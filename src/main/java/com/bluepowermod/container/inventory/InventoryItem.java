@@ -24,6 +24,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.IItemProvider;
 
 public class InventoryItem extends Inventory {
     
@@ -32,9 +33,7 @@ public class InventoryItem extends Inventory {
     private boolean      reading = false;
     
     public InventoryItem(PlayerEntity player, ItemStack item, String name, boolean customName, int size) {
-    
-        super(name, customName, size);
-        
+        super(item);
         this.player = player;
         this.item = item;
         
@@ -77,8 +76,8 @@ public class InventoryItem extends Inventory {
     
     private boolean hasInventory() {
     
-        if (item.getTagCompound() == null) { return false; }
-        return item.getTagCompound().getTag("Inventory") != null;
+        if (item.getTag() == null) { return false; }
+        return item.getTag().contains("Inventory");
     }
     
     private void createInventory() {
@@ -88,21 +87,21 @@ public class InventoryItem extends Inventory {
     
     protected void writeToNBT() {
     
-        if (item.getTagCompound() == null) {
-            item.setTagCompound(new CompoundNBT());
+        if (item.getTag() == null) {
+            item.setTag(new CompoundNBT());
         }
         ListNBT itemList = new ListNBT();
         for (int i = 0; i < getSizeInventory(); i++) {
             if (!getStackInSlot(i).isEmpty()) {
                 CompoundNBT slotEntry = new CompoundNBT();
-                slotEntry.setByte("Slot", (byte) i);
-                getStackInSlot(i).writeToNBT(slotEntry);
-                itemList.appendTag(slotEntry);
+                slotEntry.putByte("Slot", (byte) i);
+                getStackInSlot(i).write(slotEntry);
+                itemList.add(slotEntry);
             }
         }
         CompoundNBT inventory = new CompoundNBT();
-        inventory.setTag("Items", itemList);
-        item.getTagCompound().setTag("Inventory", inventory);
+        inventory.put("Items", itemList);
+        item.getTag().put("Inventory", inventory);
     }
     
     public void loadInventory() {
@@ -127,7 +126,7 @@ public class InventoryItem extends Inventory {
         }
         
         if (!is.isEmpty() && is.getItem() == this.item.getItem()) {
-            is.setTagCompound(item.getTagCompound());
+            is.setTag(item.getTag());
         }
     }
     
@@ -135,13 +134,13 @@ public class InventoryItem extends Inventory {
     
         reading = true;
         
-        ListNBT itemList = (ListNBT) ((CompoundNBT) item.getTagCompound().getTag("Inventory")).getTag("Items");
-        for (int i = 0; i < itemList.tagCount(); i++) {
-            CompoundNBT slotEntry = itemList.getCompoundTagAt(i);
+        ListNBT itemList = (ListNBT) ((CompoundNBT) item.getTag().get("Inventory")).get("Items");
+        for (int i = 0; i < itemList.size(); i++) {
+            CompoundNBT slotEntry = itemList.getCompound(i);
             int j = slotEntry.getByte("Slot") & 0xff;
             
             if (j >= 0 && j < getSizeInventory()) {
-                setInventorySlotContents(j, new ItemStack(slotEntry));
+                setInventorySlotContents(j, new ItemStack((IItemProvider) slotEntry));
             }
         }
         reading = false;

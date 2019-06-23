@@ -17,32 +17,28 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.helper.BPItemTier;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.DamageSource;
-import net.minecraftforge.common.util.EnumHelper;
 
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 
 public class ItemAthame extends SwordItem {
     
     private float               damageDealt;
-    private static ToolMaterial athameMaterial = EnumHelper.addToolMaterial("SILVER", 0, 100, 6.0F, 2.0F, 10);
+    private static IItemTier athameMaterial = new BPItemTier(100, 6.0F, 2.0F, 0, 10, Ingredient.fromItems(BPItems.silver_ingot));
     
     public ItemAthame() {
-        super(athameMaterial);
-        this.setCreativeTab(BPCreativeTabs.tools);
-        this.setMaxDamage(100);
-        this.setTranslationKey(Refs.ATHAME_NAME);
+        super(athameMaterial, 1, 1, new Properties());
         this.setRegistryName(Refs.MODID + ":" + Refs.ATHAME_NAME);
-        this.maxStackSize = 1;
-        this.setFull3D();
         BPItems.itemList.add(this);
     }
 

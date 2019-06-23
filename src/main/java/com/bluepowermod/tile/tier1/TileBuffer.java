@@ -35,7 +35,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     public static final int SLOTS = 21;
     private final NonNullList<ItemStack> allInventories = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
 
-    public TileBuffer(TileEntityType<?> type) {
+    public TileBuffer() {
         super(BPTileEntityType.BUFFER);
     }
 

@@ -24,6 +24,8 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -32,29 +34,29 @@ import java.util.List;
 public class ItemFloppyDisk extends ItemBase implements IItemColor{
 
     public ItemFloppyDisk(String name) {
-        this.setTranslationKey(name);
+        super(new Properties());
         this.setRegistryName(Refs.MODID + ":" + name);
         BPItems.itemList.add(this);
     }
 
     public static void finaliseDisk(ItemStack itemStack, String name, MinecraftColor color){
         CompoundNBT nbt = new CompoundNBT();
-        nbt.setInteger("color", color.getHex());
-        nbt.setString("name", name);
-        itemStack.setTagCompound(nbt);
+        nbt.putInt("color", color.getHex());
+        nbt.putString("name", name);
+        itemStack.setTag(nbt);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("name")) {
-            tooltip.add(stack.getTagCompound().getString("name"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        if(stack.getTag() != null && stack.getTag().contains("name")) {
+            tooltip.add(new StringTextComponent(stack.getTag().getString("name")));
         }
     }
 
     @Override
-    public int colorMultiplier(ItemStack stack, int tintIndex) {
-        if(tintIndex == 0 && stack.getTagCompound() != null && stack.getTagCompound().hasKey("color")) {
-            return stack.getTagCompound().getInteger("color");
+    public int getColor(ItemStack stack, int tintIndex) {
+        if(tintIndex == 0 && stack.getTag() != null && stack.getTag().contains("color")) {
+            return stack.getTag().getInt("color");
         }
         return -1;
     }

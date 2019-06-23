@@ -14,8 +14,7 @@ public class ItemPaintCan extends ItemDamageableColorableOverlay {
     private static final int MAX_USES = 16;
 
     public ItemPaintCan(String name) {
-
-        super(name);
+        super(name, new Properties());
     }
 
     @Override
@@ -34,13 +33,13 @@ public class ItemPaintCan extends ItemDamageableColorableOverlay {
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
 
-        if (itemStack.getItemDamage() >= 16)
+        if (itemStack.getDamage() >= 16)
             return ItemStack.EMPTY;
         ItemStack stack = itemStack.copy();
         int newUses = getUsesUsed(stack) + 1;
 
         if (newUses == getMaxUses()) {
-            stack.setItemDamage(16);
+            stack.setDamage(16);
             setUsesUsed(stack, 0);
         } else {
             setUsesUsed(stack, newUses);

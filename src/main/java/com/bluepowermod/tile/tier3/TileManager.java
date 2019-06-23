@@ -11,6 +11,7 @@ import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.IRejectAnimator;
 import com.bluepowermod.tile.TileMachineBase;
@@ -41,8 +42,8 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     public int fuzzySetting;
     private int rejectTicker = -1;
 
-    public TileManager(TileEntityType<?> type) {
-        super(type);
+    public TileManager() {
+        super(BPTileEntityType.MANAGER);
     }
 
     private int acceptedItems(ItemStack item) {

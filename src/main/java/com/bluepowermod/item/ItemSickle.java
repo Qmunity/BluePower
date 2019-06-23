@@ -17,7 +17,6 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import com.google.common.collect.Sets;
@@ -26,13 +25,13 @@ import net.minecraft.block.BushBlock;
 import net.minecraft.block.LilyPadBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
+import net.minecraft.item.*;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -43,14 +42,12 @@ public class ItemSickle extends ToolItem {
     public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;
 
-    private static final Set toolBlocks = Sets.newHashSet(Blocks.LEAVES, Blocks.LEAVES2, Blocks.WHEAT, Blocks.POTATOES, Blocks.CARROTS,
-            Blocks.NETHER_WART, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.REEDS, Blocks.TALLGRASS, Blocks.VINE, Blocks.WATERLILY,
-            Blocks.RED_FLOWER, Blocks.YELLOW_FLOWER);
+    private static final Set toolBlocks = Sets.newHashSet(ItemTags.LEAVES, Blocks.WHEAT, Blocks.POTATOES, Blocks.CARROTS,
+            Blocks.NETHER_WART, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.SUGAR_CANE, Blocks.TALL_GRASS, Blocks.VINE, Blocks.LILY_PAD,
+            BlockTags.SMALL_FLOWERS);
 
-    public ItemSickle(ToolMaterial material, String name, Item repairItem) {
-        super(material, toolBlocks);
-        this.setTranslationKey(name);
-        this.setCreativeTab(BPCreativeTabs.tools);
+    public ItemSickle(IItemTier itemTier, String name, Item repairItem) {
+        super(itemTier.getHarvestLevel(),1.4F, itemTier, toolBlocks, new Properties());
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);
@@ -96,17 +93,17 @@ public class ItemSickle extends ToolItem {
         if (!(entityLiving instanceof PlayerEntity)) return false;
         PlayerEntity player = (PlayerEntity) entityLiving;
 
-        if ((state != null) && (state.getBlock().isLeaves(state, world, pos))) {
+        if (state.getBlock().isFoliage(state, world, pos)) {
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     for (int k = -1; k <= 1; k++) {
                         Block blockToCheck = world.getBlockState(pos.add(i,j,k)).getBlock();
                         BlockState meta = world.getBlockState(pos.add(i,j,k));
-                        if ((blockToCheck != null) && (blockToCheck.isLeaves(meta, world, pos.add(i,j,k)))) {
-                            if (blockToCheck.canHarvestBlock(world, pos.add(i,j,k), player)) {
+                        if (blockToCheck.isFoliage(meta, world, pos.add(i,j,k))) {
+                            if (blockToCheck.canHarvestBlock(world.getBlockState(pos.add(i,j,k)), world, pos.add(i,j,k), player)) {
                                 blockToCheck.harvestBlock(world, player, pos.add(i,j,k), meta, null, stack);
                             }
-                            world.setBlockToAir(pos.add(i,j,k));
+                            world.setBlockState(pos.add(i,j,k), Blocks.AIR.getDefaultState());
                             used = true;
                         }
                     }
@@ -127,7 +124,7 @@ public class ItemSickle extends ToolItem {
                         if (blockToCheck.canHarvestBlock(world, pos.add(i,0,j), player)) {
                             blockToCheck.harvestBlock(world, player, pos.add(i,0,j), meta, null, stack);
                         }
-                        world.setBlockToAir(pos.add(i,0,j));
+                        world.setBlockState(pos.add(i,0,j), Blocks.AIR.getDefaultState());
                         used = true;
                     }
                 }
@@ -140,10 +137,10 @@ public class ItemSickle extends ToolItem {
                     BlockState meta = world.getBlockState(pos.add(i,0,j));
                     if (blockToCheck != null) {
                         if (blockToCheck instanceof BushBlock && !(blockToCheck instanceof LilyPadBlock)) {
-                            if (blockToCheck.canHarvestBlock(world,  pos.add(i,0,j), player)) {
+                            if (blockToCheck.canHarvestBlock(world.getBlockState(pos.add(i,0,j)), world,  pos.add(i,0,j), player)) {
                                 blockToCheck.harvestBlock(world, player, pos.add(i,0,j), meta, null, stack);
                             }
-                            world.setBlockToAir(pos.add(i,0,j));
+                            world.setBlockState(pos.add(i,0,j), Blocks.AIR.getDefaultState());
                             used = true;
                         }
                     }

@@ -1,11 +1,10 @@
 package com.bluepowermod.network;
 
+import javafx.geometry.Side;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.network.NetworkRegistry;
+
 public class NetworkHandler{
 
     public final SimpleNetworkWrapper wrapper;

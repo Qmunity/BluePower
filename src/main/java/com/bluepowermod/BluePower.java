@@ -13,9 +13,12 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
+import com.bluepowermod.helper.BPItemTier;
 import com.bluepowermod.init.*;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -34,6 +37,7 @@ public class BluePower {
 
     public static BluePower instance;
     public static CommonProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new,() -> CommonProxy::new);
+    public static IItemTier gemItemTier = new BPItemTier(750, 6, 2.0F, 4, 18, Ingredient.fromItems(BPItems.amethyst_gem, BPItems.ruby_gem, BPItems.sapphire_gem, BPItems.malachite_gem));
 
     public BluePower(){
         instance = this;
@@ -51,7 +55,6 @@ public class BluePower {
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         BPBlocks.init();
-        BPItems.init();
         proxy.preInitRenderers();
 
     }

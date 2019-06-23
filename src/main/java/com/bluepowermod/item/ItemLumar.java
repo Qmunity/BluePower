@@ -19,6 +19,7 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IBPColoredItem;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
@@ -32,33 +33,20 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ItemLumar extends ItemBase implements IBPColoredItem{
 
     public ItemLumar() {
-
-        super();
-        this.setCreativeTab(BPCreativeTabs.items);
-        this.setHasSubtypes(true);
-        this.setTranslationKey(Refs.LUMAR_NAME);
+        super(new Properties());
         this.setRegistryName(Refs.MODID + ":" + Refs.LUMAR_NAME);
     }
 
     @Override
     public String getTranslationKey(ItemStack itemStack) {
 
-        return super.getTranslationKey() + "." + Refs.oreDictDyes[15 - itemStack.getItemDamage()].substring(3).toLowerCase();
-    }
-
-    @Override
-    public void getSubItems(ItemGroup tab, NonNullList<ItemStack> items) {
-        if(isInCreativeTab(tab)) {
-            for (int i = 0; i < DyeItem.DYE_COLORS.length; i++) {
-                items.add(new ItemStack(this, 1, i));
-            }
-        }
+        return super.getTranslationKey() + "." + Refs.oreDictDyes[15 - itemStack.getDamage()].substring(3).toLowerCase();
     }
 
     @Override
     public int getColor(ItemStack stack, int tintIndex) {
-        int damage = stack.getItemDamage();
-        if (damage >= 0 && damage < DyeItem.DYE_COLORS.length) { return DyeItem.DYE_COLORS[15 - damage]; }
+        int damage = stack.getDamage();
+        if (damage >= 0 && damage < MinecraftColor.values().length) { return MinecraftColor.values()[15 - damage].getHex(); }
         return 16777215;
     }
 }

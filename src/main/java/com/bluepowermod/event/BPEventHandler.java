@@ -20,18 +20,15 @@ import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageServerTickTime;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.GrassBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelBlock;
-import net.minecraft.client.renderer.block.model.ModelManager;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -49,14 +46,16 @@ import net.minecraft.tileentity.HopperTileEntity;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.*;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.*;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -70,9 +69,10 @@ public class BPEventHandler {
     @SubscribeEvent
     public void tick(TickEvent.WorldTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
-            if (event.world.getWorldTime() % 200 == 0) {
-                double tickTime = MathHelper.mean(event.world.getMinecraftServer().tickTimeArray) * 1.0E-6D;//In case world are going to get their own thread: MinecraftServer.getServer().worldTickTimes.get(event.world.provider.dimensionId)
-                BPNetworkHandler.INSTANCE.sendToDimension(new MessageServerTickTime(tickTime), event.world.provider.getDimension());
+            if (event.world.getGameTime() % 200 == 0) {
+                double tickTime = MathHelper.mean(event.world.getServer().tickTimeArray) * 1.0E-6D;//In case world are going to get their own thread: MinecraftServer.getServer().worldTickTimes.get(event.world.provider.dimensionId)
+                //TODO: Network Handler
+                //BPNetworkHandler.INSTANCE.sendToDimension(new MessageServerTickTime(tickTime), event.world.getDimension());
             }
         }
     }
@@ -83,7 +83,7 @@ public class BPEventHandler {
         if (!event.getLeft().isEmpty() && event.getLeft().getItem() == BPItems.screwdriver) {
             if (!event.getRight().isEmpty() && event.getRight().getItem() == Items.ENCHANTED_BOOK) {
                 if (EnchantmentHelper.getEnchantments(event.getRight()).get(Enchantments.SILK_TOUCH) != null) {
-                    event.setOutput(new ItemStack(BPItems.silky_screwdriver, 1, event.getLeft().getItemDamage()));
+                    event.setOutput(new ItemStack(BPItems.silky_screwdriver, 1));
                     event.setCost(20);
                 }
             }
@@ -93,7 +93,7 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent.LeftClickBlock event) {
 
-        if (event.getEntityPlayer().capabilities.isCreativeMode) {
+        if (event.getEntityPlayer().isCreative()) {
             ItemStack heldItem = event.getEntityPlayer().getHeldItem(event.getHand());
             if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemSickle) {
                 heldItem.getItem().onBlockDestroyed(heldItem, event.getWorld(), event.getWorld().getBlockState(event.getPos()), event.getPos(), event.getEntityPlayer());
@@ -118,7 +118,7 @@ public class BPEventHandler {
 
                         if (pickedUp.isEmpty()) {
                             event.setResult(Event.Result.ALLOW);
-                            event.getItem().setDead();
+                            event.getItem().remove();
                             return;
                         } else {
                             event.getItem().setItem(pickedUp);
@@ -188,13 +188,13 @@ public class BPEventHandler {
     private void dropHeads(LivingDeathEvent event) {
 
         if (event.getEntityLiving() instanceof CreeperEntity) {
-            event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 4), 0.0F);
+            event.getEntityLiving().entityDropItem(new ItemStack(Items.CREEPER_HEAD, 1), 0.0F);
         }
 
         if (event.getEntityLiving() instanceof PlayerEntity) {
-            ItemStack drop = new ItemStack(Items.SKULL, 1, 3);
-            drop.setTagCompound(new CompoundNBT());
-            drop.getTagCompound().setString("SkullOwner", ((PlayerEntity) event.getEntityLiving()).getDisplayName().getFormattedText());
+            ItemStack drop = new ItemStack(Items.PLAYER_HEAD, 1);
+            drop.setTag(new CompoundNBT());
+            drop.getTag().putString("SkullOwner", ((PlayerEntity) event.getEntityLiving()).getDisplayName().getFormattedText());
             event.getEntityLiving().entityDropItem(drop, 0.0F);
         }
 
@@ -202,14 +202,14 @@ public class BPEventHandler {
             AbstractSkeletonEntity sk = (AbstractSkeletonEntity) event.getEntityLiving();
 
             if (sk instanceof SkeletonEntity) {
-                event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 0), 0.0F);
+                event.getEntityLiving().entityDropItem(new ItemStack(Items.SKELETON_SKULL, 1), 0.0F);
             } else {
-                event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 1), 0.0F);
+                event.getEntityLiving().entityDropItem(new ItemStack(Items.WITHER_SKELETON_SKULL, 1), 0.0F);
             }
         }
 
         if (event.getEntityLiving() instanceof ZombieEntity) {
-            event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 2), 0.0F);
+            event.getEntityLiving().entityDropItem(new ItemStack(Items.ZOMBIE_HEAD, 1), 0.0F);
         }
     }
 
@@ -217,17 +217,17 @@ public class BPEventHandler {
     @OnlyIn(Dist.CLIENT)
     public void onItemTooltip(ItemTooltipEvent event) {
 
-        if (event.getItemStack().hasTagCompound() && event.getItemStack().getTagCompound().hasKey("tileData")
-                && !event.getItemStack().getTagCompound().getBoolean("hideSilkyTooltip")) {
-            event.getToolTip().add(I18n.format("gui.tooltip.hasSilkyData"));
+        if (event.getItemStack().hasTag() && event.getItemStack().getTag().contains("tileData")
+                && !event.getItemStack().getTag().getBoolean("hideSilkyTooltip")) {
+            event.getToolTip().add(new StringTextComponent("gui.tooltip.hasSilkyData"));
         }
 
         if (ClientProxy.getOpenedGui() instanceof GuiCircuitDatabaseSharing) {
             ItemStack deletingStack = ((GuiCircuitDatabaseSharing) ClientProxy.getOpenedGui()).getCurrentDeletingTemplate();
             if (!deletingStack.isEmpty() && deletingStack == event.getItemStack()) {
-                event.getToolTip().add(I18n.format("gui.circuitDatabase.info.sneakClickToConfirmDeleting"));
+                event.getToolTip().add(new StringTextComponent("gui.circuitDatabase.info.sneakClickToConfirmDeleting"));
             } else {
-                event.getToolTip().add(I18n.format("gui.circuitDatabase.info.sneakClickToDelete"));
+                event.getToolTip().add(new StringTextComponent("gui.circuitDatabase.info.sneakClickToDelete"));
             }
         }
     }
@@ -235,7 +235,7 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
 
-        Item item = event.crafting.getItem();
+        Item item = event.getCrafting().getItem();
         if (item == Item.getItemFromBlock(Blocks.AIR))
             return;
     }
@@ -244,14 +244,15 @@ public class BPEventHandler {
     public void onBonemealEvent(BonemealEvent event) {
 
         if (!event.getWorld().isRemote) {
-            if (event.getBlock() instanceof GrassBlock) {
+            if (event.getBlock().getBlock() instanceof GrassBlock) {
                 for (int x = event.getPos().getX() - 2; x < event.getPos().getX() + 3; x++) {
                     for (int z = event.getPos().getZ() - 2; z < event.getPos().getZ() + 3; z++) {
                         if (event.getWorld().isAirBlock(new BlockPos(x, event.getPos().getY() + 1, z))) {
                             if (event.getWorld().rand.nextInt(50) == 1) {
-                                if (BPBlocks.indigo_flower.canBlockStay(event.getWorld(), event.getPos().add(0,1,0), event.getWorld().getBlockState(event.getPos().add(0,1,0)))) {
-                                    event.getWorld().setBlockState(event.getPos().add(0,1,0), BPBlocks.indigo_flower.getDefaultState());
-                                }
+                                //TODO: Flower Chance
+                                //if (BPBlocks.indigo_flower.canSustainPlant(event.getWorld().getBlockState(event.getPos().up()), event.getWorld(), event.getPos().up())) {
+                                //    event.getWorld().setBlockState(event.getPos().up(), BPBlocks.indigo_flower.getDefaultState());
+                                //}
                             }
                         }
                     }
@@ -264,9 +265,9 @@ public class BPEventHandler {
     @SubscribeEvent
     public void blockHighlightEvent(DrawBlockHighlightEvent event) {
         RayTraceResult mop = event.getTarget();
-        Block block = Block.getBlockFromItem(event.getPlayer().getHeldItem(Hand.MAIN_HAND).getItem());
-        if(block instanceof BlockGateBase && mop.typeOfHit == RayTraceResult.Type.BLOCK){
-            BlockPos position = event.getTarget().getBlockPos().offset(mop.sideHit);
+        Block block = Block.getBlockFromItem(Minecraft.getInstance().player.getHeldItem(Hand.MAIN_HAND).getItem());
+        if(block instanceof BlockGateBase && mop.getType() == RayTraceResult.Type.BLOCK){
+            BlockPos position = ((BlockRayTraceResult)mop).getPos().offset(((BlockRayTraceResult)mop).getFace());
             Entity entity = Minecraft.getInstance().getRenderViewEntity();
             double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)event.getPartialTicks();
             double d1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)event.getPartialTicks();
@@ -275,13 +276,13 @@ public class BPEventHandler {
             BufferBuilder vertexbuffer = tessellator.getBuffer();
             vertexbuffer.setTranslation(-d0, -d1, -d2 );
             GlStateManager.pushMatrix();
-            GlStateManager.enableAlpha();
+            GlStateManager.enableAlphaTest();
             position.add(0.5, 0.1, 0.5);
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-            BlockState state = block.getDefaultState().with(BlockGateBase.FACING, mop.sideHit);
+            BlockState state = block.getDefaultState().with(BlockGateBase.FACING, ((BlockRayTraceResult)mop).getFace());
             IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
-            blockrendererdispatcher.getBlockModelRenderer().renderModel(event.getPlayer().world, ibakedmodel, state, position, vertexbuffer, false, new Random().nextLong());
+            blockrendererdispatcher.getBlockModelRenderer().renderModel(Minecraft.getInstance().world, ibakedmodel, state, position, vertexbuffer, false, new Random(), 0);
             tessellator.draw();
             GlStateManager.popMatrix();
             vertexbuffer.setTranslation(0, 0, 0);

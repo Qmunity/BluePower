@@ -30,17 +30,4 @@ public class EnchantmentVorpal extends Enchantment {
         return 10 + 20 * (par1 - 1);
     }
 
-    @Override
-    public int getMaxEnchantability(int par1) {
-
-        return super.getMinEnchantability(par1) + 50;
-    }
-
-    @Override
-    public String getTranslatedName(int level) {
-
-        return I18n.format("enchantment.bluepower:vorpal.name") + " "
-                + I18n.format("enchantment.level." + level);
-    }
-
 }

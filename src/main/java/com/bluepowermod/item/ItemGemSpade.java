@@ -20,8 +20,6 @@ package com.bluepowermod.item;
 import com.bluepowermod.init.BPItems;
 import net.minecraft.item.*;
 import net.minecraft.item.ShovelItem;
-
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.item.Items;
 
@@ -30,10 +28,8 @@ public class ItemGemSpade extends ShovelItem {
     public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;
 
-    public ItemGemSpade(ToolMaterial material, String name, Item repairItem) {
-        super(material);
-        this.setTranslationKey(name);
-        this.setCreativeTab(BPCreativeTabs.tools);
+    public ItemGemSpade(IItemTier itemTier, String name, Item repairItem) {
+        super(itemTier, itemTier.getHarvestLevel(),1.4F, new Properties());
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);

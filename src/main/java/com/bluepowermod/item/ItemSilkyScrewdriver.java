@@ -20,6 +20,7 @@ package com.bluepowermod.item;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.UseAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
@@ -34,30 +35,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ItemSilkyScrewdriver extends ItemBase {
 
     public ItemSilkyScrewdriver() {
-
-        setTranslationKey(Refs.SILKYSCREWDRIVER_NAME);
-        setCreativeTab(BPCreativeTabs.tools);
-        setMaxDamage(250);
-        setMaxStackSize(1);
+        super(new Properties().maxDamage(250).maxStackSize(1));
         setRegistryName(Refs.MODID + ":" + Refs.SILKYSCREWDRIVER_NAME);
     }
 
-
     @Override
-    public ActionResultType onItemUseFirst(PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, Hand hand) {
+    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
             return ActionResultType.PASS;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public boolean isFull3D() {
-
-        return true;
-    }
-
-    @Override
-    public UseAction getItemUseAction(ItemStack par1ItemStack) {
-
-        return UseAction.BLOCK;
     }
 }

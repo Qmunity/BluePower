@@ -26,21 +26,18 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.reference.GuiIDs;
-
 public class ItemCanvasBag extends ItemColorableOverlay {
     
-    public ItemCanvasBag(String name) {
-    
-        super(name);
+    public ItemCanvasBag(String name, Properties properties) {
+        super(name, properties);
     }
 
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand handIn) {
         if (!world.isRemote) {
-            player.openGui(BluePower.instance, GuiIDs.CANVAS_BAG.ordinal(), world, (int) player.posX, (int) player.posY, (int) player.posZ);
+            //TODO: Open GUI
+            //player.openGui(BluePower.instance, GuiIDs.CANVAS_BAG.ordinal(), world, (int) player.posX, (int) player.posY, (int) player.posZ);
         }
         return new ActionResult<ItemStack>(ActionResultType.SUCCESS ,player.getHeldItem(handIn));
     }

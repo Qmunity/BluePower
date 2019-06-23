@@ -21,27 +21,27 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.container.inventory.InventoryItem;
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.*;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
 public class ItemSeedBag extends ItemBase {
 
     public ItemSeedBag(String name) {
-        this.setCreativeTab(BPCreativeTabs.items);
+        super(new Properties().maxStackSize(1));
         this.setRegistryName(Refs.MODID + ":" + name);
-        this.maxStackSize = 1;
     }
 
     public static ItemStack getSeedType(ItemStack seedBag) {
@@ -92,14 +92,21 @@ public class ItemSeedBag extends ItemBase {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldObj, PlayerEntity playerEntity, Hand handIn) {
         if (!worldObj.isRemote && playerEntity.isSneaking()) {
-            playerEntity.openGui(BluePower.instance, GuiIDs.SEEDBAG.ordinal(), worldObj, (int) playerEntity.posX, (int) playerEntity.posY,
-                    (int) playerEntity.posZ);
+            //TODO: Open Gui
+            //playerEntity.openGui(BluePower.instance, GuiIDs.SEEDBAG.ordinal(), worldObj, (int) playerEntity.posX, (int) playerEntity.posY,
+            //(int) playerEntity.posZ);
         }
         return new ActionResult<ItemStack>(ActionResultType.SUCCESS, playerEntity.getHeldItem(handIn));
     }
 
+
     @Override
-    public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(ItemUseContext context) {
+        PlayerEntity player = context.getPlayer();
+        World worldIn = context.getWorld();
+        Hand hand = context.getHand();
+        BlockPos pos = context.getPos();
+
         if (player.isSneaking()) {
             return ActionResultType.PASS;
         }
@@ -120,7 +127,9 @@ public class ItemSeedBag extends ItemBase {
                             if (!is.isEmpty()) {
 
                                 Item item = is.getItem();
-                                item.onItemUse(player, worldIn, pos.add(modX, 0, modZ), hand, facing, hitX + modX, hitY, hitZ + modZ);
+                                item.onItemUse(new ItemUseContext(player, hand, new BlockRayTraceResult(
+                                        new Vec3d( context.getHitVec().x + modX, context.getHitVec().y, context.getHitVec().z + modZ),
+                                        context.getFace(), pos.add(modX, 0, modZ), false)));
                                 seedBagInventory.decrStackSize(i, 0);
                                 break;
                             }

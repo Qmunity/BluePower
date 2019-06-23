@@ -9,8 +9,8 @@ package com.bluepowermod.helper;
 
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageDebugBlock;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

@@ -14,10 +14,10 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketThreadUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -28,7 +28,6 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import org.lwjgl.opengl.GL11;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.RenderHelper;
-import com.bluepowermod.reference.Refs;
 
 /**
  *
@@ -154,7 +153,8 @@ public class TubeStack {
     }
 
     public void writeToPacket(ByteBuf buf) {
-        ByteBufUtils.writeItemStack(buf, stack);
+        //TODO: Add Items
+        //ByteBufUtils.writeItemStack(buf, stack);
         buf.writeByte(heading.ordinal());
         buf.writeByte((byte) color.ordinal());
         buf.writeDouble(speed);
@@ -162,8 +162,9 @@ public class TubeStack {
     }
 
     public static TubeStack loadFromPacket(ByteBuf buf) {
-
-        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), Direction.byIndex(buf.readByte()),
+        //TODO: Add Items
+        //ByteBufUtils.readItemStack(buf)
+        TubeStack stack = new TubeStack(null, Direction.byIndex(buf.readByte()),
                 TubeColor.values()[buf.readByte()]);
         stack.speed = buf.readDouble();
         stack.progress = buf.readDouble();

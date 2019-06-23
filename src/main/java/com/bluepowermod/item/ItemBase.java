@@ -31,8 +31,8 @@ import net.minecraftforge.event.RegistryEvent;
 
 public class ItemBase extends Item {
 
-    public ItemBase() {
-        super();
+    public ItemBase(Properties properties) {
+        super(properties);
         BPItems.itemList.add(this);
     }
 

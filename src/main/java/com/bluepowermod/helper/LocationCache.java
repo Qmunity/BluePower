@@ -29,7 +29,7 @@ public abstract class LocationCache<CachedType> {
         if (world == null)
             throw new NullPointerException("World can't be null!");
         cachedValue = (CachedType[]) new Object[6];
-        for (Direction d : Direction.VALUES) {
+        for (Direction d : Direction.values()) {
             cachedValue[d.ordinal()] = getNewValue(world, pos.offset(d), extraArgs);
         }
     }

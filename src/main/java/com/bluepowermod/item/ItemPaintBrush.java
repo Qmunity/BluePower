@@ -10,8 +10,7 @@ package com.bluepowermod.item;
 public class ItemPaintBrush extends ItemDamageableColorableOverlay {
     
     public ItemPaintBrush(String name) {
-    
-        super(name);
+        super(name, new Properties());
         
     }
     

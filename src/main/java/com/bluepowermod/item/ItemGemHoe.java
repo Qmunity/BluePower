@@ -17,23 +17,17 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 
 public class ItemGemHoe extends HoeItem {
 
     public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;
 
-    public ItemGemHoe(ToolMaterial material, String name, Item repairItem) {
-        super(material);
-        this.setTranslationKey(name);
-        this.setCreativeTab(BPCreativeTabs.tools);
+    public ItemGemHoe(IItemTier itemTier, String name, Item repairItem) {
+        super(itemTier, itemTier.getAttackDamage(), new Properties());
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);

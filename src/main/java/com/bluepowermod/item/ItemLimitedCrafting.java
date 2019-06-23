@@ -28,13 +28,8 @@ import java.util.Random;
 public class ItemLimitedCrafting extends ItemBase {
     
     public ItemLimitedCrafting(String name, int uses) {
-    
-        this.setCreativeTab(BPCreativeTabs.items);
-        this.setTranslationKey(name);
+        super(new Properties().maxDamage(uses - 1));
         this.setRegistryName(Refs.MODID + ":" + name);
-        this.setMaxDamage(uses - 1);
-        
-        this.setContainerItem(this);
     }
     
     @Override

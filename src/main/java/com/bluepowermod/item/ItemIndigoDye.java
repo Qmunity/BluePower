@@ -30,9 +30,7 @@ import net.minecraft.util.Hand;
 public class ItemIndigoDye extends ItemBase {
 
     public ItemIndigoDye(String name) {
-
-        this.setTranslationKey(name);
-        this.setCreativeTab(BPCreativeTabs.items);
+		super(new Properties());
         this.setRegistryName(Refs.MODID + ":" + name);
     }
 
