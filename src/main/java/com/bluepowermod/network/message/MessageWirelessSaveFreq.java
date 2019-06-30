@@ -36,7 +36,7 @@ public class MessageWirelessSaveFreq extends Packet<MessageWirelessSaveFreq> {
     @Override
     public void handleServerSide(PlayerEntity player) {
 
-        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (ServerPlayerEntity) player);
+        //BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (ServerPlayerEntity) player);
     }
 
     @Override

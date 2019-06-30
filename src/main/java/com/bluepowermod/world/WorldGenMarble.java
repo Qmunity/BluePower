@@ -17,26 +17,35 @@
 
 package com.bluepowermod.world;
 
+import com.bluepowermod.init.Config;
+import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.OreFeature;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
 
 import java.util.*;
+import java.util.function.Function;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class WorldGenMarble extends OreFeature {
+public class WorldGenMarble extends Feature<NoFeatureConfig> {
 
-    LinkedList marbleVein = new LinkedList();
-    HashSet veinsList = new HashSet();
-    Block block;
-    int numberOfBlocks;
+    private LinkedList marbleVein = new LinkedList();
+    private HashSet veinsList = new HashSet();
+    private int numberOfBlocks;
+    private Block block;
 
-    public WorldGenMarble(Block block, int num) {
-        super(block.getDefaultState(), num);
+    public WorldGenMarble(Function<Dynamic<?>, ? extends NoFeatureConfig> deserializer, Block block, int veinSize) {
+        super(deserializer);
         this.block = block;
-        this.numberOfBlocks = num;
+        this.numberOfBlocks = veinSize;
     }
 
     private void addBlock(int x, int y, int z, int num) {
@@ -62,29 +71,33 @@ public class WorldGenMarble extends OreFeature {
     }
 
     @Override
-    public boolean generate(World world, Random rand, BlockPos pos) {
-
+    public boolean place(IWorld world, ChunkGenerator<? extends GenerationSettings> chunkGenerator, Random random, BlockPos pos, NoFeatureConfig noFeatureConfig) {
         if (world.isAirBlock(pos)) {
             return false;
         }
 
-        int i = pos.getY();
-        while (world.getBlockState(new BlockPos(pos.getX(), i, pos.getZ())) != Blocks.STONE) {
-            if (i > 96) return false; // Don't generate marble over y96
-            i++;
-            addBlock(pos.getX(), i, pos.getZ(), 6);
-        }
-        while ((this.marbleVein.size() > 0) && (this.numberOfBlocks > 0)) {
-            List blocksToGenerate = (List) this.marbleVein.removeFirst();
-            Integer[] blockToSet = (Integer[]) blocksToGenerate.toArray();
-            if (world.getBlockState(new BlockPos(blockToSet[0], blockToSet[1], blockToSet[2])).getBlock() == Blocks.STONE) {
-                world.setBlockState(new BlockPos(blockToSet[0], blockToSet[1], blockToSet[2]), this.block.getDefaultState());
-                if (blockToSet[3] > 0) {
-                    searchBlock(world, blockToSet[0], blockToSet[1], blockToSet[2], blockToSet[3] - 1);
+        if (Config.veinSizeMarble > 0) {
+            for (int i = 0; i < 4; i++) {
+                int y = pos.getY();
+                while (world.getBlockState(new BlockPos(pos.getX(), y, pos.getZ())).getBlock() != Blocks.STONE) {
+                    if (y > 96) return false; // Don't generate marble over y96
+                    y++;
+                    addBlock(pos.getX(), y, pos.getZ(), 6);
                 }
-                this.numberOfBlocks -= 1;
+                while ((this.marbleVein.size() > 0) && (this.numberOfBlocks > 0)) {
+                    List blocksToGenerate = (List) this.marbleVein.removeFirst();
+                    Integer[] blockToSet = (Integer[]) blocksToGenerate.toArray();
+                    if (world.getBlockState(new BlockPos(blockToSet[0], blockToSet[1], blockToSet[2])).getBlock() == Blocks.STONE) {
+                        world.setBlockState(new BlockPos(blockToSet[0], blockToSet[1], blockToSet[2]), this.block.getDefaultState(), 0);
+                        if (blockToSet[3] > 0) {
+                            searchBlock(world.getWorld(), blockToSet[0], blockToSet[1], blockToSet[2], blockToSet[3] - 1);
+                        }
+                        this.numberOfBlocks -= 1;
+                    }
+                }
             }
+            return true;
         }
-        return true;
+        return false;
     }
 }

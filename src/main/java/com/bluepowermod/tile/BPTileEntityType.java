@@ -1,6 +1,7 @@
 package com.bluepowermod.tile;
 
 import com.bluepowermod.reference.ContainerNames;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
 import com.bluepowermod.tile.tier2.TileRegulator;
@@ -8,6 +9,7 @@ import com.bluepowermod.tile.tier2.TileRetriever;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier3.*;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ObjectHolder;
 
 public class BPTileEntityType {
@@ -71,5 +73,30 @@ public class BPTileEntityType {
 
     @ObjectHolder(ContainerNames.WINDMILL)
     public static TileEntityType<TileCircuitDatabase> WINDMILL;
+
+    @ObjectHolder(Refs.MODID + ":engine")
+    public static TileEntityType<TileEngine> ENGINE;
+
+    @ObjectHolder(Refs.MODID + ":blockbreaker")
+    public static TileEntityType<TileBlockBreaker> BLOCKBREAKER;
+
+    @ObjectHolder(Refs.MODID + ":igniter")
+    public static TileEntityType<TileIgniter> IGNITER;
+
+    @ObjectHolder(Refs.MODID + ":lamp")
+    public static TileEntityType<TileLamp> LAMP;
+
+    @ObjectHolder(Refs.MODID + ":transposer")
+    public static TileEntityType<TileTransposer> TRANSPOSER;
+
+    @ObjectHolder(Refs.MODID + ":wire")
+    public static TileEntityType<TileWire> WIRE;
+
+    @ObjectHolder(Refs.MODID + ":battery")
+    public static TileEntityType<TileBattery> BATTERY;
+
+    @ObjectHolder(Refs.MODID + ":solar_panel")
+    public static TileEntityType<TileSolarPanel> SOLAR_PANEL;
+
 
 }

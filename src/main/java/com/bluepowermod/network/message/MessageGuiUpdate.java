@@ -36,27 +36,6 @@ public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
         this.value = value;
     }
 
-
-    @Override
-    public void toBytes(ByteBuf buf) {
-
-        super.toBytes(buf);
-        buf.writeInt(messageId);
-        buf.writeInt(partId);
-        buf.writeInt(value);
-        buf.writeInt(icId);
-    }
-
-    @Override
-    public void fromBytes(ByteBuf buf) {
-
-        super.fromBytes(buf);
-        messageId = buf.readInt();
-        partId = buf.readInt();
-        value = buf.readInt();
-        icId = buf.readInt();
-    }
-
     @Override
     public void handleClientSide(PlayerEntity player) {
 

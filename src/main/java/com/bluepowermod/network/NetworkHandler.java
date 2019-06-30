@@ -1,18 +1,15 @@
 package com.bluepowermod.network;
 
-import javafx.geometry.Side;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.api.distmarker.Dist;
 
 public class NetworkHandler{
 
-    public final SimpleNetworkWrapper wrapper;
+    //public final SimpleNetworkWrapper wrapper;
     private int lastDiscriminator = 0;
 
     public NetworkHandler(String modid){
 
-        wrapper = NetworkRegistry.INSTANCE.newSimpleChannel(modid);
+        //wrapper = NetworkRegistry.INSTANCE.newSimpleChannel(modid);
 
     }
 
@@ -21,52 +18,17 @@ public class NetworkHandler{
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public void registerPacket(Class packetHandler, Class packetType, Side side){
+    public void registerPacket(Class packetHandler, Class packetType, Dist side){
 
-        wrapper.registerMessage(packetHandler, packetType, lastDiscriminator++, side);
+        //wrapper.registerMessage(packetHandler, packetType, lastDiscriminator++, side);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public void registerPacket(Class packetType, Side side){
+    public void registerPacket(Class packetType, Dist side){
 
-        wrapper.registerMessage(packetType, packetType, lastDiscriminator++, side);
+        //wrapper.registerMessage(packetType, packetType, lastDiscriminator++, side);
     }
 
-    public void sendToAll(IMessage packet){
 
-        wrapper.sendToAll(packet);
-    }
-
-    public void sendTo(IMessage packet, ServerPlayerEntity player){
-
-        wrapper.sendTo(packet, player);
-    }
-
-    @SuppressWarnings("rawtypes")
-    public void sendToAllAround(LocatedPacket packet, World world, double range){
-
-        sendToAllAround((IMessage) packet, packet.getTargetPoint(world, range));
-    }
-
-    @SuppressWarnings("rawtypes")
-    public void sendToAllAround(LocatedPacket packet, World world){
-
-        sendToAllAround((IMessage)packet, packet.getTargetPoint(world, 64));
-    }
-
-    public void sendToAllAround(IMessage packet, NetworkRegistry.TargetPoint point){
-
-        wrapper.sendToAllAround(packet, point);
-    }
-
-    public void sendToDimension(IMessage packet, int dimensionId){
-
-        wrapper.sendToDimension(packet, dimensionId);
-    }
-
-    public void sendToServer(IMessage packet){
-
-        wrapper.sendToServer(packet);
-    }
 
 }

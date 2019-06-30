@@ -30,12 +30,13 @@ public class MessageUpdateTextfield extends LocatedPacket<MessageUpdateTextfield
         text = ((IGUITextFieldSensitive) te).getText(textfieldID);
     }
 
+/*
     @Override
     public void toBytes(ByteBuf buffer) {
 
         super.toBytes(buffer);
         buffer.writeInt(textFieldID);
-        ByteBufUtils.writeUTF8String(buffer, text);
+        //ByteBufUtils.writeUTF8String(buffer, text);
     }
 
     @Override
@@ -43,8 +44,9 @@ public class MessageUpdateTextfield extends LocatedPacket<MessageUpdateTextfield
 
         super.fromBytes(buffer);
         textFieldID = buffer.readInt();
-        text = ByteBufUtils.readUTF8String(buffer);
+        //text = ByteBufUtils.readUTF8String(buffer);
     }
+*/
 
     @Override
     public void handleClientSide(PlayerEntity player) {

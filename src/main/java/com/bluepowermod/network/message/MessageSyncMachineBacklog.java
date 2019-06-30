@@ -28,6 +28,7 @@ public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineB
         this.stacks = stacks;
    }
 
+/*
     @Override
     public void toBytes(ByteBuf buf) {
 
@@ -36,7 +37,7 @@ public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineB
         for (TubeStack stack : stacks) {
             CompoundNBT tag = new CompoundNBT();
             stack.writeToNBT(tag);
-            ByteBufUtils.writeTag(buf, tag);
+            //ByteBufUtils.writeTag(buf, tag);
         }
     }
 
@@ -46,9 +47,10 @@ public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineB
         super.fromBytes(buf);
         int amount = buf.readInt();
         for (int i = 0; i < amount; i++) {
-            stacks.add(TubeStack.loadFromNBT(ByteBufUtils.readTag(buf)));
+            //stacks.add(TubeStack.loadFromNBT(ByteBufUtils.readTag(buf)));
         }
     }
+*/
 
     @Override
     public void handleClientSide(PlayerEntity player) {

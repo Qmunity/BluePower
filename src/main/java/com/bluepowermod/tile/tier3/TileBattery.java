@@ -11,14 +11,16 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.power.BlockBattery;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -29,8 +31,12 @@ public class TileBattery extends TileMachineBase {
 
     private final BlutricityStorage storage = new BlutricityStorage(3200);
 
+    public TileBattery() {
+        super(BPTileEntityType.BATTERY);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         double voltage = storage.getVoltage();
         int level = (int)((voltage / storage.getMaxVoltage()) * 6);
         if(world.getBlockState(pos).get(BlockBattery.LEVEL) != level){
@@ -39,25 +45,20 @@ public class TileBattery extends TileMachineBase {
         }
     }
 
+    @Nonnull
     @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-        return capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY || super.hasCapability(capability, facing);
-    }
-
-    @Nullable
-    @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if(capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
-            return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(storage);
-        }
-        return super.getCapability(capability, facing);
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability) {
+        //if(capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
+            //return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(storage);
+        //}
+        return super.getCapability(capability);
     }
 
     @Override
     protected void readFromPacketNBT(CompoundNBT tCompound) {
         super.readFromPacketNBT(tCompound);
-        if(tCompound.hasKey("energy")) {
-        NBTBase nbtstorage = tCompound.getTag("energy");
+        if(tCompound.contains("energy")) {
+        INBT nbtstorage = tCompound.get("energy");
         CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
         }
     }
@@ -65,8 +66,8 @@ public class TileBattery extends TileMachineBase {
     @Override
     protected void writeToPacketNBT(CompoundNBT tCompound) {
         super.writeToPacketNBT(tCompound);
-            NBTBase nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
-            tCompound.setTag("energy", nbtstorage);
+            INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
+            tCompound.put("energy", nbtstorage);
     }
 
     @Nullable
@@ -77,7 +78,7 @@ public class TileBattery extends TileMachineBase {
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.writeToNBT(new CompoundNBT());
+        return this.write(new CompoundNBT());
     }
 
     @Override

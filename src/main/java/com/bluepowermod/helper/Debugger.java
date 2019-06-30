@@ -40,7 +40,7 @@ public class Debugger {
                     world.addParticle(ParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
                 }
             } else {
-                BPNetworkHandler.INSTANCE.sendToAllAround(new MessageDebugBlock(pos), world);
+                //BPNetworkHandler.INSTANCE.sendToAllAround(new MessageDebugBlock(pos), world);
             }
         }
     }

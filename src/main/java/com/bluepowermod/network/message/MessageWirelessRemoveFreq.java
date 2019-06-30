@@ -47,7 +47,7 @@ public class MessageWirelessRemoveFreq extends Packet<MessageWirelessRemoveFreq>
         // WirelessManager.COMMON_INSTANCE.unregisterFrequency(WirelessManager.COMMON_INSTANCE.getFrequency(freq.getAccessibility(),
         //        freq.getFrequencyName(), freq.getOwner()));
 
-        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (ServerPlayerEntity) player);
+        //BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (ServerPlayerEntity) player);
 
     }
 }

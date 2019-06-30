@@ -8,7 +8,6 @@
 
 package com.bluepowermod.compat;
 
-import com.bluepowermod.compat.hydcraft.CompatModuleHydCraft;
 import com.bluepowermod.compat.ic2.CompatModuleIC2;
 import com.bluepowermod.compat.mcmp.CompatModuleMCMP;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
@@ -119,7 +118,7 @@ public class CompatibilityUtils {
         registerModule(Dependencies.MCMP, CompatModuleMCMP.class, null);
         registerModule(Dependencies.WAILA, CompatModuleWaila.class, null);
         registerModule(Dependencies.IC2, CompatModuleIC2.class, null);
-        registerModule(Dependencies.HC, CompatModuleHydCraft.class, null);
+        //registerModule(Dependencies.HC, CompatModuleHydCraft.class, null);
     }
 
 }

@@ -18,17 +18,24 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.block.machine.BlockIgniter;
+import com.bluepowermod.tile.BPTileEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.Direction;;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.world.World;
 
 import static com.bluepowermod.block.machine.BlockIgniter.ACTIVE;
 import static com.bluepowermod.block.machine.BlockIgniter.FACING;
 
 public class TileIgniter extends TileBase implements IEjectAnimator {
+
+    public TileIgniter() {
+        super(BPTileEntityType.IGNITER);
+    }
 
     @Override
     protected void redstoneChanged(boolean newValue) {
@@ -44,7 +51,7 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
 
     private void ignite() {
         Direction facing = world.getBlockState(pos).get(FACING);
-        if (world.getRedstonePowerFromNeighbors(pos) > 0 && world.isAirBlock(pos.offset(facing)) && Blocks.FIRE.canPlaceBlockAt(world, pos.offset(facing))) {
+        if (world.getRedstonePowerFromNeighbors(pos) > 0 && world.isAirBlock(pos.offset(facing)) && world.getBlockState(pos.offset(facing)).isAir()) {
             world.setBlockState(pos.offset(facing), Blocks.FIRE.getDefaultState());
         }
     }
@@ -52,19 +59,19 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
     private void extinguish() {
         Direction facing = world.getBlockState(pos).get(FACING);
         Block target = world.getBlockState(pos.offset(facing)).getBlock();
-        if (world.getRedstonePowerFromNeighbors(pos) == 0 && (target == Blocks.FIRE || target == Blocks.PORTAL)) {
-            world.setBlockToAir(pos.offset(facing));
+        if (world.getRedstonePowerFromNeighbors(pos) == 0 && (target == Blocks.FIRE || target == Blocks.NETHER_PORTAL)) {
+            world.setBlockState(pos.offset(facing), Blocks.AIR.getDefaultState());
         }
     }
 
 
     @Override
-    public void update() {
+    public void tick() {
 
         if (getTicker() % 5 == 0) {
             ignite();
         }
-        super.update();
+        super.tick();
     }
 
     @Override

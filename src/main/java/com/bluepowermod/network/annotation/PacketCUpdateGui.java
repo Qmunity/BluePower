@@ -26,7 +26,7 @@ public class PacketCUpdateGui extends Packet<PacketCUpdateGui> {
 
     public PacketCUpdateGui(int syncId, SyncedField syncField){
         this.syncId = syncId;
-        value = syncField.get();
+        value = syncField.getValue();
         type = getType(syncField);
     }
 
@@ -55,14 +55,14 @@ public class PacketCUpdateGui extends Packet<PacketCUpdateGui> {
             case 3:
                 return buf.readBoolean();
             case 4:
-                return ByteBufUtils.readUTF8String(buf);
+                //return ByteBufUtils.readUTF8String(buf);
             case 5:
                 return buf.readByte();
             case 6:
-                return ByteBufUtils.readItemStack(buf);
+                //return ByteBufUtils.readItemStack(buf);
             case 7:
                 if(!buf.readBoolean()) return null;
-                return FluidStack.loadFluidStackFromNBT(ByteBufUtils.readTag(buf));
+                //return FluidStack.loadFluidStackFromNBT(ByteBufUtils.readTag(buf));
         }
         throw new IllegalArgumentException("Invalid sync type! " + type);
     }
@@ -82,36 +82,22 @@ public class PacketCUpdateGui extends Packet<PacketCUpdateGui> {
                 buf.writeBoolean((Boolean)value);
                 break;
             case 4:
-                ByteBufUtils.writeUTF8String(buf, (String)value);
+                //ByteBufUtils.writeUTF8String(buf, (String)value);
                 break;
             case 5:
                 buf.writeByte((Byte)value);
                 break;
             case 6:
-                ByteBufUtils.writeItemStack(buf, (ItemStack)value);
+                //ByteBufUtils.writeItemStack(buf, (ItemStack)value);
                 break;
             case 7:
                 buf.writeBoolean(value != null);
                 if(value != null) {
                     FluidStack stack = (FluidStack)value;
-                    stack.writeToNBT(ByteBufUtils.readTag(buf));
+                    //stack.writeToNBT(ByteBufUtils.readTag(buf));
                 }
                 break;
         }
-    }
-
-    @Override
-    public void fromBytes(ByteBuf buf){
-        syncId = buf.readInt();
-        type = buf.readByte();
-        value = readField(buf, type);
-    }
-
-    @Override
-    public void toBytes(ByteBuf buf){
-        buf.writeInt(syncId);
-        buf.writeByte(type);
-        writeField(buf, value, type);
     }
 
     @Override

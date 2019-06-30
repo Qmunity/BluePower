@@ -10,8 +10,10 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
@@ -28,15 +30,19 @@ public class TileSolarPanel extends TileMachineBase  {
 
 	private final IPowerBase storage = new BlutricityStorage(10);
 
+	public TileSolarPanel() {
+		super(BPTileEntityType.SOLAR_PANEL);
+	}
+
 	@Override
-	public void update() {
-		if(world.isDaytime() && world.canSeeSky(pos) && storage.getVoltage() < 10)
+	public void tick() {
+		if(world.isDaytime() && world.canBlockSeeSky(pos) && storage.getVoltage() < 10)
 			storage.addEnergy(-(storage.getVoltage() - 10), false);
 
 		for (Direction facing : Direction.values()){
 		    TileEntity tile = world.getTileEntity(pos.offset(facing));
-		    if((storage.getVoltage() > 0) && tile != null && tile.hasCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite())){
-		        IPowerBase exStorage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite());
+		    if((storage.getVoltage() > 0) && tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).isPresent()){
+		        IPowerBase exStorage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).orElse(null);
 		        if(exStorage.getVoltage() < exStorage.getMaxVoltage()) {
 					storage.addEnergy(-(exStorage.addEnergy(storage.getVoltage(), false)), false);
 				}
@@ -44,17 +50,4 @@ public class TileSolarPanel extends TileMachineBase  {
         }
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Nullable
-	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if(capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
-				return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(this.storage);
-		}
-		return super.getCapability(capability, facing);
-	}
 }

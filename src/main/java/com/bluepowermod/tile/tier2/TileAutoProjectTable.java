@@ -6,6 +6,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
 
 import java.util.List;
 import java.util.Map;
@@ -33,21 +34,21 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT tag) {
-        super.writeToNBT(tag);
+    public CompoundNBT write(CompoundNBT tag) {
+        super.write(tag);
             CompoundNBT bufferTag = new CompoundNBT();
-            craftBuffer.writeToNBT(bufferTag);
-            tag.setTag("craftBuffer", bufferTag);
+            craftBuffer.write(bufferTag);
+            tag.put("craftBuffer", bufferTag);
 
         return tag;
     }
 
     @Override
-    public void readFromNBT(CompoundNBT tag) {
-        super.readFromNBT(tag);
+    public void read(CompoundNBT tag) {
+        super.read(tag);
 
-        if (tag.hasKey("craftBuffer")) {
-            craftBuffer = new ItemStack(tag.getCompoundTag("craftBuffer"));
+        if (tag.contains("craftBuffer")) {
+            craftBuffer = new ItemStack((IItemProvider) tag.getCompound("craftBuffer"));
         } else {
             craftBuffer = ItemStack.EMPTY;
         }
@@ -86,7 +87,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
         for (Map.Entry<ItemStack, Integer> entry : collection.entrySet()) {
             ItemStack s = entry.getKey();
             if (s.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(stack, s)) {
-                entry.setValue(entry.get() + 1);
+                entry.setValue(entry.getValue() + 1);
                 return;
             }
         }
@@ -109,18 +110,11 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void tick() {
+        super.tick();
         if (markedForBufferFill) {
             markedForBufferFill = false;
         }
-    }
-
-
-    @Override
-    public String getName() {
-
-        return BPBlocks.auto_project_table.getTranslationKey();
     }
 
     //Todo Fields
@@ -129,20 +123,6 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
         return craftBuffer == ItemStack.EMPTY;
     }
 
-    @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
 
     @Override
     public void clear() {

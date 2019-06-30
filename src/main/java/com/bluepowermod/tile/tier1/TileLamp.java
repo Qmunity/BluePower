@@ -8,53 +8,44 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
-import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.helper.MathHelper;
-import com.bluepowermod.init.Config;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
-import elucent.albedo.lighting.ILightProvider;
-import elucent.albedo.lighting.Light;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional;
 
 
 /**
  * @author Koen Beckers (K4Unl) and Amadornes.
  */
-@Optional.Interface(iface="elucent.albedo.lighting.ILightProvider", modid="albedo")
-public class TileLamp extends TileBase implements ILightProvider{
+public class TileLamp extends TileBase{
 
     private byte[] bundledPower = new byte[16];
 
+    public TileLamp() {
+        super(BPTileEntityType.LAMP);
+    }
+
     @Override
     protected void writeToPacketNBT(CompoundNBT tCompound) {
-        if (blockType instanceof BlockLampRGB) {
-            tCompound.setByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
-            tCompound.setByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
-            tCompound.setByte("blue", bundledPower[MinecraftColor.BLUE.ordinal()]);
+        if (getBlockState().getBlock() instanceof BlockLampRGB) {
+            tCompound.putByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
+            tCompound.putByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
+            tCompound.putByte("blue", bundledPower[MinecraftColor.BLUE.ordinal()]);
         }
     }
 
     @Override
     protected void readFromPacketNBT(CompoundNBT tCompound) {
-        if (tCompound.hasKey("red")) {
+        if (tCompound.contains("red")) {
             byte[] pow = bundledPower;
             pow[MinecraftColor.RED.ordinal()] = tCompound.getByte("red");
             pow[MinecraftColor.GREEN.ordinal()] = tCompound.getByte("green");
             pow[MinecraftColor.BLUE.ordinal()] = tCompound.getByte("blue");
             bundledPower = pow;
         }
-    }
-
-
-    @Override
-    public boolean shouldRenderInPass(int pass) {
-        RenderLamp.pass = pass;
-        return true;
     }
 
     @Override
@@ -78,9 +69,9 @@ public class TileLamp extends TileBase implements ILightProvider{
 
     @Override
     protected void onTileLoaded() {
-        world.getBlockState(pos).neighborChanged(world, pos, world.getBlockState(pos).getBlock(), pos);
+        world.getBlockState(pos).neighborChanged(world, pos, world.getBlockState(pos).getBlock(), pos, true);
     }
-
+/*
     @Optional.Method(modid="albedo")
     @Override
     public Light provideLight() {
@@ -100,5 +91,5 @@ public class TileLamp extends TileBase implements ILightProvider{
                 .color(r ,g,b, Config.albedoBrightness)
                 .radius(Math.max(value / 2, 1))
                 .build();
-    }
+    }*/
 }

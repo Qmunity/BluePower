@@ -3,7 +3,6 @@ package com.bluepowermod.network;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -39,11 +38,6 @@ public abstract class LocatedPacket<T extends LocatedPacket<T>> extends Packet<T
         buffer.writeInt(pos.getX());
         buffer.writeInt(pos.getY());
         buffer.writeInt(pos.getZ());
-    }
-
-    public NetworkRegistry.TargetPoint getTargetPoint(World world, double range){
-
-        return new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), range);
     }
 
     protected TileEntity getTileEntity(World world){

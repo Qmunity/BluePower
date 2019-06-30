@@ -28,22 +28,22 @@ public class BPNetworkHandler {
 
     public static void initBP() {
 
-        INSTANCE.registerPacket(MessageGuiUpdate.class, MessageGuiUpdate.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageCraftingSync.class, MessageCraftingSync.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageUpdateTextfield.class, MessageUpdateTextfield.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Side.CLIENT);
-        INSTANCE.registerPacket(MessageDebugBlock.class, MessageDebugBlock.class, Side.CLIENT);
-        INSTANCE.registerPacket(MessageSendClientServerTemplates.class, MessageSendClientServerTemplates.class, Side.CLIENT);
-        INSTANCE.registerPacket(MessageRedirectTubeStack.class, MessageRedirectTubeStack.class, Side.CLIENT);
-        INSTANCE.registerPacket(MessageServerTickTime.class, Side.CLIENT);
+        INSTANCE.registerPacket(MessageGuiUpdate.class, MessageGuiUpdate.class, Dist.DEDICATED_SERVER);
+        INSTANCE.registerPacket(MessageCraftingSync.class, MessageCraftingSync.class, Dist.DEDICATED_SERVER);
+        INSTANCE.registerPacket(MessageUpdateTextfield.class, MessageUpdateTextfield.class, Dist.DEDICATED_SERVER);
+        INSTANCE.registerPacket(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Dist.DEDICATED_SERVER);
+        INSTANCE.registerPacket(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Dist.CLIENT);
+        INSTANCE.registerPacket(MessageDebugBlock.class, MessageDebugBlock.class, Dist.CLIENT);
+        INSTANCE.registerPacket(MessageSendClientServerTemplates.class, MessageSendClientServerTemplates.class, Dist.CLIENT);
+        INSTANCE.registerPacket(MessageRedirectTubeStack.class, MessageRedirectTubeStack.class, Dist.CLIENT);
+        INSTANCE.registerPacket(MessageServerTickTime.class, Dist.CLIENT);
 
-        INSTANCE.registerPacket(MessageWirelessNewFreq.class, MessageWirelessNewFreq.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageWirelessSaveFreq.class, MessageWirelessSaveFreq.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageWirelessFrequencySync.class, MessageWirelessFrequencySync.class, Side.CLIENT);
-        INSTANCE.registerPacket(MessageWirelessRemoveFreq.class, MessageWirelessRemoveFreq.class, Side.SERVER);
+        INSTANCE.registerPacket(MessageWirelessNewFreq.class, MessageWirelessNewFreq.class, Dist.DEDICATED_SERVER);
+        INSTANCE.registerPacket(MessageWirelessSaveFreq.class, MessageWirelessSaveFreq.class, Dist.DEDICATED_SERVER);
+        INSTANCE.registerPacket(MessageWirelessFrequencySync.class, MessageWirelessFrequencySync.class, Dist.CLIENT);
+        INSTANCE.registerPacket(MessageWirelessRemoveFreq.class, MessageWirelessRemoveFreq.class, Dist.DEDICATED_SERVER);
 
-        INSTANCE.registerPacket(MessageSyncMachineBacklog.class, MessageSyncMachineBacklog.class, Side.CLIENT);
+        INSTANCE.registerPacket(MessageSyncMachineBacklog.class, MessageSyncMachineBacklog.class, Dist.CLIENT);
     }
 
 }

@@ -1,8 +1,6 @@
 package com.bluepowermod.network;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -39,14 +37,5 @@ public abstract class LocatedPacketDouble<T extends LocatedPacket<T>> extends Pa
         buffer.writeDouble(pos.getZ());
     }
 
-    public NetworkRegistry.TargetPoint getTargetPoint(World world) {
-
-        return getTargetPoint(world, 64);
-    }
-
-    public NetworkRegistry.TargetPoint getTargetPoint(World world, double updateDistance) {
-
-        return new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), updateDistance);
-    }
 
 }

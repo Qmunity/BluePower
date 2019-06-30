@@ -29,7 +29,7 @@ public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequenc
     public void write(DataOutput buffer) throws IOException {
 
         List<IFrequency> frequencies = null;
-        if (player == null || player.capabilities.isCreativeMode) {
+        if (player == null || player.isCreative()) {
            // frequencies = WirelessManager.COMMON_INSTANCE.getFrequencies();
         } else {
             frequencies = new ArrayList<IFrequency>();

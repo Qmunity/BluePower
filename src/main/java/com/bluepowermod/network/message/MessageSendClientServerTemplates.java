@@ -33,13 +33,14 @@ public class MessageSendClientServerTemplates extends Packet<MessageSendClientSe
         this.stacks = stacks;
     }
 
+/*
     @Override
     public void fromBytes(ByteBuf buf) {
 
         int amount = buf.readInt();
         stacks = new ArrayList<ItemStack>();
         for (int i = 0; i < amount; i++) {
-            stacks.add(ByteBufUtils.readItemStack(buf));
+            //stacks.add(ByteBufUtils.readItemStack(buf));
         }
     }
 
@@ -47,9 +48,10 @@ public class MessageSendClientServerTemplates extends Packet<MessageSendClientSe
     public void toBytes(ByteBuf buf) {
 
         buf.writeInt(stacks.size());
-        for (ItemStack stack : stacks)
-            ByteBufUtils.writeItemStack(buf, stack);
+        //for (ItemStack stack : stacks)
+            //ByteBufUtils.writeItemStack(buf, stack);
     }
+*/
 
     @Override
     public void write(DataOutput buffer) throws IOException {

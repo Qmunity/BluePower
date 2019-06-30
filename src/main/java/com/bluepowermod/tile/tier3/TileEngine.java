@@ -9,16 +9,13 @@ package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.api.power.BlutricityFEStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
+import com.bluepowermod.tile.BPTileEntityType;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.Direction;
-;
-
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraftforge.common.capabilities.Capability;
-
 import javax.annotation.Nullable;
 
 /**
@@ -42,15 +39,16 @@ public class TileEngine extends TileMachineBase  {
 
 	
 	public TileEngine(){
-		
+		super(BPTileEntityType.ENGINE);
+
 		pumpTick  = 0;
 		pumpSpeed = 16;
 		
 	}
 
     @Override
-	public void update() {
-		super.update();
+	public void tick() {
+		super.tick();
 		if(world.isRemote){
 			if(isActive){
 				pumpTick++;
@@ -86,22 +84,22 @@ public class TileEngine extends TileMachineBase  {
 	protected void writeToPacketNBT(CompoundNBT compound) {
 		super.writeToPacketNBT(compound);
 		int rotation = orientation.getIndex();
-		compound.setInteger("rotation", rotation);
-        compound.setByte("pumpspeed", pumpSpeed);
-        compound.setByte("pumptick", pumpTick);
-        NBTBase nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
-		compound.setTag("energy", nbtstorage);
+		compound.putInt("rotation", rotation);
+        compound.putByte("pumpspeed", pumpSpeed);
+        compound.putByte("pumptick", pumpTick);
+        INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
+		compound.put("energy", nbtstorage);
 
 	}
 
 	@Override
 	protected void readFromPacketNBT(CompoundNBT compound) {
 		super.readFromPacketNBT(compound);
-		orientation = Direction.byIndex(compound.getInteger("rotation"));
+		orientation = Direction.byIndex(compound.getInt("rotation"));
         pumpSpeed = compound.getByte("pumpspeed");
         pumpTick = compound.getByte("pumptick");
-        if(compound.hasKey("energy")) {
-            NBTBase nbtstorage = compound.getTag("energy");
+        if(compound.contains("energy")) {
+            INBT nbtstorage = compound.get("energy");
             CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
         }
 	}
@@ -114,7 +112,7 @@ public class TileEngine extends TileMachineBase  {
 
 	@Override
 	public CompoundNBT getUpdateTag() {
-		return this.writeToNBT(new CompoundNBT());
+		return this.write(new CompoundNBT());
 	}
 
 	@Override
@@ -122,18 +120,4 @@ public class TileEngine extends TileMachineBase  {
 		super.onDataPacket(net, pkt);
 		handleUpdateTag(pkt.getNbtCompound());
 	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Nullable
-	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if(capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY ) {
-			return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(storage);
-		}
-		return super.getCapability(capability, facing);
-    }
 }

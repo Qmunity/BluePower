@@ -35,7 +35,7 @@ public class MessageRedirectTubeStack extends LocatedPacket<MessageRedirectTubeS
      //  super(tube.getPos());
       //  this.stack = stack;
     //}
-
+/*
     @Override
     public void toBytes(ByteBuf buf) {
 
@@ -48,7 +48,7 @@ public class MessageRedirectTubeStack extends LocatedPacket<MessageRedirectTubeS
 
         super.fromBytes(buf);
         stack = TubeStack.loadFromPacket(buf);
-    }
+    }*/
 
     @Override
     public void handleClientSide(PlayerEntity player) {

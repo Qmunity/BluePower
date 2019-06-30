@@ -17,6 +17,7 @@ import com.bluepowermod.helper.BPItemTier;
 import com.bluepowermod.init.*;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.world.WorldGenOres;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
@@ -66,10 +67,10 @@ public class BluePower {
     public void setup(FMLCommonSetupEvent event) {
 
         proxy.initRenderers();
-        TileEntities.init();
         OreDictionarySetup.init();
         //TODO: World Gen
-        //GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
+        WorldGenOres.setupOres();
+        //GameRegistry.registerWorldGenerator(new BPWorldGen(), 0);
 
         proxy.setup(event);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> BPContainerType::registerScreenFactories);

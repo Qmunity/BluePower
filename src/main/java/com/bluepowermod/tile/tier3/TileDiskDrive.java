@@ -7,12 +7,16 @@
  */
 package com.bluepowermod.tile.tier3;
 
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
 
 /**
  * @author fabricator77
  */
 public class TileDiskDrive extends TileBase implements IRedBusWindow {
+	public TileDiskDrive() {
+		super(BPTileEntityType.DISK_DRIVE);
+	}
 	/** redbus memory block
 	 * addr size function
 	 * 0x00 128 Data buffer

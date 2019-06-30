@@ -25,7 +25,6 @@ import net.minecraft.block.BushBlock;
 import net.minecraft.block.LilyPadBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
@@ -81,7 +80,7 @@ public class ItemSickle extends ToolItem {
     @Override
     public boolean hitEntity(ItemStack itemStack, LivingEntity par2EntityLivingBase, LivingEntity par3EntityLivingBase) {
 
-        itemStack.damageItem(2, par3EntityLivingBase);
+        itemStack.setDamage(itemStack.getDamage() -2);
         return true;
     }
 
@@ -110,7 +109,7 @@ public class ItemSickle extends ToolItem {
                 }
             }
             if (used) {
-                stack.damageItem(1, entityLiving);
+                stack.setDamage(stack.getDamage() -1);
             }
             return used;
         }
@@ -121,7 +120,7 @@ public class ItemSickle extends ToolItem {
                     Block blockToCheck = world.getBlockState(pos.add(i,0,j)).getBlock();
                     BlockState meta = world.getBlockState(pos.add(i,0,j));
                     if (blockToCheck != null && blockToCheck instanceof LilyPadBlock) {
-                        if (blockToCheck.canHarvestBlock(world, pos.add(i,0,j), player)) {
+                        if (blockToCheck.canHarvestBlock(meta, world, pos.add(i,0,j), player)) {
                             blockToCheck.harvestBlock(world, player, pos.add(i,0,j), meta, null, stack);
                         }
                         world.setBlockState(pos.add(i,0,j), Blocks.AIR.getDefaultState());
@@ -148,7 +147,7 @@ public class ItemSickle extends ToolItem {
             }
         }
         if (used) {
-            stack.damageItem(1, entityLiving);
+            stack.setDamage(stack.getDamage() -1);
         }
         return used;
     }
