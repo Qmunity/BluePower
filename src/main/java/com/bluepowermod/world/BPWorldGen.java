@@ -18,7 +18,7 @@
 package com.bluepowermod.world;
 
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.Config;
+import com.bluepowermod.init.BPConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
@@ -27,6 +27,6 @@ public class BPWorldGen {
 
     //VOLCANO
     public static final Feature<NoFeatureConfig> VOLCANO = new WorldGenVolcano(NoFeatureConfig::deserialize);
-    public static final Feature<NoFeatureConfig> MARBLE = new WorldGenMarble(NoFeatureConfig::deserialize, BPBlocks.marble, Config.veinSizeMarble);
+    public static final Feature<NoFeatureConfig> MARBLE = new WorldGenMarble(NoFeatureConfig::deserialize, BPBlocks.marble, BPConfig.CONFIG.veinSizeMarble.get());
 
 }

@@ -17,29 +17,16 @@
 
 package com.bluepowermod.compat.waila;
 
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.api.IWailaDataProvider;
+import mcp.mobius.waila.api.IServerDataProvider;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.List;
-
-public class WailaProviderParts implements IWailaDataProvider {
+public class WailaProviderParts implements IServerDataProvider<TileEntity>{
 
     @Override
-    public List<String> getWailaHead(ItemStack item, List<String> l, IWailaDataAccessor data, IWailaConfigHandler cfg) {
-
-        return l;
-    }
-
-    @Override
-    public List<String> getWailaBody(ItemStack item, List<String> l, IWailaDataAccessor data, IWailaConfigHandler cfg) {
-
+    public void appendServerData(CompoundNBT compoundNBT, ServerPlayerEntity serverPlayerEntity, World world, TileEntity tileEntity) {
         // ITilePartHolder h = MultipartCompatibility.getPartHolder(data.getWorld(), data.getPosition().blockX, data.getPosition().blockY,
         // data.getPosition().blockZ);
         //
@@ -52,26 +39,6 @@ public class WailaProviderParts implements IWailaDataProvider {
         // if (mop.hitVec.distanceTo(data.getPosition().hitVec) < 0.01)
         // ((IPartWAILAProvider) mop.getPart()).addWAILABody(l);
         // }
-
-        return l;
-    }
-
-    @Override
-    public List<String> getWailaTail(ItemStack item, List<String> l, IWailaDataAccessor data, IWailaConfigHandler cfg) {
-
-        return l;
-    }
-
-    @Override
-    public ItemStack getWailaStack(IWailaDataAccessor data, IWailaConfigHandler cfg) {
-
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public CompoundNBT getNBTData(ServerPlayerEntity player, TileEntity te, CompoundNBT tag, World w, BlockPos pos) {
-
-        return tag;
     }
 
 }

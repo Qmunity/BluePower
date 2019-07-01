@@ -19,7 +19,7 @@ package com.bluepowermod.world;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.Config;
+import com.bluepowermod.init.BPConfig;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -62,7 +62,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld world, ChunkGenerator<? extends GenerationSettings> chunkGenerator, Random rand, BlockPos blockPos, NoFeatureConfig noFeatureConfig) {
-        if (rand.nextDouble() < Config.volcanoSpawnChance) {
+        if (rand.nextDouble() < BPConfig.CONFIG.volcanoSpawnChance.get()) {
             if (world.getBlockState(new BlockPos(blockPos.getX(), 10, blockPos.getZ())).getBlock() == Blocks.LAVA && world.getHeight(Heightmap.Type.WORLD_SURFACE, blockPos.getX(), blockPos.getZ()) <= 90) {
                 List<Pos>[] distMap = calculateDistMap();
                 boolean first = true;
@@ -118,7 +118,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
     private void generateLavaColumn(World world, int x, int topY, int z, Random rand) {
 
         // world.setBlock(x, topY, z, Blocks.lava);
-        if (rand.nextDouble() < Config.volcanoActiveToInactiveRatio) {
+        if (rand.nextDouble() < BPConfig.CONFIG.volcanoActiveToInactiveRatio.get()) {
             world.setBlockState(new BlockPos(x, topY, z), BPBlocks.cracked_basalt_lava.getDefaultState());
         } else {
             world.setBlockState(new BlockPos(x, topY + 1, z), Blocks.LAVA.getDefaultState());

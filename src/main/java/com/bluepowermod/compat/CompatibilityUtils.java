@@ -8,8 +8,8 @@
 
 package com.bluepowermod.compat;
 
-import com.bluepowermod.compat.ic2.CompatModuleIC2;
-import com.bluepowermod.compat.mcmp.CompatModuleMCMP;
+//import com.bluepowermod.compat.ic2.CompatModuleIC2;
+//import com.bluepowermod.compat.mcmp.CompatModuleMCMP;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
 import com.bluepowermod.util.Dependencies;
 import net.minecraft.item.ItemStack;
@@ -115,9 +115,9 @@ public class CompatibilityUtils {
      */
     static {
         //registerModule(Dependencies.COMPUTER_CRAFT, CompatModuleCC.class, null);
-        registerModule(Dependencies.MCMP, CompatModuleMCMP.class, null);
-        registerModule(Dependencies.WAILA, CompatModuleWaila.class, null);
-        registerModule(Dependencies.IC2, CompatModuleIC2.class, null);
+        //registerModule(Dependencies.MCMP, CompatModuleMCMP.class, null);
+        //registerModule(Dependencies.WAILA, CompatModuleWaila.class, null);
+        //registerModule(Dependencies.IC2, CompatModuleIC2.class, null);
         //registerModule(Dependencies.HC, CompatModuleHydCraft.class, null);
     }
 

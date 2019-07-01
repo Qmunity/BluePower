@@ -1,5 +1,5 @@
 package com.bluepowermod.compat.mcmp.parts;
-
+/*
 import mcmultipart.api.multipart.IMultipart;
 import mcmultipart.api.slot.EnumFaceSlot;
 import mcmultipart.api.slot.IPartSlot;
@@ -10,6 +10,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
 
 public class PartLamp implements IMultipart {
     private Block block;
@@ -34,3 +35,4 @@ public class PartLamp implements IMultipart {
     }
 
 }
+*/

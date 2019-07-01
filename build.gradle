@@ -61,9 +61,9 @@ dependencies {
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
 	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
-    //deobfCompile "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
-	//deobfCompile "mezz.jei:jei_1.12.2:4.9.2.196:api"
-	//runtime "mezz.jei:jei_1.12.2:4.9.2.196"
+    compileOnly fg.deobf("mcp.mobius.waila:Hwyla:1.10.3-B64_1.14.2")
+    compileOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.5:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.5")
     //compile "team.chisel.ctm:CTM:MC1.12.2-0.3.3.22"
 }
 

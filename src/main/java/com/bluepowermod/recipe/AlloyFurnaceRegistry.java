@@ -20,7 +20,7 @@ package com.bluepowermod.recipe;
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
-import com.bluepowermod.init.Config;
+import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.util.ItemStackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -117,14 +117,14 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     @SuppressWarnings("unchecked")
     public void generateRecyclingRecipes() {
 
-        Collections.addAll(blacklist, Config.alloyFurnaceBlacklist);
+        Collections.addAll(blacklist, BPConfig.CONFIG.alloyFurnaceBlacklist.get());
         List<Item> blacklist = new ArrayList<Item>();
         for (String configString : this.blacklist) {
             Item item = Item.getByNameOrId(configString);
             if (item != null) {
                 blacklist.add(item);
             } else {
-                BluePower.log.info("Config entry \"" + configString
+                BluePower.log.info("BPConfig entry \"" + configString
                         + "\" not an existing item/block name! Will not be added to the blacklist");
             }
         }
@@ -153,47 +153,14 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                         }
                     } else if (recipe instanceof ShapelessRecipe) {
                         ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
-                        if (!shapeless.recipeItems.isEmpty()) {
-                            for (Ingredient input : shapeless.recipeItems) {
+                        if (!shapeless.getIngredients().isEmpty()) {
+                            for (Ingredient input : shapeless.getIngredients()) {
                                 if (input.test(recyclingItem)) {
                                     ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
                                     if (currentlyRecycledInto.isEmpty()
                                             || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
                                         currentlyRecycledInto = moltenDownItem;
                                         recyclingAmount += moltenDownItem.getCount();
-                                    }
-                                }
-                            }
-                        }
-                    } else if (recipe instanceof ShapedOreRecipe) {
-                        ShapedOreRecipe shapedOreRecipe = (ShapedOreRecipe) recipe;
-                            for (Ingredient input : shapedOreRecipe.getIngredients()) {
-                                if (input != null) {
-                                    for (ItemStack item : input.getMatchingStacks()) {
-                                        if (!item.isEmpty() && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
-                                            ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
-                                            if (currentlyRecycledInto.isEmpty() || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
-                                                currentlyRecycledInto = moltenDownItem;
-                                                recyclingAmount += moltenDownItem.getCount();
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                        }
-                    } else if (recipe instanceof ShapelessOreRecipe) {
-                        ShapelessOreRecipe shapeless = (ShapelessOreRecipe) recipe;
-                        for (Ingredient input : shapeless.getIngredients()) {
-                            if (input != null) {
-                                for (ItemStack item : input.getMatchingStacks()) {
-                                    if (!item.isEmpty() && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
-                                        ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
-                                        if (currentlyRecycledInto.isEmpty()
-                                                || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
-                                            currentlyRecycledInto = moltenDownItem;
-                                            recyclingAmount += moltenDownItem.getCount();
-                                        }
-                                        break;
                                     }
                                 }
                             }
@@ -226,8 +193,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                                 + " to the Alloy Furnace recipes.");
                         continue;
                     }
-                    ItemStack resultItem = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount),
-                            currentlyRecycledInto.getItemDamage());
+                    ItemStack resultItem = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount));
                     registeredResultItems.add(resultItem);
                     registeredRecycledItems.add(recipe.getRecipeOutput());
 

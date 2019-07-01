@@ -17,7 +17,7 @@
 
 package com.bluepowermod.world;
 
-import com.bluepowermod.init.Config;
+import com.bluepowermod.init.BPConfig;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -28,8 +28,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
 
 import java.util.*;
 import java.util.function.Function;
@@ -76,7 +74,7 @@ public class WorldGenMarble extends Feature<NoFeatureConfig> {
             return false;
         }
 
-        if (Config.veinSizeMarble > 0) {
+        if (BPConfig.CONFIG.veinSizeMarble.get() > 0) {
             for (int i = 0; i < 4; i++) {
                 int y = pos.getY();
                 while (world.getBlockState(new BlockPos(pos.getX(), y, pos.getZ())).getBlock() != Blocks.STONE) {

@@ -6,6 +6,7 @@
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
 package com.bluepowermod.compat.ic2;
+/*
 
 import ic2.api.recipe.IRecipeInput;
 import net.minecraft.item.ItemStack;
@@ -36,3 +37,4 @@ public class IC2RecipeInput implements IRecipeInput{
     }
 
 }
+*/

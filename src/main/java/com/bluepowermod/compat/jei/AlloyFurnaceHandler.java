@@ -9,17 +9,19 @@ package com.bluepowermod.compat.jei;
 
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.reference.Refs;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiItemStackGroup;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeCategory;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import mezz.jei.api.recipe.IRecipeWrapperFactory;
+import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
@@ -39,8 +41,13 @@ public class AlloyFurnaceHandler implements IRecipeCategory<AlloyFurnaceWrapper>
     }
 
     @Override
-    public String getUid() {
-        return "bluepower.alloyfurnace";
+    public ResourceLocation getUid() {
+        return new ResourceLocation("bluepower:alloyfurnace");
+    }
+
+    @Override
+    public Class<? extends AlloyFurnaceWrapper> getRecipeClass() {
+        return null;
     }
 
     @Override
@@ -49,17 +56,17 @@ public class AlloyFurnaceHandler implements IRecipeCategory<AlloyFurnaceWrapper>
     }
 
     @Override
-    public String getModName() {
-        return Refs.NAME;
-    }
-
-    @Override
     public IDrawable getBackground() {
         return background;
     }
 
     @Override
-    public void drawExtras(Minecraft minecraft) {
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
+    public void setIngredients(AlloyFurnaceWrapper alloyFurnaceWrapper, IIngredients iIngredients) {
 
     }
 
@@ -69,19 +76,20 @@ public class AlloyFurnaceHandler implements IRecipeCategory<AlloyFurnaceWrapper>
         guiItemStackGroup.init(0, false, 12, 21);
         guiItemStackGroup.set(0, new ItemStack(Items.COAL));
         guiItemStackGroup.init(1, false,125, 21);
-        guiItemStackGroup.set(1, ingredients.getOutputs(ItemStack.class).get(0));
+        guiItemStackGroup.set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
         for(int i = 0; i < 3; i++ ) {
             for(int j = 0; j < 3; j++ ) {
                 guiItemStackGroup.init(i * 3 + j + 2, true, 38 + j * 18, 3 + i * 18);
             }
         }
-        for(int i = 0; i < ingredients.getInputs(ItemStack.class).get(0).size(); i++){
-            guiItemStackGroup.set(i + 2, ingredients.getInputs(ItemStack.class).get(0).get(i));
+        for(int i = 0; i < ingredients.getInputs(VanillaTypes.ITEM).get(0).size(); i++){
+            guiItemStackGroup.set(i + 2, ingredients.getInputs(VanillaTypes.ITEM).get(0).get(i));
         }
     }
 
 }
 
+/*
 class AlloyFurnaceWrapperFactory implements IRecipeWrapperFactory<StandardAlloyFurnaceRecipe> {
 
     @Override
@@ -89,8 +97,9 @@ class AlloyFurnaceWrapperFactory implements IRecipeWrapperFactory<StandardAlloyF
         return new AlloyFurnaceWrapper(recipe);
     }
 }
+*/
 
-class AlloyFurnaceWrapper implements IRecipeWrapper {
+class AlloyFurnaceWrapper { //implements IRecipeWrapper
 
     protected final NonNullList<ItemStack> inputs;
     protected final ItemStack output;
@@ -100,10 +109,10 @@ class AlloyFurnaceWrapper implements IRecipeWrapper {
         this.output = recipe.getCraftingResult(inputs);
     }
 
-    @Override
+    /*@Override
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInput(ItemStack.class, inputs);
         ingredients.setOutput(ItemStack.class, output);
-    }
+    }*/
 }
 

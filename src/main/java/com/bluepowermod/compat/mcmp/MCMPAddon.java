@@ -1,5 +1,6 @@
 package com.bluepowermod.compat.mcmp;
 
+/*
 import com.bluepowermod.block.machine.BlockLampSurface;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.compat.mcmp.parts.PartLamp;
@@ -58,3 +59,4 @@ public class MCMPAddon implements IMCMPAddon{
     }
 
 }
+*/

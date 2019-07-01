@@ -10,14 +10,9 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackDatabase;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.Config;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
-import com.bluepowermod.network.message.MessageSendClientServerTemplates;
+import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -53,7 +48,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
 
     public static boolean hasPermissions(PlayerEntity player) {
 
-        if (Config.serverCircuitSavingOpOnly) {
+        if (BPConfig.CONFIG.serverCircuitSavingOpOnly.get()) {
             //if (!player.can(2, "saveTemplate")) {
                 //player.sendMessage(new StringTextComponent("gui.circuitDatabase.info.opsOnly"));
                 //return false;

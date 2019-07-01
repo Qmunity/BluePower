@@ -6,6 +6,7 @@
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
 package com.bluepowermod.compat.ic2;
+/*
 
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.init.BPBlocks;
@@ -67,3 +68,4 @@ public class CompatModuleIC2 extends CompatModule {
 
     }
 }
+*/

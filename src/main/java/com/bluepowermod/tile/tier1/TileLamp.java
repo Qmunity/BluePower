@@ -88,7 +88,7 @@ public class TileLamp extends TileBase{
 
         return Light.builder()
                 .pos(this.pos)
-                .color(r ,g,b, Config.albedoBrightness)
+                .color(r ,g,b, BPConfig.albedoBrightness)
                 .radius(Math.max(value / 2, 1))
                 .build();
     }*/

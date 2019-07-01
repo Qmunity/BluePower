@@ -24,7 +24,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -43,16 +45,11 @@ public class BluePower {
     public BluePower(){
         instance = this;
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
-
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, BPConfig.spec);
         BPApi.init(new BluePowerAPI());
-        //Load configs
-        //TODO: Configs
-        //Config.syncConfig(config);
         BPEnchantments.init();
         MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
         CapabilityBlutricity.register();
-
-        MinecraftForge.EVENT_BUS.register(new Config());
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         BPBlocks.init();

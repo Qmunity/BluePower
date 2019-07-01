@@ -6,6 +6,7 @@
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
 package com.bluepowermod.compat.mcmp;
+/*
 
 import com.bluepowermod.compat.CompatModule;
 import net.minecraftforge.common.MinecraftForge;
@@ -51,3 +52,4 @@ public class CompatModuleMCMP extends CompatModule {
 
     }
 }
+*/
