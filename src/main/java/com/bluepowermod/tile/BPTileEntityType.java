@@ -77,7 +77,10 @@ public class BPTileEntityType {
     @ObjectHolder(Refs.MODID + ":engine")
     public static TileEntityType<TileEngine> ENGINE;
 
-    @ObjectHolder(Refs.MODID + ":blockbreaker")
+    @ObjectHolder(Refs.MODID + ":sortron")
+    public static TileEntityType<TileSortron> SORTRON;
+
+    @ObjectHolder(Refs.MODID + ":block_breaker")
     public static TileEntityType<TileBlockBreaker> BLOCKBREAKER;
 
     @ObjectHolder(Refs.MODID + ":igniter")

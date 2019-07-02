@@ -10,6 +10,7 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class BlockGateBase extends BlockBase {
 
     private final String name;
-    public static final DirectionProperty FACING = DirectionProperty.create("facing");
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 3);
     public static final BooleanProperty POWERED_FRONT = BooleanProperty.create("powered_front");
     public static final BooleanProperty POWERED_BACK = BooleanProperty.create("powered_back");

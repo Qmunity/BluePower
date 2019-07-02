@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -21,7 +22,7 @@ public class BlockLampSurface extends BlockLamp {
     private final Boolean isInverted;
     private final AxisAlignedBB size;
 
-    public static final DirectionProperty FACING = DirectionProperty.create("facing");
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public BlockLampSurface(String name, boolean isInverted, MinecraftColor color, AxisAlignedBB size) {
         super(name, isInverted, color);

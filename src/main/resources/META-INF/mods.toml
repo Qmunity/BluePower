@@ -12,7 +12,7 @@ issueTrackerURL="https://github.com/Qmunity/BluePower/issues" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="https://github.com/Qmunity/BluePower" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-logoFile="assets/bluepower/logo.png" #optional
+logoFile="logo.png" #optional
 # A text field displayed in the mod UI
 credits="Thanks to all the contributors for their contributions and the community for the support" #optional
 # A text field displayed in the mod UI
@@ -32,7 +32,7 @@ description='''
 Work in progress mod aiming to reintroduce some missing 'glue' blocks from prior versions of modded Minecraft.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.restrictedportals]] #optional
+[[dependencies.bluepower]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
@@ -44,7 +44,7 @@ Work in progress mod aiming to reintroduce some missing 'glue' blocks from prior
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.restrictedportals]]
+[[dependencies.bluepower]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.14.2]"

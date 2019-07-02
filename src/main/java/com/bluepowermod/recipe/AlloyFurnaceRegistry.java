@@ -23,10 +23,20 @@ import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.util.ItemStackUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.CraftingTableBlock;
+import net.minecraft.client.Minecraft;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.*;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
@@ -72,7 +82,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     @Override
     public void addRecipe(ItemStack craftingResult, Object... requiredItems) {
 
-        if (craftingResult == null || craftingResult.getItem() == null)
+        if (craftingResult == null || craftingResult.getItem() == Items.AIR)
             throw new NullPointerException("Can't register an Alloy Furnace recipe with a null output stack or item");
         if (craftingResult.isEmpty())
             throw new NullPointerException("Can't register an Alloy Furnace recipe with a invalid output stack or item");
@@ -81,9 +91,9 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             if (requiredItems[i] instanceof ItemStack) {
                 requiredStacks.set(i, (ItemStack) requiredItems[i]);
             } else if (requiredItems[i] instanceof Item) {
-                requiredStacks.set(i, new ItemStack((Item) requiredItems[i], 1, OreDictionary.WILDCARD_VALUE));
+                requiredStacks.set(i, new ItemStack((Item) requiredItems[i], 1));
             } else if (requiredItems[i] instanceof Block) {
-                requiredStacks.set(i, new ItemStack(Item.getItemFromBlock((Block) requiredItems[i]), 1, OreDictionary.WILDCARD_VALUE));
+                requiredStacks.set(i, new ItemStack(Item.getItemFromBlock((Block) requiredItems[i]), 1));
             } else {
                 throw new IllegalArgumentException("Alloy Furnace crafting ingredients can only be ItemStack, Item or Block!");
             }
@@ -98,9 +108,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             throw new NullPointerException("Recycled item can't be null!");
         bufferedRecyclingItems.add(recycledItem);
         if (blacklist.length > 0) {
-            ModContainer mc = Loader.instance().activeModContainer();
-            BluePower.log.info((mc != null ? mc.getName() : "Unknown mod") + " added to the Alloy Furnace recycling blacklist: "
-                    + Arrays.toString(blacklist));
+            BluePower.log.info("Added to the Alloy Furnace recycling blacklist: " + Arrays.toString(blacklist));
             Collections.addAll(this.blacklist, blacklist);
         }
     }
@@ -120,7 +128,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         Collections.addAll(blacklist, BPConfig.CONFIG.alloyFurnaceBlacklist.get());
         List<Item> blacklist = new ArrayList<Item>();
         for (String configString : this.blacklist) {
-            Item item = Item.getByNameOrId(configString);
+            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(configString));
             if (item != null) {
                 blacklist.add(item);
             } else {
@@ -132,7 +140,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         List<ItemStack> registeredRecycledItems = new ArrayList<ItemStack>();
         List<ItemStack> registeredResultItems = new ArrayList<ItemStack>();
 
-        for (IRecipe recipe : CraftingManager.REGISTRY) {
+        for (IRecipe recipe : Minecraft.getInstance().world.getRecipeManager().getRecipes()) {
             int recyclingAmount = 0;
             ItemStack currentlyRecycledInto = ItemStack.EMPTY;
             for (ItemStack recyclingItem : bufferedRecyclingItems) {

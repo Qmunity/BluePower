@@ -47,10 +47,7 @@ public class GuiFilter extends GuiContainerBaseBP<ContainerFilter> implements IH
         super(container, playerInventory, title, resLoc);
         this.filter = container;
     }
-    public GuiFilter(ContainerFilter container, PlayerInventory playerInventory, ITextComponent title, ResourceLocation resourceLocation){
-        super(container, playerInventory, title, resourceLocation);
-        this.filter = container;
-    }
+
     @Override
     public void init() {
 

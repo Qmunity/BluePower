@@ -20,8 +20,8 @@ public class BPEnchantments {
 	public static Enchantment disjunction;
 	
 	public static void init() {
-		vorpal = new EnchantmentVorpal(BPConfig.CONFIG.vorpalEnchantmentId.get(), Enchantment.Rarity.COMMON);
-		disjunction = new EnchantmentDisjunction(BPConfig.CONFIG.disjunctionEnchantmentId.get(), Enchantment.Rarity.COMMON);
+		vorpal = new EnchantmentVorpal(Enchantment.Rarity.COMMON);
+		disjunction = new EnchantmentDisjunction(Enchantment.Rarity.COMMON);
 	}
 
 	@SubscribeEvent

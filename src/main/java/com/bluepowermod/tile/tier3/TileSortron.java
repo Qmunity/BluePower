@@ -19,7 +19,7 @@ import net.minecraft.tileentity.TileEntityType;
 // , @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = Dependencies.OPEN_COMPUTERS)
 public class TileSortron extends TileMachineBase {
     public TileSortron() {
-        super(BPTileEntityType.SORTING_MACHINE);
+        super(BPTileEntityType.SORTRON);
     }// implements IPeripheral/* , SimpleComponent */{
     //
     // private static final String NAME = "BluePower.Sortron";

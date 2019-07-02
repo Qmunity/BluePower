@@ -48,7 +48,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Refs.MODID)
+@Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BPBlocks {
 
     public static List<Block> blockList = new ArrayList<>();

@@ -17,12 +17,6 @@
 
         package com.bluepowermod.recipe;
 
-        import com.bluepowermod.init.BPBlocks;
-        import com.bluepowermod.init.BPItems;
-        import net.minecraft.block.Blocks;
-        import net.minecraft.item.ItemStack;
-        import net.minecraftforge.fml.common.registry.GameRegistry;
-        import net.minecraftforge.oredict.RecipeSorter;
 
 /**
  * Created by Quetzi on 27/10/14.
@@ -32,7 +26,7 @@ public class CoreRecipes {
     public static void init() {
 
         // Smelting
-        GameRegistry.addSmelting(BPBlocks.basalt_cobble, new ItemStack(BPBlocks.basalt), 0);
+        /*GameRegistry.addSmelting(BPBlocks.basalt_cobble, new ItemStack(BPBlocks.basalt), 0);
         GameRegistry.addSmelting(BPBlocks.copper_ore, new ItemStack(BPItems.copper_ingot), 0.5F);
         GameRegistry.addSmelting(BPBlocks.zinc_ore, new ItemStack(BPItems.zinc_ingot), 0.5F);
         GameRegistry.addSmelting(BPBlocks.silver_ore, new ItemStack(BPItems.silver_ingot), 0.7F);
@@ -40,12 +34,12 @@ public class CoreRecipes {
         GameRegistry.addSmelting(Blocks.STONE, new ItemStack(BPItems.stone_tile, 2), 0);
         GameRegistry.addSmelting(BPItems.zinc_ore_crushed, new ItemStack(BPItems.zinc_ingot), 0.5F);
         GameRegistry.addSmelting(BPItems.zinc_dust, new ItemStack(BPItems.zinc_ingot), 0.5F);
-        GameRegistry.addSmelting(BPItems.zinc_ore_purified, new ItemStack(BPItems.zinc_ingot), 0.5F);
+        GameRegistry.addSmelting(BPItems.zinc_ore_purified, new ItemStack(BPItems.zinc_ingot), 0.5F);*/
 
         // Decoration
-        GameRegistry.addSmelting(BPBlocks.basalt_brick, new ItemStack(BPBlocks.basaltbrick_cracked, 1), 0);
+        /*GameRegistry.addSmelting(BPBlocks.basalt_brick, new ItemStack(BPBlocks.basaltbrick_cracked, 1), 0);
         GameRegistry.addSmelting(BPBlocks.basalt, new ItemStack(BPBlocks.basalt_tile), 0);
-        GameRegistry.addSmelting(BPBlocks.marble, new ItemStack(BPBlocks.marble_tile), 0);
+        GameRegistry.addSmelting(BPBlocks.marble, new ItemStack(BPBlocks.marble_tile), 0);*/
 
 /*        if (Loader.isModLoaded("ForgeMicroblock")) {
             ItemStack diamondPanel = new ItemStack(GameData.getItemRegistry().getObject(new ResourceLocation("ForgeMicroblock:microblock")), 1, 2);

@@ -18,12 +18,15 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.helper.BPItemTier;
 import com.bluepowermod.item.*;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemTier;
 import net.minecraft.item.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,7 +34,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Refs.MODID)
+@Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BPItems {
     public static List<Item> itemList = new ArrayList<Item>();
     public static final Item amethyst_gem = new ItemCrafting(Refs.AMETHYST_NAME);
@@ -99,41 +102,42 @@ public class BPItems {
     public static final Item iron_wire = new ItemCrafting(Refs.IRONWIRE_NAME);
     public static final Item paint_can = new ItemPaintCan(Refs.PAINTCAN_NAME);
     public static final Item paint_brush = new ItemPaintBrush(Refs.PAINTBRUSH_NAME);
-    public static final Item ruby_axe = new ItemGemAxe(BluePower.gemItemTier, Refs.RUBYAXE_NAME, BPItems.ruby_gem);
-    public static final Item ruby_sword = new ItemGemSword(BluePower.gemItemTier, Refs.RUBYSWORD_NAME, BPItems.ruby_gem);
-    public static final Item ruby_pickaxe = new ItemGemPickaxe(BluePower.gemItemTier, Refs.RUBYPICKAXE_NAME, BPItems.ruby_gem);
-    public static final Item ruby_shovel = new ItemGemSpade(BluePower.gemItemTier, Refs.RUBYSPADE_NAME, BPItems.ruby_gem);
-    public static final Item ruby_hoe = new ItemGemHoe(BluePower.gemItemTier, Refs.RUBYHOE_NAME, BPItems.ruby_gem);
-    public static final Item ruby_sickle = new ItemSickle(BluePower.gemItemTier, Refs.RUBYSICKLE_NAME, BPItems.ruby_gem);
-    public static final Item ruby_saw = new ItemSaw(BluePower.gemItemTier.getHarvestLevel(), Refs.RUBYSAW_NAME);
-    public static final Item sapphire_axe = new ItemGemAxe(BluePower.gemItemTier, Refs.SAPPHIREAXE_NAME, BPItems.sapphire_gem);
-    public static final Item sapphire_sword = new ItemGemSword(BluePower.gemItemTier, Refs.SAPPHIRESWORD_NAME, BPItems.sapphire_gem);
-    public static final Item sapphire_pickaxe = new ItemGemPickaxe(BluePower.gemItemTier, Refs.SAPPHIREPICKAXE_NAME, BPItems.sapphire_gem);
-    public static final Item sapphire_shovel = new ItemGemSpade(BluePower.gemItemTier, Refs.SAPPHIRESPADE_NAME, BPItems.sapphire_gem);
-    public static final Item sapphire_hoe = new ItemGemHoe(BluePower.gemItemTier, Refs.SAPPHIREHOE_NAME, BPItems.sapphire_gem);
-    public static final Item sapphire_sickle = new ItemSickle(BluePower.gemItemTier, Refs.SAPPHIRESICKLE_NAME, BPItems.sapphire_gem);
-    public static final Item sapphire_saw = new ItemSaw(BluePower.gemItemTier.getHarvestLevel(), Refs.SAPPHIRESAW_NAME);
-    public static final Item malachite_axe = new ItemGemAxe(BluePower.gemItemTier, Refs.MALACHITEAXE_NAME, BPItems.amethyst_gem);
-    public static final Item malachite_sword = new ItemGemSword(BluePower.gemItemTier, Refs.MALACHITESWORD_NAME, BPItems.amethyst_gem);
-    public static final Item malachite_pickaxe = new ItemGemPickaxe(BluePower.gemItemTier, Refs.MALACHITEPICKAXE_NAME, BPItems.amethyst_gem);
-    public static final Item malachite_shovel = new ItemGemSpade(BluePower.gemItemTier, Refs.MALACHITESPADE_NAME, BPItems.amethyst_gem);
-    public static final Item malachite_hoe = new ItemGemHoe(BluePower.gemItemTier, Refs.MALACHITEHOE_NAME, BPItems.amethyst_gem);
-    public static final Item malachite_sickle = new ItemSickle(BluePower.gemItemTier, Refs.MALACHITESICKLE_NAME, BPItems.amethyst_gem);
-    public static final Item malachite_saw = new ItemSaw(BluePower.gemItemTier.getHarvestLevel(), Refs.MALACHITESAW_NAME);
-    public static final Item amethyst_axe = new ItemGemAxe(BluePower.gemItemTier, Refs.AMETHYSTAXE_NAME, BPItems.amethyst_gem);
-    public static final Item amethyst_sword = new ItemGemSword(BluePower.gemItemTier, Refs.AMETHYSTSWORD_NAME, BPItems.amethyst_gem);
-    public static final Item amethyst_pickaxe = new ItemGemPickaxe(BluePower.gemItemTier, Refs.AMETHYSTPICKAXE_NAME, BPItems.amethyst_gem);
-    public static final Item amethyst_shovel = new ItemGemSpade(BluePower.gemItemTier, Refs.AMETHYSTSPADE_NAME, BPItems.amethyst_gem);
-    public static final Item amethyst_hoe = new ItemGemHoe(BluePower.gemItemTier, Refs.AMETHYSTHOE_NAME, BPItems.amethyst_gem);
-    public static final Item amethyst_sickle = new ItemSickle(BluePower.gemItemTier, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
-    public static final Item amethyst_saw = new ItemSaw(BluePower.gemItemTier.getHarvestLevel(), Refs.AMETHYSTSAW_NAME);
-    public static final Item tungcarb_axe = new ItemGemAxe(BluePower.gemItemTier, Refs.TUNGCARBAXE_NAME, BPItems.tungsten_carbide);
-    public static final Item tungcarb_sword = new ItemGemSword(BluePower.gemItemTier, Refs.TUNGCARBSWORD_NAME,BPItems.tungsten_carbide);
-    public static final Item tungcarb_pickaxe = new ItemGemPickaxe(BluePower.gemItemTier, Refs.TUNGCARBPICKAXE_NAME, BPItems.tungsten_carbide);
-    public static final Item tungcarb_shovel = new ItemGemSpade(BluePower.gemItemTier, Refs.TUNGCARBSPADE_NAME, BPItems.tungsten_carbide);
-    public static final Item tungcarb_hoe = new ItemGemHoe(BluePower.gemItemTier, Refs.TUNGCARBHOE_NAME, BPItems.tungsten_carbide);
-    public static final Item tungcarb_sickle = new ItemSickle(BluePower.gemItemTier, Refs.TUNGCARBSICKLE_NAME, BPItems.tungsten_carbide);
-    public static final Item tungcarb_saw = new ItemSaw(BluePower.gemItemTier.getHarvestLevel(), Refs.TUNGCARBSAW_NAME);
+    public static IItemTier gemItemTier = new BPItemTier(750, 6, 2.0F, 4, 18, Ingredient.fromItems(BPItems.amethyst_gem, BPItems.ruby_gem, BPItems.sapphire_gem, BPItems.malachite_gem));
+    public static final Item ruby_axe = new ItemGemAxe(gemItemTier, Refs.RUBYAXE_NAME, BPItems.ruby_gem);
+    public static final Item ruby_sword = new ItemGemSword(gemItemTier, Refs.RUBYSWORD_NAME, BPItems.ruby_gem);
+    public static final Item ruby_pickaxe = new ItemGemPickaxe(gemItemTier, Refs.RUBYPICKAXE_NAME, BPItems.ruby_gem);
+    public static final Item ruby_shovel = new ItemGemSpade(gemItemTier, Refs.RUBYSPADE_NAME, BPItems.ruby_gem);
+    public static final Item ruby_hoe = new ItemGemHoe(gemItemTier, Refs.RUBYHOE_NAME, BPItems.ruby_gem);
+    public static final Item ruby_sickle = new ItemSickle(gemItemTier, Refs.RUBYSICKLE_NAME, BPItems.ruby_gem);
+    public static final Item ruby_saw = new ItemSaw(gemItemTier.getHarvestLevel(), Refs.RUBYSAW_NAME);
+    public static final Item sapphire_axe = new ItemGemAxe(gemItemTier, Refs.SAPPHIREAXE_NAME, BPItems.sapphire_gem);
+    public static final Item sapphire_sword = new ItemGemSword(gemItemTier, Refs.SAPPHIRESWORD_NAME, BPItems.sapphire_gem);
+    public static final Item sapphire_pickaxe = new ItemGemPickaxe(gemItemTier, Refs.SAPPHIREPICKAXE_NAME, BPItems.sapphire_gem);
+    public static final Item sapphire_shovel = new ItemGemSpade(gemItemTier, Refs.SAPPHIRESPADE_NAME, BPItems.sapphire_gem);
+    public static final Item sapphire_hoe = new ItemGemHoe(gemItemTier, Refs.SAPPHIREHOE_NAME, BPItems.sapphire_gem);
+    public static final Item sapphire_sickle = new ItemSickle(gemItemTier, Refs.SAPPHIRESICKLE_NAME, BPItems.sapphire_gem);
+    public static final Item sapphire_saw = new ItemSaw(gemItemTier.getHarvestLevel(), Refs.SAPPHIRESAW_NAME);
+    public static final Item malachite_axe = new ItemGemAxe(gemItemTier, Refs.MALACHITEAXE_NAME, BPItems.amethyst_gem);
+    public static final Item malachite_sword = new ItemGemSword(gemItemTier, Refs.MALACHITESWORD_NAME, BPItems.amethyst_gem);
+    public static final Item malachite_pickaxe = new ItemGemPickaxe(gemItemTier, Refs.MALACHITEPICKAXE_NAME, BPItems.amethyst_gem);
+    public static final Item malachite_shovel = new ItemGemSpade(gemItemTier, Refs.MALACHITESPADE_NAME, BPItems.amethyst_gem);
+    public static final Item malachite_hoe = new ItemGemHoe(gemItemTier, Refs.MALACHITEHOE_NAME, BPItems.amethyst_gem);
+    public static final Item malachite_sickle = new ItemSickle(gemItemTier, Refs.MALACHITESICKLE_NAME, BPItems.amethyst_gem);
+    public static final Item malachite_saw = new ItemSaw(gemItemTier.getHarvestLevel(), Refs.MALACHITESAW_NAME);
+    public static final Item amethyst_axe = new ItemGemAxe(gemItemTier, Refs.AMETHYSTAXE_NAME, BPItems.amethyst_gem);
+    public static final Item amethyst_sword = new ItemGemSword(gemItemTier, Refs.AMETHYSTSWORD_NAME, BPItems.amethyst_gem);
+    public static final Item amethyst_pickaxe = new ItemGemPickaxe(gemItemTier, Refs.AMETHYSTPICKAXE_NAME, BPItems.amethyst_gem);
+    public static final Item amethyst_shovel = new ItemGemSpade(gemItemTier, Refs.AMETHYSTSPADE_NAME, BPItems.amethyst_gem);
+    public static final Item amethyst_hoe = new ItemGemHoe(gemItemTier, Refs.AMETHYSTHOE_NAME, BPItems.amethyst_gem);
+    public static final Item amethyst_sickle = new ItemSickle(gemItemTier, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
+    public static final Item amethyst_saw = new ItemSaw(gemItemTier.getHarvestLevel(), Refs.AMETHYSTSAW_NAME);
+    public static final Item tungcarb_axe = new ItemGemAxe(gemItemTier, Refs.TUNGCARBAXE_NAME, BPItems.tungsten_carbide);
+    public static final Item tungcarb_sword = new ItemGemSword(gemItemTier, Refs.TUNGCARBSWORD_NAME,BPItems.tungsten_carbide);
+    public static final Item tungcarb_pickaxe = new ItemGemPickaxe(gemItemTier, Refs.TUNGCARBPICKAXE_NAME, BPItems.tungsten_carbide);
+    public static final Item tungcarb_shovel = new ItemGemSpade(gemItemTier, Refs.TUNGCARBSPADE_NAME, BPItems.tungsten_carbide);
+    public static final Item tungcarb_hoe = new ItemGemHoe(gemItemTier, Refs.TUNGCARBHOE_NAME, BPItems.tungsten_carbide);
+    public static final Item tungcarb_sickle = new ItemSickle(gemItemTier, Refs.TUNGCARBSICKLE_NAME, BPItems.tungsten_carbide);
+    public static final Item tungcarb_saw = new ItemSaw(gemItemTier.getHarvestLevel(), Refs.TUNGCARBSAW_NAME);
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {

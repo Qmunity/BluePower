@@ -16,6 +16,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -26,7 +27,7 @@ import net.minecraft.world.World;
  */
 public class BlockContainerFacingBase extends BlockContainerBase {
 
-    public static final DirectionProperty FACING = DirectionProperty.create("facing");
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
     public BlockContainerFacingBase(Material material, Class<? extends TileBase> tileEntityClass) {

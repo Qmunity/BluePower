@@ -19,6 +19,8 @@
 
 package com.bluepowermod.client.gui;
 
+import com.bluepowermod.container.ContainerSeedBag;
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
@@ -26,7 +28,7 @@ import com.bluepowermod.container.ContainerCanvasBag;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.util.text.ITextComponent;
 
-public class GuiCanvasBag extends GuiContainerBaseBP {
+public class GuiCanvasBag extends GuiContainerBaseBP<ContainerCanvasBag> implements IHasContainer<ContainerCanvasBag> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/canvas_bag.png");
 

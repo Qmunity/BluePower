@@ -17,6 +17,7 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -31,7 +32,7 @@ import java.util.Set;
 
 public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBlock{
 
-    public static final DirectionProperty FACING = DirectionProperty.create("facing");
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
     public static final BooleanProperty CONNECTED_BACK = BooleanProperty.create("connected_back");

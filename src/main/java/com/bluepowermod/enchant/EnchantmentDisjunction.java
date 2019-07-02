@@ -13,7 +13,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 
 public class EnchantmentDisjunction extends Enchantment {
 
-    public EnchantmentDisjunction(int enchantId, Rarity rarity) {
+    public EnchantmentDisjunction(Rarity rarity) {
         super(rarity, EnchantmentType.WEAPON, EquipmentSlotType.values());
     }
 

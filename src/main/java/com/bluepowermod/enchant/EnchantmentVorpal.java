@@ -14,7 +14,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 
 public class EnchantmentVorpal extends Enchantment {
 
-    public EnchantmentVorpal(int enchantId, Rarity rarity) {
+    public EnchantmentVorpal(Rarity rarity) {
         super(rarity, EnchantmentType.WEAPON, EquipmentSlotType.values());
     }
 

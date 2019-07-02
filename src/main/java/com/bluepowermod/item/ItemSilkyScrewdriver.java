@@ -35,7 +35,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ItemSilkyScrewdriver extends ItemBase {
 
     public ItemSilkyScrewdriver() {
-        super(new Properties().maxDamage(250).maxStackSize(1));
+        super(new Properties().maxDamage(250));
         setRegistryName(Refs.MODID + ":" + Refs.SILKYSCREWDRIVER_NAME);
     }
 

@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,16 +41,16 @@ public class BluePower {
 
     public static BluePower instance;
     public static CommonProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new,() -> CommonProxy::new);
-    public static IItemTier gemItemTier = new BPItemTier(750, 6, 2.0F, 4, 18, Ingredient.fromItems(BPItems.amethyst_gem, BPItems.ruby_gem, BPItems.sapphire_gem, BPItems.malachite_gem));
 
     public BluePower(){
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BPConfig.spec);
         instance = this;
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, BPConfig.spec);
         BPApi.init(new BluePowerAPI());
         BPEnchantments.init();
         MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
-        CapabilityBlutricity.register();
+        //TODO: Blutricity Capability
+        //CapabilityBlutricity.register();
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         BPBlocks.init();
@@ -63,7 +64,6 @@ public class BluePower {
     @SubscribeEvent
     public void setup(FMLCommonSetupEvent event) {
 
-        proxy.initRenderers();
         OreDictionarySetup.init();
         //TODO: World Gen
         WorldGenOres.setupOres();
@@ -77,8 +77,13 @@ public class BluePower {
 
     @SubscribeEvent
     public void complete(FMLLoadCompleteEvent event) {
+        proxy.initRenderers();
         CompatibilityUtils.postInit(event);
         Recipes.init();
+    }
+
+    @SubscribeEvent
+    public void serverStarted(FMLServerStartedEvent event) {
         AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
     }
 
