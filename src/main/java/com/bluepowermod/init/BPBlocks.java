@@ -19,6 +19,7 @@ package com.bluepowermod.init;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
+import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.machine.*;
@@ -40,6 +41,7 @@ import net.minecraft.block.trees.AcaciaTree;
 import net.minecraft.block.trees.OakTree;
 import net.minecraft.item.Item;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemGroup;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -306,7 +308,12 @@ public class BPBlocks {
     public static void registerBlockItems(RegistryEvent.Register<Item> event) {
         for (Block block : blockList) {
             if (block.getRegistryName() != null && !(block instanceof BlockCrop)) { // Crops have seeds rather than blocks
-                event.getRegistry().register(new BlockItem(block, new Item.Properties().group(BPCreativeTabs.blocks)).setRegistryName(block.getRegistryName()));
+                ItemGroup group = BPCreativeTabs.blocks;
+                if(block instanceof BlockContainerBase){group = BPCreativeTabs.machines;}
+                if(block instanceof BlockLamp){group = BPCreativeTabs.lighting;}
+                if(block instanceof BlockAlloyWire){group = BPCreativeTabs.wiring;}
+                if(block instanceof BlockGateBase){group = BPCreativeTabs.circuits;}
+                event.getRegistry().register(new BlockItem(block, new Item.Properties().group(group)).setRegistryName(block.getRegistryName()));
             }
         }
     }

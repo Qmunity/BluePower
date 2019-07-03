@@ -336,6 +336,7 @@
   "block.bluepower.fixture.green": "Green Fixture",
   "block.bluepower.fixture.red": "Red Fixture",
   "block.bluepower.fixture.black": "Black Fixture",
+  "block.bluepower.fixture.rgb": "RGB Fixture",
 
   "block.bluepower.fixture.white.inverted": "Inverted White Fixture",
   "block.bluepower.fixture.orange.inverted": "Inverted Orange Fixture",
@@ -353,6 +354,7 @@
   "block.bluepower.fixture.green.inverted": "Inverted Green Fixture",
   "block.bluepower.fixture.red.inverted": "Inverted Red Fixture",
   "block.bluepower.fixture.black.inverted": "Inverted Black Fixture",
+  "block.bluepower.fixture.rgb.inverted": "Inverted RGB Fixture",
 
   "block.bluepower.cagelamp.white": "White Cage Lamp",
   "block.bluepower.cagelamp.orange": "Orange Cage Lamp",
@@ -370,6 +372,7 @@
   "block.bluepower.cagelamp.green": "Green Cage Lamp",
   "block.bluepower.cagelamp.red": "Red Cage Lamp",
   "block.bluepower.cagelamp.black": "Black Cage Lamp",
+  "block.bluepower.cagelamp.rgb": "RGB Cage Lamp",
 
   "block.bluepower.cagelamp.white.inverted": "Inverted White Cage Lamp",
   "block.bluepower.cagelamp.orange.inverted": "Inverted Orange Cage Lamp",
@@ -387,6 +390,7 @@
   "block.bluepower.cagelamp.green.inverted": "Inverted Green Cage Lamp",
   "block.bluepower.cagelamp.red.inverted": "Inverted Red Cage Lamp",
   "block.bluepower.cagelamp.black.inverted": "Inverted Black Cage Lamp",
+  "block.bluepower.cagelamp.rgb.inverted": "Inverted RGB Cage Lamp",
 
   "item.bluepower.ruby_gem": "Ruby",
   "item.bluepower.amethyst_gem": "Amethyst",
