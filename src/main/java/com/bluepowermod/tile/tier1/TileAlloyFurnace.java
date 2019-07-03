@@ -317,7 +317,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
 
         if (slot == 0) {
-            return FurnaceTileEntity.func_213991_b(itemStack);
+            return FurnaceTileEntity.isFuel(itemStack);
         } else if (slot == 1) { // Output slot
             return false;
         } else {

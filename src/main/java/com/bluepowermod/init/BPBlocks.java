@@ -306,7 +306,7 @@ public class BPBlocks {
     public static void registerBlockItems(RegistryEvent.Register<Item> event) {
         for (Block block : blockList) {
             if (block.getRegistryName() != null && !(block instanceof BlockCrop)) { // Crops have seeds rather than blocks
-                event.getRegistry().register(new BlockItem(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
+                event.getRegistry().register(new BlockItem(block, new Item.Properties().group(BPCreativeTabs.blocks)).setRegistryName(block.getRegistryName()));
             }
         }
     }

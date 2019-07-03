@@ -50,7 +50,7 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
         this.color = color;
         this.name = name;
         setDefaultState(getStateContainer().getBaseState().with(POWER, isInverted ? 15 : 0));
-        setRegistryName(name + (isInverted ? "inverted" : "") + (color == MinecraftColor.NONE ? "" : color.name().toLowerCase()));
+        setRegistryName(name + "." + (color == MinecraftColor.NONE ? "" : color.name().toLowerCase()) + (isInverted ? ".inverted" : ""));
     }
 
     @Override

@@ -29,21 +29,10 @@ public class ItemGemAxe extends AxeItem {
     protected boolean canRepair              = true;
 
     public ItemGemAxe(IItemTier itemTier, String name, Item repairItem) {
-        super(itemTier, itemTier.getAttackDamage(), 1.4F, new Properties());
+        super(itemTier, itemTier.getAttackDamage(), 1.4F, new Properties().group(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);
-    }
-
-    @Override
-    public String getTranslationKey(ItemStack stack) {
-
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
-    }
-
-    protected String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
     }
 
     @Override

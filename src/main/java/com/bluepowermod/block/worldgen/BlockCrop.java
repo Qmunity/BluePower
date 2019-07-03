@@ -58,17 +58,6 @@ public class BlockCrop extends CropsBlock implements IGrowable {
     }
 
     @Override
-    public String getTranslationKey() {
-
-        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
-    }
-
-    String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
-    }
-
-    @Override
     public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (state.getBlock() instanceof BlockCrop) {
             if (isMaxAge(state) && world.getBlockState(pos.down()).getBlock() == this) {

@@ -63,12 +63,6 @@ public class BlockStoneOre extends Block {
         BPBlocks.blockList.add(this);
     }
 
-    @Override
-    public String getTranslationKey() {
-
-        return String.format("tile." + Refs.MODID + ":" + name);
-    }
-
     // Allow storage blocks to be used as a beacon base
     @Override
     public boolean isBeaconBase(BlockState state, IWorldReader world, BlockPos pos, BlockPos beacon) {

@@ -20,7 +20,7 @@ project.ext {
     } else {
         build = "-custom"
     }
-    mcVersion = "1.14.2"
+    mcVersion = "1.14.3"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -57,18 +57,18 @@ repositories {
 apply plugin: 'maven'
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.2-26.0.32'
+    minecraft 'net.minecraftforge:forge:1.14.3-27.0.22'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
 	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
     compileOnly fg.deobf("mcp.mobius.waila:Hwyla:1.10.3-B64_1.14.2")
-    compileOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.5:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.5")
+    compileOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.7:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.7")
     //compile "team.chisel.ctm:CTM:MC1.12.2-0.3.3.22"
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190614-1.14.2'
+    mappings channel: 'snapshot', version: '20190621-1.14.2'
 
     runs {
         client = {

@@ -87,7 +87,7 @@ public class ContainerAlloyFurnace extends Container {
                 if (!mergeItemStack(var5, 11, 47, false)) return ItemStack.EMPTY;
                 var4.onSlotChange(var5, var3);
             } else {
-                if (FurnaceTileEntity.func_213991_b(var5) && mergeItemStack(var5, 0, 1, false)) {
+                if (FurnaceTileEntity.isFuel(var5) && mergeItemStack(var5, 0, 1, false)) {
                     
                 } else if (!mergeItemStack(var5, 2, 11, false)) return ItemStack.EMPTY;
                 var4.onSlotChange(var5, var3);

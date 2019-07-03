@@ -55,17 +55,5 @@ public abstract class BlockBase extends Block {
             tooltip.add(new StringTextComponent(MinecraftColor.RED.getChatColor() + "WIP") );
         }
     }
-
-
-    @Override
-    public String getTranslationKey() {
-    
-        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
-    }
-    
-    protected String getUnwrappedUnlocalizedName(String name) {
-    
-        return name.substring(name.indexOf(".") + 1);
-    }
     
 }
