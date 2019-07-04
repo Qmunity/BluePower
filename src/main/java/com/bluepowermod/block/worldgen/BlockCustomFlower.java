@@ -31,49 +31,9 @@ public class BlockCustomFlower extends BushBlock {
     // private int meta;
 
     public BlockCustomFlower(String name, Properties properties) {
-        super(properties.hardnessAndResistance(0.0F).sound(SoundType.PLANT).tickRandomly());
+        super(properties.hardnessAndResistance(0.0F).sound(SoundType.PLANT));
         this.setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
-    }
-
-    @Override
-    public String getTranslationKey() {
-
-        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
-    }
-
-    String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
-    }
-
-    public static FlowerBlock func_149857_e(String name) {
-
-        String[] astring = field_149858_b;
-        int i = astring.length;
-        int j;
-        String s1;
-
-        for (j = 0; j < i; ++j) {
-            s1 = astring[j];
-
-            if (s1.equals(name)) {
-                return (FlowerBlock) BPBlocks.indigo_flower;
-            }
-        }
-        return null;
-    }
-
-    public static int func_149856_f(String name) {
-
-        int i;
-
-        for (i = 0; i < field_149858_b.length; ++i) {
-            if (field_149858_b[i].equals(name)) {
-                return i;
-            }
-        }
-        return 0;
     }
 
 }
