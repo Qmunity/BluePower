@@ -70,6 +70,7 @@ public class BPConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> veinSizeSapphire;
         public final ForgeConfigSpec.ConfigValue<Double> volcanoActiveToInactiveRatio;
         public final ForgeConfigSpec.ConfigValue<Double> volcanoSpawnChance; // chance of a volcano spawning per chunk.
+        public final ForgeConfigSpec.ConfigValue<Integer> flowerSpawnChance;
         public final ForgeConfigSpec.ConfigValue<String> alloyFurnaceBlacklist;
         public final ForgeConfigSpec.ConfigValue<Float> albedoBrightness;
         //public final ForgeConfigSpec.BooleanValue enableTubeCaching;
@@ -120,6 +121,7 @@ public class BPConfig {
             veinCountSapphire = builder.comment("Vein Count Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".vein_count").define("veinCountSapphire", 2);
             veinSizeSapphire = builder.comment("Vein Size Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".vein_size").define("veinSizeSapphire", 5);
             volcanoSpawnChance = builder.comment("Volcano Spawn Chance").translation("bluepower.config.volcano_spawn_chance").define("volcanoSpawnChance", 0.005);
+            flowerSpawnChance = builder.comment("Indigo Flower Spawn Chance").translation("bluepower.config.flower_spawn_chance").define("flowerSpawnChance", 1);
             volcanoActiveToInactiveRatio = builder.comment("Volcano Active To Inactive Ratio").translation("bluepower.config.volcano_inactive_ratio").define("volcanoActiveToInactiveRatio", 0.5);
             veinSizeMarble = builder.comment("veinSizeMarble").translation("bluepower.config.marble.vein_size").define("veinSizeMarble", 2048);
 

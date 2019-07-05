@@ -17,6 +17,7 @@ import com.bluepowermod.helper.BPItemTier;
 import com.bluepowermod.init.*;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
@@ -65,9 +66,8 @@ public class BluePower {
     public void setup(FMLCommonSetupEvent event) {
 
         OreDictionarySetup.init();
-        //TODO: World Gen
         WorldGenOres.setupOres();
-        //GameRegistry.registerWorldGenerator(new BPWorldGen(), 0);
+        WorldGenFlowers.setupFlowers();
 
         proxy.setup(event);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> BPContainerType::registerScreenFactories);

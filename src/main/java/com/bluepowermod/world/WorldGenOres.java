@@ -6,8 +6,11 @@ import net.minecraft.block.Block;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.placement.FrequencyConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static net.minecraft.world.gen.feature.OreFeatureConfig.FillerBlockType.NATURAL_STONE;
@@ -45,7 +48,7 @@ public class WorldGenOres {
 
     private static void addOreToGenerate(int veinCount, int veinSize, int minY, int maxY, Block ore){
         for(Biome biome : ForgeRegistries.BIOMES) {
-            if(!biome.getCategory().equals(Biome.Category.NETHER) || !biome.getCategory().equals(Biome.Category.THEEND)) {
+            if(!biome.getCategory().equals(Biome.Category.NETHER) && !biome.getCategory().equals(Biome.Category.THEEND)) {
                 biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE,
                         new OreFeatureConfig(NATURAL_STONE, ore.getDefaultState(), veinSize),
                         COUNT_RANGE, new CountRangeConfig(veinCount, minY, minY, maxY)));
