@@ -17,7 +17,7 @@
 
 package com.bluepowermod.init;
 
-import com.bluepowermod.BluePower;
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.helper.BPItemTier;
 import com.bluepowermod.item.*;
 import com.bluepowermod.reference.Refs;
@@ -95,13 +95,13 @@ public class BPItems {
     public static final Item seed_bag = new ItemSeedBag(Refs.SEEDBAG_NAME);
     public static final Item canvas_bag = new ItemCanvasBag(Refs.CANVASBAG_NAME,new Item.Properties());
     public static final Item canvas = new ItemCrafting(Refs.CANVAS_NAME);
-    public static final Item lumar = new ItemLumar();
+    public static final ArrayList<Item> lumar = new ArrayList<>();
     public static final Item wool_card = new ItemLimitedCrafting(Refs.WOOLCARD_NAME, 64);
     public static final Item diamond_drawplate = new ItemLimitedCrafting(Refs.DIAMONDDRAWPLATE_NAME, 256);
     public static final Item copper_wire = new ItemCrafting(Refs.COPPERWIRE_NAME);
     public static final Item iron_wire = new ItemCrafting(Refs.IRONWIRE_NAME);
-    public static final Item paint_can = new ItemPaintCan(Refs.PAINTCAN_NAME);
-    public static final Item paint_brush = new ItemPaintBrush(Refs.PAINTBRUSH_NAME);
+    public static final ArrayList<Item> paint_can = new ArrayList<>();
+    public static final ArrayList<Item> paint_brush = new ArrayList<>();
     public static IItemTier gemItemTier = new BPItemTier(750, 6, 2.0F, 4, 18, Ingredient.fromItems(BPItems.amethyst_gem, BPItems.ruby_gem, BPItems.sapphire_gem, BPItems.malachite_gem));
     public static final Item ruby_axe = new ItemGemAxe(gemItemTier, Refs.RUBYAXE_NAME, BPItems.ruby_gem);
     public static final Item ruby_sword = new ItemGemSword(gemItemTier, Refs.RUBYSWORD_NAME, BPItems.ruby_gem);
@@ -138,6 +138,23 @@ public class BPItems {
     public static final Item tungcarb_hoe = new ItemGemHoe(gemItemTier, Refs.TUNGCARBHOE_NAME, BPItems.tungsten_carbide);
     public static final Item tungcarb_sickle = new ItemSickle(gemItemTier, Refs.TUNGCARBSICKLE_NAME, BPItems.tungsten_carbide);
     public static final Item tungcarb_saw = new ItemSaw(gemItemTier.getHarvestLevel(), Refs.TUNGCARBSAW_NAME);
+
+    static {
+        //Lumar
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
+            lumar.add(new ItemLumar(MinecraftColor.values()[i]));
+
+        //Paint Can
+        paint_can.add(new ItemPaintCan());
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
+            paint_can.add(new ItemPaintCan(MinecraftColor.values()[i]));
+
+        //Paint Brush
+        paint_brush.add(new ItemPaintBrush());
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
+            paint_brush.add(new ItemPaintBrush(MinecraftColor.values()[i]));
+
+    }
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {

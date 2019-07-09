@@ -22,19 +22,21 @@ import net.minecraft.util.NonNullList;
  */
 public class ItemColorableOverlay extends ItemBase implements IBPColoredItem {
 
+    private final MinecraftColor color;
+
     public ItemColorableOverlay(String name, Properties properties) {
         super(properties);
+        this.color = MinecraftColor.NONE;
         setRegistryName(Refs.MODID + ":" + name);
     }
-
-    @Override
-    public String getTranslationKey(ItemStack stack) {
-    
-        return super.getTranslationKey() + "." + (stack.getDamage() >= 16 ? "empty" : MinecraftColor.values()[stack.getDamage()].name().toLowerCase());
+    public ItemColorableOverlay(MinecraftColor color, String name, Properties properties) {
+        super(properties);
+        this.color = color;
+        setRegistryName(Refs.MODID + ":" + name + "_" + color.name().toLowerCase());
     }
 
     @Override
     public int getColor(ItemStack itemStack, int renderPass) {
-        return renderPass == 0 || itemStack.getDamage() >= 16 ? -1 : MinecraftColor.values()[15 - itemStack.getDamage()].getHex();
+        return renderPass == 0 ? -1 : color.getHex();
     }
 }

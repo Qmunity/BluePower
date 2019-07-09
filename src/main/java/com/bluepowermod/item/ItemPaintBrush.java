@@ -7,13 +7,19 @@
  */
 package com.bluepowermod.item;
 
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.reference.Refs;
+
 public class ItemPaintBrush extends ItemDamageableColorableOverlay {
     
-    public ItemPaintBrush(String name) {
-        super(name, new Properties());
-        
+    public ItemPaintBrush() {
+        super(Refs.PAINTBRUSH_NAME + "_blank", new Properties());
     }
-    
+
+    public ItemPaintBrush(MinecraftColor color) {
+        super(color, Refs.PAINTBRUSH_NAME, new Properties());
+    }
+
     @Override
     protected int getMaxUses() {
     

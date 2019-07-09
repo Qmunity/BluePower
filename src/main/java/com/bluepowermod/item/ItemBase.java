@@ -43,8 +43,4 @@ public class ItemBase extends Item {
         BPItems.itemList.add(this);
     }
 
-    protected String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
-    }
 }

@@ -32,21 +32,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemLumar extends ItemBase implements IBPColoredItem{
 
-    public ItemLumar() {
+    private final MinecraftColor color;
+
+    public ItemLumar(MinecraftColor color) {
         super(new Properties());
-        this.setRegistryName(Refs.MODID + ":" + Refs.LUMAR_NAME);
-    }
-
-    @Override
-    public String getTranslationKey(ItemStack itemStack) {
-
-        return super.getTranslationKey() + "." + Refs.oreDictDyes[15 - itemStack.getDamage()].substring(3).toLowerCase();
+        this.color = color;
+        this.setRegistryName(Refs.MODID + ":" + Refs.LUMAR_NAME + "_" + color.name().toLowerCase());
     }
 
     @Override
     public int getColor(ItemStack stack, int tintIndex) {
-        int damage = stack.getDamage();
-        if (damage >= 0 && damage < MinecraftColor.values().length) { return MinecraftColor.values()[15 - damage].getHex(); }
-        return 16777215;
+        return color.getHex();
     }
 }

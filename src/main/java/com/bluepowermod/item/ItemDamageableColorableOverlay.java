@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.item;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -17,10 +18,12 @@ import net.minecraft.util.NonNullList;
  */
 public abstract class ItemDamageableColorableOverlay extends ItemColorableOverlay {
 
+    public ItemDamageableColorableOverlay(MinecraftColor color, String name, Properties properties) {
+        super(color, name, properties);
+    }
     public ItemDamageableColorableOverlay(String name, Properties properties) {
         super(name, properties);
     }
-
 
     public static int getUsesUsed(ItemStack stack) {
 
