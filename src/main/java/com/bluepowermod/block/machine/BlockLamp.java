@@ -64,6 +64,7 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
 
         TileEntity te = w.getTileEntity(pos);
 
+        if (!(te instanceof TileLamp))
             return null;
 
         return (TileLamp) te;

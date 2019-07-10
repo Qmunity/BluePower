@@ -20,13 +20,8 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.container.inventory.InventoryItem;
-import com.bluepowermod.container.slot.SlotExclude;
 import com.bluepowermod.container.slot.SlotLocked;
-import com.bluepowermod.init.BPItems;
-//import invtweaks.api.container.ChestContainer;
-//import invtweaks.api.container.ContainerSection;
-//import invtweaks.api.container.ContainerSectionCallback;
+import com.bluepowermod.item.ItemCanvasBag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -35,61 +30,92 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 //@ChestContainer
 public class ContainerCanvasBag extends Container {
-    
-    IInventory canvasBagInventory;
+
+    private final ItemStackHandler canvasBagInvHandler;
+    private Hand activeHand;
 
     public ContainerCanvasBag(int windowId, PlayerInventory playerInventory, IInventory inventory) {
     super(BPContainerType.CANVAS_BAG, windowId);
-        this.canvasBagInventory = inventory;
+        canvasBagInvHandler = new ItemStackHandler(27);
+
+        //Get Active hand
+        activeHand = Hand.MAIN_HAND;
+        ItemStack canvasbag = playerInventory.player.getHeldItem(activeHand);
+        if(!(canvasbag.getItem() instanceof ItemCanvasBag)){
+            canvasbag = playerInventory.player.getHeldItemOffhand();
+            activeHand = Hand.OFF_HAND;
+        }
+
+        //Get Items from the NBT Handler
+        if (canvasbag.hasTag()) canvasBagInvHandler.deserializeNBT(canvasbag.getTag().getCompound("inv"));
+
+        //Create Item Slots
         int i = -1 * 18;
-        //canvasBagInventory.openInventory();
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 9; ++k) {
-                addSlot(new SlotExclude(canvasBagInventory, k + j * 9, 8 + k * 18, 18 + j * 18, BPItems.canvas_bag));
+                addSlot(new SlotItemHandler(canvasBagInvHandler, k + j * 9, 8 + k * 18, 18 + j * 18){
+                    @Override
+                    public boolean isItemValid(ItemStack stack) {
+                        return super.isItemValid(stack) && !(stack.getItem() instanceof ItemCanvasBag);
+                    }
+                });
             }
         }
-        
+
+        //Create Player Slots
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 9; ++k) {
                 addSlot(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 103 + j * 18 + i));
             }
         }
-        
+
+        //Lock the Current Item
         for (int j = 0; j < 9; ++j) {
-            if (playerInventory.getStackInSlot(j) == ((InventoryItem) canvasBagInventory).getItem()) {
+            if (playerInventory.currentItem == j) {
                 addSlot(new SlotLocked(playerInventory, j, 8 + j * 18, 161 + i));
             } else {
                 addSlot(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
             }
-            addSlot(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
         }
-        
-        this.canvasBagInventory = canvasBagInventory;
     }
 
     public ContainerCanvasBag( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( 9));
+        this( id, player, new Inventory( 27));
     }
 
     @Override
     public boolean canInteractWith(PlayerEntity player) {
-    
-        return canvasBagInventory.isUsableByPlayer(player);
+        return player.getHeldItem(activeHand).getItem() instanceof ItemCanvasBag;
     }
-    
+
     @Override
     public ItemStack slotClick(int par1, int par2, ClickType par3, PlayerEntity player) {
-    
+
         if (par3.ordinal() != 2 || player.inventory.currentItem != par2) {
             return super.slotClick(par1, par2, par3, player);
         } else {
             return ItemStack.EMPTY;
         }
     }
-    
+
+    @Override
+    public void onContainerClosed(PlayerEntity playerIn) {
+        //Update items in the NBT
+        ItemStack canvasBag = playerIn.getHeldItem(activeHand);
+        if (!canvasBag.hasTag())canvasBag.setTag(new CompoundNBT());
+        if (canvasBag.getTag() != null) {
+            canvasBag.getTag().put("inv", canvasBagInvHandler.serializeNBT());
+        }
+        super.onContainerClosed(playerIn);
+    }
+
     @Override
     public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
     

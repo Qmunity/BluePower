@@ -93,15 +93,15 @@ public class BPItems {
     public static final Item stone_bundle = new ItemCrafting(Refs.STONEBUNDLE_NAME);
     public static final Item screwdriver_handle = new ItemCrafting(Refs.SCREWDRIVERHANDLE_NAME);
     public static final Item seed_bag = new ItemSeedBag(Refs.SEEDBAG_NAME);
-    public static final Item canvas_bag = new ItemCanvasBag(Refs.CANVASBAG_NAME,new Item.Properties());
+    public static final List<Item> canvas_bag = new ArrayList<>();
     public static final Item canvas = new ItemCrafting(Refs.CANVAS_NAME);
-    public static final ArrayList<Item> lumar = new ArrayList<>();
+    public static final List<Item> lumar = new ArrayList<>();
     public static final Item wool_card = new ItemLimitedCrafting(Refs.WOOLCARD_NAME, 64);
     public static final Item diamond_drawplate = new ItemLimitedCrafting(Refs.DIAMONDDRAWPLATE_NAME, 256);
     public static final Item copper_wire = new ItemCrafting(Refs.COPPERWIRE_NAME);
     public static final Item iron_wire = new ItemCrafting(Refs.IRONWIRE_NAME);
-    public static final ArrayList<Item> paint_can = new ArrayList<>();
-    public static final ArrayList<Item> paint_brush = new ArrayList<>();
+    public static final List<Item> paint_can = new ArrayList<>();
+    public static final List<Item> paint_brush = new ArrayList<>();
     public static IItemTier gemItemTier = new BPItemTier(750, 6, 2.0F, 4, 18, Ingredient.fromItems(BPItems.amethyst_gem, BPItems.ruby_gem, BPItems.sapphire_gem, BPItems.malachite_gem));
     public static final Item ruby_axe = new ItemGemAxe(gemItemTier, Refs.RUBYAXE_NAME, BPItems.ruby_gem);
     public static final Item ruby_sword = new ItemGemSword(gemItemTier, Refs.RUBYSWORD_NAME, BPItems.ruby_gem);
@@ -144,6 +144,10 @@ public class BPItems {
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             lumar.add(new ItemLumar(MinecraftColor.values()[i]));
 
+        //Canvas Bag
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
+            canvas_bag.add(new ItemCanvasBag(MinecraftColor.values()[i]));
+
         //Paint Can
         paint_can.add(new ItemPaintCan());
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
@@ -153,6 +157,7 @@ public class BPItems {
         paint_brush.add(new ItemPaintBrush());
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             paint_brush.add(new ItemPaintBrush(MinecraftColor.values()[i]));
+
 
     }
 
