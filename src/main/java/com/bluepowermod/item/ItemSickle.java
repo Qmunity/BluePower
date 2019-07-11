@@ -53,23 +53,6 @@ public class ItemSickle extends ToolItem {
     }
 
     @Override
-    public String getTranslationKey(ItemStack stack) {
-
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
-    }
-
-    @Override
-    public String getTranslationKey() {
-
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
-    }
-
-    protected String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
-    }
-
-    @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         if ((state.getMaterial() == Material.LEAVES) || (state.getMaterial() == Material.PLANTS) || toolBlocks.contains(state)) {
             return this.efficiency;
@@ -150,12 +133,6 @@ public class ItemSickle extends ToolItem {
             stack.setDamage(stack.getDamage() -1);
         }
         return used;
-    }
-
-    @Override
-    public boolean isRepairable() {
-
-        return canRepair && isDamageable();
     }
 
     @Override

@@ -57,7 +57,7 @@ repositories {
 apply plugin: 'maven'
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.3-27.0.22'
+    minecraft 'net.minecraftforge:forge:1.14.3-27.0.50'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
 	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"

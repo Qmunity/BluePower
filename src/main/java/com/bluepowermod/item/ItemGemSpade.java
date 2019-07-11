@@ -37,12 +37,6 @@ public class ItemGemSpade extends ShovelItem {
     }
 
     @Override
-    public boolean isRepairable() {
-
-        return canRepair && isDamageable();
-    }
-
-    @Override
     public boolean getIsRepairable(ItemStack is1, ItemStack is2) {
 
         return ((is1.getItem() == this || is2.getItem() == this) && (is1.getItem() == this.customCraftingMaterial || is2.getItem() == this.customCraftingMaterial));

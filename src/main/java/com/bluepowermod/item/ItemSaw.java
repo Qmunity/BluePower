@@ -52,10 +52,4 @@ public class ItemSaw extends ItemBase{
 
         return true;
     }
-
-    @Override
-    public boolean isRepairable() {
-
-        return false;
-    }
 }
