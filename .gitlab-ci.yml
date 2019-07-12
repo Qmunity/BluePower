@@ -16,6 +16,7 @@ build:
   script:
     - chmod +x gradlew
     - rm -rf build/libs
+    - ./gradlew
     - ./gradlew build
   artifacts:
     paths:
