@@ -1,22 +1,12 @@
 image: java:8-jdk
 
-variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-  CACHE_DIR: "$CI_PROJECT_DIR/build"
-  CACHE_DIR2: "$CI_PROJECT_DIR/.gradle"
-  
-cache:
-  paths:
-  - $CACHE_DIR
-  - $CACHE_DIR2
-  key: "$CI_PROJECT_ID"
-
 build:
   stage: build
   script:
     - chmod +x gradlew
     - rm -rf build/libs
-    - ./gradlew build; ./gradlew build
+    - ./gradlew build -S
   artifacts:
     paths:
       - build/libs/*.jar
+      
