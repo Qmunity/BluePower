@@ -1,4 +1,4 @@
-{
+﻿{
   "result": {
     "item": "bluepower:buffer"
   },
@@ -7,13 +7,13 @@
     "P P",
     "BPB"
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "key": {
     "B": {
       "item": "minecraft:iron_bars"
     },
     "P": {
-      "item": "#PLANKWOOD"
+      "tag": "minecraft:planks"
     }
   }
 }

@@ -1,0 +1,14 @@
+﻿{
+  "result": {
+    "item": "bluepower:screwdriver_handle"
+  },
+  "ingredients": [
+    {
+      "tag": "forge:rods/wooden"
+    },
+    {
+      "item": "bluepower:indigo_dye"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

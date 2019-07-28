@@ -1,7 +1,7 @@
 ﻿{
   "forge_marker": 1,
   "defaults": {
-    "model": "bluepower:fixture_lamp",
+    "model": "bluepower:fixture__lamp",
     "uvlock": false
   },
   "variants": {

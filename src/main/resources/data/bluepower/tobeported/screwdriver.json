@@ -1,0 +1,18 @@
+﻿{
+  "result": {
+    "item": "bluepower:screwdriver"
+  },
+  "pattern": [
+    " #",
+    "S "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "forge:INGOTIRON"
+    },
+    "S": {
+      "item": "bluepower:screwdriver_handle"
+    }
+  }
+}

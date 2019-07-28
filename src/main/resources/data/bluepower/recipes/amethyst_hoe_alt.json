@@ -1,4 +1,4 @@
-{
+﻿{
   "result": {
     "item": "bluepower:amethyst_hoe"
   },
@@ -7,13 +7,13 @@
     " S ",
     " S "
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
-      "item": "#STICKWOOD"
+      "tag": "forge:rods/wooden"
     },
     "G": {
-      "item": "#GEMAMETHYST"
+      "tag": "forge:gems/amethyst"
     }
   }
 }

@@ -1,4 +1,4 @@
-{
+﻿{
   "result": {
     "item": "bluepower:athame"
   },
@@ -6,13 +6,13 @@
     "# ",
     " S"
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "item": "#INGOTSILVER"
+      "tag": "forge:ingots/silver"
     },
     "S": {
-      "item": "#STICKWOOD"
+      "tag": "forge:rods/wooden"
     }
   }
 }

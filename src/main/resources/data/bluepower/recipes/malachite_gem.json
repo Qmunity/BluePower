@@ -1,0 +1,15 @@
+﻿{
+  "result": {
+    "item": "bluepower:malachite_gem",
+    "count": 9
+  },
+  "pattern": [
+    "#"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "bluepower:malachite_block"
+    }
+  }
+}

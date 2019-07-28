@@ -1,0 +1,22 @@
+﻿{
+  "result": {
+    "item": "bluepower:lamp_cyan"
+  },
+  "pattern": [
+    "GLG",
+    "GLG",
+    "GRG"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "L": {
+      "item": "bluepower:lumar_cyan"
+    }
+  }
+}

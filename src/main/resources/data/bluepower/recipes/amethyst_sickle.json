@@ -1,4 +1,4 @@
-{
+﻿{
   "result": {
     "item": "bluepower:amethyst_sickle"
   },
@@ -7,13 +7,13 @@
     "  G",
     "SG "
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
-      "item": "#STICKWOOD"
+      "tag": "forge:rods/wooden"
     },
     "G": {
-      "item": "#GEMAMETHYST"
+      "tag": "forge:gems/amethyst"
     }
   }
 }

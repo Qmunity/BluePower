@@ -1,0 +1,25 @@
+﻿{
+  "result": {
+    "item": "bluepower:transposer"
+  },
+  "pattern": [
+    "SSS",
+    "WPW",
+    "SRS"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "item": "minecraft:cobblestone"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    }
+  }
+}

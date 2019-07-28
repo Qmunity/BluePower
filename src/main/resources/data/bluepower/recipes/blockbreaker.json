@@ -1,4 +1,4 @@
-{
+﻿{
   "result": {
     "item": "bluepower:block_breaker"
   },
@@ -7,7 +7,7 @@
     "SPS",
     "SWS"
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
       "item": "minecraft:cobblestone"

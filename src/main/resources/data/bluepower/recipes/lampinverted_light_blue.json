@@ -1,0 +1,22 @@
+﻿{
+  "result": {
+    "item": "bluepower:lampinverted_light_blue"
+  },
+  "pattern": [
+    "GLG",
+    "GLG",
+    "GRG"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": {
+      "item": "minecraft:redstone_torch"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "L": {
+      "item": "bluepower:lumar_light_blue"
+    }
+  }
+}

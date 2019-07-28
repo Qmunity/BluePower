@@ -1,0 +1,16 @@
+﻿{
+  "result": {
+    "item": "bluepower:zinc_block"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "forge:INGOTZINC"
+    }
+  }
+}

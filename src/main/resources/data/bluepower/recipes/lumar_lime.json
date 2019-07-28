@@ -1,0 +1,22 @@
+﻿{
+  "result": {
+    "item": "bluepower:lumar_lime",
+    "count": 2
+  },
+  "pattern": [
+    "RG",
+    "DD"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "D": {
+      "tag": "forge:dyes/lime"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+﻿{
+  "result": {
+    "item": "bluepower:cagelampinverted_lime"
+  },
+  "pattern": [
+    "BLB",
+    "GLG",
+    "SRS"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "R": {
+      "item": "minecraft:redstone_torch"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "S": {
+      "item": "minecraft:stone_slab"
+    },
+    "L": {
+      "item": "bluepower:lumar_lime"
+    }
+  }
+}

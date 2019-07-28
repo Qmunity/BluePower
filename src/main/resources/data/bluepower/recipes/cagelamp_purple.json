@@ -1,0 +1,28 @@
+﻿{
+  "result": {
+    "item": "bluepower:cagelamp_purple"
+  },
+  "pattern": [
+    "BLB",
+    "GLG",
+    "SRS"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "L": {
+      "item": "bluepower:lumar_purple"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "S": {
+      "item": "minecraft:stone_slab"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  }
+}
