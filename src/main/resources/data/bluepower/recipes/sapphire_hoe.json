@@ -1,0 +1,19 @@
+﻿{
+  "result": {
+    "item": "bluepower:sapphire_hoe"
+  },
+  "pattern": [
+    "GG ",
+    " S ",
+    " S "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "tag": "forge:rods/wooden"
+    },
+    "G": {
+      "tag": "forge:gems/sapphire"
+    }
+  }
+}

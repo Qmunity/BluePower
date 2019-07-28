@@ -2,6 +2,20 @@
   "replace": false,
   "values": [
     "bluepower:canvas_bag_white",
-    "bluepower:canvas_bag_black"
+    "bluepower:canvas_bag_black",
+    "bluepower:canvas_bag_blue",
+    "bluepower:canvas_bag_brown",
+    "bluepower:canvas_bag_cyan",
+    "bluepower:canvas_bag_gray",
+    "bluepower:canvas_bag_green",
+    "bluepower:canvas_bag_light_blue",
+    "bluepower:canvas_bag_light_gray",
+    "bluepower:canvas_bag_lime",
+    "bluepower:canvas_bag_magenta",
+    "bluepower:canvas_bag_orange",
+    "bluepower:canvas_bag_pink",
+    "bluepower:canvas_bag_purple",
+    "bluepower:canvas_bag_red",
+    "bluepower:canvas_bag_yellow"
   ]
 }

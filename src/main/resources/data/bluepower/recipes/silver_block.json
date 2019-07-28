@@ -1,0 +1,16 @@
+﻿{
+  "result": {
+    "item": "bluepower:silver_block"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "forge:ingots/silver"
+    }
+  }
+}
