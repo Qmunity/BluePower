@@ -1,0 +1,14 @@
+{
+  "type": "bluepower:alloy_smelting",
+  "ingredients": [
+    {
+      "item": "bluepower:blue_alloy_ingot"
+    },
+    {
+      "item": "bluepower:red_alloy_ingot"
+    }
+  ],
+  "result": {
+    "item": "bluepower:purple_alloy_ingot"
+  }
+}

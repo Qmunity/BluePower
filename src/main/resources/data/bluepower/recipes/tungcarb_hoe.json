@@ -1,21 +1,18 @@
 ﻿{
   "result": {
-    "item": "bluepower:tungcarb_saw"
+    "item": "bluepower:tungcarb_hoe"
   },
   "pattern": [
-    "SSS",
-    " II",
-    " DD"
+    "GG ",
+    " S ",
+    " S "
   ],
   "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
       "tag": "forge:rods/wooden"
     },
-    "I": {
-      "tag": "forge:ingots/iron"
-    },
-    "D": {
+    "G": {
       "item": "bluepower:tungsten_carbide"
     }
   }

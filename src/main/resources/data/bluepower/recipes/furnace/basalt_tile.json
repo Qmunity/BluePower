@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "bluepower:basalt"
+  },
+  "result": "bluepower:basalt_tile",
+  "cookingtime": 200
+}
