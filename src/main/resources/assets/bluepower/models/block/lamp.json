@@ -1,6 +1,6 @@
 ﻿{
-   "parent": "block/cube_all",
+   "parent": "bluepower:block/tinted",
    "textures": {
-      "all": "bluepower:blocks/lamp"
+      "all": "bluepower:blocks/lamps/lamp_off"
    }
 }

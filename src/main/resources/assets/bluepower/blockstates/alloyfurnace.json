@@ -1,29 +1,12 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "textures": {
-      "top": "bluepower:blocks/machines/alloyfurnace_top",
-      "bottom": "bluepower:blocks/machines/alloyfurnace_bottom",
-      "front": "bluepower:blocks/machines/alloyfurnace_front_off",
-      "side": "bluepower:blocks/machines/alloyfurnace_side"
-    },
-    "model": "bluepower:cube_front",
-    "uvlock": false
-  },
   "variants": {
-    "normal": [{}],
-    "inventory": [{}],
-    "facing": {
-      "north": {},
-      "south": {"y": 180},
-      "west": {"y": 270},
-      "east": {"y": 90},
-      "up": {"x": -90},
-      "down": {"x": 90}
-    },
-    "active":{
-      "true":{"textures": {"front": "bluepower:blocks/machines/alloyfurnace_front_on"}},
-      "false":{"textures": {"front": "bluepower:blocks/machines/alloyfurnace_front_off"}}
-    }
+    "facing=north,active=false": { "model": "bluepower:block/alloyfurnace" },
+    "facing=south,active=false": { "model": "bluepower:block/alloyfurnace", "y": 180 },
+    "facing=west,active=false": { "model": "bluepower:block/alloyfurnace", "y": 270 },
+    "facing=east,active=false": { "model": "bluepower:block/alloyfurnace", "y": 90 },
+    "facing=north,active=true": { "model": "bluepower:block/alloyfurnace_on" },
+    "facing=south,active=true": { "model": "bluepower:block/alloyfurnace_on", "y": 180 },
+    "facing=west,active=true": { "model": "bluepower:block/alloyfurnace_on", "y": 270 },
+    "facing=east,active=true": { "model": "bluepower:block/alloyfurnace_on", "y": 90 }
   }
 }
