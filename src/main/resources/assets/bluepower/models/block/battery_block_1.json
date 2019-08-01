@@ -4,7 +4,7 @@
       "up": "bluepower:blocks/machines/battery/battery_top",
       "down": "bluepower:blocks/machines/battery/battery_bottom",
       "side": "bluepower:blocks/machines/battery/battery_side_0",
-      "overlay": "bluepower:blocks/machines/battery/battery_side_0",
+      "overlay": "bluepower:blocks/machines/battery/battery_side_1",
       "particle": "bluepower:blocks/machines/battery/battery_side_0"
    }
 }

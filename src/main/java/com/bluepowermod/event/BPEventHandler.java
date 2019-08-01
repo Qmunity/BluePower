@@ -270,7 +270,7 @@ public class BPEventHandler {
             BlockPos position = ((BlockRayTraceResult)mop).getPos().offset(((BlockRayTraceResult)mop).getFace());
             Entity entity = Minecraft.getInstance().getRenderViewEntity();
             double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)event.getPartialTicks();
-            double d1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)event.getPartialTicks();
+            double d1 = (entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)event.getPartialTicks()) + entity.getEyeHeight();
             double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)event.getPartialTicks();
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder vertexbuffer = tessellator.getBuffer();
