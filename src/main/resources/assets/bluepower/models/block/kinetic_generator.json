@@ -1,6 +1,11 @@
 ﻿{
-   "parent": "block/cube_all",
+   "parent": "bluepower:block/cube_front_back",
    "textures": {
-      "all": "bluepower:blocks/kinetic_generator"
+      "side": "bluepower:blocks/machines/kinetic_generator_vent_1",
+      "back": "bluepower:blocks/machines/kinetic_generator_back",
+      "left": "bluepower:blocks/machines/kinetic_generator_vent_0",
+      "right": "bluepower:blocks/machines/kinetic_generator_vent_0",
+      "front": "bluepower:blocks/machines/kinetic_generator_front",
+      "particle": "bluepower:blocks/machines/kinetic_generator_vent_1"
    }
 }

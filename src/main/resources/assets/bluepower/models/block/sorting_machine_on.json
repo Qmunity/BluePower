@@ -5,9 +5,9 @@
       "bottom": "bluepower:blocks/machines/sorting_machine_side_2",
       "side": "bluepower:blocks/machines/sorting_machine_side",
       "front": "bluepower:blocks/machines/sorting_machine_front",
-      "back": "bluepower:blocks/machines/sorting_machine_back",
+      "back": "bluepower:blocks/machines/sorting_machine_back_3",
       "particle": "bluepower:blocks/machines/sorting_machine_side",
-      "right": "bluepower:blocks/machines/sorting_machine_side",
-      "left": "bluepower:blocks/machines/sorting_machine_side"
+      "left": "bluepower:blocks/machines/sorting_machine_side_4",
+      "right": "bluepower:blocks/machines/sorting_machine_side_4"
    }
 }

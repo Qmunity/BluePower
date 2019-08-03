@@ -5,7 +5,7 @@
       "back": "bluepower:blocks/machines/deployer_back",
       "left": "bluepower:blocks/machines/deployer_side_0",
       "right": "bluepower:blocks/machines/deployer_side_0",
-      "front": "bluepower:blocks/machines/deployer_front",
+      "front": "bluepower:blocks/machines/deployer_front_active",
       "particle": "bluepower:blocks/machines/deployer_side"
    }
 }

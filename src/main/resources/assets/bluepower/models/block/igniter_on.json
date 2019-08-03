@@ -2,8 +2,8 @@
    "parent": "bluepower:block/cube_front_back",
    "textures": {
       "side": "bluepower:blocks/machines/igniter_side",
-      "front": "bluepower:blocks/machines/igniter_front",
+      "front": "bluepower:blocks/machines/igniter_front_active",
       "back": "bluepower:blocks/machines/igniter_back",
-      "particle": "bluepower:blocks/machines/igniter_side"
+      "particle": "bluepower:blocks/machines/igniter_side_active"
    }
 }

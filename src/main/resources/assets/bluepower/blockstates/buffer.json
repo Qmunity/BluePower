@@ -1,30 +1,12 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "textures": {
-      "side": "bluepower:blocks/machines/buffer_side",
-      "front": "bluepower:blocks/machines/buffer_front",
-      "back": "bluepower:blocks/machines/buffer_back",
-      "particle": "#side"
-    },
-    "model": "bluepower:cube_front_back",
-    "uvlock": false
-  },
   "variants": {
-    "normal": [{}],
-    "inventory": [{"x": -90}],
-    "facing": {
-      "north": {},
-      "south": {"y": 180},
-      "west": {"y": 270},
-      "east": {"y": 90},
-      "up": {"x": -90},
-      "down": {"x": 90}
-    },
-    "active":{
-      "true":{},
-      "false":{}
-    }
+    "facing=north,active=false": { "model": "bluepower:block/buffer" },
+    "facing=south,active=false": { "model": "bluepower:block/buffer", "y": 180 },
+    "facing=west,active=false": { "model": "bluepower:block/buffer", "y": 270 },
+    "facing=east,active=false": { "model": "bluepower:block/buffer", "y": 90 },
+    "facing=north,active=true": { "model": "bluepower:block/buffer_on" },
+    "facing=south,active=true": { "model": "bluepower:block/buffer_on", "y": 180 },
+    "facing=west,active=true": { "model": "bluepower:block/buffer_on", "y": 270 },
+    "facing=east,active=true": { "model": "bluepower:block/buffer_on", "y": 90 }
   }
 }
-

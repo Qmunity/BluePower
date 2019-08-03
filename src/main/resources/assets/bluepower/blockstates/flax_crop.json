@@ -1,25 +1,12 @@
 ﻿{
-  "forge_marker": 1,
-  "defaults": {
-    "textures": {
-    "crop": "bluepower:blocks/flax_crop_stage_0"
-    },
-    "model": "crop",
-    "uvlock": true
-  },
   "variants": {
-    "normal": [{
-
-    }],
-    "age": {
-      "0": {"textures": {"crop": "bluepower:blocks/flax_crop_stage_0"}},
-      "1": {"textures": {"crop": "bluepower:blocks/flax_crop_stage_0"}},
-      "2": {"textures": {"crop": "bluepower:blocks/flax_crop_stage_1"}},
-      "3": {"textures": {"crop": "bluepower:blocks/flax_crop_stage_2"}},
-      "4": {"textures": {"crop": "bluepower:blocks/flax_crop_stage_2"}},
-      "5": {"textures": {"crop": "bluepower:blocks/flax_crop_stage_3"}},
-      "6": {"textures": {"crop": "bluepower:blocks/flax_crop_stage_4"}},
-      "7": {"textures": {"crop": "bluepower:blocks/flax_crop_stage_5"}}
-    }
+    "age=0": {"model": "bluepower:block/flax_crop"},
+    "age=1": {"model": "bluepower:block/flax_crop"},
+    "age=2": {"model": "bluepower:block/flax_crop_1"},
+    "age=3": {"model": "bluepower:block/flax_crop_2"},
+    "age=4": {"model": "bluepower:block/flax_crop_2"},
+    "age=5": {"model": "bluepower:block/flax_crop_3"},
+    "age=6": {"model": "bluepower:block/flax_crop_4"},
+    "age=7": {"model": "bluepower:block/flax_crop_5"}
   }
 }

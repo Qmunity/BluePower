@@ -1,43 +1,16 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "textures": {
-      "top": "bluepower:blocks/machines/sorting_machine_side_2",
-      "bottom": "bluepower:blocks/machines/sorting_machine_side_2",
-      "side": "bluepower:blocks/machines/sorting_machine_side",
-      "front": "bluepower:blocks/machines/sorting_machine_front",
-      "back": "bluepower:blocks/machines/sorting_machine_back",
-      "particle": "bluepower:blocks/machines/sorting_machine_side"
-    },
-    "model": "bluepower:cube_front_back",
-    "uvlock": false
-  },
   "variants": {
-    "normal": [{}],
-    "inventory": [{"x": -90}],
-    "facing": {
-      "north": {},
-      "south": {"y": 180},
-      "west": {"y": 270},
-      "east": {"y": 90},
-      "up": {"x": -90},
-      "down": {"x": 90}
-    },
-    "active":{
-      "true":{
-        "textures": {
-          "back": "bluepower:blocks/machines/sorting_machine_back_3",
-          "left": "bluepower:blocks/machines/sorting_machine_side_4",
-          "right": "bluepower:blocks/machines/sorting_machine_side_4"
-        }
-      },
-      "false":{
-        "textures": {
-          "right": "bluepower:blocks/machines/sorting_machine_side",
-          "left": "bluepower:blocks/machines/sorting_machine_side",
-          "back": "bluepower:blocks/machines/sorting_machine_back"
-        }
-      }
-    }
+    "facing=up,active=false": { "model": "bluepower:block/sorting_machine", "x": -90 },
+    "facing=down,active=false": { "model": "bluepower:block/sorting_machine", "x": 90 },
+    "facing=north,active=false": { "model": "bluepower:block/sorting_machine" },
+    "facing=south,active=false": { "model": "bluepower:block/sorting_machine", "y": 180 },
+    "facing=west,active=false": { "model": "bluepower:block/sorting_machine", "y": 270 },
+    "facing=east,active=false": { "model": "bluepower:block/sorting_machine", "y": 90 },
+    "facing=up,active=true": { "model": "bluepower:block/sorting_machine", "x": -90 },
+    "facing=down,active=true": { "model": "bluepower:block/sorting_machine", "x": 90 },
+    "facing=north,active=true": { "model": "bluepower:block/sorting_machine_on" },
+    "facing=south,active=true": { "model": "bluepower:block/sorting_machine_on", "y": 180 },
+    "facing=west,active=true": { "model": "bluepower:block/sorting_machine_on", "y": 270 },
+    "facing=east,active=true": { "model": "bluepower:block/sorting_machine_on", "y": 90 }
   }
 }

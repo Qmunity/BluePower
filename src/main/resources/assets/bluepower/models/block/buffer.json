@@ -1,6 +1,9 @@
 ﻿{
-   "parent": "block/cube_all",
+   "parent": "bluepower:block/cube_front_back",
    "textures": {
-      "all": "bluepower:blocks/buffer"
+      "side": "bluepower:blocks/machines/buffer_side",
+      "front": "bluepower:blocks/machines/buffer_front",
+      "back": "bluepower:blocks/machines/buffer_back",
+      "particle": "#side"
    }
 }

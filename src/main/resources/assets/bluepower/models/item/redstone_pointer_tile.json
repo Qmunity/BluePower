@@ -1,7 +1,7 @@
 ﻿{
   "ambientocclusion": false,
   "textures": {
-    "bluestone_torch_on": "blocks/redstone_torch_on",
+    "bluestone_torch_on": "minecraft:block/redstone_torch",
     "gate": "bluepower:blocks/gates/gate",
     "bluestone_on": "bluepower:base/redstone_on"
   },

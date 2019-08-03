@@ -1,6 +1,10 @@
 ﻿{
-   "parent": "block/cube_all",
+   "parent": "bluepower:block/cube_front",
    "textures": {
-      "all": "bluepower:blocks/circuit_table"
+      "top": "bluepower:blocks/machines/circuit_table_top",
+      "bottom": "bluepower:blocks/machines/circuit_table_bottom",
+      "front": "bluepower:blocks/machines/circuit_table_front",
+      "side": "bluepower:blocks/machines/circuit_table_side",
+      "particle": "bluepower:blocks/machines/circuit_table_side"
    }
 }
