@@ -108,7 +108,8 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
     protected void markForRenderUpdate() {
 
         if (world != null)
-            world.markForRerender(pos);
+            //TODO: Check this is correct in 1.14.4
+            world.func_225319_b(pos, getBlockState(), getBlockState());
     }
 
     protected void notifyNeighborBlockUpdate() {

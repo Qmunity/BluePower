@@ -50,6 +50,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -288,5 +289,11 @@ public class BPEventHandler {
             vertexbuffer.setTranslation(0, 0, 0);
         }
     }
+
+    //TODO: May need to bake the engine model
+    //@SubscribeEvent
+    //public void onModelBakeEvent(ModelBakeEvent event) {
+        //event.getModelRegistry().put();
+    //}
 
 }

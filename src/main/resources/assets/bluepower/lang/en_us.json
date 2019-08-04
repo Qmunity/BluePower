@@ -77,7 +77,7 @@
   "block.bluepower.circuit_table": "Circuit Table",
   "block.bluepower.circuit_database": "Circuit Database",
 
-  "block.bluepower.wire.bluestone": "Bluestone Wire",
+  "block.bluepower.bluestone_wire": "Bluestone Wire",
   "block.bluepower.wire.bluestone.white": "White Bluestone Wire",
   "block.bluepower.wire.bluestone.orange": "Orange Bluestone Wire",
   "block.bluepower.wire.bluestone.magenta": "Magenta Bluestone Wire",
@@ -94,7 +94,7 @@
   "block.bluepower.wire.bluestone.green": "Green Bluestone Wire",
   "block.bluepower.wire.bluestone.red": "Red Bluestone Wire",
   "block.bluepower.wire.bluestone.black": "Black Bluestone Wire",
-  "block.bluepower.wire.redalloy": "Red Alloy Wire",
+  "block.bluepower.redalloy_wire": "Red Alloy Wire",
   "block.bluepower.wire.redalloy.white": "White Red Alloy Wire",
   "block.bluepower.wire.redalloy.orange": "Orange Red Alloy Wire",
   "block.bluepower.wire.redalloy.magenta": "Magenta Red Alloy Wire",

@@ -75,7 +75,7 @@
     "block.bluepower:circuit_table": "Schaltkreis Werkbank",
     "block.bluepower:circuit_database": "Schaltkreis Datenbank",
 
-    "block.bluepower:wire.bluestone": "Bluestone Kabel",
+    "block.bluepower:bluestone_wire": "Bluestone Kabel",
     "block.bluepower:wire.bluestone.white": "Weißes Bluestone Kabel",
     "block.bluepower:wire.bluestone.orange": "Oranges Bluestone Kabel",
     "block.bluepower:wire.bluestone.magenta": "Magentanes Bluestone Kabel",
@@ -93,7 +93,7 @@
     "block.bluepower:wire.bluestone.red": "Rotes Bluestone Kabel",
     "block.bluepower:wire.bluestone.black": "Schwarzes Bluestone Kabel",
 
-    "block.bluepower:wire.redalloy": "Red Alloy Kabel",
+    "block.bluepower:redalloy_wire": "Red Alloy Kabel",
     "block.bluepower:wire.redalloy.white": "Weißes Red Alloy Kabel",
     "block.bluepower:wire.redalloy.orange": "Oranges Red Alloy Kabel",
     "block.bluepower:wire.redalloy.magenta": "Magentanes Red Alloy Kabel",

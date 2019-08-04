@@ -47,7 +47,7 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
         super(Material.ROCK, TileWire.class);
         this.type = type;
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.UP).with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false).with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false).with(POWERED, false));
-        setRegistryName(Refs.MODID + ":" + "wire." + type);
+        setRegistryName(Refs.MODID + ":" + type + "_wire");
     }
 
     public BlockAlloyWire(String type, Material material) {

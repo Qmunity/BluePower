@@ -17,11 +17,11 @@ project.ext {
     major = "0"
     minor = "3"
     if (System.getenv("CI_PIPELINE_IID") != null) {
-        build = System.getenv("CI_PIPELINE_IID")
+        build = System.getenv("CI_PIPELINE_IID") + "-alpha"
     } else {
         build = "-custom"
     }
-    mcVersion = "1.14.3"
+    mcVersion = "1.14.4"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -58,7 +58,7 @@ repositories {
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190621-1.14.2'
+    mappings channel: 'snapshot', version: '20190719-1.14.3'
 
     runs {
         client = {
@@ -78,13 +78,13 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.3-27.0.50'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.40'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
 	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
     compileOnly fg.deobf("mcp.mobius.waila:Hwyla:1.10.4-B65_1.14.2:api")
-    compileOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.7:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.7")
+    compileOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.8:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.8")
     //compile "team.chisel.ctm:CTM:MC1.12.2-0.3.3.22"
 }
 

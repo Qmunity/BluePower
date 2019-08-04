@@ -6,6 +6,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RedstoneWireBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
@@ -69,6 +71,21 @@ public class BlockGateBase extends BlockBase {
     }
 
     @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+        super.onBlockPlacedBy(world, pos, state, entity, stack);
+        Map<String, Byte> map = getSidePower(world, state, pos);
+        world.setBlockState(pos, state.with(POWERED_FRONT, map.get("front") > 0)
+                .with(POWERED_BACK, map.get("back") > 0)
+                .with(POWERED_LEFT, map.get("left") > 0)
+                .with(POWERED_RIGHT, map.get("right") > 0));
+    }
+
+    @Override
+    public boolean canProvidePower(BlockState p_149744_1_) {
+        return true;
+    }
+
+    @Override
     public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side){
         if(side == Direction.byHorizontalIndex(blockState.get(ROTATION))) {
             Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
@@ -126,11 +143,16 @@ public class BlockGateBase extends BlockBase {
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
-        if(!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()){
+        if(!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()) {
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
             //TODO: Drop Block as Item
             //this.dropBlockAsItem(world, pos, state, 0);
         }
+        Map<String, Byte> map = getSidePower(world, state, pos);
+        world.setBlockState(pos, state.with(POWERED_FRONT, map.get("front") > 0)
+                .with(POWERED_BACK, map.get("back") > 0)
+                .with(POWERED_LEFT, map.get("left") > 0)
+                .with(POWERED_RIGHT, map.get("right") > 0));
     }
 
 }
