@@ -57,6 +57,10 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
         setTileEntityClass(tileEntityClass);
     }
 
+    public BlockContainerBase(Properties properties, Class<? extends TileBase> tileEntityClass) {
+        super(properties);
+        setTileEntityClass(tileEntityClass);
+    }
 
     public BlockContainerBase setTileEntityClass(Class<? extends TileBase> tileEntityClass) {
 

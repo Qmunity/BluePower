@@ -48,6 +48,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -131,6 +132,8 @@ public class BPBlocks {
     // public static Block disk_drive;
     // public static Block io_expander;
 
+    public static List<Block> allLamps;
+
     public static Block[] blockLamp;
     public static Block[] blockLampInverted;
     public static Block[] cagedLamp;
@@ -140,6 +143,13 @@ public class BPBlocks {
 
     public static Block blockLampRGB;
     public static Block blockLampRGBInverted;
+    public static Block cagedLampRGB;
+    public static Block cagedLampRGBInverted;
+    public static Block fixedLampRGB;
+    public static Block fixedLampRGBInverted;
+
+
+
     public static Block blockGateAND;
     public static Block blockGateNAND;
 
@@ -253,21 +263,37 @@ public class BPBlocks {
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             blockLampInverted[i] = new BlockLamp(Refs.LAMP_NAME, true, MinecraftColor.VALID_COLORS[i]);
 
+        allLamps = new ArrayList<>();
+        allLamps.addAll(Arrays.asList(blockLamp));
+        allLamps.addAll(Arrays.asList(blockLampInverted));
+        allLamps.add(blockLampRGB);
+        allLamps.add(blockLampRGBInverted);
+
         //Cage Lamp
-        blockLampRGB = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,false, Refs.CAGELAMP_AABB).setWIP(true);
+        cagedLampRGB = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,false, Refs.CAGELAMP_AABB).setWIP(true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             cagedLamp[i] = new BlockLampSurface(Refs.CAGELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
-        blockLampRGBInverted = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,true, Refs.CAGELAMP_AABB).setWIP(true);
+        cagedLampRGBInverted = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,true, Refs.CAGELAMP_AABB).setWIP(true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             cagedLampInverted[i] = new BlockLampSurface(Refs.CAGELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
 
+        allLamps.addAll(Arrays.asList(cagedLamp));
+        allLamps.addAll(Arrays.asList(cagedLampInverted));
+        allLamps.add(cagedLampRGB);
+        allLamps.add(cagedLampRGBInverted);
+
         //Fixture Lamp
-        blockLampRGB = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,false, Refs.FIXTURELAMP_AABB).setWIP(true);
+        fixedLampRGB = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,false, Refs.FIXTURELAMP_AABB).setWIP(true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             fixedLamp[i] = new BlockLampSurface(Refs.FIXTURELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
-        blockLampRGBInverted = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,true, Refs.FIXTURELAMP_AABB).setWIP(true);
+        fixedLampRGBInverted = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,true, Refs.FIXTURELAMP_AABB).setWIP(true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             fixedLampInverted[i] = new BlockLampSurface(Refs.FIXTURELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
+
+        allLamps.addAll(Arrays.asList(fixedLamp));
+        allLamps.addAll(Arrays.asList(fixedLampInverted));
+        allLamps.add(fixedLampRGB);
+        allLamps.add(fixedLampRGBInverted);
 
         //Gates
         blockGateAND = new BlockGateBase("gate_and").setRegistryName("bluepower:gate_and");

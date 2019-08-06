@@ -41,6 +41,11 @@ public abstract class BlockBase extends Block {
         BPBlocks.blockList.add(this);
     }
 
+    public BlockBase(Properties properties) {
+        super(properties);
+        BPBlocks.blockList.add(this);
+    }
+
 
     public BlockBase setWIP(boolean wip) {
 

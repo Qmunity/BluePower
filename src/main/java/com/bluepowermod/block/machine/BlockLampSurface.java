@@ -11,6 +11,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,16 +23,21 @@ public class BlockLampSurface extends BlockLamp {
 
     private final String name;
     private final Boolean isInverted;
-    private final AxisAlignedBB size;
+    private final VoxelShape size;
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-    public BlockLampSurface(String name, boolean isInverted, MinecraftColor color, AxisAlignedBB size) {
+    public BlockLampSurface(String name, boolean isInverted, MinecraftColor color, VoxelShape size) {
         super(name, isInverted, color);
         this.name = name;
         this.isInverted = isInverted;
         this.size = size;
         this.setDefaultState(stateContainer.getBaseState().with(POWER, isInverted ? 15 : 0).with(FACING, Direction.UP));
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return size;
     }
 
     @Override

@@ -17,7 +17,10 @@
 
 package com.bluepowermod.reference;
 
+import net.minecraft.block.Block;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 
 public class Refs {
 
@@ -230,10 +233,10 @@ public class Refs {
         "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
     public static final String LAMP_NAME = "lamp";
     public static final String CAGELAMP_NAME = "cagelamp";
-    public static final AxisAlignedBB CAGELAMP_AABB = new AxisAlignedBB(0.3125, 0.125, 0.3125,  0.6875, 0.6875, 0.6875);
-    public static final AxisAlignedBB GATE_AABB = new AxisAlignedBB(0, 0, 0,  1, 2 / 16, 1);
+    public static final VoxelShape CAGELAMP_AABB = VoxelShapes.or(Block.makeCuboidShape(5, 2, 5,  11, 11, 11));
+    public static final VoxelShape GATE_AABB = VoxelShapes.or(Block.makeCuboidShape(0, 0, 0,  16, 2, 16));
     public static final String FIXTURELAMP_NAME = "fixture";
-    public static final AxisAlignedBB FIXTURELAMP_AABB = new AxisAlignedBB(0.1875, 0.125, 0.1875, 0.8125, 0.5, 0.8125 );
+    public static final VoxelShape FIXTURELAMP_AABB = VoxelShapes.or(Block.makeCuboidShape(3, 2, 3, 13, 8, 13));
 
 
    //Configs

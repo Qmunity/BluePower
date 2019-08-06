@@ -18,6 +18,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -53,6 +54,10 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
     public BlockAlloyWire(String type, Material material) {
         super(material, TileWire.class);
         this.type = type;
+    }
+
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
     }
 
     private BlockState updateSurroundingWire(World worldIn, BlockPos pos, BlockState state)

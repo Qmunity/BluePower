@@ -4,13 +4,14 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 
 import java.awt.*;
 
 public class BlockLampRGBSurface extends BlockLampSurface {
 
-    public BlockLampRGBSurface(String name, boolean isInverted, AxisAlignedBB size) {
+    public BlockLampRGBSurface(String name, boolean isInverted, VoxelShape size) {
         super(name, isInverted, MinecraftColor.NONE, size);
     }
 

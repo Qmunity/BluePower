@@ -22,6 +22,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.*;
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
@@ -63,7 +64,7 @@ public class TileEntities {
                     //TileEntityType.Builder.create(TileAutoProjectTable::new, BPBlocks.auto_project_table).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "auto_project_table")),
                     TileEntityType.Builder.create(TileCircuitTable::new, BPBlocks.circuit_table).build(null).setRegistryName(ContainerNames.CIRCUIT_TABLE),
                     TileEntityType.Builder.create(TileCircuitDatabase::new, BPBlocks.circuit_database).build(null).setRegistryName(ContainerNames.CIRCUITDATABASE_MAIN),
-                    TileEntityType.Builder.create(TileLamp::new, BPBlocks.blockLamp).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "lamp")),
+                    TileEntityType.Builder.create(TileLamp::new, BPBlocks.allLamps.toArray(new Block[0])).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "lamp")),
                     TileEntityType.Builder.create(TileWire::new, BPBlocks.blockAlloyWire).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "wire"))
             );
 

@@ -15,9 +15,13 @@ import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.RedstoneTorchBlock;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
@@ -45,11 +49,11 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
     private final String name;
 
     public BlockLamp(String name, boolean isInverted, MinecraftColor color) {
-        super(Material.REDSTONE_LIGHT, TileLamp.class);
+        super(Properties.create(Material.REDSTONE_LIGHT).sound(SoundType.STONE).hardnessAndResistance(3.0F).lightValue(15), TileLamp.class);
         this.isInverted = isInverted;
         this.color = color;
         this.name = name;
-        setDefaultState(getStateContainer().getBaseState().with(POWER, isInverted ? 15 : 0));
+        setDefaultState(this.getDefaultState().with(POWER, isInverted ? 15 : 0));
         setRegistryName(name + (isInverted ? "inverted" : "") + "_"+ (color == MinecraftColor.NONE ? "rgb" : color.name().toLowerCase()));
     }
 
@@ -72,6 +76,11 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
 
     @Override
     public int getLightValue(BlockState state, IEnviromentBlockReader w, BlockPos pos) {
+        return !isInverted ? state.get(POWER) : 15 - state.get(POWER);
+    }
+
+    @Override
+    public int getLightValue(BlockState state) {
         return !isInverted ? state.get(POWER) : 15 - state.get(POWER);
     }
 
@@ -118,7 +127,8 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
-        world.setBlockState(pos, state.with(POWER, world.getRedstonePowerFromNeighbors(pos)));
+        int redstoneValue = world.getRedstonePowerFromNeighbors(pos);
+            world.setBlockState(pos, state.with(POWER, redstoneValue), 2);
     }
 
 }

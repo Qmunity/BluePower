@@ -1,0 +1,72 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+        "bluestone_back": "bluepower:base/bluestone_on",
+        "torch_middle": "bluepower:blocks/bluestone_torch_off"
+    },
+    "elements": [
+        {
+            "name": "TopWire",
+            "from": [ 7.5, 2, 13 ],
+            "to": [ 8.5, 2.5, 16 ],
+            "faces": {
+                "north": { "texture": "#bluestone_back", "uv": [ 0, 0, 1, 0.5 ] },
+                "east": { "texture": "#bluestone_back", "uv": [ 0, 0, 3, 0.5 ] },
+                "south": { "texture": "#bluestone_back", "uv": [ 0, 0, 1, 0.5 ] },
+                "west": { "texture": "#bluestone_back", "uv": [ 0, 0, 3, 0.5 ] },
+                "up": { "texture": "#bluestone_back", "uv": [ 0, 0, 1, 3 ] }
+            }
+        },
+        {
+            "name": "TopWire",
+            "from": [ 6.5, 2, 11 ],
+            "to": [ 7.5, 2.5, 13 ],
+            "faces": {
+                "north": { "texture": "#bluestone_back", "uv": [ 0, 0, 1, 0.5 ] },
+                "east": { "texture": "#bluestone_back", "uv": [ 0, 0, 2, 0.5 ] },
+                "south": { "texture": "#bluestone_back", "uv": [ 0, 0, 1, 0.5 ] },
+                "west": { "texture": "#bluestone_back", "uv": [ 0, 0, 2, 0.5 ] },
+                "up": { "texture": "#bluestone_back", "uv": [ 0, 0, 1, 2 ] }
+            }
+        },
+        {
+            "name": "TopWire",
+            "from": [ 7.5, 2, 9.5 ],
+            "to": [ 8.5, 2.5, 11 ],
+            "faces": {
+                "east": { "texture": "#bluestone_back", "uv": [ 0, 0, 1.5, 0.5 ] },
+                "south": { "texture": "#bluestone_back", "uv": [ 0, 0, 1, 0.5 ] },
+                "west": { "texture": "#bluestone_back", "uv": [ 0, 0, 1.5, 0.5 ] },
+                "up": { "texture": "#bluestone_back", "uv": [ 0, 0, 1, 2 ] }
+            }
+        },
+        {
+            "name": "Middle1",
+            "from": [ 7, 2, 6.5 ],
+            "to": [ 9, 6, 10.5 ],
+            "shade": false,
+            "faces": {
+                "east": { "texture": "#torch_middle", "uv": [ 6, 5, 10, 9 ] },
+                "west": { "texture": "#torch_middle", "uv": [ 6, 5, 10, 9 ] }
+            }
+        },
+        {
+            "name": "Middle2",
+            "from": [ 6, 2, 7.5 ],
+            "to": [ 10, 6, 9.5 ],
+            "shade": false,
+            "faces": {
+                "north": { "texture": "#torch_middle", "uv": [ 6, 5, 10, 9 ] },
+                "south": { "texture": "#torch_middle", "uv": [ 6, 5, 10, 9 ] }
+            }
+        },
+        {
+            "name": "Torch_Middle",
+            "from": [ 7, 2, 7.5 ],
+            "to": [ 9, 5, 9.5 ],
+            "faces": {
+                "up": { "texture": "#torch_middle", "uv": [ 7, 6, 9, 8 ] }
+            }
+        }
+    ]
+}
