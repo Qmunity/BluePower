@@ -43,11 +43,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.HopperTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -281,7 +283,11 @@ public class BPEventHandler {
             position.add(0.5, 0.1, 0.5);
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-            BlockState state = block.getDefaultState().with(BlockGateBase.FACING, ((BlockRayTraceResult)mop).getFace());
+            Vec3d lookVec = event.getInfo().getLookDirection();
+            //Todo: Gate wall placement
+            // ((BlockRayTraceResult)mop).getFace()
+            BlockState state = block.getDefaultState().with(BlockGateBase.FACING, Direction.UP)
+                    .with(BlockGateBase.ROTATION, Direction.getFacingFromVector(lookVec.x, 0, lookVec.z).getOpposite().getHorizontalIndex());
             IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
             blockrendererdispatcher.getBlockModelRenderer().renderModel(Minecraft.getInstance().world, ibakedmodel, state, position, vertexbuffer, false, new Random(), 0);
             tessellator.draw();
