@@ -20,24 +20,39 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.container.ContainerCanvasBag;
+import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.container.inventory.InventoryItem;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerProvider;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.items.ItemStackHandler;
 
-public class ItemSeedBag extends ItemBase {
+import javax.annotation.Nullable;
+
+public class ItemSeedBag extends ItemBase implements INamedContainerProvider {
 
     public ItemSeedBag(String name) {
         super(new Properties().maxStackSize(1));
@@ -47,9 +62,13 @@ public class ItemSeedBag extends ItemBase {
     public static ItemStack getSeedType(ItemStack seedBag) {
         ItemStack seed = ItemStack.EMPTY;
 
-        IInventory seedBagInventory = InventoryItem.getItemInventory(seedBag, "Seed Bag", 9);
-        for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
-            ItemStack is = seedBagInventory.getStackInSlot(i);
+        ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
+
+        //Get Items from the NBT Handler
+        if (seedBag.hasTag()) seedBagInvHandler.deserializeNBT(seedBag.getTag().getCompound("inv"));
+
+        for (int i = 0; i < 9; i++) {
+            ItemStack is = seedBagInvHandler.getStackInSlot(i);
             if (!is.isEmpty()) {
                 seed = is;
             }
@@ -73,9 +92,13 @@ public class ItemSeedBag extends ItemBase {
     public int getItemDamageForDisplay(ItemStack stack) {
 
         int items = 0;
-        IInventory seedBagInventory = InventoryItem.getItemInventory(stack, "Seed Bag", 9);
-        for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
-            ItemStack is = seedBagInventory.getStackInSlot(i);
+        ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
+
+        //Get Items from the NBT Handler
+        if (stack.hasTag()) seedBagInvHandler.deserializeNBT(stack.getTag().getCompound("inv"));
+
+        for (int i = 0; i < 8; i++) {
+            ItemStack is = seedBagInvHandler.getStackInSlot(i);
             if (!is.isEmpty()) {
                 items += is.getCount();
             }
@@ -90,15 +113,12 @@ public class ItemSeedBag extends ItemBase {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldObj, PlayerEntity playerEntity, Hand handIn) {
-        if (!worldObj.isRemote && playerEntity.isSneaking()) {
-            //TODO: Open Gui
-            //playerEntity.openGui(BluePower.instance, GuiIDs.SEEDBAG.ordinal(), worldObj, (int) playerEntity.posX, (int) playerEntity.posY,
-            //(int) playerEntity.posZ);
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand handIn) {
+        if (!world.isRemote && player.isSneaking()) {
+            NetworkHooks.openGui((ServerPlayerEntity) player, this);
         }
-        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, playerEntity.getHeldItem(handIn));
+        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(handIn));
     }
-
 
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
@@ -111,38 +131,57 @@ public class ItemSeedBag extends ItemBase {
             return ActionResultType.PASS;
         }
 
-        IInventory seedBagInventory = InventoryItem.getItemInventory(player, player.getHeldItem(hand), "Seed Bag", 9);
-        seedBagInventory.openInventory(player);
+        ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
 
-        ItemStack seed = getSeedType(player.getHeldItem(hand));
-        if (!seed.isEmpty() && seed.getItem() instanceof IPlantable) {
-            IPlantable plant = (IPlantable) seed.getItem();
-            for (int modX = -2; modX < 3; modX++) {
-                for (int modZ = -2; modZ < 3; modZ++) {
-                    BlockState b = worldIn.getBlockState(pos.add(modX, 0, modZ));
-                    if (b.getBlock().canSustainPlant(b, worldIn, pos, Direction.UP, plant)
-                            && worldIn.isAirBlock(pos.add(modX, 1, modZ))) {
-                        for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
-                            ItemStack is = seedBagInventory.getStackInSlot(i);
-                            if (!is.isEmpty()) {
-
-                                Item item = is.getItem();
-                                item.onItemUse(new ItemUseContext(player, hand, new BlockRayTraceResult(
-                                        new Vec3d( context.getHitVec().x + modX, context.getHitVec().y, context.getHitVec().z + modZ),
-                                        context.getFace(), pos.add(modX, 0, modZ), false)));
-                                seedBagInventory.decrStackSize(i, 0);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            return ActionResultType.SUCCESS;
-
+        //Get Active hand
+        Hand activeHand = Hand.MAIN_HAND;
+        ItemStack seedBag = player.getHeldItem(activeHand);
+        if(!(seedBag.getItem() instanceof ItemSeedBag)){
+            seedBag = player.getHeldItemOffhand();
+            activeHand = Hand.OFF_HAND;
         }
 
-        seedBagInventory.closeInventory(player);
+        //Get Items from the NBT Handler
+        if (seedBag.hasTag()) seedBagInvHandler.deserializeNBT(seedBag.getTag().getCompound("inv"));
 
+        ItemStack seed = getSeedType(player.getHeldItem(hand));
+        Block block = Block.getBlockFromItem(seed.getItem());
+        if (!seed.isEmpty() && block instanceof IPlantable) {
+            IPlantable plant = (IPlantable) block;
+            BlockState b = worldIn.getBlockState(pos);
+            if (b.getBlock().canSustainPlant(b, worldIn, pos, Direction.UP, plant)
+                    && worldIn.isAirBlock(pos.offset(Direction.UP))) {
+                for (int i = 0; i < 9; i++) {
+                    ItemStack is = seedBagInvHandler.getStackInSlot(i);
+                    if (!is.isEmpty()) {
+                        worldIn.setBlockState(pos.offset(Direction.UP), block.getDefaultState(), 0);
+                        seedBagInvHandler.extractItem(i, 1, false);
+                        break;
+                    }
+                }
+
+                //Update items in the NBT
+                if (!seedBag.hasTag())
+                    seedBag.setTag(new CompoundNBT());
+                if (seedBag.getTag() != null) {
+                    seedBag.getTag().put("inv", seedBagInvHandler.serializeNBT());
+                }
+
+                return ActionResultType.SUCCESS;
+            }
+        }
         return ActionResultType.PASS;
     }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.SEEDBAG_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+        return new ContainerSeedBag(id, inventory);
+    }
+
 }

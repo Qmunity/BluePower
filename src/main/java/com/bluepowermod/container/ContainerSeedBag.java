@@ -20,6 +20,7 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.item.ItemCanvasBag;
 import com.bluepowermod.tile.tier1.TileBuffer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -33,18 +34,33 @@ import com.bluepowermod.container.inventory.InventoryItem;
 import com.bluepowermod.container.slot.SlotLocked;
 import com.bluepowermod.container.slot.SlotSeedBag;
 import com.bluepowermod.item.ItemSeedBag;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
+import net.minecraftforge.items.ItemStackHandler;
 
 public class ContainerSeedBag extends Container {
 
-    private IInventory seedBagInventory;
+    private final ItemStackHandler seedBagInvHandler;
+    private Hand activeHand;
 
-    public ContainerSeedBag(PlayerInventory playerInventory, IInventory inventory, int windowId) {
+    public ContainerSeedBag(int windowId, PlayerInventory playerInventory) {
         super(BPContainerType.SEEDBAG, windowId);
-        this.seedBagInventory = inventory;
+        seedBagInvHandler = new ItemStackHandler(9);
+        
+        //Get Active hand
+        activeHand = Hand.MAIN_HAND;
+        ItemStack seedBag = playerInventory.player.getHeldItem(activeHand);
+        if(!(seedBag.getItem() instanceof ItemSeedBag)){
+            seedBag = playerInventory.player.getHeldItemOffhand();
+            activeHand = Hand.OFF_HAND;
+        }
+
+        //Get Items from the NBT Handler
+        if (seedBag.hasTag()) seedBagInvHandler.deserializeNBT(seedBag.getTag().getCompound("inv"));
         
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                this.addSlot(new SlotSeedBag(seedBagInventory, j + i * 3, 62 + j * 18, 17 + i * 18));
+                this.addSlot(new SlotSeedBag(seedBagInvHandler, j + i * 3, 62 + j * 18, 17 + i * 18));
             }
         }
         
@@ -55,18 +71,13 @@ public class ContainerSeedBag extends Container {
         }
         
         for (int i = 0; i < 9; ++i) {
-            if (playerInventory.getStackInSlot(i) == ((InventoryItem) seedBagInventory).getItem()) {
+            if (playerInventory.currentItem == i) {
                 this.addSlot(new SlotLocked(playerInventory, i, 8 + i * 18, 142));
             } else {
                 this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
             }
         }
-        
-        //seedBagInventory.openInventory();
-    }
 
-    public ContainerSeedBag(int windowId, PlayerInventory invPlayer) {
-        this(invPlayer, new Inventory(9), windowId);
     }
     
     @Override
@@ -74,115 +85,45 @@ public class ContainerSeedBag extends Container {
     
         return !player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemSeedBag;
     }
-    
+
+    @Override
+    public void onContainerClosed(PlayerEntity playerIn) {
+        //Update items in the NBT
+        ItemStack seedBag = playerIn.getHeldItem(activeHand);
+        if (!seedBag.hasTag())
+            seedBag.setTag(new CompoundNBT());
+        if (seedBag.getTag() != null) {
+            seedBag.getTag().put("inv", seedBagInvHandler.serializeNBT());
+        }
+        super.onContainerClosed(playerIn);
+    }
+
     @Override
     public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
-    
+
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.inventorySlots.get(par2);
-        
+
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            
+
             if (par2 < 9) {
                 if (!this.mergeItemStack(itemstack1, 9, 45, true)) { return ItemStack.EMPTY; }
             } else if (!this.mergeItemStack(itemstack1, 0, 9, false)) { return ItemStack.EMPTY; }
-            
+
             if (itemstack1.getCount() == 0) {
                 slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
-            
+
             if (itemstack1.getCount() == itemstack.getCount()) { return ItemStack.EMPTY; }
-            
+
             slot.onSlotChange(itemstack, itemstack1);
         }
-        
+
         return itemstack;
     }
-    
-    @Override
-    public boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4) {
-    
-        boolean flag1 = false;
-        int k = par2;
-        
-        if (par4) {
-            k = par3 - 1;
-        }
-        
-        Slot slot;
-        ItemStack itemstack1;
-        
-        if (par1ItemStack.isStackable()) {
-            while (par1ItemStack.getCount() > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
-                slot = (Slot) this.inventorySlots.get(k);
-                itemstack1 = slot.getStack();
-                
-                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem()
-                        && (!par1ItemStack.hasContainerItem() || par1ItemStack.getDamage() == itemstack1.getDamage())
-                        && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
-                    int l = itemstack1.getCount() + par1ItemStack.getCount();
-                    
-                    if (l <= par1ItemStack.getMaxStackSize()) {
-                        par1ItemStack.setCount(0);
-                        itemstack1.setCount(l);
-                        slot.onSlotChanged();
-                        flag1 = true;
-                    } else if (itemstack1.getCount() < par1ItemStack.getMaxStackSize()) {
-                        par1ItemStack.setCount(par1ItemStack.getCount() - par1ItemStack.getMaxStackSize() - itemstack1.getCount());
-                        itemstack1.setCount(par1ItemStack.getMaxStackSize());
-                        slot.onSlotChanged();
-                        flag1 = true;
-                    }
-                }
-                
-                if (par4) {
-                    --k;
-                } else {
-                    ++k;
-                }
-            }
-        }
-        
-        if (par1ItemStack.getCount() > 0) {
-            if (par4) {
-                k = par3 - 1;
-            } else {
-                k = par2;
-            }
-            
-            while (!par4 && k < par3 || par4 && k >= par2) {
-                slot = (Slot) this.inventorySlots.get(k);
-                itemstack1 = slot.getStack();
-                
-                if (itemstack1.isEmpty() && slot.isItemValid(par1ItemStack)) {
-                    if (1 < par1ItemStack.getCount()) {
-                        ItemStack copy = par1ItemStack.copy();
-                        copy.setCount(1);
-                        slot.putStack(copy);
-                        
-                        par1ItemStack.setCount(par1ItemStack.getCount() - 1);
-                        flag1 = true;
-                        break;
-                    } else {
-                        slot.putStack(par1ItemStack.copy());
-                        slot.onSlotChanged();
-                        par1ItemStack.setCount(0);
-                        flag1 = true;
-                        break;
-                    }
-                }
-                
-                if (par4) {
-                    --k;
-                } else {
-                    ++k;
-                }
-            }
-        }
-        return flag1;
-    }
+
 }

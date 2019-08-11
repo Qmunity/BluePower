@@ -24,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.util.text.ITextComponent;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author MineMaarten
@@ -43,7 +44,7 @@ public class GuiAlloyFurnace extends GuiContainerBaseBP<ContainerAlloyFurnace> i
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        this.minecraft.getTextureManager().bindTexture(resLoc);
+        super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
         int burningPercentage = (int) (furnace.currentProcessTime * 13);
         if (burningPercentage > 0)

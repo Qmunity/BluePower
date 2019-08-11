@@ -63,6 +63,7 @@ import net.minecraftforge.fml.common.gameevent.*;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.ItemStackHandler;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
@@ -114,17 +115,30 @@ public class BPEventHandler {
                 if (!is.isEmpty() && is.getItem() instanceof ItemSeedBag) {
                     ItemStack seedType = ItemSeedBag.getSeedType(is);
                     if (!seedType.isEmpty() && seedType.isItemEqual(pickUp)) {
-                        InventoryItem inventory = InventoryItem.getItemInventory(is, "Seed Bag", 9);
-                        inventory.openInventory(event.getEntityPlayer());
-                        ItemStack pickedUp = HopperTileEntity.putStackInInventoryAllSlots(null, inventory, pickUp, null);
-                        inventory.closeInventory(is);
+                        ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
 
-                        if (pickedUp.isEmpty()) {
+                        //Get Items from the NBT Handler
+                        if (is.hasTag()) seedBagInvHandler.deserializeNBT(is.getTag().getCompound("inv"));
+
+                        //Attempt to insert items
+                        for(int j = 0; j < 9 && !pickUp.isEmpty(); ++j) {
+                            pickUp = seedBagInvHandler.insertItem(j, pickUp, false);
+                        }
+
+                        //Update items in the NBT
+                        if (!is.hasTag())
+                            is.setTag(new CompoundNBT());
+                        if (is.getTag() != null) {
+                            is.getTag().put("inv", seedBagInvHandler.serializeNBT());
+                        }
+
+                        //Pickup Leftovers
+                        if (pickUp.isEmpty()) {
                             event.setResult(Event.Result.ALLOW);
                             event.getItem().remove();
                             return;
                         } else {
-                            event.getItem().setItem(pickedUp);
+                            event.getItem().setItem(pickUp);
                         }
                     }
                 }

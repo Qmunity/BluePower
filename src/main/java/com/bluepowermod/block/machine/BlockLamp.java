@@ -76,12 +76,12 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
 
     @Override
     public int getLightValue(BlockState state, IEnviromentBlockReader w, BlockPos pos) {
-        return !isInverted ? state.get(POWER) : 15 - state.get(POWER);
+        return state.get(POWER);
     }
 
     @Override
     public int getLightValue(BlockState state) {
-        return !isInverted ? state.get(POWER) : 15 - state.get(POWER);
+        return state.get(POWER);
     }
 
     @Override
@@ -128,7 +128,8 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
         int redstoneValue = world.getRedstonePowerFromNeighbors(pos);
-            world.setBlockState(pos, state.with(POWER, redstoneValue), 2);
+        if(isInverted){redstoneValue = 15 - redstoneValue;}
+        world.setBlockState(pos, state.with(POWER, redstoneValue), 2);
     }
 
 }

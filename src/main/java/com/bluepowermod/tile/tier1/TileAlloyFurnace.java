@@ -46,7 +46,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     public int currentBurnTime;
     public int currentProcessTime;
     public int maxBurnTime;
-    public static final int SLOTS = 10;
+    public static final int SLOTS = 11;
     private NonNullList<ItemStack> inventory;
     private ItemStack fuelInventory;
     private ItemStack outputInventory;

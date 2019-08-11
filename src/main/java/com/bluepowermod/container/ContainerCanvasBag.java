@@ -41,7 +41,7 @@ public class ContainerCanvasBag extends Container {
     private final ItemStackHandler canvasBagInvHandler;
     private Hand activeHand;
 
-    public ContainerCanvasBag(int windowId, PlayerInventory playerInventory, IInventory inventory) {
+    public ContainerCanvasBag(int windowId, PlayerInventory playerInventory) {
     super(BPContainerType.CANVAS_BAG, windowId);
         canvasBagInvHandler = new ItemStackHandler(27);
 
@@ -86,10 +86,6 @@ public class ContainerCanvasBag extends Container {
         }
     }
 
-    public ContainerCanvasBag( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( 27));
-    }
-
     @Override
     public boolean canInteractWith(PlayerEntity player) {
         return player.getHeldItem(activeHand).getItem() instanceof ItemCanvasBag;
@@ -109,7 +105,8 @@ public class ContainerCanvasBag extends Container {
     public void onContainerClosed(PlayerEntity playerIn) {
         //Update items in the NBT
         ItemStack canvasBag = playerIn.getHeldItem(activeHand);
-        if (!canvasBag.hasTag())canvasBag.setTag(new CompoundNBT());
+        if (!canvasBag.hasTag())
+            canvasBag.setTag(new CompoundNBT());
         if (canvasBag.getTag() != null) {
             canvasBag.getTag().put("inv", canvasBagInvHandler.serializeNBT());
         }
@@ -142,87 +139,6 @@ public class ContainerCanvasBag extends Container {
         }
         
         return itemstack;
-    }
-    
-    @Override
-    public boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4) {
-    
-        boolean flag1 = false;
-        int k = par2;
-        
-        if (par4) {
-            k = par3 - 1;
-        }
-        
-        Slot slot;
-        ItemStack itemstack1;
-        
-        if (par1ItemStack.isStackable()) {
-            while (par1ItemStack.getCount() > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
-                slot = (Slot) inventorySlots.get(k);
-                itemstack1 = slot.getStack();
-                
-                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.hasContainerItem() || par1ItemStack.getDamage() == itemstack1.getDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
-                    int l = itemstack1.getCount() + par1ItemStack.getCount();
-                    
-                    if (l <= par1ItemStack.getMaxStackSize()) {
-                        par1ItemStack.setCount(0);
-                        itemstack1.setCount(l);
-                        slot.onSlotChanged();
-                        flag1 = true;
-                    } else if (itemstack1.getCount() < par1ItemStack.getMaxStackSize()) {
-                        par1ItemStack.setCount(par1ItemStack.getCount() - par1ItemStack.getMaxStackSize() - itemstack1.getCount());
-                        itemstack1.setCount(par1ItemStack.getMaxStackSize());
-                        slot.onSlotChanged();
-                        flag1 = true;
-                    }
-                }
-                
-                if (par4) {
-                    --k;
-                } else {
-                    ++k;
-                }
-            }
-        }
-        
-        if (par1ItemStack.getCount() > 0) {
-            if (par4) {
-                k = par3 - 1;
-            } else {
-                k = par2;
-            }
-            
-            while (!par4 && k < par3 || par4 && k >= par2) {
-                slot = (Slot) inventorySlots.get(k);
-                itemstack1 = slot.getStack();
-                
-                if (itemstack1.isEmpty() && slot.isItemValid(par1ItemStack)) {
-                    if (1 < par1ItemStack.getCount()) {
-                        ItemStack copy = par1ItemStack.copy();
-                        copy.setCount(1);
-                        slot.putStack(copy);
-
-                        par1ItemStack.setCount(par1ItemStack.getCount() - 1);
-                        flag1 = true;
-                        break;
-                    } else {
-                        slot.putStack(par1ItemStack.copy());
-                        slot.onSlotChanged();
-                        par1ItemStack.setCount(0);
-                        flag1 = true;
-                        break;
-                    }
-                }
-                
-                if (par4) {
-                    --k;
-                } else {
-                    ++k;
-                }
-            }
-        }
-        return flag1;
     }
 
     /*TODO: Inventory Tweaks Support find @Optional.Method alternative

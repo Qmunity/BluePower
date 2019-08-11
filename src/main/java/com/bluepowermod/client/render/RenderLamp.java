@@ -41,9 +41,6 @@ public class RenderLamp extends TileEntityRenderer {
             int g = (color & greenMask) >> 8;
             int b = (color & blueMask);
 
-            if (bLamp.isInverted()) {
-                power = 15 - power;
-            }
             AxisAlignedBB box = bLamp.getShape(te.getBlockState(), null, null, null).getBoundingBox();
             //Define our base Glow
             if (bLamp instanceof  BlockLampSurface)
@@ -56,7 +53,7 @@ public class RenderLamp extends TileEntityRenderer {
                 for (Direction face : Direction.values()) {
                     BlockState state = te.getWorld().getBlockState(te.getPos().offset(face.getOpposite()));
                     if (state.getBlock() instanceof BlockLamp && ((BlockLamp)state.getBlock()).getShape(te.getBlockState(), null, null, null).getBoundingBox().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
-                        if (((BlockLamp) state.getBlock()).isInverted() ? state.get(BlockLamp.POWER) < 15 : state.get(BlockLamp.POWER) > 0) {
+                        if (state.get(BlockLamp.POWER) > 0) {
                             renderFaces[face.getIndex()] = false;
                             double offsetx = (face.getXOffset() * 0.05) > 0 ? (face.getXOffset() * 0.05) : 0;
                             double offsety = (face.getYOffset() * 0.05) > 0 ? (face.getYOffset() * 0.05) : 0;
