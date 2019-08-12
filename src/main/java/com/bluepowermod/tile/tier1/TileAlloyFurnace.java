@@ -19,20 +19,29 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.block.machine.BlockAlloyFurnace;
+import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -40,7 +49,7 @@ import java.util.List;
  * @author MineMaarten, Koen Beckers (K4Unl), amadornes
  */
 
-public class TileAlloyFurnace extends TileBase implements ISidedInventory {
+public class TileAlloyFurnace extends TileBase implements ISidedInventory, INamedContainerProvider {
 
     private boolean isActive;
     public int currentBurnTime;
@@ -72,10 +81,10 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
 
         for (int i = 0; i < 9; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, new ItemStack((IItemProvider) tc));
+            inventory.set(i, ItemStack.read(tc));
         }
-        fuelInventory = new ItemStack((IItemProvider) tCompound.getCompound("fuelInventory"));
-        outputInventory = new ItemStack((IItemProvider) tCompound.getCompound("outputInventory"));
+        fuelInventory = ItemStack.read(tCompound.getCompound("fuelInventory"));
+        outputInventory = ItemStack.read(tCompound.getCompound("outputInventory"));
 
     }
 
@@ -88,9 +97,9 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
         super.write(tCompound);
 
         for (int i = 0; i < 9; i++) {
-                CompoundNBT tc = new CompoundNBT();
-                inventory.get(i).write(tc);
-                tCompound.put("inventory" + i, tc);
+            CompoundNBT tc = new CompoundNBT();
+            inventory.get(i).write(tc);
+            tCompound.put("inventory" + i, tc);
         }
         if (fuelInventory != null) {
             CompoundNBT fuelCompound = new CompoundNBT();
@@ -365,4 +374,14 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
 
     }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.ALLOYFURNACE_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+        return new ContainerAlloyFurnace(id, inventory, this);
+    }
 }

@@ -40,7 +40,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nullable;
 
 
-public class BlockProjectTable extends BlockContainerBase implements INamedContainerProvider {
+public class BlockProjectTable extends BlockContainerBase {
 
     public BlockProjectTable() {
 
@@ -51,7 +51,7 @@ public class BlockProjectTable extends BlockContainerBase implements INamedConta
     @Override
     public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (!world.isRemote) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, this);
+            NetworkHooks.openGui((ServerPlayerEntity) player, (TileProjectTable)world.getTileEntity(pos));
             return true;
         }
         return super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult);
@@ -66,16 +66,5 @@ public class BlockProjectTable extends BlockContainerBase implements INamedConta
     protected boolean canRotateVertical() {
 
         return false;
-    }
-
-    @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.PROJECTTABLE_NAME);
-    }
-
-    @Nullable
-    @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
-        return new ContainerProjectTable(id, inventory);
     }
 }

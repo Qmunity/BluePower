@@ -8,26 +8,33 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
+import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
  * @author MineMaarten
  */
-public class TileProjectTable extends TileBase implements IInventory, IGuiButtonSensitive{
+public class TileProjectTable extends TileBase implements IInventory, IGuiButtonSensitive, INamedContainerProvider {
 
     public final static int SLOTS = 28;
     private NonNullList<ItemStack> inventory = NonNullList.withSize(19, ItemStack.EMPTY);
@@ -86,7 +93,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
             CompoundNBT tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, new ItemStack((IItemProvider) tagCompound));
+                inventory.set(slot, ItemStack.read(tagCompound));
             }
         }
 
@@ -96,7 +103,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
             CompoundNBT tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < craftingGrid.size()) {
-                craftingGrid.set(slot, new ItemStack((IItemProvider) tagCompound));
+                craftingGrid.set(slot, ItemStack.read(tagCompound));
             }
         }
     }
@@ -201,4 +208,14 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
     }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.PROJECTTABLE_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+        return new ContainerProjectTable(id, inventory, this);
+    }
 }

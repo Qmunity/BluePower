@@ -43,7 +43,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockAlloyFurnace extends BlockContainerFacingBase implements INamedContainerProvider {
+public class BlockAlloyFurnace extends BlockContainerFacingBase  {
 
     public BlockAlloyFurnace() {
 
@@ -54,7 +54,7 @@ public class BlockAlloyFurnace extends BlockContainerFacingBase implements IName
     @Override
     public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (!world.isRemote) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, this);
+            NetworkHooks.openGui((ServerPlayerEntity) player, (TileAlloyFurnace)world.getTileEntity(pos));
             return true;
         }
         return super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult);
@@ -95,16 +95,5 @@ public class BlockAlloyFurnace extends BlockContainerFacingBase implements IName
     protected boolean canRotateVertical() {
 
         return false;
-    }
-
-    @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.ALLOYFURNACE_NAME);
-    }
-
-    @Nullable
-    @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
-        return new ContainerAlloyFurnace(id, inventory);
     }
 }
