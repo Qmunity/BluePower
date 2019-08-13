@@ -233,10 +233,10 @@ public class Refs {
         "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
     public static final String LAMP_NAME = "lamp";
     public static final String CAGELAMP_NAME = "cagelamp";
-    public static final VoxelShape CAGELAMP_AABB = VoxelShapes.or(Block.makeCuboidShape(5, 2, 5,  11, 11, 11));
-    public static final VoxelShape GATE_AABB = VoxelShapes.or(Block.makeCuboidShape(0, 0, 0,  16, 2, 16));
+    public static final VoxelShape CAGELAMP_AABB = Block.makeCuboidShape(5, 2, 5,  11, 11, 11);
+    public static final VoxelShape GATE_AABB = Block.makeCuboidShape(0, 0, 0,  16, 2, 16);
     public static final String FIXTURELAMP_NAME = "fixture";
-    public static final VoxelShape FIXTURELAMP_AABB = VoxelShapes.or(Block.makeCuboidShape(3, 2, 3, 13, 8, 13));
+    public static final VoxelShape FIXTURELAMP_AABB = Block.makeCuboidShape(3, 2, 3, 13, 8, 13);
 
 
    //Configs

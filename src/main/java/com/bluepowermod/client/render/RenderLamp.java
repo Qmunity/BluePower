@@ -31,7 +31,8 @@ public class RenderLamp extends TileEntityRenderer {
             return;
 
         if (pass != 0) {
-            BlockLamp bLamp = (BlockLamp) te.getBlockState().getBlock();
+            BlockState stateLamp = te.getBlockState();
+            BlockLamp bLamp = (BlockLamp) stateLamp.getBlock();
             int power = te.getWorld().getBlockState(te.getPos()).get(BlockLamp.POWER);
 
             int color = bLamp.getColor(te.getWorld(), te.getPos(), 0);
@@ -41,10 +42,9 @@ public class RenderLamp extends TileEntityRenderer {
             int g = (color & greenMask) >> 8;
             int b = (color & blueMask);
 
-            AxisAlignedBB box = bLamp.getShape(te.getBlockState(), null, null, null).getBoundingBox();
+            AxisAlignedBB box = stateLamp.getShape(te.getWorld(), te.getPos()).getBoundingBox();
+
             //Define our base Glow
-            if (bLamp instanceof  BlockLampSurface)
-                box = AABBUtils.rotate(box, te.getWorld().getBlockState(te.getPos()).get(BlockLampSurface.FACING));
             box = box.equals(new AxisAlignedBB(0,0,0,1,1,1)) ? box.grow(0.05) : box.grow(0.03125);
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 

@@ -1,8 +1,10 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -18,6 +20,8 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 public class BlockLampSurface extends BlockLamp {
 
@@ -37,7 +41,7 @@ public class BlockLampSurface extends BlockLamp {
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return size;
+        return AABBUtils.rotate(size, state.get(FACING));
     }
 
     @Override
@@ -63,6 +67,12 @@ public class BlockLampSurface extends BlockLamp {
         if (!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()) {
             world.destroyBlock(pos, true);
         }
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState().with(FACING, context.getFace());
     }
 
     @Override
