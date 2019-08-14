@@ -1,7 +1,16 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.block.gates;
 
 import com.bluepowermod.block.BlockBase;
+import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -26,9 +35,11 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+/**
+ * @author MoreThanHidden
+ */
 public class BlockGateBase extends BlockBase {
 
     private final String name;
@@ -59,7 +70,7 @@ public class BlockGateBase extends BlockBase {
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return Refs.GATE_AABB;
+        return AABBUtils.rotate(Refs.GATE_AABB, state.get(FACING));
     }
 
     @Override
@@ -70,14 +81,13 @@ public class BlockGateBase extends BlockBase {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(ROTATION, context.getPlacementHorizontalFacing().getOpposite().getHorizontalIndex());
+        Direction face = context.getFace();
+        return this.getDefaultState().with(ROTATION, context.getPlacementHorizontalFacing().getOpposite().getHorizontalIndex()).with(FACING, face);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand) {
-
         Map<String, Byte> map = getSidePower(world, state, pos1);
-
         return super.getStateForPlacement(state, facing, state2, world, pos1, pos2, hand)
                 .with(POWERED_FRONT, map.get("front") > 0)
                 .with(POWERED_BACK, map.get("back") > 0)
@@ -102,7 +112,8 @@ public class BlockGateBase extends BlockBase {
 
     @Override
     public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side){
-        if(side == Direction.byHorizontalIndex(blockState.get(ROTATION))) {
+        Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.get(FACING));
+        if(side == dirs[blockState.get(ROTATION)]) {
             Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
             return map.get("front");
         }
@@ -111,7 +122,8 @@ public class BlockGateBase extends BlockBase {
 
     @Override
     public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-        if(side == Direction.byHorizontalIndex(blockState.get(ROTATION))) {
+        Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.get(FACING));
+        if(side == dirs[blockState.get(ROTATION)]) {
             Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
             return map.get("front");
         }
@@ -120,9 +132,10 @@ public class BlockGateBase extends BlockBase {
 
     private Map<String, Byte> getSidePower(IBlockReader worldIn, BlockState state, BlockPos pos){
          Map<String, Byte> map = new HashMap<>();
-         Direction side_left = Direction.byHorizontalIndex(state.get(ROTATION) == 3 ? 0 : state.get(ROTATION) + 1);
+         Direction[] dirs = DirectionHelper.ArrayFromDirection(state.get(FACING));
+         Direction side_left = dirs[state.get(ROTATION) == 3 ? 0 : state.get(ROTATION) + 1];
          Direction side_right = side_left.getOpposite();
-         Direction side_back = Direction.byHorizontalIndex(state.get(ROTATION));
+         Direction side_back = dirs[state.get(ROTATION)];
          BlockPos pos_left = pos.offset(side_left);
          BlockPos pos_right = pos.offset(side_right);
          BlockPos pos_back = pos.offset(side_back);
@@ -158,10 +171,9 @@ public class BlockGateBase extends BlockBase {
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
-        if(!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()) {
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
-            //TODO: Drop Block as Item
-            //this.dropBlockAsItem(world, pos, state, 0);
+        if(!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isNormalCube(world,pos.offset(state.get(FACING).getOpposite()))) {
+            world.destroyBlock(pos, true);
+            return;
         }
         Map<String, Byte> map = getSidePower(world, state, pos);
         world.setBlockState(pos, state.with(POWERED_FRONT, map.get("front") > 0)

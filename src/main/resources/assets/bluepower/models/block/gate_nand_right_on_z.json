@@ -1,5 +1,5 @@
 {
-    "parent": "bluepower:block/gate_nand_right",
+    "parent": "bluepower:block/gate_nand_right_z",
     "textures": {
         "bluestone_right": "bluepower:base/bluestone_on",
         "torch_right": "bluepower:blocks/bluestone_torch_off"

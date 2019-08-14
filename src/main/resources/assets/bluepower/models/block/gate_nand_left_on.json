@@ -1,48 +1,7 @@
 {
-    "ambientocclusion": false,
+    "parent": "bluepower:block/gate_nand_left",
     "textures": {
         "bluestone_left": "bluepower:base/bluestone_on",
         "torch_left": "bluepower:blocks/bluestone_torch_off"
-    },
-    "elements": [
-        {
-            "name": "AcrossWire",
-            "from": [ 0, 2, 8 ],
-            "to": [ 4, 2.5, 9 ],
-            "faces": {
-                "north": { "texture": "#bluestone_left", "uv": [ 0, 0, 4, 0.5 ] },
-                "south": { "texture": "#bluestone_left", "uv": [ 0, 0, 4, 0.5 ] },
-                "west": { "texture": "#bluestone_left", "uv": [ 0, 0, 1, 0.5 ] },
-                "up": { "texture": "#bluestone_left", "uv": [ 0, 0, 4, 1 ] }
-            }
-        },
-        {
-            "name": "Left1",
-            "from": [ 4, 2, 6.5 ],
-            "to": [ 6, 6, 10.5 ],
-            "shade": false,
-            "faces": {
-                "east": { "texture": "#torch_left", "uv": [ 6, 5, 10, 9 ] },
-                "west": { "texture": "#torch_left", "uv": [ 6, 5, 10, 9 ] }
-            }
-        },
-        {
-            "name": "Left2",
-            "from": [ 3, 2, 7.5 ],
-            "to": [ 7, 6, 9.5 ],
-            "shade": false,
-            "faces": {
-                "north": { "texture": "#torch_left", "uv": [ 6, 5, 10, 9 ] },
-                "south": { "texture": "#torch_left", "uv": [ 6, 5, 10, 9 ] }
-            }
-        },
-        {
-            "name": "Torch_Left",
-            "from": [ 4, 2, 7.5 ],
-            "to": [ 6, 5, 9.5 ],
-            "faces": {
-                "up": { "texture": "#torch_left", "uv": [ 7, 6, 9, 8 ] }
-            }
-        }
-    ]
+    }
 }

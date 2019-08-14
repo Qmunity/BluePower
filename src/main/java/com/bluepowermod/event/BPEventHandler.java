@@ -296,9 +296,8 @@ public class BPEventHandler {
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
             Vec3d lookVec = event.getInfo().getLookDirection();
-            //Todo: Gate wall placement
-            // ((BlockRayTraceResult)mop).getFace()
-            BlockState state = block.getDefaultState().with(BlockGateBase.FACING, Direction.UP)
+            Direction dir = ((BlockRayTraceResult)mop).getFace();
+            BlockState state = block.getDefaultState().with(BlockGateBase.FACING, dir)
                     .with(BlockGateBase.ROTATION, Direction.getFacingFromVector(lookVec.x, 0, lookVec.z).getOpposite().getHorizontalIndex());
             IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
             blockrendererdispatcher.getBlockModelRenderer().renderModel(Minecraft.getInstance().world, ibakedmodel, state, position, vertexbuffer, false, new Random(), 0);
