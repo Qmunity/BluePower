@@ -44,13 +44,13 @@ public class JEIPlugin implements IModPlugin {
         jeiHelpers = registry.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
         categories.put(AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe.class, new AlloyFurnaceHandler(guiHelper));
-        registry.addRecipeCategories(categories.values().toArray(new IRecipeCategory[categories.size()]));
+        //registry.addRecipeCategories(categories.values().toArray(new IRecipeCategory[categories.size()]));
 
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registryIn) {
-        registryIn.addRecipes( AlloyFurnaceRegistry.getInstance().getAllRecipes(), new ResourceLocation("bluepower:alloyfurnace"));
+        //registryIn.addRecipes( AlloyFurnaceRegistry.getInstance().getAllRecipes(), new ResourceLocation("bluepower:alloyfurnace"));
     }
 
     @Override
@@ -61,13 +61,13 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(BPBlocks.alloyfurnace), new ResourceLocation("bluepower:alloyfurnace"));
+        //registration.addRecipeCatalyst(new ItemStack(BPBlocks.alloyfurnace), new ResourceLocation("bluepower:alloyfurnace"));
         registration.addRecipeCatalyst(new ItemStack(BPBlocks.project_table), VanillaRecipeCategoryUid.CRAFTING);
     }
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-        registration.addRecipeTransferHandler(ContainerAlloyFurnace.class, new ResourceLocation("bluepower:alloyfurnace"), 2, 9, 11, 36);
+        //registration.addRecipeTransferHandler(ContainerAlloyFurnace.class, new ResourceLocation("bluepower:alloyfurnace"), 2, 9, 11, 36);
         registration.addRecipeTransferHandler(ContainerProjectTable.class, VanillaRecipeCategoryUid.CRAFTING, 1, 9, 10, 54);
     }
 }

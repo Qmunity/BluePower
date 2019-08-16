@@ -33,13 +33,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -151,7 +149,11 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
                 currentBurnTime--;
             }
             if (updatingRecipe) {
-                currentRecipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory, outputInventory);
+                if(this.world.getRecipeManager().getRecipe(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, this, this.world).isPresent()) {
+                    currentRecipe = (IAlloyFurnaceRecipe) this.world.getRecipeManager().getRecipe(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, this, this.world).get();
+                }else{
+                    currentRecipe = null;
+                }
                 updatingRecipe = false;
             }
             if (currentRecipe != null) {

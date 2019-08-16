@@ -17,7 +17,10 @@
 
 package com.bluepowermod.api.recipe;
 
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 /**
@@ -25,7 +28,7 @@ import net.minecraft.util.NonNullList;
  * {@link com.bluepowermod.recipe.AlloyFurnaceRegistry#addRecipe(ItemStack, Object...)}.
  * @author MineMaarten
  */
-public interface IAlloyFurnaceRecipe {
+public interface IAlloyFurnaceRecipe extends IRecipe<TileAlloyFurnace> {
     
     /**
      * Return true if this recipe can be smelted using the input stacks. The input stacks are the 9 inventory slots, so an element can be ItemStack.EMPTY.

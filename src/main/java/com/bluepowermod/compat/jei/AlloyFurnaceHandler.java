@@ -101,12 +101,12 @@ class AlloyFurnaceWrapperFactory implements IRecipeWrapperFactory<StandardAlloyF
 
 class AlloyFurnaceWrapper { //implements IRecipeWrapper
 
-    protected final NonNullList<ItemStack> inputs;
+    protected final NonNullList<Ingredient> inputs;
     protected final ItemStack output;
 
     public AlloyFurnaceWrapper(StandardAlloyFurnaceRecipe recipe) {
         this.inputs = recipe.getRequiredItems();
-        this.output = recipe.getCraftingResult(inputs);
+        this.output = recipe.getCraftingResult((NonNullList<ItemStack>) null);
     }
 
     /*@Override

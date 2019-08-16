@@ -2,7 +2,7 @@
   "type": "bluepower:alloy_smelting",
   "ingredients": [
     {
-      "tag": "forge:glass",
+      "item": "minecraft:glass",
       "count": 4
     },
     {

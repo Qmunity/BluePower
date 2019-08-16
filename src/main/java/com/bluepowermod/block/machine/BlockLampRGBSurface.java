@@ -17,12 +17,12 @@ public class BlockLampRGBSurface extends BlockLampSurface {
 
     @Override
     public int getColor(IBlockReader w, BlockPos pos, int tint) {
-
+        if(w != null){
         TileLamp te = get(w, pos);
-        if (te == null)
-            return 0;
-
-        return te.getColor();
+        if (te != null)
+            return te.getColor();
+        }
+        return Color.getHSBColor((System.currentTimeMillis() % 10000) / 10000F, 1, 1).getRGB();
     }
 
     @Override

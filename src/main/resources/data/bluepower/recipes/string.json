@@ -8,7 +8,7 @@
       "item": "bluepower:wool_card"
     },
     {
-      "item": "minecraft:wool"
+      "tag": "minecraft:wool"
     }
   ],
   "type": "minecraft:crafting_shapeless"

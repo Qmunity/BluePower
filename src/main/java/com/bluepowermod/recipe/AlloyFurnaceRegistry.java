@@ -20,22 +20,24 @@ package com.bluepowermod.recipe;
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPConfig;
+import com.bluepowermod.init.BPRecipeSerializer;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.util.ItemStackUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.CraftingTableBlock;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.*;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
+import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
@@ -48,6 +50,7 @@ import java.util.*;
 public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
     private static AlloyFurnaceRegistry INSTANCE = new AlloyFurnaceRegistry();
+    public static final IRecipeType ALLOYFURNACE_RECIPE = IRecipeType.<IAlloyFurnaceRecipe>register("bluepower:alloy_smelting");
 
     private final List<IAlloyFurnaceRecipe> alloyFurnaceRecipes = new ArrayList<IAlloyFurnaceRecipe>();
     private final List<ItemStack> bufferedRecyclingItems = new ArrayList<ItemStack>();
@@ -80,25 +83,17 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     }
 
     @Override
-    public void addRecipe(ItemStack craftingResult, Object... requiredItems) {
+    public void addRecipe(ResourceLocation resourceLocation, ItemStack craftingResult, Ingredient... requiredItems) {
 
         if (craftingResult == null || craftingResult.getItem() == Items.AIR)
             throw new NullPointerException("Can't register an Alloy Furnace recipe with a null output stack or item");
         if (craftingResult.isEmpty())
             throw new NullPointerException("Can't register an Alloy Furnace recipe with a invalid output stack or item");
-        NonNullList<ItemStack> requiredStacks = NonNullList.withSize(requiredItems.length, ItemStack.EMPTY);
-        for (int i = 0; i < requiredStacks.size(); i++) {
-            if (requiredItems[i] instanceof ItemStack) {
-                requiredStacks.set(i, (ItemStack) requiredItems[i]);
-            } else if (requiredItems[i] instanceof Item) {
-                requiredStacks.set(i, new ItemStack((Item) requiredItems[i], 1));
-            } else if (requiredItems[i] instanceof Block) {
-                requiredStacks.set(i, new ItemStack(Item.getItemFromBlock((Block) requiredItems[i]), 1));
-            } else {
-                throw new IllegalArgumentException("Alloy Furnace crafting ingredients can only be ItemStack, Item or Block!");
-            }
+        NonNullList<Ingredient> requiredStacks = NonNullList.create();
+        for (Ingredient requiredItem : requiredItems) {
+                requiredStacks.add(requiredItem);
         }
-        addRecipe(new StandardAlloyFurnaceRecipe(craftingResult, requiredStacks));
+        addRecipe(new StandardAlloyFurnaceRecipe(resourceLocation, "", craftingResult, requiredStacks));
     }
 
     @Override
@@ -209,7 +204,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             }
         }
         for (int i = 0; i < registeredResultItems.size(); i++) {
-            addRecipe(registeredResultItems.get(i), registeredRecycledItems.get(i));
+            addRecipe(registeredResultItems.get(i).getItem().getRegistryName(), registeredResultItems.get(i), Ingredient.fromStacks(registeredRecycledItems.get(i)));
         }
 
     }
@@ -238,40 +233,94 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         return null;
     }
 
-    public class StandardAlloyFurnaceRecipe implements IAlloyFurnaceRecipe {
+    public static class StandardAlloyFurnaceRecipe implements IAlloyFurnaceRecipe {
 
         private final ItemStack craftingResult;
-        private final NonNullList<ItemStack> requiredItems;
+        private final NonNullList<Ingredient> requiredItems;
+        private final ResourceLocation id;
+        private final String group;
 
-        private StandardAlloyFurnaceRecipe(ItemStack craftingResult, NonNullList<ItemStack> requiredItems) {
+        private StandardAlloyFurnaceRecipe(ResourceLocation id, String group, ItemStack craftingResult, NonNullList<Ingredient> requiredItems) {
 
             if (craftingResult.isEmpty())
                 throw new IllegalArgumentException("Alloy Furnace crafting result can't be null!");
             if (requiredItems.size() > 9)
                 throw new IllegalArgumentException("There can't be more than 9 crafting ingredients for the Alloy Furnace!");
-            for (ItemStack requiredItem : requiredItems) {
-                if (requiredItem.isEmpty())
+            for (Ingredient requiredItem : requiredItems) {
+                if (requiredItem.hasNoMatchingItems())
                     throw new NullPointerException("An Alloy Furnace crafting ingredient can't be null!");
-            }
-            for (ItemStack stack : requiredItems) {
-                for (ItemStack stack2 : requiredItems) {
-                    if (stack != stack2 && ItemStackUtils.isItemFuzzyEqual(stack, stack2))
-                        throw new IllegalArgumentException(
-                                "No equivalent Alloy Furnace crafting ingredient can be given twice! This does take OreDict + wildcard values in account.");
-                }
             }
 
             this.craftingResult = craftingResult;
             this.requiredItems = requiredItems;
+            this.id = id;
+            this.group = group;
+        }
+
+        @Override
+        public boolean matches(TileAlloyFurnace inv, World worldIn)
+        {
+            NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
+            //Get Input Slots first 2 are Fuel and Output
+            for (int i = 2; i < 11; i++) {
+               input.set(i - 2, inv.getStackInSlot(i));
+            }
+            return matches(input);
+        }
+
+        @Override
+        public ItemStack getCraftingResult(TileAlloyFurnace inv) {
+            NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
+            //Get Input Slots first 2 are Fuel and Output
+            for (int i = 2; i < 12; i++) {
+                input.set(i - 2, inv.getStackInSlot(i));
+            }
+
+            return getCraftingResult(input);
+        }
+
+        @Override
+        public boolean canFit(int width, int height) {
+            return width <= 3 && height <= 3;
+        }
+
+        @Override
+        public ItemStack getRecipeOutput() {
+            return craftingResult;
+        }
+
+        @Override
+        public ResourceLocation getId() {
+            return id;
+        }
+
+        @Override
+        public String getGroup() {
+            return group;
+        }
+
+        @Override
+        public ItemStack getIcon() {
+            return new ItemStack(BPBlocks.alloyfurnace);
+        }
+
+        @Override
+        public IRecipeSerializer<?> getSerializer() {
+            return BPRecipeSerializer.ALLOYSMELTING;
+        }
+
+        @Override
+        public IRecipeType<?> getType() {
+            return ALLOYFURNACE_RECIPE;
         }
 
         @Override
         public boolean matches(NonNullList<ItemStack> input) {
 
-            for (ItemStack requiredItem : requiredItems) {
-                int itemsNeeded = requiredItem.getCount();
+            for (Ingredient requiredItem : requiredItems) {
+                int itemsNeeded = requiredItem.getMatchingStacks()[0].getCount();
                 for (ItemStack inputStack : input) {
-                    if (!inputStack.isEmpty() && ItemStackUtils.isItemFuzzyEqual(inputStack, requiredItem)) {
+                    if (requiredItem.test(inputStack)) {
                         itemsNeeded -= inputStack.getCount();
                         if (itemsNeeded <= 0)
                             break;
@@ -286,11 +335,11 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         @Override
         public void useItems(NonNullList<ItemStack> input) {
 
-            for (ItemStack requiredItem : requiredItems) {
-                int itemsNeeded = requiredItem.getCount();
+            for (Ingredient requiredItem : requiredItems) {
+                int itemsNeeded = requiredItem.getMatchingStacks()[0].getCount();
                 for (int i = 0; i < input.size(); i++) {
                     ItemStack inputStack = input.get(i);
-                    if (!inputStack.isEmpty() && ItemStackUtils.isItemFuzzyEqual(inputStack, requiredItem)) {
+                    if (requiredItem.test(inputStack)) {
                         int itemsSubstracted = Math.min(inputStack.getCount(), itemsNeeded);
                         inputStack.setCount(inputStack.getCount() - itemsSubstracted);
                         if (inputStack.getCount() <= 0)
@@ -308,7 +357,6 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
         @Override
         public ItemStack getCraftingResult(NonNullList<ItemStack> input) {
-
             return craftingResult;
         }
 
@@ -317,11 +365,68 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
          *
          * @return
          */
-        public NonNullList<ItemStack> getRequiredItems() {
+        public NonNullList<Ingredient> getRequiredItems() {
 
             return requiredItems;
         }
 
     }
 
+    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<IAlloyFurnaceRecipe> {
+
+        @Override
+        public IAlloyFurnaceRecipe read(ResourceLocation recipeId, JsonObject json) {
+            String s = JSONUtils.getString(json, "group", "");
+            NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
+            if (nonnulllist.isEmpty()) {
+                throw new JsonParseException("No ingredients for alloy furnace recipe");
+            } else if (nonnulllist.size() > 9) {
+                throw new JsonParseException("Too many ingredients for shapeless recipe the max is 9");
+            } else {
+                ItemStack itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+                return new StandardAlloyFurnaceRecipe(recipeId, s, itemstack, nonnulllist);
+            }
+        }
+
+        private static NonNullList<Ingredient> readIngredients(JsonArray p_199568_0_) {
+            NonNullList<Ingredient> nonnulllist = NonNullList.create();
+
+            for(int i = 0; i < p_199568_0_.size(); ++i) {
+                Ingredient ingredient = Ingredient.deserialize(p_199568_0_.get(i));
+                if (!ingredient.hasNoMatchingItems()) {
+                    nonnulllist.add(ingredient);
+                }
+            }
+
+            return nonnulllist;
+        }
+
+        @Override
+        public IAlloyFurnaceRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+            String s = buffer.readString(32767);
+            int i = buffer.readVarInt();
+            NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
+
+            for(int j = 0; j < nonnulllist.size(); ++j) {
+                nonnulllist.set(j, Ingredient.read(buffer));
+            }
+
+            ItemStack itemstack = buffer.readItemStack();
+            return new StandardAlloyFurnaceRecipe(recipeId, s, itemstack, nonnulllist);
+        }
+
+        @Override
+        public void write(PacketBuffer buffer, IAlloyFurnaceRecipe recipe) {
+            if(recipe instanceof StandardAlloyFurnaceRecipe) {
+                buffer.writeString(((StandardAlloyFurnaceRecipe)recipe).group);
+                buffer.writeVarInt(((StandardAlloyFurnaceRecipe)recipe).requiredItems.size());
+
+                for (Ingredient ingredient :((StandardAlloyFurnaceRecipe)recipe).requiredItems ) {
+                    ingredient.write(buffer);
+                }
+
+                buffer.writeItemStack(((StandardAlloyFurnaceRecipe)recipe).craftingResult);
+            }
+        }
+    }
 }

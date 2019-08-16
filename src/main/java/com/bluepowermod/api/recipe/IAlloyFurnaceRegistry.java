@@ -18,14 +18,15 @@
 package com.bluepowermod.api.recipe;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * 
  * @author MineMaarten
  */
 
-public interface IAlloyFurnaceRegistry {
-
+public interface IAlloyFurnaceRegistry{
     /**
      * With this you can add recipes that require special handling (like NBT dependent recipes). It's similar to Vanilla's IRecipe
      * For the normal recipes, use addRecipe(ItemStack output, Object... input).
@@ -41,7 +42,7 @@ public interface IAlloyFurnaceRegistry {
      * @param input  input items. These can be ItemStack, Item or Block objects. You can specify up to 9 input objects.
      *               You can only specify one type of item once. Items will automatically be matched against the ore dictionary.
      */
-    void addRecipe(ItemStack output, Object... input);
+    void addRecipe(ResourceLocation resourceLocation, ItemStack output, Ingredient... input);
 
     /**
      * Any item added here will cause dynamically generated recipes that allows items to be broken down to this item.
