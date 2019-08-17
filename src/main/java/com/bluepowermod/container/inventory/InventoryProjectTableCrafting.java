@@ -31,7 +31,7 @@ public class InventoryProjectTableCrafting extends CraftingInventory {
 
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
-        this.projectTable.setInventorySlotContents(slot, stack);
+        this.projectTable.setInventorySlotContents(18 + slot, stack);
         eventHandler.onCraftMatrixChanged(this);
 
     }
@@ -47,7 +47,7 @@ public class InventoryProjectTableCrafting extends CraftingInventory {
     @Nonnull
     @Override
     public ItemStack getStackInSlot(int index) {
-        return index >= this.getSizeInventory() ? ItemStack.EMPTY : this.projectTable.getStackInSlot(index);
+        return 18 + index >= 18 + this.getSizeInventory() ? ItemStack.EMPTY : this.projectTable.getStackInSlot(18 + index);
     }
 
     @Nonnull

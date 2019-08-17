@@ -24,14 +24,20 @@ import com.bluepowermod.container.slot.SlotProjectTableCrafting;
 //import invtweaks.api.container.ChestContainer;
 //import invtweaks.api.container.ContainerSection;
 //import invtweaks.api.container.ContainerSectionCallback;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.*;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.network.play.server.SSetSlotPacket;
+import net.minecraft.world.World;
+
+import java.util.Optional;
 
 
 /**
@@ -50,7 +56,7 @@ public class ContainerProjectTable extends Container {
         super(BPContainerType.PROJECT_TABLE, windowId);
         this.projectTable = inventory;
         craftResult =  new CraftResultInventory();
-        craftingGrid = new InventoryProjectTableCrafting(this, projectTable, 3, 3);;
+        craftingGrid = new InventoryProjectTableCrafting(this, projectTable, 3, 3);
         player = invPlayer.player;
 
         //Output
@@ -94,14 +100,30 @@ public class ContainerProjectTable extends Container {
         }
     }
 
+
+    protected static void updateCrafting(int id, World world, PlayerEntity playerEntity, CraftingInventory craftingInventory, CraftResultInventory craftResultInventory) {
+        if (!world.isRemote) {
+            ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)playerEntity;
+            ItemStack itemstack = ItemStack.EMPTY;
+            Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInventory, world);
+            if (optional.isPresent()) {
+                ICraftingRecipe icraftingrecipe = optional.get();
+                if (craftResultInventory.canUseRecipe(world, serverplayerentity, icraftingrecipe)) {
+                    itemstack = icraftingrecipe.getCraftingResult(craftingInventory);
+                }
+            }
+
+            craftResultInventory.setInventorySlotContents(0, itemstack);
+            serverplayerentity.connection.sendPacket(new SSetSlotPacket(id, 0, itemstack));
+        }
+    }
+
     /**
      * Callback for when the crafting matrix is changed.
      */
-    //TODO: Crafting grid update
-    //@Override
-    //public void onCraftMatrixChanged(IInventory p_75130_1_) {
-    //    this.slotChangedCraftingGrid(player.getEntityWorld(), this.player, this.craftingGrid, this.craftResult);
-    //}
+    public void onCraftMatrixChanged(IInventory inventoryIn) {
+            updateCrafting(this.windowId, this.player.getEntityWorld(), this.player, this.craftingGrid, this.craftResult);
+    }
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {

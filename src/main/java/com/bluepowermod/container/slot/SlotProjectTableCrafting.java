@@ -44,10 +44,10 @@ public class SlotProjectTableCrafting extends CraftingResultSlot {
     private boolean extractedFromTable(){
         boolean remaining = true;
         for (int i = 0; i < 10; i++) {
-            ItemStack itemStack = craftMatrix.getStackInSlot(i);
+            ItemStack itemStack = craftMatrix.getStackInSlot(i + 18);
             if (itemStack.getCount() == 1) {
                 itemStack = extractFromTable(itemStack);
-                craftMatrix.setInventorySlotContents(i, itemStack);
+                craftMatrix.setInventorySlotContents(i + 18, itemStack);
             }
             if (itemStack.getCount() == 1) {
                 remaining  =  false;
@@ -57,9 +57,9 @@ public class SlotProjectTableCrafting extends CraftingResultSlot {
     }
 
     private ItemStack extractFromTable(ItemStack itemStack){
-        for (int j = 0; j < projectTable.getSizeInventory(); j++) {
-            if (projectTable.getStackInSlot(j).getItem().equals(itemStack.getItem())) {
-                projectTable.decrStackSize(j, 1);
+        for (int j = 18; j < projectTable.getSizeInventory() + 18; j++) {
+            if (projectTable.getStackInSlot(j + 18).getItem().equals(itemStack.getItem())) {
+                projectTable.decrStackSize(j + 18, 1);
                 itemStack.setCount(itemStack.getCount() + 1);
             }
         }

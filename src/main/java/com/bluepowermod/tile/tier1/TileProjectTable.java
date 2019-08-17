@@ -116,7 +116,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        return inventory.get(i);
+        return i < 18 ? inventory.get(i) : craftingGrid.get(i - 18);
     }
     public ItemStack getStackInCraftingSlot(int i) {
         return craftingGrid.get(i);
@@ -151,7 +151,11 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
-        inventory.set(i, itemStack);
+        if(i < 18){
+            inventory.set(i, itemStack);
+        }else{
+            craftingGrid.set(i - 18, itemStack);
+        }
     }
 
     public void setCraftingSlotContents(int i, ItemStack itemStack) {
