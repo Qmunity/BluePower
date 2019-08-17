@@ -29,20 +29,22 @@ import net.minecraft.tileentity.FurnaceTileEntity;
 import com.bluepowermod.container.slot.SlotMachineInput;
 import com.bluepowermod.container.slot.SlotMachineOutput;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author MineMaarten
  */
 public class ContainerAlloyFurnace extends Container {
-    private int currentBurnTime;
-    private int maxBurnTime;
-    public int currentProcessTime;
+    private IIntArray fields;
+    public final IInventory inventory;
 
-    private final IInventory inventory;
-
-    public ContainerAlloyFurnace(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+    public ContainerAlloyFurnace(int windowId, PlayerInventory invPlayer, IInventory inventory, IIntArray fields) {
         super(BPContainerType.ALLOY_FURNACE, windowId);
         this.inventory = inventory;
+        this.fields = fields;
 
         addSlot(new SlotMachineInput(inventory, 0, 21, 35));
         addSlot(new SlotMachineOutput(inventory, 1, 134, 35));
@@ -52,10 +54,11 @@ public class ContainerAlloyFurnace extends Container {
             }
         }
         bindPlayerInventory(invPlayer);
+        this.trackIntArray(fields);
     }
 
     public ContainerAlloyFurnace( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( TileAlloyFurnace.SLOTS ));
+        this( id, player, new Inventory( TileAlloyFurnace.SLOTS ), new IntArray(3));
     }
 
     protected void bindPlayerInventory(PlayerInventory invPlayer) {
@@ -111,5 +114,23 @@ public class ContainerAlloyFurnace extends Container {
     public boolean canInteractWith(PlayerEntity playerEntity) {
         return inventory.isUsableByPlayer( playerEntity );
     }
+
+    @OnlyIn(Dist.CLIENT)
+    public float getBurningPercentage() {
+
+        if (fields.get(2) > 0) {
+            return (float) fields.get(0) / (float) fields.get(2);
+        } else {
+            return 0;
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public float getProcessPercentage() {
+
+        return (float) fields.get(1) / 200;
+    }
+
+
 
 }

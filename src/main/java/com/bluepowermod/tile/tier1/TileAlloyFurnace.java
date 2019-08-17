@@ -33,6 +33,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -50,9 +51,9 @@ import java.util.List;
 public class TileAlloyFurnace extends TileBase implements ISidedInventory, INamedContainerProvider {
 
     private boolean isActive;
-    public int currentBurnTime;
-    public int currentProcessTime;
-    public int maxBurnTime;
+    private int currentBurnTime;
+    private int currentProcessTime;
+    private int maxBurnTime;
     public static final int SLOTS = 11;
     private NonNullList<ItemStack> inventory;
     private ItemStack fuelInventory;
@@ -160,7 +161,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
                 if (currentBurnTime <= 0) {
                     if (FurnaceTileEntity.getBurnTimes().containsKey(fuelInventory.getItem())) {
                         // Put new item in
-                        currentBurnTime = maxBurnTime = FurnaceTileEntity.getBurnTimes().get(fuelInventory.getItem()) + 1;
+                        currentBurnTime = maxBurnTime = FurnaceTileEntity.getBurnTimes().get(fuelInventory.getItem());
                         if (!fuelInventory.isEmpty()) {
                             fuelInventory.setCount(fuelInventory.getCount() - 1);
                             if (fuelInventory.getCount() <= 0) {
@@ -194,26 +195,38 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
         // setIsActive(newValue);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void setBurnTicks(int _maxBurnTime, int _currentBurnTime) {
-
-        maxBurnTime = _maxBurnTime;
-        currentBurnTime = _currentBurnTime;
-    }
-
-    public float getBurningPercentage() {
-
-        if (maxBurnTime > 0) {
-            return (float) currentBurnTime / (float) maxBurnTime;
-        } else {
-            return 0;
+    protected final IIntArray fields = new IIntArray() {
+        public int get(int i) {
+            switch (i) {
+                case 0:
+                    return TileAlloyFurnace.this.currentBurnTime;
+                case 1:
+                    return TileAlloyFurnace.this.currentProcessTime;
+                case 2:
+                    return TileAlloyFurnace.this.maxBurnTime;
+                default:
+                    return 0;
+            }
         }
-    }
 
-    public float getProcessPercentage() {
+        public void set(int i, int value) {
+            switch (i) {
+                case 0:
+                    TileAlloyFurnace.this.currentBurnTime = value;
+                    break;
+                case 1:
+                    TileAlloyFurnace.this.currentProcessTime = value;
+                    break;
+                case 2:
+                    TileAlloyFurnace.this.maxBurnTime = value;
+            }
 
-        return (float) currentProcessTime / 200;
-    }
+        }
+
+        public int size() {
+            return 3;
+        }
+    };
 
     /**
      * ************* ADDED FUNCTIONS *************
@@ -384,6 +397,6 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
     @Nullable
     @Override
     public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
-        return new ContainerAlloyFurnace(id, inventory, this);
+        return new ContainerAlloyFurnace(id, inventory, this, fields);
     }
 }

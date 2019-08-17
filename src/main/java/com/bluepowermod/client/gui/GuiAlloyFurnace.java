@@ -17,8 +17,10 @@
 
 package com.bluepowermod.client.gui;
 
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerAlloyFurnace;
@@ -46,11 +48,11 @@ public class GuiAlloyFurnace extends GuiContainerBaseBP<ContainerAlloyFurnace> i
 
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
-        int burningPercentage = (int) (furnace.currentProcessTime * 13);
+        int burningPercentage = (int)(furnace.getBurningPercentage() * 13);
         if (burningPercentage > 0)
             this.blit(x + 22, y + 54 + 13 - burningPercentage, 177, 13 - burningPercentage, 14, burningPercentage + 1);
 
-        int processPercentage = (int) (furnace.currentProcessTime * 22);
+        int processPercentage = (int)(furnace.getProcessPercentage() * 22);
         this.blit(x + 103, y + 35, 178, 14, processPercentage, 15);
     }
 
