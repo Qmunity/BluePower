@@ -65,6 +65,6 @@ public class GuiProjectTable extends GuiContainerBaseBP<ContainerProjectTable> i
 
     @Override
     public void actionPerformed(IGuiWidget button) {
-        //BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(projectTable, 0, 0));
+        BPNetworkHandler.wrapper.sendToServer(new MessageGuiUpdate(0, 0));
     }
 }

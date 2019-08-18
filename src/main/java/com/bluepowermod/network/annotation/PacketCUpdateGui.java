@@ -1,12 +1,9 @@
 package com.bluepowermod.network.annotation;
 
-import com.bluepowermod.network.Packet;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import com.bluepowermod.network.annotation.SyncedField.*;
 
 import java.io.DataInput;
@@ -17,12 +14,10 @@ import java.io.IOException;
  * @author MineMaarten
  */
 
-public class PacketCUpdateGui extends Packet<PacketCUpdateGui> {
+public class PacketCUpdateGui{
     private int syncId;
     private Object value;
     private byte type;
-
-    public PacketCUpdateGui(){}
 
     public PacketCUpdateGui(int syncId, SyncedField syncField){
         this.syncId = syncId;
@@ -100,7 +95,6 @@ public class PacketCUpdateGui extends Packet<PacketCUpdateGui> {
         }
     }
 
-    @Override
     public void handleClientSide(PlayerEntity player){
         Container container = player.openContainer;
         //if(container instanceof ContainerBase) {
@@ -108,15 +102,12 @@ public class PacketCUpdateGui extends Packet<PacketCUpdateGui> {
         //}
     }
 
-    @Override
     public void handleServerSide(PlayerEntity player){
 
     }
 
-    @Override
     public void read(DataInput buffer) throws IOException{}
 
-    @Override
     public void write(DataOutput buffer) throws IOException{}
 
 }

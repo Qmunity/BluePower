@@ -61,13 +61,13 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        //registration.addRecipeCatalyst(new ItemStack(BPBlocks.alloyfurnace), new ResourceLocation("bluepower:alloyfurnace"));
+        registration.addRecipeCatalyst(new ItemStack(BPBlocks.alloyfurnace), new ResourceLocation("bluepower:alloyfurnace"));
         registration.addRecipeCatalyst(new ItemStack(BPBlocks.project_table), VanillaRecipeCategoryUid.CRAFTING);
     }
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-        //registration.addRecipeTransferHandler(ContainerAlloyFurnace.class, new ResourceLocation("bluepower:alloyfurnace"), 2, 9, 11, 36);
+        registration.addRecipeTransferHandler(ContainerAlloyFurnace.class, new ResourceLocation("bluepower:alloyfurnace"), 2, 9, 11, 36);
         registration.addRecipeTransferHandler(ContainerProjectTable.class, VanillaRecipeCategoryUid.CRAFTING, 1, 9, 10, 54);
     }
 }

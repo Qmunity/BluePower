@@ -19,6 +19,7 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
 import com.bluepowermod.container.slot.SlotProjectTableCrafting;
 //import invtweaks.api.container.ChestContainer;
@@ -44,7 +45,7 @@ import java.util.Optional;
  * @author MineMaarten
  */
 //@ChestContainer
-public class ContainerProjectTable extends Container {
+public class ContainerProjectTable extends Container implements IGuiButtonSensitive {
 
     private final PlayerEntity player;
     private final CraftingInventory craftingGrid;
@@ -193,6 +194,11 @@ public class ContainerProjectTable extends Container {
 
         this.onCraftMatrixChanged(this.craftingGrid);
         return itemstack;
+    }
+
+    @Override
+    public void onButtonPress(PlayerEntity player, int messageId, int value) {
+        this.clearCraftingGrid();
     }
 /*
     @Optional.Method(modid = Dependencies.INVTWEAKS)

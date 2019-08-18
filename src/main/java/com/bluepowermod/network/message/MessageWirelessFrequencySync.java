@@ -6,12 +6,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bluepowermod.network.Packet;
 import net.minecraft.entity.player.PlayerEntity;
 
 import com.bluepowermod.api.wireless.IFrequency;
 
-public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequencySync> {
+public class MessageWirelessFrequencySync {
 
     //private List<Frequency> frequencies = new ArrayList<Frequency>();
     private PlayerEntity player;
@@ -25,7 +24,6 @@ public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequenc
 
     }
 
-    @Override
     public void write(DataOutput buffer) throws IOException {
 
         List<IFrequency> frequencies = null;
@@ -42,7 +40,6 @@ public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequenc
             //((Frequency) f).writeToBuffer(buffer);
     }
 
-    @Override
     public void read(DataInput buffer) throws IOException {
 
         int amt = buffer.readInt();
@@ -53,7 +50,6 @@ public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequenc
         //}
     }
 
-    @Override
     public void handleClientSide(PlayerEntity player) {
 
        // WirelessManager m = WirelessManager.CLIENT_INSTANCE;
@@ -64,7 +60,6 @@ public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequenc
        //     m.registerFrequency(f);
     }
 
-    @Override
     public void handleServerSide(PlayerEntity player) {
 
     }

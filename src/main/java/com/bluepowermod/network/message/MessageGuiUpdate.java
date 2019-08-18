@@ -8,45 +8,50 @@
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
-import com.bluepowermod.network.LocatedPacket;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
+import java.util.function.Supplier;
 
 /**
  *
  * @author MineMaarten
  */
 
-public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
+public class MessageGuiUpdate{
 
-    private int partId;
-    private int icId; // only used with the Integrated Circuit
     private int messageId;
     private int value;
 
-    public MessageGuiUpdate() {
-
-    }
-    public MessageGuiUpdate(Container container, int messageId, int value) {
-        super();
-        partId = -1;
+    public MessageGuiUpdate(int messageId, int value) {
         this.messageId = messageId;
         this.value = value;
     }
 
-    @Override
-    public void handleClientSide(PlayerEntity player) {
-
+    public static MessageGuiUpdate decode(PacketBuffer buffer){
+        int id = buffer.readByte();
+        int value = buffer.readByte();
+        return new MessageGuiUpdate(id, value);
     }
 
-    @Override
-    public void handleServerSide(PlayerEntity player) {
+    public static void encode(MessageGuiUpdate message, PacketBuffer buffer) {
+        buffer.writeByte(message.messageId);
+        buffer.writeByte(message.value);
+    }
 
-            TileEntity te = player.world.getTileEntity(pos);
-            if (te instanceof IGuiButtonSensitive) {
-                ((IGuiButtonSensitive) te).onButtonPress(player, messageId, value);
+    public static void handle(MessageGuiUpdate msg, Supplier<NetworkEvent.Context> contextSupplier) {
+       NetworkEvent.Context context = contextSupplier.get();
+        context.enqueueWork(() -> {
+            ServerPlayerEntity player = context.getSender();
+            if (player == null) {
+                return;
             }
+
+            Container container = player.openContainer;
+            if (container instanceof IGuiButtonSensitive) {
+                ((IGuiButtonSensitive) container).onButtonPress(player, msg.messageId, msg.value);
+            }
+        });
     }
 }

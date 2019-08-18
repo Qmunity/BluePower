@@ -2,19 +2,15 @@ package com.bluepowermod.network.message;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.client.gui.GuiContainerBase;
-import com.bluepowermod.network.LocatedPacket;
 import com.bluepowermod.container.stack.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineBacklog> {
+public class MessageSyncMachineBacklog{
 
     private List<TubeStack> stacks = new ArrayList<TubeStack>();
 
@@ -24,7 +20,7 @@ public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineB
 
     public MessageSyncMachineBacklog(TileMachineBase tile, List<TubeStack> stacks) {
 
-        super(tile.getPos());
+        //super(tile.getPos());
         this.stacks = stacks;
    }
 
@@ -52,19 +48,17 @@ public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineB
     }
 */
 
-    @Override
     public void handleClientSide(PlayerEntity player) {
 
-        TileEntity te = player.world.getTileEntity(pos);
-        if (te instanceof TileMachineBase) {
-            ((TileMachineBase) te).setBacklog(stacks);
-            GuiContainerBase gui = (GuiContainerBase) ClientProxy.getOpenedGui();
-            if (gui != null)
-                gui.redraw();
-        }
+        //TileEntity te = player.world.getTileEntity(pos);
+        //if (te instanceof TileMachineBase) {
+            //((TileMachineBase) te).setBacklog(stacks);
+            // GuiContainerBase gui = (GuiContainerBase) ClientProxy.getOpenedGui();
+            // if (gui != null)
+            //    gui.redraw();
+        //}
     }
 
-    @Override
     public void handleServerSide(PlayerEntity player) {
 
     }

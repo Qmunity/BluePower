@@ -15,6 +15,7 @@ import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.helper.BPItemTier;
 import com.bluepowermod.init.*;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.BPWorldGen;
@@ -26,6 +27,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -67,7 +69,7 @@ public class BluePower {
 
     @SubscribeEvent
     public void setup(FMLCommonSetupEvent event) {
-
+        DeferredWorkQueue.runLater(BPNetworkHandler::init);
         OreDictionarySetup.init();
         WorldGenOres.setupOres();
         WorldGenFlowers.setupFlowers();

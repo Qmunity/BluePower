@@ -18,11 +18,9 @@
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.container.stack.TubeStack;
-import com.bluepowermod.network.LocatedPacket;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
 
-public class MessageRedirectTubeStack extends LocatedPacket<MessageRedirectTubeStack> {
+public class MessageRedirectTubeStack{
 
     private TubeStack stack;
 
@@ -50,19 +48,17 @@ public class MessageRedirectTubeStack extends LocatedPacket<MessageRedirectTubeS
         stack = TubeStack.loadFromPacket(buf);
     }*/
 
-    @Override
     public void handleClientSide(PlayerEntity player) {
 
         //PneumaticTube tube = MultipartCompatibility.getPart(player.world, pos, PneumaticTube.class);
         //if (tube == null)
-            return;
-       // TubeLogic logic = tube.getLogic();
+            // return;
+        //TubeLogic logic = tube.getLogic();
         //if (logic == null)
-           // return;
+            // return;
         //logic.onClientTubeRedirectPacket(stack);
     }
 
-    @Override
     public void handleServerSide(PlayerEntity player) {
 
     }

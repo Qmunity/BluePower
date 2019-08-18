@@ -3,15 +3,10 @@ package com.bluepowermod.network.message;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
-import com.bluepowermod.network.Packet;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-
 import com.bluepowermod.api.misc.Accessibility;
-import com.bluepowermod.network.BPNetworkHandler;
 
-public class MessageWirelessSaveFreq extends Packet<MessageWirelessSaveFreq> {
+public class MessageWirelessSaveFreq{
 
     //private Frequency freq;
     private Accessibility acc;
@@ -28,18 +23,15 @@ public class MessageWirelessSaveFreq extends Packet<MessageWirelessSaveFreq> {
 
     }
 
-    @Override
     public void handleClientSide(PlayerEntity player) {
 
     }
 
-    @Override
     public void handleServerSide(PlayerEntity player) {
 
         //BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (ServerPlayerEntity) player);
     }
 
-    @Override
     public void write(DataOutput buffer) throws IOException {
 
         //freq.writeToBuffer(buffer);
@@ -48,7 +40,6 @@ public class MessageWirelessSaveFreq extends Packet<MessageWirelessSaveFreq> {
         buffer.writeUTF(name);
     }
 
-    @Override
     public void read(DataInput buffer) throws IOException {
 
         // freq = new Frequency();

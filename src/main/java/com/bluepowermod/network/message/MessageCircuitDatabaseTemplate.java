@@ -8,12 +8,9 @@
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.helper.ItemStackDatabase;
-import com.bluepowermod.network.LocatedPacket;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
 /**
  * Used from client to server to select a template from the private library of the client. Used from server to client to message the client to save
@@ -21,7 +18,7 @@ import net.minecraft.tileentity.TileEntity;
  *
  * @author MineMaarten, amadornes
  */
-public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuitDatabaseTemplate> {
+public class MessageCircuitDatabaseTemplate{
 
     private ItemStack stack;
     private boolean deleting; // server side only used
@@ -32,27 +29,24 @@ public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuit
 
     public MessageCircuitDatabaseTemplate(TileCircuitDatabase circuitDatabase, ItemStack stack) {
 
-        super(circuitDatabase.getPos().getX(), circuitDatabase.getPos().getY(), circuitDatabase.getPos().getZ());
+        //super(circuitDatabase.getPos().getX(), circuitDatabase.getPos().getY(), circuitDatabase.getPos().getZ());
         this.stack = stack;
     }
 
     public MessageCircuitDatabaseTemplate(TileCircuitDatabase circuitDatabase, ItemStack stack, boolean deleting) {
 
-        super(circuitDatabase.getPos().getX(), circuitDatabase.getPos().getY(), circuitDatabase.getPos().getZ());
+        //super(circuitDatabase.getPos().getX(), circuitDatabase.getPos().getY(), circuitDatabase.getPos().getZ());
         this.stack = stack;
         this.deleting = deleting;
     }
 
-    @Override
     public void handleClientSide(PlayerEntity player) {
-
-        TileEntity te = player.world.getTileEntity(pos);
-        if (te instanceof TileCircuitDatabase) {
-            ((TileCircuitDatabase) te).saveToPrivateLibrary(stack);
-        }
+        //TileEntity te = player.world.getTileEntity(pos);
+        //if (te instanceof TileCircuitDatabase) {
+            //((TileCircuitDatabase) te).saveToPrivateLibrary(stack);
+        //}
     }
 
-    @Override
     public void handleServerSide(PlayerEntity player) {
 
         if (deleting) {
@@ -62,12 +56,12 @@ public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuit
                 //BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
             }
         } else {
-            TileEntity te = player.world.getTileEntity(pos);
-            if (te instanceof TileCircuitDatabase) {
-                ((TileCircuitDatabase) te).copyInventory.setInventorySlotContents(0, stack);
+            //TileEntity te = player.world.getTileEntity(pos);
+            //if (te instanceof TileCircuitDatabase) {
+                //((TileCircuitDatabase) te).copyInventory.setInventorySlotContents(0, stack);
                 //TODO: Open GUI
                 //player.openGui(BluePower.instance, GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal(), player.world, pos.getX(), pos.getY(), pos.getZ());
-            }
+            //}
         }
     }
 

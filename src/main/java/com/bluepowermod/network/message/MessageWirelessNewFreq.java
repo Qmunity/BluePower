@@ -1,7 +1,6 @@
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.api.misc.Accessibility;
-import com.bluepowermod.network.LocatedPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;
 
@@ -10,7 +9,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 
-public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq> {
+public class MessageWirelessNewFreq{
 
     private Accessibility acc;
     private String name;
@@ -31,12 +30,10 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
 
     }
 
-    @Override
     public void handleClientSide(PlayerEntity player) {
 
     }
 
-    @Override
     public void handleServerSide(PlayerEntity player) {
 
         //Frequency freq = (Frequency) WirelessManager.COMMON_INSTANCE.registerFrequency(player, name, acc, bundled);
@@ -56,10 +53,9 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
        // }
     }
 
-    @Override
     public void write(DataOutput buffer) throws IOException {
 
-        super.write(buffer);
+        //super.write(buffer);
 
         buffer.writeInt(acc.ordinal());
         buffer.writeUTF(name);
@@ -67,10 +63,9 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
         buffer.writeInt(face.ordinal());
     }
 
-    @Override
     public void read(DataInput buffer) throws IOException {
 
-        super.read(buffer);
+        //super.read(buffer);
 
         acc = Accessibility.values()[buffer.readInt()];
         name = buffer.readUTF();

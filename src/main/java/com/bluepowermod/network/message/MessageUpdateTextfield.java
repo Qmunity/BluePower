@@ -7,14 +7,11 @@
  */
 package com.bluepowermod.network.message;
 
-import com.bluepowermod.network.LocatedPacket;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 
-public class MessageUpdateTextfield extends LocatedPacket<MessageUpdateTextfield> {
+public class MessageUpdateTextfield{
 
     private int textFieldID;
     private String text;
@@ -25,7 +22,7 @@ public class MessageUpdateTextfield extends LocatedPacket<MessageUpdateTextfield
 
     public MessageUpdateTextfield(TileEntity te, int textfieldID) {
 
-        super(te.getPos());
+        //super(te.getPos());
         textFieldID = textfieldID;
         text = ((IGUITextFieldSensitive) te).getText(textfieldID);
     }
@@ -48,18 +45,16 @@ public class MessageUpdateTextfield extends LocatedPacket<MessageUpdateTextfield
     }
 */
 
-    @Override
     public void handleClientSide(PlayerEntity player) {
 
     }
 
-    @Override
     public void handleServerSide(PlayerEntity player) {
 
-        TileEntity te = player.world.getTileEntity(pos);
-        if (te instanceof IGUITextFieldSensitive) {
-            ((IGUITextFieldSensitive) te).setText(textFieldID, text);
-        }
+        //TileEntity te = player.world.getTileEntity(pos);
+        //if (te instanceof IGUITextFieldSensitive) {
+            //((IGUITextFieldSensitive) te).setText(textFieldID, text);
+        //}
 
     }
 

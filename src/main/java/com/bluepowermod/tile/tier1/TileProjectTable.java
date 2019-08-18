@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * @author MineMaarten
  */
-public class TileProjectTable extends TileBase implements IInventory, IGuiButtonSensitive, INamedContainerProvider {
+public class TileProjectTable extends TileBase implements IInventory, INamedContainerProvider {
 
     public final static int SLOTS = 28;
     private NonNullList<ItemStack> inventory = NonNullList.withSize(18, ItemStack.EMPTY);
@@ -187,14 +187,6 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 
         return true;
-    }
-
-    @Override
-    public void onButtonPress(PlayerEntity player, int messageId, int value) {
-        Container container = player.openContainer;
-        if (container instanceof ContainerProjectTable) {
-            ((ContainerProjectTable) container).clearCraftingGrid();
-        }
     }
 
     @Override
