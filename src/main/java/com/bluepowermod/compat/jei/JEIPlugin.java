@@ -18,11 +18,16 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author MoreThanHidden
@@ -40,34 +45,39 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public void  registerCategories(IRecipeCategoryRegistration registry) {
-
         jeiHelpers = registry.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
         categories.put(AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe.class, new AlloyFurnaceHandler(guiHelper));
-        //registry.addRecipeCategories(categories.values().toArray(new IRecipeCategory[categories.size()]));
+        registry.addRecipeCategories(categories.values().toArray(new IRecipeCategory[categories.size()]));
 
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registryIn) {
-        //registryIn.addRecipes( AlloyFurnaceRegistry.getInstance().getAllRecipes(), new ResourceLocation("bluepower:alloyfurnace"));
+        registryIn.addRecipes(getRecipes(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
+    }
+
+    private static List<IRecipe<?>> getRecipes(IRecipeType<?> recipeType) {
+        return Minecraft.getInstance().world.getRecipeManager().getRecipes().stream()
+                .filter(recipe -> recipe.getType() == recipeType)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         //TODO: JEI Recipe Handler
-        //registration.handleRecipes(AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe.class, new AlloyFurnaceWrapperFactory(), "bluepower.alloyfurnace");
+        //registration.addGuiContainerHandler(new AlloyFurnaceHandler());
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(BPBlocks.alloyfurnace), new ResourceLocation("bluepower:alloyfurnace"));
+        registration.addRecipeCatalyst(new ItemStack(BPBlocks.alloyfurnace), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
         registration.addRecipeCatalyst(new ItemStack(BPBlocks.project_table), VanillaRecipeCategoryUid.CRAFTING);
     }
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-        registration.addRecipeTransferHandler(ContainerAlloyFurnace.class, new ResourceLocation("bluepower:alloyfurnace"), 2, 9, 11, 36);
+        registration.addRecipeTransferHandler(ContainerAlloyFurnace.class, new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME), 2, 9, 11, 36);
         registration.addRecipeTransferHandler(ContainerProjectTable.class, VanillaRecipeCategoryUid.CRAFTING, 1, 9, 10, 54);
     }
 }

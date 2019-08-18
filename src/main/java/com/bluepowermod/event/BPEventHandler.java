@@ -60,6 +60,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
 import org.lwjgl.opengl.GL11;
 
@@ -71,9 +72,9 @@ public class BPEventHandler {
     public void tick(TickEvent.WorldTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             if (event.world.getGameTime() % 200 == 0) {
-                double tickTime = MathHelper.mean(event.world.getServer().tickTimeArray) * 1.0E-6D;//In case world are going to get their own thread: MinecraftServer.getServer().worldTickTimes.get(event.world.provider.dimensionId)
-                //TODO: Network Handler
-                //BPNetworkHandler.INSTANCE.sendToDimension(new MessageServerTickTime(tickTime), event.world.getDimension());
+                //double tickTime = MathHelper.mean(event.world.getServer().tickTimeArray) * 1.0E-6D;
+                //In case world are going to get their own thread: MinecraftServer.getServer().worldTickTimes.get(event.world.provider.dimensionId)
+                //BPNetworkHandler.wrapper.send(PacketDistributor.DIMENSION.with(event.world.getDimension().getType()), new MessageServerTickTime(tickTime));
             }
         }
     }

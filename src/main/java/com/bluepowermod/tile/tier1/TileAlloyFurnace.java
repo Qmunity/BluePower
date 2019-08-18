@@ -64,7 +64,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
 
     public TileAlloyFurnace() {
         super(BPTileEntityType.ALLOY_FURNACE);
-        this.inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
+        this.inventory = NonNullList.withSize(9, ItemStack.EMPTY);
         this.fuelInventory = ItemStack.EMPTY;
         this.outputInventory = ItemStack.EMPTY;
     }

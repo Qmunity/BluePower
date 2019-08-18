@@ -365,8 +365,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         }
 
         /**
-         * getter for NEI plugin
-         *
+         * getters for JEI plugin
          * @return
          */
         public NonNullList<Ingredient> getRequiredItems() {
@@ -374,6 +373,9 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             return requiredItems;
         }
 
+        public NonNullList<Integer> getRequiredCount() {
+            return requiredCount;
+        }
     }
 
     public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<IAlloyFurnaceRecipe> {

@@ -53,5 +53,6 @@ public class MessageGuiUpdate{
                 ((IGuiButtonSensitive) container).onButtonPress(player, msg.messageId, msg.value);
             }
         });
+        contextSupplier.get().setPacketHandled(true);
     }
 }

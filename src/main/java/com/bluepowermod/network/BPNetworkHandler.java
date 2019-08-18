@@ -39,7 +39,7 @@ public class BPNetworkHandler {
         //wrapper.registerMessage(5, MessageDebugBlock.class, MessageDebugBlock.class, Dist.CLIENT);
         //wrapper.registerMessage(6, MessageSendClientServerTemplates.class, MessageSendClientServerTemplates.class, Dist.CLIENT);
         //wrapper.registerMessage(7, MessageRedirectTubeStack.class, MessageRedirectTubeStack.class, Dist.CLIENT);
-        //wrapper.registerMessage(8, MessageServerTickTime.class, Dist.CLIENT);
+        //wrapper.registerMessage(8, MessageServerTickTime.class, MessageServerTickTime::encode, MessageServerTickTime::decode, MessageServerTickTime::handle);
 
         //wrapper.registerMessage(9, MessageWirelessNewFreq.class, MessageWirelessNewFreq.class, Dist.DEDICATED_SERVER);
         //wrapper.registerMessage(10, MessageWirelessSaveFreq.class, MessageWirelessSaveFreq.class, Dist.DEDICATED_SERVER);
