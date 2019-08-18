@@ -9,14 +9,20 @@ package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
+import com.bluepowermod.container.ContainerBuffer;
+import com.bluepowermod.container.ContainerSortingMachine;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -24,7 +30,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +42,7 @@ import java.util.List;
  * @author MineMaarten
  */
 
-public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
+public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, INamedContainerProvider {
 
     public int curColumn = 0;
     public PullMode pullMode = PullMode.SINGLE_STEP;
@@ -52,6 +61,17 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         super(BPTileEntityType.SORTING_MACHINE);
         for (int i = 0; i < colors.length; i++)
             colors[i] = TubeColor.NONE;
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.SORTING_MACHINE_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerSortingMachine(id, inventory, this);
     }
 
     public enum PullMode {

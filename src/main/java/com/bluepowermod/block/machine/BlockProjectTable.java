@@ -48,15 +48,6 @@ public class BlockProjectTable extends BlockContainerBase {
         setRegistryName(Refs.MODID, Refs.PROJECTTABLE_NAME);
     }
 
-    @Override
-    public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if (!world.isRemote) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, (TileProjectTable)world.getTileEntity(pos));
-            return true;
-        }
-        return super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult);
-    }
-
     public BlockProjectTable(Class<? extends TileBase> tileClass) {
 
         super(Material.WOOD, tileClass);

@@ -7,9 +7,20 @@
  */
 package com.bluepowermod.tile.tier2;
 
+import com.bluepowermod.container.ContainerBuffer;
+import com.bluepowermod.container.ContainerRetriever;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.tier1.TileFilter;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+
+import javax.annotation.Nullable;
 
 /**
  * @author MineMaarten
@@ -39,4 +50,16 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     public int getFuzzySetting() {
         return fuzzySetting;
     }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.RETRIEVER_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerRetriever(id, inventory, this);
+    }
+
 }

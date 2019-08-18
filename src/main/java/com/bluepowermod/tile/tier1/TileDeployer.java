@@ -9,7 +9,9 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.block.BlockContainerFacingBase;
+import com.bluepowermod.container.ContainerDeployer;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
@@ -20,6 +22,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.Items;
 import net.minecraft.inventory.ISidedInventory;
@@ -34,11 +39,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -47,7 +55,7 @@ import java.util.UUID;
 /**
  * @author MineMaarten
  */
-public class TileDeployer extends TileBase implements ISidedInventory, IEjectAnimator {
+public class TileDeployer extends TileBase implements ISidedInventory, IEjectAnimator, INamedContainerProvider {
 
     private static final List<Item>  blacklistedItems    = new ArrayList<Item>();
     private static final GameProfile FAKE_PLAYER_PROFILE = new GameProfile(UUID.randomUUID(), "[BP Deployer]");
@@ -357,4 +365,14 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
 
     }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.BLOCKDEPLOYER_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerDeployer(id, inventory, this);
+    }
 }

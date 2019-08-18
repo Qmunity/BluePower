@@ -1,7 +1,7 @@
 package com.bluepowermod.client.gui;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.client.gui.widget.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
@@ -10,7 +10,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -127,24 +126,6 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
     public void render(int x, int y, float partialTick) {
         super.render(x, y, partialTick);
         this.renderHoveredToolTip(x, y);
-        List<String> tooltip = new ArrayList<String>();
-        boolean shift = BluePower.proxy.isSneakingInGui();
-        for (IGuiWidget widget : widgets) {
-            if (widget.getBounds().contains(x, y))
-                widget.addTooltip(x, y, tooltip, shift);
-        }
-        if (!tooltip.isEmpty()) {
-            List<String> localizedTooltip = new ArrayList<String>();
-            for (String line : tooltip) {
-                String localizedLine = I18n.format(line);
-                String[] lines = WordUtils.wrap(localizedLine, 50).split(System.getProperty("line.separator"));
-                for (String locLine : lines) {
-                    localizedTooltip.add(locLine);
-                }
-            }
-            //TODO Check This
-            drawString(x, y, localizedTooltip.toString(), false);
-        }
 
     }
 
@@ -172,25 +153,20 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
     @Override
     public void tick() {
         super.tick();
-        //TODO: Should this be updating every tick?
         for (IGuiWidget widget : widgets)
             widget.update();
     }
 
-    public void redraw() {
+    @Override
+    public void resize(Minecraft minecraft, int x, int y) {
+        super.resize(minecraft, x, y);
+        redraw();
+    }
 
+    public void redraw() {
         buttons.clear();
-        List<IGuiWidget> stats = new ArrayList<IGuiWidget>();
-        for (IGuiWidget widget : widgets) {
-            if (widget instanceof IGuiAnimatedStat) {
-                stats.add(widget);
-            }
-        }
         widgets.clear();
         init();
-
-        widgets.removeIf(widget -> widget instanceof IGuiAnimatedStat);
-        widgets.addAll(stats);
     }
 
 }

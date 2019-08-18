@@ -17,20 +17,28 @@
 
 package com.bluepowermod.tile.tier1;
 
+import com.bluepowermod.container.ContainerBuffer;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileBuffer extends TileBase implements ISidedInventory {
+public class TileBuffer extends TileBase implements ISidedInventory, INamedContainerProvider {
 
     public static final int SLOTS = 21;
     private final NonNullList<ItemStack> allInventories = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
@@ -184,5 +192,16 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     @Override
     public void clear() {
 
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.BLOCKBUFFER_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerBuffer(id, inventory, this);
     }
 }

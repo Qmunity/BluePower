@@ -9,27 +9,35 @@ package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
+import com.bluepowermod.container.ContainerRegulator;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
  * @author MineMaarten
  */
-public class TileRegulator extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive{
+public class TileRegulator extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, INamedContainerProvider {
 
     public static final int SLOTS = 27;
     private NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
@@ -39,6 +47,17 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
 
     public TileRegulator() {
         super(BPTileEntityType.REGULATOR);
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.REGULATOR_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerRegulator(id, inventory, this);
     }
 
     private enum EnumSection {

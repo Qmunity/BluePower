@@ -4,6 +4,7 @@ import com.bluepowermod.client.gui.widget.WidgetTabItemLister;
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -29,6 +30,13 @@ public class GuiContainerBaseBP<T extends Container> extends GuiContainerBase<T>
             lastRightStat = backlogTab;
             backlogTab.setItems(((TileMachineBase) inventory).getBacklog());
             addWidget(backlogTab);
+        }
+
+        //Widgets currently conflicting with progress GUI
+        if(container.getType() != BPContainerType.ALLOY_FURNACE) {
+            String unlocalizedInfo = title.getString() + ".info";
+            addAnimatedStat("gui.bluepower:tab.info", Refs.MODID + ":textures/gui/widgets/gui_info.png", 0xFF8888FF, isInfoStatLeftSided()).setText(
+                    unlocalizedInfo);
         }
 
     }

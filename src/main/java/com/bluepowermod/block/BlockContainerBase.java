@@ -23,10 +23,13 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tile.IRotatable;
 import com.bluepowermod.tile.TileBase;
+import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -39,6 +42,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -150,9 +154,9 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
             return false;
         }
 
-        TileEntity entity = get(world, pos);
-        if (entity == null || !(entity instanceof TileBase)) {
-            return false;
+        if (!world.isRemote && world.getTileEntity(pos) instanceof INamedContainerProvider) {
+            NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider)world.getTileEntity(pos));
+            return true;
         }
         return false;
     }

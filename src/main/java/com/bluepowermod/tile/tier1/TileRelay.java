@@ -19,18 +19,26 @@
 
 package com.bluepowermod.tile.tier1;
 
+import com.bluepowermod.container.ContainerRelay;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileRelay extends TileMachineBase implements IInventory {
+public class TileRelay extends TileMachineBase implements IInventory, INamedContainerProvider {
 
     public static final int SLOTS = 10;
     private final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
@@ -220,4 +228,14 @@ public class TileRelay extends TileMachineBase implements IInventory {
 
     }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.RELAY_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerRelay(id, inventory, this);
+    }
 }

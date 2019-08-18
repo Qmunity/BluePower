@@ -90,10 +90,12 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         if (craftingResult.isEmpty())
             throw new NullPointerException("Can't register an Alloy Furnace recipe with a invalid output stack or item");
         NonNullList<Ingredient> requiredStacks = NonNullList.create();
+        NonNullList<Integer> requiredCount = NonNullList.create();
         for (Ingredient requiredItem : requiredItems) {
                 requiredStacks.add(requiredItem);
+                requiredCount.add(1);
         }
-        addRecipe(new StandardAlloyFurnaceRecipe(resourceLocation, "", craftingResult, requiredStacks));
+        addRecipe(new StandardAlloyFurnaceRecipe(resourceLocation, "", craftingResult, requiredStacks, requiredCount));
     }
 
     @Override
@@ -237,10 +239,11 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
         private final ItemStack craftingResult;
         private final NonNullList<Ingredient> requiredItems;
+        private final NonNullList<Integer> requiredCount;
         private final ResourceLocation id;
         private final String group;
 
-        private StandardAlloyFurnaceRecipe(ResourceLocation id, String group, ItemStack craftingResult, NonNullList<Ingredient> requiredItems) {
+        private StandardAlloyFurnaceRecipe(ResourceLocation id, String group, ItemStack craftingResult, NonNullList<Ingredient> requiredItems, NonNullList<Integer> requiredCount) {
 
             if (craftingResult.isEmpty())
                 throw new IllegalArgumentException("Alloy Furnace crafting result can't be null!");
@@ -253,6 +256,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
             this.craftingResult = craftingResult;
             this.requiredItems = requiredItems;
+            this.requiredCount = requiredCount;
             this.id = id;
             this.group = group;
         }
@@ -317,10 +321,10 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         @Override
         public boolean matches(NonNullList<ItemStack> input) {
 
-            for (Ingredient requiredItem : requiredItems) {
-                int itemsNeeded = requiredItem.getMatchingStacks()[0].getCount();
+            for (int i = 0; i < requiredItems.size(); i++) {
+                int itemsNeeded = requiredCount.get(i);
                 for (ItemStack inputStack : input) {
-                    if (requiredItem.test(inputStack)) {
+                    if (requiredItems.get(i).test(inputStack)) {
                         itemsNeeded -= inputStack.getCount();
                         if (itemsNeeded <= 0)
                             break;
@@ -335,11 +339,11 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         @Override
         public void useItems(NonNullList<ItemStack> input) {
 
-            for (Ingredient requiredItem : requiredItems) {
-                int itemsNeeded = requiredItem.getMatchingStacks()[0].getCount();
+            for (int j = 0; j < requiredItems.size(); j++) {
+                int itemsNeeded = requiredCount.get(j);
                 for (int i = 0; i < input.size(); i++) {
                     ItemStack inputStack = input.get(i);
-                    if (requiredItem.test(inputStack)) {
+                    if (requiredItems.get(j).test(inputStack)) {
                         int itemsSubstracted = Math.min(inputStack.getCount(), itemsNeeded);
                         inputStack.setCount(inputStack.getCount() - itemsSubstracted);
                         if (inputStack.getCount() <= 0)
@@ -378,27 +382,43 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         public IAlloyFurnaceRecipe read(ResourceLocation recipeId, JsonObject json) {
             String s = JSONUtils.getString(json, "group", "");
             NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
+            NonNullList<Integer> countlist = readCount(JSONUtils.getJsonArray(json, "ingredients"));
             if (nonnulllist.isEmpty()) {
                 throw new JsonParseException("No ingredients for alloy furnace recipe");
             } else if (nonnulllist.size() > 9) {
                 throw new JsonParseException("Too many ingredients for shapeless recipe the max is 9");
             } else {
                 ItemStack itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
-                return new StandardAlloyFurnaceRecipe(recipeId, s, itemstack, nonnulllist);
+                return new StandardAlloyFurnaceRecipe(recipeId, s, itemstack, nonnulllist, countlist);
             }
         }
 
-        private static NonNullList<Ingredient> readIngredients(JsonArray p_199568_0_) {
+        private static NonNullList<Ingredient> readIngredients(JsonArray jsonArray) {
             NonNullList<Ingredient> nonnulllist = NonNullList.create();
-
-            for(int i = 0; i < p_199568_0_.size(); ++i) {
-                Ingredient ingredient = Ingredient.deserialize(p_199568_0_.get(i));
+            for(int i = 0; i < jsonArray.size(); ++i) {
+                Ingredient ingredient = Ingredient.deserialize(jsonArray.get(i));
                 if (!ingredient.hasNoMatchingItems()) {
                     nonnulllist.add(ingredient);
                 }
             }
-
             return nonnulllist;
+        }
+
+        private static NonNullList<Integer> readCount(JsonArray jsonArray) {
+            NonNullList<Integer> countlist = NonNullList.create();
+            for(int i = 0; i < jsonArray.size(); ++i) {
+                Ingredient ingredient = Ingredient.deserialize(jsonArray.get(i));
+                int count;
+                if (jsonArray.get(i).isJsonObject() && ((JsonObject)jsonArray.get(i)).has("count")) {
+                    count = ((JsonObject) jsonArray.get(i)).get("count").getAsInt();
+                }else{
+                    count = 1;
+                }
+                if (!ingredient.hasNoMatchingItems()) {
+                    countlist.add(i, count);
+                }
+            }
+            return countlist;
         }
 
         @Override
@@ -406,13 +426,18 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             String s = buffer.readString(32767);
             int i = buffer.readVarInt();
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
+            NonNullList<Integer> countlist = NonNullList.withSize(i, 0);
 
             for(int j = 0; j < nonnulllist.size(); ++j) {
                 nonnulllist.set(j, Ingredient.read(buffer));
             }
 
+            for(int j = 0; j < nonnulllist.size(); ++j) {
+                countlist.set(j, buffer.readInt());
+            }
+
             ItemStack itemstack = buffer.readItemStack();
-            return new StandardAlloyFurnaceRecipe(recipeId, s, itemstack, nonnulllist);
+            return new StandardAlloyFurnaceRecipe(recipeId, s, itemstack, nonnulllist, countlist);
         }
 
         @Override
@@ -423,6 +448,10 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
                 for (Ingredient ingredient :((StandardAlloyFurnaceRecipe)recipe).requiredItems ) {
                     ingredient.write(buffer);
+                }
+
+                for (int i :((StandardAlloyFurnaceRecipe)recipe).requiredCount ) {
+                    buffer.writeInt(i);
                 }
 
                 buffer.writeItemStack(((StandardAlloyFurnaceRecipe)recipe).craftingResult);

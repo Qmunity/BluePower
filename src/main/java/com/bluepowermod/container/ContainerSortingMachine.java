@@ -48,7 +48,7 @@ public class ContainerSortingMachine extends Container {
     public final TubeColor[] colors = new TubeColor[9];
     public final int[] fuzzySettings = new int[8];
 
-    public ContainerSortingMachine(PlayerInventory invPlayer, IInventory inventory, int windowId) {
+    public ContainerSortingMachine(int windowId, PlayerInventory invPlayer, IInventory inventory) {
         super(BPContainerType.SORTING_MACHINE, windowId);
         this.inventory = inventory;
         for (int i = 0; i < 5; i++) {
@@ -57,13 +57,13 @@ public class ContainerSortingMachine extends Container {
             }
         }
         bindPlayerInventory(invPlayer);
-        Arrays.fill(colors, -1);
+        //Arrays.fill(colors, -1);
         Arrays.fill(fuzzySettings, -1);
 
     }
 
     public ContainerSortingMachine(int windowId, PlayerInventory invPlayer) {
-        this(invPlayer, new Inventory(TileSortingMachine.SLOTS), windowId);
+        this(windowId, invPlayer, new Inventory(TileSortingMachine.SLOTS));
     }
 
     protected void bindPlayerInventory(PlayerInventory invPlayer) {

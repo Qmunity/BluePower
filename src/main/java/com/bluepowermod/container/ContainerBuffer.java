@@ -32,7 +32,7 @@ public class ContainerBuffer extends Container {
     
     private final IInventory inventory;
     
-    public ContainerBuffer(PlayerInventory invPlayer, IInventory inventory, int windowId) {
+    public ContainerBuffer(int windowId, PlayerInventory invPlayer, IInventory inventory) {
         super(BPContainerType.BUFFER, windowId);
         this.inventory = inventory;
         for (int i = 0; i < 4; i++) {
@@ -44,7 +44,7 @@ public class ContainerBuffer extends Container {
     }
 
     public ContainerBuffer(int windowId, PlayerInventory invPlayer) {
-        this(invPlayer, new Inventory(TileBuffer.SLOTS), windowId);
+        this(windowId, invPlayer, new Inventory(TileBuffer.SLOTS));
     }
     
     protected void bindPlayerInventory(PlayerInventory invPlayer) {

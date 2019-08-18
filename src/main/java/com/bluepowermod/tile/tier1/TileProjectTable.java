@@ -37,7 +37,7 @@ import java.util.List;
 public class TileProjectTable extends TileBase implements IInventory, IGuiButtonSensitive, INamedContainerProvider {
 
     public final static int SLOTS = 28;
-    private NonNullList<ItemStack> inventory = NonNullList.withSize(19, ItemStack.EMPTY);
+    private NonNullList<ItemStack> inventory = NonNullList.withSize(18, ItemStack.EMPTY);
     protected NonNullList<ItemStack> craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
 
     public TileProjectTable() {

@@ -9,23 +9,31 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
+import com.bluepowermod.container.ContainerFilter;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.reference.Refs;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.List;
 /**
  * @author MineMaarten
  */
-public class TileFilter extends TileTransposer implements ISidedInventory, IGuiButtonSensitive {
+public class TileFilter extends TileTransposer implements ISidedInventory, IGuiButtonSensitive, INamedContainerProvider {
 
     public static final int SLOTS = 9;
     protected final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
@@ -256,5 +264,16 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
             filterColor = TubeColor.values()[value];
         if (messageId == 1)
             fuzzySetting = value;
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.FILTER_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerFilter(id, inventory, this);
     }
 }

@@ -27,6 +27,7 @@ import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -173,7 +174,10 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
                     }
                 }
 
-                if (++currentProcessTime >= 200) {
+                //Check if progress completed, and output slot is empty and less then a stack of the same item.
+                if (++currentProcessTime >= 200 && ((outputInventory.getItem() == currentRecipe.getRecipeOutput().getItem()
+                        && (outputInventory.getCount() + currentRecipe.getCraftingResult(inventory).getCount()) <= 64)
+                                        || outputInventory.isEmpty())) {
                     currentProcessTime = 0;
                     if (!outputInventory.isEmpty()) {
                         outputInventory.setCount(outputInventory.getCount() + currentRecipe.getCraftingResult(inventory).getCount());

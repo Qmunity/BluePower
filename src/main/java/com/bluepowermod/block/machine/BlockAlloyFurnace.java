@@ -52,15 +52,6 @@ public class BlockAlloyFurnace extends BlockContainerFacingBase  {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if (!world.isRemote) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, (TileAlloyFurnace)world.getTileEntity(pos));
-            return true;
-        }
-        return super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult);
-    }
-
-    @Override
     public void randomTick(BlockState stateIn, World world, BlockPos pos, Random rnd) {
         if (stateIn.get(ACTIVE)) {
             int l = stateIn.get(FACING).ordinal();

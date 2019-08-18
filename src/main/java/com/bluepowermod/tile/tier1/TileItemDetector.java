@@ -8,17 +8,26 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
+import com.bluepowermod.container.ContainerBuffer;
+import com.bluepowermod.container.ContainerItemDetector;
 import com.bluepowermod.helper.ItemStackHelper;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 ;
@@ -26,7 +35,7 @@ import java.util.List;
 /**
  * @author MineMaarten
  */
-public class TileItemDetector extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
+public class TileItemDetector extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, INamedContainerProvider {
 
     public int mode;
     public final static int SLOTS = 10;
@@ -248,15 +257,24 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         return true;
     }
 
-    //Todo Fields
     @Override
     public boolean isEmpty() {
-        return inventory.size() == 0;
+        return inventory.isEmpty();
     }
 
     @Override
     public void clear() {
-
+        inventory.clear();
     }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.ITEMDETECTOR_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerItemDetector(id, inventory, this);
+    }
 }

@@ -43,10 +43,11 @@ public class GuiAlloyFurnace extends GuiContainerBaseBP<ContainerAlloyFurnace> i
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY){
-        int x = (width - xSize) / 2;
-        int y = (height - ySize) / 2;
 
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+
+        int x = (width - xSize) / 2;
+        int y = (height - ySize) / 2;
 
         int burningPercentage = (int)(furnace.getBurningPercentage() * 13);
         if (burningPercentage > 0)
