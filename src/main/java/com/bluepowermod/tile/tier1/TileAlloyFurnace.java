@@ -274,32 +274,21 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public ItemStack decrStackSize(int var1, int var2) {
+    public ItemStack decrStackSize(int slot, int amount) {
 
-        ItemStack tInventory = getStackInSlot(var1);
-
-        if (tInventory.isEmpty()) {
-            return ItemStack.EMPTY;
-        }
-
-        ItemStack ret = ItemStack.EMPTY;
-        if (tInventory.getCount() < var2) {
-            ret = tInventory;
-            inventory = null;
-        } else {
-            ret = tInventory.split(var2);
-            if (tInventory.getCount() <= 0) {
-                if (var1 == 0) {
-                    fuelInventory = ItemStack.EMPTY;
-                } else if (var1 == 1) {
-                    outputInventory = ItemStack.EMPTY;
-                } else {
-                    inventory.set(var1 - 2, ItemStack.EMPTY);
+        ItemStack itemStack = getStackInSlot(slot);
+        if (!itemStack.isEmpty()) {
+            if (itemStack.getCount() <= amount) {
+                setInventorySlotContents(slot, ItemStack.EMPTY);
+            } else {
+                itemStack = itemStack.split(amount);
+                if (itemStack.getCount() == 0) {
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
 
-        return ret;
+        return itemStack;
     }
 
     @Override
