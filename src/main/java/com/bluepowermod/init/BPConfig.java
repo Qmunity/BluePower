@@ -72,6 +72,7 @@ public class BPConfig {
         public final ForgeConfigSpec.ConfigValue<Double> volcanoSpawnChance; // chance of a volcano spawning per chunk.
         public final ForgeConfigSpec.ConfigValue<Integer> flowerSpawnChance;
         public final ForgeConfigSpec.ConfigValue<String> alloyFurnaceBlacklist;
+        public final ForgeConfigSpec.ConfigValue<Boolean> alloyFurnaceDatapackGenerator;
         public final ForgeConfigSpec.ConfigValue<Float> albedoBrightness;
         //public final ForgeConfigSpec.BooleanValue enableTubeCaching;
         public final ForgeConfigSpec.BooleanValue enableGateSounds;
@@ -126,7 +127,8 @@ public class BPConfig {
             veinSizeMarble = builder.comment("veinSizeMarble").translation("bluepower.config.marble.vein_size").define("veinSizeMarble", 2048);
 
             builder.push(Refs.CONFIG_RECIPES).comment("Toggle recipes to be enabled or not");
-            alloyFurnaceBlacklist = builder.comment( "Any item name ('minecraft:bucket', 'minecraft:minecart') added here will be blacklisted from being able to melt down into its raw materials.").translation("bluepower.config.alloy_furnace.blacklist").define("alloyFurnaceBlacklist", "");
+            alloyFurnaceBlacklist = builder.comment( "Any item name (minecraft:bucket,minecraft:minecart) added here will be blacklisted from being able to melt down into its raw materials.").translation("bluepower.config.alloy_furnace.blacklist").define("alloyFurnaceBlacklist", "minecraft:iron_nugget,minecraft:gold_nugget");
+            alloyFurnaceDatapackGenerator = builder.comment( "Generate Json Datapack for Alloy Furnace (Only used to generate recycling recipes)").translation("bluepower.config.alloy_furnace.datapack").define("alloyFurnaceDatapackGenerator", true);
 
             /*
             builder.push(Refs.CONFIG_TUBES).comment("Tube Options");

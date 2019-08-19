@@ -28,7 +28,7 @@ import net.minecraft.util.ResourceLocation;
 
 public interface IAlloyFurnaceRegistry{
     /**
-     * With this you can add recipes that require special handling (like NBT dependent recipes). It's similar to Vanilla's IRecipe
+     * With this you can add recipes to be generated as a json data pack that require special handling.
      * For the normal recipes, use addRecipe(ItemStack output, Object... input).
      *
      * @param recipe
@@ -36,7 +36,7 @@ public interface IAlloyFurnaceRegistry{
     void addRecipe(IAlloyFurnaceRecipe recipe);
 
     /**
-     * Adds a recipe to the Alloy Furnace.
+     * Adds a recipe to be generated as a json data pack to the Alloy Furnace.
      *
      * @param output the crafting result
      * @param input  input items. These can be ItemStack, Item or Block objects. You can specify up to 9 input objects.

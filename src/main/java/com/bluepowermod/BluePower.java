@@ -24,7 +24,12 @@ import com.bluepowermod.world.WorldGenOres;
 import com.bluepowermod.world.WorldGenVolcano;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
@@ -35,7 +40,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,6 +66,7 @@ public class BluePower {
         //CapabilityBlutricity.register();
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
+        MinecraftForge.EVENT_BUS.register(this);
         BPBlocks.init();
         proxy.preInitRenderers();
 
@@ -89,8 +97,23 @@ public class BluePower {
     }
 
     @SubscribeEvent
-    public void serverStarted(FMLServerStartedEvent event) {
-        AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
+    public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
+        //Add Reload Listener for the Alloy Furnace Recipe Generator
+        event.getServer().getResourceManager().addReloadListener((IResourceManagerReloadListener) resourceManager -> {
+            if(BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()) {
+                RecipeManager recipeManager = event.getServer().getRecipeManager();
+                AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes(recipeManager);
+                AlloyFurnaceRegistry.getInstance().generateRecipeDatapack(event);
+            }
+        });
+    }
+
+    @SubscribeEvent
+    public void onServerStarted(FMLServerStartedEvent event){
+        //Reload to make sure Recycling Recipes are available
+        if(BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()){
+            event.getServer().reload();
+        }
     }
 
 }

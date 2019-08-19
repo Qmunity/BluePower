@@ -24,6 +24,7 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import com.bluepowermod.util.DatapackUtils;
 import com.bluepowermod.util.ItemStackUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -38,8 +39,12 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -52,10 +57,10 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     private static AlloyFurnaceRegistry INSTANCE = new AlloyFurnaceRegistry();
     public static final IRecipeType ALLOYFURNACE_RECIPE = IRecipeType.<IAlloyFurnaceRecipe>register("bluepower:alloy_smelting");
 
-    private final List<IAlloyFurnaceRecipe> alloyFurnaceRecipes = new ArrayList<IAlloyFurnaceRecipe>();
-    private final List<ItemStack> bufferedRecyclingItems = new ArrayList<ItemStack>();
-    private final Map<ItemStack, ItemStack> moltenDownMap = new HashMap<ItemStack, ItemStack>();
-    private final List<String> blacklist = new ArrayList<String>();
+    private List<IAlloyFurnaceRecipe> alloyFurnaceRecipes = new ArrayList<IAlloyFurnaceRecipe>();
+    private List<ItemStack> bufferedRecyclingItems = new ArrayList<ItemStack>();
+    private Map<ItemStack, ItemStack> moltenDownMap = new HashMap<ItemStack, ItemStack>();
+    private List<String> blacklist = new ArrayList<String>();
 
     private AlloyFurnaceRegistry() {
 
@@ -73,13 +78,23 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     }
 
     /**
-     * getter for NEI plugin
-     *
-     * @return
+     * Clears existing and generates an Alloy Furnace Recipe Data Pack,
+     * Mainly for Dynamically generated Recycle Recipes.
      */
-    public List<IAlloyFurnaceRecipe> getAllRecipes() {
+    public void generateRecipeDatapack(FMLServerAboutToStartEvent event){
+        if(event.getServer() != null) {
+            String path = event.getServer().getDataDirectory().getPath() + "/saves/" + event.getServer().getFolderName() + "/datapacks";
 
-        return alloyFurnaceRecipes;
+            if (event.getServer().isDedicatedServer()) {
+                path = event.getServer().getDataDirectory().getPath() + "/" + event.getServer().getFolderName() + "/datapacks";
+            }
+
+            DatapackUtils.createBPDatapack(path);
+            DatapackUtils.clearBPAlloyFurnaceDatapack(path);
+            for (IAlloyFurnaceRecipe recipe : alloyFurnaceRecipes) {
+                DatapackUtils.generateAlloyFurnaceRecipe(recipe, path);
+            }
+        }
     }
 
     @Override
@@ -120,9 +135,9 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public void generateRecyclingRecipes() {
+    public void generateRecyclingRecipes(RecipeManager recipeManager) {
 
-        Collections.addAll(blacklist, BPConfig.CONFIG.alloyFurnaceBlacklist.get());
+        this.blacklist = Arrays.asList(BPConfig.CONFIG.alloyFurnaceBlacklist.get().split(","));
         List<Item> blacklist = new ArrayList<Item>();
         for (String configString : this.blacklist) {
             Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(configString));
@@ -137,7 +152,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         List<ItemStack> registeredRecycledItems = new ArrayList<ItemStack>();
         List<ItemStack> registeredResultItems = new ArrayList<ItemStack>();
 
-        for (IRecipe recipe : Minecraft.getInstance().world.getRecipeManager().getRecipes()) {
+        for (IRecipe recipe : recipeManager.getRecipes()) {
             int recyclingAmount = 0;
             ItemStack currentlyRecycledInto = ItemStack.EMPTY;
             for (ItemStack recyclingItem : bufferedRecyclingItems) {
@@ -215,24 +230,6 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
         ItemStack moltenDownStack = moltenDownMap.get(original);
         return moltenDownStack != null ? moltenDownStack : original;
-    }
-
-    public IAlloyFurnaceRecipe getMatchingRecipe(NonNullList<ItemStack> input, ItemStack outputSlot) {
-
-        for (IAlloyFurnaceRecipe recipe : alloyFurnaceRecipes) {
-            if (recipe.matches(input)) {
-                if (outputSlot != null && !outputSlot.isEmpty()) {// check if we can add the crafting result to the output slot
-                    ItemStack craftingResult = recipe.getCraftingResult(input);
-                    if (!ItemStack.areItemStackTagsEqual(outputSlot, craftingResult) || !outputSlot.isItemEqual(craftingResult)) {
-                        continue;
-                    } else if (craftingResult.getCount() + outputSlot.getCount() > outputSlot.getMaxStackSize()) {
-                        continue;
-                    }
-                }
-                return recipe;
-            }
-        }
-        return null;
     }
 
     public static class StandardAlloyFurnaceRecipe implements IAlloyFurnaceRecipe {

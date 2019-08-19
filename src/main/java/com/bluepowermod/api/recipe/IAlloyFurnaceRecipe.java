@@ -25,7 +25,7 @@ import net.minecraft.util.NonNullList;
 
 /**
  * This class only should be used for special recipes, like recipes that depend on NBT. For normal recipes use
- * {@link com.bluepowermod.recipe.AlloyFurnaceRegistry#addRecipe(ItemStack, Object...)}.
+ * {@link com.bluepowermod.recipe.AlloyFurnaceRegistry#addRecipe(net.minecraft.util.ResourceLocation, ItemStack, Ingredient...)}.
  * @author MineMaarten
  */
 public interface IAlloyFurnaceRecipe extends IRecipe<TileAlloyFurnace> {
@@ -42,6 +42,10 @@ public interface IAlloyFurnaceRecipe extends IRecipe<TileAlloyFurnace> {
      * The items that are needed in this recipe need to be removed from the input inventory.
      */
     void useItems(NonNullList<ItemStack> input);
-    
+
     ItemStack getCraftingResult(NonNullList<ItemStack> input);
+
+    NonNullList<Ingredient> getRequiredItems();
+
+    NonNullList<Integer> getRequiredCount();
 }
