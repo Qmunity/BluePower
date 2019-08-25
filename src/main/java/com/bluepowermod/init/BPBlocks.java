@@ -183,10 +183,10 @@ public class BPBlocks {
         tiles = new BlockStoneOre(Refs.TILES);
 
         teslatite_ore = new BlockTeslatiteOre(Refs.TESLATITEORE_NAME);
-        ruby_ore = new BlockRubyOre(Refs.RUBYORE_NAME);
-        sapphire_ore = new BlockSapphireOre(Refs.SAPPHIREORE_NAME);
-        amethyst_ore = new BlockAmethystOre(Refs.AMETHYSTORE_NAME);
-        malachite_ore = new BlockMalachiteOre(Refs.MALACHITEORE_NAME);
+        ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME);
+        sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME);
+        amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME);
+        malachite_ore = new BlockItemOre(Refs.MALACHITEORE_NAME);
 
         copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
         silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);

@@ -7,7 +7,7 @@
         "cage_top": "bluepower:blocks/lamps/cage_top",
         "lamp_side": "bluepower:blocks/lamps/cage_lamp_off",
         "lamp_top": "bluepower:blocks/lamps/cage_lamp_off_top",
-        "particle": "#lamp_side"
+        "particle": "bluepower:blocks/lamps/cage_foot_side"
     },
     "elements": [
         {

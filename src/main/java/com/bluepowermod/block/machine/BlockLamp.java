@@ -49,7 +49,7 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
     private final String name;
 
     public BlockLamp(String name, boolean isInverted, MinecraftColor color) {
-        super(Properties.create(Material.REDSTONE_LIGHT).sound(SoundType.STONE).hardnessAndResistance(3.0F).lightValue(15), TileLamp.class);
+        super(Properties.create(Material.REDSTONE_LIGHT).sound(SoundType.STONE).hardnessAndResistance(1.0F).lightValue(15), TileLamp.class);
         this.isInverted = isInverted;
         this.color = color;
         this.name = name;

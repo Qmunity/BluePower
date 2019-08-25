@@ -42,9 +42,11 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author MineMaarten
@@ -76,6 +78,14 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
 
         isRedstoneEmitter = true;
         return this;
+    }
+
+    //TODO Replace with Loot Tables
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        List<ItemStack> drops =  super.getDrops(state, builder);
+        drops.add(new ItemStack(this));
+        return drops;
     }
 
     @Override

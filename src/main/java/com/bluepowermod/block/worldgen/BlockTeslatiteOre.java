@@ -43,6 +43,7 @@ public class BlockTeslatiteOre extends BlockItemOre {
         return MathHelper.nextInt(rand, 2, 5);
     }
 
+    //TODO Loot Table
     @Override
     public List<ItemStack> getDrops(BlockState p_220076_1_, LootContext.Builder p_220076_2_) {
         List<ItemStack> stacks = NonNullList.create();

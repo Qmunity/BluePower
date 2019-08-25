@@ -49,10 +49,10 @@ public class RenderLamp extends TileEntityRenderer {
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
             //Remove overlapping Glow
-            if(bLamp.getShape(te.getBlockState(), null, null, null).getBoundingBox().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
+            if(stateLamp.getShape(te.getWorld(), te.getPos()).getBoundingBox().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
                 for (Direction face : Direction.values()) {
                     BlockState state = te.getWorld().getBlockState(te.getPos().offset(face.getOpposite()));
-                    if (state.getBlock() instanceof BlockLamp && ((BlockLamp)state.getBlock()).getShape(te.getBlockState(), null, null, null).getBoundingBox().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
+                    if (state.getBlock() instanceof BlockLamp && state.getShape(te.getWorld(), te.getPos()).getBoundingBox().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
                         if (state.get(BlockLamp.POWER) > 0) {
                             renderFaces[face.getIndex()] = false;
                             double offsetx = (face.getXOffset() * 0.05) > 0 ? (face.getXOffset() * 0.05) : 0;
