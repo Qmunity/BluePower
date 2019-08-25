@@ -33,6 +33,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 
@@ -46,7 +47,7 @@ import java.util.Random;
 public class BlockCrackedBasalt extends BlockStoneOre {
 
     public BlockCrackedBasalt(String name) {
-        super(name, Properties.create(Material.ROCK).hardnessAndResistance(25.0F).sound(SoundType.STONE).tickRandomly());
+        super(name, Properties.create(Material.ROCK).hardnessAndResistance(25.0F).sound(SoundType.STONE));
     }
 
     @Override
@@ -56,11 +57,15 @@ public class BlockCrackedBasalt extends BlockStoneOre {
 
 
     @Override
-    public void randomTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void tick(BlockState state, World world, BlockPos pos, Random random) {
         // When the random chance hit, spew lava.
         if (!world.isRemote && (random.nextInt(100) == 0)) {
                 spawnLava(world, pos, random);
         }
+    }
+
+    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+        worldIn.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(worldIn));
     }
 
     //TODO: Confirm this can't be silk touched

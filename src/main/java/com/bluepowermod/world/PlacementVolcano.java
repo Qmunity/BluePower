@@ -3,6 +3,7 @@ package com.bluepowermod.world;
 import com.bluepowermod.init.BPConfig;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -21,12 +22,15 @@ public class PlacementVolcano extends Placement<NoPlacementConfig> {
     }
 
     public Stream<BlockPos> getPositions(IWorld world, ChunkGenerator<? extends GenerationSettings> p_212848_2_, Random random, NoPlacementConfig p_212848_4_, BlockPos blockPos) {
-        if (random.nextDouble() < BPConfig.CONFIG.volcanoSpawnChance.get()) {
-            if (world.getBlockState(new BlockPos(blockPos.getX(), 10, blockPos.getZ())).getBlock() == Blocks.LAVA && world.getHeight(Heightmap.Type.WORLD_SURFACE, blockPos.getX(), blockPos.getZ()) <= 90) {
-                return Stream.of(blockPos);
-            }
-        }
+        int chunkPosX = blockPos.getX() >> 8;
+        int chuckPosZ = blockPos.getZ() >> 8;
 
-        return Stream.empty();
+        ((SharedSeedRandom) random).setLargeFeatureSeed(world.getSeed(), chunkPosX, chuckPosZ);
+
+        if (random.nextDouble() < (BPConfig.CONFIG.volcanoSpawnChance.get() * 16)) {
+            return Stream.of(blockPos);
+        } else {
+            return Stream.empty();
+        }
     }
 }

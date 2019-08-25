@@ -9,40 +9,31 @@
 package com.bluepowermod;
 
 import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
-import com.bluepowermod.helper.BPItemTier;
 import com.bluepowermod.init.*;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.util.DatapackUtils;
 import com.bluepowermod.world.BPWorldGen;
 import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
-import com.bluepowermod.world.WorldGenVolcano;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -74,14 +65,13 @@ public class BluePower {
 
     public static Logger log = LogManager.getLogger(Refs.MODID);
 
-
     @SubscribeEvent
     public void setup(FMLCommonSetupEvent event) {
         DeferredWorkQueue.runLater(BPNetworkHandler::init);
         OreDictionarySetup.init();
         WorldGenOres.setupOres();
         WorldGenFlowers.setupFlowers();
-       // BPWorldGen.setupGeneralWorldGen();
+        BPWorldGen.setupGeneralWorldGen();
 
         proxy.setup(event);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> BPContainerType::registerScreenFactories);
@@ -104,6 +94,13 @@ public class BluePower {
                 RecipeManager recipeManager = event.getServer().getRecipeManager();
                 AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes(recipeManager);
                 AlloyFurnaceRegistry.getInstance().generateRecipeDatapack(event);
+            }else{
+                //If disabled remove any generated recipes
+                String path = event.getServer().getDataDirectory().getPath() + "/saves/" + event.getServer().getFolderName() + "/datapacks";
+                if (event.getServer().isDedicatedServer()) {
+                    path = event.getServer().getDataDirectory().getPath() + "/" + event.getServer().getFolderName() + "/datapacks";
+                }
+                DatapackUtils.clearBPAlloyFurnaceDatapack(path);
             }
         });
     }
