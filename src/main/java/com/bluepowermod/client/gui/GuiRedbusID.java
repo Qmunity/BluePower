@@ -10,20 +10,20 @@ package com.bluepowermod.client.gui;
 import com.bluepowermod.container.ContainerRedbusID;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.IRedBusWindow;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiRedbusID extends GuiContainerBaseBP {
+public class GuiRedbusID extends GuiContainerBaseBP<ContainerRedbusID> implements IHasContainer<ContainerRedbusID> {
 
-    private final IRedBusWindow device;
+    private final ContainerRedbusID device;
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/redbusgui.png");
 
-    public GuiRedbusID(InventoryPlayer invPlayer, IRedBusWindow device) {
-
-        super(new ContainerRedbusID(invPlayer, device), resLoc);
-        this.device = device;
+    public GuiRedbusID(ContainerRedbusID container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.device = container;
 
         xSize = 123;
         ySize = 81;
@@ -32,9 +32,9 @@ public class GuiRedbusID extends GuiContainerBaseBP {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 
-        drawHorizontalAlignedString(7, 4, xSize - 14,  I18n.translateToLocal("gui.redbusgui"), true);
+        drawHorizontalAlignedString(7, 4, xSize - 14,  "gui.redbusgui", true);
 
-        drawHorizontalAlignedString(7, 60, xSize - 14, I18n.translateToLocal("gui.redbus.id") + ":" + IRedBusWindow.redbus_id,
+        drawHorizontalAlignedString(7, 60, xSize - 14, "gui.redbus.id" + ":" + IRedBusWindow.redbus_id,
                 true);
     }
 

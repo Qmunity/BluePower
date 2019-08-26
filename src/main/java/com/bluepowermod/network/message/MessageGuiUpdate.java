@@ -8,66 +8,51 @@
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
-import com.bluepowermod.network.LocatedPacket;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
+import java.util.function.Supplier;
 
 /**
  *
  * @author MineMaarten
  */
 
-public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
+public class MessageGuiUpdate{
 
-    private int partId;
-    private int icId; // only used with the Integrated Circuit
     private int messageId;
     private int value;
 
-    public MessageGuiUpdate() {
-
-    }
-    public MessageGuiUpdate(TileEntity tile, int messageId, int value) {
-
-        super(tile.getPos());
-        partId = -1;
+    public MessageGuiUpdate(int messageId, int value) {
         this.messageId = messageId;
         this.value = value;
     }
 
-
-    @Override
-    public void toBytes(ByteBuf buf) {
-
-        super.toBytes(buf);
-        buf.writeInt(messageId);
-        buf.writeInt(partId);
-        buf.writeInt(value);
-        buf.writeInt(icId);
+    public static MessageGuiUpdate decode(PacketBuffer buffer){
+        int id = buffer.readByte();
+        int value = buffer.readByte();
+        return new MessageGuiUpdate(id, value);
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-
-        super.fromBytes(buf);
-        messageId = buf.readInt();
-        partId = buf.readInt();
-        value = buf.readInt();
-        icId = buf.readInt();
+    public static void encode(MessageGuiUpdate message, PacketBuffer buffer) {
+        buffer.writeByte(message.messageId);
+        buffer.writeByte(message.value);
     }
 
-    @Override
-    public void handleClientSide(EntityPlayer player) {
-
-    }
-
-    @Override
-    public void handleServerSide(EntityPlayer player) {
-
-            TileEntity te = player.world.getTileEntity(pos);
-            if (te instanceof IGuiButtonSensitive) {
-                ((IGuiButtonSensitive) te).onButtonPress(player, messageId, value);
+    public static void handle(MessageGuiUpdate msg, Supplier<NetworkEvent.Context> contextSupplier) {
+       NetworkEvent.Context context = contextSupplier.get();
+        context.enqueueWork(() -> {
+            ServerPlayerEntity player = context.getSender();
+            if (player == null) {
+                return;
             }
+
+            Container container = player.openContainer;
+            if (container instanceof IGuiButtonSensitive) {
+                ((IGuiButtonSensitive) container).onButtonPress(player, msg.messageId, msg.value);
+            }
+        });
+        contextSupplier.get().setPacketHandled(true);
     }
 }

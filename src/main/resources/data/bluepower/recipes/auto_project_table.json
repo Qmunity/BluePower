@@ -1,0 +1,22 @@
+﻿{
+  "result": {
+    "item": "bluepower:auto_project_table"
+  },
+  "pattern": [
+    "PCP",
+    "CTC",
+    "PCP"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "C": {
+      "item": "minecraft:crafting_table"
+    },
+    "T": {
+      "item": "bluepower:project_table"
+    }
+  }
+}

@@ -17,51 +17,60 @@
 
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tile.tier3.TileKinectGenerator;
 
 public class ContainerKinect extends Container {
 
-    private final TileKinectGenerator tilekinect;
+    private final IInventory kinect;
 
-    public ContainerKinect(InventoryPlayer invPlayer, TileKinectGenerator kinect) {
-
-        tilekinect = kinect;
+    public ContainerKinect(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+        super(BPContainerType.KINETIC_GENERATOR, windowId);
+        kinect = inventory;
         
         //Inventory for Turbines
-        addSlotToContainer(new Slot(kinect, 0, 80, 35));
+        addSlot(new Slot(kinect, 0, 80, 35));
         
         bindPlayerInventory(invPlayer);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    public ContainerKinect( int id, PlayerInventory player )    {
+        this( id, player, new Inventory( TileKinectGenerator.SLOTS ));
+    }
+
+
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                addSlot(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
+            addSlot(new Slot(invPlayer, j, 8 + j * 18, 142));
         }
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
 
-        return tilekinect.isUsableByPlayer(player);
+        return kinect.isUsableByPlayer(player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
     	
     	return ItemStack.EMPTY;
      }

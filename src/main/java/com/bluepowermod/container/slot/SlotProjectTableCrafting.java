@@ -7,8 +7,9 @@
  */
 package com.bluepowermod.container.slot;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.*;
+import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tile.tier1.TileProjectTable;
@@ -16,13 +17,13 @@ import com.bluepowermod.tile.tier1.TileProjectTable;
 /**
  * @author MineMaarten
  */
-public class SlotProjectTableCrafting extends SlotCrafting {
+public class SlotProjectTableCrafting extends CraftingResultSlot {
     
     /** The craft matrix inventory linked to this result slot. */
-    private final InventoryCrafting craftMatrix;
-    private final TileProjectTable projectTable;
+    private final CraftingInventory craftMatrix;
+    private final IInventory projectTable;
 
-    public SlotProjectTableCrafting(TileProjectTable projectTable, EntityPlayer player, InventoryCrafting craftMatrix, InventoryCraftResult res, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
+    public SlotProjectTableCrafting(IInventory projectTable, PlayerEntity player, CraftingInventory craftMatrix, CraftResultInventory res, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
     
         super(player, craftMatrix, res, p_i1823_4_, p_i1823_5_, p_i1823_6_);
         this.craftMatrix = craftMatrix;
@@ -35,7 +36,7 @@ public class SlotProjectTableCrafting extends SlotCrafting {
     }
 
     @Override
-    public ItemStack onTake(EntityPlayer thePlayer, ItemStack stack) {
+    public ItemStack onTake(PlayerEntity thePlayer, ItemStack stack) {
             extractedFromTable();
             return super.onTake(thePlayer, stack);
     }
@@ -43,10 +44,10 @@ public class SlotProjectTableCrafting extends SlotCrafting {
     private boolean extractedFromTable(){
         boolean remaining = true;
         for (int i = 0; i < 10; i++) {
-            ItemStack itemStack = craftMatrix.getStackInSlot(i);
+            ItemStack itemStack = craftMatrix.getStackInSlot(i + 18);
             if (itemStack.getCount() == 1) {
                 itemStack = extractFromTable(itemStack);
-                craftMatrix.setInventorySlotContents(i, itemStack);
+                craftMatrix.setInventorySlotContents(i + 18, itemStack);
             }
             if (itemStack.getCount() == 1) {
                 remaining  =  false;
@@ -56,9 +57,9 @@ public class SlotProjectTableCrafting extends SlotCrafting {
     }
 
     private ItemStack extractFromTable(ItemStack itemStack){
-        for (int j = 0; j < projectTable.getSizeInventory(); j++) {
-            if (projectTable.getStackInSlot(j).getItem().equals(itemStack.getItem())) {
-                projectTable.decrStackSize(j, 1);
+        for (int j = 18; j < projectTable.getSizeInventory() + 18; j++) {
+            if (projectTable.getStackInSlot(j + 18).getItem().equals(itemStack.getItem())) {
+                projectTable.decrStackSize(j + 18, 1);
                 itemStack.setCount(itemStack.getCount() + 1);
             }
         }

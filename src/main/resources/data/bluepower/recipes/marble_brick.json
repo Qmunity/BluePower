@@ -1,0 +1,14 @@
+﻿{
+  "result": {
+    "item": "bluepower:marble_brick"
+  },
+  "pattern": [
+    "#"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "bluepower:marble_brick_small"
+    }
+  }
+}

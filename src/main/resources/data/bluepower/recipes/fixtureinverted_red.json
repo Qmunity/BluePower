@@ -1,0 +1,25 @@
+﻿{
+  "result": {
+    "item": "bluepower:fixtureinverted_red"
+  },
+  "pattern": [
+    "GLG",
+    "GLG",
+    "SRS"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": {
+      "item": "minecraft:redstone_torch"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "S": {
+      "item": "minecraft:stone_slab"
+    },
+    "L": {
+      "item": "bluepower:lumar_red"
+    }
+  }
+}

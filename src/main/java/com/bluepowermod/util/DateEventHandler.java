@@ -17,12 +17,13 @@
 
 package com.bluepowermod.util;
 
-import net.minecraft.entity.item.EntityFireworkRocket;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemDye;
+import com.bluepowermod.api.misc.MinecraftColor;
+import net.minecraft.entity.item.FireworkRocketEntity;
+import net.minecraft.item.Items;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -59,57 +60,56 @@ public class DateEventHandler {
 
     public static void spawnFirework(World world, double x, double y, double z) {
 
-        ItemStack rocket = new ItemStack(Items.FIREWORKS);
+        ItemStack rocket = new ItemStack(Items.FIREWORK_ROCKET);
 
         ItemStack itemstack1 = getFireworkCharge();
 
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
-        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-        NBTTagList nbttaglist = new NBTTagList();
+        CompoundNBT nbttagcompound = new CompoundNBT();
+        CompoundNBT nbttagcompound1 = new CompoundNBT();
+        ListNBT nbttaglist = new ListNBT();
 
-        if (!itemstack1.isEmpty() && itemstack1.getItem() == Items.FIREWORK_CHARGE && itemstack1.hasTagCompound()
-                && itemstack1.getTagCompound().hasKey("Explosion")) {
-            nbttaglist.appendTag(itemstack1.getTagCompound().getCompoundTag("Explosion"));
+        if (!itemstack1.isEmpty() && itemstack1.getItem() == Items.FIREWORK_STAR && itemstack1.hasTag()
+                && itemstack1.getTag().hasUniqueId("Explosion")) {
+            nbttaglist.add(itemstack1.getTag().getCompound("Explosion"));
         }
 
-        nbttagcompound1.setTag("Explosions", nbttaglist);
-        nbttagcompound1.setByte("Flight", (byte) 2);
-        nbttagcompound.setTag("Fireworks", nbttagcompound1);
+        nbttagcompound1.put("Explosions", nbttaglist);
+        nbttagcompound1.putByte("Flight", (byte) 2);
+        nbttagcompound.put("Fireworks", nbttagcompound1);
 
-        rocket.setTagCompound(nbttagcompound);
+        rocket.setTag(nbttagcompound);
 
-        EntityFireworkRocket entity = new EntityFireworkRocket(world, x, y, z, rocket);
-        world.spawnEntity(entity);
+        FireworkRocketEntity entity = new FireworkRocketEntity(world, x, y, z, rocket);
+        world.addEntity(entity);
     }
 
     private static ItemStack getFireworkCharge() {
 
-        ItemStack charge = new ItemStack(Items.FIREWORK_CHARGE);
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
-        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+        ItemStack charge = new ItemStack(Items.FIREWORK_STAR);
+        CompoundNBT nbttagcompound = new CompoundNBT();
+        CompoundNBT nbttagcompound1 = new CompoundNBT();
         byte b0 = 0;
         ArrayList<Integer> arraylist = new ArrayList<Integer>();
-
-        arraylist.add(ItemDye.DYE_COLORS[rand.nextInt(16)]);
-
-        if (rand.nextBoolean())
-            nbttagcompound1.setBoolean("Flicker", true);
+        arraylist.add( MinecraftColor.values()[rand.nextInt(16)].getHex());
 
         if (rand.nextBoolean())
-            nbttagcompound1.setBoolean("Trail", true);
+            nbttagcompound1.putBoolean("Flicker", true);
+
+        if (rand.nextBoolean())
+            nbttagcompound1.putBoolean("Trail", true);
 
         b0 = (byte) rand.nextInt(5);
 
         int[] aint = new int[arraylist.size()];
 
         for (int j2 = 0; j2 < aint.length; ++j2) {
-            aint[j2] = arraylist.get(j2).intValue();
+            aint[j2] = arraylist.get(j2);
         }
 
-        nbttagcompound1.setIntArray("Colors", aint);
-        nbttagcompound1.setByte("Type", b0);
-        nbttagcompound.setTag("Explosion", nbttagcompound1);
-        charge.setTagCompound(nbttagcompound);
+        nbttagcompound1.putIntArray("Colors", aint);
+        nbttagcompound1.putByte("Type", b0);
+        nbttagcompound.put("Explosion", nbttagcompound1);
+        charge.setTag(nbttagcompound);
         return charge;
     }
 }

@@ -9,23 +9,26 @@ package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.init.BPBlocks;
-import net.minecraft.block.state.IBlockState;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.tile.tier3.TileEngine;
+
+import java.util.Random;
 
 /**
  *
@@ -33,14 +36,14 @@ import com.bluepowermod.tile.tier3.TileEngine;
  * TODO: Create Rotation Helper and re-implement as Fast TESR
  *
  */
-@SideOnly(Side.CLIENT)
-public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
+@OnlyIn(Dist.CLIENT)
+public class RenderEngine extends TileEntityRenderer<TileEngine> {
 
     float rotateAmount  = 0F;
 
     @Override
-    public void render(TileEngine engine, double x, double y, double z, float f, int destroyStage, float alpha) {
-        GlStateManager.pushAttrib();
+    public void render(TileEngine engine, double x, double y, double z, float f, int destroyStage) {
+        GlStateManager.pushTextureAttributes();
         GlStateManager.pushMatrix();
         // Translate to the location of our tile entity
         GlStateManager.disableRescaleNormal();
@@ -49,7 +52,7 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
         GlStateManager.pushMatrix();
         RenderHelper.disableStandardItemLighting();
 
-        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        this.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         if (Minecraft.isAmbientOcclusionEnabled()) {
             GlStateManager.shadeModel(GL11.GL_SMOOTH);
         } else {
@@ -60,35 +63,35 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
-        IBlockState state = BPBlocks.engine.getDefaultState();
-        BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+        BlockState state = BPBlocks.engine.getDefaultState();
+        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
         BlockPos pos = engine.getPos();
 
-        GlStateManager.translate(x, y, z);
+        GlStateManager.translated(x, y, z);
 
         TileEngine tile = (TileEngine) engine.getWorld().getTileEntity(engine.getPos());
-        EnumFacing direction = tile.getOrientation();
+        Direction direction = tile.getOrientation();
 
-        if (direction == EnumFacing.UP) {
+        if (direction == Direction.UP) {
             GL11.glTranslated(0,1,1);
             GL11.glRotatef(180, 1, 0, 0);
         }
-        if (direction == EnumFacing.DOWN) {
+        if (direction == Direction.DOWN) {
             GL11.glRotatef(0, 0, 0, 0);
         }
-        if (direction == EnumFacing.EAST) {
+        if (direction == Direction.EAST) {
             GL11.glTranslated(1,0,0);
             GL11.glRotatef(90, 0, 0, 1);
         }
-        if (direction == EnumFacing.WEST) {
+        if (direction == Direction.WEST) {
             GL11.glTranslated(0,1,0);
             GL11.glRotatef(90, 0, 0, -1);
         }
-        if (direction == EnumFacing.NORTH) {
+        if (direction == Direction.NORTH) {
             GL11.glTranslated(0,1,0);
             GL11.glRotatef(90, 1, 0, 0);
         }
-        if (direction == EnumFacing.SOUTH) {
+        if (direction == Direction.SOUTH) {
             GL11.glTranslated(0,0,1);
             GL11.glRotatef(90, -1, 0, 0);
         }
@@ -107,8 +110,8 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
             f2 = ((float) (.5 - .5 * Math.cos(3.1415926535897931D * (double) f)) / 4);
         }
         GL11.glTranslatef(0, f2, 0);
-        IBakedModel glider = dispatcher.getModelForState(state.withProperty(BlockEngine.GLIDER, true));
-        dispatcher.getBlockModelRenderer().renderModel(world, glider, state, pos, bufferBuilder, false);
+        IBakedModel glider = dispatcher.getModelForState(state.with(BlockEngine.GLIDER, true));
+        dispatcher.getBlockModelRenderer().renderModel(world, glider, state, pos, bufferBuilder, false, new Random(), 0);
 
         tessellator.draw();
         GlStateManager.popMatrix();
@@ -117,12 +120,12 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
         GlStateManager.pushMatrix();
         bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 
-        GlStateManager.translate(0.5, 0, 0.5);
+        GlStateManager.translated(0.5, 0, 0.5);
         long angle = tile.isActive ? (System.currentTimeMillis() / 10) % 360 : 0;
-        GlStateManager.rotate(angle, 0, 1, 0);
-        GlStateManager.translate(-0.5, 0, -0.5);
-        IBakedModel gear = dispatcher.getModelForState(state.withProperty(BlockEngine.GEAR, true));
-        dispatcher.getBlockModelRenderer().renderModel(world, gear, state, pos, bufferBuilder, false);
+        GlStateManager.rotated(angle, 0, 1, 0);
+        GlStateManager.translated(-0.5, 0, -0.5);
+        IBakedModel gear = dispatcher.getModelForState(state.with(BlockEngine.GEAR, true));
+        dispatcher.getBlockModelRenderer().renderModel(world, gear, state, pos, bufferBuilder, false, new Random(), 0);
 
         tessellator.draw();
         GlStateManager.popMatrix();
@@ -134,7 +137,7 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
         GlStateManager.popMatrix();
 
         GlStateManager.popMatrix();
-        GlStateManager.popAttrib();
+        GlStateManager.popAttributes();
     }
 
 

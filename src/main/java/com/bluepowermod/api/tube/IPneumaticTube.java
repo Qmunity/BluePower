@@ -8,7 +8,7 @@
 package com.bluepowermod.api.tube;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 /**
  * This interface is implemented by the Pneumatic Tube's logic. you can get the tube from a block by doing 
@@ -31,5 +31,5 @@ public interface IPneumaticTube {
      * @param simulate
      * @return
      */
-    public boolean injectStack(ItemStack stack, EnumFacing from, TubeColor itemColor, boolean simulate);
+    public boolean injectStack(ItemStack stack, Direction from, TubeColor itemColor, boolean simulate);
 }

@@ -1,0 +1,22 @@
+﻿{
+  "result": {
+    "item": "bluepower:rs_latch"
+  },
+  "pattern": [
+    "WWA",
+    "CTC",
+    "AWW"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "C": {
+      "item": "bluepower:bluestone_cathode_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    }
+  }
+}

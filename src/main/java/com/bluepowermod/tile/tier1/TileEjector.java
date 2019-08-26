@@ -17,19 +17,35 @@
 
 package com.bluepowermod.tile.tier1;
 
+import com.bluepowermod.container.ContainerEjector;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileEjector extends TileMachineBase implements IInventory {
+public class TileEjector extends TileMachineBase implements IInventory, INamedContainerProvider {
 
-    private final NonNullList<ItemStack> inventory = NonNullList.withSize(10, ItemStack.EMPTY);
+    public static final int SLOTS = 10;
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
+
+    public TileEjector() {
+        super(BPTileEntityType.EJECTOR);
+    }
 
     @Override
     protected void redstoneChanged(boolean newValue) {
@@ -55,13 +71,13 @@ public class TileEjector extends TileMachineBase implements IInventory {
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(NBTTagCompound tCompound) {
+    public void read(CompoundNBT tCompound) {
 
-        super.readFromNBT(tCompound);
+        super.read(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory.set(i, new ItemStack(tc));
+            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            inventory.set(i, new ItemStack((IItemProvider) tc));
         }
     }
 
@@ -69,14 +85,14 @@ public class TileEjector extends TileMachineBase implements IInventory {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
+    public CompoundNBT write(CompoundNBT tCompound) {
 
-        super.writeToNBT(tCompound);
+        super.write(tCompound);
 
         for (int i = 0; i < 9; i++) {
-                NBTTagCompound tc = new NBTTagCompound();
-                inventory.get(i).writeToNBT(tc);
-                tCompound.setTag("inventory" + i, tc);
+                CompoundNBT tc = new CompoundNBT();
+                inventory.get(i).write(tc);
+                tCompound.put("inventory" + i, tc);
         }
 
         return tCompound;
@@ -116,7 +132,7 @@ public class TileEjector extends TileMachineBase implements IInventory {
             if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
-                itemStack = itemStack.splitStack(amount);
+                itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
@@ -150,24 +166,6 @@ public class TileEjector extends TileMachineBase implements IInventory {
     }
 
     /**
-     * Returns the name of the inventory
-     */
-    @Override
-    public String getName() {
-
-        return BPBlocks.ejector.getTranslationKey();
-    }
-
-    /**
-     * Returns if the inventory is named
-     */
-    @Override
-    public boolean hasCustomName() {
-
-        return true;
-    }
-
-    /**
      * Returns the maximum stack size for a inventory slot.
      */
     @Override
@@ -182,17 +180,17 @@ public class TileEjector extends TileMachineBase implements IInventory {
      * @param player
      */
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
-        return player.getDistanceSqToCenter(pos) <= 64.0D;
+    public boolean isUsableByPlayer(PlayerEntity player) {
+        return player.getPosition().withinDistance(pos,64.0D);
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -209,9 +207,9 @@ public class TileEjector extends TileMachineBase implements IInventory {
     }
 
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
             if (!stack.isEmpty())
                 drops.add(stack);
@@ -231,23 +229,18 @@ public class TileEjector extends TileMachineBase implements IInventory {
     }
 
     @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
-
-    @Override
     public void clear() {
 
     }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.EJECTOR_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerEjector(id, inventory, this);
+    }
 }

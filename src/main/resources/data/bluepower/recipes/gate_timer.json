@@ -1,0 +1,28 @@
+﻿{
+  "result": {
+    "item": "bluepower:timer"
+  },
+  "pattern": [
+    "TWT",
+    "WPW",
+    "ACA"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "bluepower:bluestone_anode_tile"
+    },
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "C": {
+      "item": "bluepower:bluestone_cathode_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    },
+    "P": {
+      "item": "bluepower:bluestone_pointer_tile"
+    }
+  }
+}

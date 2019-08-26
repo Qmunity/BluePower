@@ -20,9 +20,11 @@ package com.bluepowermod.block.machine;
 import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileIgniter;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class BlockIgniter extends BlockContainerFacingBase {
@@ -30,14 +32,13 @@ public class BlockIgniter extends BlockContainerFacingBase {
     public BlockIgniter() {
     
         super(Material.ROCK, TileIgniter.class);
-        setTranslationKey(Refs.BLOCKIGNITER_NAME);
         setRegistryName(Refs.MODID, Refs.BLOCKIGNITER_NAME);
     }
 
     @Override
-    public boolean isFireSource(World world, BlockPos pos, EnumFacing side) {
+    public boolean isFireSource(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
         TileIgniter tile = (TileIgniter) world.getTileEntity(pos);
-        boolean orientation = world.getBlockState(pos).getValue(FACING) == EnumFacing.UP;
+        boolean orientation = world.getBlockState(pos).get(FACING) == Direction.UP;
         return orientation && tile.getIsRedstonePowered();
     }
 }

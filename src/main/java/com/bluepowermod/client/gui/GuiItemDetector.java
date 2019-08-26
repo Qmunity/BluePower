@@ -12,7 +12,9 @@ import java.util.List;
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
-import net.minecraft.entity.player.InventoryPlayer;
+import com.bluepowermod.container.ContainerAlloyFurnace;
+import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
@@ -21,25 +23,25 @@ import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileItemDetector;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * @author MineMaarten
  */
-public class GuiItemDetector extends GuiContainerBaseBP {
+public class GuiItemDetector extends GuiContainerBaseBP<ContainerItemDetector> implements IHasContainer<ContainerItemDetector> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/item_detector.png");
-    private final TileItemDetector itemDetector;
+    private final ContainerItemDetector itemDetector;
 
-    public GuiItemDetector(InventoryPlayer invPlayer, TileItemDetector itemDetector) {
-
-        super(itemDetector, new ContainerItemDetector(invPlayer, itemDetector), resLoc);
-        this.itemDetector = itemDetector;
+    public GuiItemDetector(ContainerItemDetector container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.itemDetector = container;
     }
 
     @Override
-    public void initGui() {
+    public void init() {
 
-        super.initGui();
+        super.init();
         WidgetMode modeWidget = new WidgetMode(0, guiLeft + 152, guiTop + 10, 176, 3, Refs.MODID + ":textures/gui/item_detector.png") {
 
             @Override
@@ -78,6 +80,6 @@ public class GuiItemDetector extends GuiContainerBaseBP {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(itemDetector, widget.getID(), baseWidget.value));
+        //BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(itemDetector, widget.getID(), baseWidget.value));
     }
 }

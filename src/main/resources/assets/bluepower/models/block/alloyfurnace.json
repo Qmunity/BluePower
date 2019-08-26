@@ -1,0 +1,9 @@
+﻿{
+   "parent": "bluepower:block/cube_front",
+   "textures": {
+      "top": "bluepower:blocks/machines/alloyfurnace_top",
+      "bottom": "bluepower:blocks/machines/alloyfurnace_bottom",
+      "front": "bluepower:blocks/machines/alloyfurnace_front_off",
+      "side": "bluepower:blocks/machines/alloyfurnace_side"
+   }
+}

@@ -7,28 +7,30 @@
  */
 package com.bluepowermod.client.gui;
 
+import com.bluepowermod.container.ContainerAlloyFurnace;
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.container.ContainerMonitor;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileMonitor;
 
-public class GuiMonitor extends GuiContainerBaseBP {
+public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements IHasContainer<ContainerMonitor> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/monitorgui.png");
     private static final ResourceLocation chracterSetResLoc = new ResourceLocation(Refs.MODID + ":textures/gui/65el02_chars.png");
-    private final TileMonitor monitor;
+    private final ContainerMonitor monitor;
 
-    public GuiMonitor(InventoryPlayer invPlayer, TileMonitor monitor) {
-
-        super(new ContainerMonitor(invPlayer, monitor), resLoc);
-        this.monitor = monitor;
+    public GuiMonitor(ContainerMonitor container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.monitor = container;
         xSize = 350;
         ySize = 230;
         width = 350 / 2;
@@ -44,22 +46,22 @@ public class GuiMonitor extends GuiContainerBaseBP {
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.getTextureManager().bindTexture(resLoc);
+        this.minecraft.getTextureManager().bindTexture(resLoc);
         int k = (width - xSize) / 2;
         int l = (height - ySize) / 2;
         drawTexturedModalRect2(k, l, 0, 0, xSize, ySize);
 
         // screen color
-        mc.getTextureManager().bindTexture(chracterSetResLoc);
+        this.minecraft.getTextureManager().bindTexture(chracterSetResLoc);
         GL11.glColor4f(TileMonitor.screenColor[0], TileMonitor.screenColor[1], TileMonitor.screenColor[2], 1.0F);
 
         for (int row = 0; row < 50; row++) {
             for (int col = 0; col < 80; col++) {
-                byte character = monitor.screenMemory[row * 80 + col];
+                //byte character = monitor.screenMemory[row * 80 + col];
                 // TODO: overlay cursor character
-                if (character != 32) {
-                    drawCharacter(row, col, character);
-                }
+                //if (character != 32) {
+                    //drawCharacter(row, col, character);
+                //}
             }
         }
     }
@@ -89,10 +91,10 @@ public class GuiMonitor extends GuiContainerBaseBP {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(x + 0, z + h, zLevel).tex((u + 0) * f, (v + h) * f1).endVertex();
-        buffer.pos(x + w, z + h, zLevel).tex((u + w) * f, (v + h) * f1).endVertex();
-        buffer.pos(x + w, z + 0, zLevel).tex((u + w) * f, (v + 0) * f1).endVertex();
-        buffer.pos(x + 0, z + 0, zLevel).tex((u + 0) * f, (v + 0) * f1).endVertex();
+        //buffer.pos(x + 0, z + h, zLevel).tex((u + 0) * f, (v + h) * f1).endVertex();
+        //buffer.pos(x + w, z + h, zLevel).tex((u + w) * f, (v + h) * f1).endVertex();
+        //buffer.pos(x + w, z + 0, zLevel).tex((u + w) * f, (v + 0) * f1).endVertex();
+        //buffer.pos(x + 0, z + 0, zLevel).tex((u + 0) * f, (v + 0) * f1).endVertex();
         tessellator.draw();
     }
 
@@ -104,10 +106,10 @@ public class GuiMonitor extends GuiContainerBaseBP {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(x + 0, z + h, zLevel).tex((u + 0) * f, (v + h) * f1).endVertex();
-        buffer.pos(x + w, z + h, zLevel).tex((u + w) * f, (v + h) * f1).endVertex();
-        buffer.pos(x + w, z + 0, zLevel).tex((u + w) * f, (v + 0) * f1).endVertex();
-        buffer.pos(x + 0, z + 0, zLevel).tex((u + 0) * f, (v + 0) * f1).endVertex();
+        //buffer.pos(x + 0, z + h, zLevel).tex((u + 0) * f, (v + h) * f1).endVertex();
+        //buffer.pos(x + w, z + h, zLevel).tex((u + w) * f, (v + h) * f1).endVertex();
+        //buffer.pos(x + w, z + 0, zLevel).tex((u + w) * f, (v + 0) * f1).endVertex();
+        //buffer.pos(x + 0, z + 0, zLevel).tex((u + 0) * f, (v + 0) * f1).endVertex();
         tessellator.draw();
     }
 }

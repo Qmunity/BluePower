@@ -21,21 +21,26 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 
 public class TileTransposer extends TileMachineBase {
 
-    @Override
-    public void update() {
+    public TileTransposer() {
+        super(BPTileEntityType.TRANSPOSER);
+    }
 
-        super.update();
+    @Override
+    public void tick() {
+        super.tick();
         if (!world.isRemote) {
             suckEntity();
         }
@@ -46,7 +51,7 @@ public class TileTransposer extends TileMachineBase {
     protected void redstoneChanged(boolean newValue) {
 
         super.redstoneChanged(newValue);
-        EnumFacing direction = getFacingDirection();
+        Direction direction = getFacingDirection();
 
         if (!world.isRemote && newValue) {
             if (world.isAirBlock(pos.offset(direction))) {
@@ -60,7 +65,7 @@ public class TileTransposer extends TileMachineBase {
 
     protected void pullItem() {
 
-        EnumFacing dir = getOutputDirection().getOpposite();
+        Direction dir = getOutputDirection().getOpposite();
         TileEntity inputTE = getTileCache(dir);
         ItemStack extractedStack = IOHelper.extractOneItem(inputTE, dir.getOpposite());
         if (!extractedStack.isEmpty())
@@ -80,25 +85,25 @@ public class TileTransposer extends TileMachineBase {
 
     private void suckItems() {
 
-        for (EntityItem entity : (List<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()].offset(pos))) {
+        for (ItemEntity entity : (List<ItemEntity>) world.getEntitiesWithinAABB(ItemEntity.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()].offset(pos))) {
             ItemStack stack = entity.getItem();
-            if (isItemAccepted(stack) && !entity.isDead) {
+            if (isItemAccepted(stack) && entity.isAlive()) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
-                entity.setDead();
+                entity.remove();
             }
         }
     }
 
     private void suckEntity() {
 
-        EnumFacing direction = getFacingDirection();
+        Direction direction = getFacingDirection();
         AxisAlignedBB box = new AxisAlignedBB(pos.getX() + direction.getXOffset(), pos.getY() + direction.getYOffset(), pos.getZ() + direction.getZOffset(), pos.getX()
                 + direction.getXOffset() + 1, pos.getY() + direction.getYOffset() + 1, pos.getZ() + direction.getZOffset() + 1);
-        for (EntityItem entity : (List<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, box)) {
+        for (ItemEntity entity : (List<ItemEntity>) world.getEntitiesWithinAABB(ItemEntity.class, box)) {
             ItemStack stack = entity.getItem();
-            if (isItemAccepted(stack) && !entity.isDead) {
+            if (isItemAccepted(stack) && entity.isAlive()) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
-                entity.setDead();
+                entity.remove();
             }
         }
     }

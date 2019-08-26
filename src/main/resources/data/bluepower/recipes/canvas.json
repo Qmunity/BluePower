@@ -1,0 +1,19 @@
+﻿{
+  "result": {
+    "item": "bluepower:canvas"
+  },
+  "pattern": [
+    "SSS",
+    "SiS",
+    "SSS"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "item": "minecraft:string"
+    },
+    "i": {
+      "tag": "forge:rods/wooden"
+    }
+  }
+}

@@ -6,17 +6,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bluepowermod.network.Packet;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 import com.bluepowermod.api.wireless.IFrequency;
 
-public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequencySync> {
+public class MessageWirelessFrequencySync {
 
     //private List<Frequency> frequencies = new ArrayList<Frequency>();
-    private EntityPlayer player;
+    private PlayerEntity player;
 
-    public MessageWirelessFrequencySync(EntityPlayer player) {
+    public MessageWirelessFrequencySync(PlayerEntity player) {
 
         this.player = player;
     }
@@ -25,11 +24,10 @@ public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequenc
 
     }
 
-    @Override
     public void write(DataOutput buffer) throws IOException {
 
         List<IFrequency> frequencies = null;
-        if (player == null || player.capabilities.isCreativeMode) {
+        if (player == null || player.isCreative()) {
            // frequencies = WirelessManager.COMMON_INSTANCE.getFrequencies();
         } else {
             frequencies = new ArrayList<IFrequency>();
@@ -42,7 +40,6 @@ public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequenc
             //((Frequency) f).writeToBuffer(buffer);
     }
 
-    @Override
     public void read(DataInput buffer) throws IOException {
 
         int amt = buffer.readInt();
@@ -53,8 +50,7 @@ public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequenc
         //}
     }
 
-    @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
        // WirelessManager m = WirelessManager.CLIENT_INSTANCE;
 
@@ -64,8 +60,7 @@ public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequenc
        //     m.registerFrequency(f);
     }
 
-    @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
     }
 

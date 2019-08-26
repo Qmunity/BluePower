@@ -8,9 +8,10 @@
 package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundCategory;
 
 import java.io.IOException;
@@ -66,6 +67,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
     private int BRKaddress;
 
     public TileCPU() {
+        super(BPTileEntityType.CPU);
         //TODO: make memory a config option
         this.memory = new byte[8192];
         powerOnReset();
@@ -122,7 +124,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
     //TODO: NBT read/write
     
     @Override
-    public void update() {
+    public void tick() {
         // 20 ticks per second = 20khz
         if (halt) return;
         this.rtc += 1;
@@ -991,7 +993,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
     public void opSTP() {// 65EL02 modified
         availableCycles = -1;
         halt = true;
-        BluePower.log.info("self block=" + this.blockType);
+        BluePower.log.info("self block=" + this.getType());
         if ( this.world.isAirBlock(this.pos)) {
             //set CPU on fire for the lolz
             this.world.playSound((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, this.world.rand.nextFloat() * 0.4F + 0.8F, true);

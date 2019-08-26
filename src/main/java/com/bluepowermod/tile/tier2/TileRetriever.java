@@ -7,16 +7,20 @@
  */
 package com.bluepowermod.tile.tier2;
 
-import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.container.ContainerBuffer;
+import com.bluepowermod.container.ContainerRetriever;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.tier1.TileFilter;
-import mcmultipart.api.container.IMultipartContainer;
-import mcmultipart.api.multipart.MultipartHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
-import java.util.Optional;
+import javax.annotation.Nullable;
 
 /**
  * @author MineMaarten
@@ -28,24 +32,16 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
 
 
     @Override
-    public String getName() {
-
-        return BPBlocks.retriever.getTranslationKey();
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-
-        super.writeToNBT(tag);
-        tag.setByte("slotIndex", (byte) slotIndex);
-        tag.setByte("mode", (byte) mode);
+    public CompoundNBT write(CompoundNBT tag) {
+        super.write(tag);
+        tag.putByte("slotIndex", (byte) slotIndex);
+        tag.putByte("mode", (byte) mode);
         return tag;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-
-        super.readFromNBT(tag);
+    public void read(CompoundNBT tag) {
+        super.read(tag);
         slotIndex = tag.getByte("slotIndex");
         mode = tag.getByte("mode");
     }
@@ -54,4 +50,16 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     public int getFuzzySetting() {
         return fuzzySetting;
     }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.RETRIEVER_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerRetriever(id, inventory, this);
+    }
+
 }

@@ -1,21 +1,20 @@
 package com.bluepowermod.client.gui.widget;
 
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -29,7 +28,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     private IGuiAnimatedStat affectingStat;
     private ItemStack iStack;
     private String texture = "";
-    private final GuiScreen gui;
+    private final Screen gui;
     private final List<String> textList = new ArrayList<String>();
     private int baseX;
     private int baseY;
@@ -49,7 +48,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     private boolean leftSided; // this boolean determines if the stat is going
     // to expand to the left or right.
     private boolean doneExpanding;
-    private RenderItem itemRenderer;
+    private ItemRenderer itemRenderer;
     private float textSize;
     private float textScale = 1F;
     public static final int MAX_CHAR = 28;
@@ -57,8 +56,8 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     private ResourceLocation iconResLoc;
     private IWidgetListener listener;
 
-    public GuiAnimatedStat(GuiScreen gui, String title, int xPos, int yPos, int backGroundColor, IGuiAnimatedStat affectingStat,
-            boolean leftSided) {
+    public GuiAnimatedStat(Screen gui, String title, int xPos, int yPos, int backGroundColor, IGuiAnimatedStat affectingStat,
+                           boolean leftSided) {
 
         super(-1, xPos, yPos, yPos, backGroundColor);
 
@@ -73,7 +72,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         texture = "";
         this.leftSided = leftSided;
         if (gui != null) {
-            ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+            MainWindow sr = Minecraft.getInstance().mainWindow;
             if (sr.getScaledWidth() < 520) {
                 textSize = (sr.getScaledWidth() - 220) * 0.0033F;
             } else {
@@ -89,32 +88,32 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         }
     }
 
-    public GuiAnimatedStat(GuiScreen gui, int backgroundColor) {
+    public GuiAnimatedStat(Screen gui, int backgroundColor) {
 
         this(gui, "", 0, 0, backgroundColor, null, false);
     }
 
-    public GuiAnimatedStat(GuiScreen gui, int backgroundColor, ItemStack icon) {
+    public GuiAnimatedStat(Screen gui, int backgroundColor, ItemStack icon) {
 
         this(gui, backgroundColor);
         iStack = icon;
     }
 
-    public GuiAnimatedStat(GuiScreen gui, int backgroundColor, String texture) {
+    public GuiAnimatedStat(Screen gui, int backgroundColor, String texture) {
 
         this(gui, backgroundColor);
         this.texture = texture;
     }
 
-    public GuiAnimatedStat(GuiScreen gui, String title, ItemStack icon, int xPos, int yPos, int backGroundColor,
-            IGuiAnimatedStat affectingStat, boolean leftSided) {
+    public GuiAnimatedStat(Screen gui, String title, ItemStack icon, int xPos, int yPos, int backGroundColor,
+                           IGuiAnimatedStat affectingStat, boolean leftSided) {
 
         this(gui, title, xPos, yPos, backGroundColor, affectingStat, leftSided);
         iStack = icon;
     }
 
-    public GuiAnimatedStat(GuiScreen gui, String title, String texture, int xPos, int yPos, int backGroundColor,
-            IGuiAnimatedStat affectingStat, boolean leftSided) {
+    public GuiAnimatedStat(Screen gui, String title, String texture, int xPos, int yPos, int backGroundColor,
+                           IGuiAnimatedStat affectingStat, boolean leftSided) {
 
         this(gui, title, xPos, yPos, backGroundColor, affectingStat, leftSided);
         this.texture = texture;
@@ -203,7 +202,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         oldWidth = width;
         oldHeight = height;
 
-        FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
+        FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
         doneExpanding = true;
         if (isClicked) {
             // calculate the width and height needed for the box to fit the
@@ -276,7 +275,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
         if (leftSided)
             renderWidth *= -1;
-        Gui.drawRect(renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
+        AbstractGui.fill(renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
                 backGroundColor);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glLineWidth(3.0F);
@@ -320,7 +319,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
                 if (iconResLoc == null)
                     iconResLoc = new ResourceLocation(texture);
                 drawTexture(iconResLoc, renderBaseX - (leftSided ? 16 : 0), renderAffectedY);
-            } else if (gui != null || !(iStack.getItem() instanceof ItemBlock)) {
+            } else if (gui != null || !(iStack.getItem() instanceof BlockItem)) {
                 renderItem(fontRenderer, renderBaseX - (leftSided ? 16 : 0), renderAffectedY, iStack);
             }
         }
@@ -329,7 +328,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     protected void renderItem(FontRenderer fontRenderer, int x, int y, ItemStack stack) {
 
         if (itemRenderer == null)
-            itemRenderer = new RenderItem(Minecraft.getMinecraft().getTextureManager(), Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager(), Minecraft.getMinecraft().getItemColors());
+            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelMesher().getModelManager(), Minecraft.getInstance().getItemColors());
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0, -50);
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -345,7 +344,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
     public static void drawTexture(ResourceLocation texture, int x, int y) {
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+        Minecraft.getInstance().getTextureManager().bindTexture(texture);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buff = tessellator.getBuffer();
         buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -479,7 +478,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     @Override
     public void render(int mouseX, int mouseY, float partialTick) {
 
-        render(Minecraft.getMinecraft().fontRenderer, 0, partialTick);
+        render(Minecraft.getInstance().fontRenderer, 0, partialTick);
 
     }
 

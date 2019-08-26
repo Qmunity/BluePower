@@ -1,0 +1,10 @@
+﻿{
+   "parent": "bluepower:block/cube_front",
+   "textures": {
+      "top": "bluepower:blocks/machines/auto_project_table_top",
+      "bottom": "bluepower:blocks/machines/auto_project_table_bottom",
+      "front": "bluepower:blocks/machines/auto_project_table_front",
+      "side": "bluepower:blocks/machines/auto_project_table_side",
+      "particle": "bluepower:blocks/machines/auto_project_table_side"
+   }
+}

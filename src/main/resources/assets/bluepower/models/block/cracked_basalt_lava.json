@@ -1,0 +1,7 @@
+﻿{
+   "parent": "bluepower:block/overlay",
+   "textures": {
+      "all": "bluepower:blocks/basalt",
+      "overlay": "bluepower:blocks/cracked_basalt_lava"
+   }
+}

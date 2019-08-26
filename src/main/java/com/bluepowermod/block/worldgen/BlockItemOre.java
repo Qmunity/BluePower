@@ -20,9 +20,13 @@ package com.bluepowermod.block.worldgen;
 import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IWorldReader;
 
 import java.util.Random;
 
@@ -33,38 +37,13 @@ public class BlockItemOre extends BlockBase {
     public BlockItemOre(String type) {
 
         super(Material.IRON);
-        this.setCreativeTab(BPCreativeTabs.blocks);
-        this.setSoundType(SoundType.STONE);
-        this.setHardness(2.5F);
-        this.setResistance(10.0F);
-        this.setTranslationKey(type);
         this.setRegistryName(Refs.MODID + ":" + type);
-        this.setHarvestLevel("pickaxe", 2);
     }
 
     @Override
-    public int quantityDropped(Random rand) {
-
-        return 1;
+    public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
+        return MathHelper.nextInt(rand, 3, 7);
     }
 
-    @Override
-    protected boolean canSilkHarvest() {
 
-        return true;
-    }
-
-    @Override
-    public int quantityDroppedWithBonus(int quantity, Random rand) {
-
-        if (quantity > 0 && Item.getItemFromBlock(this) != this.getItemDropped(this.getDefaultState(), rand, quantity)) {
-            int j = rand.nextInt(quantity + 2) - 1;
-            if (j < 0) {
-                j = 0;
-            }
-            return this.quantityDropped(rand) * (j + 1);
-        } else {
-            return this.quantityDropped(rand);
-        }
-    }
 }

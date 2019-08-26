@@ -7,38 +7,32 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackDatabase;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.Config;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
-import com.bluepowermod.network.message.MessageSendClientServerTemplates;
-import com.bluepowermod.reference.GuiIDs;
+import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.IItemProvider;
+import net.minecraft.util.text.StringTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TileCircuitDatabase extends TileCircuitTable {
 
-    public IInventory copyInventory = new InventoryBasic("copy inventory", false, 2) {
+    public IInventory copyInventory = new Inventory(2) {
 
         @Override
         public void setInventorySlotContents(int slot, ItemStack itemStack) {
 
             super.setInventorySlotContents(slot, itemStack);
             if (slot == 0 && !itemStack.isEmpty()) {
-                nameTextField = itemStack.getDisplayName();
+                nameTextField = itemStack.getDisplayName().getString();
             }
         }
     };
@@ -49,16 +43,16 @@ public class TileCircuitDatabase extends TileCircuitTable {
     public static final int UPLOAD_AND_COPY_TIME = 20;
     public final ItemStackDatabase stackDatabase = new ItemStackDatabase();
     public static List<ItemStack> serverDatabaseStacks = new ArrayList<ItemStack>(); // client side used only, sent from the server database.
-    private EntityPlayer triggeringPlayer;
+    private PlayerEntity triggeringPlayer;
     public String nameTextField = "";
 
-    public static boolean hasPermissions(EntityPlayer player) {
+    public static boolean hasPermissions(PlayerEntity player) {
 
-        if (Config.serverCircuitSavingOpOnly) {
-            if (!player.canUseCommand(2, "saveTemplate")) {
-                player.sendMessage(new TextComponentString("gui.circuitDatabase.info.opsOnly"));
-                return false;
-            }
+        if (BPConfig.CONFIG.serverCircuitSavingOpOnly.get()) {
+            //if (!player.can(2, "saveTemplate")) {
+                //player.sendMessage(new StringTextComponent("gui.circuitDatabase.info.opsOnly"));
+                //return false;
+            //}
         }
         return true;
     }
@@ -69,7 +63,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
         if (textFieldID == 1) {
             nameTextField = text;
             if (!copyInventory.getStackInSlot(0).isEmpty()) {
-                copyInventory.getStackInSlot(0).setStackDisplayName(nameTextField);
+                copyInventory.getStackInSlot(0).setDisplayName(new StringTextComponent(nameTextField));
             }
         } else {
             super.setText(textFieldID, text);
@@ -89,13 +83,13 @@ public class TileCircuitDatabase extends TileCircuitTable {
      * @param simulate
      * @return
      */
-    public boolean copy(EntityPlayer player, ItemStack template, ItemStack target, boolean simulate) {
+    public boolean copy(PlayerEntity player, ItemStack template, ItemStack target, boolean simulate) {
 
         if (!template.isEmpty() && !target.isEmpty()) {
             if (template.isItemEqual(target)) {
                 IDatabaseSaveable saveable = (IDatabaseSaveable) template.getItem();
                 if (saveable.canCopy(template, target)) {
-                    if (!player.capabilities.isCreativeMode) {
+                    if (!player.isCreative()) {
                         List<ItemStack> stacksInTemplate = saveable.getItemsOnStack(template);
                         List<ItemStack> stacksInOutput = saveable.getItemsOnStack(target);
 
@@ -166,9 +160,9 @@ public class TileCircuitDatabase extends TileCircuitTable {
     }
 
     @Override
-    public void update() {
+    public void tick() {
 
-        super.update();
+        super.tick();
         if (!world.isRemote) {
             if (!copyInventory.getStackInSlot(0).isEmpty()) {
                 if (curCopyProgress >= 0) {
@@ -184,11 +178,11 @@ public class TileCircuitDatabase extends TileCircuitTable {
                     if (++curUploadProgress > UPLOAD_AND_COPY_TIME) {
                         curUploadProgress = -1;
                         if (selectedShareOption == 1 && triggeringPlayer != null)
-                            BPNetworkHandler.INSTANCE.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getStackInSlot(0)),
-                                    (EntityPlayerMP) triggeringPlayer);
+                            //BPNetworkHandler.INSTANCE.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getStackInSlot(0)),
+                                    //(ServerPlayerEntity) triggeringPlayer);
                         if (selectedShareOption == 2) {
                             stackDatabase.saveItemStack(copyInventory.getStackInSlot(0));
-                            BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
+                            //BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
                         }
                         selectedShareOption = 0;
                     }
@@ -207,53 +201,47 @@ public class TileCircuitDatabase extends TileCircuitTable {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+    public CompoundNBT write(CompoundNBT tag) {
 
-        super.writeToNBT(tag);
+        super.write(tag);
 
         if (!copyInventory.getStackInSlot(0).isEmpty()) {
-            NBTTagCompound stackTag = new NBTTagCompound();
-            copyInventory.getStackInSlot(0).writeToNBT(stackTag);
-            tag.setTag("copyTemplateStack", stackTag);
+            CompoundNBT stackTag = new CompoundNBT();
+            copyInventory.getStackInSlot(0).write(stackTag);
+            tag.put("copyTemplateStack", stackTag);
         }
         if (!copyInventory.getStackInSlot(1).isEmpty()) {
-            NBTTagCompound stackTag = new NBTTagCompound();
-            copyInventory.getStackInSlot(1).writeToNBT(stackTag);
-            tag.setTag("copyOutputStack", stackTag);
+            CompoundNBT stackTag = new CompoundNBT();
+            copyInventory.getStackInSlot(1).write(stackTag);
+            tag.put("copyOutputStack", stackTag);
         }
 
-        tag.setInteger("curUploadProgress", curUploadProgress);
-        tag.setInteger("curCopyProgress", curCopyProgress);
-        tag.setByte("selectedShareOption", (byte) selectedShareOption);
+        tag.putInt("curUploadProgress", curUploadProgress);
+        tag.putInt("curCopyProgress", curCopyProgress);
+        tag.putByte("selectedShareOption", (byte) selectedShareOption);
         return tag;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
+    public void read(CompoundNBT tag) {
 
-        super.readFromNBT(tag);
+        super.read(tag);
 
-        if (tag.hasKey("copyTemplateStack")) {
-            copyInventory.setInventorySlotContents(0, new ItemStack(tag.getCompoundTag("copyTemplateStack")));
+        if (tag.contains("copyTemplateStack")) {
+            copyInventory.setInventorySlotContents(0, new ItemStack((IItemProvider) tag.getCompound("copyTemplateStack")));
         } else {
             copyInventory.setInventorySlotContents(0, ItemStack.EMPTY);
         }
 
-        if (tag.hasKey("copyOutputStack")) {
-            copyInventory.setInventorySlotContents(1, new ItemStack(tag.getCompoundTag("copyOutputStack")));
+        if (tag.contains("copyOutputStack")) {
+            copyInventory.setInventorySlotContents(1, new ItemStack((IItemProvider) tag.getCompound("copyOutputStack")));
         } else {
             copyInventory.setInventorySlotContents(1, ItemStack.EMPTY);
         }
 
-        curUploadProgress = tag.getInteger("curUploadProgress");
-        curCopyProgress = tag.getInteger("curCopyProgress");
+        curUploadProgress = tag.getInt("curUploadProgress");
+        curCopyProgress = tag.getInt("curCopyProgress");
         selectedShareOption = tag.getByte("selectedShareOption");
     }
 
-
-    @Override
-    public String getName() {
-
-        return BPBlocks.circuit_database.getTranslationKey();
-    }
 }

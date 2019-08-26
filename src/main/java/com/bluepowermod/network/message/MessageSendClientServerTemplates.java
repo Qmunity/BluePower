@@ -7,20 +7,16 @@
  */
 package com.bluepowermod.network.message;
 
-import com.bluepowermod.network.Packet;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class MessageSendClientServerTemplates extends Packet<MessageSendClientServerTemplates> {
+public class MessageSendClientServerTemplates{
 
     private List<ItemStack> stacks;
 
@@ -33,13 +29,14 @@ public class MessageSendClientServerTemplates extends Packet<MessageSendClientSe
         this.stacks = stacks;
     }
 
+/*
     @Override
     public void fromBytes(ByteBuf buf) {
 
         int amount = buf.readInt();
         stacks = new ArrayList<ItemStack>();
         for (int i = 0; i < amount; i++) {
-            stacks.add(ByteBufUtils.readItemStack(buf));
+            //stacks.add(ByteBufUtils.readItemStack(buf));
         }
     }
 
@@ -47,28 +44,25 @@ public class MessageSendClientServerTemplates extends Packet<MessageSendClientSe
     public void toBytes(ByteBuf buf) {
 
         buf.writeInt(stacks.size());
-        for (ItemStack stack : stacks)
-            ByteBufUtils.writeItemStack(buf, stack);
+        //for (ItemStack stack : stacks)
+            //ByteBufUtils.writeItemStack(buf, stack);
     }
+*/
 
-    @Override
     public void write(DataOutput buffer) throws IOException {
 
     }
 
-    @Override
     public void read(DataInput buffer) throws IOException {
 
     }
 
-    @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
         TileCircuitDatabase.serverDatabaseStacks = stacks;
     }
 
-    @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
     }
 

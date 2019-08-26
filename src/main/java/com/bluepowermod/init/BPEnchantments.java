@@ -12,7 +12,7 @@ import net.minecraft.enchantment.Enchantment;
 import com.bluepowermod.enchant.EnchantmentDisjunction;
 import com.bluepowermod.enchant.EnchantmentVorpal;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BPEnchantments {
 
@@ -20,8 +20,8 @@ public class BPEnchantments {
 	public static Enchantment disjunction;
 	
 	public static void init() {
-		vorpal = new EnchantmentVorpal(Config.vorpalEnchantmentId, Enchantment.Rarity.COMMON);
-		disjunction = new EnchantmentDisjunction(Config.disjunctionEnchantmentId, Enchantment.Rarity.COMMON);
+		vorpal = new EnchantmentVorpal(Enchantment.Rarity.COMMON);
+		disjunction = new EnchantmentDisjunction(Enchantment.Rarity.COMMON);
 	}
 
 	@SubscribeEvent

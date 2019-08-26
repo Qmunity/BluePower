@@ -9,8 +9,8 @@ package com.bluepowermod.helper;
 
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageDebugBlock;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -37,10 +37,10 @@ public class Debugger {
                     double dx = pos.getX() + 0.5;
                     double dy = pos.getY() + 0.5;
                     double dz = pos.getZ() + 0.5;
-                    world.spawnParticle(EnumParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
+                    world.addParticle(ParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
                 }
             } else {
-                BPNetworkHandler.INSTANCE.sendToAllAround(new MessageDebugBlock(pos), world);
+                //BPNetworkHandler.INSTANCE.sendToAllAround(new MessageDebugBlock(pos), world);
             }
         }
     }

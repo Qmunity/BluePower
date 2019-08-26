@@ -21,18 +21,21 @@ import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
@@ -41,56 +44,45 @@ import java.util.Random;
 public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
     public ItemScrewdriver() {
-
-        setTranslationKey(Refs.SCREWDRIVER_NAME);
-        setCreativeTab(BPCreativeTabs.tools);
-        setMaxDamage(250);
-        setMaxStackSize(1);
+        super(new Properties().maxDamage(250));
         setRegistryName(Refs.MODID + ":" + Refs.SCREWDRIVER_NAME);
     }
 
     @Override
-    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-        Block block = world.getBlockState(pos).getBlock();
-
-            if (player.isSneaking() && block.rotateBlock(world, pos, side.getOpposite())) {
-                damage(player.getHeldItem(hand), 1, player, false);
-                return EnumActionResult.SUCCESS;
-            } else if (block.rotateBlock(world, pos, side)) {
-                damage(player.getHeldItem(hand), 1, player, false);
-                return EnumActionResult.SUCCESS;
+    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+        Block block = context.getWorld().getBlockState(context.getPos()).getBlock();
+            if (context.getPlayer().isSneaking()){
+                block.rotate(context.getWorld().getBlockState(context.getPos()), context.getWorld(), context.getPos(), Rotation.CLOCKWISE_180);
+                damage(context.getPlayer().getHeldItem(context.getHand()), 1, context.getPlayer(), false);
+                return ActionResultType.SUCCESS;
+            } else{
+                block.rotate(context.getWorld().getBlockState(context.getPos()), context.getWorld(), context.getPos(), Rotation.CLOCKWISE_90);
+                damage(context.getPlayer().getHeldItem(context.getHand()), 1, context.getPlayer(), false);
+                return ActionResultType.SUCCESS;
             }
-
-        return EnumActionResult.PASS;
-    }
-    @SideOnly(Side.CLIENT)
-    @Override
-    public boolean isFull3D() {
-
-        return true;
     }
 
     @Override
-    public boolean damage(ItemStack stack, int damage, EntityPlayer player, boolean simulated) {
+    public boolean damage(ItemStack stack, int damage, PlayerEntity player, boolean simulated) {
 
-        if (player != null && player.capabilities.isCreativeMode)
+        if (player != null && player.isCreative())
             return true;
-        if ((stack.getItemDamage() % stack.getMaxDamage()) + damage > stack.getMaxDamage())
+        if ((stack.getDamage() % stack.getMaxDamage()) + damage > stack.getMaxDamage())
             return false;
 
         if (!simulated) {
-            if (stack.attemptDamageItem(damage, new Random(), (EntityPlayerMP) player)) {
+            if (stack.attemptDamageItem(damage, new Random(), (ServerPlayerEntity) player)) {
                 if (player != null)
-                    player.renderBrokenItemStack(stack);
+                    player.sendBreakAnimation(Hand.MAIN_HAND);
                 stack.setCount(stack.getCount() - 1);
 
-                if (player != null && player instanceof EntityPlayer)
-                    player.addStat(StatList.getObjectBreakStats(stack.getItem()), 1);
+                if (player != null && player instanceof PlayerEntity)
+                    player.addStat(Stats.ITEM_BROKEN.get(stack.getItem()), 1);
 
                 if (stack.getCount() < 0)
                     stack.setCount(0);
 
-                stack.setItemDamage(0);
+                stack.setDamage(0);
             }
         }
 
@@ -98,7 +90,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
+    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
         return true;
     }
 

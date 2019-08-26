@@ -1,0 +1,7 @@
+﻿{
+   "parent": "bluepower:block/fixture_lamp",
+   "textures": {
+      "lamp_side": "bluepower:blocks/lamps/fixture_lamp_on",
+      "lamp_top": "bluepower:blocks/lamps/fixture_lamp_on_top"
+   }
+}

@@ -1,0 +1,6 @@
+﻿{
+   "parent": "bluepower:block/tinted",
+   "textures": {
+      "all": "bluepower:blocks/lamps/lamp_off"
+   }
+}

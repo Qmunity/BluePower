@@ -7,23 +7,25 @@
  */
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import com.bluepowermod.container.ContainerAlloyFurnace;
+import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerDiskDrive;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileDiskDrive;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiDiskDrive extends GuiContainerBaseBP {
+public class GuiDiskDrive extends GuiContainerBaseBP<ContainerDiskDrive> implements IHasContainer<ContainerDiskDrive> {
 
-    private final TileDiskDrive diskDrive;
+    private final ContainerDiskDrive diskDrive;
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/diskdrivegui.png");
 
-    public GuiDiskDrive(InventoryPlayer invPlayer, TileDiskDrive diskDrive) {
-
-        super(new ContainerDiskDrive(invPlayer, diskDrive), resLoc);
-        this.diskDrive = diskDrive;
+    public GuiDiskDrive(ContainerDiskDrive container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.diskDrive = container;
     }
 
     @Override

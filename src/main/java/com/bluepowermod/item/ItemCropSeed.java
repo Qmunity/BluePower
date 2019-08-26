@@ -19,60 +19,58 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPItems;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraft.util.EnumFacing;;
 
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 
-public class ItemCropSeed extends ItemSeeds implements IPlantable {
+public class ItemCropSeed extends Item implements IPlantable {
 
     public static Block field_150925_a;
 
     public ItemCropSeed(Block blockCrop, Block blockSoil) {
-        super(blockCrop, blockSoil);
+        super(new Properties());
         field_150925_a = blockCrop;
-        this.setCreativeTab(BPCreativeTabs.items);
         this.setRegistryName(Refs.MODID + ":" + Refs.FLAXSEED_NAME);
         BPItems.itemList.add(this);
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(ItemUseContext itemUseContext) {
+        PlayerEntity player = itemUseContext.getPlayer();
+        Hand hand = itemUseContext.getHand();
+        Direction facing = itemUseContext.getFace();
+        World world = itemUseContext.getWorld();
+        BlockPos pos = itemUseContext.getPos();
         ItemStack itemStack = player.getHeldItem(hand);
         if (facing.ordinal() != 1) {
-            return EnumActionResult.PASS;
+            return ActionResultType.PASS;
         } else if (player.canPlayerEdit(pos, facing, itemStack) && player.canPlayerEdit(pos.up(), facing, itemStack)) {
-            if (world.getBlockState(pos).getBlock().canSustainPlant(world.getBlockState(pos),  world, pos, EnumFacing.UP, this) && world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock().isFertile(world, pos)) {
+            if (world.getBlockState(pos).getBlock().canSustainPlant(world.getBlockState(pos),  world, pos, Direction.UP, this) && world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock().isFertile(world.getBlockState(pos), world, pos)) {
                 world.setBlockState(pos.up(), field_150925_a.getDefaultState(), 2);
                 itemStack.setCount(itemStack.getCount() - 1);
                 player.setHeldItem(hand, itemStack);
-                return EnumActionResult.SUCCESS;
+                return ActionResultType.SUCCESS;
             } else {
-                return EnumActionResult.PASS;
+                return ActionResultType.PASS;
             }
         } else {
-            return EnumActionResult.PASS;
+            return ActionResultType.PASS;
         }
     }
 
     @Override
-    public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
-        return EnumPlantType.Crop;
-    }
-
-    @Override
-    public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
+    public BlockState getPlant(IBlockReader world, BlockPos pos) {
         return field_150925_a.getDefaultState();
     }
 

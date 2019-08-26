@@ -1,0 +1,13 @@
+﻿{
+   "parent": "bluepower:block/cube_front_back",
+   "textures": {
+      "top": "bluepower:blocks/machines/sorting_machine_side_2",
+      "bottom": "bluepower:blocks/machines/sorting_machine_side_2",
+      "side": "bluepower:blocks/machines/sorting_machine_side",
+      "front": "bluepower:blocks/machines/sorting_machine_front",
+      "back": "bluepower:blocks/machines/sorting_machine_back",
+      "particle": "bluepower:blocks/machines/sorting_machine_side",
+      "right": "bluepower:blocks/machines/sorting_machine_side",
+      "left": "bluepower:blocks/machines/sorting_machine_side"
+   }
+}

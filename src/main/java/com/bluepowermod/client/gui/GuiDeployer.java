@@ -19,25 +19,25 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerDeployer;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileDeployer;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * @author MineMaarten
  */
-public class GuiDeployer extends GuiContainerBaseBP {
+public class GuiDeployer extends GuiContainerBaseBP<ContainerDeployer> implements IHasContainer<ContainerDeployer> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/deployer.png");
-    private final TileDeployer deployer;
+    private final ContainerDeployer deployer;
 
-    public GuiDeployer(InventoryPlayer invPlayer, TileDeployer deployer) {
-
-        super(deployer, new ContainerDeployer(invPlayer, deployer), resLoc);
-        this.deployer = deployer;
+    public GuiDeployer(ContainerDeployer container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.deployer = container;
         ySize = 166;
     }
 }

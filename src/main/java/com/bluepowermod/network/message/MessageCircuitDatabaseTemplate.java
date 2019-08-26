@@ -7,17 +7,10 @@
  */
 package com.bluepowermod.network.message;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.helper.ItemStackDatabase;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.LocatedPacket;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 /**
  * Used from client to server to select a template from the private library of the client. Used from server to client to message the client to save
@@ -25,7 +18,7 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
  *
  * @author MineMaarten, amadornes
  */
-public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuitDatabaseTemplate> {
+public class MessageCircuitDatabaseTemplate{
 
     private ItemStack stack;
     private boolean deleting; // server side only used
@@ -36,57 +29,39 @@ public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuit
 
     public MessageCircuitDatabaseTemplate(TileCircuitDatabase circuitDatabase, ItemStack stack) {
 
-        super(circuitDatabase.getPos().getX(), circuitDatabase.getPos().getY(), circuitDatabase.getPos().getZ());
+        //super(circuitDatabase.getPos().getX(), circuitDatabase.getPos().getY(), circuitDatabase.getPos().getZ());
         this.stack = stack;
     }
 
     public MessageCircuitDatabaseTemplate(TileCircuitDatabase circuitDatabase, ItemStack stack, boolean deleting) {
 
-        super(circuitDatabase.getPos().getX(), circuitDatabase.getPos().getY(), circuitDatabase.getPos().getZ());
+        //super(circuitDatabase.getPos().getX(), circuitDatabase.getPos().getY(), circuitDatabase.getPos().getZ());
         this.stack = stack;
         this.deleting = deleting;
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-
-        super.toBytes(buf);
-        ByteBufUtils.writeItemStack(buf, stack);
-        buf.writeBoolean(deleting);
+    public void handleClientSide(PlayerEntity player) {
+        //TileEntity te = player.world.getTileEntity(pos);
+        //if (te instanceof TileCircuitDatabase) {
+            //((TileCircuitDatabase) te).saveToPrivateLibrary(stack);
+        //}
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-
-        super.fromBytes(buf);
-        stack = ByteBufUtils.readItemStack(buf);
-        deleting = buf.readBoolean();
-    }
-
-    @Override
-    public void handleClientSide(EntityPlayer player) {
-
-        TileEntity te = player.world.getTileEntity(pos);
-        if (te instanceof TileCircuitDatabase) {
-            ((TileCircuitDatabase) te).saveToPrivateLibrary(stack);
-        }
-    }
-
-    @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
         if (deleting) {
             if (TileCircuitDatabase.hasPermissions(player)) {
                 ItemStackDatabase stackDatabase = new ItemStackDatabase();
                 stackDatabase.deleteStack(stack);
-                BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
+                //BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
             }
         } else {
-            TileEntity te = player.world.getTileEntity(pos);
-            if (te instanceof TileCircuitDatabase) {
-                ((TileCircuitDatabase) te).copyInventory.setInventorySlotContents(0, stack);
-                player.openGui(BluePower.instance, GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal(), player.world, pos.getX(), pos.getY(), pos.getZ());
-            }
+            //TileEntity te = player.world.getTileEntity(pos);
+            //if (te instanceof TileCircuitDatabase) {
+                //((TileCircuitDatabase) te).copyInventory.setInventorySlotContents(0, stack);
+                //TODO: Open GUI
+                //player.openGui(BluePower.instance, GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal(), player.world, pos.getX(), pos.getY(), pos.getZ());
+            //}
         }
     }
 

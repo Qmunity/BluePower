@@ -15,17 +15,18 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -47,10 +48,14 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     protected boolean ejectionScheduled;
     private static final int WARNING_INTERVAL = 600; // Every 30s
 
-    @Override
-    public void update() {
+    public TileMachineBase(TileEntityType<?> type) {
+        super(type);
+    }
 
-        super.update();
+    @Override
+    public void tick() {
+
+        super.tick();
 
         if (!world.isRemote) {
             if (ejectionScheduled || getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
@@ -80,9 +85,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                     break;
                 }
             } else if (spawnItemsInWorld) {
-                EnumFacing direction = getFacingDirection().getOpposite();
+                Direction direction = getFacingDirection().getOpposite();
                 Block block = world.getBlockState(pos.offset(direction)).getBlock();
-                if (block.isPassable(world, pos.offset(direction)) || block instanceof BlockLiquid || block instanceof IFluidBlock) {
+                if (!world.getBlockState( pos.offset(direction)).isSolid() || block instanceof IFluidBlock) {
                     ejectItemInWorld(tubeStack.stack, direction);
                     iterator.remove();
                     markDirty();
@@ -122,7 +127,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         return internalItemStackBuffer;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setBacklog(List<TubeStack> backlog) {
         internalItemStackBuffer.clear();
         internalItemStackBuffer.addAll(backlog);
@@ -151,7 +156,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         return internalItemStackBuffer.isEmpty();// also say the buffer is empty when a immediate injection is scheduled.
     }
 
-    public TileEntity getTileCache(EnumFacing d) {
+    public TileEntity getTileCache(Direction d) {
 
         if (tileCache == null) {
             tileCache = new TileEntityCache(world, pos);
@@ -159,74 +164,70 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         return tileCache.getValue(d);
     }
 
-    public EnumFacing getOutputDirection() {
+    public Direction getOutputDirection() {
 
         return getFacingDirection().getOpposite();
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void read(CompoundNBT compound) {
 
-        super.readFromNBT(compound);
-        NBTTagList nbttaglist = compound.getTagList("ItemBuffer", 10);
+        super.read(compound);
+        ListNBT nbttaglist = compound.getList("ItemBuffer", 10);
 
-        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
+        for (int i = 0; i < nbttaglist.size(); ++i) {
+            CompoundNBT nbttagcompound1 = nbttaglist.getCompound(i);
 
             internalItemStackBuffer.add(TubeStack.loadFromNBT(nbttagcompound1));
         }
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public CompoundNBT write(CompoundNBT compound) {
 
-        super.writeToNBT(compound);
-        NBTTagList nbttaglist = new NBTTagList();
+        super.write(compound);
+        ListNBT nbttaglist = new ListNBT();
 
         for (TubeStack tubeStack : internalItemStackBuffer) {
             if (tubeStack != null) {
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                CompoundNBT nbttagcompound1 = new CompoundNBT();
                 tubeStack.writeToNBT(nbttagcompound1);
-                nbttaglist.appendTag(nbttagcompound1);
+                nbttaglist.add(nbttagcompound1);
             }
         }
-        compound.setTag("ItemBuffer", nbttaglist);
+        compound.put("ItemBuffer", nbttaglist);
         return compound;
     }
 
-    public void ejectItemInWorld(ItemStack stack, EnumFacing oppDirection) {
+    public void ejectItemInWorld(ItemStack stack, Direction oppDirection) {
 
         float spawnX = pos.getX() + 0.5F + oppDirection.getXOffset() * 0.8F;
         float spawnY = pos.getY() + 0.5F + oppDirection.getYOffset() * 0.8F;
         float spawnZ = pos.getZ() + 0.5F + oppDirection.getZOffset() * 0.8F;
 
-        EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, stack);
-
-        droppedItem.motionX = oppDirection.getXOffset() * 0.20F;
-        droppedItem.motionY = oppDirection.getYOffset() * 0.20F;
-        droppedItem.motionZ = oppDirection.getZOffset() * 0.20F;
-
-        world.spawnEntity(droppedItem);
+        ItemEntity droppedItem = new ItemEntity(world, spawnX, spawnY, spawnZ, stack);
+        droppedItem.setMotion(oppDirection.getXOffset() * 0.20F, oppDirection.getYOffset() * 0.20F, oppDirection.getZOffset() * 0.20F);
+        world.addEntity(droppedItem);
     }
 
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         for (TubeStack stack : internalItemStackBuffer)
             drops.add(stack.stack);
         return drops;
     }
 
     @Override
-    public boolean isConnectedTo(EnumFacing from) {
+    public boolean isConnectedTo(Direction from) {
 
-        EnumFacing dir = getOutputDirection();
+        Direction dir = getOutputDirection();
         return from == dir.getOpposite() || acceptsTubeItems && from == dir;
     }
 
     @Override
-    public int getWeight(EnumFacing from) {
+    public int getWeight(Direction from) {
 
         return from == getOutputDirection().getOpposite() ? 1000000 : 0;// make the buffer side the last place to go
     }
@@ -244,7 +245,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
      *
      * @param info
      */
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addWailaInfo(List<String> info) {
 
         if (isEjecting()) {

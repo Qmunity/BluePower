@@ -21,98 +21,88 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.client.gui.GuiContainerBase;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier1.TileFilter;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author MineMaarten
  */
-public class ContainerFilter extends ContainerMachineBase {
+public class ContainerFilter extends Container {
 
-    private final TileFilter tileFilter;
-    private int filterColor = -1;
-    private int fuzzySetting = -1;
+    private final IInventory filter;
+    public TubeColor filterColor = TubeColor.BLACK;
+    public int fuzzySetting = -1;
 
-    public ContainerFilter(InventoryPlayer invPlayer, TileFilter filter) {
-
-        super(filter);
-        tileFilter = filter;
+    public ContainerFilter(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+        super(BPContainerType.FILTER, windowId);
+        this.filter = inventory;
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                addSlotToContainer(new Slot(filter, j + i * 3, 62 + j * 18, 17 + i * 18));
+                addSlot(new Slot(filter, j + i * 3, 62 + j * 18, 17 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    public ContainerFilter( int id, PlayerInventory player )    {
+        this( id, player, new Inventory( TileFilter.SLOTS ));
+    }
+
+    public ContainerFilter(ContainerType containerType, int id, IInventory inventory){
+        super(containerType, id);
+        this.filter = inventory;
+    }
+
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                addSlot(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
+            addSlot(new Slot(invPlayer, j, 8 + j * 18, 142));
         }
     }
 
-    /**
-     * Looks for changes made in the container, sends them to every listener.
-     */
     @Override
-    public void detectAndSendChanges() {
-
-        super.detectAndSendChanges();
-
-        for (Object crafter : listeners) {
-            IContainerListener icrafting = (IContainerListener) crafter;
-
-            if (filterColor != tileFilter.filterColor.ordinal()) {
-                icrafting.sendWindowProperty(this, 0, tileFilter.filterColor.ordinal());
-            }
-
-            if (fuzzySetting != tileFilter.fuzzySetting) {
-                icrafting.sendWindowProperty(this, 1, tileFilter.fuzzySetting);
-            }
-        }
-        filterColor = tileFilter.filterColor.ordinal();
-        fuzzySetting = tileFilter.fuzzySetting;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int id, int value) {
 
         if (id == 0) {
-            tileFilter.filterColor = TubeColor.values()[value];
+            filterColor = TubeColor.values()[value];
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 1) {
-            tileFilter.fuzzySetting = value;
+            fuzzySetting = value;
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
 
-        return tileFilter.isUsableByPlayer(player);
+        return filter.isUsableByPlayer(player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);

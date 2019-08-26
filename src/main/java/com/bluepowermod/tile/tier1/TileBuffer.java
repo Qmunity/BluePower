@@ -17,32 +17,47 @@
 
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.container.ContainerBuffer;
+import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileBuffer extends TileBase implements ISidedInventory {
-    
-    private final NonNullList<ItemStack> allInventories = NonNullList.withSize(21, ItemStack.EMPTY);
-    
+public class TileBuffer extends TileBase implements ISidedInventory, INamedContainerProvider {
+
+    public static final int SLOTS = 21;
+    private final NonNullList<ItemStack> allInventories = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
+
+    public TileBuffer() {
+        super(BPTileEntityType.BUFFER);
+    }
+
     /**
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(NBTTagCompound tCompound) {
+    public void read(CompoundNBT tCompound) {
     
-        super.readFromNBT(tCompound);
+        super.read(tCompound);
         
         for (int i = 0; i < 20; i++) {
-            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            allInventories.set(i, new ItemStack(tc));
+            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            allInventories.set(i, new ItemStack((IItemProvider) tc));
         }
     }
     
@@ -50,14 +65,14 @@ public class TileBuffer extends TileBase implements ISidedInventory {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
+    public CompoundNBT write(CompoundNBT tCompound) {
     
-        super.writeToNBT(tCompound);
+        super.write(tCompound);
         
         for (int i = 0; i < 20; i++) {
-                NBTTagCompound tc = new NBTTagCompound();
-                allInventories.get(i).writeToNBT(tc);
-                tCompound.setTag("inventory" + i, tc);
+                CompoundNBT tc = new CompoundNBT();
+                allInventories.get(i).write(tc);
+                tCompound.put("inventory" + i, tc);
         }
         return  tCompound;
     }
@@ -82,7 +97,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
             if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
-                itemStack = itemStack.splitStack(amount);
+                itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
@@ -102,18 +117,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     
         allInventories.set(i, itemStack);
     }
-    
-    @Override
-    public String getName() {
-    
-        return BPBlocks.buffer.getTranslationKey();
-    }
-    
-    @Override
-    public boolean hasCustomName() {
-    
-        return true;
-    }
+
     
     @Override
     public int getInventoryStackLimit() {
@@ -122,17 +126,17 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
-        return player.getDistanceSqToCenter(pos) <= 64.0D;
+    public boolean isUsableByPlayer(PlayerEntity player) {
+        return player.getPosition().withinDistance(pos, 64.0D);
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -143,18 +147,18 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     }
     
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
     
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         for (ItemStack stack : allInventories)
             if (!stack.isEmpty()) drops.add(stack);
         return drops;
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(Direction side) {
         int var1 = side.ordinal();
-        EnumFacing dir = getFacingDirection();
+        Direction dir = getFacingDirection();
         if (side == dir) {
             int[] allSlots = new int[allInventories.size()];
             for (int i = 0; i < allSlots.length; i++)
@@ -170,12 +174,12 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         return true;
     }
 
@@ -186,22 +190,18 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     }
 
     @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
-
-    @Override
     public void clear() {
 
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.BLOCKBUFFER_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerBuffer(id, inventory, this);
     }
 }

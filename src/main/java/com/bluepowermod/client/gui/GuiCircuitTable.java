@@ -7,32 +7,24 @@
  */
 package com.bluepowermod.client.gui;
 
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.input.Keyboard;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import com.bluepowermod.container.ContainerCircuitTable;
-import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageUpdateTextfield;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier2.TileCircuitTable;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.io.IOException;
-
-@SideOnly(Side.CLIENT)
-public class GuiCircuitTable extends GuiContainerBaseBP {
+@OnlyIn(Dist.CLIENT)
+public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> implements IHasContainer<ContainerCircuitTable> {
 
     protected static final ResourceLocation guiTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_table.png");
     private static final ResourceLocation scrollTexture = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
-    private final TileCircuitTable circuitTable;
+    private final ContainerCircuitTable circuitTable;
 
     /** Amount scrolled in Creative mode inventory (0 = top, 1 = bottom) */
     private float currentScroll;
@@ -44,7 +36,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP {
      * True if the left mouse button was held down last time drawScreen was called.
      */
     private boolean wasClicking;
-    private GuiTextField searchField;
+    private TextFieldWidget searchField;
     private final boolean firstRun = true;
     private int ticksExisted;
 
@@ -56,66 +48,53 @@ public class GuiCircuitTable extends GuiContainerBaseBP {
 
     private final boolean[] displayRed = new boolean[24];
 
-    public GuiCircuitTable(InventoryPlayer invPlayer, TileCircuitTable circuitTable) {
-
-        this(circuitTable, new ContainerCircuitTable(invPlayer, circuitTable), guiTexture);
-    }
-
-    public GuiCircuitTable(TileCircuitTable circuitTable, Container container, ResourceLocation resLoc) {
-
-        super(circuitTable, container, resLoc);
-        allowUserInput = true;
+    public GuiCircuitTable(ContainerCircuitTable container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, guiTexture);
         ySize = 224;
-        this.circuitTable = circuitTable;
+        this.circuitTable = container;
     }
 
     /**
      * Adds the buttons (and other controls) to the screen in question.
      */
     @Override
-    public void initGui() {
+    public void init() {
 
-        super.initGui();
-        buttonList.clear();
-        Keyboard.enableRepeatEvents(true);
-        searchField = new GuiTextField(0, fontRenderer, guiLeft + 8, guiTop + 20, 89, fontRenderer.FONT_HEIGHT);
-        searchField.setMaxStringLength(15);
-        searchField.setEnableBackgroundDrawing(true);
-        searchField.setVisible(true);
-        searchField.setTextColor(16777215);
-        searchField.setText(circuitTable.getText(0));
+        super.init();
+        buttons.clear();
+        //Keyboard.enableRepeatEvents(true);
+        //searchField = new TextFieldWidget(0, font, guiLeft + 8, guiTop + 20, 89, font.FONT_HEIGHT);
+        //searchField.setMaxStringLength(15);
+        //searchField.setEnableBackgroundDrawing(true);
+        //searchField.setVisible(true);
+        //searchField.setTextColor(16777215);
+        //searchField.setText(circuitTable.getText(0));
 
     }
 
-    /**
-     * Called when the screen is unloaded. Used to disable keyboard repeat events
-     */
     @Override
-    public void onGuiClosed() {
-
-        super.onGuiClosed();
-        Keyboard.enableRepeatEvents(false);
+    public void onClose() {
+        super.onClose();
+        //Keyboard.enableRepeatEvents(false);
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int button) {
-
+    public boolean mouseClicked(double x, double y, int button) {
         super.mouseClicked(x, y, button);
         if (isTextfieldEnabled()) {
             searchField.mouseClicked(x, y, button);
             if (searchField.isFocused() && button == 1) {
                 searchField.setText("");
-                circuitTable.setText(0, searchField.getText());
-                BPNetworkHandler.INSTANCE.sendToServer(new MessageUpdateTextfield(circuitTable, 0));
+                //circuitTable.setText(0, searchField.getText());
+                //BPNetworkHandler.INSTANCE.sendToServer(new MessageUpdateTextfield(circuitTable, 0));
             }
         }
+        return true;
     }
 
-    /**
-     * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
-     */
     @Override
-    protected void keyTyped(char par1, int par2) throws IOException {
+    public boolean keyPressed(int par1, int par2, int par3) {
+
 
         if (field_74234_w) {
             field_74234_w = false;
@@ -124,17 +103,18 @@ public class GuiCircuitTable extends GuiContainerBaseBP {
 
         if (par2 == 1)// esc
         {
-            super.keyTyped(par1, par2);
+            super.keyPressed(par1, par2, par3);
         } else {
             if (isTextfieldEnabled()) {
-                if (searchField.textboxKeyTyped(par1, par2)) {
-                    circuitTable.setText(0, searchField.getText());
-                    BPNetworkHandler.INSTANCE.sendToServer(new MessageUpdateTextfield(circuitTable, 0));
+                if (searchField.keyPressed(par1, par2, par3)) {
+                    //circuitTable.putText(0, searchField.getText());
+                    //BPNetworkHandler.INSTANCE.sendToServer(new MessageUpdateTextfield(circuitTable, 0));
                 } else {
-                    super.keyTyped(par1, par2);
+                    super.keyPressed(par1, par2, par3);
                 }
             }
         }
+        return true;
     }
 
     /**
@@ -144,37 +124,37 @@ public class GuiCircuitTable extends GuiContainerBaseBP {
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
 
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
-        if (isTextfieldEnabled())
-            searchField.drawTextBox();
+        //if (isTextfieldEnabled())
+            //searchField.drawTextBox();
 
         int i1 = guiLeft + 156;
         int k = guiTop + 48;
         int l = k + 112;
-        mc.getTextureManager().bindTexture(scrollTexture);
-        // drawTexturedModalRect(i1, k + (int) ((l - k - 17) * currentScroll), 232 + (needsScrollBars() ? 0 : 12), 0, 12, 15);
+        this.minecraft.getTextureManager().bindTexture(scrollTexture);
+         //blit(i1, k + (int) ((l - k - 17) * currentScroll), 232 + (needsScrollBars() ? 0 : 12), 0, 12, 15);
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
                 if (displayRed[i * 8 + j]) {
-                    drawRect(guiLeft + 8 + j * 18, guiTop + 33 + i * 18, guiLeft + 24 + j * 18, guiTop + 49 + i * 18, 0x55FF0000);
+                    fill(guiLeft + 8 + j * 18, guiTop + 33 + i * 18, guiLeft + 24 + j * 18, guiTop + 49 + i * 18, 0x55FF0000);
                 }
             }
         }
     }
 
     @Override
-    public void updateScreen() {
+    public void tick() {
 
-        super.updateScreen();
+        super.tick();
         for (int i = 0; i < 24; i++) {
-            displayRed[i] = inventorySlots.getSlot(i).getHasStack() ? shouldDisplayRed(inventorySlots.getSlot(i).getStack()) : false;
+            //displayRed[i] = inventory.getStackInSlot(i).isEmpty() && shouldDisplayRed(inventory.getStackInSlot(i));
         }
     }
 
-    protected boolean shouldDisplayRed(ItemStack stack) {
+    //protected boolean shouldDisplayRed(ItemStack stack) {
 
-        return !SlotCircuitTableCrafting.canCraft(stack, circuitTable);
-    }
+        //return !SlotCircuitTableCrafting.canCraft(stack, circuitTable);
+    //}
 
     protected boolean isTextfieldEnabled() {
 

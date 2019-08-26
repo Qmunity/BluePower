@@ -1,0 +1,11 @@
+﻿{
+   "parent": "bluepower:block/cube_front_back",
+   "textures": {
+      "side": "bluepower:blocks/machines/ejector_side_active",
+      "top": "bluepower:blocks/machines/ejector_side_0",
+      "bottom": "bluepower:blocks/machines/ejector_side_0",
+      "front": "bluepower:blocks/machines/ejector_front",
+      "back": "bluepower:blocks/machines/ejector_back",
+      "particle": "bluepower:blocks/machines/ejector_side"
+   }
+}

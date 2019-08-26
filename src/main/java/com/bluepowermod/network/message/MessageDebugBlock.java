@@ -7,18 +7,15 @@
  */
 package com.bluepowermod.network.message;
 
-import com.bluepowermod.network.LocatedPacket;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
-
-import com.bluepowermod.helper.Debugger;
 
 /**
  *
  * @author MineMaarten, amadornes
  */
 
-public class MessageDebugBlock extends LocatedPacket<MessageDebugBlock> {
+public class MessageDebugBlock{
 
     public MessageDebugBlock() {
 
@@ -26,17 +23,15 @@ public class MessageDebugBlock extends LocatedPacket<MessageDebugBlock> {
 
     public MessageDebugBlock(BlockPos pos) {
 
-        super(pos);
+        //super(pos);
     }
 
-    @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
-        Debugger.indicateBlock(player.world, pos);
+        //Debugger.indicateBlock(player.world, pos);
     }
 
-    @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
     }
 

@@ -1,0 +1,11 @@
+﻿{
+  "result": {
+    "item": "bluepower:marble_paver"
+  },
+  "ingredients": [
+    {
+      "item": "bluepower:marble_tile"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

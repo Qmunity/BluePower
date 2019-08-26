@@ -7,20 +7,24 @@
  */
 package com.bluepowermod.item;
 
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.reference.Refs;
 import net.minecraft.item.ItemStack;
 
 public class ItemPaintCan extends ItemDamageableColorableOverlay {
 
     private static final int MAX_USES = 16;
 
-    public ItemPaintCan(String name) {
+    public ItemPaintCan() {
+        super(Refs.PAINTCAN_NAME + "_blank", new Properties());
+    }
 
-        super(name);
+    public ItemPaintCan(MinecraftColor color) {
+        super(color, Refs.PAINTCAN_NAME, new Properties());
     }
 
     @Override
     protected int getMaxUses() {
-
         return MAX_USES;
     }
 
@@ -34,13 +38,13 @@ public class ItemPaintCan extends ItemDamageableColorableOverlay {
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
 
-        if (itemStack.getItemDamage() >= 16)
+        if (itemStack.getDamage() >= 16)
             return ItemStack.EMPTY;
         ItemStack stack = itemStack.copy();
         int newUses = getUsesUsed(stack) + 1;
 
         if (newUses == getMaxUses()) {
-            stack.setItemDamage(16);
+            stack.setDamage(16);
             setUsesUsed(stack, 0);
         } else {
             setUsesUsed(stack, newUses);

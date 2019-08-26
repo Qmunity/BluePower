@@ -17,10 +17,14 @@
 
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tile.tier1.TileDeployer;
@@ -30,44 +34,49 @@ import com.bluepowermod.tile.tier1.TileDeployer;
  */
 public class ContainerDeployer extends Container {
     
-    private final TileDeployer tileDeployer;
-    
-    public ContainerDeployer(InventoryPlayer invPlayer, TileDeployer deployer) {
-    
-        tileDeployer = deployer;
+    private final IInventory deployer;
+
+    public ContainerDeployer(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+        super(BPContainerType.DEPLOYER, windowId);
+        this.deployer = inventory;
         
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                addSlotToContainer(new Slot(deployer, j + i * 3, 62 + j * 18, 17 + i * 18));
+                addSlot(new Slot(deployer, j + i * 3, 62 + j * 18, 17 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
     }
-    
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+
+    public ContainerDeployer( int id, PlayerInventory player )    {
+        this( id, player, new Inventory( TileDeployer.SLOTS ));
+    }
+
+
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
     
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                addSlot(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
         
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
+            addSlot(new Slot(invPlayer, j, 8 + j * 18, 142));
         }
         
     }
     
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
     
-        return tileDeployer.isUsableByPlayer(player);
+        return deployer.isUsableByPlayer(player);
     }
     
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
     
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);
@@ -112,7 +121,7 @@ public class ContainerDeployer extends Container {
                 slot = (Slot) inventorySlots.get(k);
                 itemstack1 = slot.getStack();
                 
-                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
+                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.hasContainerItem() || par1ItemStack.getDamage() == itemstack1.getDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
                     int l = itemstack1.getCount() + par1ItemStack.getCount();
                     
                     if (l <= par1ItemStack.getMaxStackSize()) {

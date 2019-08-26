@@ -21,117 +21,100 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileRegulator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author MineMaarten
  */
-public class ContainerRegulator extends ContainerMachineBase {
+public class ContainerRegulator extends Container {
 
-    private final TileRegulator tileRegulator;
+    private final IInventory regulator;
     private int filterColor = -1;
-    private int mode = -1;
-    private int fuzzySetting = -1;
+    public TubeColor color = TubeColor.BLACK;
+    public int mode = -1;
+    public int fuzzySetting = -1;
 
-    public ContainerRegulator(InventoryPlayer invPlayer, TileRegulator regulator) {
-
-        super(regulator);
-        tileRegulator = regulator;
+    public ContainerRegulator(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+        super(BPContainerType.REGULATOR, windowId);
+        this.regulator = inventory;
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                addSlotToContainer(new SlotPhantom(regulator, j + i * 3, 8 + j * 18, 18 + i * 18));
+                addSlot(new SlotPhantom(regulator, j + i * 3, 8 + j * 18, 18 + i * 18));
             }
         }
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                addSlotToContainer(new Slot(regulator, j + i * 3 + 9, 80 + j * 18, 18 + i * 18));
+                addSlot(new Slot(regulator, j + i * 3 + 9, 80 + j * 18, 18 + i * 18));
             }
         }
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                addSlotToContainer(new SlotPhantom(regulator, j + i * 3 + 18, 152 + j * 18, 18 + i * 18));
+                addSlot(new SlotPhantom(regulator, j + i * 3 + 18, 152 + j * 18, 18 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    public ContainerRegulator( int id, PlayerInventory player )    {
+        this( id, player, new Inventory( TileRegulator.SLOTS ));
+    }
+
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 26 + j * 18, 86 + i * 18));
+                addSlot(new Slot(invPlayer, j + i * 9 + 9, 26 + j * 18, 86 + i * 18));
             }
         }
 
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 26 + j * 18, 144));
+            addSlot(new Slot(invPlayer, j, 26 + j * 18, 144));
         }
     }
 
-    /**
-     * Looks for changes made in the container, sends them to every listener.
-     */
-    @Override
-    public void detectAndSendChanges() {
 
-        super.detectAndSendChanges();
-
-        for (Object crafter : listeners) {
-            IContainerListener icrafting = (IContainerListener) crafter;
-
-            if (filterColor != tileRegulator.color.ordinal()) {
-                icrafting.sendWindowProperty(this, 0, tileRegulator.color.ordinal());
-            }
-            if (mode != tileRegulator.mode) {
-                icrafting.sendWindowProperty(this, 2, tileRegulator.mode);
-            }
-            if (fuzzySetting != tileRegulator.fuzzySetting) {
-                icrafting.sendWindowProperty(this, 3, tileRegulator.fuzzySetting);
-            }
-        }
-        filterColor = tileRegulator.color.ordinal();
-        mode = tileRegulator.mode;
-        fuzzySetting = tileRegulator.fuzzySetting;
-    }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int id, int value) {
 
         if (id == 0) {
-            tileRegulator.color = TubeColor.values()[value];
+            color = TubeColor.values()[value];
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 2) {
-            tileRegulator.mode = value;
+            mode = value;
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 3) {
-            tileRegulator.fuzzySetting = value;
+            fuzzySetting = value;
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
 
-        return tileRegulator.isUsableByPlayer(player);
+        return regulator.isUsableByPlayer(player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);

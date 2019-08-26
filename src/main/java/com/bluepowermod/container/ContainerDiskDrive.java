@@ -7,25 +7,33 @@
  */
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
 
 import com.bluepowermod.tile.tier3.TileDiskDrive;
 
 public class ContainerDiskDrive extends Container {
 
-	private final TileDiskDrive diskDrive;
-	
-	public ContainerDiskDrive(InventoryPlayer invPlayer, TileDiskDrive ent) {
+	private final IInventory inventory;
 
-		this.diskDrive = ent;
+	public ContainerDiskDrive(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+		super(BPContainerType.DISK_DRIVE, windowId);
+		this.inventory = inventory;
+	}
+
+	public ContainerDiskDrive( int id, PlayerInventory player )    {
+		this( id, player, new Inventory( 1));
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-
-		return true;
+	public boolean canInteractWith(PlayerEntity playerEntity) {
+		return inventory.isUsableByPlayer(playerEntity);
 	}
+
 
 }

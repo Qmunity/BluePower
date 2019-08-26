@@ -1,0 +1,12 @@
+﻿{
+   "parent": "bluepower:block/cube_sided",
+   "textures": {
+      "top": "bluepower:blocks/machines/cpu_top",
+      "bottom": "bluepower:blocks/machines/cpu_bottom",
+      "right": "bluepower:blocks/machines/cpu_side",
+      "left": "bluepower:blocks/machines/cpu_side",
+      "front": "bluepower:blocks/machines/cpu_front",
+      "back": "bluepower:blocks/machines/cpu_back",
+      "particle": "bluepower:blocks/machines/block_breaker_side"
+   }
+}

@@ -7,94 +7,75 @@
  */
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.GuiCircuitTable;
+import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
-import invtweaks.api.container.ChestContainer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import com.bluepowermod.tile.tier3.TileCircuitDatabase;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.*;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
 
-@ChestContainer
+//@ChestContainer
 public class ContainerCircuitTable extends Container {
 
-    private final TileCircuitTable circuitTable;
-    public InventoryCrafting craftMatrix;
+    private final IInventory circuitTable;
+    public CraftingInventory craftMatrix;
     private int itemsCrafted;
     private boolean isRetrying = false;
     private int scrollState = -1;
 
-    public ContainerCircuitTable(InventoryPlayer invPlayer, TileCircuitTable circuitTable) {
-
-        this.circuitTable = circuitTable;
-        craftMatrix = new InventoryCrafting(this, 5, 5);
+    public ContainerCircuitTable(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+        super(BPContainerType.CIRCUIT_TABLE, windowId);
+        this.circuitTable = inventory;
+        craftMatrix = new CraftingInventory(this, 5, 5);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 8; ++j) {
-                addSlotToContainer(new SlotCircuitTableCrafting(invPlayer.player, circuitTable, craftMatrix, j + i * 8, 8 + j * 18,
+                addSlot(new SlotCircuitTableCrafting(invPlayer.player, circuitTable, craftMatrix, j + i * 8, 8 + j * 18,
                         33 + i * 18));
             }
         }
 
         for (int i = 0; i < 2; ++i) {
             for (int j = 0; j < 9; ++j) {
-                addSlotToContainer(new Slot(circuitTable, j + i * 9, 8 + j * 18, 95 + i * 18));
+                addSlot(new Slot(circuitTable, j + i * 9, 8 + j * 18, 95 + i * 18));
             }
         }
 
         bindPlayerInventory(invPlayer);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    public ContainerCircuitTable( int id, PlayerInventory player )    {
+        this( id, player, new Inventory( TileCircuitTable.SLOTS ));
+    }
+
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 142 + i * 18));
+                addSlot(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 142 + i * 18));
             }
         }
 
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 200));
+            addSlot(new Slot(invPlayer, j, 8 + j * 18, 200));
         }
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
 
         return true;
     }
 
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
-        if (scrollState != circuitTable.slotsScrolled) {
-            scrollState = circuitTable.slotsScrolled;
-            for (IContainerListener crafter : (List<IContainerListener>) listeners) {
-                crafter.sendWindowProperty(this, 0, circuitTable.slotsScrolled);
-            }
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int p_75137_1_, int p_75137_2_) {
-        circuitTable.slotsScrolled = p_75137_2_;
-        GuiScreen gui = Minecraft.getMinecraft().currentScreen;
-        if (gui instanceof GuiCircuitTable) {
-            ((GuiCircuitTable) gui).updateScrollbar(circuitTable.slotsScrolled);
-        }
-    }
-
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
 
         if (!isRetrying)
             itemsCrafted = 0;

@@ -12,10 +12,10 @@ import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileSolarPanel;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 
 /**
  * @author MoreThanHidden
@@ -25,22 +25,7 @@ public class BlockSolarPanel extends BlockContainerBase {
 
     public BlockSolarPanel() {
         super(Material.IRON, TileSolarPanel.class);
-        setTranslationKey(Refs.SOLARPANEL_NAME);
         setRegistryName(Refs.MODID, Refs.SOLARPANEL_NAME);
     }
 
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0,0,0,1,0.25,1);
-    }
-
-    @Override
-    public boolean isFullBlock(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
 }

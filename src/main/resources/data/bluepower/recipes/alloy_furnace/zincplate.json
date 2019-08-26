@@ -1,0 +1,16 @@
+{
+  "type": "bluepower:alloy_smelting",
+  "ingredients": [
+    {
+      "tag": "forge:dusts/zinc"
+    },
+    {
+      "tag": "forge:ingots/iron",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "bluepower:zincplate",
+    "count": 4
+  }
+}

@@ -8,13 +8,13 @@
 package com.bluepowermod.block.computer;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileMonitor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -28,7 +28,7 @@ public class BlockMonitor extends BlockContainerBase {
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+    public void tick(BlockState state, World world, BlockPos pos, Random rand) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TileMonitor) {
             // ((TileCPU)tileEntity).updateEntity();
@@ -37,14 +37,7 @@ public class BlockMonitor extends BlockContainerBase {
     }
 
     @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.MONITOR;
-    }
-
-    @Override
-    public int tickRate(World world) {
-
+    public int tickRate(IWorldReader p_149738_1_) {
         return 1;
     }
 

@@ -19,14 +19,15 @@
 
 package com.bluepowermod.container.slot;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class SlotSeedBag extends Slot {
+public class SlotSeedBag extends SlotItemHandler {
     
-    public SlotSeedBag(IInventory par1iInventory, int par2, int par3, int par4) {
+    public SlotSeedBag(ItemStackHandler par1iInventory, int par2, int par3, int par4) {
     
         super(par1iInventory, par2, par3, par4);
     }
@@ -36,7 +37,8 @@ public class SlotSeedBag extends Slot {
     
         itemstack = itemstack.copy();
         itemstack.setCount(1);
-        if (itemstack.getItem() instanceof ItemSeeds) {
+        Block block = Block.getBlockFromItem(itemstack.getItem());
+        if (block instanceof IPlantable) {
             ItemStack seedType = ItemStack.EMPTY;
             
             for (int i = 0; i < this.inventory.getSizeInventory(); i++) {

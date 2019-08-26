@@ -17,52 +17,56 @@
 
 package com.bluepowermod.init;
 
+import com.bluepowermod.reference.ContainerNames;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.*;
+import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
 
 public class TileEntities {
 
     /**
      * Method to register the TE's to the game. If a TE is not registered, it _will_ cause issues!
      */
-    public static void init() {
+    @Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class Registration {
+        @SubscribeEvent
+        public static void onTileEntityTypeRegistry(final RegistryEvent.Register<TileEntityType<?>> event) {
+            event.getRegistry().registerAll(
+                    TileEntityType.Builder.create(TileAlloyFurnace::new, BPBlocks.alloyfurnace).build(null).setRegistryName(ContainerNames.ALLOY_FURNACE),
+                    TileEntityType.Builder.create(TileBlockBreaker::new, BPBlocks.block_breaker).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "block_breaker")),
+                    TileEntityType.Builder.create(TileIgniter::new, BPBlocks.igniter).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "igniter")),
+                    TileEntityType.Builder.create(TileBuffer::new, BPBlocks.buffer).build(null).setRegistryName(ContainerNames.BUFFER),
+                    TileEntityType.Builder.create(TileTransposer::new, BPBlocks.transposer).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "transposer")),
+                    TileEntityType.Builder.create(TileSortingMachine::new, BPBlocks.sorting_machine).build(null).setRegistryName(ContainerNames.SORTING_MACHINE),
+                    //TileEntityType.Builder.create(TileSortron::new, BPBlocks.sortron).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "sortron")),
+                    TileEntityType.Builder.create(TileEngine::new, BPBlocks.engine).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "engine")),
+                    TileEntityType.Builder.create(TileBattery::new, BPBlocks.battery).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "battery")),
+                    //TileEntityType.Builder.create(TileWindmill::new, BPBlocks.windmill).build(null).setRegistryName(ContainerNames.WINDMILL),
+                    TileEntityType.Builder.create(TileKinectGenerator::new, BPBlocks.kinetic_generator).build(null).setRegistryName(ContainerNames.KINETIC_GENERATOR),
+                    TileEntityType.Builder.create(TileSolarPanel::new, BPBlocks.solarpanel).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "solar_panel")),
+                    TileEntityType.Builder.create(TileDeployer::new, BPBlocks.deployer).build(null).setRegistryName(ContainerNames.DEPLOYER),
+                    TileEntityType.Builder.create(TileEjector::new, BPBlocks.ejector).build(null).setRegistryName(ContainerNames.EJECTOR),
+                    TileEntityType.Builder.create(TileRelay::new, BPBlocks.relay).build(null).setRegistryName(ContainerNames.RELAY),
+                    TileEntityType.Builder.create(TileFilter::new, BPBlocks.filter).build(null).setRegistryName(ContainerNames.FILTER),
+                    TileEntityType.Builder.create(TileRetriever::new, BPBlocks.retriever).build(null).setRegistryName(ContainerNames.RETRIEVER),
+                    TileEntityType.Builder.create(TileRegulator::new, BPBlocks.regulator).build(null).setRegistryName(ContainerNames.REGULATOR),
+                    TileEntityType.Builder.create(TileItemDetector::new, BPBlocks.item_detector).build(null).setRegistryName(ContainerNames.ITEM_DETECTOR),
+                    TileEntityType.Builder.create(TileManager::new, BPBlocks.manager).build(null).setRegistryName(ContainerNames.MANAGER),
+                    TileEntityType.Builder.create(TileProjectTable::new, BPBlocks.project_tables).build(null).setRegistryName(ContainerNames.PROJECT_TABLE),
+                    TileEntityType.Builder.create(TileCircuitTable::new, BPBlocks.circuit_table).build(null).setRegistryName(ContainerNames.CIRCUIT_TABLE),
+                    TileEntityType.Builder.create(TileCircuitDatabase::new, BPBlocks.circuit_database).build(null).setRegistryName(ContainerNames.CIRCUITDATABASE_MAIN),
+                    TileEntityType.Builder.create(TileLamp::new, BPBlocks.allLamps.toArray(new Block[0])).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "lamp")),
+                    TileEntityType.Builder.create(TileWire::new, BPBlocks.blockAlloyWire).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "wire"))
+            );
 
-        GameRegistry.registerTileEntity(TileAlloyFurnace.class, new ResourceLocation(Refs.MODID, "alloyFurnace"));
-        GameRegistry.registerTileEntity(TileBlockBreaker.class, new ResourceLocation(Refs.MODID, "blockBreaker"));
-        GameRegistry.registerTileEntity(TileIgniter.class, new ResourceLocation(Refs.MODID, "igniter"));
-        GameRegistry.registerTileEntity(TileBuffer.class, new ResourceLocation(Refs.MODID, "buffer"));
-        GameRegistry.registerTileEntity(TileTransposer.class, new ResourceLocation(Refs.MODID, "transposer"));
-        GameRegistry.registerTileEntity(TileSortingMachine.class, new ResourceLocation(Refs.MODID, "sortingMachine"));
-        GameRegistry.registerTileEntity(TileSortron.class, new ResourceLocation(Refs.MODID, "sortron"));
-        // GameRegistry.registerTileEntity(TileCPU.class, "CPU");
-        // GameRegistry.registerTileEntity(TileMonitor.class, "monitor");
-        // GameRegistry.registerTileEntity(TileDiskDrive.class, "diskDrive");
-        // GameRegistry.registerTileEntity(TileIOExpander.class, "IOExpander");
-        GameRegistry.registerTileEntity(TileEngine.class, new ResourceLocation(Refs.MODID, "engine"));
-        GameRegistry.registerTileEntity(TileBattery.class, new ResourceLocation(Refs.MODID, "battery"));
-        GameRegistry.registerTileEntity(TileWindmill.class, new ResourceLocation(Refs.MODID, "windmill"));
-        GameRegistry.registerTileEntity(TileKinectGenerator.class, new ResourceLocation(Refs.MODID, "kinectgenerator"));
-        GameRegistry.registerTileEntity(TileSolarPanel.class, new ResourceLocation(Refs.MODID, "solarpanel"));
-
-
-        GameRegistry.registerTileEntity(TileDeployer.class, new ResourceLocation(Refs.MODID, "deployer"));
-        GameRegistry.registerTileEntity(TileEjector.class, new ResourceLocation(Refs.MODID, "ejector"));
-        GameRegistry.registerTileEntity(TileRelay.class, new ResourceLocation(Refs.MODID, "relay"));
-        GameRegistry.registerTileEntity(TileFilter.class, new ResourceLocation(Refs.MODID, "filter"));
-        GameRegistry.registerTileEntity(TileRetriever.class, new ResourceLocation(Refs.MODID, "retriever"));
-        GameRegistry.registerTileEntity(TileRegulator.class, new ResourceLocation(Refs.MODID, "regulator"));
-        GameRegistry.registerTileEntity(TileItemDetector.class, new ResourceLocation(Refs.MODID, "itemDetector"));
-        GameRegistry.registerTileEntity(TileManager.class, new ResourceLocation(Refs.MODID, "manager"));
-        GameRegistry.registerTileEntity(TileProjectTable.class, new ResourceLocation(Refs.MODID, "projectTable"));
-        GameRegistry.registerTileEntity(TileAutoProjectTable.class, new ResourceLocation(Refs.MODID, "autoProjectTable"));
-        GameRegistry.registerTileEntity(TileCircuitTable.class, new ResourceLocation(Refs.MODID, "circuitTable"));
-        GameRegistry.registerTileEntity(TileCircuitDatabase.class, new ResourceLocation(Refs.MODID, "circuitDatabase"));
-        GameRegistry.registerTileEntity(TileLamp.class, new ResourceLocation(Refs.MODID, "lamp"));
-        GameRegistry.registerTileEntity(TileWire.class, new ResourceLocation(Refs.MODID, "wire"));
-
+        }
     }
 }

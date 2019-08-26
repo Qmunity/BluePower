@@ -7,40 +7,63 @@
  */
 package com.bluepowermod.compat.jei;
 
+import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.container.ContainerAlloyFurnace;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.reference.Refs;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiItemStackGroup;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.drawable.IDrawableAnimated;
+import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeCategory;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import mezz.jei.api.recipe.IRecipeWrapperFactory;
+import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.transfer.IRecipeTransferError;
+import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
+import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
   @author MoreThanHidden
 */
 
 
-public class AlloyFurnaceHandler implements IRecipeCategory<AlloyFurnaceWrapper> {
+public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnaceRecipe> {
 
     private final IDrawable background;
+    private final IDrawable icon;
+    private final IDrawableAnimated progress;
 
     public AlloyFurnaceHandler(IGuiHelper helper) {
       background = helper.createDrawable(new ResourceLocation(Refs.MODID + ":textures/gui/alloy_furnace.png"),8,13, 147, 60);
+      icon = helper.createDrawableIngredient(new ItemStack(BPBlocks.alloyfurnace));
+      progress = helper.drawableBuilder(new ResourceLocation(Refs.MODID + ":textures/gui/alloy_furnace.png"), 178, 14, 24, 17).buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
     }
 
     @Override
-    public String getUid() {
-        return "bluepower.alloyfurnace";
+    public ResourceLocation getUid() {
+        return new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME);
+    }
+
+    @Override
+    public Class<? extends StandardAlloyFurnaceRecipe> getRecipeClass() {
+        return StandardAlloyFurnaceRecipe.class;
     }
 
     @Override
@@ -49,61 +72,50 @@ public class AlloyFurnaceHandler implements IRecipeCategory<AlloyFurnaceWrapper>
     }
 
     @Override
-    public String getModName() {
-        return Refs.NAME;
-    }
-
-    @Override
     public IDrawable getBackground() {
         return background;
     }
 
     @Override
-    public void drawExtras(Minecraft minecraft) {
-
+    public void draw(StandardAlloyFurnaceRecipe recipe, double mouseX, double mouseY) {
+        progress.draw(95, 22);
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, AlloyFurnaceWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
+    public IDrawable getIcon() {
+        return icon;
+    }
+
+    @Override
+    public void setIngredients(StandardAlloyFurnaceRecipe recipe, IIngredients ingredients) {
+        List<List<ItemStack>> items = recipe.getRequiredItems().stream().map(ingredient -> Arrays.asList(ingredient.getMatchingStacks())).collect(Collectors.toList());
+        for (int i = 0; i < items.size(); i++) {
+            for(ItemStack itemStack : items.get(i)){
+                itemStack.setCount(recipe.getRequiredCount().get(i));
+            }
+        }
+        ingredients.setInputLists(VanillaTypes.ITEM, items);
+        ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
+    }
+
+    @Override
+    public void setRecipe(IRecipeLayout iRecipeLayout, StandardAlloyFurnaceRecipe recipe, IIngredients ingredients) {
+        IGuiItemStackGroup guiItemStackGroup = iRecipeLayout.getItemStacks();
         guiItemStackGroup.init(0, false, 12, 21);
         guiItemStackGroup.set(0, new ItemStack(Items.COAL));
         guiItemStackGroup.init(1, false,125, 21);
-        guiItemStackGroup.set(1, ingredients.getOutputs(ItemStack.class).get(0));
+        guiItemStackGroup.set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
         for(int i = 0; i < 3; i++ ) {
             for(int j = 0; j < 3; j++ ) {
                 guiItemStackGroup.init(i * 3 + j + 2, true, 38 + j * 18, 3 + i * 18);
             }
         }
-        for(int i = 0; i < ingredients.getInputs(ItemStack.class).get(0).size(); i++){
-            guiItemStackGroup.set(i + 2, ingredients.getInputs(ItemStack.class).get(0).get(i));
+        for(int i = 0; i < recipe.getRequiredItems().size(); i++){
+            List<ItemStack> itemStacks = ingredients.getInputs(VanillaTypes.ITEM).get(i);
+            for (ItemStack itemStack : itemStacks) {
+                itemStack.setCount(recipe.getRequiredCount().get(i));
+            }
+            guiItemStackGroup.set(i + 2, itemStacks);
         }
     }
-
 }
-
-class AlloyFurnaceWrapperFactory implements IRecipeWrapperFactory<StandardAlloyFurnaceRecipe> {
-
-    @Override
-    public IRecipeWrapper getRecipeWrapper(@Nonnull StandardAlloyFurnaceRecipe recipe) {
-        return new AlloyFurnaceWrapper(recipe);
-    }
-}
-
-class AlloyFurnaceWrapper implements IRecipeWrapper {
-
-    protected final NonNullList<ItemStack> inputs;
-    protected final ItemStack output;
-
-    public AlloyFurnaceWrapper(StandardAlloyFurnaceRecipe recipe) {
-        this.inputs = recipe.getRequiredItems();
-        this.output = recipe.getCraftingResult(inputs);
-    }
-
-    @Override
-    public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(ItemStack.class, inputs);
-        ingredients.setOutput(ItemStack.class, output);
-    }
-}
-

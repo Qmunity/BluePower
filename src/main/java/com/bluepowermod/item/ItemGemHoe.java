@@ -20,40 +20,18 @@ package com.bluepowermod.item;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 
-public class ItemGemHoe extends ItemHoe {
+public class ItemGemHoe extends HoeItem {
 
     public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;
 
-    public ItemGemHoe(ToolMaterial material, String name, Item repairItem) {
-        super(material);
-        this.setTranslationKey(name);
-        this.setCreativeTab(BPCreativeTabs.tools);
+    public ItemGemHoe(IItemTier itemTier, String name, Item repairItem) {
+        super(itemTier, itemTier.getAttackDamage(), new Properties().group(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);
-    }
-
-    @Override
-    public String getTranslationKey(ItemStack stack) {
-
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
-    }
-
-    protected String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
-    }
-
-    @Override
-    public boolean isRepairable() {
-
-        return canRepair && isDamageable();
     }
 
     @Override

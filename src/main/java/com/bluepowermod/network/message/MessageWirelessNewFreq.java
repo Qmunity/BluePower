@@ -1,22 +1,20 @@
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.api.misc.Accessibility;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.LocatedPacket;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Direction;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 
-public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq> {
+public class MessageWirelessNewFreq{
 
     private Accessibility acc;
     private String name;
     private boolean bundled;
-    private EnumFacing face;
+    private Direction face;
 
    // public MessageWirelessNewFreq(IWirelessGate gate, Accessibility newAccessibility, String newName, boolean bundled) {
 
@@ -32,13 +30,11 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
 
     }
 
-    @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
     }
 
-    @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
         //Frequency freq = (Frequency) WirelessManager.COMMON_INSTANCE.registerFrequency(player, name, acc, bundled);
        // ITilePartHolder h = MultipartCompatibility.getPartHolder(player.world, pos);
@@ -57,10 +53,9 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
        // }
     }
 
-    @Override
     public void write(DataOutput buffer) throws IOException {
 
-        super.write(buffer);
+        //super.write(buffer);
 
         buffer.writeInt(acc.ordinal());
         buffer.writeUTF(name);
@@ -68,14 +63,13 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
         buffer.writeInt(face.ordinal());
     }
 
-    @Override
     public void read(DataInput buffer) throws IOException {
 
-        super.read(buffer);
+        //super.read(buffer);
 
         acc = Accessibility.values()[buffer.readInt()];
         name = buffer.readUTF();
         bundled = buffer.readBoolean();
-        face = EnumFacing.byIndex(buffer.readInt());
+        face = Direction.byIndex(buffer.readInt());
     }
 }

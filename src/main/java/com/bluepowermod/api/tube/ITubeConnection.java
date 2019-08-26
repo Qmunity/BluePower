@@ -8,7 +8,7 @@
 package com.bluepowermod.api.tube;
 
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 /**
  * 
@@ -17,7 +17,7 @@ import net.minecraft.util.EnumFacing;
 
 public interface ITubeConnection {
     
-    public boolean isConnectedTo(EnumFacing from);
+    public boolean isConnectedTo(Direction from);
     
     /**
      * 

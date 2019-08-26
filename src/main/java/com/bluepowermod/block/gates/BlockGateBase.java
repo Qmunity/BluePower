@@ -1,91 +1,119 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.block.gates;
 
-import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockBase;
-import com.bluepowermod.block.machine.BlockLamp;
+import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileWire;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRedstoneWire;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.RedstoneWireBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.security.KeyPair;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+/**
+ * @author MoreThanHidden
+ */
 public class BlockGateBase extends BlockBase {
 
     private final String name;
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
-    public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 3);
-    public static final PropertyBool POWERED_FRONT = PropertyBool.create("powered_front");
-    public static final PropertyBool POWERED_BACK = PropertyBool.create("powered_back");
-    public static final PropertyBool POWERED_LEFT = PropertyBool.create("powered_left");
-    public static final PropertyBool POWERED_RIGHT = PropertyBool.create("powered_right");
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 3);
+    public static final BooleanProperty POWERED_FRONT = BooleanProperty.create("powered_front");
+    public static final BooleanProperty POWERED_BACK = BooleanProperty.create("powered_back");
+    public static final BooleanProperty POWERED_LEFT = BooleanProperty.create("powered_left");
+    public static final BooleanProperty POWERED_RIGHT = BooleanProperty.create("powered_right");
 
     public BlockGateBase(String name) {
-        super(Material.CIRCUITS);
+        super(Material.CLAY);
         this.name = name;
-        this.setDefaultState(blockState.getBaseState()
-                .withProperty(FACING, EnumFacing.UP)
-                .withProperty(POWERED_BACK, false)
-                .withProperty(POWERED_FRONT, false)
-                .withProperty(POWERED_LEFT, false)
-                .withProperty(POWERED_RIGHT, false)
-                .withProperty(ROTATION, 0));
-        setTranslationKey(name);
+        this.setDefaultState(stateContainer.getBaseState()
+                .with(FACING, Direction.UP)
+                .with(POWERED_BACK, false)
+                .with(POWERED_FRONT, false)
+                .with(POWERED_LEFT, false)
+                .with(POWERED_RIGHT, false)
+                .with(ROTATION, 0));
         setWIP(true);
     }
 
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0,
-                new ModelResourceLocation(Refs.MODID + ":" + name, "inventory"));
-
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+        builder.add(FACING, ROTATION, POWERED_BACK, POWERED_FRONT, POWERED_LEFT, POWERED_RIGHT);
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
-        return state.getValue(FACING) != side && (state.getValue(FACING).getOpposite() != side);
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return AABBUtils.rotate(Refs.GATE_AABB, state.get(FACING));
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-
-        Map<String, Byte> map = getSidePower(worldIn, state, pos);
-
-        return super.getActualState(state, worldIn, pos)
-                .withProperty(POWERED_FRONT, map.get("front") > 0)
-                .withProperty(POWERED_BACK, map.get("back") > 0)
-                .withProperty(POWERED_LEFT, map.get("left") > 0)
-                .withProperty(POWERED_RIGHT, map.get("right") > 0);
+    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
+        return state.get(FACING) != side && (state.get(FACING).getOpposite() != side);
     }
 
-    public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side){
-        if(side == EnumFacing.byHorizontalIndex(blockState.getValue(ROTATION))) {
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        Direction face = context.getFace();
+        return this.getDefaultState().with(ROTATION, context.getPlacementHorizontalFacing().getOpposite().getHorizontalIndex()).with(FACING, face);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand) {
+        Map<String, Byte> map = getSidePower(world, state, pos1);
+        return super.getStateForPlacement(state, facing, state2, world, pos1, pos2, hand)
+                .with(POWERED_FRONT, map.get("front") > 0)
+                .with(POWERED_BACK, map.get("back") > 0)
+                .with(POWERED_LEFT, map.get("left") > 0)
+                .with(POWERED_RIGHT, map.get("right") > 0);
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+        super.onBlockPlacedBy(world, pos, state, entity, stack);
+        Map<String, Byte> map = getSidePower(world, state, pos);
+        world.setBlockState(pos, state.with(POWERED_FRONT, map.get("front") > 0)
+                .with(POWERED_BACK, map.get("back") > 0)
+                .with(POWERED_LEFT, map.get("left") > 0)
+                .with(POWERED_RIGHT, map.get("right") > 0));
+    }
+
+    @Override
+    public boolean canProvidePower(BlockState p_149744_1_) {
+        return true;
+    }
+
+    @Override
+    public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side){
+        Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.get(FACING));
+        if(side == dirs[blockState.get(ROTATION)]) {
             Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
             return map.get("front");
         }
@@ -93,31 +121,33 @@ public class BlockGateBase extends BlockBase {
     }
 
     @Override
-    public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        if(side == EnumFacing.byHorizontalIndex(blockState.getValue(ROTATION))) {
+    public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+        Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.get(FACING));
+        if(side == dirs[blockState.get(ROTATION)]) {
             Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
             return map.get("front");
         }
         return 0;
     }
 
-    private Map<String, Byte> getSidePower(IBlockAccess worldIn, IBlockState state, BlockPos pos){
+    private Map<String, Byte> getSidePower(IBlockReader worldIn, BlockState state, BlockPos pos){
          Map<String, Byte> map = new HashMap<>();
-         EnumFacing side_left = EnumFacing.byHorizontalIndex(state.getValue(ROTATION) == 3 ? 0 : state.getValue(ROTATION) + 1);
-         EnumFacing side_right = side_left.getOpposite();
-         EnumFacing side_back = EnumFacing.byHorizontalIndex(state.getValue(ROTATION));
+         Direction[] dirs = DirectionHelper.ArrayFromDirection(state.get(FACING));
+         Direction side_left = dirs[state.get(ROTATION) == 3 ? 0 : state.get(ROTATION) + 1];
+         Direction side_right = side_left.getOpposite();
+         Direction side_back = dirs[state.get(ROTATION)];
          BlockPos pos_left = pos.offset(side_left);
          BlockPos pos_right = pos.offset(side_right);
          BlockPos pos_back = pos.offset(side_back);
-         IBlockState state_left = worldIn.getBlockState(pos_left);
-         IBlockState state_right = worldIn.getBlockState(pos_right);
-         IBlockState state_back = worldIn.getBlockState(pos_back);
+         BlockState state_left = worldIn.getBlockState(pos_left);
+         BlockState state_right = worldIn.getBlockState(pos_right);
+         BlockState state_back = worldIn.getBlockState(pos_back);
          byte left = (byte) state_left.getWeakPower(worldIn, pos_left, side_right);
          byte right = (byte) state_right.getWeakPower(worldIn, pos_right, side_left);
          byte back = (byte) state_back.getWeakPower(worldIn, pos_back, side_back.getOpposite());
-         if(state_left.getBlock() instanceof BlockRedstoneWire){left = state_left.getValue(BlockRedstoneWire.POWER).byteValue();}
-         if(state_right.getBlock() instanceof BlockRedstoneWire){right = state_right.getValue(BlockRedstoneWire.POWER).byteValue();}
-         if(state_back.getBlock() instanceof BlockRedstoneWire){back = state_back.getValue(BlockRedstoneWire.POWER).byteValue();}
+         if(state_left.getBlock() instanceof RedstoneWireBlock){left = state_left.get(RedstoneWireBlock.POWER).byteValue();}
+         if(state_right.getBlock() instanceof RedstoneWireBlock){right = state_right.get(RedstoneWireBlock.POWER).byteValue();}
+         if(state_back.getBlock() instanceof RedstoneWireBlock){back = state_back.get(RedstoneWireBlock.POWER).byteValue();}
          map.put("left", left);
          map.put("right", right);
          map.put("back", back);
@@ -134,46 +164,22 @@ public class BlockGateBase extends BlockBase {
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return AABBUtils.rotate(Refs.GATE_AABB, state.getValue(FACING));
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, ROTATION, POWERED_BACK, POWERED_FRONT, POWERED_LEFT, POWERED_RIGHT);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getIndex();
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
-    }
-
-    @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        super.neighborChanged(state, world, pos, blockIn, fromPos);
-        if(!world.getBlockState(pos.offset(state.getValue(FACING).getOpposite())).isFullBlock()){
-            world.setBlockToAir(pos);
-            this.dropBlockAsItem(world, pos, state, 0);
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+        super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
+        if(!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isNormalCube(world,pos.offset(state.get(FACING).getOpposite()))) {
+            world.destroyBlock(pos, true);
+            return;
         }
+        Map<String, Byte> map = getSidePower(world, state, pos);
+        world.setBlockState(pos, state.with(POWERED_FRONT, map.get("front") > 0)
+                .with(POWERED_BACK, map.get("back") > 0)
+                .with(POWERED_LEFT, map.get("left") > 0)
+                .with(POWERED_RIGHT, map.get("right") > 0));
     }
 
-    @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(FACING, facing);
-    }
 }

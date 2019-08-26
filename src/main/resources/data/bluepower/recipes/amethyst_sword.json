@@ -1,0 +1,19 @@
+﻿{
+  "result": {
+    "item": "bluepower:amethyst_sword"
+  },
+  "pattern": [
+    "G",
+    "G",
+    "S"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "tag": "forge:rods/wooden"
+    },
+    "G": {
+      "tag": "forge:gems/amethyst"
+    }
+  }
+}

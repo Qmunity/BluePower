@@ -25,7 +25,7 @@ public class ComparatorMOP implements Comparator<RayTraceResult> {
     @Override
     public int compare(RayTraceResult arg0, RayTraceResult arg1) {
 
-        return (int) (((arg0.hitVec.distanceTo(start) - arg1.hitVec.distanceTo(start)) * 1000000));
+        return (int) (((arg0.getHitVec().distanceTo(start) - arg1.getHitVec().distanceTo(start)) * 1000000));
     }
 
 }

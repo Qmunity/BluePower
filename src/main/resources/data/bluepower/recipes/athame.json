@@ -1,0 +1,18 @@
+﻿{
+  "result": {
+    "item": "bluepower:athame"
+  },
+  "pattern": [
+    "# ",
+    " S"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "forge:ingots/silver"
+    },
+    "S": {
+      "tag": "forge:rods/wooden"
+    }
+  }
+}

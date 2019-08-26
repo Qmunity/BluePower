@@ -8,12 +8,14 @@
 package com.bluepowermod.helper;
 
 import com.bluepowermod.BluePower;
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -36,12 +38,12 @@ public class ItemStackDatabase {
         new File(saveLocation).mkdirs();
         File targetLocation = new File(saveLocation + stack.getDisplayName() + FILE_EXTENSION);
 
-        NBTTagCompound tag = new NBTTagCompound();
-        stack.writeToNBT(tag);
+        CompoundNBT tag = new CompoundNBT();
+        stack.write(tag);
 
         ResourceLocation ui = stack.getItem().getRegistryName();
-        tag.setString("owner", ui.getNamespace());
-        tag.setString("name", ui.getPath());
+        tag.putString("owner", ui.getNamespace());
+        tag.putString("name", ui.getPath());
 
         try {
             FileOutputStream fos = new FileOutputStream(targetLocation);
@@ -94,17 +96,18 @@ public class ItemStackDatabase {
                         byte[] abyte = new byte[short1];
                         dos.read(abyte);
                         ByteArrayInputStream byteStream = new ByteArrayInputStream(abyte);
-                        NBTTagCompound tag = CompressedStreamTools.readCompressed(byteStream);
-                        ItemStack stack = new ItemStack(tag);
+                        CompoundNBT tag = CompressedStreamTools.readCompressed(byteStream);
+                        ItemStack stack = new ItemStack((IItemProvider) tag);
                         if (stack.getItem() != Items.AIR) {
                             stacks.add(stack);
                         } else {
                             BluePower.log.error("Couldn't retrieve an itemstack with item id: " + tag.getShort("id"));
-                            Item item = Item.REGISTRY.getObject(new ResourceLocation(tag.getString("owner"), tag.getString("name")));
+                            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tag.getString("owner"), tag.getString("name")));
                             if (item != null && item != Items.AIR) {
-                                ItemStack backupStack = new ItemStack(item, stack.getCount(), tag.getShort("Damage"));
-                                if (stack.hasTagCompound()) {
-                                    backupStack.setTagCompound(stack.getTagCompound());
+                                ItemStack backupStack = new ItemStack(item, stack.getCount());
+                                backupStack.setDamage(tag.getShort("Damage"));
+                                if (stack.hasTag()) {
+                                    backupStack.setTag(stack.getTag());
                                 }
                                 stacks.add(backupStack);
                                 BluePower.log.info("Successfully retrieved stack via its name: " + tag.getString("owner") + ":"

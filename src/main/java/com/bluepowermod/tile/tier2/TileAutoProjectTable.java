@@ -1,14 +1,14 @@
 package com.bluepowermod.tile.tier2;
 
-import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
+import net.minecraft.util.NonNullList;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,30 +26,30 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         if (!craftBuffer.isEmpty())
             drops.add(craftBuffer);
         return drops;
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
-            NBTTagCompound bufferTag = new NBTTagCompound();
-            craftBuffer.writeToNBT(bufferTag);
-            tag.setTag("craftBuffer", bufferTag);
+    public CompoundNBT write(CompoundNBT tag) {
+        super.write(tag);
+            CompoundNBT bufferTag = new CompoundNBT();
+            craftBuffer.write(bufferTag);
+            tag.put("craftBuffer", bufferTag);
 
         return tag;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
+    public void read(CompoundNBT tag) {
+        super.read(tag);
 
-        if (tag.hasKey("craftBuffer")) {
-            craftBuffer = new ItemStack(tag.getCompoundTag("craftBuffer"));
+        if (tag.contains("craftBuffer")) {
+            craftBuffer = new ItemStack((IItemProvider) tag.getCompound("craftBuffer"));
         } else {
             craftBuffer = ItemStack.EMPTY;
         }
@@ -62,7 +62,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(Direction side) {
         return new int[0];
     }
 
@@ -71,12 +71,12 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int slot, ItemStack itemStackIn, Direction direction) {
         return slot < 18;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
+    public boolean canExtractItem(int slot, ItemStack stack, Direction side) {
         if (slot == 18) {
             return true;
         } else {
@@ -111,40 +111,18 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void tick() {
+        super.tick();
         if (markedForBufferFill) {
             markedForBufferFill = false;
         }
     }
 
-
-    @Override
-    public String getName() {
-
-        return BPBlocks.auto_project_table.getTranslationKey();
-    }
-
-    //Todo Fields
     @Override
     public boolean isEmpty() {
         return craftBuffer == ItemStack.EMPTY;
     }
 
-    @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
 
     @Override
     public void clear() {

@@ -1,0 +1,9 @@
+﻿{
+   "parent": "bluepower:block/cube_front_back",
+   "textures": {
+      "side": "bluepower:blocks/machines/block_breaker_side",
+      "front": "bluepower:blocks/machines/block_breaker_front_active",
+      "back": "bluepower:blocks/machines/block_breaker_back",
+      "particle": "bluepower:blocks/machines/block_breaker_side"
+   }
+}

@@ -1,9 +1,9 @@
 package com.bluepowermod.client.gui.widget;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.client.audio.SimpleSound;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -68,8 +68,8 @@ public class BaseWidget implements IGuiWidget {
             GL11.glColor4d(0.2, 0.2, 0.2, 1);
         }
         if (textures.length > 0)
-            Minecraft.getMinecraft().getTextureManager().bindTexture(textures[textureIndex]);
-        Gui.drawModalRectWithCustomSizedTexture(x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
+            Minecraft.getInstance().getTextureManager().bindTexture(textures[textureIndex]);
+        AbstractGui.blit(x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
     }
 
     protected int getTextureU() {
@@ -95,8 +95,8 @@ public class BaseWidget implements IGuiWidget {
     @Override
     public void onMouseClicked(int mouseX, int mouseY, int button) {
 
-        Minecraft.getMinecraft().getSoundHandler()
-                .playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        Minecraft.getInstance().getSoundHandler()
+                .play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         gui.actionPerformed(this);
     }
 

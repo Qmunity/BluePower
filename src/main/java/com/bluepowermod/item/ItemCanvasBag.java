@@ -19,30 +19,47 @@
 
 package com.bluepowermod.item;
 
-import net.minecraft.entity.player.EntityPlayer;
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.container.ContainerCanvasBag;
+import com.bluepowermod.reference.Refs;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.reference.GuiIDs;
+import javax.annotation.Nullable;
 
-public class ItemCanvasBag extends ItemColorableOverlay {
+public class ItemCanvasBag extends ItemColorableOverlay implements INamedContainerProvider{
     
-    public ItemCanvasBag(String name) {
-    
-        super(name);
+    public ItemCanvasBag(MinecraftColor color) {
+        super(color, Refs.CANVASBAG_NAME, new Properties());
     }
-
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand handIn) {
         if (!world.isRemote) {
-            player.openGui(BluePower.instance, GuiIDs.CANVAS_BAG.ordinal(), world, (int) player.posX, (int) player.posY, (int) player.posZ);
+            NetworkHooks.openGui((ServerPlayerEntity) player, this);
         }
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS ,player.getHeldItem(handIn));
+        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(handIn));
     }
-    
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.CANVASBAG_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+        return new ContainerCanvasBag(id, inventory);
+    }
 }

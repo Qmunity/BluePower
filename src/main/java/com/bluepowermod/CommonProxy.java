@@ -17,12 +17,15 @@
 
 package com.bluepowermod;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.server.FMLServerHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class CommonProxy {
 
-    public void init() {
+    private FMLCommonSetupEvent event;
+
+    public void setup(FMLCommonSetupEvent event) {
 
     }
 
@@ -35,7 +38,7 @@ public class CommonProxy {
     }
 
 
-    public EntityPlayer getPlayer() {
+    public PlayerEntity getPlayer() {
 
         return null;
     }
@@ -46,7 +49,7 @@ public class CommonProxy {
     }
 
     public String getSavePath() {
-
-        return FMLServerHandler.instance().getSavesDirectory().getAbsolutePath();
+        //TODO: Possible Crash
+        return Minecraft.getInstance().world.getServer().getDataDirectory().getPath();
     }
 }

@@ -3,11 +3,12 @@ package com.bluepowermod.client.gui.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.container.stack.TubeStack;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.ItemDye;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
@@ -17,29 +18,29 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
     private List<TubeStack> showingItems = new ArrayList<TubeStack>();
     private static final int MAX_ITEMS_X = 5;
 
-    public WidgetTabItemLister(GuiScreen gui, int backgroundColor) {
+    public WidgetTabItemLister(Screen gui, int backgroundColor) {
 
         super(gui, backgroundColor);
     }
 
-    public WidgetTabItemLister(GuiScreen gui, int backgroundColor, ItemStack icon) {
+    public WidgetTabItemLister(Screen gui, int backgroundColor, ItemStack icon) {
 
         super(gui, backgroundColor, icon);
     }
 
-    public WidgetTabItemLister(GuiScreen gui, int backgroundColor, String texture) {
+    public WidgetTabItemLister(Screen gui, int backgroundColor, String texture) {
 
         super(gui, backgroundColor, texture);
     }
 
-    public WidgetTabItemLister(GuiScreen gui, String title, ItemStack icon, int xPos, int yPos, int backGroundColor,
-            IGuiAnimatedStat affectingStat, boolean leftSided) {
+    public WidgetTabItemLister(Screen gui, String title, ItemStack icon, int xPos, int yPos, int backGroundColor,
+                               IGuiAnimatedStat affectingStat, boolean leftSided) {
 
         super(gui, title, icon, xPos, yPos, backGroundColor, affectingStat, leftSided);
     }
 
-    public WidgetTabItemLister(GuiScreen gui, String title, String texture, int xPos, int yPos, int backGroundColor,
-            IGuiAnimatedStat affectingStat, boolean leftSided) {
+    public WidgetTabItemLister(Screen gui, String title, String texture, int xPos, int yPos, int backGroundColor,
+                               IGuiAnimatedStat affectingStat, boolean leftSided) {
 
         super(gui, title, texture, xPos, yPos, backGroundColor, affectingStat, leftSided);
     }
@@ -71,7 +72,7 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
         super.render(fontRenderer, zLevel, partialTicks);
         if (isDoneExpanding()) {
             if (showingItems.size() > 0) {
-                Gui.drawRect(getBaseX() + 7, getAffectedY() + 16, getBaseX() + Math.min(MAX_ITEMS_X, showingItems.size()) * 18 + 9,
+                AbstractGui.fill(getBaseX() + 7, getAffectedY() + 16, getBaseX() + Math.min(MAX_ITEMS_X, showingItems.size()) * 18 + 9,
                         getAffectedY() + 36 + (showingItems.size() - 1) / MAX_ITEMS_X * 18, 0xFFAAAAAA);
             }
             for (int i = 0; i < MAX_ITEMS_X; i++) {
@@ -80,7 +81,7 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
                     int x = getBaseX() + i * 18 + 9;
                     int y = getAffectedY() + j * 18 + 18;
                     if (stack.color != TubeColor.NONE) {
-                        Gui.drawRect(x, y, x + 16, y + 16, 0xFF000000 + ItemDye.DYE_COLORS[stack.color.ordinal()]);
+                        AbstractGui.fill(x, y, x + 16, y + 16, 0xFF000000 + MinecraftColor.values()[stack.color.ordinal()].getHex());
                     }
                     renderItem(fontRenderer, x, y, stack.stack);
                 }

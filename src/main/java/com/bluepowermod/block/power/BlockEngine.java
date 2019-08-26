@@ -8,115 +8,67 @@
 package com.bluepowermod.block.power;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.client.render.ICustomModelBlock;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileEngine;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 
-;import javax.annotation.Nullable;
+import javax.annotation.Nullable;
 
 /**
- *
  * @author TheFjong, MoreThanHidden
- *
  */
 public class BlockEngine extends BlockContainerBase {
 
-    public static final PropertyBool ACTIVE = PropertyBool.create("active");
-    public static final PropertyBool GEAR = PropertyBool.create("gear");
-    public static final PropertyBool GLIDER = PropertyBool.create("glider");
-    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
+    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
+    public static final BooleanProperty GEAR = BooleanProperty.create("gear");
+    public static final BooleanProperty GLIDER = BooleanProperty.create("glider");
+    public static final EnumProperty<Direction> FACING = EnumProperty.create("facing", Direction.class);
 
     public BlockEngine() {
 
         super(Material.IRON, TileEngine.class);
-        setCreativeTab(BPCreativeTabs.machines);
-        setTranslationKey(Refs.ENGINE_NAME);
-        setDefaultState(blockState.getBaseState().withProperty(ACTIVE, false).withProperty(GEAR, false).withProperty(GLIDER, false).withProperty(FACING, EnumFacing.DOWN));
+        setDefaultState(this.stateContainer.getBaseState().with(ACTIVE, false).with(GEAR, false).with(GLIDER, false).with(FACING, Direction.DOWN));
         setRegistryName(Refs.MODID, Refs.ENGINE_NAME);
     }
-
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, ACTIVE, GEAR, GLIDER, FACING);
-    }
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(ACTIVE) ? 0 : 1;
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+        builder.add(ACTIVE, GEAR, GLIDER, FACING);
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(ACTIVE, meta == 1);
-    }
-
-    @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        TileEngine tile = (TileEngine)worldIn.getTileEntity(pos);
-        return ((tile != null) && (tile.getOrientation() != null)) ? getDefaultState().withProperty(FACING, tile.getOrientation()).withProperty(ACTIVE, tile.isActive) : super.getActualState(state, worldIn, pos);
-    }
-
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
-    }
-
-    @Override
-    public boolean isFullCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean rotateBlock(World world, BlockPos pos, EnumFacing dir) {
-        if(!world.isRemote) {
-            TileEngine engine = (TileEngine) world.getTileEntity(pos);
-            if (engine != null) {
-                engine.setOrientation(EnumFacing.byIndex(dir.ordinal()));
-            }
-            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
-        }
-        return super.rotateBlock(world, pos, dir);
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
     @SuppressWarnings("cast")
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack iStack) {
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity player, ItemStack iStack) {
         if (world.getTileEntity(pos) instanceof TileEngine) {
-            EnumFacing facing;
+            Direction facing;
 
             if (player.rotationPitch > 45) {
 
-                facing = EnumFacing.DOWN;
+                facing = Direction.DOWN;
             } else if (player.rotationPitch < -45) {
 
-                facing = EnumFacing.UP;
+                facing = Direction.UP;
             } else {
 
                 facing = player.getHorizontalFacing().getOpposite();
@@ -129,9 +81,8 @@ public class BlockEngine extends BlockContainerBase {
         }
     }
 
-    @SuppressWarnings("cast")
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing efacing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (!player.inventory.getCurrentItem().isEmpty()) {
             Item item = player.inventory.getCurrentItem().getItem();
             if (item == BPItems.screwdriver) {
@@ -139,23 +90,11 @@ public class BlockEngine extends BlockContainerBase {
             }
         }
 
-        return super.onBlockActivated(world, pos, state, player, hand, efacing, hitX, hitY, hitZ);
-    }
-
-
-    /**
-     * Method to be overwritten that returns a GUI ID
-     *
-     * @return
-     */
-    @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.INVALID;
+        return super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult);
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
+    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
         return true;
     }
 

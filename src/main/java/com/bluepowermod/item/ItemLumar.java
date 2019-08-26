@@ -19,48 +19,29 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IBPColoredItem;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemLumar extends ItemBase implements IBPColoredItem{
 
-    public ItemLumar() {
+    private final MinecraftColor color;
 
-        super();
-        this.setCreativeTab(BPCreativeTabs.items);
-        this.setHasSubtypes(true);
-        this.setTranslationKey(Refs.LUMAR_NAME);
-        this.setRegistryName(Refs.MODID + ":" + Refs.LUMAR_NAME);
-    }
-
-    @Override
-    public String getTranslationKey(ItemStack itemStack) {
-
-        return super.getTranslationKey() + "." + Refs.oreDictDyes[15 - itemStack.getItemDamage()].substring(3).toLowerCase();
-    }
-
-    @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if(isInCreativeTab(tab)) {
-            for (int i = 0; i < ItemDye.DYE_COLORS.length; i++) {
-                items.add(new ItemStack(this, 1, i));
-            }
-        }
+    public ItemLumar(MinecraftColor color) {
+        super(new Properties());
+        this.color = color;
+        this.setRegistryName(Refs.MODID + ":" + Refs.LUMAR_NAME + "_" + color.name().toLowerCase());
     }
 
     @Override
     public int getColor(ItemStack stack, int tintIndex) {
-        int damage = stack.getItemDamage();
-        if (damage >= 0 && damage < ItemDye.DYE_COLORS.length) { return ItemDye.DYE_COLORS[15 - damage]; }
-        return 16777215;
+        return color.getHex();
     }
 }

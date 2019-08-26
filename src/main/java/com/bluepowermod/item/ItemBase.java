@@ -22,8 +22,10 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.reference.Refs;
@@ -31,25 +33,14 @@ import net.minecraftforge.event.RegistryEvent;
 
 public class ItemBase extends Item {
 
-    public ItemBase() {
-        super();
+    public ItemBase(Properties properties) {
+        super(properties.group(BPCreativeTabs.items));
         BPItems.itemList.add(this);
     }
 
-    @Override
-    public String getTranslationKey() {
-
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
+    public ItemBase(Properties properties, ItemGroup group) {
+        super(properties.group(group));
+        BPItems.itemList.add(this);
     }
 
-    @Override
-    public String getTranslationKey(ItemStack stack) {
-
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
-    }
-
-    protected String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
-    }
 }

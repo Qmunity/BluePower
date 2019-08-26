@@ -1,14 +1,32 @@
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven { url = "https://files.minecraftforge.net/maven" }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+
+project.ext {
+    major = "0"
+    minor = "3"
+    if (System.getenv("CI_PIPELINE_IID") != null) {
+        build = System.getenv("CI_PIPELINE_IID") + "-alpha"
+    } else {
+        build = "-custom"
+    }
+    mcVersion = "1.14.4"
+}
+
+version = "${project.ext.major}.${project.minor}.${project.build}"
+group = "com.bluepowermod"
+archivesBaseName = "bluepower"
 
 repositories {
     maven {
@@ -28,77 +46,44 @@ repositories {
         url "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
-        name 'MCMultipart'
-        url 'https://maven.amadornes.com/'
-    }
-    maven {
         name 'CTM'
         url 'https://maven.tterrag.com/'
     }
 }
 
-apply plugin: 'maven'
-
-project.ext {
-    major = "0"
-    minor = "3"
-    if (System.getenv("CI_PIPELINE_IID") != null) {
-        build = System.getenv("CI_PIPELINE_IID")
-    } else {
-        build = "-custom"
-    }
-    mcVersion = "1.12.2"
-}
-
-version = "${project.ext.major}.${project.minor}.${project.build}"
-group = "com.bluepowermod"
-archivesBaseName = "BluePower"
-
-dependencies {
-    deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
-    compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
-	deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
-    deobfCompile "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
-	deobfCompile "mezz.jei:jei_1.12.2:4.9.2.196:api"
-	runtime "mezz.jei:jei_1.12.2:4.9.2.196"
-    compile "team.chisel.ctm:CTM:MC1.12.2-0.3.3.22"
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    version = "${project.ext.mcVersion}-14.23.5.2768"
-    runDir = "run"
-	mappings = "snapshot_20180717"
+    mappings channel: 'snapshot', version: '20190719-1.14.3'
 
-    // replacing stuff in the source
-    replace '@MAJOR@', project.major
-    replace '@MINOR@', project.minor
-    replace '@MC_VERSION@', version
-    replace '@BUILD_NUMBER@', project.build
+    runs {
+        client = {
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            properties 'forge.logging.console.level': 'debug'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
+        server = {
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            properties 'forge.logging.console.level': 'debug'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
+    }
 
 }
 
-processResources
-        {
-            // this will ensure that this task is redone when the versions change.
-            inputs.property "version", project.version
-            inputs.property "mcversion", project.minecraft.version
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.49'
+    //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
+    //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
+	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
+    compileOnly fg.deobf("mcp.mobius.waila:Hwyla:1.10.5-B66_1.14.4:api")
+    compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.10:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.10")
+    //compile "team.chisel.ctm:CTM:MC1.12.2-0.3.3.22"
+}
 
-            // replace stuff in mcmod.info, nothing else
-            from(sourceSets.main.resources.srcDirs) {
-                include '*.info'
-
-                // replace version and mcversion
-                expand 'version': project.version, 'mcversion': project.minecraft.version
-            }
-
-            // copy everything else, thats not the mcmod.info
-            from(sourceSets.main.resources.srcDirs) {
-                exclude 'mcmod.info'
-            }
-
-            //This makes sure that it gets run EVERY time
-            outputs.upToDateWhen {false}
-        }
 
 
 jar {
@@ -125,7 +110,6 @@ task apiZip(type: Zip) {
 apiZip.mustRunAfter deobfJar
 
 artifacts {
-    archives sourceJar
     archives deobfJar
     archives apiZip
 }
@@ -194,5 +178,17 @@ uploadArchives {
                 }
             }
         }
+    }
+}
+
+jar {
+    manifest {
+        attributes(["Specification-Title": "bluepower",
+                    "Specification-Vendor": "qmunity",
+                    "Specification-Version": "26.0", // We are version 1 of the modlauncher specification
+                    "Implementation-Title": project.name,
+                    "Implementation-Version": "${version}",
+                    "Implementation-Vendor" :"qmunity",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
 }

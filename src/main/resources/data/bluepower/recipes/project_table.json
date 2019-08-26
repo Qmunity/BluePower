@@ -1,0 +1,25 @@
+﻿{
+  "result": {
+    "item": "bluepower:project_table"
+  },
+  "pattern": [
+    "SSS",
+    "WCW",
+    "WIW"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "tag": "forge:stone"
+    },
+    "C": {
+      "item": "minecraft:crafting_table"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "I": {
+      "item": "minecraft:chest"
+    }
+  }
+}

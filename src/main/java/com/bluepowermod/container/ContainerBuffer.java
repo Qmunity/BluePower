@@ -17,52 +17,59 @@
 
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.tile.tier1.TileBuffer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.tile.tier1.TileBuffer;
 
 public class ContainerBuffer extends Container {
     
-    private final TileBuffer tileBuffer;
+    private final IInventory inventory;
     
-    public ContainerBuffer(InventoryPlayer invPlayer, TileBuffer buffer) {
-    
-        tileBuffer = buffer;
+    public ContainerBuffer(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+        super(BPContainerType.BUFFER, windowId);
+        this.inventory = inventory;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
-                addSlotToContainer(new Slot(buffer, i * 5 + j, 45 + j * 18, 18 + i * 18));
+                addSlot(new Slot(this.inventory, i * 5 + j, 45 + j * 18, 18 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
     }
+
+    public ContainerBuffer(int windowId, PlayerInventory invPlayer) {
+        this(windowId, invPlayer, new Inventory(TileBuffer.SLOTS));
+    }
     
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
     
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 104 + i * 18));
+                addSlot(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 104 + i * 18));
             }
         }
         
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 162));
+            addSlot(new Slot(invPlayer, j, 8 + j * 18, 162));
         }
     }
     
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
     
-        return tileBuffer.isUsableByPlayer(player);
+        return inventory.isUsableByPlayer(player);
     }
     
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
     
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);

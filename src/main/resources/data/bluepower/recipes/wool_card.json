@@ -1,0 +1,22 @@
+﻿{
+  "result": {
+    "item": "bluepower:wool_card"
+  },
+  "pattern": [
+    "f",
+    "p",
+    "s"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "tag": "minecraft:planks"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    },
+    "f": {
+      "item": "bluepower:iron_wire"
+    }
+  }
+}

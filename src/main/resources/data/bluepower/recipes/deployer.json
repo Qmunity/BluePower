@@ -1,0 +1,25 @@
+﻿{
+  "result": {
+    "item": "bluepower:deployer"
+  },
+  "pattern": [
+    "SCS",
+    "SPS",
+    "SRS"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "item": "minecraft:cobblestone"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "C": {
+      "item": "minecraft:chest"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    }
+  }
+}

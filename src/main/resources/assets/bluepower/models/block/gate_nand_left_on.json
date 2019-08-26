@@ -1,0 +1,7 @@
+{
+    "parent": "bluepower:block/gate_nand_left",
+    "textures": {
+        "bluestone_left": "bluepower:base/bluestone_on",
+        "torch_left": "bluepower:blocks/bluestone_torch_off"
+    }
+}

@@ -1,0 +1,19 @@
+﻿{
+  "result": {
+    "item": "bluepower:tiles",
+    "count": 4
+  },
+  "pattern": [
+    "MB",
+    "BM"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "bluepower:basalt_tile"
+    },
+    "M": {
+      "item": "bluepower:marble_tile"
+    }
+  }
+}

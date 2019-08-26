@@ -1,10 +1,9 @@
 package com.bluepowermod.container.inventory;
 
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageCraftingSync;
 import com.bluepowermod.tile.tier1.TileProjectTable;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -12,13 +11,13 @@ import javax.annotation.Nonnull;
 /**
  *@author MoreThanHidden
  **/
-public class InventoryProjectTableCrafting extends InventoryCrafting{
+public class InventoryProjectTableCrafting extends CraftingInventory {
 
     private final int length;
-    private final TileProjectTable projectTable;
+    private final IInventory projectTable;
     private final Container eventHandler;
 
-    public InventoryProjectTableCrafting(Container eventHandlerIn, TileProjectTable projectTable, int width, int height) {
+    public InventoryProjectTableCrafting(Container eventHandlerIn, IInventory projectTable, int width, int height) {
         super(eventHandlerIn, width, height);
         this.length = width * height;
         this.projectTable = projectTable;
@@ -32,14 +31,9 @@ public class InventoryProjectTableCrafting extends InventoryCrafting{
 
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
-        this.projectTable.setCraftingSlotContents(slot, stack);
+        this.projectTable.setInventorySlotContents(18 + slot, stack);
         eventHandler.onCraftMatrixChanged(this);
 
-    }
-
-    @Override
-    public boolean hasCustomName() {
-        return false;
     }
 
     @Override
@@ -53,7 +47,7 @@ public class InventoryProjectTableCrafting extends InventoryCrafting{
     @Nonnull
     @Override
     public ItemStack getStackInSlot(int index) {
-        return index >= this.getSizeInventory() ? ItemStack.EMPTY : this.projectTable.getStackInCraftingSlot(index);
+        return 18 + index >= 18 + this.getSizeInventory() ? ItemStack.EMPTY : this.projectTable.getStackInSlot(18 + index);
     }
 
     @Nonnull
@@ -69,7 +63,7 @@ public class InventoryProjectTableCrafting extends InventoryCrafting{
                 return itemstack;
             }
             else {
-                itemstack = this.getStackInSlot(index).splitStack(count);
+                itemstack = this.getStackInSlot(index).split(count);
 
                 if(this.getStackInSlot(index).getCount() == 0) {
                     this.setInventorySlotContents(index, ItemStack.EMPTY);

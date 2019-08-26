@@ -1,20 +1,5 @@
-{
-  "forge_marker": 1,
-  "defaults": {
-    "textures": {
-      "end": "bluepower:blocks/rubber_log_top",
-      "side": "bluepower:blocks/rubber_log_side"
-    },
-    "model": "cube_column",
-    "uvlock": true
-  },
-  "variants": {
-    "normal": [{}],
-    "inventory": [{}],
-    "axis": {
-      "x":{"x": 90, "y": 270},
-      "y":{},
-      "z":{"x": 90}
-    }
-  }
+﻿{
+   "variants": {
+      "": [{"model": "bluepower:block/rubber_log"}]
+   }
 }

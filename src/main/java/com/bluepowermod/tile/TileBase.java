@@ -19,12 +19,14 @@ package com.bluepowermod.tile;
 
 import com.bluepowermod.block.BlockContainerFacingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -33,11 +35,15 @@ import java.util.List;
 /**
  * @author MineMaarten
  */
-public class TileBase extends TileEntity implements IRotatable, ITickable {
+public class TileBase extends TileEntity implements IRotatable, ITickableTileEntity {
 
     private boolean isRedstonePowered;
     private int outputtingRedstone;
     private int ticker = 0;
+
+    public TileBase(TileEntityType<?> type) {
+        super(type);
+    }
 
     /*************** BASIC TE FUNCTIONS **************/
 
@@ -45,9 +51,9 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(NBTTagCompound tCompound) {
+    public void read(CompoundNBT tCompound) {
 
-        super.readFromNBT(tCompound);
+        super.read(tCompound);
         isRedstonePowered = tCompound.getBoolean("isRedstonePowered");
         readFromPacketNBT(tCompound);
     }
@@ -56,10 +62,10 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
+    public CompoundNBT write(CompoundNBT tCompound) {
 
-        super.writeToNBT(tCompound);
-        tCompound.setBoolean("isRedstonePowered", isRedstonePowered);
+        super.write(tCompound);
+        tCompound.putBoolean("isRedstonePowered", isRedstonePowered);
 
         writeToPacketNBT(tCompound);
         return  tCompound;
@@ -70,11 +76,11 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
      * 
      * @param tCompound
      */
-    protected void writeToPacketNBT(NBTTagCompound tCompound) {
-        tCompound.setByte("outputtingRedstone", (byte) outputtingRedstone);
+    protected void writeToPacketNBT(CompoundNBT tCompound) {
+        tCompound.putByte("outputtingRedstone", (byte) outputtingRedstone);
     }
 
-    protected void readFromPacketNBT(NBTTagCompound tCompound) {
+    protected void readFromPacketNBT(CompoundNBT tCompound) {
         outputtingRedstone = tCompound.getByte("outputtingRedstone");
         if (world != null)
             markForRenderUpdate();
@@ -82,14 +88,14 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
 
     @Nullable
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tCompound = new NBTTagCompound();
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        CompoundNBT tCompound = new CompoundNBT();
         writeToPacketNBT(tCompound);
-        return new SPacketUpdateTileEntity(pos, 0, tCompound);
+        return new SUpdateTileEntityPacket(pos, 0, tCompound);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 
         readFromPacketNBT(pkt.getNbtCompound());
     }
@@ -97,30 +103,19 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
     protected void sendUpdatePacket() {
 
         if (!world.isRemote)
-        world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
+        world.notifyNeighborsOfStateChange(pos, getBlockState().getBlock());
     }
 
     protected void markForRenderUpdate() {
 
         if (world != null)
-            world.markBlockRangeForRenderUpdate(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
+            //TODO: Check this is correct in 1.14.4
+            world.func_225319_b(pos, getBlockState(), getBlockState());
     }
 
     protected void notifyNeighborBlockUpdate() {
 
         //world.notifyBlocksOfNeighborChange(pos, getBlockType());
-    }
-
-    /**
-     * Function gets called every tick.
-     */
-    @Override
-    public void update() {
-
-        if (ticker == 0) {
-            onTileLoaded();
-        }
-        ticker++;
     }
 
     /**
@@ -213,13 +208,13 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
             onBlockNeighbourChanged();
     }
 
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        return new ArrayList<ItemStack>();
+        return NonNullList.create();
     }
 
     @Override
-    public void setFacingDirection(EnumFacing dir) {
+    public void setFacingDirection(Direction dir) {
         if(world.getBlockState(pos).getBlock() instanceof BlockContainerFacingBase) {
             BlockContainerFacingBase.setState(dir, world, pos);
             if (world != null) {
@@ -230,15 +225,23 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
     }
 
     @Override
-    public EnumFacing getFacingDirection() {
+    public Direction getFacingDirection() {
         if(world.getBlockState(pos).getBlock() instanceof BlockContainerFacingBase) {
-            return world.getBlockState(pos).getValue(BlockContainerFacingBase.FACING);
+            return world.getBlockState(pos).get(BlockContainerFacingBase.FACING);
         }
-        return EnumFacing.UP;
+        return Direction.UP;
     }
 
     public boolean canConnectRedstone() {
 
         return false;
+    }
+
+    @Override
+    public void tick() {
+        if (ticker == 0) {
+            onTileLoaded();
+        }
+        ticker++;
     }
 }

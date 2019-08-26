@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "bluepower:basalt_cobble"
+  },
+  "result": "bluepower:basalt",
+  "cookingtime": 200
+}

@@ -1,0 +1,6 @@
+﻿{
+   "parent": "block/crop",
+   "textures": {
+      "crop": "bluepower:blocks/flax_crop_stage_4"
+   }
+}

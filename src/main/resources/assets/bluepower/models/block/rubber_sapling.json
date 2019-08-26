@@ -1,0 +1,6 @@
+﻿{
+   "parent": "block/cross",
+   "textures": {
+      "cross": "bluepower:blocks/rubber_sapling"
+   }
+}

@@ -19,52 +19,62 @@
 
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
+import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tile.tier1.TileRelay;
 
-public class ContainerRelay extends ContainerMachineBase {
+public class ContainerRelay extends Container {
 
-    private final TileRelay tileRelay;
+    private final IInventory relay;
 
-    public ContainerRelay(InventoryPlayer invPlayer, TileRelay relay) {
-        super(relay);
-        tileRelay = relay;
+    public ContainerRelay(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+        super(BPContainerType.RELAY, windowId);
+        this.relay = inventory;
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                addSlotToContainer(new Slot(relay, j + i * 3, 62 + j * 18, 17 + i * 18));
+                addSlot(new Slot(relay, j + i * 3, 62 + j * 18, 17 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    public ContainerRelay( int id, PlayerInventory player )    {
+        this( id, player, new Inventory( TileRelay.SLOTS ));
+    }
+
+
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                addSlot(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
+            addSlot(new Slot(invPlayer, j, 8 + j * 18, 142));
         }
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
 
-        return tileRelay.isUsableByPlayer(player);
+        return relay.isUsableByPlayer(player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);

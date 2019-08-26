@@ -1,22 +1,12 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "textures": {
-      "top": "bluepower:blocks/machines/blutricity_furnace_top",
-      "bottom": "bluepower:blocks/machines/blutricity_furnace_bottom",
-      "front": "bluepower:blocks/machines/blutricity_furnace_front_off",
-      "side": "bluepower:blocks/machines/blutricity_furnace_side",
-      "particle": "bluepower:blocks/machines/blutricity_furnace_side"
-    },
-    "model": "bluepower:cube_front",
-    "uvlock": true
-  },
   "variants": {
-    "normal": [{}],
-    "inventory": [{}],
-    "active":{
-      "true":{"textures": {"front": "bluepower:blocks/machines/blutricity_furnace_front_on"}},
-      "false":{"textures": {"front": "bluepower:blocks/machines/blutricity_furnace_front_off"}}
-    }
+    "facing=north,active=false": { "model": "bluepower:block/blutricity_furnace" },
+    "facing=south,active=false": { "model": "bluepower:block/blutricity_furnace", "y": 180 },
+    "facing=west,active=false": { "model": "bluepower:block/blutricity_furnace", "y": 270 },
+    "facing=east,active=false": { "model": "bluepower:block/blutricity_furnace", "y": 90 },
+    "facing=north,active=true": { "model": "bluepower:block/blutricity_furnace_on" },
+    "facing=south,active=true": { "model": "bluepower:block/blutricity_furnace_on", "y": 180 },
+    "facing=west,active=true": { "model": "bluepower:block/blutricity_furnace_on", "y": 270 },
+    "facing=east,active=true": { "model": "bluepower:block/blutricity_furnace_on", "y": 90 }
   }
 }

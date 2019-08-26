@@ -9,39 +9,64 @@ package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
+import com.bluepowermod.container.ContainerRegulator;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
  * @author MineMaarten
  */
-public class TileRegulator extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive{
+public class TileRegulator extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, INamedContainerProvider {
 
-    private NonNullList<ItemStack> inventory = NonNullList.withSize(27, ItemStack.EMPTY);
+    public static final int SLOTS = 27;
+    private NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
     public TubeColor color = TubeColor.NONE;
     public int mode;
     public int fuzzySetting;
+
+    public TileRegulator() {
+        super(BPTileEntityType.REGULATOR);
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.REGULATOR_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+        return new ContainerRegulator(id, inventory, this);
+    }
 
     private enum EnumSection {
         INPUT_FILTER, BUFFER, OUTPUT_FILTER
     }
 
     @Override
-    public void update() {
-
-        super.update();
+    public void tick() {
+        super.tick();
         if (!world.isRemote) {
             boolean ratiosMatch = true;
             for (int i = 0; i < 9; i++) {
@@ -112,7 +137,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+    public void onButtonPress(PlayerEntity player, int messageId, int value) {
 
         if (messageId == 1) {
             mode = value;
@@ -195,9 +220,9 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         for (int i = 9; i < 18; i++) {
             if (!inventory.get(i).isEmpty())
                 drops.add(inventory.get(i));
@@ -206,41 +231,41 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+    public CompoundNBT write(CompoundNBT tag) {
 
-        super.writeToNBT(tag);
+        super.write(tag);
 
-        tag.setByte("filterColor", (byte) color.ordinal());
-        tag.setByte("mode", (byte) mode);
-        tag.setByte("fuzzySetting", (byte) fuzzySetting);
+        tag.putByte("filterColor", (byte) color.ordinal());
+        tag.putByte("mode", (byte) mode);
+        tag.putByte("fuzzySetting", (byte) fuzzySetting);
 
-        NBTTagList tagList = new NBTTagList();
+        ListNBT tagList = new ListNBT();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
-                NBTTagCompound tagCompound = new NBTTagCompound();
-                tagCompound.setByte("Slot", (byte) currentIndex);
-                inventory.get(currentIndex).writeToNBT(tagCompound);
-                tagList.appendTag(tagCompound);
+                CompoundNBT tagCompound = new CompoundNBT();
+                tagCompound.putByte("Slot", (byte) currentIndex);
+                inventory.get(currentIndex).write(tagCompound);
+                tagList.add(tagCompound);
         }
-        tag.setTag("Items", tagList);
+        tag.put("Items", tagList);
         return tag;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
+    public void read(CompoundNBT tag) {
 
-        super.readFromNBT(tag);
+        super.read(tag);
 
         color = TubeColor.values()[tag.getByte("filterColor")];
         mode = tag.getByte("mode");
         fuzzySetting = tag.getByte("fuzzySetting");
 
-        NBTTagList tagList = tag.getTagList("Items", 10);
+        ListNBT tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(27, ItemStack.EMPTY);
-        for (int i = 0; i < tagList.tagCount(); ++i) {
-            NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
+        for (int i = 0; i < tagList.size(); ++i) {
+            CompoundNBT tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, new ItemStack(tagCompound));
+                inventory.set(slot, new ItemStack((IItemProvider) tagCompound));
             }
         }
     }
@@ -265,7 +290,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
             if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
-                itemStack = itemStack.splitStack(amount);
+                itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
@@ -291,35 +316,23 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public String getName() {
-
-        return BPBlocks.regulator.getTranslationKey();
-    }
-
-    @Override
-    public boolean hasCustomName() {
-
-        return false;
-    }
-
-    @Override
     public int getInventoryStackLimit() {
 
         return 64;
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return true;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -330,7 +343,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == getFacingDirection() || side == getOutputDirection())
             return new int[0];
         int[] slots = new int[9];
@@ -340,12 +353,12 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         return true;
     }
 
@@ -353,21 +366,6 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     @Override
     public boolean isEmpty() {
         return inventory.size() == 0;
-    }
-
-    @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
     }
 
     @Override

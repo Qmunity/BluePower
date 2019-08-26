@@ -1,5 +1,6 @@
 package com.bluepowermod.compat.mcmp;
 
+/*
 import com.bluepowermod.block.machine.BlockLampSurface;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.compat.mcmp.parts.PartLamp;
@@ -12,7 +13,7 @@ import mcmultipart.api.ref.MCMPCapabilities;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -44,13 +45,13 @@ public class MCMPAddon implements IMCMPAddon{
                 IMultipartTile multipartTileLamp = IMultipartTile.wrap(te.getObject());
 
                 @Override
-                public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+                public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing) {
                     return Objects.equals(capability, MCMPCapabilities.MULTIPART_TILE);
                 }
 
                 @Nullable
                 @Override
-                public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+                public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
                     return capability == MCMPCapabilities.MULTIPART_TILE ? MCMPCapabilities.MULTIPART_TILE.cast(multipartTileLamp) : null;
                 }
             });
@@ -58,3 +59,4 @@ public class MCMPAddon implements IMCMPAddon{
     }
 
 }
+*/

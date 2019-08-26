@@ -1,0 +1,11 @@
+﻿{
+  "result": {
+    "item": "bluepower:basalt_tile"
+  },
+  "ingredients": [
+    {
+      "item": "bluepower:basalt_paver"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

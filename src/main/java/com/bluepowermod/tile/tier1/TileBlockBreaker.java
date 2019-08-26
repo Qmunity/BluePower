@@ -17,14 +17,15 @@
 
 package com.bluepowermod.tile.tier1;
 
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fluids.IFluidBlock;
 
 import java.util.List;
@@ -32,30 +33,33 @@ import java.util.List;
 ;
 
 public class TileBlockBreaker extends TileMachineBase {
-    
+
+    public TileBlockBreaker() {
+        super(BPTileEntityType.BLOCKBREAKER);
+    }
+
     @Override
     protected void redstoneChanged(boolean newValue) {
     
         super.redstoneChanged(newValue);
         
         if (!world.isRemote && newValue) {
-            EnumFacing direction = getFacingDirection();
-            IBlockState breakState = world.getBlockState(pos.offset(direction));
+            Direction direction = getFacingDirection();
+            BlockState breakState = world.getBlockState(pos.offset(direction));
             if (!canBreakBlock(breakState.getBlock(), world, breakState, pos.offset(direction))) return;
-            List<ItemStack> breakStacks = breakState.getBlock().getDrops(world, pos.offset(direction), breakState, 0);
+            List<ItemStack> breakStacks = breakState.getBlock().getDrops(breakState, (ServerWorld) world, pos.offset(direction),this);
             world.destroyBlock(pos.offset(direction), false); // destroyBlock
             addItemsToOutputBuffer(breakStacks);
         }
     }
 
-    private boolean canBreakBlock(Block block, World world, IBlockState state, BlockPos pos) {
+    private boolean canBreakBlock(Block block, World world, BlockState state, BlockPos pos) {
     
-        return !world.isAirBlock(pos) && !(block instanceof BlockLiquid) && !(block instanceof IFluidBlock) && block.getBlockHardness(state, world, pos) > -1.0F;
+        return !world.isAirBlock(pos) && !(block instanceof IFluidBlock) && block.getBlockHardness(state, world, pos) > -1.0F;
     }
     
     @Override
     public boolean canConnectRedstone() {
-    
         return true;
     }
 }

@@ -22,20 +22,19 @@ import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ClientProxy extends CommonProxy {
 
     @Override
-    public void init() {
+    public void setup(FMLCommonSetupEvent event) {
 
     }
 
@@ -53,25 +52,25 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public EntityPlayer getPlayer() {
+    public PlayerEntity getPlayer() {
 
-        return FMLClientHandler.instance().getClientPlayerEntity();
+        return Minecraft.getInstance().player;
     }
 
     @Override
     public boolean isSneakingInGui() {
 
-        return Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode());
+
+        return Minecraft.getInstance().gameSettings.keyBindSneak.isKeyDown();
     }
 
-    public static GuiScreen getOpenedGui() {
-
-        return FMLClientHandler.instance().getClient().currentScreen;
+    public static Screen getOpenedGui() {
+        return Minecraft.getInstance().currentScreen;
     }
 
     @Override
     public String getSavePath() {
 
-        return Minecraft.getMinecraft().gameDir.getAbsolutePath();
+        return Minecraft.getInstance().gameDir.getAbsolutePath();
     }
 }

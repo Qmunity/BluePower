@@ -19,19 +19,19 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerEjector;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileEjector;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiEjector extends GuiContainerBaseBP {
+public class GuiEjector extends GuiContainerBaseBP<ContainerEjector> implements IHasContainer<ContainerEjector> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
 
-    public GuiEjector(InventoryPlayer invPlayer, TileEjector ejector) {
-
-        super(ejector, new ContainerEjector(invPlayer, ejector), resLoc);
+    public GuiEjector(ContainerEjector container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
     }
 }

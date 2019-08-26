@@ -1,11 +1,5 @@
 ﻿{
-  "forge_marker": 1,
-  "defaults": {
-    "model": "bluepower:solar_panel",
-    "uvlock": true
-  },
-  "variants": {
-    "normal": [{}],
-    "inventory": [{}]
-  }
+   "variants": {
+      "": [{"model": "bluepower:block/solar_panel"}]
+   }
 }

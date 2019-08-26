@@ -1,14 +1,13 @@
 package com.bluepowermod.api.power;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
 import javax.annotation.Nullable;
-import java.util.concurrent.Callable;
 
 /**
  * @author MoreThanHidden
@@ -19,22 +18,23 @@ public class CapabilityBlutricity {
     public static Capability<IPowerBase> BLUTRICITY_CAPABILITY = null;
 
     public static void register(){
-        CapabilityManager.INSTANCE.register(IPowerBase.class, new DefaultBlutricityStorage<>(), BlutricityStorage.class);
+        //TODO: Add factory
+        CapabilityManager.INSTANCE.register(IPowerBase.class, new DefaultBlutricityStorage<>(), () -> {throw new UnsupportedOperationException();});
     }
 
     private static class DefaultBlutricityStorage<T extends IPowerBase> implements Capability.IStorage<T> {
 
         @Nullable
         @Override
-        public NBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side) {
-            NBTTagCompound nbt = new NBTTagCompound();
-            nbt.setDouble("blutricity", instance.getVoltage());
+        public INBT writeNBT(Capability<T> capability, T instance, Direction direction) {
+            CompoundNBT nbt = new CompoundNBT();
+            nbt.putDouble("blutricity", instance.getVoltage());
             return nbt;
         }
 
         @Override
-        public void readNBT(Capability<T> capability, T instance, EnumFacing side, NBTBase nbt) {
-            NBTTagCompound tags = (NBTTagCompound) nbt;
+        public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
+            CompoundNBT tags = (CompoundNBT) nbt;
             double energy = tags.getDouble("blutricity");
             instance.addEnergy(-(instance.getVoltage() - energy), false);
         }

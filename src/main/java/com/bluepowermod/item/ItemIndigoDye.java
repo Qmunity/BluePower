@@ -17,31 +17,29 @@
 
 package com.bluepowermod.item;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 
 public class ItemIndigoDye extends ItemBase {
 
     public ItemIndigoDye(String name) {
-
-        this.setTranslationKey(name);
-        this.setCreativeTab(BPCreativeTabs.items);
+		super(new Properties());
         this.setRegistryName(Refs.MODID + ":" + name);
     }
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase entity, EnumHand hand) {
-		if (entity instanceof EntitySheep) {
-			EntitySheep sheep = (EntitySheep) entity;
-			if (!sheep.getSheared() && sheep.getFleeceColor() != EnumDyeColor.PURPLE) {
-				sheep.setFleeceColor(EnumDyeColor.PURPLE);
+	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
+		if (entity instanceof SheepEntity) {
+			SheepEntity sheep = (SheepEntity) entity;
+			if (!sheep.getSheared() && sheep.getFleeceColor() != DyeColor.PURPLE) {
+				sheep.setFleeceColor(DyeColor.PURPLE);
 				stack.setCount(stack.getCount() - 1);
 			}
 			return true;

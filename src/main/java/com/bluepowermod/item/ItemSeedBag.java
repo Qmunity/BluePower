@@ -20,40 +20,55 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.container.ContainerCanvasBag;
+import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.container.inventory.InventoryItem;
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerProvider;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.items.ItemStackHandler;
 
-;
+import javax.annotation.Nullable;
 
-public class ItemSeedBag extends ItemBase {
+public class ItemSeedBag extends ItemBase implements INamedContainerProvider {
 
     public ItemSeedBag(String name) {
-        this.setCreativeTab(BPCreativeTabs.items);
-        this.setTranslationKey(name);
+        super(new Properties().maxStackSize(1));
         this.setRegistryName(Refs.MODID + ":" + name);
-        this.maxStackSize = 1;
     }
 
     public static ItemStack getSeedType(ItemStack seedBag) {
         ItemStack seed = ItemStack.EMPTY;
 
-        IInventory seedBagInventory = InventoryItem.getItemInventory(seedBag, "Seed Bag", 9);
-        for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
-            ItemStack is = seedBagInventory.getStackInSlot(i);
+        ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
+
+        //Get Items from the NBT Handler
+        if (seedBag.hasTag()) seedBagInvHandler.deserializeNBT(seedBag.getTag().getCompound("inv"));
+
+        for (int i = 0; i < 9; i++) {
+            ItemStack is = seedBagInvHandler.getStackInSlot(i);
             if (!is.isEmpty()) {
                 seed = is;
             }
@@ -71,15 +86,19 @@ public class ItemSeedBag extends ItemBase {
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
 
-        return stack.getTagCompound() != null;
+        return stack.getTag() != null;
     }
 
     public int getItemDamageForDisplay(ItemStack stack) {
 
         int items = 0;
-        IInventory seedBagInventory = InventoryItem.getItemInventory(stack, "Seed Bag", 9);
-        for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
-            ItemStack is = seedBagInventory.getStackInSlot(i);
+        ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
+
+        //Get Items from the NBT Handler
+        if (stack.hasTag()) seedBagInvHandler.deserializeNBT(stack.getTag().getCompound("inv"));
+
+        for (int i = 0; i < 8; i++) {
+            ItemStack is = seedBagInvHandler.getStackInSlot(i);
             if (!is.isEmpty()) {
                 items += is.getCount();
             }
@@ -94,50 +113,75 @@ public class ItemSeedBag extends ItemBase {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldObj, EntityPlayer playerEntity, EnumHand handIn) {
-        if (!worldObj.isRemote && playerEntity.isSneaking()) {
-            playerEntity.openGui(BluePower.instance, GuiIDs.SEEDBAG.ordinal(), worldObj, (int) playerEntity.posX, (int) playerEntity.posY,
-                    (int) playerEntity.posZ);
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand handIn) {
+        if (!world.isRemote && player.isSneaking()) {
+            NetworkHooks.openGui((ServerPlayerEntity) player, this);
         }
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerEntity.getHeldItem(handIn));
+        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(handIn));
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(ItemUseContext context) {
+        PlayerEntity player = context.getPlayer();
+        World worldIn = context.getWorld();
+        Hand hand = context.getHand();
+        BlockPos pos = context.getPos();
+
         if (player.isSneaking()) {
-            return EnumActionResult.PASS;
+            return ActionResultType.PASS;
         }
 
-        IInventory seedBagInventory = InventoryItem.getItemInventory(player, player.getHeldItem(hand), "Seed Bag", 9);
-        seedBagInventory.openInventory(player);
+        ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
+
+        //Get Active hand
+        Hand activeHand = Hand.MAIN_HAND;
+        ItemStack seedBag = player.getHeldItem(activeHand);
+        if(!(seedBag.getItem() instanceof ItemSeedBag)){
+            seedBag = player.getHeldItemOffhand();
+            activeHand = Hand.OFF_HAND;
+        }
+
+        //Get Items from the NBT Handler
+        if (seedBag.hasTag()) seedBagInvHandler.deserializeNBT(seedBag.getTag().getCompound("inv"));
 
         ItemStack seed = getSeedType(player.getHeldItem(hand));
-        if (!seed.isEmpty() && seed.getItem() instanceof IPlantable) {
-            IPlantable plant = (IPlantable) seed.getItem();
-            for (int modX = -2; modX < 3; modX++) {
-                for (int modZ = -2; modZ < 3; modZ++) {
-                    IBlockState b = worldIn.getBlockState(pos.add(modX, 0, modZ));
-                    if (b.getBlock().canSustainPlant(b, worldIn, pos, EnumFacing.UP, plant)
-                            && worldIn.isAirBlock(pos.add(modX, 1, modZ))) {
-                        for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
-                            ItemStack is = seedBagInventory.getStackInSlot(i);
-                            if (!is.isEmpty()) {
-
-                                Item item = is.getItem();
-                                item.onItemUse(player, worldIn, pos.add(modX, 0, modZ), hand, facing, hitX + modX, hitY, hitZ + modZ);
-                                seedBagInventory.decrStackSize(i, 0);
-                                break;
-                            }
-                        }
+        Block block = Block.getBlockFromItem(seed.getItem());
+        if (!seed.isEmpty() && block instanceof IPlantable) {
+            IPlantable plant = (IPlantable) block;
+            BlockState b = worldIn.getBlockState(pos);
+            if (b.getBlock().canSustainPlant(b, worldIn, pos, Direction.UP, plant)
+                    && worldIn.isAirBlock(pos.offset(Direction.UP))) {
+                for (int i = 0; i < 9; i++) {
+                    ItemStack is = seedBagInvHandler.getStackInSlot(i);
+                    if (!is.isEmpty()) {
+                        worldIn.setBlockState(pos.offset(Direction.UP), block.getDefaultState(), 0);
+                        seedBagInvHandler.extractItem(i, 1, false);
+                        break;
                     }
                 }
+
+                //Update items in the NBT
+                if (!seedBag.hasTag())
+                    seedBag.setTag(new CompoundNBT());
+                if (seedBag.getTag() != null) {
+                    seedBag.getTag().put("inv", seedBagInvHandler.serializeNBT());
+                }
+
+                return ActionResultType.SUCCESS;
             }
-            return EnumActionResult.SUCCESS;
-
         }
-
-        seedBagInventory.closeInventory(player);
-
-        return EnumActionResult.PASS;
+        return ActionResultType.PASS;
     }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.SEEDBAG_NAME);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+        return new ContainerSeedBag(id, inventory);
+    }
+
 }

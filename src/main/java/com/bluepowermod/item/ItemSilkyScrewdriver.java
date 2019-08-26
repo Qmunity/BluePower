@@ -19,45 +19,28 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.UseAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 public class ItemSilkyScrewdriver extends ItemBase {
 
     public ItemSilkyScrewdriver() {
-
-        setTranslationKey(Refs.SILKYSCREWDRIVER_NAME);
-        setCreativeTab(BPCreativeTabs.tools);
-        setMaxDamage(250);
-        setMaxStackSize(1);
+        super(new Properties().maxDamage(250), BPCreativeTabs.tools);
         setRegistryName(Refs.MODID + ":" + Refs.SILKYSCREWDRIVER_NAME);
     }
 
-
     @Override
-    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-            return EnumActionResult.PASS;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public boolean isFull3D() {
-
-        return true;
-    }
-
-    @Override
-    public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-
-        return EnumAction.BLOCK;
+    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+            return ActionResultType.PASS;
     }
 }

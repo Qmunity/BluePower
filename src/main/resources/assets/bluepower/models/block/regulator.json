@@ -1,0 +1,11 @@
+﻿{
+   "parent": "bluepower:block/cube_front_back",
+   "textures": {
+      "side": "bluepower:blocks/machines/regulator_side",
+      "top": "bluepower:blocks/machines/regulator_side_0",
+      "bottom": "bluepower:blocks/machines/regulator_side_0",
+      "front": "bluepower:blocks/machines/regulator_front",
+      "back": "bluepower:blocks/machines/regulator_back",
+      "particle": "bluepower:blocks/machines/regulator_side"
+   }
+}

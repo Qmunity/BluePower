@@ -7,10 +7,10 @@
  */
 package com.bluepowermod.item;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import com.bluepowermod.api.misc.MinecraftColor;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 
 /**
@@ -18,24 +18,18 @@ import net.minecraft.util.NonNullList;
  */
 public abstract class ItemDamageableColorableOverlay extends ItemColorableOverlay {
 
-    public ItemDamageableColorableOverlay(String name) {
-
-        super(name);
+    public ItemDamageableColorableOverlay(MinecraftColor color, String name, Properties properties) {
+        super(color, name, properties);
     }
-
-    @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if(isInCreativeTab(tab)) {
-            items.add(new ItemStack(this, 1, 16));
-            super.getSubItems(tab, items);
-        }
+    public ItemDamageableColorableOverlay(String name, Properties properties) {
+        super(name, properties);
     }
 
     public static int getUsesUsed(ItemStack stack) {
 
-        NBTTagCompound tag = stack.getTagCompound();
+        CompoundNBT tag = stack.getTag();
         if (tag != null) {
-            return tag.getInteger("usesUsed");
+            return tag.getInt("usesUsed");
         } else {
             return 0;
         }
@@ -43,17 +37,17 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
 
     public static void setUsesUsed(ItemStack stack, int newUses) {
 
-        NBTTagCompound tag = stack.getTagCompound();
+        CompoundNBT tag = stack.getTag();
         if (tag == null) {
-            tag = new NBTTagCompound();
-            stack.setTagCompound(tag);
+            tag = new CompoundNBT();
+            stack.setTag(tag);
         }
-        tag.setInteger("usesUsed", newUses);
+        tag.putInt("usesUsed", newUses);
     }
 
     public boolean tryUseItem(ItemStack stack) {
 
-        if (stack.getItemDamage() == 16)
+        if (stack.getDamage() == 16)
             return true;
         if (getUsesUsed(stack) < getMaxUses()) {
             int newUses = getUsesUsed(stack) + 1;
@@ -61,7 +55,7 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
                 setUsesUsed(stack, newUses);
             } else {
                 setUsesUsed(stack, 0);
-                stack.setItemDamage(16);
+                stack.setDamage(16);
             }
             return true;
         } else {

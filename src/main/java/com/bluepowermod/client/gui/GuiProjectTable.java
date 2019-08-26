@@ -23,7 +23,9 @@ import java.util.List;
 
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
-import net.minecraft.entity.player.InventoryPlayer;
+import com.bluepowermod.container.ContainerAlloyFurnace;
+import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerProjectTable;
@@ -31,26 +33,26 @@ import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileProjectTable;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * @author MineMaarten
  */
-public class GuiProjectTable extends GuiContainerBaseBP {
+public class GuiProjectTable extends GuiContainerBaseBP<ContainerProjectTable> implements IHasContainer<ContainerProjectTable> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/project_table.png");
-    private final TileProjectTable projectTable;
+    private final ContainerProjectTable projectTable;
 
-    public GuiProjectTable(InventoryPlayer invPlayer, TileProjectTable projectTable) {
-
-        super(projectTable, new ContainerProjectTable(invPlayer, projectTable), resLoc);
-        this.projectTable = projectTable;
+    public GuiProjectTable(ContainerProjectTable container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.projectTable = container;
         ySize = 208;
     }
 
     @Override
-    public void initGui() {
+    public void init() {
 
-        super.initGui();
+        super.init();
         addWidget(new WidgetMode(0, guiLeft + 15, guiTop + 20, 176, 1, Refs.MODID + ":textures/gui/project_table.png") {
 
             @Override
@@ -63,7 +65,6 @@ public class GuiProjectTable extends GuiContainerBaseBP {
 
     @Override
     public void actionPerformed(IGuiWidget button) {
-
-        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(projectTable, 0, 0));
+        BPNetworkHandler.wrapper.sendToServer(new MessageGuiUpdate(0, 0));
     }
 }

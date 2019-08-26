@@ -19,80 +19,102 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.container.inventory.InventoryItem;
-import com.bluepowermod.container.slot.SlotExclude;
+import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.container.slot.SlotLocked;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.util.Dependencies;
-import invtweaks.api.container.ChestContainer;
-import invtweaks.api.container.ContainerSection;
-import invtweaks.api.container.ContainerSectionCallback;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Container;
+import com.bluepowermod.item.ItemCanvasBag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.ClickType;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.Optional;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-@ChestContainer
+//@ChestContainer
 public class ContainerCanvasBag extends Container {
-    
-    IInventory canvasBagInventory;
-    ItemStack  bag;
 
-    public ContainerCanvasBag(ItemStack bag, IInventory playerInventory, IInventory canvasBagInventory) {
-    
-        this.bag = bag;
+    private final ItemStackHandler canvasBagInvHandler;
+    private Hand activeHand;
+
+    public ContainerCanvasBag(int windowId, PlayerInventory playerInventory) {
+    super(BPContainerType.CANVAS_BAG, windowId);
+        canvasBagInvHandler = new ItemStackHandler(27);
+
+        //Get Active hand
+        activeHand = Hand.MAIN_HAND;
+        ItemStack canvasbag = playerInventory.player.getHeldItem(activeHand);
+        if(!(canvasbag.getItem() instanceof ItemCanvasBag)){
+            canvasbag = playerInventory.player.getHeldItemOffhand();
+            activeHand = Hand.OFF_HAND;
+        }
+
+        //Get Items from the NBT Handler
+        if (canvasbag.hasTag()) canvasBagInvHandler.deserializeNBT(canvasbag.getTag().getCompound("inv"));
+
+        //Create Item Slots
         int i = -1 * 18;
-        //canvasBagInventory.openInventory();
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 9; ++k) {
-                addSlotToContainer(new SlotExclude(canvasBagInventory, k + j * 9, 8 + k * 18, 18 + j * 18, BPItems.canvas_bag));
+                addSlot(new SlotItemHandler(canvasBagInvHandler, k + j * 9, 8 + k * 18, 18 + j * 18){
+                    @Override
+                    public boolean isItemValid(ItemStack stack) {
+                        return super.isItemValid(stack) && !(stack.getItem() instanceof ItemCanvasBag);
+                    }
+                });
             }
         }
-        
+
+        //Create Player Slots
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 9; ++k) {
-                addSlotToContainer(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 103 + j * 18 + i));
+                addSlot(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 103 + j * 18 + i));
             }
         }
-        
+
+        //Lock the Current Item
         for (int j = 0; j < 9; ++j) {
-            if (playerInventory.getStackInSlot(j) == ((InventoryItem) canvasBagInventory).getItem()) {
-                addSlotToContainer(new SlotLocked(playerInventory, j, 8 + j * 18, 161 + i));
+            if (playerInventory.currentItem == j) {
+                addSlot(new SlotLocked(playerInventory, j, 8 + j * 18, 161 + i));
             } else {
-                addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
+                addSlot(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
             }
-            addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
         }
-        
-        this.canvasBagInventory = canvasBagInventory;
     }
-    
+
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
-    
-        return ItemStack.areItemStacksEqual(player.getHeldItemMainhand(), bag);
+    public boolean canInteractWith(PlayerEntity player) {
+        return player.getHeldItem(activeHand).getItem() instanceof ItemCanvasBag;
     }
-    
+
     @Override
-    public ItemStack slotClick(int par1, int par2, ClickType par3, EntityPlayer player) {
-    
+    public ItemStack slotClick(int par1, int par2, ClickType par3, PlayerEntity player) {
+
         if (par3.ordinal() != 2 || player.inventory.currentItem != par2) {
             return super.slotClick(par1, par2, par3, player);
         } else {
             return ItemStack.EMPTY;
         }
     }
-    
+
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
+    public void onContainerClosed(PlayerEntity playerIn) {
+        //Update items in the NBT
+        ItemStack canvasBag = playerIn.getHeldItem(activeHand);
+        if (!canvasBag.hasTag())
+            canvasBag.setTag(new CompoundNBT());
+        if (canvasBag.getTag() != null) {
+            canvasBag.getTag().put("inv", canvasBagInvHandler.serializeNBT());
+        }
+        super.onContainerClosed(playerIn);
+    }
+
+    @Override
+    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
     
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);
@@ -118,88 +140,8 @@ public class ContainerCanvasBag extends Container {
         
         return itemstack;
     }
-    
-    @Override
-    public boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4) {
-    
-        boolean flag1 = false;
-        int k = par2;
-        
-        if (par4) {
-            k = par3 - 1;
-        }
-        
-        Slot slot;
-        ItemStack itemstack1;
-        
-        if (par1ItemStack.isStackable()) {
-            while (par1ItemStack.getCount() > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
-                slot = (Slot) inventorySlots.get(k);
-                itemstack1 = slot.getStack();
-                
-                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
-                    int l = itemstack1.getCount() + par1ItemStack.getCount();
-                    
-                    if (l <= par1ItemStack.getMaxStackSize()) {
-                        par1ItemStack.setCount(0);
-                        itemstack1.setCount(l);
-                        slot.onSlotChanged();
-                        flag1 = true;
-                    } else if (itemstack1.getCount() < par1ItemStack.getMaxStackSize()) {
-                        par1ItemStack.setCount(par1ItemStack.getCount() - par1ItemStack.getMaxStackSize() - itemstack1.getCount());
-                        itemstack1.setCount(par1ItemStack.getMaxStackSize());
-                        slot.onSlotChanged();
-                        flag1 = true;
-                    }
-                }
-                
-                if (par4) {
-                    --k;
-                } else {
-                    ++k;
-                }
-            }
-        }
-        
-        if (par1ItemStack.getCount() > 0) {
-            if (par4) {
-                k = par3 - 1;
-            } else {
-                k = par2;
-            }
-            
-            while (!par4 && k < par3 || par4 && k >= par2) {
-                slot = (Slot) inventorySlots.get(k);
-                itemstack1 = slot.getStack();
-                
-                if (itemstack1.isEmpty() && slot.isItemValid(par1ItemStack)) {
-                    if (1 < par1ItemStack.getCount()) {
-                        ItemStack copy = par1ItemStack.copy();
-                        copy.setCount(1);
-                        slot.putStack(copy);
 
-                        par1ItemStack.setCount(par1ItemStack.getCount() - 1);
-                        flag1 = true;
-                        break;
-                    } else {
-                        slot.putStack(par1ItemStack.copy());
-                        slot.onSlotChanged();
-                        par1ItemStack.setCount(0);
-                        flag1 = true;
-                        break;
-                    }
-                }
-                
-                if (par4) {
-                    --k;
-                } else {
-                    ++k;
-                }
-            }
-        }
-        return flag1;
-    }
-
+    /*TODO: Inventory Tweaks Support find @Optional.Method alternative
     @Optional.Method(modid = Dependencies.INVTWEAKS)
     @ContainerSectionCallback
     public Map<ContainerSection, List<Slot>> getSections() {
@@ -216,5 +158,5 @@ public class ContainerCanvasBag extends Container {
         sections.put(ContainerSection.CHEST, slotsChest);
         sections.put(ContainerSection.INVENTORY, slotsInventory);
         return sections;
-    }
+    }*/
 }

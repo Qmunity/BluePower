@@ -1,9 +1,9 @@
 package com.bluepowermod.api.wire.redstone;
 
-import net.minecraft.util.EnumFacing;;
+import net.minecraft.util.Direction;
 
 public interface IRedstoneDeviceWrapper {
 
-    public IRedstoneDevice getDeviceOnSide(EnumFacing side);
+    public IRedstoneDevice getDeviceOnSide(Direction side);
 
 }

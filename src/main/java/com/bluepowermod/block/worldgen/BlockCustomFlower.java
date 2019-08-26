@@ -18,73 +18,26 @@
 package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.EnumPlantType;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 
-public class BlockCustomFlower extends BlockBush {
+public class BlockCustomFlower extends BushBlock {
+    protected static final VoxelShape SHAPE = Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 14.0D, 13.0D);
 
-    public static final String[] field_149858_b = new String[] { "indigo_flower" };
-    // private int meta;
-
-    public BlockCustomFlower(String name) {
-
-        super();
-        this.setCreativeTab(BPCreativeTabs.blocks);
-        this.setHardness(0.0F);
-        this.setSoundType(SoundType.PLANT);
-        this.setTranslationKey(name);
+    public BlockCustomFlower(String name, Properties properties) {
+        super(properties.hardnessAndResistance(0.0F).sound(SoundType.PLANT).doesNotBlockMovement());
         this.setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
     }
 
-    @Override
-    public String getTranslationKey() {
-
-        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        Vec3d vec3d = state.getOffset(worldIn, pos);
+        return SHAPE.withOffset(vec3d.x, vec3d.y, vec3d.z);
     }
 
-    String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
-    }
-
-    public static BlockFlower func_149857_e(String name) {
-
-        String[] astring = field_149858_b;
-        int i = astring.length;
-        int j;
-        String s1;
-
-        for (j = 0; j < i; ++j) {
-            s1 = astring[j];
-
-            if (s1.equals(name)) {
-                return (BlockFlower) BPBlocks.indigo_flower;
-            }
-        }
-        return null;
-    }
-
-    public static int func_149856_f(String name) {
-
-        int i;
-
-        for (i = 0; i < field_149858_b.length; ++i) {
-            if (field_149858_b[i].equals(name)) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    @Override
-    public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
-        return EnumPlantType.Plains;
-    }
 }

@@ -9,13 +9,13 @@ package com.bluepowermod.enchant;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.inventory.EquipmentSlotType;
 
 public class EnchantmentVorpal extends Enchantment {
 
-    public EnchantmentVorpal(int enchantId, Rarity rarity) {
-        super(rarity, EnumEnchantmentType.WEAPON, EntityEquipmentSlot.values());
+    public EnchantmentVorpal(Rarity rarity) {
+        super(rarity, EnchantmentType.WEAPON, EquipmentSlotType.values());
     }
 
     @Override
@@ -28,19 +28,6 @@ public class EnchantmentVorpal extends Enchantment {
     public int getMinEnchantability(int par1) {
 
         return 10 + 20 * (par1 - 1);
-    }
-
-    @Override
-    public int getMaxEnchantability(int par1) {
-
-        return super.getMinEnchantability(par1) + 50;
-    }
-
-    @Override
-    public String getTranslatedName(int level) {
-
-        return I18n.format("enchantment.bluepower:vorpal.name") + " "
-                + I18n.format("enchantment.level." + level);
     }
 
 }

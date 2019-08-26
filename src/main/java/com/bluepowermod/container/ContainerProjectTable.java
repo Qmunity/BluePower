@@ -18,56 +18,63 @@
 
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
 import com.bluepowermod.container.slot.SlotProjectTableCrafting;
-import com.bluepowermod.helper.IOHelper;
+//import invtweaks.api.container.ChestContainer;
+//import invtweaks.api.container.ContainerSection;
+//import invtweaks.api.container.ContainerSectionCallback;
 import com.bluepowermod.tile.tier1.TileProjectTable;
-import com.bluepowermod.util.Dependencies;
-import invtweaks.api.container.ChestContainer;
-import invtweaks.api.container.ContainerSection;
-import invtweaks.api.container.ContainerSectionCallback;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.*;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.Optional;
+import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.network.play.server.SSetSlotPacket;
+import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 
 /**
  * @author MineMaarten
  */
-@ChestContainer
-public class ContainerProjectTable extends Container {
+//@ChestContainer
+public class ContainerProjectTable extends Container implements IGuiButtonSensitive {
 
-    private final EntityPlayer player;
-    private final InventoryCrafting craftingGrid;
-    private final InventoryCraftResult craftResult;
+    private final PlayerEntity player;
+    private final CraftingInventory craftingGrid;
+    private final CraftResultInventory craftResult;
 
-    public ContainerProjectTable(InventoryPlayer invPlayer, TileProjectTable projectTable) {
-        craftResult =  new InventoryCraftResult();
-        craftingGrid = new InventoryProjectTableCrafting(this, projectTable, 3, 3);;
+    private final IInventory projectTable;
+
+    public ContainerProjectTable(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+        super(BPContainerType.PROJECT_TABLE, windowId);
+        this.projectTable = inventory;
+        craftResult =  new CraftResultInventory();
+        craftingGrid = new InventoryProjectTableCrafting(this, projectTable, 3, 3);
         player = invPlayer.player;
 
         //Output
-        addSlotToContainer(new SlotProjectTableCrafting(projectTable, player, craftingGrid, craftResult, 0, 127, 34));
+        addSlot(new SlotProjectTableCrafting(projectTable, player, craftingGrid, craftResult, 0, 127, 34));
 
         //Crafting Grid
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 //When changing the 34 and 16, this will break the NEI shift clicking the question mark. See NEIPluginInitConfig
-                addSlotToContainer(new Slot(craftingGrid, j + i * 3, 34 + j * 18, 16 + i * 18));
+                addSlot(new Slot(craftingGrid, j + i * 3, 34 + j * 18, 16 + i * 18));
             }
         }
 
         //Chest
         for (int i = 0; i < 2; ++i) {
             for (int j = 0; j < 9; ++j) {
-                addSlotToContainer(new Slot(projectTable, j + i * 9, 8 + j * 18, 79 + i * 18));
+                addSlot(new Slot(projectTable, j + i * 9, 8 + j * 18, 79 + i * 18));
             }
         }
 
@@ -75,31 +82,52 @@ public class ContainerProjectTable extends Container {
         this.onCraftMatrixChanged(this.craftingGrid);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    public ContainerProjectTable( int id, PlayerInventory player )    {
+        this( id, player, new Inventory( TileProjectTable.SLOTS ));
+    }
+
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 126 + i * 18));
+                addSlot(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 126 + i * 18));
             }
         }
 
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 184));
+            addSlot(new Slot(invPlayer, j, 8 + j * 18, 184));
+        }
+    }
+
+
+    protected static void updateCrafting(int id, World world, PlayerEntity playerEntity, CraftingInventory craftingInventory, CraftResultInventory craftResultInventory) {
+        if (!world.isRemote) {
+            ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)playerEntity;
+            ItemStack itemstack = ItemStack.EMPTY;
+            Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInventory, world);
+            if (optional.isPresent()) {
+                ICraftingRecipe icraftingrecipe = optional.get();
+                if (craftResultInventory.canUseRecipe(world, serverplayerentity, icraftingrecipe)) {
+                    itemstack = icraftingrecipe.getCraftingResult(craftingInventory);
+                }
+            }
+
+            craftResultInventory.setInventorySlotContents(0, itemstack);
+            serverplayerentity.connection.sendPacket(new SSetSlotPacket(id, 0, itemstack));
         }
     }
 
     /**
      * Callback for when the crafting matrix is changed.
      */
-    @Override
-    public void onCraftMatrixChanged(IInventory p_75130_1_) {
-        this.slotChangedCraftingGrid(player.getEntityWorld(), this.player, this.craftingGrid, this.craftResult);
+    public void onCraftMatrixChanged(IInventory inventoryIn) {
+            updateCrafting(this.windowId, this.player.getEntityWorld(), this.player, this.craftingGrid, this.craftResult);
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(PlayerEntity playerIn) {
         return true;
     }
 
@@ -119,7 +147,7 @@ public class ContainerProjectTable extends Container {
         return slotIn.inventory != this.craftResult && super.canMergeSlot(stack, slotIn);
     }
 
-    public InventoryCrafting getCraftingGrid() {
+    public CraftingInventory getCraftingGrid() {
         return craftingGrid;
     }
 
@@ -127,7 +155,7 @@ public class ContainerProjectTable extends Container {
      * 0 result, 1-9 matrix,  10 - 27 inventory, 28 - 63 player inv.
      */
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(par2);
@@ -168,6 +196,11 @@ public class ContainerProjectTable extends Container {
         return itemstack;
     }
 
+    @Override
+    public void onButtonPress(PlayerEntity player, int messageId, int value) {
+        this.clearCraftingGrid();
+    }
+/*
     @Optional.Method(modid = Dependencies.INVTWEAKS)
     @ContainerSectionCallback
     public Map<ContainerSection, List<Slot>> getSections() {
@@ -197,5 +230,5 @@ public class ContainerProjectTable extends Container {
         sections.put(ContainerSection.INVENTORY, slotsInventory);
         sections.put(ContainerSection.INVENTORY_HOTBAR, slotsInventoryHotbar);
         return sections;
-    }
+    }*/
 }

@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.tile.tier3;
 
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
 
 /**
@@ -33,6 +34,7 @@ public class TileMonitor extends TileBase implements IRedBusWindow  {
 	public static float[] screenColor = new float[]{1.0F, 0.8F, 0.0F};
 	
 	public TileMonitor() {
+		super(BPTileEntityType.MONITOR);
 		blankMemory();
 		testMemory();
 	}

@@ -9,7 +9,8 @@
         "torch_left": "bluepower:blocks/bluestone_torch_on",
         "torch_right": "bluepower:blocks/bluestone_torch_on",
         "torch_front": "bluepower:blocks/bluestone_torch_off",
-        "torch_middle": "bluepower:blocks/bluestone_torch_on"
+        "torch_middle": "bluepower:blocks/bluestone_torch_on",
+        "particle": "bluepower:blocks/gates/gate"
     },
     "display": {
         "gui": {

@@ -6,14 +6,15 @@
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
 package com.bluepowermod.compat.mcmp;
+/*
 
 import com.bluepowermod.compat.CompatModule;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class CompatModuleMCMP extends CompatModule {
 
@@ -46,8 +47,9 @@ public class CompatModuleMCMP extends CompatModule {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void registerRenders() {
 
     }
 }
+*/

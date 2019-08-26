@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "bluepower:zinc_ore_crushed"
+  },
+  "result": "bluepower:zinc_ingot",
+  "cookingtime": 200
+}

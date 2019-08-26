@@ -1,0 +1,14 @@
+﻿{
+  "result": {
+    "item": "bluepower:canvas_bag_pink"
+  },
+  "ingredients": [
+    {
+      "tag": "bluepower:canvas_bag"
+    },
+    {
+      "tag": "forge:dyes/pink"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

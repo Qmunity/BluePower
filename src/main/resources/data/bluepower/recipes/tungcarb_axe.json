@@ -1,0 +1,19 @@
+﻿{
+  "result": {
+    "item": "bluepower:tungcarb_axe"
+  },
+  "pattern": [
+    "GG ",
+    "GS ",
+    " S "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "tag": "forge:rods/wooden"
+    },
+    "G": {
+      "item": "bluepower:tungsten_carbide"
+    }
+  }
+}

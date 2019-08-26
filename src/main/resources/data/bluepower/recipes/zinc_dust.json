@@ -1,0 +1,16 @@
+﻿{
+  "result": {
+    "item": "bluepower:zinc_dust"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "bluepower:zinc_tiny_dust"
+    }
+  }
+}

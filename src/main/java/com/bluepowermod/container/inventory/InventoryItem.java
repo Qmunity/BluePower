@@ -19,22 +19,21 @@
 
 package com.bluepowermod.container.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.IItemProvider;
 
-public class InventoryItem extends InventoryBasic {
+public class InventoryItem extends Inventory {
     
     private ItemStack    item;
-    private EntityPlayer player;
+    private PlayerEntity player;
     private boolean      reading = false;
     
-    public InventoryItem(EntityPlayer player, ItemStack item, String name, boolean customName, int size) {
-    
-        super(name, customName, size);
-        
+    public InventoryItem(PlayerEntity player, ItemStack item, String name, boolean customName, int size) {
+        super(item);
         this.player = player;
         this.item = item;
         
@@ -50,7 +49,7 @@ public class InventoryItem extends InventoryBasic {
         return getItemInventory(null, is, name, size);
     }
     
-    public static InventoryItem getItemInventory(EntityPlayer player, ItemStack is, String name, int size) {
+    public static InventoryItem getItemInventory(PlayerEntity player, ItemStack is, String name, int size) {
     
         return new InventoryItem(player, is, name, false, size);
     }
@@ -61,12 +60,12 @@ public class InventoryItem extends InventoryBasic {
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
         loadInventory();
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
         super.closeInventory(player);
     }
 
@@ -77,8 +76,8 @@ public class InventoryItem extends InventoryBasic {
     
     private boolean hasInventory() {
     
-        if (item.getTagCompound() == null) { return false; }
-        return item.getTagCompound().getTag("Inventory") != null;
+        if (item.getTag() == null) { return false; }
+        return item.getTag().contains("Inventory");
     }
     
     private void createInventory() {
@@ -88,21 +87,21 @@ public class InventoryItem extends InventoryBasic {
     
     protected void writeToNBT() {
     
-        if (item.getTagCompound() == null) {
-            item.setTagCompound(new NBTTagCompound());
+        if (item.getTag() == null) {
+            item.setTag(new CompoundNBT());
         }
-        NBTTagList itemList = new NBTTagList();
+        ListNBT itemList = new ListNBT();
         for (int i = 0; i < getSizeInventory(); i++) {
             if (!getStackInSlot(i).isEmpty()) {
-                NBTTagCompound slotEntry = new NBTTagCompound();
-                slotEntry.setByte("Slot", (byte) i);
-                getStackInSlot(i).writeToNBT(slotEntry);
-                itemList.appendTag(slotEntry);
+                CompoundNBT slotEntry = new CompoundNBT();
+                slotEntry.putByte("Slot", (byte) i);
+                getStackInSlot(i).write(slotEntry);
+                itemList.add(slotEntry);
             }
         }
-        NBTTagCompound inventory = new NBTTagCompound();
-        inventory.setTag("Items", itemList);
-        item.getTagCompound().setTag("Inventory", inventory);
+        CompoundNBT inventory = new CompoundNBT();
+        inventory.put("Items", itemList);
+        item.getTag().put("Inventory", inventory);
     }
     
     public void loadInventory() {
@@ -127,7 +126,7 @@ public class InventoryItem extends InventoryBasic {
         }
         
         if (!is.isEmpty() && is.getItem() == this.item.getItem()) {
-            is.setTagCompound(item.getTagCompound());
+            is.setTag(item.getTag());
         }
     }
     
@@ -135,13 +134,13 @@ public class InventoryItem extends InventoryBasic {
     
         reading = true;
         
-        NBTTagList itemList = (NBTTagList) ((NBTTagCompound) item.getTagCompound().getTag("Inventory")).getTag("Items");
-        for (int i = 0; i < itemList.tagCount(); i++) {
-            NBTTagCompound slotEntry = itemList.getCompoundTagAt(i);
+        ListNBT itemList = (ListNBT) ((CompoundNBT) item.getTag().get("Inventory")).get("Items");
+        for (int i = 0; i < itemList.size(); i++) {
+            CompoundNBT slotEntry = itemList.getCompound(i);
             int j = slotEntry.getByte("Slot") & 0xff;
             
             if (j >= 0 && j < getSizeInventory()) {
-                setInventorySlotContents(j, new ItemStack(slotEntry));
+                setInventorySlotContents(j, new ItemStack((IItemProvider) slotEntry));
             }
         }
         reading = false;

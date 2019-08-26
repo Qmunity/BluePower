@@ -1,0 +1,7 @@
+﻿{
+   "parent": "block/cube_column",
+   "textures": {
+      "end": "bluepower:blocks/rubber_log_top",
+      "side": "bluepower:blocks/rubber_log_side"
+   }
+}

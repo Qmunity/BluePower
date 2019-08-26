@@ -7,13 +7,12 @@
  */
 package com.bluepowermod.compat.waila;
 
+import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.tile.TileMachineBase;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.api.IWailaDataProvider;
-import net.minecraft.entity.player.EntityPlayerMP;
+import mcp.mobius.waila.api.IServerDataProvider;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,43 +24,17 @@ import java.util.List;
  * @author amadornes
  *
  */
-public class WailaProviderMachines implements IWailaDataProvider {
+public class WailaProviderMachines implements IServerDataProvider<TileEntity> {
 
     private List<String> info = new ArrayList<String>();
 
     @Override
-    public List<String> getWailaBody(ItemStack item, List<String> tip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-
-        TileMachineBase machine = (TileMachineBase) accessor.getTileEntity();
+    public void appendServerData(CompoundNBT compoundNBT, ServerPlayerEntity serverPlayerEntity, World world, TileEntity tileEntity) {
+        TileMachineBase machine = (TileMachineBase) tileEntity;
 
         machine.addWailaInfo(info);
-        tip.addAll(info);
+        //TODO: Check this works
+        compoundNBT.keySet().addAll(info);
         info.clear();
-
-        return tip;
-    }
-
-    @Override
-    public List<String> getWailaHead(ItemStack item, List<String> tip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-
-        return tip;
-    }
-
-    @Override
-    public List<String> getWailaTail(ItemStack item, List<String> tip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-
-        return tip;
-    }
-
-    @Override
-    public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World w, BlockPos pos) {
-
-        return tag;
     }
 }

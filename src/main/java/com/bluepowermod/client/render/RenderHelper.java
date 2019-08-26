@@ -11,17 +11,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
-
-;
-
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderHelper {
 
     /**
@@ -69,7 +66,7 @@ public class RenderHelper {
 
         GL11.glPushMatrix();
         {
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+            Minecraft.getInstance().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
             if (digital) {
             } else {
@@ -134,7 +131,7 @@ public class RenderHelper {
             GL11.glPushMatrix();
             {
                 GL11.glTranslated(6 / 16D, 2 / 16D, 8 / 16D);
-                Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(resSide));
+                Minecraft.getInstance().renderEngine.bindTexture(new ResourceLocation(resSide));
                 for (int i = 0; i < 4; i++) {
                     GL11.glTranslated(2 / 16D, 0, 2 / 16D);
                     GL11.glRotated(90, 0, 1, 0);
@@ -154,7 +151,7 @@ public class RenderHelper {
 
             GL11.glTranslated(0, 1 / 16D, 0 / 16D);
 
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(res));
+            Minecraft.getInstance().renderEngine.bindTexture(new ResourceLocation(res));
             Tessellator t = Tessellator.instance;
 
             y = 2 / 16D;
@@ -190,7 +187,7 @@ public class RenderHelper {
             GL11.glRotated(180 + 360 * -angle, 0, 1, 0);
             GL11.glTranslated(-0.5, -0.5, -0.5);
 
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("minecraft:textures/blocks/stone.png"));
+            Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation("minecraft:textures/blocks/stone.png"));
 
             GL11.glBegin(GL11.GL_QUADS);
             {
@@ -728,7 +725,7 @@ public class RenderHelper {
      * @author amadornes
      * @param d
      */
-    public static void rotateRenderMatrix(EnumFacing d) {
+    public static void rotateRenderMatrix(Direction d) {
 
         switch (d) {
         case UP:

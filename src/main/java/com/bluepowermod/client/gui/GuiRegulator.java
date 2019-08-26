@@ -22,7 +22,10 @@ package com.bluepowermod.client.gui;
 import java.util.List;
 
 import com.bluepowermod.client.gui.widget.*;
-import net.minecraft.entity.player.InventoryPlayer;
+import com.bluepowermod.container.ContainerAlloyFurnace;
+import com.bluepowermod.container.ContainerRetriever;
+import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerRegulator;
@@ -30,26 +33,26 @@ import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileRegulator;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * @author MineMaarten
  */
-public class GuiRegulator extends GuiContainerBaseBP {
+public class GuiRegulator extends GuiContainerBaseBP<ContainerRegulator> implements IHasContainer<ContainerRegulator> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/regulator.png");
-    protected TileRegulator regulator;
+    protected ContainerRegulator regulator;
 
-    public GuiRegulator(InventoryPlayer invPlayer, TileRegulator regulator) {
-
-        super(regulator, new ContainerRegulator(invPlayer, regulator), resLoc);
-        this.regulator = regulator;
+    public GuiRegulator(ContainerRegulator container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.regulator = container;
         xSize = 212;
     }
 
     @Override
-    public void initGui() {
+    public void init() {
 
-        super.initGui();
+        super.init();
         WidgetColor colorWidget = new WidgetColor(0, guiLeft + 135, guiTop + 55);
         colorWidget.value = regulator.color.ordinal();
         addWidget(colorWidget);
@@ -80,6 +83,6 @@ public class GuiRegulator extends GuiContainerBaseBP {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(regulator, widget.getID(), baseWidget.value));
+        //BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(regulator, widget.getID(), baseWidget.value));
     }
 }

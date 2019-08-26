@@ -9,20 +9,13 @@ package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.api.power.BlutricityFEStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
-import com.bluepowermod.api.power.IPowerBase;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
+import com.bluepowermod.tile.BPTileEntityType;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.util.EnumFacing;;
-
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.util.Direction;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
-
 import javax.annotation.Nullable;
 
 /**
@@ -32,7 +25,7 @@ import javax.annotation.Nullable;
  */
 public class TileEngine extends TileMachineBase  {
 
-	private EnumFacing orientation;
+	private Direction orientation;
 	public boolean isActive = false;
     public byte pumpTick;
     public byte pumpSpeed;
@@ -46,15 +39,16 @@ public class TileEngine extends TileMachineBase  {
 
 	
 	public TileEngine(){
-		
+		super(BPTileEntityType.ENGINE);
+
 		pumpTick  = 0;
 		pumpSpeed = 16;
 		
 	}
 
     @Override
-	public void update() {
-		super.update();
+	public void tick() {
+		super.tick();
 		if(world.isRemote){
 			if(isActive){
 				pumpTick++;
@@ -75,69 +69,55 @@ public class TileEngine extends TileMachineBase  {
 
 	}
 
-    public void setOrientation(EnumFacing orientation){
+    public void setOrientation(Direction orientation){
         this.orientation = orientation;
         markDirty();
     }
 
-    public EnumFacing getOrientation()
+    public Direction getOrientation()
     {
         return orientation;
     }
 
 
 	@Override
-	protected void writeToPacketNBT(NBTTagCompound compound) {
+	protected void writeToPacketNBT(CompoundNBT compound) {
 		super.writeToPacketNBT(compound);
 		int rotation = orientation.getIndex();
-		compound.setInteger("rotation", rotation);
-        compound.setByte("pumpspeed", pumpSpeed);
-        compound.setByte("pumptick", pumpTick);
-        NBTBase nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
-		compound.setTag("energy", nbtstorage);
+		compound.putInt("rotation", rotation);
+        compound.putByte("pumpspeed", pumpSpeed);
+        compound.putByte("pumptick", pumpTick);
+        INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
+		compound.put("energy", nbtstorage);
 
 	}
 
 	@Override
-	protected void readFromPacketNBT(NBTTagCompound compound) {
+	protected void readFromPacketNBT(CompoundNBT compound) {
 		super.readFromPacketNBT(compound);
-		orientation = EnumFacing.byIndex(compound.getInteger("rotation"));
+		orientation = Direction.byIndex(compound.getInt("rotation"));
         pumpSpeed = compound.getByte("pumpspeed");
         pumpTick = compound.getByte("pumptick");
-        if(compound.hasKey("energy")) {
-            NBTBase nbtstorage = compound.getTag("energy");
+        if(compound.contains("energy")) {
+            INBT nbtstorage = compound.get("energy");
             CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
         }
 	}
 
 	@Nullable
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(this.pos, 3, this.getUpdateTag());
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		return this.writeToNBT(new NBTTagCompound());
+	public CompoundNBT getUpdateTag() {
+		return this.write(new CompoundNBT());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
 		handleUpdateTag(pkt.getNbtCompound());
 	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Nullable
-	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		if(capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY ) {
-			return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(storage);
-		}
-		return super.getCapability(capability, facing);
-    }
 }

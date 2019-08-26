@@ -1,0 +1,19 @@
+﻿{
+  "result": {
+    "item": "bluepower:buffer"
+  },
+  "pattern": [
+    "BPB",
+    "P P",
+    "BPB"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    }
+  }
+}

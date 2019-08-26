@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "bluepower:basaltbrick"
+  },
+  "result": "bluepower:basaltbrick_cracked",
+  "cookingtime": 200
+}

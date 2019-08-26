@@ -1,0 +1,12 @@
+﻿{
+   "parent": "bluepower:block/cube_sided",
+   "textures": {
+      "top": "bluepower:blocks/machines/manager_side_rejecting",
+      "bottom": "bluepower:blocks/machines/manager_side_rejecting",
+      "right": "bluepower:blocks/machines/manager_side_rejecting",
+      "left": "bluepower:blocks/machines/manager_side_rejecting",
+      "front": "bluepower:blocks/machines/manager_front",
+      "back": "bluepower:blocks/machines/manager_back",
+      "particle": "bluepower:blocks/machines/manager_side_rejecting"
+   }
+}

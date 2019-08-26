@@ -8,7 +8,6 @@
 package com.bluepowermod.block.computer;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileDiskDrive;
 import net.minecraft.block.material.Material;
@@ -19,12 +18,6 @@ public class BlockDiskDrive extends BlockContainerBase {
 
         super(Material.IRON, TileDiskDrive.class);
         setRegistryName(Refs.BLOCKDISKDRIVE_NAME);
-    }
-
-    @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.DISK_DRIVE;
     }
 
 }

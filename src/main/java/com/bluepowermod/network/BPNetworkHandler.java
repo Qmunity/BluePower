@@ -19,31 +19,34 @@ package com.bluepowermod.network;
 
 import com.bluepowermod.network.message.*;
 import com.bluepowermod.reference.Refs;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 
 public class BPNetworkHandler {
 
-    public static final NetworkHandler INSTANCE = new NetworkHandler(Refs.MODID);
+    public static SimpleChannel wrapper;
 
-    public static void initBP() {
+    public static void init() {
+        wrapper = NetworkRegistry.newSimpleChannel(new ResourceLocation(Refs.MODID, "network"), () -> "1.0", client -> true, server -> true);
 
-        INSTANCE.registerPacket(MessageGuiUpdate.class, MessageGuiUpdate.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageCraftingSync.class, MessageCraftingSync.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageUpdateTextfield.class, MessageUpdateTextfield.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Side.CLIENT);
-        INSTANCE.registerPacket(MessageDebugBlock.class, MessageDebugBlock.class, Side.CLIENT);
-        INSTANCE.registerPacket(MessageSendClientServerTemplates.class, MessageSendClientServerTemplates.class, Side.CLIENT);
-        INSTANCE.registerPacket(MessageRedirectTubeStack.class, MessageRedirectTubeStack.class, Side.CLIENT);
-        INSTANCE.registerPacket(MessageServerTickTime.class, Side.CLIENT);
+        wrapper.registerMessage(0, MessageGuiUpdate.class, MessageGuiUpdate::encode, MessageGuiUpdate::decode,  MessageGuiUpdate::handle);
+        //wrapper.registerMessage(1, MessageCraftingSync.class, MessageCraftingSync.class, Dist.DEDICATED_SERVER);
+        //wrapper.registerMessage(2, MessageUpdateTextfield.class, MessageUpdateTextfield.class, Dist.DEDICATED_SERVER);
+        //wrapper.registerMessage(3, MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Dist.DEDICATED_SERVER);
+        //wrapper.registerMessage(4, MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Dist.CLIENT);
+        //wrapper.registerMessage(5, MessageDebugBlock.class, MessageDebugBlock.class, Dist.CLIENT);
+        //wrapper.registerMessage(6, MessageSendClientServerTemplates.class, MessageSendClientServerTemplates.class, Dist.CLIENT);
+        //wrapper.registerMessage(7, MessageRedirectTubeStack.class, MessageRedirectTubeStack.class, Dist.CLIENT);
+        //wrapper.registerMessage(8, MessageServerTickTime.class, MessageServerTickTime::encode, MessageServerTickTime::decode, MessageServerTickTime::handle);
 
-        INSTANCE.registerPacket(MessageWirelessNewFreq.class, MessageWirelessNewFreq.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageWirelessSaveFreq.class, MessageWirelessSaveFreq.class, Side.SERVER);
-        INSTANCE.registerPacket(MessageWirelessFrequencySync.class, MessageWirelessFrequencySync.class, Side.CLIENT);
-        INSTANCE.registerPacket(MessageWirelessRemoveFreq.class, MessageWirelessRemoveFreq.class, Side.SERVER);
+        //wrapper.registerMessage(9, MessageWirelessNewFreq.class, MessageWirelessNewFreq.class, Dist.DEDICATED_SERVER);
+        //wrapper.registerMessage(10, MessageWirelessSaveFreq.class, MessageWirelessSaveFreq.class, Dist.DEDICATED_SERVER);
+        //wrapper.registerMessage(11, MessageWirelessFrequencySync.class, MessageWirelessFrequencySync.class, Dist.CLIENT);
+        //wrapper.registerMessage(12, MessageWirelessRemoveFreq.class, MessageWirelessRemoveFreq.class, Dist.DEDICATED_SERVER);
 
-        INSTANCE.registerPacket(MessageSyncMachineBacklog.class, MessageSyncMachineBacklog.class, Side.CLIENT);
+        //wrapper.registerMessage(13, MessageSyncMachineBacklog.class, MessageSyncMachineBacklog.class, Dist.CLIENT);
     }
 
 }

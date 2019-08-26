@@ -1,12 +1,12 @@
 package com.bluepowermod.api.gate;
 
 import com.bluepowermod.client.render.RenderHelper;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -23,17 +23,17 @@ public interface IGateComponent {
 
     public void tick();
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass);
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void renderDynamic(Vec3d translation, double delta, int pass);
 
     public void onLayoutRefresh();
 
-    public void writeToNBT(NBTTagCompound tag);
+    public void writeToNBT(CompoundNBT tag);
 
-    public void readFromNBT(NBTTagCompound tag);
+    public void readFromNBT(CompoundNBT tag);
 
     public void writeData(DataOutput buffer) throws IOException;
 

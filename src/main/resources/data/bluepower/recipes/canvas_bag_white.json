@@ -1,0 +1,16 @@
+﻿{
+  "result": {
+    "item": "bluepower:canvas_bag_white"
+  },
+  "pattern": [
+    "SSS",
+    "S S",
+    "SSS"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "item": "bluepower:canvas"
+    }
+  }
+}

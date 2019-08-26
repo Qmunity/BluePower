@@ -9,28 +9,25 @@ package com.bluepowermod.container.stack;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.*;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketThreadUtil;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.RenderHelper;
-import com.bluepowermod.reference.Refs;
 
 /**
  *
@@ -43,7 +40,7 @@ public class TubeStack {
     public final TubeColor color;
     public double progress; // 0 at the start, 0.5 on an intersection, 1 at the end.
     public double oldProgress;
-    public EnumFacing heading;
+    public Direction heading;
     public boolean enabled = true; // will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server
     // input. This just serves a visual purpose.
     public int idleCounter; // increased when the stack is standing still. This will cause the client to remove the stack when a timeout occurs.
@@ -53,9 +50,9 @@ public class TubeStack {
     private double speed = ITEM_SPEED;
     public static double tickTimeMultiplier = 1;//Used client side to correct for TPS lag. This is being synchronized from the server.
 
-    @SideOnly(Side.CLIENT)
-    private static RenderItem customRenderItem;
-    private static EntityItem renderedItem;
+    @OnlyIn(Dist.CLIENT)
+    private static ItemRenderer customRenderItem;
+    private static ItemEntity renderedItem;
 
     public static RenderMode renderMode;
 
@@ -63,12 +60,12 @@ public class TubeStack {
         AUTO, NORMAL, REDUCED, NONE
     }
 
-    public TubeStack(ItemStack stack, EnumFacing from) {
+    public TubeStack(ItemStack stack, Direction from) {
 
         this(stack, from, TubeColor.NONE);
     }
 
-    public TubeStack(ItemStack stack, EnumFacing from, TubeColor color) {
+    public TubeStack(ItemStack stack, Direction from, TubeColor color) {
 
         heading = from;
         this.stack = stack;
@@ -126,38 +123,38 @@ public class TubeStack {
 
     public TubeStack copy() {
 
-        NBTTagCompound tag = new NBTTagCompound();
+        CompoundNBT tag = new CompoundNBT();
         writeToNBT(tag);
         return loadFromNBT(tag);
     }
 
-    public void writeToNBT(NBTTagCompound tag) {
+    public void writeToNBT(CompoundNBT tag) {
 
-        stack.writeToNBT(tag);
-        tag.setByte("color", (byte) color.ordinal());
-        tag.setByte("heading", (byte) heading.ordinal());
-        tag.setDouble("progress", progress);
-        tag.setDouble("speed", speed);
-        tag.setInteger("targetX", targetX);
-        tag.setInteger("targetY", targetY);
-        tag.setInteger("targetZ", targetZ);
+        stack.write(tag);
+        tag.putByte("color", (byte) color.ordinal());
+        tag.putByte("heading", (byte) heading.ordinal());
+        tag.putDouble("progress", progress);
+        tag.putDouble("speed", speed);
+        tag.putInt("targetX", targetX);
+        tag.putInt("targetY", targetY);
+        tag.putInt("targetZ", targetZ);
     }
 
-    public static TubeStack loadFromNBT(NBTTagCompound tag) {
+    public static TubeStack loadFromNBT(CompoundNBT tag) {
 
-        TubeStack stack = new TubeStack(new ItemStack(tag), EnumFacing.byIndex(tag.getByte("heading")),
+        TubeStack stack = new TubeStack(new ItemStack((IItemProvider) tag), Direction.byIndex(tag.getByte("heading")),
                 TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
         stack.speed = tag.getDouble("speed");
-        stack.targetX = tag.getInteger("targetX");
-        stack.targetY = tag.getInteger("targetY");
-        stack.targetZ = tag.getInteger("targetZ");
+        stack.targetX = tag.getInt("targetX");
+        stack.targetY = tag.getInt("targetY");
+        stack.targetZ = tag.getInt("targetZ");
         return stack;
     }
 
     public void writeToPacket(ByteBuf buf) {
-
-        ByteBufUtils.writeItemStack(buf, stack);
+        //TODO: Add Items
+        //ByteBufUtils.writeItemStack(buf, stack);
         buf.writeByte(heading.ordinal());
         buf.writeByte((byte) color.ordinal());
         buf.writeDouble(speed);
@@ -165,27 +162,27 @@ public class TubeStack {
     }
 
     public static TubeStack loadFromPacket(ByteBuf buf) {
-
-        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), EnumFacing.byIndex(buf.readByte()),
+        //TODO: Add Items
+        //ByteBufUtils.readItemStack(buf)
+        TubeStack stack = new TubeStack(null, Direction.byIndex(buf.readByte()),
                 TubeColor.values()[buf.readByte()]);
         stack.speed = buf.readDouble();
         stack.progress = buf.readDouble();
         return stack;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void render(float partialTick) {
 
         if (renderMode == RenderMode.AUTO) {
-            renderMode = Minecraft.getMinecraft().gameSettings.fancyGraphics ? RenderMode.NORMAL : RenderMode.REDUCED;
+            renderMode = Minecraft.getInstance().gameSettings.fancyGraphics ? RenderMode.NORMAL : RenderMode.REDUCED;
         }
         final RenderMode finalRenderMode = renderMode;
 
         if (customRenderItem == null) {
-            customRenderItem = Minecraft.getMinecraft().getRenderItem();
+            customRenderItem = Minecraft.getInstance().getItemRenderer();
 
-            renderedItem = new EntityItem(FMLClientHandler.instance().getWorldClient());
-            renderedItem.hoverStart = 0.0F;
+            renderedItem = new ItemEntity(Minecraft.getInstance().world, 0,0,0);
         }
 
         double renderProgress = (oldProgress + (progress - oldProgress) * partialTick) * 2 - 1;
@@ -197,7 +194,7 @@ public class TubeStack {
             if (stack.getCount() > 5) {
                 GL11.glScaled(0.8, 0.8, 0.8);
             }
-            if (!(stack.getItem() instanceof ItemBlock)) {
+            if (!(stack.getItem() instanceof BlockItem)) {
                 GL11.glScaled(0.8, 0.8, 0.8);
                 GL11.glTranslated(0, -0.15, 0);
             }
@@ -217,7 +214,7 @@ public class TubeStack {
 
             float size = 0.2F;
 
-            int colorInt = ItemDye.DYE_COLORS[color.ordinal()];
+            int colorInt = DyeColor.values()[color.ordinal()].getId();
             float red = (colorInt >> 16) / 256F;
             float green = (colorInt >> 8 & 255) / 256F;
             float blue = (colorInt & 255) / 256F;
@@ -225,7 +222,8 @@ public class TubeStack {
             GL11.glDisable(GL11.GL_CULL_FACE);
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glColor3f(red, green, blue);
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID, "textures/blocks/tubes/inside_color_border.png"));
+            //TODO: Find replacement for RenderEngine
+            //Minecraft.getInstance().renderEngine.bindTexture(new ResourceLocation(Refs.MODID, "textures/blocks/tubes/inside_color_border.png"));
             RenderHelper.drawTesselatedTexturedCube(new AxisAlignedBB(-size, -size, -size, size, size, size));
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);

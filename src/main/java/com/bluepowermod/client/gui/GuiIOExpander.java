@@ -7,23 +7,23 @@
  */
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerIOExpander;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier3.TileIOExpander;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiIOExpander extends GuiContainerBaseBP {
+public class GuiIOExpander extends GuiContainerBaseBP<ContainerIOExpander> implements IHasContainer<ContainerIOExpander> {
 
-    private final TileIOExpander ioExpander;
+    private final ContainerIOExpander ioExpander;
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/ioexpandergui.png");
 
-    public GuiIOExpander(InventoryPlayer invPlayer, TileIOExpander ioExpander) {
-
-        super(new ContainerIOExpander(invPlayer, ioExpander), resLoc);
-        this.ioExpander = ioExpander;
+    public GuiIOExpander(ContainerIOExpander container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.ioExpander = container;
     }
 
     @Override

@@ -17,10 +17,10 @@
 package com.bluepowermod.api.misc;
 
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 public interface IFace {
 
-    EnumFacing getFace();
+    Direction getFace();
 
 }

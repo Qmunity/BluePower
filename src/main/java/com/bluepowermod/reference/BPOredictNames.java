@@ -3,69 +3,67 @@ package com.bluepowermod.reference;
 public class BPOredictNames {
 
     // Ores
-    public static final String ORE_COPPER = "oreCopper";
-    public static final String ORE_ZINC = "oreZinc";
-    public static final String ORE_SILVER = "oreSilver";
-    public static final String ORE_TUNGSTEN = "oreTungsten";
-    public static final String ORE_TESLATITE = "oreTeslatite";
-    public static final String ORE_AMETHYST = "oreAmethyst";
-    public static final String ORE_RUBY = "oreRuby";
-    public static final String ORE_SAPPHIRE = "oreSapphire";
+    public static final String ORE_COPPER = "forge:ores/copper";
+    public static final String ORE_ZINC = "forge:ores/zinc";
+    public static final String ORE_SILVER = "forge:ores/silver";
+    public static final String ORE_TUNGSTEN = "forge:ores/tungsten";
+    public static final String ORE_TESLATITE = "forge:ores/teslatite";
+    public static final String ORE_AMETHYST = "forge:ores/amethyst";
+    public static final String ORE_RUBY = "forge:ores/ruby";
+    public static final String ORE_SAPPHIRE = "forge:ores/sapphire";
 
     // Storage blocks
-    public static final String BLOCK_COPPER = "blockCopper";
-    public static final String BLOCK_ZINC = "blockZinc";
-    public static final String BLOCK_SILVER = "blockSilver";
-    public static final String BLOCK_TUNGSTEN = "blockTungsten";
-    public static final String BLOCK_TESLATITE = "blockTeslatite";
-    public static final String BLOCK_AMETHYST = "blockAmethyst";
-    public static final String BLOCK_RUBY = "blockRuby";
-    public static final String BLOCK_SAPPHIRE = "blockSapphire";
-    public static final String BLOCK_MALACHITE = "blockMalachite";
+    public static final String BLOCK_COPPER = "forge:blocks/copper";
+    public static final String BLOCK_ZINC = "forge:blocks/zinc";
+    public static final String BLOCK_SILVER = "forge:blocks/silver";
+    public static final String BLOCK_TUNGSTEN = "forge:blocks/tungsten";
+    public static final String BLOCK_TESLATITE = "forge:blocks/teslatite";
+    public static final String BLOCK_AMETHYST = "forge:blocks/amethyst";
+    public static final String BLOCK_RUBY = "forge:blocks/ruby";
+    public static final String BLOCK_SAPPHIRE = "forge:blocks/sapphire";
+    public static final String BLOCK_MALACHITE = "forge:blocks/malachite";
 
     // Ingots
-    public static final String INGOT_COPPER = "ingotCopper";
-    public static final String INGOT_ZINC = "ingotZinc";
-    public static final String INGOT_SILVER = "ingotSilver";
-    public static final String INGOT_TUNGSTEN = "ingotTungsten";
-    public static final String INGOT_TUNGCARB = "ingotTungstenCarbite";
-
-    public static final String INGOT_BLUE_ALLOY = "ingotBlueAlloy";
-    public static final String INGOT_RED_ALLOY = "ingotRedAlloy";
-    public static final String INGOT_PURPLE_ALLOY = "ingotPurpleAlloy";
-
-    public static final String INGOT_BRASS = "ingotBrass";
+    public static final String INGOT_COPPER = "forge:ingots/copper";
+    public static final String INGOT_ZINC = "forge:ingots/zinc";
+    public static final String INGOT_SILVER = "forge:ingots/silver";
+    public static final String INGOT_TUNGSTEN = "forge:ingots/tungsten";
+    public static final String INGOT_TUNGCARB = "forge:ingots/tungsten_carbite";
+    public static final String INGOT_BLUE_ALLOY = "forge:ingots/blue_alloy";
+    public static final String INGOT_RED_ALLOY = "forge:ingots/red_alloy";
+    public static final String INGOT_PURPLE_ALLOY = "forge:ingots/purple_alloy";
+    public static final String INGOT_BRASS = "forge:ingots/brass";
 
     // Dusts
-    public static final String DUST_TESLATITE = "dustTeslatite";
-    public static final String DUST_INFUSED_TESLATITE = "dustInfusedTeslatite";
-    public static final String DUST_ZINC = "dustZinc";
+    public static final String DUST_TESLATITE = "forge:dusts/teslatite";
+    public static final String DUST_INFUSED_TESLATITE = "forge:dusts/infused_teslatite";
+    public static final String DUST_ZINC = "forge:dusts/zinc";
 
     // Nuggets
-    public static final String NUGGET_TUNGSTEN = "nuggetTungsten";
+    public static final String NUGGET_TUNGSTEN = "forge:nuggets/tungsten";
 
     // Gems
-    public static final String GEM_AMETHYST = "gemAmethyst";
-    public static final String GEM_RUBY = "gemRuby";
-    public static final String GEM_SAPPHIRE = "gemSapphire";
+    public static final String GEM_AMETHYST = "forge:gems/amethyst";
+    public static final String GEM_RUBY = "forge:gems/ruby";
+    public static final String GEM_SAPPHIRE = "forge:gems/sapphire";
 
     // Dyes
-    public static final String DYE_INDIGO = "dyePurple";
+    public static final String DYE_INDIGO = "minecraft:dyes/purple";
 
     // Circuitry
-    public static final String STONE_TILE = "waferStone";
-    public static final String BLUESTONE_TILE = "waferBlue";
-    public static final String BLUESTONE_ANODE = "waferBlueAnode";
-    public static final String BLUESTONE_CATHODE = "waferBlueCathode";
-    public static final String BLUESTONE_POINTER = "waferBluePointer";
-    public static final String REDSTONE_TILE = "waferRede";
-    public static final String REDSTONE_ANODE = "waferRedAnode";
-    public static final String REDSTONE_CATHODE = "waferRedCathode";
-    public static final String REDSTONE_POINTER = "waferRedPointer";
-    public static final String SILICON_CHIP = "waferSilicon";
-    public static final String TAINTED_SILICON_CHIP = "waferSiliconTainted";
-    public static final String QUARTZ_RESONATOR = "waferResonator";
-    public static final String BUNDLED_TILE = "waferBundled";
+    public static final String STONE_TILE = Refs.MODID + ":wafers/stone";
+    public static final String BLUESTONE_TILE = Refs.MODID + ":wafers/blue";
+    public static final String BLUESTONE_ANODE = Refs.MODID + ":wafers/blue_anode";
+    public static final String BLUESTONE_CATHODE = Refs.MODID + ":wafers/blue_cathode";
+    public static final String BLUESTONE_POINTER = Refs.MODID + ":wafers/blue_pointer";
+    public static final String REDSTONE_TILE = Refs.MODID + ":wafers/red";
+    public static final String REDSTONE_ANODE = Refs.MODID + ":wafers/red_anode";
+    public static final String REDSTONE_CATHODE = Refs.MODID + ":wafers/red_cathode";
+    public static final String REDSTONE_POINTER = Refs.MODID + ":wafers/red_pointer";
+    public static final String SILICON_CHIP = Refs.MODID + ":wafers/silicon";
+    public static final String TAINTED_SILICON_CHIP = Refs.MODID + ":wafers/silicon_tainted";
+    public static final String QUARTZ_RESONATOR = Refs.MODID + ":wafers/resonator";
+    public static final String BUNDLED_TILE = Refs.MODID + ":wafers/bundled";
 
     // Other
     public static final String MARBLE = "marble";

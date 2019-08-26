@@ -11,34 +11,40 @@ import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.IRejectAnimator;
 import com.bluepowermod.tile.TileMachineBase;
-import mcmultipart.api.container.IMultipartContainer;
-import mcmultipart.api.multipart.MultipartHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.Vec3i;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author MineMaarten
  */
 public class TileManager extends TileMachineBase implements ISidedInventory,  IRejectAnimator, IFuzzyRetrieving, IGuiButtonSensitive {
-
-    protected final NonNullList<ItemStack> inventory = NonNullList.withSize(25, ItemStack.EMPTY);
+    public static final int SLOTS = 25;
+    protected final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
     public TubeColor filterColor = TubeColor.NONE;
     public int priority;
     public int mode;
     public int fuzzySetting;
     private int rejectTicker = -1;
+
+    public TileManager() {
+        super(BPTileEntityType.MANAGER);
+    }
 
     private int acceptedItems(ItemStack item) {
 
@@ -51,7 +57,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+    public void onButtonPress(PlayerEntity player, int messageId, int value) {
 
         if (messageId == 0) {
             filterColor = TubeColor.values()[value];
@@ -65,7 +71,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public void update() {
+    public void tick() {
 
         if (!world.isRemote && getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
             dumpUnwantedItems();
@@ -78,7 +84,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
                 markForRenderUpdate();
             }
         }
-        super.update();
+        super.tick();
     }
 
     private boolean shouldEmitRedstone() {
@@ -91,9 +97,9 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     private void retrieveItemsFromManagers() {
-        Optional<IMultipartContainer> container = MultipartHelper.getContainer(world, pos.offset(getOutputDirection()));
-        if (container.isPresent()) {
-        }
+        //Optional<IMultipartContainer> container = MultipartHelper.getContainer(world, pos.offset(getOutputDirection()));
+        //if (container.isPresent()) {
+        //}
     }
 
     private void dumpUnwantedItems() {
@@ -120,13 +126,13 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(NBTTagCompound tCompound) {
+    public void read(CompoundNBT tCompound) {
 
-        super.readFromNBT(tCompound);
+        super.read(tCompound);
 
         for (int i = 0; i < 24; i++) {
-            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory.set(i, new ItemStack(tc));
+            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            inventory.set(i, new ItemStack((IItemProvider) tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
         mode = tCompound.getByte("mode");
@@ -138,32 +144,32 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
+    public CompoundNBT write(CompoundNBT tCompound) {
 
-        super.writeToNBT(tCompound);
+        super.write(tCompound);
 
         for (int i = 0; i < 24; i++) {
-                NBTTagCompound tc = new NBTTagCompound();
-                inventory.get(i).writeToNBT(tc);
-                tCompound.setTag("inventory" + i, tc);
+                CompoundNBT tc = new CompoundNBT();
+                inventory.get(i).write(tc);
+                tCompound.put("inventory" + i, tc);
         }
 
-        tCompound.setByte("filterColor", (byte) filterColor.ordinal());
-        tCompound.setByte("mode", (byte) mode);
-        tCompound.setByte("priority", (byte) priority);
-        tCompound.setByte("fuzzySetting", (byte) fuzzySetting);
+        tCompound.putByte("filterColor", (byte) filterColor.ordinal());
+        tCompound.putByte("mode", (byte) mode);
+        tCompound.putByte("priority", (byte) priority);
+        tCompound.putByte("fuzzySetting", (byte) fuzzySetting);
         return tCompound;
     }
 
     @Override
-    public void writeToPacketNBT(NBTTagCompound tag) {
+    public void writeToPacketNBT(CompoundNBT tag) {
 
         super.writeToPacketNBT(tag);
-        tag.setByte("rejectAnimation", (byte) rejectTicker);
+        tag.putByte("rejectAnimation", (byte) rejectTicker);
     }
 
     @Override
-    public void readFromPacketNBT(NBTTagCompound tag) {
+    public void readFromPacketNBT(CompoundNBT tag) {
 
         super.readFromPacketNBT(tag);
         rejectTicker = tag.getByte("rejectAnimation");
@@ -194,7 +200,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
             if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
-                itemStack = itemStack.splitStack(amount);
+                itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
@@ -220,33 +226,23 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public String getName() {
-        return BPBlocks.manager.getTranslationKey();
-    }
-
-    @Override
-    public boolean hasCustomName() {
-        return false;
-    }
-
-    @Override
     public int getInventoryStackLimit() {
 
         return 64;
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
-        return player.getDistanceSqToCenter(pos) <= 64.0D;
+    public boolean isUsableByPlayer(PlayerEntity player) {
+        return pos.withinDistance(new Vec3i(player.posX, player.posY, player.posZ), 64.0D);
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -257,29 +253,14 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
-
-    @Override
     public void clear() {
 
     }
 
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
             if (!stack.isEmpty())
                 drops.add(stack);
@@ -287,8 +268,8 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        EnumFacing direction = getFacingDirection();
+    public int[] getSlotsForFace(Direction side) {
+        Direction direction = getFacingDirection();
 
         if (side == direction || side == direction.getOpposite()) {
             return new int[] {};
@@ -300,12 +281,12 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         return true;
     }
 

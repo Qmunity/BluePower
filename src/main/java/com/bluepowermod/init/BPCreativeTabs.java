@@ -18,33 +18,32 @@
 package com.bluepowermod.init;
 
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.item.Items;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BPCreativeTabs {
 
-    public static CreativeTabs blocks;
-    public static CreativeTabs machines;
-    public static CreativeTabs items;
-    public static CreativeTabs tools;
-    public static CreativeTabs circuits;
-    public static CreativeTabs wiring;
-    public static CreativeTabs lighting;
+    public static ItemGroup blocks;
+    public static ItemGroup machines;
+    public static ItemGroup items;
+    public static ItemGroup tools;
+    public static ItemGroup circuits;
+    public static ItemGroup wiring;
+    public static ItemGroup lighting;
 
     static {
 
         blocks = new BPCreativeTab("bluepower:blocks") {
 
             @Override
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public ItemStack createIcon() {
                 Block iconBlock = BPBlocks.amethyst_ore;
                 if (iconBlock != null) {
@@ -58,7 +57,7 @@ public class BPCreativeTabs {
         machines = new BPCreativeTab("bluepower:machines") {
 
             @Override
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public ItemStack createIcon() {
 
                 Block iconBlock = BPBlocks.alloyfurnace;
@@ -73,7 +72,7 @@ public class BPCreativeTabs {
         items = new BPCreativeTab("bluepower:items") {
 
             @Override
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public ItemStack createIcon() {
 
                 Item iconItem = BPItems.ruby_gem;
@@ -88,7 +87,7 @@ public class BPCreativeTabs {
         tools = new BPCreativeTab("bluepower:tools") {
 
             @Override
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public ItemStack createIcon() {
 
                 Item iconItem = BPItems.screwdriver;
@@ -103,7 +102,7 @@ public class BPCreativeTabs {
         circuits = new BPCreativeTab("bluepower:circuits", true) {
 
             @Override
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public ItemStack createIcon() {
 
                 ItemStack iconItem = new ItemStack(BPItems.redstone_pointer_tile);
@@ -118,7 +117,7 @@ public class BPCreativeTabs {
         wiring = new BPCreativeTab("bluepower:wiring", true) {
 
             @Override
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public ItemStack createIcon() {
                 ItemStack iconItem = new ItemStack(BPItems.blue_alloy_ingot);
                 if (!iconItem.isEmpty()) {
@@ -132,7 +131,7 @@ public class BPCreativeTabs {
         lighting = new BPCreativeTab("bluepower:lighting", true) {
 
             @Override
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public ItemStack createIcon() {
                 int t = 1000;
 
@@ -150,7 +149,7 @@ public class BPCreativeTabs {
         };
     }
 
-    private static abstract class BPCreativeTab extends CreativeTabs {
+    private static abstract class BPCreativeTab extends ItemGroup {
 
         private boolean searchbar = false;
 
@@ -172,7 +171,7 @@ public class BPCreativeTabs {
         }
 
         @Override
-        @SideOnly(Side.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         public String getBackgroundImageName() {
 
             return searchbar ? "bp_search.png" : super.getBackgroundImageName();

@@ -8,9 +8,10 @@
 package com.bluepowermod.util;
 
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.Block;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.VoxelShape;
 
 public class AABBUtils {
 
@@ -22,7 +23,7 @@ public class AABBUtils {
         return aabb.offset(x,y,z);
     }
 
-    public static AxisAlignedBB rotate (AxisAlignedBB aabb, EnumFacing facing){
+    public static AxisAlignedBB rotate (AxisAlignedBB aabb, Direction facing){
         switch (facing){
             case UP:
                 return aabb;
@@ -38,6 +39,12 @@ public class AABBUtils {
                 return new AxisAlignedBB(aabb.minX, aabb.minZ, aabb.minY, aabb.maxX, aabb.maxZ, aabb.maxY);
         }
         return aabb;
+    }
+
+    public static VoxelShape rotate (VoxelShape shape, Direction facing){
+        AxisAlignedBB aabb = shape.getBoundingBox();
+        aabb = rotate(aabb, facing);
+        return Block.makeCuboidShape(aabb.minX * 16, aabb.minY * 16, aabb.minZ * 16, aabb.maxX * 16, aabb.maxY * 16, aabb.maxZ * 16);
     }
 
 }

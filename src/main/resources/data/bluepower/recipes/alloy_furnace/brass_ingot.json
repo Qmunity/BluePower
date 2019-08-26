@@ -1,0 +1,16 @@
+{
+  "type": "bluepower:alloy_smelting",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/copper",
+      "count": 3
+    },
+    {
+      "tag": "forge:ingots/zinc"
+    }
+  ],
+  "result": {
+    "item": "bluepower:brass_ingot",
+    "count": 4
+  }
+}

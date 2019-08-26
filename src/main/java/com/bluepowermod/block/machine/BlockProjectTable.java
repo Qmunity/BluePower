@@ -18,11 +18,26 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier1.TileProjectTable;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
+
+import javax.annotation.Nullable;
 
 
 public class BlockProjectTable extends BlockContainerBase {
@@ -30,7 +45,6 @@ public class BlockProjectTable extends BlockContainerBase {
     public BlockProjectTable() {
 
         super(Material.WOOD, TileProjectTable.class);
-        setTranslationKey(Refs.PROJECTTABLE_NAME);
         setRegistryName(Refs.MODID, Refs.PROJECTTABLE_NAME);
     }
 
@@ -40,14 +54,8 @@ public class BlockProjectTable extends BlockContainerBase {
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return true;
-    }
-
-    @Override
     protected boolean canRotateVertical() {
 
         return false;
     }
-
 }

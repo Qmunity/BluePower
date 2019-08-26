@@ -7,20 +7,31 @@
  */
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import com.bluepowermod.client.gui.BPContainerType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
 
 import com.bluepowermod.tile.tier3.TileIOExpander;
 
 public class ContainerIOExpander extends Container {
 
-	public ContainerIOExpander(InventoryPlayer inventoryPlayer, TileIOExpander ioExpander) {
+	private final IInventory inventory;
+
+	public ContainerIOExpander(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+		super(BPContainerType.IO_EXPANDER, windowId);
+		this.inventory = inventory;
+	}
+
+	public ContainerIOExpander( int id, PlayerInventory player )    {
+		this( id, player, new Inventory( 1));
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer var1) {
-		return true;
+	public boolean canInteractWith(PlayerEntity playerEntity) {
+		return inventory.isUsableByPlayer(playerEntity);
 	}
 
 }

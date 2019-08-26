@@ -3,7 +3,7 @@ package com.bluepowermod.api.wire.redstone;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionCache;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -25,7 +25,7 @@ public interface IRedstoneApi {
      *            Face the device must be placed on or {@link null} if not know or not a face device
      * @return The redstone device at the specified coords, side and face.
      */
-    public IRedstoneDevice getRedstoneDevice(World world, BlockPos pos, EnumFacing face, EnumFacing side);
+    public IRedstoneDevice getRedstoneDevice(World world, BlockPos pos, Direction face, Direction side);
 
     /**
      * Returns the bundled device at the specified coordinates and on the specified side and face. Data gotten from the registered
@@ -41,7 +41,7 @@ public interface IRedstoneApi {
      *            Face the device must be placed on or {@link null} if not know or not a face device
      * @return The redstone device at the specified coords, side and face.
      */
-    public IBundledDevice getBundledDevice(World world, BlockPos pos, EnumFacing face, EnumFacing side);
+    public IBundledDevice getBundledDevice(World world, BlockPos pos, Direction face, Direction side);
 
     /**
      * Registers a redstone/bundled device provider.
@@ -70,18 +70,18 @@ public interface IRedstoneApi {
      */
     public void setWiresHandleUpdates(boolean shouldWiresHandleUpdates);
 
-    public IConnection<IRedstoneDevice> createConnection(IRedstoneDevice a, IRedstoneDevice b, EnumFacing sideA, EnumFacing sideB,
-            ConnectionType type);
+    public IConnection<IRedstoneDevice> createConnection(IRedstoneDevice a, IRedstoneDevice b, Direction sideA, Direction sideB,
+                                                         ConnectionType type);
 
-    public IConnection<IBundledDevice> createConnection(IBundledDevice a, IBundledDevice b, EnumFacing sideA, EnumFacing sideB,
-            ConnectionType type);
+    public IConnection<IBundledDevice> createConnection(IBundledDevice a, IBundledDevice b, Direction sideA, Direction sideB,
+                                                        ConnectionType type);
 
     public IConnectionCache<IRedstoneDevice> createRedstoneConnectionCache(IRedstoneDevice dev);
 
     public IConnectionCache<IBundledDevice> createBundledConnectionCache(IBundledDevice dev);
 
-    public IPropagator<IRedstoneDevice> getRedstonePropagator(IRedstoneDevice device, EnumFacing side);
+    public IPropagator<IRedstoneDevice> getRedstonePropagator(IRedstoneDevice device, Direction side);
 
-    public IPropagator<IBundledDevice> getBundledPropagator(IBundledDevice device, EnumFacing side);
+    public IPropagator<IBundledDevice> getBundledPropagator(IBundledDevice device, Direction side);
 
 }
