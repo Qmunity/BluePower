@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.util.NonNullList;
 
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,9 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         if (!craftBuffer.isEmpty())
             drops.add(craftBuffer);
         return drops;
@@ -117,7 +118,6 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
         }
     }
 
-    //Todo Fields
     @Override
     public boolean isEmpty() {
         return craftBuffer == ItemStack.EMPTY;

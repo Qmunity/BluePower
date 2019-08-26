@@ -112,6 +112,7 @@ public class BPBlocks {
     public static Block sorting_machine;
     public static Block project_table;
     public static Block auto_project_table;
+    public static Block[] project_tables = new Block[2];
     public static Block circuit_table;
     public static Block circuit_database;
     public static Block ejector;
@@ -182,7 +183,7 @@ public class BPBlocks {
         basalt_paver = new BlockStoneOre(Refs.BASALTPAVER_NAME);
         tiles = new BlockStoneOre(Refs.TILES);
 
-        teslatite_ore = new BlockTeslatiteOre(Refs.TESLATITEORE_NAME);
+        teslatite_ore = new BlockItemOre(Refs.TESLATITEORE_NAME);
         ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME);
         sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME);
         amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME);
@@ -223,7 +224,10 @@ public class BPBlocks {
         sorting_machine = new BlockContainerFacingBase(Material.ROCK, TileSortingMachine.class).setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.SORTING_MACHINE_NAME);
         project_table = new BlockProjectTable();
-        auto_project_table = new BlockProjectTable(TileAutoProjectTable.class).setRegistryName(Refs.MODID, Refs.AUTOPROJECTTABLE_NAME);
+        project_tables[0] = project_table;
+        auto_project_table = new BlockProjectTable(TileAutoProjectTable.class).setWIP(true).setRegistryName(Refs.MODID, Refs.AUTOPROJECTTABLE_NAME);
+        project_tables[1] = auto_project_table;
+
         circuit_table = new BlockProjectTable(TileCircuitTable.class).setWIP(true).setRegistryName(Refs.MODID, Refs.CIRCUITTABLE_NAME);
         circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.CIRCUITDATABASE_NAME);

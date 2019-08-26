@@ -1,0 +1,25 @@
+﻿{
+  "result": {
+    "item": "bluepower:gate_transparent"
+  },
+  "pattern": [
+    "ACW",
+    "CCC",
+    "CWT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "bluepower:bluestone_anode_tile"
+    },
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "C": {
+      "item": "bluepower:bluestone_cathode_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    }
+  }
+}

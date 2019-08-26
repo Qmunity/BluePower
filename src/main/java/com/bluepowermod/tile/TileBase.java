@@ -26,6 +26,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -207,9 +208,9 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
             onBlockNeighbourChanged();
     }
 
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        return new ArrayList<ItemStack>();
+        return NonNullList.create();
     }
 
     @Override

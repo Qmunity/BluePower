@@ -220,9 +220,9 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         for (int i = 9; i < 18; i++) {
             if (!inventory.get(i).isEmpty())
                 drops.add(inventory.get(i));

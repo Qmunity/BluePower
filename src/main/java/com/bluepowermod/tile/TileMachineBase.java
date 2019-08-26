@@ -23,6 +23,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -210,9 +211,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         for (TubeStack stack : internalItemStackBuffer)
             drops.add(stack.stack);
         return drops;

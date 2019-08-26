@@ -45,9 +45,9 @@ public class TileProjectTable extends TileBase implements IInventory, INamedCont
     }
 
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
             if (!stack.isEmpty())
                 drops.add(stack);

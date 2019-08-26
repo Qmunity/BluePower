@@ -1,0 +1,28 @@
+﻿{
+  "result": {
+    "item": "bluepower:gate_state_cell"
+  },
+  "pattern": [
+    "TAC",
+    "WSP",
+    "TWT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "S": {
+      "item": "bluepower:silicon_chip_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    },
+    "P": {
+      "item": "bluepower:bluestone_pointer_tile"
+    },
+    "C": {
+      "item": "bluepower:bluestone_cathode_tile"
+    }
+  }
+}

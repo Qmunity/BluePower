@@ -19,21 +19,25 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.BushBlock;
-import net.minecraft.block.FlowerBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 
 public class BlockCustomFlower extends BushBlock {
-
-    public static final String[] field_149858_b = new String[] { "indigo_flower" };
-    // private int meta;
+    protected static final VoxelShape SHAPE = Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 14.0D, 13.0D);
 
     public BlockCustomFlower(String name, Properties properties) {
-        super(properties.hardnessAndResistance(0.0F).sound(SoundType.PLANT));
+        super(properties.hardnessAndResistance(0.0F).sound(SoundType.PLANT).doesNotBlockMovement());
         this.setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
+    }
+
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        Vec3d vec3d = state.getOffset(worldIn, pos);
+        return SHAPE.withOffset(vec3d.x, vec3d.y, vec3d.z);
     }
 
 }

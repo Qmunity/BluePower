@@ -1,0 +1,22 @@
+﻿{
+  "result": {
+    "item": "bluepower:gate_lightcell"
+  },
+  "pattern": [
+    "TWT",
+    "TDT",
+    "TTT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": {
+      "item": "bluepower:blue_doped_wafer"
+    },
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    }
+  }
+}

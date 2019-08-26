@@ -211,9 +211,9 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
             if (!stack.isEmpty())
                 drops.add(stack);

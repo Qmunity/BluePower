@@ -343,9 +343,9 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public List<ItemStack> getDrops() {
+    public NonNullList<ItemStack> getDrops() {
 
-        List<ItemStack> drops = super.getDrops();
+        NonNullList<ItemStack> drops = super.getDrops();
         if (!fuelInventory.isEmpty())
             drops.add(fuelInventory);
         if (!outputInventory.isEmpty())

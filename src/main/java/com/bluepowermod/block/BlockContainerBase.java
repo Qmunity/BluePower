@@ -29,6 +29,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -80,12 +82,23 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
         return this;
     }
 
-    //TODO Replace with Loot Tables
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> drops =  super.getDrops(state, builder);
         drops.add(new ItemStack(this));
         return drops;
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (state.getBlock() != newState.getBlock()) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if (tileentity instanceof TileBase) {
+                InventoryHelper.dropItems(worldIn, pos, ((TileBase)tileentity).getDrops());
+                worldIn.updateComparatorOutputLevel(pos, this);
+            }
+            super.onReplaced(state, worldIn, pos, newState, isMoving);
+        }
     }
 
     @Override
@@ -170,20 +183,6 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
         }
         return false;
     }
-
-    @Override
-    public void onPlayerDestroy(IWorld world, BlockPos pos, BlockState state) {
-        if (!isSilkyRemoving) {
-            TileBase tile = get(world, pos);
-            if (tile != null) {
-                for (ItemStack stack : tile.getDrops()) {
-                    IOHelper.spawnItemInWorld(world.getWorld(), stack, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-                }
-            }
-        }
-        super.onPlayerDestroy(world, pos, state);
-    }
-
 
     protected boolean canRotateVertical() {
 

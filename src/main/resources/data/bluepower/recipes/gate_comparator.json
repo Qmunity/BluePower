@@ -1,0 +1,28 @@
+﻿{
+  "result": {
+    "item": "bluepower:gate_comparator"
+  },
+  "pattern": [
+    "TCT",
+    "WSW",
+    "CAC"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "bluepower:redstone_anode_tile"
+    },
+    "W": {
+      "item": "bluepower:redstone_wire_tile"
+    },
+    "C": {
+      "item": "bluepower:redstone_cathode_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    },
+    "S": {
+      "item": "bluepower:quartz_resonator_tile"
+    }
+  }
+}

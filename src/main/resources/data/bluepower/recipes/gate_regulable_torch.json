@@ -1,0 +1,22 @@
+﻿{
+  "result": {
+    "item": "bluepower:regulable_torch"
+  },
+  "pattern": [
+    "TWT",
+    "TPT",
+    "TTT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "item": "bluepower:redstone_wire_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    },
+    "P": {
+      "item": "bluepower:redstone_pointer_tile"
+    }
+  }
+}
