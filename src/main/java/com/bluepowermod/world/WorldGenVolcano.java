@@ -239,7 +239,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
     private void generateAltar(IWorld world, int startX, int startY, int startZ, Random rand, Direction dir) {
         generateLootChest(world, new BlockPos(startX, startY + 1, startZ), rand, dir);
         Direction opDir = dir.getOpposite();
-        Block altarBlock = ALTAR_BLOCKS[rand.nextInt(ALTAR_BLOCKS.length)];
+        Block altarBlock = ALTAR_BLOCKS[new Random().nextInt(ALTAR_BLOCKS.length)];
         setAltarBlockAndPossiblyTrap(world, startX, startY, startZ, rand, altarBlock);
         setAltarBlockAndPossiblyTrap(world, startX + opDir.getXOffset(), startY, startZ + opDir.getZOffset(), rand, altarBlock);
         Direction sideDir = Direction.DOWN;
