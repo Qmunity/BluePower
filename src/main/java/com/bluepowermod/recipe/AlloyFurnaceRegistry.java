@@ -149,10 +149,12 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             }
         }
 
-        List<ItemStack> registeredRecycledItems = new ArrayList<ItemStack>();
-        List<ItemStack> registeredResultItems = new ArrayList<ItemStack>();
 
         for (IRecipe recipe : recipeManager.getRecipes()) {
+
+            List<ItemStack> registeredRecycledItems = new ArrayList<ItemStack>();
+            List<ItemStack> registeredResultItems = new ArrayList<ItemStack>();
+
             int recyclingAmount = 0;
             ItemStack currentlyRecycledInto = ItemStack.EMPTY;
             for (ItemStack recyclingItem : bufferedRecyclingItems) {
@@ -213,15 +215,22 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                                 + " to the Alloy Furnace recipes.");
                         continue;
                     }
-                    ItemStack resultItem = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount));
+                    //Divide by the Recipe Output
+                    ItemStack resultItem = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount / recipe.getRecipeOutput().getCount()));
                     registeredResultItems.add(resultItem);
                     registeredRecycledItems.add(recipe.getRecipeOutput());
 
                 }
             }
-        }
-        for (int i = 0; i < registeredResultItems.size(); i++) {
-            addRecipe(registeredResultItems.get(i).getItem().getRegistryName(), registeredResultItems.get(i), Ingredient.fromStacks(registeredRecycledItems.get(i)));
+
+            for (int i = 0; i < registeredResultItems.size(); i++) {
+                //Check if for null output
+                if(registeredResultItems.get(i).getCount() > 0) {
+                    //Register Recipe
+                    addRecipe(registeredResultItems.get(i).getItem().getRegistryName(), registeredResultItems.get(i), Ingredient.fromStacks(registeredRecycledItems.get(i)));
+                }
+            }
+
         }
 
     }
