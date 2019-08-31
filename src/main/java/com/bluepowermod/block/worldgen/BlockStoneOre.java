@@ -35,6 +35,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponentUtils;
 import net.minecraft.world.*;
+import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -113,15 +114,20 @@ public class BlockStoneOre extends Block {
 
     @Override
     public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
-        //TODO: Test Witherproof still works
         if (!witherproof)
             super.onExplosionDestroy(worldIn, pos, explosionIn);
     }
 
     @Override
     public boolean canDropFromExplosion(Explosion explosion) {
+        return !witherproof && super.canDropFromExplosion(explosion);
+    }
 
-        return witherproof ? false : super.canDropFromExplosion(explosion);
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        List<ItemStack> drops = super.getDrops(state, builder);
+        drops.add(new ItemStack(this));
+        return drops;
     }
 
 }
