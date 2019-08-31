@@ -1,0 +1,22 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S",
+    "R",
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "bluepower:stone_tile"
+    },
+    "R": {
+      "item": "minecraft:redstone_torch"
+    },
+    "S": {
+      "item": "minecraft:stone"
+    }
+  },
+  "result": {
+    "item": "bluepower:redstone_pointer_tile"
+  }
+}

@@ -1,0 +1,20 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "RRR",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "bluepower:stone_tile"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "bluepower:redstone_anode_tile",
+    "count": 3
+  }
+}

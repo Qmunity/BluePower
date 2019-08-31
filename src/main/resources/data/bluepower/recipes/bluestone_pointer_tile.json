@@ -1,0 +1,25 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "TRT",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "bluepower:stone_tile"
+    },
+    "T": {
+      "item": "bluepower:teslatite_dust"
+    },
+    "R": {
+      "item": "minecraft:redstone_torch"
+    },
+    "S": {
+      "item": "minecraft:stone"
+    }
+  },
+  "result": {
+    "item": "bluepower:bluestone_pointer_tile"
+  }
+}

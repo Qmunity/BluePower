@@ -1,5 +1,6 @@
 ﻿{
   "ambientocclusion": false,
+  "parent": "bluepower:item/stone_tile",
   "textures": {
     "bluestone_torch_on": "bluepower:blocks/bluestone_torch_on",
     "gate": "bluepower:blocks/gates/gate",
@@ -9,39 +10,14 @@
     "gui": {
       "rotation": [ 30, 45, 0 ],
       "translation": [ 0, 2, 0 ],
-      "scale": [ 0.725, 0.725, 0.725 ]
-    },
-    "ground": {
-      "rotation": [ 0, 0, 0 ],
-      "translation": [ 0, 3, 0 ],
-      "scale": [ 0.25, 0.25, 0.25 ]
-    },
-    "fixed": {
-      "rotation": [ 0, 180, 0 ],
-      "translation": [ 0, 0, 0 ],
-      "scale": [ 1, 1, 1 ]
-    },
-    "head": {
-      "rotation": [ 0, 180, 0 ],
-      "translation": [ 0, 0, 0 ],
-      "scale": [ 1, 1, 1 ]
-    },
-    "firstperson_righthand": {
-      "rotation": [ 0, 315, 0 ],
-      "translation": [ 0, 2.5, 0 ],
-      "scale": [ 0.4, 0.4, 0.4 ]
-    },
-    "thirdperson_righthand": {
-      "rotation": [ 75, 315, 0 ],
-      "translation": [ 0, 2.5, 0 ],
-      "scale": [ 0.375, 0.375, 0.375 ]
+      "scale": [ 0.8, 0.8, 0.8 ]
     }
   },
   "elements": [
     {
       "name": "Element",
-      "from": [ 7, 2, 6 ],
-      "to": [ 9, 8, 10 ],
+      "from": [ 7, 3, 6 ],
+      "to": [ 9, 9, 10 ],
       "shade": false,
       "faces": {
         "east": { "texture": "#bluestone_torch_on", "uv": [ 6, 5, 10, 11 ] },
@@ -50,8 +26,8 @@
     },
     {
       "name": "Element",
-      "from": [ 6, 2, 7 ],
-      "to": [ 10, 8, 9 ],
+      "from": [ 6, 3, 7 ],
+      "to": [ 10, 9, 9 ],
       "shade": false,
       "faces": {
         "north": { "texture": "#bluestone_torch_on", "uv": [ 6, 5, 10, 11 ] },
@@ -59,22 +35,22 @@
       }
     },
     {
-      "name": "Base",
-      "from": [ 1, 0, 1 ],
-      "to": [ 15, 2, 15 ],
+      "name": "Tile",
+      "from": [ 3, 0, 3 ],
+      "to": [ 13, 3, 13 ],
       "faces": {
-        "north": { "texture": "#gate", "uv": [ 1, 1, 15, 2 ], "rotation": 180 },
-        "east": { "texture": "#gate", "uv": [ 14, 1, 15, 15 ], "rotation": 90 },
-        "south": { "texture": "#gate", "uv": [ 1, 14, 15, 15 ] },
-        "west": { "texture": "#gate", "uv": [ 1, 1, 2, 15 ], "rotation": 270 },
-        "up": { "texture": "#gate", "uv": [ 1, 1, 15, 15 ] },
-        "down": { "texture": "#gate", "uv": [ 1, 1, 15, 15 ] }
+        "north": { "texture": "#gate", "uv": [ 3, 1, 13, 3 ] },
+        "east": { "texture": "#gate", "uv": [ 2, 4, 12, 6 ] },
+        "south": { "texture": "#gate", "uv": [ 2, 7, 12, 9 ] },
+        "west": { "texture": "#gate", "uv": [ 2, 6, 12, 8 ] },
+        "up": { "texture": "#gate", "uv": [ 2, 2, 12, 12 ] },
+        "down": { "texture": "#gate", "uv": [ 2, 2, 12, 12 ] }
       }
     },
     {
       "name": "Wire",
-      "from": [ 9, 2, 7 ],
-      "to": [ 15, 3, 9 ],
+      "from": [ 9, 3, 7 ],
+      "to": [ 13, 4, 9 ],
       "faces": {
         "north": { "texture": "#bluestone_on", "uv": [ 0, 0, 6, 1 ] },
         "east": { "texture": "#bluestone_on", "uv": [ 0, 0, 2, 1 ] },
@@ -86,8 +62,8 @@
     },
     {
       "name": "Torch",
-      "from": [ 7, 2, 7 ],
-      "to": [ 9, 7, 9 ],
+      "from": [ 7, 3, 7 ],
+      "to": [ 9, 8, 9 ],
       "faces": {
         "north": { "texture": "#bluestone_torch_on", "uv": [ 7, 6, 9, 11 ] },
         "east": { "texture": "#bluestone_torch_on", "uv": [ 7, 6, 9, 11 ] },
@@ -99,8 +75,8 @@
     },
     {
       "name": "PointerTip",
-      "from": [ 5, 3, 5 ],
-      "to": [ 8, 4.4, 8 ],
+      "from": [ 5, 4, 5 ],
+      "to": [ 8, 5.4, 8 ],
       "faces": {
         "north": { "texture": "#gate", "uv": [ 8, 8, 11, 9.4 ] },
         "east": { "texture": "#gate", "uv": [ 6, 6, 9, 7.4 ] },
@@ -112,8 +88,8 @@
     },
     {
       "name": "PointerBase",
-      "from": [ 5.9, 3, 5.9 ],
-      "to": [ 10.15, 4.4, 8.9 ],
+      "from": [ 5.9, 4, 5.9 ],
+      "to": [ 10.15, 5.4, 8.9 ],
       "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "y", "angle": 45.0 },
       "faces": {
         "north": { "texture": "#gate", "uv": [ 5, 5, 9.25, 6.4 ] },

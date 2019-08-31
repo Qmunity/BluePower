@@ -1,0 +1,18 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "T",
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "bluepower:stone_tile"
+    },
+    "T": {
+      "item": "bluepower:teslatite_dust"
+    }
+  },
+  "result": {
+    "item": "bluepower:bluestone_wire_tile"
+  }
+}

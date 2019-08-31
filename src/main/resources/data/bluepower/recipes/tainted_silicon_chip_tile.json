@@ -1,0 +1,17 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SG"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "S": {
+      "item": "bluepower:silicon_chip_tile"
+    }
+  },
+  "result": {
+    "item": "bluepower:tainted_silicon_chip_tile"
+  }
+}

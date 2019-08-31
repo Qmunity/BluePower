@@ -1,0 +1,20 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " T ",
+    "TTT",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "bluepower:stone_tile"
+    },
+    "T": {
+      "item": "bluepower:teslatite_dust"
+    }
+  },
+  "result": {
+    "item": "bluepower:bluestone_anode_tile",
+    "count": 3
+  }
+}

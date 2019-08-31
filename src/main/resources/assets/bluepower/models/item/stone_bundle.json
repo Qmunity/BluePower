@@ -1,4 +1,5 @@
 ﻿{
+  "parent": "bluepower:item/stone_tile",
   "textures": {
     "bundled_straight_1": "bluepower:blocks/wire/bundled_straight_1",
     "gate": "bluepower:blocks/gates/gate",
@@ -8,54 +9,29 @@
   },
   "display": {
     "gui": {
-      "rotation": [ 30, 315, 0 ],
+      "rotation": [ 30, 135, 0 ],
       "translation": [ 0, 2, 0 ],
-      "scale": [ 0.725, 0.725, 0.725 ]
-    },
-    "ground": {
-      "rotation": [ 0, 0, 0 ],
-      "translation": [ 0, 3, 0 ],
-      "scale": [ 0.25, 0.25, 0.25 ]
-    },
-    "fixed": {
-      "rotation": [ 0, 180, 0 ],
-      "translation": [ 0, 0, 0 ],
-      "scale": [ 1, 1, 1 ]
-    },
-    "head": {
-      "rotation": [ 0, 180, 0 ],
-      "translation": [ 0, 0, 0 ],
-      "scale": [ 1, 1, 1 ]
-    },
-    "firstperson_righthand": {
-      "rotation": [ 0, 315, 0 ],
-      "translation": [ 0, 2.5, 0 ],
-      "scale": [ 0.4, 0.4, 0.4 ]
-    },
-    "thirdperson_righthand": {
-      "rotation": [ 75, 315, 0 ],
-      "translation": [ 0, 2.5, 0 ],
-      "scale": [ 0.375, 0.375, 0.375 ]
+      "scale": [ 0.8, 0.8, 0.8 ]
     }
   },
   "elements": [
     {
-      "name": "Base",
-      "from": [ 1, 0, 1 ],
-      "to": [ 15, 2, 15 ],
+      "name": "Tile",
+      "from": [ 3, 0, 3 ],
+      "to": [ 13, 3, 13 ],
       "faces": {
-        "north": { "texture": "#gate", "uv": [ 1, 1, 15, 2 ], "rotation": 180 },
-        "east": { "texture": "#gate", "uv": [ 14, 1, 15, 15 ], "rotation": 90 },
-        "south": { "texture": "#gate", "uv": [ 1, 14, 15, 15 ] },
-        "west": { "texture": "#gate", "uv": [ 1, 1, 2, 15 ], "rotation": 270 },
-        "up": { "texture": "#gate", "uv": [ 1, 1, 15, 15 ] },
-        "down": { "texture": "#gate", "uv": [ 1, 1, 15, 15 ] }
+        "north": { "texture": "#gate", "uv": [ 3, 1, 13, 3 ] },
+        "east": { "texture": "#gate", "uv": [ 2, 4, 12, 6 ] },
+        "south": { "texture": "#gate", "uv": [ 2, 7, 12, 9 ] },
+        "west": { "texture": "#gate", "uv": [ 2, 6, 12, 8 ] },
+        "up": { "texture": "#gate", "uv": [ 2, 2, 12, 12 ] },
+        "down": { "texture": "#gate", "uv": [ 2, 2, 12, 12 ] }
       }
     },
     {
       "name": "Cube",
-      "from": [ 5, 2, 1 ],
-      "to": [ 11, 4, 15 ],
+      "from": [ 5, 3, 3 ],
+      "to": [ 11, 5, 13 ],
       "faces": {
         "north": { "texture": "#bundled_connection", "uv": [ 11, 13, 5, 15 ] },
         "east": { "texture": "#bundled_side_2", "uv": [ 1, 13, 15, 15 ] },

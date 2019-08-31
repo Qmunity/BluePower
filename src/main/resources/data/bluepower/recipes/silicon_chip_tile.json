@@ -1,0 +1,18 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "bluepower:stone_tile"
+    },
+    "S": {
+      "item": "bluepower:blue_doped_wafer"
+    }
+  },
+  "result": {
+    "item": "bluepower:silicon_chip_tile"
+  }
+}
