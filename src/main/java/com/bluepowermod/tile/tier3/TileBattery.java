@@ -14,6 +14,7 @@ import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.NetworkManager;
@@ -40,11 +41,15 @@ public class TileBattery extends TileMachineBase {
 
     @Override
     public void tick() {
-        double voltage = storage.getVoltage();
-        int level = (int)((voltage / storage.getMaxVoltage()) * 6);
-        if(world.getBlockState(pos).get(BlockBattery.LEVEL) != level){
-            world.setBlockState(pos, world.getBlockState(pos).with(BlockBattery.LEVEL, level));
-            markDirty();
+        if (!world.isRemote) {
+            double voltage = storage.getVoltage();
+            int level = (int) ((voltage / storage.getMaxVoltage()) * 6);
+            BlockState state = world.getBlockState(pos);
+            if (state.get(BlockBattery.LEVEL) != level) {
+                world.setBlockState(pos, state.with(BlockBattery.LEVEL, level));
+                markForRenderUpdate();
+                markDirty();
+            }
         }
     }
 

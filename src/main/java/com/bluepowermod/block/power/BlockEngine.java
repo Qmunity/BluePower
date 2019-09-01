@@ -26,6 +26,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -50,6 +52,11 @@ public class BlockEngine extends BlockContainerBase {
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
         builder.add(ACTIVE, GEAR, GLIDER, FACING);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
+        return Block.makeCuboidShape(0,0,0,16,9,16);
     }
 
     @Override

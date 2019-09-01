@@ -11,6 +11,7 @@ package com.bluepowermod;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.init.*;
@@ -21,9 +22,20 @@ import com.bluepowermod.util.DatapackUtils;
 import com.bluepowermod.world.BPWorldGen;
 import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.BasicState;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
@@ -51,12 +63,15 @@ public class BluePower {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BPConfig.spec);
         instance = this;
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
-        BPApi.init(new BluePowerAPI());
-        BPEnchantments.init();
+        MinecraftForge.EVENT_BUS.register(this);
+
         MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
+
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
-        MinecraftForge.EVENT_BUS.register(this);
+
+        BPApi.init(new BluePowerAPI());
+        BPEnchantments.init();
         BPBlocks.init();
         proxy.preInitRenderers();
 

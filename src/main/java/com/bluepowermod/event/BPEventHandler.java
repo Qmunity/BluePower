@@ -11,15 +11,10 @@ import com.bluepowermod.ClientProxy;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
 import com.bluepowermod.container.ContainerSeedBag;
-import com.bluepowermod.container.inventory.InventoryItem;
-import com.bluepowermod.helper.MathHelper;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageServerTickTime;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.GrassBlock;
@@ -30,7 +25,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -60,7 +54,6 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
 import org.lwjgl.opengl.GL11;
 
@@ -281,22 +274,22 @@ public class BPEventHandler {
     public void blockHighlightEvent(DrawBlockHighlightEvent event) {
         RayTraceResult mop = event.getTarget();
         Block block = Block.getBlockFromItem(Minecraft.getInstance().player.getHeldItem(Hand.MAIN_HAND).getItem());
-        if(block instanceof BlockGateBase && mop.getType() == RayTraceResult.Type.BLOCK){
-            BlockPos position = ((BlockRayTraceResult)mop).getPos().offset(((BlockRayTraceResult)mop).getFace());
+        if (block instanceof BlockGateBase && mop.getType() == RayTraceResult.Type.BLOCK) {
+            BlockPos position = ((BlockRayTraceResult) mop).getPos().offset(((BlockRayTraceResult) mop).getFace());
             Entity entity = Minecraft.getInstance().getRenderViewEntity();
-            double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)event.getPartialTicks();
-            double d1 = (entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)event.getPartialTicks()) + entity.getEyeHeight();
-            double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)event.getPartialTicks();
+            double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) event.getPartialTicks();
+            double d1 = (entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) event.getPartialTicks()) + entity.getEyeHeight();
+            double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) event.getPartialTicks();
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder vertexbuffer = tessellator.getBuffer();
-            vertexbuffer.setTranslation(-d0, -d1, -d2 );
+            vertexbuffer.setTranslation(-d0, -d1, -d2);
             GlStateManager.pushMatrix();
             GlStateManager.enableAlphaTest();
             position.add(0.5, 0.1, 0.5);
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
             Vec3d lookVec = event.getInfo().getLookDirection();
-            Direction dir = ((BlockRayTraceResult)mop).getFace();
+            Direction dir = ((BlockRayTraceResult) mop).getFace();
             BlockState state = block.getDefaultState().with(BlockGateBase.FACING, dir)
                     .with(BlockGateBase.ROTATION, Direction.getFacingFromVector(lookVec.x, 0, lookVec.z).getOpposite().getHorizontalIndex());
             IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
@@ -306,11 +299,5 @@ public class BPEventHandler {
             vertexbuffer.setTranslation(0, 0, 0);
         }
     }
-
-    //TODO: May need to bake the engine model
-    //@SubscribeEvent
-    //public void onModelBakeEvent(ModelBakeEvent event) {
-        //event.getModelRegistry().put();
-    //}
 
 }

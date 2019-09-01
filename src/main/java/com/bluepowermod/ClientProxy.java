@@ -29,6 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientProxy extends CommonProxy {
@@ -43,6 +44,8 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new RenderDebugScreen());
         CompatibilityUtils.registerRenders();
         OBJLoader.INSTANCE.addDomain(Refs.MODID);
+
+        FMLJavaModLoadingContext.get().getModEventBus().register(new Renderers());
     }
 
 
