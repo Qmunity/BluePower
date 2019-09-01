@@ -9,6 +9,7 @@
 package com.bluepowermod;
 
 import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
@@ -53,8 +54,6 @@ public class BluePower {
         BPApi.init(new BluePowerAPI());
         BPEnchantments.init();
         MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
-        //TODO: Blutricity Capability
-        //CapabilityBlutricity.register();
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         MinecraftForge.EVENT_BUS.register(this);
@@ -72,6 +71,7 @@ public class BluePower {
         WorldGenOres.setupOres();
         WorldGenFlowers.setupFlowers();
         BPWorldGen.setupGeneralWorldGen();
+        CapabilityBlutricity.register();
 
         proxy.setup(event);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> BPContainerType::registerScreenFactories);

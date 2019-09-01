@@ -10,6 +10,7 @@ package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
+import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
@@ -17,6 +18,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -30,6 +32,7 @@ import javax.annotation.Nullable;
 public class TileBattery extends TileMachineBase {
 
     private final BlutricityStorage storage = new BlutricityStorage(3200);
+    private LazyOptional<IPowerBase> blutricityCap;
 
     public TileBattery() {
         super(BPTileEntityType.BATTERY);
@@ -40,18 +43,29 @@ public class TileBattery extends TileMachineBase {
         double voltage = storage.getVoltage();
         int level = (int)((voltage / storage.getMaxVoltage()) * 6);
         if(world.getBlockState(pos).get(BlockBattery.LEVEL) != level){
-            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos).with(BlockBattery.LEVEL, level), 0);
+            world.setBlockState(pos, world.getBlockState(pos).with(BlockBattery.LEVEL, level));
             markDirty();
         }
     }
 
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability) {
-        //if(capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
-            //return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(storage);
-        //}
-        return super.getCapability(capability);
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
+            if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
+            return blutricityCap.cast();
+        }
+        return super.getCapability(cap);
+    }
+
+    @Override
+    protected void invalidateCaps(){
+        super.invalidateCaps();
+        if( blutricityCap != null )
+        {
+            blutricityCap.invalidate();
+            blutricityCap = null;
+        }
     }
 
     @Override

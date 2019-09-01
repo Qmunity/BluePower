@@ -3,9 +3,9 @@ package com.bluepowermod.network.annotation;
 import com.bluepowermod.util.BPLog;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.Field;
@@ -252,7 +252,7 @@ public abstract class SyncedField<T> {
 
         @Override
         protected boolean equals(FluidStack oldValue, FluidStack newValue){
-            return oldValue.isFluidEqual(newValue) && oldValue.amount == newValue.amount;
+            return oldValue.isFluidEqual(newValue) && oldValue.getAmount() == newValue.getAmount();
         }
 
         @Override

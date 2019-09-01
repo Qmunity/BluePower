@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.bluepowermod.util.BPLog;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidTank;
 import com.bluepowermod.network.annotation.SyncedField.SyncedBoolean;
 import com.bluepowermod.network.annotation.SyncedField.SyncedDouble;
 import com.bluepowermod.network.annotation.SyncedField.SyncedEnum;
@@ -15,6 +14,7 @@ import com.bluepowermod.network.annotation.SyncedField.SyncedFluidTank;
 import com.bluepowermod.network.annotation.SyncedField.SyncedInt;
 import com.bluepowermod.network.annotation.SyncedField.SyncedItemStack;
 import com.bluepowermod.network.annotation.SyncedField.SyncedString;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 /**
  * @author MineMaarten

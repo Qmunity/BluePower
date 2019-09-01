@@ -11,21 +11,15 @@ package com.bluepowermod.client.render;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tile.tier1.TileLamp;
-import com.bluepowermod.tile.tier3.TileEngine;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistry;
 
 @Mod.EventBusSubscriber(Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
@@ -44,7 +38,7 @@ public class Renderers {
     public static void init() {
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
+        //ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
 
         for (Item item : BPItems.itemList) {
             if (item instanceof IBPColoredItem) {

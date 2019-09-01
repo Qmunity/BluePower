@@ -11,10 +11,14 @@ package com.bluepowermod.block.power;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileSolarPanel;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
 /**
@@ -28,4 +32,8 @@ public class BlockSolarPanel extends BlockContainerBase {
         setRegistryName(Refs.MODID, Refs.SOLARPANEL_NAME);
     }
 
+    @Override
+    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
+        return Block.makeCuboidShape(0,0,0, 16,4,16);
+    }
 }

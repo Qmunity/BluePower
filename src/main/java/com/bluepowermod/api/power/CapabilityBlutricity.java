@@ -18,7 +18,6 @@ public class CapabilityBlutricity {
     public static Capability<IPowerBase> BLUTRICITY_CAPABILITY = null;
 
     public static void register(){
-        //TODO: Add factory
         CapabilityManager.INSTANCE.register(IPowerBase.class, new DefaultBlutricityStorage<>(), () -> {throw new UnsupportedOperationException();});
     }
 
