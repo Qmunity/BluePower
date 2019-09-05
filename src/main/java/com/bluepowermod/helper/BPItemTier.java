@@ -23,27 +23,27 @@ public class BPItemTier implements IItemTier {
 
     @Override
     public int getMaxUses() {
-        return 750;
+        return maxUses;
     }
 
     @Override
     public float getEfficiency() {
-        return 6;
+        return efficiency;
     }
 
     @Override
     public float getAttackDamage() {
-        return 2;
+        return attackDamage;
     }
 
     @Override
     public int getHarvestLevel() {
-        return 4;
+        return harvestLevel;
     }
 
     @Override
     public int getEnchantability() {
-        return 18;
+        return enchantability;
     }
 
     @Override

@@ -28,7 +28,7 @@ public class ItemGemHoe extends HoeItem {
     protected boolean canRepair              = true;
 
     public ItemGemHoe(IItemTier itemTier, String name, Item repairItem) {
-        super(itemTier, itemTier.getAttackDamage(), new Properties().group(BPCreativeTabs.tools));
+        super(itemTier, -1.4F, new Properties().group(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);

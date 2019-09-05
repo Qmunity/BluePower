@@ -29,7 +29,7 @@ public class ItemGemAxe extends AxeItem {
     protected boolean canRepair              = true;
 
     public ItemGemAxe(IItemTier itemTier, String name, Item repairItem) {
-        super(itemTier, itemTier.getAttackDamage(), 1.4F, new Properties().group(BPCreativeTabs.tools));
+        super(itemTier, 2, -1.4F, new Properties().group(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);

@@ -29,7 +29,7 @@ public class ItemGemPickaxe extends PickaxeItem {
     protected boolean canRepair              = true;
 
     public ItemGemPickaxe(IItemTier itemTier, String name, Item repairItem) {
-        super(itemTier, itemTier.getHarvestLevel(),1.4F, new Properties().group(BPCreativeTabs.tools));
+        super(itemTier, 3,-1.4F, new Properties().group(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);

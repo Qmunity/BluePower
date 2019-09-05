@@ -18,6 +18,7 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.helper.BPItemTier;
+import com.bluepowermod.init.BPCreativeTabs;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.monster.EndermanEntity;
@@ -37,7 +38,7 @@ public class ItemAthame extends SwordItem {
     private static IItemTier athameMaterial = new BPItemTier(100, 6.0F, 2.0F, 0, 10, Ingredient.fromItems(BPItems.silver_ingot));
     
     public ItemAthame() {
-        super(athameMaterial, 1, 1, new Properties());
+        super(athameMaterial, 1, -3, new Properties().group(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + Refs.ATHAME_NAME);
         BPItems.itemList.add(this);
     }
@@ -55,17 +56,6 @@ public class ItemAthame extends SwordItem {
         }
         entity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) player), this.damageDealt);
         return super.hitEntity(stack, entity, player);
-    }
-
-    @Override
-    public String getTranslationKey(ItemStack stack) {
-
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
-    }
-
-    protected String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
     }
 
     @Override
