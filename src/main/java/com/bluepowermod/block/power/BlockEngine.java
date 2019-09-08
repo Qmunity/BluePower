@@ -11,6 +11,7 @@ import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileEngine;
+import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -55,8 +56,8 @@ public class BlockEngine extends BlockContainerBase {
     }
 
     @Override
-    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
-        return Block.makeCuboidShape(0,0,0,16,9,16);
+    public VoxelShape getShape(BlockState blockState, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+        return AABBUtils.rotate(Block.makeCuboidShape(0.01,0,0.01,15.99F,10,16.99F), blockState.get(FACING).getOpposite());
     }
 
     @Override
@@ -85,6 +86,7 @@ public class BlockEngine extends BlockContainerBase {
             if (tile != null) {
                 tile.setOrientation(facing);
             }
+            world.setBlockState(pos, state.with(FACING, facing), 2);
         }
     }
 

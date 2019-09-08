@@ -14,18 +14,15 @@ import com.bluepowermod.tile.tier1.TileLamp;
 import com.bluepowermod.tile.tier3.TileEngine;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.model.multipart.Multipart;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.BasicState;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.*;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -33,11 +30,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.function.Predicate;
+
 @Mod.EventBusSubscriber(Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class Renderers {
-
-
 
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent evt){
@@ -61,9 +58,25 @@ public class Renderers {
     public void onModelBakeEvent(ModelBakeEvent event) {
         IUnbakedModel baseModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("bluepower:block/engine/engine_base.obj"));
         if (baseModel instanceof OBJModel) {
-            IBakedModel bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(baseModel.getDefaultState(), false), DefaultVertexFormats.ITEM);
+            IBakedModel bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ForgeBlockStateV1.Transforms.get("forge:default-block").get(), false), DefaultVertexFormats.ITEM);
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "inventory"), bakedModel);
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=down,gear=false,glider=false"), bakedModel);
+            bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X180_Y0, false), DefaultVertexFormats.ITEM);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=up,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=up,gear=false,glider=false"), bakedModel);
+            bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X270_Y90, false), DefaultVertexFormats.ITEM);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=east,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=east,gear=false,glider=false"), bakedModel);
+            bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X90_Y90, false), DefaultVertexFormats.ITEM);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=west,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=west,gear=false,glider=false"), bakedModel);
+            bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X270_Y0, false), DefaultVertexFormats.ITEM);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=north,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=north,gear=false,glider=false"), bakedModel);
+            bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X90_Y0, false), DefaultVertexFormats.ITEM);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=south,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=south,gear=false,glider=false"), bakedModel);
         }
 
         IUnbakedModel gearModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("bluepower:block/engine/engine_gear.obj"));

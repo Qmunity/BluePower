@@ -1,23 +1,12 @@
 ﻿{
-  "forge_marker":1,
-  "defaults":{
-    "custom": {"flip-v": true},
-    "model":"bluepower:block/engine/engine_base.obj",
-    "transform":"forge:default-block"
-  },
-  "variants": {
-    "normal": [{}],
-    "inventory": [{"submodel":{"gear":{"model":"bluepower:block/engine/engine_gear.obj","custom": {"flip-v": true}}, "glider":{"model":"bluepower:block/engine/engine_glider.obj","custom": {"flip-v": true}}}}],
-    "active":{"true":{"textures": {"#material": "bluepower:blocks/models/engineon"}},"false":{}},
-    "gear":{"true":{"model":"bluepower:block/engine/engine_gear.obj"},"false":{}},
-    "glider":{"true":{"model":"bluepower:block/engine/engine_glider.obj"},"false":{}},
-    "facing":{
-      "north": {"x": -90},
-      "south": {"x": 90},
-      "west": {"x": 90,"y": 90},
-      "east": {"x": -90,"y": 90},
-      "up": {"x": 180},
-      "down": {}
-    }
-  }
+  "multipart":  [
+    {"when":{"active":"false","facing":"north","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj","x": -90}},
+    {"when":{"active":"false","facing":"south","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj","x": 90}},
+    {"when":{"active":"false","facing":"east","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj","x": 90,"y": 90}},
+    {"when":{"active":"false","facing":"west","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj","x": -90,"y": 90}},
+    {"when":{"active":"false","facing":"up","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj","x": 180}},
+    {"when":{"active":"false","facing":"down","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj"}},
+    {"when":{"gear":"true"},"apply":{"model":"bluepower:block/engine/engine_gear.obj"}},
+    {"when":{"glider":"true"},"apply":{"model":"bluepower:block/engine/engine_glider.obj"}}
+  ]
 }

@@ -9,6 +9,8 @@ package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.api.power.BlutricityFEStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
+import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.tile.BPTileEntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -16,6 +18,10 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.Direction;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -36,6 +42,17 @@ public class TileEngine extends TileMachineBase  {
 			return false;
 		}
 	};
+	private LazyOptional<IPowerBase> blutricityCap;
+
+	@Nonnull
+	@Override
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+		if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
+			if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
+			return blutricityCap.cast();
+		}
+		return super.getCapability(cap);
+	}
 
 	
 	public TileEngine(){
@@ -66,6 +83,9 @@ public class TileEngine extends TileMachineBase  {
 		}
 
 		isActive = (storage.getEnergyStored() > 0 && world.isBlockPowered(pos));
+		if(world.getBlockState(pos).get(BlockEngine.ACTIVE) != isActive){
+			world.setBlockState(pos, world.getBlockState(pos).with(BlockEngine.ACTIVE, isActive));
+		}
 
 	}
 
@@ -108,6 +128,16 @@ public class TileEngine extends TileMachineBase  {
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
+	}
+
+	@Override
+	protected void invalidateCaps(){
+		super.invalidateCaps();
+		if( blutricityCap != null )
+		{
+			blutricityCap.invalidate();
+			blutricityCap = null;
+		}
 	}
 
 	@Override
