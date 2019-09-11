@@ -57,18 +57,6 @@ public class BlockBattery extends BlockContainerBase {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        TileEntity tile = world.getTileEntity(pos);
-        if(tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, null).isPresent()) {
-            IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null);
-            if(world.isRemote)
-                player.sendMessage(new StringTextComponent("Voltage: " + storage.getVoltage()));
-            return true;
-        }
-        return super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult);
-    }
-
-    @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }

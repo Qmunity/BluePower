@@ -8,6 +8,9 @@ public interface IPowerBase {
     double getVoltage();
     double getMaxVoltage();
 
+    void setCurrent(double current);
+    double getCurrent();
+
     /**
      * Negative energy for removal
      * @param energy

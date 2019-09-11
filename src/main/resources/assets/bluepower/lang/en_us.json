@@ -511,6 +511,7 @@
   "item.bluepower.iron_wire": "Fine Iron Wire",
   "item.bluepower.copper_wire": "Fine Copper Wire",
   "item.bluepower.infused_teslatite_dust": "Infused Teslatite Dust",
+  "item.bluepower.multimeter": "Multimeter",
 
   "block.bluepower.gate_and": "AND Gate",
   "block.bluepower.gate_buffer": "Buffer Gate",

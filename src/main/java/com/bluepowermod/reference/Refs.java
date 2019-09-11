@@ -109,6 +109,7 @@ public class Refs {
     public static final String REGULATOR_NAME = "regulator";
     public static final String ITEMDETECTOR_NAME = "item_detector";
     public static final String MANAGER_NAME = "manager";
+    public static final String MULTIMETER_NAME = "multimeter";
 
     public static final String ENGINE_NAME = "engine";
     public static final String KINETICGENERATOR_NAME = "kinetic_generator";

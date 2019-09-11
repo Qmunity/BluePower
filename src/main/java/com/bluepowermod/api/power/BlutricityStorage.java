@@ -7,6 +7,7 @@ public class BlutricityStorage implements IPowerBase{
 
     double maxEnergy;
     double energy = 0;
+    private double current = 0;
 
     public BlutricityStorage(double max){
         this.maxEnergy = max;
@@ -23,6 +24,17 @@ public class BlutricityStorage implements IPowerBase{
     }
 
     @Override
+    public void setCurrent(double current) {
+        this.current = current;
+
+    }
+
+    @Override
+    public double getCurrent() {
+        return current;
+    }
+
+    @Override
     public double addEnergy(double energy, boolean simulate) {
         double energyAccepted = 0;
         if (energy > 0)
@@ -33,5 +45,4 @@ public class BlutricityStorage implements IPowerBase{
             this.energy += energyAccepted;
         return energyAccepted;
     }
-
 }
