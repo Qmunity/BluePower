@@ -9,7 +9,7 @@ public class BlutricityFEStorage extends BlutricityStorage implements IEnergySto
 
 
     public BlutricityFEStorage(double max) {
-        super(max);
+        super(max, max);
     }
 
     @Override

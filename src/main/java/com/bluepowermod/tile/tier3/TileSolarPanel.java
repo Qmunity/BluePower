@@ -31,7 +31,7 @@ import java.util.Random;
 public class TileSolarPanel extends TileMachineBase  {
 
 
-	private final IPowerBase storage = new BlutricityStorage(10);
+	private final IPowerBase storage = new BlutricityStorage(10, 10);
 	private LazyOptional<IPowerBase> blutricityCap;
 
 	public TileSolarPanel() {
@@ -51,23 +51,19 @@ public class TileSolarPanel extends TileMachineBase  {
 
 	@Override
 	public void tick() {
-		if(world.isDaytime() && world.canBlockSeeSky(pos) && storage.getVoltage() < 10)
+		if(world.isDaytime() && world.canBlockSeeSky(pos) && storage.getEnergy() < 10)
 			storage.addEnergy(1 + new Double("0." + new Random().nextInt(3)), false);
 
 		for (Direction facing : Direction.values()){
 		    TileEntity tile = world.getTileEntity(pos.offset(facing));
-		    if((storage.getVoltage() > 0) && tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).isPresent()){
+		    if((storage.getEnergy() > 0) && tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).isPresent()){
 		        IPowerBase exStorage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).orElse(null);
 		        if(exStorage.getVoltage() < exStorage.getMaxVoltage()) {
-					storage.addEnergy(-(exStorage.addEnergy(storage.getVoltage(), false)), false);
-					storage.setCurrent(0.9 + new Double("0." + new Random().nextInt(3)));
+		        	double transferedEnergy = exStorage.addEnergy(storage.getEnergy(), false);
+					storage.addEnergy(-transferedEnergy, false);
 				}
             }
         }
-
-		if(storage.getCurrent() != 0 && storage.getVoltage() == storage.getMaxVoltage()){
-			storage.setCurrent(0);
-		}
 
 	}
 

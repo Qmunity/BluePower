@@ -20,10 +20,13 @@ public class ItemMultimeter extends ItemBase {
     public ActionResultType onItemUse(ItemUseContext context) {
         TileEntity tileEntity = context.getWorld().getTileEntity(context.getPos());
         if (context.getWorld().isRemote && tileEntity != null && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()){
-            String voltage = String.format("%.2f", tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null).getVoltage());
-            String amps = String.format("%.2f", tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null).getCurrent());
+            double volts = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null).getVoltage();
+            double amps = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null).getCurrent();
+            String voltage = String.format("%.2f", volts);
+            String ampere = String.format("%.2f", amps);
+            String watts = String.format("%.2f", volts * amps);
             if(context.getPlayer() != null)
-                context.getPlayer().sendMessage(new StringTextComponent( "Reading " + voltage + "V " + amps + "A"));
+                context.getPlayer().sendMessage(new StringTextComponent( "Reading " + voltage + "V " + ampere + "A (" + watts + "W)"));
             return ActionResultType.SUCCESS;
         }
         return super.onItemUse(context);

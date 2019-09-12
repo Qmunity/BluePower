@@ -8,30 +8,33 @@ public class BlutricityStorage implements IPowerBase{
     double maxEnergy;
     double energy = 0;
     private double current = 0;
+    private double maxVoltage;
 
-    public BlutricityStorage(double max){
-        this.maxEnergy = max;
+    public BlutricityStorage(double maxEnergy, double maxVoltage){
+        this.maxEnergy = maxEnergy;
+        this.maxVoltage = maxVoltage;
     }
 
     @Override
-    public double getVoltage() {
+    public double getEnergy() {
         return this.energy;
     }
 
     @Override
-    public double getMaxVoltage() {
-        return this.maxEnergy;
+    public double getVoltage() {
+        return (maxVoltage / 2) + ((maxVoltage / maxEnergy) * energy) / 2;
     }
 
     @Override
-    public void setCurrent(double current) {
-        this.current = current;
-
+    public double getMaxVoltage() {
+        return this.maxVoltage;
     }
 
     @Override
     public double getCurrent() {
-        return current;
+        double existingCurrent = current;
+        current = 0;
+        return existingCurrent;
     }
 
     @Override
@@ -43,6 +46,7 @@ public class BlutricityStorage implements IPowerBase{
             energyAccepted = -Math.min(this.energy, Math.min(this.maxEnergy, -energy));
         if (!simulate)
             this.energy += energyAccepted;
+        current = ((energy / getVoltage()) * energyAccepted);
         return energyAccepted;
     }
 }

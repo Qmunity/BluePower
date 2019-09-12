@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 
 public class TileBattery extends TileMachineBase {
 
-    private final BlutricityStorage storage = new BlutricityStorage(3200);
+    private final BlutricityStorage storage = new BlutricityStorage(3200, 24);
     private LazyOptional<IPowerBase> blutricityCap;
 
     public TileBattery() {
@@ -42,8 +42,8 @@ public class TileBattery extends TileMachineBase {
     @Override
     public void tick() {
         if (!world.isRemote) {
-            double voltage = storage.getVoltage();
-            int level = (int) ((voltage / storage.getMaxVoltage()) * 6);
+            double energy = storage.getEnergy();
+            int level = (int) ((energy / 3200) * 6);
             BlockState state = world.getBlockState(pos);
             if (state.get(BlockBattery.LEVEL) != level) {
                 world.setBlockState(pos, state.with(BlockBattery.LEVEL, level));

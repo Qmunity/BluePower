@@ -5,10 +5,10 @@ package com.bluepowermod.api.power;
  */
 public interface IPowerBase {
 
+    double getEnergy();
+
     double getVoltage();
     double getMaxVoltage();
-
-    void setCurrent(double current);
     double getCurrent();
 
     /**
