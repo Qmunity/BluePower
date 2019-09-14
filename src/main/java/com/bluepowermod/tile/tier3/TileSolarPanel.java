@@ -10,17 +10,18 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Random;
 
 
 /**
@@ -30,8 +31,8 @@ import java.util.Random;
  */
 public class TileSolarPanel extends TileMachineBase  {
 
-
-	private final IPowerBase storage = new BlutricityStorage(10, 10);
+	private final int MAX_VOLTAGE = 100;
+	private final BlutricityStorage storage = new BlutricityStorage(MAX_VOLTAGE, MAX_VOLTAGE);
 	private LazyOptional<IPowerBase> blutricityCap;
 
 	public TileSolarPanel() {
@@ -51,20 +52,37 @@ public class TileSolarPanel extends TileMachineBase  {
 
 	@Override
 	public void tick() {
-		if(world.isDaytime() && world.canBlockSeeSky(pos) && storage.getEnergy() < 10)
-			storage.addEnergy(1 + new Double("0." + new Random().nextInt(3)), false);
+		if (!world.isRemote) {
+			storage.resetCurrent();
 
-		for (Direction facing : Direction.values()){
-		    TileEntity tile = world.getTileEntity(pos.offset(facing));
-		    if((storage.getEnergy() > 0) && tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).isPresent()){
-		        IPowerBase exStorage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).orElse(null);
-		        if(exStorage.getVoltage() < exStorage.getMaxVoltage()) {
-		        	double transferedEnergy = exStorage.addEnergy(storage.getEnergy(), false);
-					storage.addEnergy(-transferedEnergy, false);
+			if (world.isDaytime() && world.canBlockSeeSky(pos) && storage.getEnergy() < MAX_VOLTAGE && !world.isRaining())
+				storage.addEnergy(0.2, false);
+
+			//Balance power of attached blulectric blocks.
+			for (Direction facing : Direction.values()) {
+				TileEntity tile = world.getTileEntity(pos.offset(facing));
+				if (tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).isPresent()) {
+					IPowerBase exStorage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).orElse(null);
+					EnergyHelper.balancePower(exStorage, storage);
 				}
-            }
-        }
+			}
+		}
+	}
 
+	@Override
+	protected void readFromPacketNBT(CompoundNBT tCompound) {
+		super.readFromPacketNBT(tCompound);
+		if(tCompound.contains("energy")) {
+			INBT nbtstorage = tCompound.get("energy");
+			CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
+		}
+	}
+
+	@Override
+	protected void writeToPacketNBT(CompoundNBT tCompound) {
+		super.writeToPacketNBT(tCompound);
+		INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
+		tCompound.put("energy", nbtstorage);
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class ItemMultimeter extends ItemBase {
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         TileEntity tileEntity = context.getWorld().getTileEntity(context.getPos());
-        if (context.getWorld().isRemote && tileEntity != null && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()){
+        if (!context.getWorld().isRemote && tileEntity != null && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()){
             double volts = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null).getVoltage();
             double amps = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null).getCurrent();
             String voltage = String.format("%.2f", volts);

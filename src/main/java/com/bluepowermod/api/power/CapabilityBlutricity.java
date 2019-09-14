@@ -27,7 +27,7 @@ public class CapabilityBlutricity {
         @Override
         public INBT writeNBT(Capability<T> capability, T instance, Direction direction) {
             CompoundNBT nbt = new CompoundNBT();
-            nbt.putDouble("blutricity", instance.getVoltage());
+            nbt.putDouble("blutricity", instance.getEnergy());
             return nbt;
         }
 
@@ -35,7 +35,7 @@ public class CapabilityBlutricity {
         public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
             CompoundNBT tags = (CompoundNBT) nbt;
             double energy = tags.getDouble("blutricity");
-            instance.addEnergy(-(instance.getVoltage() - energy), false);
+            instance.addEnergy(-(instance.getEnergy() - energy), false);
         }
     }
 

@@ -11,6 +11,7 @@ import com.bluepowermod.api.power.BlutricityFEStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.power.BlockEngine;
+import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.tile.BPTileEntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -40,18 +41,18 @@ public class TileEngine extends TileMachineBase  {
     public byte pumpTick;
     public byte pumpSpeed;
 
-	private final BlutricityFEStorage storage = new BlutricityFEStorage(320){
+	private final BlutricityFEStorage storage = new BlutricityFEStorage(100){
 		@Override
 		public boolean canReceive() {
 			return false;
 		}
 	};
-	private LazyOptional<IPowerBase> blutricityCap;
+	private LazyOptional<BlutricityFEStorage> blutricityCap;
 
 	@Nonnull
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-		if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
+		if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY || cap == CapabilityEnergy.ENERGY){
 			if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
 			return blutricityCap.cast();
 		}
@@ -79,17 +80,11 @@ public class TileEngine extends TileMachineBase  {
 						pumpSpeed--;
 					}
 				}
-				TileEntity tile = world.getTileEntity(pos.offset(orientation));
-				if(tile != null && tile.getCapability(CapabilityEnergy.ENERGY).isPresent()){
-					//Subtract Used Energy
-					storage.addEnergy(-(tile.getCapability(CapabilityEnergy.ENERGY).orElse(null).receiveEnergy(10, false) * 10), false);
-				}
 			}else{
 				pumpTick = 0;
 			}
-			
 		}
-
+		storage.resetCurrent();
 		isActive = (storage.getEnergyStored() > 0 && world.isBlockPowered(pos));
 		if(world.getBlockState(pos).get(BlockEngine.ACTIVE) != isActive){
 			world.setBlockState(pos, world.getBlockState(pos).with(BlockEngine.ACTIVE, isActive));

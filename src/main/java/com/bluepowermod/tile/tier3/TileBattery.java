@@ -12,6 +12,7 @@ import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.power.BlockBattery;
+import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.BlockState;
@@ -19,6 +20,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -31,8 +33,8 @@ import javax.annotation.Nullable;
  */
 
 public class TileBattery extends TileMachineBase {
-
-    private final BlutricityStorage storage = new BlutricityStorage(3200, 24);
+    private final int MAX_ENERGY = 3200;
+    private final BlutricityStorage storage = new BlutricityStorage(MAX_ENERGY, 100);
     private LazyOptional<IPowerBase> blutricityCap;
 
     public TileBattery() {
@@ -42,8 +44,19 @@ public class TileBattery extends TileMachineBase {
     @Override
     public void tick() {
         if (!world.isRemote) {
+            storage.resetCurrent();
+
+            //Balance power of attached blulectric blocks.
+            for (Direction facing : Direction.values()) {
+                TileEntity tile = world.getTileEntity(pos.offset(facing));
+                if (tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).isPresent()) {
+                    IPowerBase exStorage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).orElse(null);
+                    EnergyHelper.balancePower(exStorage, storage);
+                }
+            }
+
             double energy = storage.getEnergy();
-            int level = (int) ((energy / 3200) * 6);
+            int level = (int) ((energy / MAX_ENERGY) * 6);
             BlockState state = world.getBlockState(pos);
             if (state.get(BlockBattery.LEVEL) != level) {
                 world.setBlockState(pos, state.with(BlockBattery.LEVEL, level));
