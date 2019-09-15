@@ -25,9 +25,7 @@ import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.machine.*;
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
-import com.bluepowermod.block.power.BlockBattery;
-import com.bluepowermod.block.power.BlockEngine;
-import com.bluepowermod.block.power.BlockSolarPanel;
+import com.bluepowermod.block.power.*;
 import com.bluepowermod.block.worldgen.*;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.*;
@@ -123,10 +121,14 @@ public class BPBlocks {
     public static Block item_detector;
     public static Block manager;
     public static Block battery;
+    public static Block blulectric_cable;
+    public static Block blulectric_alloyfurnace;
+    public static Block blulectric_furnace;
     public static Block engine;
     public static Block kinetic_generator;
     public static Block windmill;
     public static Block solarpanel;
+    public static Block thermopile;
 
     // public static Block cpu;
     // public static Block monitor;
@@ -242,10 +244,14 @@ public class BPBlocks {
         manager = new BlockRejecting(Material.ROCK, TileManager.class).emitsRedstone().setWIP(true).setRegistryName(Refs.MODID, Refs.MANAGER_NAME);
 
         battery = new BlockBattery().setWIP(true);
+        blulectric_cable = new BlockBlulectricCable().setWIP(true);
+        blulectric_furnace = new BlockBlulectricFurnace().setWIP(true);
+        blulectric_alloyfurnace = new BlockBlulectricAlloyFurnace().setWIP(true);
         engine = new BlockEngine().setWIP(true);
         kinetic_generator = new BlockKineticGenerator().setWIP(true);
         //windmill = new BlockWindmill();
         solarpanel = new BlockSolarPanel().setWIP(true);
+        thermopile = new BlockThermopile().setWIP(true);
 
         // cpu = new BlockCPU();
         // monitor = new BlockMonitor();
@@ -342,6 +348,7 @@ public class BPBlocks {
                 if(block instanceof BlockContainerBase){group = BPCreativeTabs.machines;}
                 if(block instanceof BlockLamp){group = BPCreativeTabs.lighting;}
                 if(block instanceof BlockAlloyWire){group = BPCreativeTabs.wiring;}
+                if(block instanceof BlockBlulectricCable){group = BPCreativeTabs.wiring;}
                 if(block instanceof BlockGateBase){group = BPCreativeTabs.circuits;}
                 event.getRegistry().register(new BlockItem(block, new Item.Properties().group(group)).setRegistryName(block.getRegistryName()));
             }

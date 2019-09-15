@@ -98,8 +98,21 @@ public class BPTileEntityType {
     @ObjectHolder(Refs.MODID + ":battery")
     public static TileEntityType<TileBattery> BATTERY;
 
+    @ObjectHolder(Refs.MODID + ":" + Refs.BLULECTRICCABLE_NAME)
+    public static TileEntityType<TileBattery> BLULECTRIC_CABLE;
+
+    @ObjectHolder(Refs.MODID + ":" + Refs.BLULECTRICFURNACE_NAME)
+    public static TileEntityType<TileBattery> BLULECTRIC_FURNACE;
+
+    @ObjectHolder(Refs.MODID + ":" + Refs.BLULECTRICALLOYFURNACE_NAME)
+    public static TileEntityType<TileBattery> BLULECTRIC_ALLOY_FURNACE;
+
     @ObjectHolder(Refs.MODID + ":solar_panel")
     public static TileEntityType<TileSolarPanel> SOLAR_PANEL;
+
+
+    @ObjectHolder(Refs.MODID + ":" + Refs.THERMOPILE_NAME)
+    public static TileEntityType<TileThermopile> THERMOPILE;
 
 
 }

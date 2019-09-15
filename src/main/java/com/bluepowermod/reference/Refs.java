@@ -116,6 +116,10 @@ public class Refs {
     public static final String WINDMILL_NAME = "windmill";
     public static final String BATTERYBLOCK_NAME = "battery_block";
     public static final String SOLARPANEL_NAME = "solar_panel";
+    public static final String THERMOPILE_NAME  = "thermopile";
+    public static final String BLULECTRICALLOYFURNACE_NAME = "blulectric_alloyfurnace";
+    public static final String BLULECTRICFURNACE_NAME = "blulectric_furnace";
+    public static final String BLULECTRICCABLE_NAME = "blulectric_cable";
 
     public static final String TUNGCARBINGOT_NAME = "tungsten_carbide";
     public static final String BRASSINGOT_NAME = "brass_ingot";

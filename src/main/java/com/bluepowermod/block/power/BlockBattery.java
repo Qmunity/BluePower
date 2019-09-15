@@ -32,7 +32,6 @@ import net.minecraft.world.World;
 /**
  * @author MoreThanHidden
  */
-
 public class BlockBattery extends BlockContainerBase {
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 6);

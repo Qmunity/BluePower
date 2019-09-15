@@ -67,6 +67,11 @@
   "block.bluepower.battery_block": "Battery Block",
   "block.bluepower.solar_panel": "Solar Panel",
 
+  "block.bluepower.blulectric_alloyfurnace": "Blulectric Alloy Furnace",
+  "block.bluepower.blulectric_furnace": "Blulectric Furnace",
+  "block.bluepower.thermopile": "Thermopile",
+  "block.bluepower.blulectric_cable": "Blulectric Cable",
+
   "block.bluepower.cpu": "CPU",
   "block.bluepower.monitor": "Monitor",
   "block.bluepower.disk_drive": "Disk Drive",

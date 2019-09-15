@@ -1,0 +1,10 @@
+﻿{
+   "parent": "bluepower:block/cube_front",
+   "textures": {
+      "top": "bluepower:blocks/machines/alloyfurnace_top",
+      "bottom": "bluepower:blocks/machines/blutricity_furnace_bottom",
+      "front": "bluepower:blocks/machines/powered_alloy_furnace_front",
+      "side": "bluepower:blocks/machines/alloyfurnace_side",
+      "particle": "bluepower:blocks/machines/alloyfurnace_side"
+   }
+}

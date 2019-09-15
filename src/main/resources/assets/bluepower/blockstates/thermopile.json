@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "": { "model": "bluepower:block/thermopile" },
+    "facing=north": { "model": "bluepower:block/thermopile" },
+    "facing=south": { "model": "bluepower:block/thermopile", "y": 180 },
+    "facing=west": { "model": "bluepower:block/thermopile", "y": 270 },
+    "facing=east": { "model": "bluepower:block/thermopile", "y": 90 }
+  }
+}

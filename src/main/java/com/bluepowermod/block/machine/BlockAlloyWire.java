@@ -12,6 +12,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.RepeaterBlock;
 import net.minecraft.block.ObserverBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.block.BlockState;
@@ -23,6 +24,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -216,33 +219,33 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
     }
 
 
+    @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld worldIn, BlockPos pos, BlockPos pos2, Hand hand) {
-        Boolean connected_back = state.get(CONNECTED_BACK);
-        Boolean connected_front = state.get(CONNECTED_FRONT);
-        Boolean connected_left = state.get(CONNECTED_LEFT);
-        Boolean connected_right = state.get(CONNECTED_RIGHT);
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        boolean connected_back = false;
+        boolean connected_front = false;
+        boolean connected_left = false;
+        boolean connected_right = false;
 
         for (Direction face : FACING.getAllowedValues()){
-            BlockState stateof = worldIn.getBlockState(pos.offset(face));
+            BlockState stateof = context.getWorld().getBlockState(context.getPos().offset(face));
             switch (face){
                 case NORTH:
-                    connected_front = stateof.getBlock().canConnectRedstone(stateof, worldIn, pos, face);
+                    connected_front = stateof.canProvidePower();
                     break;
                 case SOUTH:
-                    connected_back = stateof.getBlock().canConnectRedstone(stateof, worldIn, pos, face);
+                    connected_back = stateof.canProvidePower();
                     break;
                 case WEST:
-                    connected_left = stateof.getBlock().canConnectRedstone(stateof, worldIn, pos, face);
+                    connected_left  = stateof.canProvidePower();
                     break;
                 case EAST:
-                    connected_right = stateof.getBlock().canConnectRedstone(stateof, worldIn, pos, face);
+                    connected_right  = stateof.canProvidePower();
                     break;
             }
         }
 
-        return super.getStateForPlacement(state, facing, state2, worldIn, pos, pos2, hand)
-                .with(CONNECTED_RIGHT, connected_right)
+        return this.getDefaultState().with(CONNECTED_RIGHT, connected_right)
                 .with(CONNECTED_LEFT, connected_left)
                 .with(CONNECTED_FRONT, connected_front)
                 .with(CONNECTED_BACK, connected_back);
