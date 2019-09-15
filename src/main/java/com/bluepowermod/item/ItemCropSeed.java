@@ -17,9 +17,11 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FarmlandBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -39,7 +41,7 @@ public class ItemCropSeed extends Item implements IPlantable {
     public static Block field_150925_a;
 
     public ItemCropSeed(Block blockCrop, Block blockSoil) {
-        super(new Properties());
+        super(new Properties().group(BPCreativeTabs.items));
         field_150925_a = blockCrop;
         this.setRegistryName(Refs.MODID + ":" + Refs.FLAXSEED_NAME);
         BPItems.itemList.add(this);
@@ -56,7 +58,7 @@ public class ItemCropSeed extends Item implements IPlantable {
         if (facing.ordinal() != 1) {
             return ActionResultType.PASS;
         } else if (player.canPlayerEdit(pos, facing, itemStack) && player.canPlayerEdit(pos.up(), facing, itemStack)) {
-            if (world.getBlockState(pos).getBlock().canSustainPlant(world.getBlockState(pos),  world, pos, Direction.UP, this) && world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock().isFertile(world.getBlockState(pos), world, pos)) {
+            if (world.getBlockState(pos).getBlock().canSustainPlant(world.getBlockState(pos),  world, pos, Direction.UP, this) && world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock() instanceof FarmlandBlock) {
                 world.setBlockState(pos.up(), field_150925_a.getDefaultState(), 2);
                 itemStack.setCount(itemStack.getCount() - 1);
                 player.setHeldItem(hand, itemStack);
@@ -74,14 +76,4 @@ public class ItemCropSeed extends Item implements IPlantable {
         return field_150925_a.getDefaultState();
     }
 
-    @Override
-    public String getTranslationKey(ItemStack stack) {
-
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
-    }
-
-    protected String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
-    }
 }
