@@ -17,6 +17,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -67,6 +68,11 @@ public class BlockLampSurface extends BlockLamp {
         if (!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()) {
             world.destroyBlock(pos, true);
         }
+    }
+
+    @Override
+    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
+        return world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid();
     }
 
     @Nullable
