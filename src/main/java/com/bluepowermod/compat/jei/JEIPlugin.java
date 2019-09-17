@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.compat.jei;
 
+import com.bluepowermod.client.gui.GuiAlloyFurnace;
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.init.BPBlocks;
@@ -65,8 +66,7 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        //TODO: JEI Recipe Handler
-        //registration.addGuiContainerHandler(new AlloyFurnaceHandler());
+        registration.addRecipeClickArea(GuiAlloyFurnace.class, 100, 32, 28, 23, new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
     }
 
     @Override
