@@ -19,7 +19,6 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.item.ItemStack;
 
@@ -34,9 +33,12 @@ public class ItemLimitedCrafting extends ItemBase {
     
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
-    
         ItemStack container = itemStack.copy();
-        container.attemptDamageItem(1, new Random(), null);
-        return container;
+        return container.attemptDamageItem(1, new Random(), null) ? ItemStack.EMPTY : container;
+    }
+
+    @Override
+    public boolean hasContainerItem(ItemStack stack) {
+        return true;
     }
 }
