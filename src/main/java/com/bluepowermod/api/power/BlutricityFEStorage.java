@@ -9,7 +9,7 @@ public class BlutricityFEStorage extends BlutricityStorage implements IEnergySto
 
 
     public BlutricityFEStorage(double max) {
-        super(max, max);
+        super(max / 10, 100);
     }
 
     @Override
@@ -18,9 +18,9 @@ public class BlutricityFEStorage extends BlutricityStorage implements IEnergySto
         if (!canReceive())
             return 0;
 
-        int energyReceived = Math.min((int)this.maxEnergy - (int)energy, Math.min((int)this.maxEnergy, maxReceive));
+        int energyReceived = Math.min((int)this.maxEnergy * 10 - (int)energy * 10, Math.min((int)this.maxEnergy * 10, maxReceive));
         if (!simulate)
-            energy += energyReceived;
+            energy += energyReceived / 10;
         return energyReceived;
     }
 
@@ -30,20 +30,20 @@ public class BlutricityFEStorage extends BlutricityStorage implements IEnergySto
         if (!canExtract())
             return 0;
 
-        int energyExtracted = Math.min((int)energy, Math.min((int)this.maxEnergy, maxExtract));
+        int energyExtracted = Math.min((int)energy * 10, Math.min((int)this.maxEnergy * 10, maxExtract));
         if (!simulate)
-            energy -= energyExtracted;
+            energy -= energyExtracted / 10;
         return energyExtracted;
     }
 
     @Override
     public int getEnergyStored() {
-        return (int)energy;
+        return (int)energy * 10;
     }
 
     @Override
     public int getMaxEnergyStored() {
-        return (int)this.maxEnergy;
+        return (int)this.maxEnergy * 10;
     }
 
     @Override

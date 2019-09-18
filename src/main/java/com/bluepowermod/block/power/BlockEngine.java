@@ -57,7 +57,7 @@ public class BlockEngine extends BlockContainerBase {
 
     @Override
     public VoxelShape getShape(BlockState blockState, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-        return AABBUtils.rotate(Block.makeCuboidShape(0.01,0,0.01,15.99F,10,16.99F), blockState.get(FACING).getOpposite());
+        return AABBUtils.rotate(Block.makeCuboidShape(0.01,0,0.01,15.99F,10,15.99F), blockState.get(FACING).getOpposite());
     }
 
     @Override

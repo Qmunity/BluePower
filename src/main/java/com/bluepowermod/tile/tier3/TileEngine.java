@@ -24,6 +24,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,7 +42,7 @@ public class TileEngine extends TileMachineBase  {
     public byte pumpTick;
     public byte pumpSpeed;
 
-	private final BlutricityFEStorage storage = new BlutricityFEStorage(100){
+	private final BlutricityFEStorage storage = new BlutricityFEStorage(320){
 		@Override
 		public boolean canReceive() {
 			return false;
@@ -56,7 +57,7 @@ public class TileEngine extends TileMachineBase  {
 			if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
 			return blutricityCap.cast();
 		}
-		return super.getCapability(cap);
+		return LazyOptional.empty();
 	}
 
 	
@@ -71,23 +72,45 @@ public class TileEngine extends TileMachineBase  {
     @Override
 	public void tick() {
 		super.tick();
-		if(world.isRemote){
-			if(isActive){
-				pumpTick++;
-				if(pumpTick >= pumpSpeed *2){
-					pumpTick = 0;
-					if(pumpSpeed > 4){
-						pumpSpeed--;
+
+		storage.resetCurrent();
+
+		//Server side capability check
+		isActive = false;
+		if(world != null && !world.isRemote && (storage.getEnergyStored() > 0 && world.isBlockPowered(pos))){
+			Direction facing = world.getBlockState(pos).get(BlockEngine.FACING).getOpposite();
+			TileEntity tileEntity = world.getTileEntity(pos.offset(facing));
+			if (tileEntity != null) {
+				tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).ifPresent(other -> {
+					int simulated = storage.extractEnergy(320, true);
+					int sent = other.receiveEnergy(simulated, false);
+					int amount = storage.extractEnergy(sent, false);
+					if(amount > 0) {
+						isActive = true;
 					}
-				}
-			}else{
-				pumpTick = 0;
+				});
 			}
 		}
-		storage.resetCurrent();
-		isActive = (storage.getEnergyStored() > 0 && world.isBlockPowered(pos));
-		if(world.getBlockState(pos).get(BlockEngine.ACTIVE) != isActive){
+
+		//Update BlockState
+		if(world != null && !world.isRemote && world.getBlockState(pos).get(BlockEngine.ACTIVE) != isActive){
 			world.setBlockState(pos, world.getBlockState(pos).with(BlockEngine.ACTIVE, isActive));
+			markForRenderUpdate();
+		}
+
+		//Update TESR from BlockState
+		if(world != null && world.getBlockState(pos).get(BlockEngine.ACTIVE)) {
+			isActive = true;
+			pumpTick++;
+			if (pumpTick >= pumpSpeed * 2) {
+				pumpTick = 0;
+				if (pumpSpeed > 4) {
+					pumpSpeed--;
+				}
+			}
+		}else{
+			isActive = false;
+			pumpTick = 0;
 		}
 
 	}

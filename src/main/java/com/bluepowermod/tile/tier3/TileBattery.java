@@ -49,10 +49,9 @@ public class TileBattery extends TileMachineBase {
             //Balance power of attached blulectric blocks.
             for (Direction facing : Direction.values()) {
                 TileEntity tile = world.getTileEntity(pos.offset(facing));
-                if (tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).isPresent()) {
-                    IPowerBase exStorage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).orElse(null);
-                    EnergyHelper.balancePower(exStorage, storage);
-                }
+                if (tile != null)
+                    tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
+                            exStorage -> EnergyHelper.balancePower(exStorage, storage));
             }
 
             double energy = storage.getEnergy();
@@ -73,7 +72,7 @@ public class TileBattery extends TileMachineBase {
             if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
             return blutricityCap.cast();
         }
-        return super.getCapability(cap);
+        return LazyOptional.empty();
     }
 
     @Override
