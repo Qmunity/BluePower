@@ -15,4 +15,9 @@ public class BlockBlulectricFurnace  extends BlockContainerFacingBase {
         setRegistryName(Refs.MODID, Refs.BLULECTRICFURNACE_NAME);
     }
 
+    @Override
+    protected boolean canRotateVertical() {
+        return false;
+    }
+
 }

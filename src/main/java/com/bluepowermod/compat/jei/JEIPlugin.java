@@ -8,7 +8,9 @@
 package com.bluepowermod.compat.jei;
 
 import com.bluepowermod.client.gui.GuiAlloyFurnace;
+import com.bluepowermod.client.gui.GuiBlulectricAlloyFurnace;
 import com.bluepowermod.container.ContainerAlloyFurnace;
+import com.bluepowermod.container.ContainerBlulectricAlloyFurnace;
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
@@ -67,17 +69,20 @@ public class JEIPlugin implements IModPlugin {
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(GuiAlloyFurnace.class, 100, 32, 28, 23, new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
+        registration.addRecipeClickArea(GuiBlulectricAlloyFurnace.class, 102, 32, 28, 23, new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(BPBlocks.alloyfurnace), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
+        registration.addRecipeCatalyst(new ItemStack(BPBlocks.blulectric_alloyfurnace), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
         registration.addRecipeCatalyst(new ItemStack(BPBlocks.project_table), VanillaRecipeCategoryUid.CRAFTING);
     }
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(ContainerAlloyFurnace.class, new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME), 2, 9, 11, 36);
+        registration.addRecipeTransferHandler(ContainerBlulectricAlloyFurnace.class, new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME), 1, 9, 10, 36);
         registration.addRecipeTransferHandler(ContainerProjectTable.class, VanillaRecipeCategoryUid.CRAFTING, 1, 9, 10, 54);
     }
 }

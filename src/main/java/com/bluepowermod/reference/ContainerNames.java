@@ -42,4 +42,6 @@ public class ContainerNames {
     public static final String CIRCUITDATABASE_MAIN = Refs.MODID + ":circuitdatabase_main";
     public static final String CIRCUITDATABASE_SHARING = Refs.MODID + ":circuitdatabase_sharing";
     public static final String WINDMILL = Refs.MODID + ":windmill";
+    public static final String BLULECTRIC_ALLOY_FURNACE = Refs.MODID + ":" + Refs.BLULECTRICALLOYFURNACE_NAME;
+    public static final String BLULECTRIC_FURNACE = Refs.MODID + ":" + Refs.BLULECTRICFURNACE_NAME;
 }

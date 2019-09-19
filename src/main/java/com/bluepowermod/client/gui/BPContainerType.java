@@ -100,6 +100,12 @@ public class BPContainerType {
     @ObjectHolder(ContainerNames.CIRCUITDATABASE_SHARING)
     public static ContainerType<ContainerCircuitDatabaseSharing> CIRCUITDATABASE_SHARING;
 
+    @ObjectHolder(ContainerNames.BLULECTRIC_ALLOY_FURNACE)
+    public static ContainerType<ContainerBlulectricAlloyFurnace> BLULECTRIC_ALLOY_FURNACE;
+
+    @ObjectHolder(ContainerNames.BLULECTRIC_FURNACE)
+    public static ContainerType<ContainerBlulectricFurnace> BLULECTRIC_FURNACE;
+
 
     @Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class Registration{
@@ -107,6 +113,8 @@ public class BPContainerType {
         public static void onContainerTypeRegistry(final RegistryEvent.Register<ContainerType<?>> e){
             e.getRegistry().registerAll(
                     new ContainerType<>(ContainerAlloyFurnace::new).setRegistryName(ContainerNames.ALLOY_FURNACE),
+                    new ContainerType<>(ContainerBlulectricFurnace::new).setRegistryName(ContainerNames.BLULECTRIC_FURNACE),
+                    new ContainerType<>(ContainerBlulectricAlloyFurnace::new).setRegistryName(ContainerNames.BLULECTRIC_ALLOY_FURNACE),
                     new ContainerType<>(ContainerBuffer::new).setRegistryName(ContainerNames.BUFFER),
                     new ContainerType<>(ContainerSortingMachine::new).setRegistryName(ContainerNames.SORTING_MACHINE),
                     new ContainerType<>(ContainerSeedBag::new).setRegistryName(ContainerNames.SEEDBAG),
@@ -136,6 +144,8 @@ public class BPContainerType {
     @OnlyIn(Dist.CLIENT)
     public static void registerScreenFactories(){
         ScreenManager.registerFactory(ALLOY_FURNACE, GuiAlloyFurnace::new);
+        ScreenManager.registerFactory(BLULECTRIC_FURNACE, GuiBlulectricFurnace::new);
+        ScreenManager.registerFactory(BLULECTRIC_ALLOY_FURNACE, GuiBlulectricAlloyFurnace::new);
         ScreenManager.registerFactory(BUFFER, GuiBuffer::new);
         ScreenManager.registerFactory(SORTING_MACHINE, GuiSortingMachine::new);
         ScreenManager.registerFactory(SEEDBAG, GuiSeedBag::new);

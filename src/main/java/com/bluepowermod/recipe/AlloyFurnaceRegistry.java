@@ -30,6 +30,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.client.Minecraft;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -268,22 +269,35 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         }
 
         @Override
-        public boolean matches(TileAlloyFurnace inv, World worldIn)
-        {
+        public boolean matches(ISidedInventory inv, World worldIn){
             NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
-            //Get Input Slots first 2 are Fuel and Output
-            for (int i = 2; i < 11; i++) {
-               input.set(i - 2, inv.getStackInSlot(i));
+            if(inv instanceof TileAlloyFurnace) {
+                //Get Input Slots first 2 are Fuel and Output
+                for (int i = 2; i < 11; i++) {
+                    input.set(i - 2, inv.getStackInSlot(i));
+                }
+            }else{
+                //Get Input Slots first slot is Output
+                for (int i = 1; i < 10; i++) {
+                    input.set(i - 1, inv.getStackInSlot(i));
+                }
             }
             return matches(input);
         }
 
         @Override
-        public ItemStack getCraftingResult(TileAlloyFurnace inv) {
+        public ItemStack getCraftingResult(ISidedInventory inv) {
             NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
-            //Get Input Slots first 2 are Fuel and Output
-            for (int i = 2; i < 12; i++) {
-                input.set(i - 2, inv.getStackInSlot(i));
+            if(inv instanceof TileAlloyFurnace) {
+                //Get Input Slots first 2 are Fuel and Output
+                for (int i = 2; i < 12; i++) {
+                    input.set(i - 2, inv.getStackInSlot(i));
+                }
+            }else{
+                //Get Input Slots first is Output
+                for (int i = 1; i < 11; i++) {
+                    input.set(i - 1, inv.getStackInSlot(i));
+                }
             }
 
             return getCraftingResult(input);
