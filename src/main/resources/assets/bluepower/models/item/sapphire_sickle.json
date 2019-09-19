@@ -1,5 +1,5 @@
 ﻿{
-  "parent": "item/handheld",,
+  "parent": "item/handheld",
   "textures": {
     "layer0": "bluepower:items/sapphire_sickle"
   }

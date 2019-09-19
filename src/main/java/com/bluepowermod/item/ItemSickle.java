@@ -17,6 +17,7 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import com.google.common.collect.Sets;
@@ -28,6 +29,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -38,15 +40,14 @@ import java.util.Set;
 
 public class ItemSickle extends ToolItem {
 
-    public    Item    customCraftingMaterial = Items.AIR;
-    protected boolean canRepair              = true;
+    private Item customCraftingMaterial;
 
     private static final Set toolBlocks = Sets.newHashSet(ItemTags.LEAVES, Blocks.WHEAT, Blocks.POTATOES, Blocks.CARROTS,
             Blocks.NETHER_WART, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.SUGAR_CANE, Blocks.TALL_GRASS, Blocks.VINE, Blocks.LILY_PAD,
             BlockTags.SMALL_FLOWERS);
 
     public ItemSickle(IItemTier itemTier, String name, Item repairItem) {
-        super(itemTier.getHarvestLevel(),1.4F, itemTier, toolBlocks, new Properties());
+        super(2,-1.4F, itemTier, toolBlocks, new Properties().group(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);
@@ -61,13 +62,6 @@ public class ItemSickle extends ToolItem {
     }
 
     @Override
-    public boolean hitEntity(ItemStack itemStack, LivingEntity par2EntityLivingBase, LivingEntity par3EntityLivingBase) {
-
-        itemStack.setDamage(itemStack.getDamage() -2);
-        return true;
-    }
-
-    @Override
     public boolean onBlockDestroyed(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
 
         boolean used = false;
@@ -75,62 +69,59 @@ public class ItemSickle extends ToolItem {
         if (!(entityLiving instanceof PlayerEntity)) return false;
         PlayerEntity player = (PlayerEntity) entityLiving;
 
-        if (state.getBlock().isFoliage(state, world, pos)) {
+        if (state.isFoliage(world, pos) || state.getBlock() instanceof  LeavesBlock) {
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     for (int k = -1; k <= 1; k++) {
-                        Block blockToCheck = world.getBlockState(pos.add(i,j,k)).getBlock();
-                        BlockState meta = world.getBlockState(pos.add(i,j,k));
-                        if (blockToCheck.isFoliage(meta, world, pos.add(i,j,k))) {
-                            if (blockToCheck.canHarvestBlock(world.getBlockState(pos.add(i,j,k)), world, pos.add(i,j,k), player)) {
-                                blockToCheck.harvestBlock(world, player, pos.add(i,j,k), meta, null, stack);
+                        BlockState blockToCheck = world.getBlockState(pos.add(i,j,k));
+                        if (blockToCheck.isFoliage(world, pos.add(i,j,k)) || blockToCheck.getBlock() instanceof  LeavesBlock) {
+                            if (blockToCheck.canHarvestBlock(world, pos.add(i,j,k), player)) {
+                                world.destroyBlock(pos.add(i,j,k), true);
                             }
-                            world.setBlockState(pos.add(i,j,k), Blocks.AIR.getDefaultState());
                             used = true;
                         }
                     }
                 }
             }
             if (used) {
-                stack.setDamage(stack.getDamage() -1);
+                stack.damageItem(1, player, (playerEntity) ->
+                        playerEntity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
             }
             return used;
         }
 
-        if ((state != null) && (state.getBlock() instanceof LilyPadBlock)) {
+        if ((state.getBlock() instanceof LilyPadBlock)) {
             for (int i = -2; i <= 2; i++) {
                 for (int j = -2; j <= 2; j++) {
                     Block blockToCheck = world.getBlockState(pos.add(i,0,j)).getBlock();
                     BlockState meta = world.getBlockState(pos.add(i,0,j));
-                    if (blockToCheck != null && blockToCheck instanceof LilyPadBlock) {
+                    if (blockToCheck instanceof LilyPadBlock) {
                         if (blockToCheck.canHarvestBlock(meta, world, pos.add(i,0,j), player)) {
-                            blockToCheck.harvestBlock(world, player, pos.add(i,0,j), meta, null, stack);
+                            world.destroyBlock(pos.add(i,0,j), true);
                         }
-                        world.setBlockState(pos.add(i,0,j), Blocks.AIR.getDefaultState());
                         used = true;
                     }
                 }
             }
         }
-        if ((state != null) && !(state.getBlock() instanceof LilyPadBlock)) {
+
+        if (!(state.getBlock() instanceof LilyPadBlock)) {
             for (int i = -2; i <= 2; i++) {
                 for (int j = -2; j <= 2; j++) {
                     Block blockToCheck = world.getBlockState(pos.add(i,0,j)).getBlock();
-                    BlockState meta = world.getBlockState(pos.add(i,0,j));
-                    if (blockToCheck != null) {
-                        if (blockToCheck instanceof BushBlock && !(blockToCheck instanceof LilyPadBlock)) {
-                            if (blockToCheck.canHarvestBlock(world.getBlockState(pos.add(i,0,j)), world,  pos.add(i,0,j), player)) {
-                                blockToCheck.harvestBlock(world, player, pos.add(i,0,j), meta, null, stack);
-                            }
-                            world.setBlockState(pos.add(i,0,j), Blocks.AIR.getDefaultState());
-                            used = true;
+                    if (blockToCheck instanceof BushBlock && !(blockToCheck instanceof LilyPadBlock)) {
+                        if (blockToCheck.canHarvestBlock(world.getBlockState(pos.add(i,0,j)), world,  pos.add(i,0,j), player)) {
+                            world.destroyBlock(pos.add(i,0,j), true);
                         }
+                        used = true;
                     }
                 }
             }
         }
+
         if (used) {
-            stack.setDamage(stack.getDamage() -1);
+            stack.damageItem(1, player, (playerEntity) ->
+                    playerEntity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
         }
         return used;
     }

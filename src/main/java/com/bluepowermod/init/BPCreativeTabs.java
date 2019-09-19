@@ -119,7 +119,7 @@ public class BPCreativeTabs {
             @Override
             @OnlyIn(Dist.CLIENT)
             public ItemStack createIcon() {
-                ItemStack iconItem = new ItemStack(BPItems.blue_alloy_ingot);
+                ItemStack iconItem = new ItemStack(BPBlocks.blulectric_cable);
                 if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
