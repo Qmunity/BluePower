@@ -17,13 +17,21 @@
 
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.container.slot.SlotMachineInput;
+import com.bluepowermod.container.slot.SlotMachineOutput;
 import com.bluepowermod.tile.tier2.TileRegulator;
+import com.bluepowermod.tile.tier3.TileBlulectricAlloyFurnace;
 import com.bluepowermod.tile.tier3.TileBlulectricFurnace;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.FurnaceContainer;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,51 +40,94 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @author MoreThanHidden
  */
-public class ContainerBlulectricFurnace extends FurnaceContainer {
+public class ContainerBlulectricFurnace extends Container {
     private IIntArray fields;
+    public final IInventory inventory;
+
+    public ContainerBlulectricFurnace( int id, PlayerInventory player ){
+        this( id, player, new Inventory(TileBlulectricFurnace.SLOTS), new IntArray(3));
+    }
 
     public ContainerBlulectricFurnace(int windowId, PlayerInventory invPlayer, IInventory inventory, IIntArray fields) {
-        super(windowId, invPlayer, inventory, fields);
+        super(BPContainerType.BLULECTRIC_FURNACE, windowId);
+        this.inventory = inventory;
         this.fields = fields;
 
-        inventorySlots.remove(new SlotMachineInput(inventory, 0, 21, 35));
+        addSlot(new SlotMachineInput(inventory, 0, 62, 35));
+        addSlot(new SlotMachineOutput(inventory, 1, 126, 35));
+
+        bindPlayerInventory(invPlayer);
+        this.trackIntArray(fields);
     }
 
-    public ContainerBlulectricFurnace( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( 2 ), new IntArray(6));
+
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+
+        // Render inventory
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 9; j++) {
+                addSlot(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+            }
+        }
+
+        // Render hotbar
+        for (int j = 0; j < 9; j++) {
+            addSlot(new Slot(invPlayer, j, 8 + j * 18, 142));
+        }
     }
 
-    //fields.get(1) = Max | fields.get(0) = Amount
+
+    @Override
+    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
+
+        ItemStack var3 = ItemStack.EMPTY;
+        Slot var4 = inventorySlots.get(par2);
+
+        if (var4 != null && var4.getHasStack()) {
+            ItemStack var5 = var4.getStack();
+            var3 = var5.copy();
+
+            if (par2 < 2) {
+                if (!mergeItemStack(var5, 1, 37, false)) return ItemStack.EMPTY;
+                var4.onSlotChange(var5, var3);
+            } else {
+                if (!mergeItemStack(var5, 0, 1, false)) return ItemStack.EMPTY;
+                var4.onSlotChange(var5, var3);
+            }
+
+            if (var5.getCount() == 0) {
+                var4.putStack(ItemStack.EMPTY);
+            } else {
+                var4.onSlotChanged();
+            }
+
+            if (var5.getCount() == var3.getCount()) return ItemStack.EMPTY;
+
+            var4.onSlotChange(var3, var5);
+        }
+
+        return var3;
+    }
+
+    @Override
+    public boolean canInteractWith(PlayerEntity playerEntity) {
+        return inventory.isUsableByPlayer( playerEntity );
+    }
+
+    //fields.get(2) = Max | fields.get(0) = Amount
     @OnlyIn(Dist.CLIENT)
     public float getBufferPercentage() {
 
-        if (fields.get(1) > 0) {
-            return (float) fields.get(0) / (float) fields.get(1);
+        if (fields.get(2) > 0) {
+            return (float) fields.get(0) / (float) fields.get(2);
         } else {
             return 0;
         }
     }
 
-    //fields.get(5) = Max | fields.get(4) = Amount
     @OnlyIn(Dist.CLIENT)
-    public float getEnergyPercentage() {
-
-        if (fields.get(5) > 0) {
-            return (float) fields.get(4) / (float) fields.get(5);
-        } else {
-            return 0;
-        }
-    }
-
-    //fields.get(6) | 0 = Both Disabled | 1 = Active | 2 = Both Enabled | 3 = Charged
-    @OnlyIn(Dist.CLIENT)
-    public boolean getActive() {
-        return fields.get(6) == 1 || fields.get(6) == 2;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public boolean getCharged() {
-        return fields.get(6) == 2 || fields.get(6) == 3;
+    public float getProcessPercentage() {
+        return (float) fields.get(1) / (100 / (fields.get(0) / (float) fields.get(2)));
     }
 
 }

@@ -1,0 +1,28 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "GCG",
+    "IMI"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:green_terracotta"
+    },
+    "M": {
+      "item": "bluepower:motor"
+    },
+    "C": {
+      "item": "bluepower:copper_coil"
+    },
+    "A": {
+      "item": "bluepower:blue_alloy_ingot"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "bluepower:engine"
+  }
+}

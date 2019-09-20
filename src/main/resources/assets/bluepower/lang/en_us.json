@@ -517,6 +517,9 @@
   "item.bluepower.copper_wire": "Fine Copper Wire",
   "item.bluepower.infused_teslatite_dust": "Infused Teslatite Dust",
   "item.bluepower.multimeter": "Multimeter",
+  "item.bluepower.copper_coil": "Copper Coil",
+  "item.bluepower.motor": "Motor",
+  "item.bluepower.battery": "Battery",
 
   "block.bluepower.gate_and": "AND Gate",
   "block.bluepower.gate_buffer": "Buffer Gate",

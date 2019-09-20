@@ -89,6 +89,9 @@ public class BPItems {
     public static final Item redstone_cathode_tile = new ItemCrafting(Refs.REDSTONECATHODE_NAME);
     public static final Item redstone_pointer_tile = new ItemCrafting(Refs.REDSTONEPOINTER_NAME);
     public static final Item multimeter = new ItemMultimeter().setRegistryName(Refs.MODID, Refs.MULTIMETER_NAME);
+    public static final Item battery = new ItemCrafting(Refs.BATTERY_NAME);
+    public static final Item motor = new ItemCrafting(Refs.MOTOR_NAME);
+    public static final Item copper_coil = new ItemCrafting(Refs.COPPERCOIL_NAME);
     // stone_redwire = new ItemCrafting(Refs.STONEREDWIRE_NAME);
     // plate_assembly = new ItemCrafting(Refs.PLATEASSEMBLY_NAME);
     public static final Item stone_bundle = new ItemCrafting(Refs.STONEBUNDLE_NAME);

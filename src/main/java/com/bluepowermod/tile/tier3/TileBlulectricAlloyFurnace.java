@@ -12,15 +12,13 @@ import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
-import com.bluepowermod.block.machine.BlockAlloyFurnace;
-import com.bluepowermod.container.ContainerAlloyFurnace;
+import com.bluepowermod.block.power.BlockBlulectricAlloyFurnace;
 import com.bluepowermod.container.ContainerBlulectricAlloyFurnace;
 import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -31,7 +29,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
@@ -159,21 +156,28 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
                 updatingRecipe = false;
             }
             if (currentRecipe != null) {
-                //Check if progress completed, and output slot is empty and less then a stack of the same item.
-                if (++currentProcessTime >= 200 && ((outputInventory.getItem() == currentRecipe.getRecipeOutput().getItem()
-                        && (outputInventory.getCount() + currentRecipe.getCraftingResult(inventory).getCount()) <= 64)
-                        || outputInventory.isEmpty())) {
-                    currentProcessTime = 0;
-                    if (!outputInventory.isEmpty()) {
-                        outputInventory.setCount(outputInventory.getCount() + currentRecipe.getCraftingResult(inventory).getCount());
-                    } else {
-                        outputInventory = currentRecipe.getCraftingResult(inventory).copy();
+                if((storage.getEnergy() / storage.getMaxEnergy()) > 0.5) {
+                    storage.addEnergy(-1, false);
+                    this.setIsActive(true);
+                    //Check if progress completed, and output slot is empty and less then a stack of the same item.
+                    if (++currentProcessTime >= (100 / (storage.getEnergy() / storage.getMaxEnergy())) && ((outputInventory.getItem() == currentRecipe.getRecipeOutput().getItem()
+                            && (outputInventory.getCount() + currentRecipe.getCraftingResult(inventory).getCount()) <= 64)
+                            || outputInventory.isEmpty())) {
+                        currentProcessTime = 0;
+                        if (!outputInventory.isEmpty()) {
+                            outputInventory.setCount(outputInventory.getCount() + currentRecipe.getCraftingResult(inventory).getCount());
+                        } else {
+                            outputInventory = currentRecipe.getCraftingResult(inventory).copy();
+                        }
+                        currentRecipe.useItems(inventory);
+                        updatingRecipe = true;
                     }
-                    currentRecipe.useItems(inventory);
-                    updatingRecipe = true;
+                }else{
+                    this.setIsActive(false);
                 }
             } else {
                 currentProcessTime = 0;
+                this.setIsActive(false);
             }
         }
     }
@@ -223,7 +227,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
 
         if (_isActive != isActive) {
             isActive = _isActive;
-            BlockAlloyFurnace.setState(isActive, world, pos);
+            BlockBlulectricAlloyFurnace.setState(isActive, world, pos);
             sendUpdatePacket();
         }
     }

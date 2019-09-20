@@ -243,14 +243,14 @@ public class BPBlocks {
                 .setRegistryName(Refs.MODID, Refs.ITEMDETECTOR_NAME);
         manager = new BlockRejecting(Material.ROCK, TileManager.class).emitsRedstone().setWIP(true).setRegistryName(Refs.MODID, Refs.MANAGER_NAME);
 
-        battery = new BlockBattery().setWIP(true);
-        blulectric_cable = new BlockBlulectricCable().setWIP(true);
-        blulectric_furnace = new BlockBlulectricFurnace().setWIP(true);
-        blulectric_alloyfurnace = new BlockBlulectricAlloyFurnace().setWIP(true);
-        engine = new BlockEngine().setWIP(true);
+        battery = new BlockBattery();
+        blulectric_cable = new BlockBlulectricCable();
+        blulectric_furnace = new BlockBlulectricFurnace();
+        blulectric_alloyfurnace = new BlockBlulectricAlloyFurnace();
+        engine = new BlockEngine();
         kinetic_generator = new BlockKineticGenerator().setWIP(true);
         //windmill = new BlockWindmill();
-        solarpanel = new BlockSolarPanel().setWIP(true);
+        solarpanel = new BlockSolarPanel();
         thermopile = new BlockThermopile().setWIP(true);
 
         // cpu = new BlockCPU();

@@ -9,8 +9,10 @@ package com.bluepowermod.compat.jei;
 
 import com.bluepowermod.client.gui.GuiAlloyFurnace;
 import com.bluepowermod.client.gui.GuiBlulectricAlloyFurnace;
+import com.bluepowermod.client.gui.GuiBlulectricFurnace;
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerBlulectricAlloyFurnace;
+import com.bluepowermod.container.ContainerBlulectricFurnace;
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
@@ -70,6 +72,7 @@ public class JEIPlugin implements IModPlugin {
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(GuiAlloyFurnace.class, 100, 32, 28, 23, new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
         registration.addRecipeClickArea(GuiBlulectricAlloyFurnace.class, 102, 32, 28, 23, new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
+        registration.addRecipeClickArea(GuiBlulectricFurnace.class, 89, 32, 28, 23, VanillaRecipeCategoryUid.FURNACE);
     }
 
     @Override
@@ -77,6 +80,7 @@ public class JEIPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(BPBlocks.alloyfurnace), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
         registration.addRecipeCatalyst(new ItemStack(BPBlocks.blulectric_alloyfurnace), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
         registration.addRecipeCatalyst(new ItemStack(BPBlocks.project_table), VanillaRecipeCategoryUid.CRAFTING);
+        registration.addRecipeCatalyst(new ItemStack(BPBlocks.blulectric_furnace), VanillaRecipeCategoryUid.FURNACE);
     }
 
     @Override
@@ -84,5 +88,6 @@ public class JEIPlugin implements IModPlugin {
         registration.addRecipeTransferHandler(ContainerAlloyFurnace.class, new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME), 2, 9, 11, 36);
         registration.addRecipeTransferHandler(ContainerBlulectricAlloyFurnace.class, new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME), 1, 9, 10, 36);
         registration.addRecipeTransferHandler(ContainerProjectTable.class, VanillaRecipeCategoryUid.CRAFTING, 1, 9, 10, 54);
+        registration.addRecipeTransferHandler(ContainerBlulectricFurnace.class, VanillaRecipeCategoryUid.FURNACE, 0, 1, 2, 36);
     }
 }

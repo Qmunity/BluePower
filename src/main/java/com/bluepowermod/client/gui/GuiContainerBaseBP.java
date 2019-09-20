@@ -32,8 +32,10 @@ public class GuiContainerBaseBP<T extends Container> extends GuiContainerBase<T>
             addWidget(backlogTab);
         }
 
-        //Widgets currently conflicting with progress GUI
-        if(container.getType() != BPContainerType.ALLOY_FURNACE && container.getType() != BPContainerType.BLULECTRIC_ALLOY_FURNACE) {
+        //TODO: Widgets currently conflicting with progress GUI
+        if(container.getType() != BPContainerType.ALLOY_FURNACE
+                && container.getType() != BPContainerType.BLULECTRIC_ALLOY_FURNACE
+                && container.getType() != BPContainerType.BLULECTRIC_FURNACE) {
             String unlocalizedInfo = title.getString() + ".info";
             addAnimatedStat("gui.bluepower:tab.info", Refs.MODID + ":textures/gui/widgets/gui_info.png", 0xFF8888FF, isInfoStatLeftSided()).setText(
                     unlocalizedInfo);

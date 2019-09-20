@@ -115,6 +115,8 @@ public class Refs {
     public static final String KINETICGENERATOR_NAME = "kinetic_generator";
     public static final String WINDMILL_NAME = "windmill";
     public static final String BATTERYBLOCK_NAME = "battery_block";
+    public static final String BATTERY_NAME = "battery";
+    public static final String MOTOR_NAME = "motor";
     public static final String SOLARPANEL_NAME = "solar_panel";
     public static final String THERMOPILE_NAME  = "thermopile";
     public static final String BLULECTRICALLOYFURNACE_NAME = "blulectric_alloyfurnace";
@@ -215,6 +217,7 @@ public class Refs {
     public static final String CANVAS_NAME = "canvas";
     public static final String LUMAR_NAME = "lumar";
     public static final String COPPERWIRE_NAME = "copper_wire";
+    public static final String COPPERCOIL_NAME = "copper_coil";
     public static final String IRONWIRE_NAME = "iron_wire";
     public static final String WOOLCARD_NAME = "wool_card";
     public static final String DIAMONDDRAWPLATE_NAME = "diamond_drawplate";

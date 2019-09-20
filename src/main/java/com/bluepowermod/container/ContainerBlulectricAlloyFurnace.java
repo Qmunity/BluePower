@@ -42,7 +42,7 @@ public class ContainerBlulectricAlloyFurnace extends Container {
     public final IInventory inventory;
 
     public ContainerBlulectricAlloyFurnace( int id, PlayerInventory player ){
-        this( id, player, new Inventory(TileBlulectricAlloyFurnace.SLOTS), new IntArray(4));
+        this( id, player, new Inventory(TileBlulectricAlloyFurnace.SLOTS), new IntArray(3));
     }
 
     public ContainerBlulectricAlloyFurnace(int windowId, PlayerInventory invPlayer, IInventory inventory, IIntArray fields) {
@@ -125,21 +125,10 @@ public class ContainerBlulectricAlloyFurnace extends Container {
         }
     }
 
-    //fields.get(3) = Max | fields.get(4) = Amount
-    @OnlyIn(Dist.CLIENT)
-    public float getEnergyPercentage() {
-
-        if (fields.get(3) > 0) {
-            return (float) fields.get(4) / (float) fields.get(3);
-        } else {
-            return 0;
-        }
-    }
-
     @OnlyIn(Dist.CLIENT)
     public float getProcessPercentage() {
 
-        return (float) fields.get(1) / 200;
+        return (float) fields.get(1) / (100 / (fields.get(0) / (float) fields.get(2)));
     }
 
 }

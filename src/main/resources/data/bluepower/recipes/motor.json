@@ -1,0 +1,22 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ICI",
+    "ICI",
+    "IAI"
+  ],
+  "key": {
+    "C": {
+      "item": "bluepower:copper_coil"
+    },
+    "A": {
+      "item": "bluepower:blue_alloy_ingot"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "bluepower:motor"
+  }
+}

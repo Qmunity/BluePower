@@ -1,0 +1,22 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "GTG",
+    "CCC"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:green_terracotta"
+    },
+    "C": {
+      "tag": "forge:ingots/copper"
+    },
+    "T": {
+      "tag": "forge:dusts/teslatite"
+    }
+  },
+  "result": {
+    "item": "bluepower:multimeter"
+  }
+}

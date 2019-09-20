@@ -1,0 +1,14 @@
+﻿{
+  "result": {
+    "item": "bluepower:copper_wire"
+  },
+  "ingredients": [
+    {
+      "item": "bluepower:diamond_drawplate"
+    },
+    {
+      "tag": "forge:ingots/copper"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

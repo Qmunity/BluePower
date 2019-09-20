@@ -1,0 +1,22 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BIB",
+    "IAI"
+  ],
+  "key": {
+    "B": {
+      "item": "bluepower:battery"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "A": {
+      "item": "bluepower:blue_alloy_ingot"
+    }
+  },
+  "result": {
+    "item": "bluepower:battery_block"
+  }
+}

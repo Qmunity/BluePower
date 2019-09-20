@@ -1,0 +1,22 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "B B",
+    "IAI"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:terracotta"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "A": {
+      "item": "bluepower:blue_alloy_ingot"
+    }
+  },
+  "result": {
+    "item": "bluepower:blulectric_furnace"
+  }
+}

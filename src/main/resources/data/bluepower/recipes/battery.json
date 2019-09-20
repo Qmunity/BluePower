@@ -1,0 +1,22 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TCT",
+    "TST",
+    "TCT"
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:ingots/copper"
+    },
+    "S": {
+      "tag": "forge:ingots/zinc"
+    },
+    "T": {
+      "tag": "forge:dusts/teslatite"
+    }
+  },
+  "result": {
+    "item": "bluepower:battery"
+  }
+}

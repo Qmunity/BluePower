@@ -50,14 +50,16 @@ public class GuiBlulectricAlloyFurnace extends GuiContainerBaseBP<ContainerBlule
         if (bufferPercentage > 0)
             this.blit(x + 21, y + 72 - bufferPercentage, 176, 65 - bufferPercentage, 5, bufferPercentage);
 
-        int energyPercentage = (int)(furnace.getEnergyPercentage() * 50);
+        double max = 0.55;
+        double min = 0.49;
+        int energyPercentage = (int)(Math.abs(Math.max(min,Math.min(furnace.getBufferPercentage(),max))-min)/Math.abs(max-min) * 50);
         if (energyPercentage > 0)
-            this.blit(x + 28, y + 72 - bufferPercentage, 176, 65 - bufferPercentage, 5, bufferPercentage);
+            this.blit(x + 29, y + 72 - energyPercentage, 176, 65 - energyPercentage, 5, energyPercentage);
 
         if(furnace.getBufferPercentage() > 0.5)
             this.blit(x + 20,y + 11,183,18,7,10);
 
-        if(furnace.getEnergyPercentage() > 0.5)
+        if(furnace.getBufferPercentage() > 0.55)
             this.blit(x + 30,y + 9,184,32,7,12);
 
         int processPercentage = (int)(furnace.getProcessPercentage() * 22);

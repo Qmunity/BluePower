@@ -1,0 +1,19 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BAB",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "bluepower:blue_doped_wafer"
+    },
+    "A": {
+      "item": "bluepower:blue_alloy_ingot"
+    }
+  },
+  "result": {
+    "item": "bluepower:solar_panel"
+  }
+}

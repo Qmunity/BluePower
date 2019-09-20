@@ -46,8 +46,24 @@ public class GuiBlulectricFurnace extends GuiContainerBaseBP<ContainerBlulectric
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        int processPercentage = (furnace.getCookProgressionScaled() * 22);
-        this.blit(x + 103, y + 35, 178, 14, processPercentage, 15);
+        int bufferPercentage = (int)(furnace.getBufferPercentage() * 50);
+        if (bufferPercentage > 0)
+            this.blit(x + 25, y + 72 - bufferPercentage, 176, 65 - bufferPercentage, 5, bufferPercentage);
+
+        double max = 0.55;
+        double min = 0.49;
+        int energyPercentage = (int)(Math.abs(Math.max(min,Math.min(furnace.getBufferPercentage(),max))-min)/Math.abs(max-min) * 50);
+        if (energyPercentage > 0)
+            this.blit(x + 33, y + 72 - energyPercentage, 176, 65 - energyPercentage, 5, energyPercentage);
+
+        if(furnace.getBufferPercentage() > 0.5)
+            this.blit(x + 24,y + 11,183,18,7,10);
+
+        if(furnace.getBufferPercentage() > 0.55)
+            this.blit(x + 34,y + 9,184,32,7,12);
+
+        int processPercentage = (int)(furnace.getProcessPercentage() * 22);
+        this.blit(x + 90, y + 35, 178, 0, processPercentage, 15);
     }
 
 }

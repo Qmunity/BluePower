@@ -1,0 +1,20 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WAW",
+    "WAW",
+    "WAW"
+  ],
+  "key": {
+    "W": {
+      "tag": "minecraft:wool"
+    },
+    "A": {
+      "item": "bluepower:blue_alloy_ingot"
+    }
+  },
+  "result": {
+    "item": "bluepower:blulectric_cable",
+    "count": 12
+  }
+}

@@ -1,0 +1,22 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WBW",
+    "BIB",
+    "WBW"
+  ],
+  "key": {
+    "W": {
+      "item": "bluepower:copper_wire"
+    },
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "bluepower:copper_coil"
+  }
+}
