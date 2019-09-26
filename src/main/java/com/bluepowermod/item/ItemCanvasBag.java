@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 public class ItemCanvasBag extends ItemColorableOverlay implements INamedContainerProvider{
     
     public ItemCanvasBag(MinecraftColor color) {
-        super(color, Refs.CANVASBAG_NAME, new Properties());
+        super(color, Refs.CANVASBAG_NAME, new Properties().maxStackSize(1));
     }
 
     @Override
