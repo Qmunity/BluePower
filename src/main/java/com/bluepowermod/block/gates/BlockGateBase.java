@@ -60,7 +60,6 @@ public class BlockGateBase extends BlockBase {
                 .with(POWERED_LEFT, false)
                 .with(POWERED_RIGHT, false)
                 .with(ROTATION, 0));
-        setWIP(true);
     }
 
     @Override

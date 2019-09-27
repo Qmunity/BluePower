@@ -37,6 +37,10 @@
   "block.bluepower.zinc_block": "Zinc Block",
   "block.bluepower.tungsten_block": "Tungsten Block",
 
+  "block.bluepower.half_block": "Slab",
+  "block.bluepower.panel": "Panel",
+  "block.bluepower.cover": "Cover",
+
   "block.bluepower.flax_crop": "Flax",
   "block.bluepower.indigo_flower": "Indigo Flower",
   "block.bluepower.rubber_log": "Rubber Log",

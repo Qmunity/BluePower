@@ -52,12 +52,12 @@ public class DatapackUtils {
         File file = new File(path + "/bluepower/data/bluepower/recipes/alloy_furnace/" + shortname + ".json");
         try {
             if(file.createNewFile()){
-                BluePower.log.info("Created Json File: " + file.getPath());
+                //BluePower.log.info("Created Json File: " + file.getPath());
             }else{
-                BluePower.log.info("File already Exists: " + file.getPath());
+                //BluePower.log.info("File already Exists: " + file.getPath());
             }
         } catch (IOException e) {
-            BluePower.log.info("Creating file failed: " + file.getPath());
+            //BluePower.log.info("Creating file failed: " + file.getPath());
         }
 
         try {
@@ -66,7 +66,7 @@ public class DatapackUtils {
             fileWriter.close();
 
         } catch (IOException e) {
-            BluePower.log.info("Editing File Failed: " + file.getPath());
+            //BluePower.log.info("Editing File Failed: " + file.getPath());
         }
 
     }
@@ -78,7 +78,7 @@ public class DatapackUtils {
         try {
             FileUtils.cleanDirectory(new File(path + "/bluepower/data/bluepower/recipes/alloy_furnace"));
         } catch (Exception e) {
-            BluePower.log.info("Failed to clean Alloy Furnace Recipe Folder");
+            //BluePower.log.info("Failed to clean Alloy Furnace Recipe Folder");
         }
     }
 
@@ -90,9 +90,9 @@ public class DatapackUtils {
         //Make DataPack Folders
         File folder = new File(path + "/bluepower");
         if(folder.mkdir()){
-            BluePower.log.info("Created DataPack Folder: " + folder.getPath());
+            //BluePower.log.info("Created DataPack Folder: " + folder.getPath());
         }else{
-            BluePower.log.info("DataPack Already Exists or Failed: " + folder.getPath());
+            //BluePower.log.info("DataPack Already Exists or Failed: " + folder.getPath());
         }
 
         //Pack MCMeta(Json)
@@ -106,12 +106,12 @@ public class DatapackUtils {
         File file = new File(path + "/bluepower/pack.mcmeta");
         try {
             if(file.createNewFile()){
-                BluePower.log.info("Created Data Pack mcmeta: " + file.getPath());
+                //BluePower.log.info("Created Data Pack mcmeta: " + file.getPath());
             }else{
-                BluePower.log.info("File already Exists: " + file.getPath());
+                //BluePower.log.info("File already Exists: " + file.getPath());
             }
         } catch (IOException e) {
-            BluePower.log.info("Creating file failed: " + file.getPath());
+            //BluePower.log.info("Creating file failed: " + file.getPath());
         }
 
         try {
@@ -120,36 +120,36 @@ public class DatapackUtils {
             fileWriter.close();
 
         } catch (IOException e) {
-            BluePower.log.info("Editing File Failed: " + file.getPath());
+            //BluePower.log.info("Editing File Failed: " + file.getPath());
         }
 
 
         folder = new File(path + "/bluepower/data");
         if(folder.mkdir()){
-            BluePower.log.info("Created DataPack Folder: " + folder.getPath());
+            //BluePower.log.info("Created DataPack Folder: " + folder.getPath());
         }else{
-            BluePower.log.info("DataPack Already Exists or Failed: " + folder.getPath());
+            //BluePower.log.info("DataPack Already Exists or Failed: " + folder.getPath());
         }
 
         folder = new File(path + "/bluepower/data/bluepower");
         if(folder.mkdir()){
-            BluePower.log.info("Created DataPack Folder: " + folder.getPath());
+            //BluePower.log.info("Created DataPack Folder: " + folder.getPath());
         }else{
-            BluePower.log.info("DataPack Already Exists or Failed: " + folder.getPath());
+            //BluePower.log.info("DataPack Already Exists or Failed: " + folder.getPath());
         }
 
         folder = new File(path + "/bluepower/data/bluepower/recipes");
         if(folder.mkdir()){
-            BluePower.log.info("Created DataPack Folder: " + folder.getPath());
+            //BluePower.log.info("Created DataPack Folder: " + folder.getPath());
         }else{
-            BluePower.log.info("DataPack Already Exists or Failed: " + folder.getPath());
+            //BluePower.log.info("DataPack Already Exists or Failed: " + folder.getPath());
         }
 
         folder = new File(path + "/bluepower/data/bluepower/recipes/alloy_furnace");
         if(folder.mkdir()){
-            BluePower.log.info("Created DataPack Folder: " + folder.getPath());
+            //BluePower.log.info("Created DataPack Folder: " + folder.getPath());
         }else{
-            BluePower.log.info("DataPack Already Exists or Failed: " + folder.getPath());
+            //BluePower.log.info("DataPack Already Exists or Failed: " + folder.getPath());
         }
 
     }

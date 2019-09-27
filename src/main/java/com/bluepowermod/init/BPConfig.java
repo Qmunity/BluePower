@@ -146,7 +146,8 @@ public class BPConfig {
             serverCircuitSavingOpOnly = builder.comment("Server Template Saving by Ops only").translation("bluepower.config.template_ops_only").define("ServerTemplateOpsonly", false);
             enableGateSounds = builder.comment("Enable Gate Ticking Sounds").translation("bluepower.config.ticking_sounds").define("tickingSounds", true);
             albedoBrightness = builder.comment("Albedo Support Lamp Brightness").translation("bluepower.config.albedo_brightness").define("albedoBrightness", 0.01F);
-        }
+
+            }
 
     }
     public static final ForgeConfigSpec spec = BUILDER.build();

@@ -19,6 +19,7 @@ package com.bluepowermod.init;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import com.bluepowermod.recipe.MicroblockRecipe;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.item.crafting.*;
 import net.minecraftforge.event.RegistryEvent;
@@ -36,12 +37,16 @@ public class BPRecipeSerializer {
     @ObjectHolder("alloy_smelting")
     public static IRecipeSerializer<IAlloyFurnaceRecipe> ALLOYSMELTING;
 
+    @ObjectHolder("micro_block")
+    public static IRecipeSerializer<MicroblockRecipe> MICROBLOCK;
+
     @Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class Registration {
         @SubscribeEvent
         public static void onRecipeSerializerRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
             IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
             registry.register(new AlloyFurnaceRegistry.Serializer().setRegistryName(Refs.MODID + ":alloy_smelting"));
+            registry.register(new MicroblockRecipe.Serializer().setRegistryName(Refs.MODID + ":micro_block"));
         }
     }
 

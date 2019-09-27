@@ -15,9 +15,9 @@ import com.bluepowermod.tile.tier3.TileEngine;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.model.multipart.Multipart;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -30,8 +30,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * @author MoreThanHidden
+ */
 @Mod.EventBusSubscriber(Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class Renderers {
@@ -56,10 +60,14 @@ public class Renderers {
 
     @SubscribeEvent
     public void onModelBakeEvent(ModelBakeEvent event) {
+
+        //Store the baked models for the inventory model
+        List<IBakedModel> engine = new ArrayList<>();
+
         IUnbakedModel baseModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("bluepower:block/engine/engine_base.obj"));
         if (baseModel instanceof OBJModel) {
             IBakedModel bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ForgeBlockStateV1.Transforms.get("forge:default-block").get(), false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "inventory"), bakedModel);
+            engine.add(bakedModel);
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=false,glider=false"), bakedModel);
             bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X180_Y0, false), DefaultVertexFormats.ITEM);
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=up,gear=false,glider=false"), bakedModel);
@@ -92,14 +100,32 @@ public class Renderers {
         IUnbakedModel gearModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("bluepower:block/engine/engine_gear.obj"));
         if (gearModel instanceof OBJModel) {
             IBakedModel bakedModel = gearModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(gearModel.getDefaultState(), false), DefaultVertexFormats.ITEM);
+            engine.add(bakedModel);
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=true,glider=false"), bakedModel);
         }
 
         IUnbakedModel gliderModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("bluepower:block/engine/engine_glider.obj"));
         if (gliderModel instanceof OBJModel) {
             IBakedModel bakedModel = gliderModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(gliderModel.getDefaultState(), false), DefaultVertexFormats.ITEM);
+            engine.add(bakedModel);
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=false,glider=true"), bakedModel);
         }
+
+        //Register Engine Inventory Model
+        event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "inventory"), new MergedBakedModel(engine));
+
+        //Register Multipart Model
+        event.getModelRegistry().put(new ModelResourceLocation("bluepower:multipart"), new BPMultipartModel());
+
+        //Register Microblock Models
+        for(Direction dir : Direction.values()) {
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName()), new BPMicroblockModel());
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName()), new BPMicroblockModel());
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName()), new BPMicroblockModel());
+        }
+        event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "inventory"), new BPMicroblockModel());
+        event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "inventory"), new BPMicroblockModel());
+        event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "inventory"), new BPMicroblockModel());
 
     }
 

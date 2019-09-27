@@ -19,8 +19,7 @@ package com.bluepowermod.init;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
-import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.block.BlockContainerFacingBase;
+import com.bluepowermod.block.*;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.machine.*;
 import com.bluepowermod.block.machine.BlockLamp;
@@ -35,7 +34,6 @@ import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.util.Dependencies;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.trees.AcaciaTree;
 import net.minecraft.block.trees.OakTree;
 import net.minecraft.item.Item;
 import net.minecraft.item.BlockItem;
@@ -53,12 +51,17 @@ import java.util.List;
 public class BPBlocks {
 
     public static List<Block> blockList = new ArrayList<>();
+    public static List<Block> microblocks = new ArrayList<>();
     public static Block basalt;
     public static Block marble;
     public static Block basalt_cobble;
     public static Block basalt_brick;
     public static Block marble_brick;
     public static Block cracked_basalt_lava;
+
+    public static Block half_block;
+    public static Block panel;
+    public static Block cover;
 
     public static Block basaltbrick_cracked;
     public static Block basalt_brick_small;
@@ -129,6 +132,7 @@ public class BPBlocks {
     public static Block windmill;
     public static Block solarpanel;
     public static Block thermopile;
+    public static Block multipart;
 
     // public static Block cpu;
     // public static Block monitor;
@@ -206,6 +210,8 @@ public class BPBlocks {
         zinc_block = new BlockStoneOre(Refs.ZINCBLOCK_NAME);
         tungsten_block = new BlockStoneOre(Refs.TUNGSTENBLOCK_NAME);
 
+        multipart = new BlockBPMultipart();
+
         rubber_leaves = new BlockRubberLeaves(Block.Properties.create(Material.PLANTS));
         rubber_log = new BlockRubberLog(Block.Properties.create(Material.WOOD));
         rubber_sapling = new BlockRubberSapling(new OakTree(), Block.Properties.create(Material.PLANTS));
@@ -252,6 +258,13 @@ public class BPBlocks {
         //windmill = new BlockWindmill();
         solarpanel = new BlockSolarPanel();
         thermopile = new BlockThermopile().setWIP(true);
+
+        half_block = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,8,16)).setRegistryName(Refs.MODID + ":half_block");
+        panel = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,4,16)).setRegistryName(Refs.MODID + ":panel");
+        cover = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,2,16)).setRegistryName(Refs.MODID + ":cover");
+        microblocks.add(half_block);
+        microblocks.add(panel);
+        microblocks.add(cover);
 
         // cpu = new BlockCPU();
         // monitor = new BlockMonitor();
@@ -327,7 +340,6 @@ public class BPBlocks {
     }
 
     private static void initModDependantBlocks() {
-
         if (ModList.get().isLoaded(Dependencies.COMPUTER_CRAFT) || ModList.get().isLoaded(Dependencies.OPEN_COMPUTERS)) {
             sortron = new BlockSortron();
         }
@@ -340,17 +352,22 @@ public class BPBlocks {
 
         }
     }
+
     @SubscribeEvent
     public static void registerBlockItems(RegistryEvent.Register<Item> event) {
         for (Block block : blockList) {
             if (block.getRegistryName() != null && !(block instanceof BlockCrop)) { // Crops have seeds rather than blocks
-                ItemGroup group = BPCreativeTabs.blocks;
-                if(block instanceof BlockContainerBase){group = BPCreativeTabs.machines;}
-                if(block instanceof BlockLamp){group = BPCreativeTabs.lighting;}
-                if(block instanceof BlockAlloyWire){group = BPCreativeTabs.wiring;}
-                if(block instanceof BlockBlulectricCable){group = BPCreativeTabs.wiring;}
-                if(block instanceof BlockGateBase){group = BPCreativeTabs.circuits;}
-                event.getRegistry().register(new BlockItem(block, new Item.Properties().group(group)).setRegistryName(block.getRegistryName()));
+                if((block instanceof BlockBase && ((BlockBase)block).getWIP()) || block instanceof BlockBPMultipart){
+                    event.getRegistry().register(new BlockItem(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
+                }else{
+                    ItemGroup group = BPCreativeTabs.blocks;
+                    if(block instanceof BlockContainerBase){group = BPCreativeTabs.machines;}
+                    if(block instanceof BlockLamp){group = BPCreativeTabs.lighting;}
+                    if(block instanceof BlockAlloyWire){group = BPCreativeTabs.wiring;}
+                    if(block instanceof BlockBlulectricCable){group = BPCreativeTabs.wiring;}
+                    if(block instanceof BlockGateBase){group = BPCreativeTabs.circuits;}
+                    event.getRegistry().register(new BlockItem(block, new Item.Properties().group(group)).setRegistryName(block.getRegistryName()));
+                }
             }
         }
     }

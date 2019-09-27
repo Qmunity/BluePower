@@ -46,6 +46,9 @@ public abstract class BlockBase extends Block {
         BPBlocks.blockList.add(this);
     }
 
+    public boolean getWIP(){
+        return wip;
+    }
 
     public BlockBase setWIP(boolean wip) {
 

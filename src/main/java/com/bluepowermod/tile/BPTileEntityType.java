@@ -1,3 +1,11 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
+
 package com.bluepowermod.tile;
 
 import com.bluepowermod.reference.ContainerNames;
@@ -9,9 +17,11 @@ import com.bluepowermod.tile.tier2.TileRetriever;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier3.*;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ObjectHolder;
 
+/**
+ * @author MoreThanHidden
+ */
 public class BPTileEntityType {
 
     @ObjectHolder(ContainerNames.ALLOY_FURNACE)
@@ -89,6 +99,9 @@ public class BPTileEntityType {
     @ObjectHolder(Refs.MODID + ":lamp")
     public static TileEntityType<TileLamp> LAMP;
 
+    @ObjectHolder(Refs.MODID + ":multipart")
+    public static TileEntityType<TileLamp> MULTIPART;
+
     @ObjectHolder(Refs.MODID + ":transposer")
     public static TileEntityType<TileTransposer> TRANSPOSER;
 
@@ -110,9 +123,11 @@ public class BPTileEntityType {
     @ObjectHolder(Refs.MODID + ":solar_panel")
     public static TileEntityType<TileSolarPanel> SOLAR_PANEL;
 
-
     @ObjectHolder(Refs.MODID + ":" + Refs.THERMOPILE_NAME)
     public static TileEntityType<TileThermopile> THERMOPILE;
+
+    @ObjectHolder(Refs.MODID + ":microblock")
+    public static TileEntityType<TileBPMicroblock> MICROBLOCK;
 
 
 }
