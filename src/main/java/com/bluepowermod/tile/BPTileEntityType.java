@@ -100,7 +100,7 @@ public class BPTileEntityType {
     public static TileEntityType<TileLamp> LAMP;
 
     @ObjectHolder(Refs.MODID + ":multipart")
-    public static TileEntityType<TileLamp> MULTIPART;
+    public static TileEntityType<TileBPMultipart> MULTIPART;
 
     @ObjectHolder(Refs.MODID + ":transposer")
     public static TileEntityType<TileTransposer> TRANSPOSER;
