@@ -4,6 +4,6 @@
       "side": "bluepower:blocks/machines/buffer_side",
       "front": "bluepower:blocks/machines/buffer_front",
       "back": "bluepower:blocks/machines/buffer_back",
-      "particle": "#side"
+      "particle": "bluepower:blocks/machines/buffer_side"
    }
 }

@@ -86,7 +86,7 @@ public class ContainerBlulectricAlloyFurnace extends Container {
             var3 = var5.copy();
 
             if (par2 < 10) {
-                if (!mergeItemStack(var5, 10, 46, false)) return ItemStack.EMPTY;
+                if (!mergeItemStack(var5, 11, 46, false)) return ItemStack.EMPTY;
                 var4.onSlotChange(var5, var3);
             } else {
                 if (FurnaceTileEntity.isFuel(var5) && mergeItemStack(var5, 0, 1, false)) {

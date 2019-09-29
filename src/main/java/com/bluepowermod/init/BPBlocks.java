@@ -225,7 +225,12 @@ public class BPBlocks {
         alloyfurnace = new BlockAlloyFurnace();
         block_breaker = new BlockContainerFacingBase(Material.ROCK, TileBlockBreaker.class).setRegistryName(Refs.MODID, Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
-        buffer = new BlockContainerFacingBase(Material.ROCK, TileBuffer.class).setRegistryName(Refs.MODID, Refs.BLOCKBUFFER_NAME);
+
+        buffer = new BlockContainerFacingBase(Material.ROCK, TileBuffer.class){
+            @Override
+            protected boolean canRotateVertical(){return false;}
+        }.setRegistryName(Refs.MODID, Refs.BLOCKBUFFER_NAME);
+
         deployer = new BlockContainerFacingBase(Material.ROCK, TileDeployer.class)
                 .setRegistryName(Refs.MODID, Refs.BLOCKDEPLOYER_NAME);
         transposer = new BlockContainerFacingBase(Material.ROCK, TileTransposer.class).setRegistryName(Refs.MODID, Refs.TRANSPOSER_NAME);
