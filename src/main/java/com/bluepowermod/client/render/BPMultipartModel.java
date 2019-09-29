@@ -37,10 +37,9 @@ public class BPMultipartModel implements IBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
         BlockRendererDispatcher brd = Minecraft.getInstance().getBlockRendererDispatcher();
-        List<BlockState> info = extraData.getData(TileBPMultipart.PROPERTY_INFO);
+        Map<BlockState, IModelData> info = extraData.getData(TileBPMultipart.PROPERTY_INFO);
         if (info != null) {
-            BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
-            return info.stream().filter(i -> i.canRenderInLayer(layer)).flatMap(i -> brd.getModelForState(i).getQuads(i, side, rand, extraData).stream()).collect(Collectors.toList());
+            return info.keySet().stream().flatMap(i -> brd.getModelForState(i).getQuads(i, side, rand, info.get(i)).stream()).collect(Collectors.toList());
         }else{
             return Collections.emptyList();
         }

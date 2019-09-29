@@ -47,10 +47,14 @@ public class BlockBPMultipart extends ContainerBlock {
         if(block != Blocks.AIR) {
             TileEntity te = worldIn.getTileEntity(pos);
             if(te instanceof TileBPMultipart){
-                ((TileBPMultipart)te).addState(block.getStateForPlacement(new BlockItemUseContext(new ItemUseContext(player, handIn, hit))));
+                BlockState partState = block.getStateForPlacement(new BlockItemUseContext(new ItemUseContext(player, handIn, hit)));
+                if (partState != null) {
+                    ((TileBPMultipart)te).addState(partState);
+                    return true;
+                }
             }
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -63,6 +67,14 @@ public class BlockBPMultipart extends ContainerBlock {
                 return shapeList.stream().reduce(shapeList.get(0), VoxelShapes::or);
         }
         return Block.makeCuboidShape(6,6,6,10,10,10);
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+        TileEntity te = world.getTileEntity(pos);
+        if(te instanceof TileBPMultipart) {
+            ((TileBPMultipart) te).getStates().forEach(s -> s.neighborChanged(world, pos, blockIn, fromPos, bool));
+        }
     }
 
     @Override

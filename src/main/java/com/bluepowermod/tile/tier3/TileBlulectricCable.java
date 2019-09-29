@@ -40,7 +40,7 @@ public class TileBlulectricCable extends TileMachineBase {
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+        if (world != null && !world.isRemote) {
             storage.resetCurrent();
             //Balance power of attached blulectric blocks.
             for (Direction facing : Direction.values()) {

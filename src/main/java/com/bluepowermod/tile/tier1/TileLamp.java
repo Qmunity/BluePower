@@ -69,7 +69,9 @@ public class TileLamp extends TileBase{
 
     @Override
     protected void onTileLoaded() {
-        world.getBlockState(pos).neighborChanged(world, pos, world.getBlockState(pos).getBlock(), pos, true);
+        if (world != null) {
+            world.getBlockState(pos).neighborChanged(world, pos, world.getBlockState(pos).getBlock(), pos, true);
+        }
     }
 /*
     @Optional.Method(modid="albedo")

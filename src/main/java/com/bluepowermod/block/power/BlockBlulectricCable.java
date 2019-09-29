@@ -10,12 +10,18 @@ package com.bluepowermod.block.power;
 
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.TileBPMicroblock;
+import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier3.TileBlulectricCable;
 
+import com.bluepowermod.util.ItemStackUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
@@ -23,13 +29,18 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author MoreThanHidden
@@ -120,14 +131,33 @@ public class BlockBlulectricCable extends BlockContainerBase{
 
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
-        if (!world.isRemote){
-           world.setBlockState(pos, this.getStateForPos(world, pos), 2);
+        TileEntity te = world.getTileEntity(pos);
+        if (!world.isRemote) {
+            //Get new state based on surrounding capabilities
+            BlockState newState = this.getStateForPos(world, pos);
+            if (!(te instanceof TileBPMultipart)){
+               //Change the block state
+               world.setBlockState(pos, newState, 2);
+            }else{
+                //Update the state in the Multipart
+                ((TileBPMultipart) te).changeState(state, newState);
+            }
+            state = newState;
         }
+        //If not placed on a solid block break off
         if (!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()) {
-            world.destroyBlock(pos, true);
+            if(te instanceof TileBPMultipart){
+                ((TileBPMultipart)te).removeState(state);
+                if(world instanceof ServerWorld) {
+                    NonNullList<ItemStack> drops = NonNullList.create();
+                    drops.add(new ItemStack(this));
+                    InventoryHelper.dropItems(world, pos, drops);
+                }
+            }else {
+                world.destroyBlock(pos, true);
+            }
         }
     }
-
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){

@@ -8,28 +8,41 @@
 
 package com.bluepowermod.tile;
 
+import com.bluepowermod.block.BlockBPMultipart;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.types.DynamicOps;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.extensions.IForgeBlockState;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author MoreThanHidden
  */
-public class TileBPMultipart extends TileEntity {
+public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
 
-    public static final ModelProperty<List<BlockState>> PROPERTY_INFO = new ModelProperty<>();
-    private List<BlockState> state = new ArrayList<>();
+    public static final ModelProperty<Map<BlockState, IModelData>> PROPERTY_INFO = new ModelProperty<>();
+    private Map<BlockState, TileEntity> stateMap = new HashMap<>();
 
     public TileBPMultipart() {
         super(BPTileEntityType.MULTIPART);
@@ -38,25 +51,51 @@ public class TileBPMultipart extends TileEntity {
     @Nonnull
     @Override
     public IModelData getModelData() {
-        return new ModelDataMap.Builder().withInitial(PROPERTY_INFO, state).build();
+        //Get Model Data for States with Tile Entities in the Multipart
+        Map<BlockState, IModelData> modelDataMap = stateMap.keySet().stream().filter(IForgeBlockState::hasTileEntity)
+                .collect(Collectors.toMap(s -> s, this::getModelData));
+
+        //Add States without Tile Entities
+        stateMap.keySet().stream().filter(s -> !s.hasTileEntity()).forEach(s -> modelDataMap.put(s, null));
+
+        return new ModelDataMap.Builder().withInitial(PROPERTY_INFO, modelDataMap).build();
+    }
+
+    private IModelData getModelData(BlockState state) {
+        //Get Model Data for specific state
+        return stateMap.get(state).getModelData();
     }
 
     public void addState(BlockState state) {
-        this.state.add(state);
+        TileEntity tile = null;
+        if(state.hasTileEntity()){
+            tile = state.getBlock().createTileEntity(state, world);
+            if (tile != null) {
+                tile.setPos(pos);
+                if (world != null) {
+                    tile.setWorld(world);
+                }
+            }
+        }
+        this.stateMap.put(state, tile);
         markDirtyClient();
     }
 
     public void removeState(BlockState state) {
-        this.state.remove(state);
+        stateMap.get(state).remove();
+        this.stateMap.remove(state);
         markDirtyClient();
     }
 
-    public List<BlockState> getStates() {
-        return state;
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        List<LazyOptional<T>> capability =  stateMap.values().stream().filter(Objects::nonNull).map(t -> t.getCapability(cap, side)).filter(LazyOptional::isPresent).collect(Collectors.toList());
+        return capability.size() > 0 ? capability.get(0) : LazyOptional.empty();
     }
 
-    public void setStates(List<BlockState> state) {
-        this.state = state;
+    public List<BlockState> getStates(){
+        return new ArrayList<>(stateMap.keySet());
     }
 
     private void markDirtyClient() {
@@ -73,7 +112,11 @@ public class TileBPMultipart extends TileEntity {
         super.write(compound);
         compound.putInt("size", getStates().size());
         for (int i = 0; i < getStates().size(); i++) {
-            compound.putString("state" + i, getStates().get(i).getBlock().getRegistryName().toString());
+            //write state data
+            compound.put("state" + i, BlockState.serialize(NBTDynamicOps.INSTANCE, getStates().get(i)).getValue());
+            //write tile NBT data
+            if(stateMap.get(getStates().get(i)) != null)
+                compound.put("tile" + i, stateMap.get(getStates().get(i)).write(new CompoundNBT()));
         }
         return compound;
     }
@@ -81,12 +124,18 @@ public class TileBPMultipart extends TileEntity {
     @Override
     public void read(CompoundNBT compound) {
         super.read(compound);
-        List<BlockState> states = new ArrayList<>();
+        Map<BlockState, TileEntity> states = new HashMap<>();
         int size = compound.getInt("size");
         for (int i = 0; i < size; i++) {
-            states.add(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("state" + i))).getDefaultState());
+            BlockState state = BlockState.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("state" + i)));
+            TileEntity tile = state.getBlock().createTileEntity(state, world);
+            if (tile != null) {
+                tile.read(compound.getCompound("tile" + i));
+                tile.setPos(pos);
+            }
+            states.put(state, tile);
         }
-        setStates(states);
+        this.stateMap = states;
         markDirtyClient();
     }
 
@@ -118,4 +167,17 @@ public class TileBPMultipart extends TileEntity {
         }
     }
 
+    public void changeState(BlockState state, BlockState newState) {
+        TileEntity te = stateMap.get(state);
+        stateMap.remove(state);
+        stateMap.put(newState, te);
+        markDirtyClient();
+    }
+
+    @Override
+    public void tick() {
+      //Tick the Tickable Multiparts
+      stateMap.values().stream().filter(t -> t instanceof ITickableTileEntity)
+              .forEach(t-> ((ITickableTileEntity)t).tick());
+    }
 }
