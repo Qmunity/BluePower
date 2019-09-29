@@ -8,8 +8,6 @@
 package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.machine.BlockLamp;
-import com.bluepowermod.block.machine.BlockLampSurface;
-import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -33,8 +31,8 @@ public class RenderLamp extends TileEntityRenderer {
         if (pass != 0) {
             BlockState stateLamp = te.getBlockState();
             BlockLamp bLamp = (BlockLamp) stateLamp.getBlock();
-            int power = te.getWorld().getBlockState(te.getPos()).get(BlockLamp.POWER);
-
+            if(te.getWorld() == null) {return;}
+            int power = stateLamp.get(BlockLamp.POWER);
             int color = bLamp.getColor(te.getWorld(), te.getPos(), 0);
 
             int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
