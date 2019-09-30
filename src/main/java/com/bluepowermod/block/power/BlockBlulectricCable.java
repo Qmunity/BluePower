@@ -8,15 +8,13 @@
 
 package com.bluepowermod.block.power;
 
+import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.TileBPMicroblock;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier3.TileBlulectricCable;
 
-import com.bluepowermod.util.ItemStackUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.inventory.InventoryHelper;
@@ -36,7 +34,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -45,7 +42,7 @@ import java.util.List;
 /**
  * @author MoreThanHidden
  */
-public class BlockBlulectricCable extends BlockContainerBase{
+public class BlockBlulectricCable extends BlockContainerBase implements IBPPartBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
@@ -170,21 +167,27 @@ public class BlockBlulectricCable extends BlockContainerBase{
         boolean connected_left = false;
         boolean connected_right = false;
 
-        for (Direction face : FACING.getAllowedValues()){
+        List<Direction> directions = new ArrayList<>(FACING.getAllowedValues());
+        //Make sure the side we are trying to connect on isn't blocked.
+        TileEntity ownTile = world.getTileEntity(pos);
+        if(ownTile instanceof TileBPMultipart)
+            directions.removeIf(d ->((TileBPMultipart)ownTile).isSideBlocked(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d));
+
+        for (Direction face : directions){
             TileEntity tile = world.getTileEntity(pos.offset(face));
             if(tile != null) {
                 switch (face) {
                     case NORTH:
-                        connected_front = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent();
+                        connected_front = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, face.getOpposite()).isPresent();
                         break;
                     case SOUTH:
-                        connected_back = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent();
+                        connected_back = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, face.getOpposite()).isPresent();
                         break;
                     case WEST:
-                        connected_left = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent();
+                        connected_left = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, face.getOpposite()).isPresent();
                         break;
                     case EAST:
-                        connected_right = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent();
+                        connected_right = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, face.getOpposite()).isPresent();
                         break;
                 }
             }

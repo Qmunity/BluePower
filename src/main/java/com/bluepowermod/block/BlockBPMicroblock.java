@@ -1,5 +1,6 @@
 package com.bluepowermod.block;
 
+import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMicroblock;
 import com.bluepowermod.util.AABBUtils;
@@ -28,12 +29,12 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Vector3f;
 
-public class BlockBPMicroblock extends ContainerBlock {
+public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     private final VoxelShape size;
@@ -67,6 +68,11 @@ public class BlockBPMicroblock extends ContainerBlock {
 
     public VoxelShape getSize() {
         return size;
+    }
+
+    @Override
+    public Boolean blockCapability(BlockState state, Capability capability, @Nullable Direction side) {
+        return side == state.get(FACING).getOpposite();
     }
 
     @Nullable
