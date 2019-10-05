@@ -18,6 +18,7 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.*;
 import com.bluepowermod.block.gates.BlockGateBase;
@@ -26,6 +27,7 @@ import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
 import com.bluepowermod.block.power.*;
 import com.bluepowermod.block.worldgen.*;
+import com.bluepowermod.item.ItemBPPart;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.*;
@@ -217,7 +219,7 @@ public class BPBlocks {
         rubber_sapling = new BlockRubberSapling(new OakTree(), Block.Properties.create(Material.PLANTS));
 
         sapphire_glass = new BlockStoneOreConnected(Refs.SAPPHIREGLASS_NAME).setTransparent(true);
-        reinforced_sapphire_glass = new BlockStoneOreConnected(Refs.REINFORCEDSAPPHIREGLASS_NAME).setTransparent(true).setWitherproof(true);
+        reinforced_sapphire_glass = new BlockStoneOreConnected(Refs.REINFORCEDSAPPHIREGLASS_NAME, true).setTransparent(true);
 
         flax_crop = new BlockCrop(Block.Properties.create(Material.PLANTS));
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME, Block.Properties.create(Material.PLANTS));
@@ -371,7 +373,11 @@ public class BPBlocks {
                     if(block instanceof BlockAlloyWire){group = BPCreativeTabs.wiring;}
                     if(block instanceof BlockBlulectricCable){group = BPCreativeTabs.wiring;}
                     if(block instanceof BlockGateBase){group = BPCreativeTabs.circuits;}
-                    event.getRegistry().register(new BlockItem(block, new Item.Properties().group(group)).setRegistryName(block.getRegistryName()));
+                    if(block instanceof IBPPartBlock){
+                        event.getRegistry().register(new ItemBPPart(block, new Item.Properties().group(group)).setRegistryName(block.getRegistryName()));
+                    }else {
+                        event.getRegistry().register(new BlockItem(block, new Item.Properties().group(group)).setRegistryName(block.getRegistryName()));
+                    }
                 }
             }
         }

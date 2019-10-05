@@ -30,6 +30,10 @@ public class BlockStoneOreConnected extends BlockStoneOre {
         super(name);
     }
 
+    public BlockStoneOreConnected(String name, Boolean witherproof) {
+        super(name, witherproof);
+    }
+
     @OnlyIn(Dist.CLIENT)
     public static boolean shouldSideBeRendered(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
         return blockAccess.getBlockState(pos.offset(side)).getBlock() != blockState.getBlock();

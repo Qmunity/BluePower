@@ -14,6 +14,7 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 
 /**
+ * IBPPartBlock's use this rather then BlockItem for their Items.
  * @author MoreThanHidden
  */
 public class ItemBPPart extends BlockItem {

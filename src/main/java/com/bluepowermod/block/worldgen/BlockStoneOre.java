@@ -23,12 +23,15 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.projectile.WitherSkullEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -44,24 +47,28 @@ import java.util.List;
 
 public class BlockStoneOre extends Block {
 
-    private String name;
-
     private boolean transparent = false;
-    private boolean witherproof = false;
-    private String[] tooltip = new String[] {};
+    private final boolean witherproof;
+
+    public BlockStoneOre(String name, boolean witherproof) {
+        super(Properties.create(Material.ROCK).hardnessAndResistance(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.STONE));
+        setRegistryName(Refs.MODID, name);
+        BPBlocks.blockList.add(this);
+        this.witherproof = witherproof;
+    }
 
     public BlockStoneOre(String name) {
         super(Properties.create(Material.ROCK).hardnessAndResistance(5.0F).sound(SoundType.STONE));
-        this.name = name;
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
+        witherproof = false;
     }
 
     public BlockStoneOre(String name, Properties properties) {
         super(properties);
-        this.name = name;
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
+        witherproof = false;
     }
 
     // Allow storage blocks to be used as a beacon base
@@ -90,12 +97,6 @@ public class BlockStoneOre extends Block {
         return transparent ? 0 : super.getOpacity(state, worldIn, pos);
     }
 
-    public BlockStoneOre setWitherproof(boolean witherproof) {
-
-        this.witherproof = witherproof;
-        return this;
-    }
-
     @Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
@@ -107,7 +108,7 @@ public class BlockStoneOre extends Block {
     @Override
     public boolean canEntityDestroy(BlockState state, IBlockReader world, BlockPos pos, Entity entity) {
         if (witherproof)
-            return !(entity instanceof WitherEntity) && super.canEntityDestroy(state, world, pos, entity);
+            return !(entity instanceof WitherEntity) && !(entity instanceof WitherSkullEntity) && super.canEntityDestroy(state, world, pos, entity);
 
         return super.canEntityDestroy(state, world, pos, entity);
     }
