@@ -7,11 +7,12 @@
  */
 package com.bluepowermod.util;
 
-
 import net.minecraft.block.Block;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+
 
 public class AABBUtils {
 
@@ -30,21 +31,24 @@ public class AABBUtils {
             case DOWN:
                 return new AxisAlignedBB(aabb.minX, 1 - aabb.minY, aabb.minZ, aabb.maxX, 1 - aabb.maxY, aabb.maxZ);
             case EAST:
-                return new AxisAlignedBB(aabb.minY, aabb.minX, aabb.minZ, aabb.maxY, aabb.maxX, aabb.maxZ);
+                return new AxisAlignedBB(aabb.minY, 1 - aabb.minZ, 1 - aabb.minX, aabb.maxY, 1 - aabb.maxZ, 1 - aabb.maxX);
             case WEST:
-                return new AxisAlignedBB(1 - aabb.minY, aabb.minX, aabb.minZ, 1 - aabb.maxY, aabb.maxX, aabb.maxZ);
+                return new AxisAlignedBB(1 - aabb.minY, 1 - aabb.minZ, aabb.minX, 1 - aabb.maxY, 1 - aabb.maxZ, aabb.maxX);
             case NORTH:
-                return new AxisAlignedBB(aabb.minX, aabb.minZ, 1 - aabb.minY, aabb.maxX, aabb.maxZ, 1 - aabb.maxY);
+                return new AxisAlignedBB(1 - aabb.minX, 1 - aabb.minZ, 1 - aabb.minY, 1 - aabb.maxX, 1 - aabb.maxZ, 1 - aabb.maxY);
             case SOUTH:
-                return new AxisAlignedBB(aabb.minX, aabb.minZ, aabb.minY, aabb.maxX, aabb.maxZ, aabb.maxY);
+                return new AxisAlignedBB(aabb.minX, 1 - aabb.minZ, aabb.minY, aabb.maxX, 1 - aabb.maxZ, aabb.maxY);
         }
         return aabb;
     }
 
     public static VoxelShape rotate (VoxelShape shape, Direction facing){
-        AxisAlignedBB aabb = shape.getBoundingBox();
-        aabb = rotate(aabb, facing);
-        return Block.makeCuboidShape(aabb.minX * 16, aabb.minY * 16, aabb.minZ * 16, aabb.maxX * 16, aabb.maxY * 16, aabb.maxZ * 16);
+        VoxelShape out = VoxelShapes.empty();
+        for(AxisAlignedBB aabb : shape.toBoundingBoxList()){
+            aabb = rotate(aabb, facing);
+            out = VoxelShapes.or(out, Block.makeCuboidShape(aabb.minX * 16, aabb.minY * 16, aabb.minZ * 16, aabb.maxX * 16, aabb.maxY * 16, aabb.maxZ * 16));
+        }
+        return out;
     }
 
 }

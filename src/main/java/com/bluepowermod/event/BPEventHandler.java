@@ -8,8 +8,12 @@
 package com.bluepowermod.event;
 
 import com.bluepowermod.ClientProxy;
+import com.bluepowermod.api.multipart.IBPPartBlock;
+import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.block.gates.BlockGateBase;
+import com.bluepowermod.block.power.BlockBlulectricCable;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
+import com.bluepowermod.client.render.BPMultipartModel;
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
@@ -274,7 +278,7 @@ public class BPEventHandler {
     public void blockHighlightEvent(DrawBlockHighlightEvent event) {
         RayTraceResult mop = event.getTarget();
         Block block = Block.getBlockFromItem(Minecraft.getInstance().player.getHeldItem(Hand.MAIN_HAND).getItem());
-        if (block instanceof BlockGateBase && mop.getType() == RayTraceResult.Type.BLOCK) {
+        if ((block instanceof BlockGateBase || block instanceof IBPPartBlock) && mop.getType() == RayTraceResult.Type.BLOCK) {
             BlockPos position = ((BlockRayTraceResult) mop).getPos().offset(((BlockRayTraceResult) mop).getFace());
             Entity entity = Minecraft.getInstance().getRenderViewEntity();
             double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) event.getPartialTicks();
@@ -290,8 +294,15 @@ public class BPEventHandler {
             BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
             Vec3d lookVec = event.getInfo().getLookDirection();
             Direction dir = ((BlockRayTraceResult) mop).getFace();
-            BlockState state = block.getDefaultState().with(BlockGateBase.FACING, dir)
+            BlockState state = block.getDefaultState();
+            if(block instanceof BlockGateBase ){
+                state = state.with(BlockGateBase.FACING, dir)
                     .with(BlockGateBase.ROTATION, Direction.getFacingFromVector(lookVec.x, 0, lookVec.z).getOpposite().getHorizontalIndex());
+            }else if(block instanceof BlockBlulectricCable){
+                state = state.with(BlockBlulectricCable.FACING, dir);
+            }else if(block instanceof BlockBPMicroblock){
+                state = state.with(BlockBPMicroblock.FACING, dir);
+            }
             IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
             blockrendererdispatcher.getBlockModelRenderer().renderModel(Minecraft.getInstance().world, ibakedmodel, state, position, vertexbuffer, false, new Random(), 0);
             tessellator.draw();
