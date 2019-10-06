@@ -18,6 +18,7 @@ import com.bluepowermod.tile.tier3.TileBlulectricCable;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -35,6 +36,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import org.apache.logging.log4j.core.net.Facility;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -69,6 +71,23 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        FACING.getAllowedValues().forEach(f ->{
+                BlockPos neighborPos = pos.offset(f).offset(state.get(FACING).getOpposite());
+                worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, isMoving);
+        });
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity p_180633_4_, ItemStack p_180633_5_) {
+        super.onBlockPlacedBy(worldIn, pos, state, p_180633_4_, p_180633_5_);
+        FACING.getAllowedValues().forEach(f -> {
+            BlockPos neighborPos = pos.offset(f).offset(state.get(FACING).getOpposite());
+            worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
+        });    }
 
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {

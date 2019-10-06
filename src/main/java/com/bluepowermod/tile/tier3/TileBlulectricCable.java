@@ -11,9 +11,12 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.block.power.BlockBlulectricCable;
 import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.NetworkManager;
@@ -25,6 +28,8 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author MoreThanHidden
@@ -42,12 +47,29 @@ public class TileBlulectricCable extends TileMachineBase {
     public void tick() {
         if (world != null && !world.isRemote) {
             storage.resetCurrent();
-            //Balance power of attached blulectric blocks.
-            for (Direction facing : Direction.values()) {
-                TileEntity tile = world.getTileEntity(pos.offset(facing));
-                if (tile != null)
-                    tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
-                            exStorage -> EnergyHelper.balancePower(exStorage, storage));
+            BlockState state = world.getBlockState(pos);
+            if (state.getBlock() instanceof BlockBlulectricCable) {
+                List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getAllowedValues());
+
+                //Check the side has capability
+                directions.removeIf(d -> !getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d).isPresent());
+
+                //Balance power of attached blulectric blocks.
+                for (Direction facing : directions) {
+                    if (world.getBlockState(pos.offset(facing)).getBlock() != Blocks.AIR) {
+                        TileEntity tile = world.getTileEntity(pos.offset(facing));
+                        if (tile != null)
+                            tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
+                                    exStorage -> EnergyHelper.balancePower(exStorage, storage)
+                            );
+                    } else {
+                        TileEntity tile = world.getTileEntity(pos.offset(facing).offset(state.get(BlockBlulectricCable.FACING).getOpposite()));
+                        if (tile instanceof TileBlulectricCable)
+                            tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, state.get(BlockBlulectricCable.FACING)).ifPresent(
+                                    exStorage -> EnergyHelper.balancePower(exStorage, storage)
+                            );
+                    }
+                }
             }
         }
     }
@@ -55,10 +77,25 @@ public class TileBlulectricCable extends TileMachineBase {
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
+        List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getAllowedValues());
+        if(world != null) {
+            BlockState state = world.getBlockState(pos);
+            if (state.getBlock() instanceof BlockBlulectricCable) {
+
+                //Remove upward connections
+                directions.remove(state.get(BlockBlulectricCable.FACING));
+
+                //Make sure the cable is on the same side of the block
+                directions.removeIf(d -> world.getBlockState(pos.offset(d)).getBlock() instanceof BlockBlulectricCable
+                        && world.getBlockState(pos.offset(d)).get(BlockBlulectricCable.FACING) != state.get(BlockBlulectricCable.FACING));
+            }
+        }
+
+        if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY && (side == null || directions.contains(side))){
             if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
             return blutricityCap.cast();
         }
+
         return LazyOptional.empty();
     }
 
