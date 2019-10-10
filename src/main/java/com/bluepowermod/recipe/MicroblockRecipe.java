@@ -13,6 +13,7 @@ import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -33,10 +34,16 @@ public class MicroblockRecipe extends SpecialRecipe {
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                if (stack.getItem() instanceof BlockItem && (Block.getBlockFromItem(stack.getItem()).getDefaultState().getShape(null, null) == VoxelShapes.fullCube()
-                        || Block.getBlockFromItem(stack.getItem()) == BPBlocks.half_block
-                        || Block.getBlockFromItem(stack.getItem()) == BPBlocks.panel)){
-                    blockCount++;
+                if (stack.getItem() instanceof BlockItem){
+                    VoxelShape shape = null;
+                    try{
+                       shape = Block.getBlockFromItem(stack.getItem()).getDefaultState().getShape(null, null);
+                    }catch (NullPointerException ignored){
+                        //Shulker Boxes try to query the Tile Entity
+                    }
+                    if (shape == VoxelShapes.fullCube() || Block.getBlockFromItem(stack.getItem()) == BPBlocks.half_block || Block.getBlockFromItem(stack.getItem()) == BPBlocks.panel) {
+                        blockCount++;
+                    }
                 } else if (stack.getItem() instanceof ItemSaw) {
                     saw++;
                 } else {
