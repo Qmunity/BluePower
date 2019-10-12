@@ -19,7 +19,6 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -27,16 +26,15 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.projectile.WitherSkullEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponentUtils;
-import net.minecraft.world.*;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -44,37 +42,31 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockStoneOre extends Block {
-
+/**
+ * @author MoreThanHidden
+ * extends StainedGlassBlock due to the FluidBlockRederer checking for this.
+ */
+public class BlockBPGlass extends StainedGlassBlock {
     private final boolean witherproof;
 
-    public BlockStoneOre(String name, boolean witherproof) {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.STONE));
+    public BlockBPGlass(String name, boolean witherproof) {
+        super(DyeColor.PURPLE, Properties.create(Material.GLASS).hardnessAndResistance(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.GLASS));
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         this.witherproof = witherproof;
     }
 
-    public BlockStoneOre(String name) {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(5.0F).sound(SoundType.STONE));
+    public BlockBPGlass(String name) {
+        super(DyeColor.LIGHT_GRAY, Properties.create(Material.ROCK).hardnessAndResistance(5.0F).sound(SoundType.STONE));
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         witherproof = false;
     }
 
-    public BlockStoneOre(String name, Properties properties) {
-        super(properties);
-        setRegistryName(Refs.MODID, name);
-        BPBlocks.blockList.add(this);
-        witherproof = false;
-    }
-
-    // Allow storage blocks to be used as a beacon base
     @Override
-    public boolean isBeaconBase(BlockState state, IWorldReader world, BlockPos pos, BlockPos beacon) {
-        return this == BPBlocks.amethyst_block || this == BPBlocks.ruby_block || this == BPBlocks.malachite_block || this == BPBlocks.sapphire_block
-                || this == BPBlocks.copper_block || this == BPBlocks.zinc_block || this == BPBlocks.silver_block
-                || this == BPBlocks.tungsten_block;
+    @OnlyIn(Dist.CLIENT)
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override

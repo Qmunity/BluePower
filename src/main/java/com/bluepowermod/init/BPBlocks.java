@@ -218,8 +218,8 @@ public class BPBlocks {
         rubber_log = new BlockRubberLog(Block.Properties.create(Material.WOOD));
         rubber_sapling = new BlockRubberSapling(new OakTree(), Block.Properties.create(Material.PLANTS));
 
-        sapphire_glass = new BlockStoneOreConnected(Refs.SAPPHIREGLASS_NAME).setTransparent(true);
-        reinforced_sapphire_glass = new BlockStoneOreConnected(Refs.REINFORCEDSAPPHIREGLASS_NAME, true).setTransparent(true);
+        sapphire_glass = new BlockBPGlass(Refs.SAPPHIREGLASS_NAME);
+        reinforced_sapphire_glass = new BlockBPGlass(Refs.REINFORCEDSAPPHIREGLASS_NAME, true);
 
         flax_crop = new BlockCrop(Block.Properties.create(Material.PLANTS));
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME, Block.Properties.create(Material.PLANTS));

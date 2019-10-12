@@ -17,13 +17,6 @@
 
 package com.bluepowermod.block.worldgen;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 public class BlockStoneOreConnected extends BlockStoneOre {
 
     public BlockStoneOreConnected(String name) {
@@ -34,8 +27,4 @@ public class BlockStoneOreConnected extends BlockStoneOre {
         super(name, witherproof);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public static boolean shouldSideBeRendered(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-        return blockAccess.getBlockState(pos.offset(side)).getBlock() != blockState.getBlock();
-    }
 }
