@@ -13,21 +13,32 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.minecraft.block.ShulkerBoxBlock.CONTENTS;
 
 /**
  * @author MoreThanHidden
@@ -36,9 +47,22 @@ public class BlockBPMultipart extends ContainerBlock {
 
 
     public BlockBPMultipart() {
-        super(Block.Properties.create(Material.ROCK));
+        super(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F));
         setRegistryName(Refs.MODID + ":multipart");
         BPBlocks.blockList.add(this);
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        TileEntity tileentity = builder.get(LootParameters.BLOCK_ENTITY);
+        List<ItemStack> itemStacks = new ArrayList<>();
+        if (tileentity instanceof TileBPMultipart) {
+            TileBPMultipart te = (TileBPMultipart)tileentity;
+            LootContext.Builder finalBuilder = builder;
+
+            te.getStates().stream().map(s -> s.getDrops(finalBuilder)).forEach(itemStacks::addAll);
+        }
+        return itemStacks;
     }
 
     @Override
@@ -66,7 +90,30 @@ public class BlockBPMultipart extends ContainerBlock {
             if(shapeList.size() > 0)
                 return shapeList.stream().reduce(shapeList.get(0), VoxelShapes::or);
         }
-        return Block.makeCuboidShape(6,6,6,10,10,10);
+        return VoxelShapes.empty();
+    }
+
+    @Override
+    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+        TileEntity te = world.getTileEntity(pos);
+        if(te instanceof TileBPMultipart){
+            for(BlockState s : ((TileBPMultipart) te).getStates()){
+                return new ItemStack(s.getBlock());
+            }
+        }
+        return null;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public boolean addDestroyEffects(BlockState state, World world, BlockPos pos, ParticleManager manager) {
+        return true;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public boolean addHitEffects(BlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
+        return true;
     }
 
     @Override

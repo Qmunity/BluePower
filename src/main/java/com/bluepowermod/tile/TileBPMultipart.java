@@ -13,6 +13,7 @@ import com.bluepowermod.block.BlockBPMultipart;
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.DynamicOps;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.NetworkManager;
@@ -21,6 +22,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
@@ -64,7 +66,9 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
 
     private IModelData getModelData(BlockState state) {
         //Get Model Data for specific state
-        return stateMap.get(state).getModelData();
+        if(stateMap.get(state) != null)
+            return stateMap.get(state).getModelData();
+        return EmptyModelData.INSTANCE;
     }
 
     public void addState(BlockState state) {
@@ -83,6 +87,21 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         stateMap.get(state).remove();
         this.stateMap.remove(state);
         markDirtyClient();
+        if(stateMap.size() == 1) {
+            //Convert back to Standalone Block
+            if (world != null) {
+                CompoundNBT nbt = ((TileEntity)stateMap.values().toArray()[0]).write(new CompoundNBT());
+                world.setBlockState(pos, stateMap.keySet().iterator().next());
+                TileEntity tile = world.getTileEntity(pos);
+                if (tile != null)
+                    tile.read(nbt);
+            }
+        }else if(stateMap.size() == 0){
+            //Remove if this is empty
+            if (world != null) {
+                world.removeBlock(pos, false);
+            }
+        }
     }
 
     @Nonnull
@@ -105,6 +124,10 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
 
     public List<BlockState> getStates(){
         return new ArrayList<>(stateMap.keySet());
+    }
+
+    public TileEntity getTileForState(BlockState state){
+        return stateMap.get(state);
     }
 
     private void markDirtyClient() {
@@ -137,7 +160,7 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         int size = compound.getInt("size");
         for (int i = 0; i < size; i++) {
             BlockState state = BlockState.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("state" + i)));
-            TileEntity tile = state.getBlock().createTileEntity(state, world);
+            TileEntity tile = state.getBlock().createTileEntity(state, getWorld());
             if (tile != null) {
                 tile.read(compound.getCompound("tile" + i));
                 tile.setPos(pos);

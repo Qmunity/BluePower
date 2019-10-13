@@ -10,7 +10,10 @@ package com.bluepowermod.block.power;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.api.power.CapabilityBlutricity;
+import com.bluepowermod.block.BlockBPMicroblock;
+import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier3.TileBlulectricCable;
@@ -41,6 +44,7 @@ import org.apache.logging.log4j.core.net.Facility;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author MoreThanHidden
@@ -87,7 +91,8 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
         FACING.getAllowedValues().forEach(f -> {
             BlockPos neighborPos = pos.offset(f).offset(state.get(FACING).getOpposite());
             worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
-        });    }
+        });
+    }
 
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
@@ -188,10 +193,22 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
 
     private BlockState getStateForPos(World world, BlockPos pos, BlockState state, Direction face){
         List<Direction> directions = new ArrayList<>(FACING.getAllowedValues());
+        List<Direction> internal = null;
+        boolean connected_left = false;
+        boolean connected_right = false;
+        boolean connected_front = false;
+        boolean connected_back = false;
+        boolean join_left = false;
+        boolean join_right = false;
+        boolean join_front = false;
+        boolean join_back = false;
+
         //Make sure the side we are trying to connect on isn't blocked.
         TileEntity ownTile = world.getTileEntity(pos);
-        if(ownTile instanceof TileBPMultipart)
+        if(ownTile instanceof TileBPMultipart) {
             directions.removeIf(d -> ((TileBPMultipart) ownTile).isSideBlocked(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d));
+            internal = ((TileBPMultipart) ownTile).getStates().stream().filter(s -> s.getBlock() == this).map(s -> s.get(FACING)).collect(Collectors.toList());
+        }
         //Make sure the cable is on the same side of the block
         directions.removeIf(d -> world.getBlockState(pos.offset(d)).getBlock() instanceof BlockBlulectricCable
                 && world.getBlockState(pos.offset(d)).get(FACING) != face);
@@ -202,119 +219,222 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
 
             boolean join = false;
             //If Air look for a change in Direction
-            if (world.getBlockState(pos.offset(d)).getBlock() == Blocks.AIR &&
-                    world.getBlockState(pos.offset(d).offset(face.getOpposite())).getBlock() instanceof BlockBlulectricCable &&
-                    world.getBlockState(pos.offset(d).offset(face.getOpposite())).get(FACING) == d) {
-                tileEntity = world.getTileEntity(pos.offset(d).offset(face.getOpposite()));
-                join = true;
+            if (world.getBlockState(pos.offset(d)).getBlock() == Blocks.AIR) {
+                BlockState dirState = world.getBlockState(pos.offset(d).offset(face.getOpposite()));
+                if (dirState.getBlock() instanceof BlockBlulectricCable && dirState.get(FACING) == d) {
+                    tileEntity = world.getTileEntity(pos.offset(d).offset(face.getOpposite()));
+                    join = true;
+                } else if (dirState.getBlock() instanceof BlockBPMultipart) {
+                    tileEntity = world.getTileEntity(pos.offset(d).offset(face.getOpposite()));
+                    if (tileEntity instanceof TileBPMultipart && ((TileBPMultipart) tileEntity).getStates().stream().filter(s -> s.getBlock() == this).anyMatch(s -> s.get(FACING) == d)) {
+                        join = true;
+                    } else {
+                        tileEntity = null;
+                    }
+                }
             }
 
             //Check Capability for Direction
-            if (tileEntity != null)
+            if (tileEntity != null) {
                 switch (state.get(FACING)) {
                     case UP:
                     case DOWN:
                         switch (d) {
                             case EAST:
-                                state = state.with(CONNECTED_RIGHT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_RIGHT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_right = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_right = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case WEST:
-                                state = state.with(CONNECTED_LEFT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_LEFT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_left = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_left = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case NORTH:
-                                state = state.with(CONNECTED_FRONT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_FRONT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_front = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_front = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case SOUTH:
-                                state = state.with(CONNECTED_BACK, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_BACK, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_back = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_back = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                         }
                         break;
                     case NORTH:
                         switch (d) {
                             case WEST:
-                                state = state.with(CONNECTED_RIGHT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_RIGHT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_right = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_right = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case EAST:
-                                state = state.with(CONNECTED_LEFT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_LEFT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_left = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_left = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case UP:
-                                state = state.with(CONNECTED_FRONT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_FRONT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_front = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_front = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case DOWN:
-                                state = state.with(CONNECTED_BACK, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_BACK, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_back = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_back = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                         }
                         break;
                     case SOUTH:
                         switch (d) {
                             case EAST:
-                                state = state.with(CONNECTED_RIGHT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_RIGHT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_right = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_right = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case WEST:
-                                state = state.with(CONNECTED_LEFT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_LEFT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_left = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_left = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case UP:
-                                state = state.with(CONNECTED_FRONT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_FRONT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_front = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_front = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case DOWN:
-                                state = state.with(CONNECTED_BACK, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_BACK, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_back = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_back = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                         }
                         break;
                     case EAST:
                         switch (d) {
                             case NORTH:
-                                state = state.with(CONNECTED_RIGHT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_RIGHT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_right = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_right = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case SOUTH:
-                                state = state.with(CONNECTED_LEFT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_LEFT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_left = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_left = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case UP:
-                                state = state.with(CONNECTED_FRONT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_FRONT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_front = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_front = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case DOWN:
-                                state = state.with(CONNECTED_BACK, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_BACK, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_back = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_back = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                         }
                         break;
                     case WEST:
                         switch (d) {
                             case SOUTH:
-                                state = state.with(CONNECTED_RIGHT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_RIGHT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_right = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_right = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case NORTH:
-                                state = state.with(CONNECTED_LEFT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_LEFT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_left = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_left = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case UP:
-                                state = state.with(CONNECTED_FRONT, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_FRONT, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_front = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_front = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                             case DOWN:
-                                state = state.with(CONNECTED_BACK, tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
-                                state = state.with(JOIN_BACK, join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent());
+                                connected_back = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
+                                join_back = join && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d.getOpposite()).isPresent();
                                 break;
                         }
                 }
+            }
         }
-        return state;
+
+        if (internal != null)
+            for(Direction d : internal){
+                switch (state.get(FACING)) {
+                    case UP:
+                    case DOWN:
+                        switch (d) {
+                            case EAST:
+                                connected_left = true;
+                                break;
+                            case WEST:
+                                connected_right = true;
+                                break;
+                            case NORTH:
+                                connected_back = true;
+                                break;
+                            case SOUTH:
+                                connected_front = true;
+                                break;
+                        }
+                        break;
+                    case NORTH:
+                        switch (d) {
+                            case WEST:
+                                connected_left = true;
+                                break;
+                            case EAST:
+                                connected_right = true;
+                                break;
+                            case UP:
+                                connected_back = true;
+                                break;
+                            case DOWN:
+                                connected_front = true;
+                                break;
+                        }
+                        break;
+                    case SOUTH:
+                        switch (d) {
+                            case EAST:
+                                connected_left = true;
+                                break;
+                            case WEST:
+                                connected_right = true;
+                                break;
+                            case UP:
+                                connected_back = true;
+                                break;
+                            case DOWN:
+                                connected_front = true;
+                                break;
+                        }
+                        break;
+                    case EAST:
+                        switch (d) {
+                            case NORTH:
+                                connected_left = true;
+                                break;
+                            case SOUTH:
+                                connected_right = true;
+                                break;
+                            case UP:
+                                connected_back = true;
+                                break;
+                            case DOWN:
+                                connected_front = true;
+                                break;
+                        }
+                        break;
+                    case WEST:
+                        switch (d) {
+                            case SOUTH:
+                                connected_left = true;
+                                break;
+                            case NORTH:
+                                connected_right = true;
+                                break;
+                            case UP:
+                                connected_back = true;
+                                break;
+                            case DOWN:
+                                connected_front = true;
+                                break;
+                        }
+                }
+            }
+
+        return state.with(CONNECTED_LEFT, connected_left)
+                .with(CONNECTED_RIGHT, connected_right)
+                .with(CONNECTED_FRONT, connected_front)
+                .with(CONNECTED_BACK, connected_back)
+                .with(JOIN_LEFT, join_left)
+                .with(JOIN_RIGHT, join_right)
+                .with(JOIN_FRONT, join_front)
+                .with(JOIN_BACK, join_back);
     }
 
     @Nullable
@@ -323,4 +443,8 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
        return getStateForPos(context.getWorld(), context.getPos(), getDefaultState().with(FACING, context.getFace()), context.getFace());
     }
 
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state) {
+        return AABBUtils.rotate(this.shapes[this.getShapeIndex(state)], state.get(FACING));
+    }
 }

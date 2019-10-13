@@ -51,4 +51,12 @@ public class AABBUtils {
         return out;
     }
 
+    /**
+     * Returns true if the shapes intersect.
+     */
+    public static Boolean testOcclusion (VoxelShape shape1, VoxelShape shape2){
+        return shape1.toBoundingBoxList().stream().anyMatch(s ->
+                shape2.toBoundingBoxList().stream().anyMatch(s::intersects));
+    }
+
 }

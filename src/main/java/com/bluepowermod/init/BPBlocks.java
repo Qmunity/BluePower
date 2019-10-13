@@ -18,6 +18,7 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.misc.PlacementType;
 import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.*;
@@ -266,9 +267,9 @@ public class BPBlocks {
         solarpanel = new BlockSolarPanel();
         thermopile = new BlockThermopile().setWIP(true);
 
-        half_block = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,8,16)).setRegistryName(Refs.MODID + ":half_block");
-        panel = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,4,16)).setRegistryName(Refs.MODID + ":panel");
-        cover = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,2,16)).setRegistryName(Refs.MODID + ":cover");
+        half_block = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,8,16), PlacementType.FAR).setRegistryName(Refs.MODID + ":half_block");
+        panel = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,4,16), PlacementType.NEAR).setRegistryName(Refs.MODID + ":panel");
+        cover = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,2,16), PlacementType.NEAR).setRegistryName(Refs.MODID + ":cover");
         microblocks.add(half_block);
         microblocks.add(panel);
         microblocks.add(cover);

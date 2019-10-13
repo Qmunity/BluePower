@@ -9,6 +9,8 @@
 package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.BlockBPMicroblock;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMicroblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -46,13 +48,13 @@ import java.util.*;
  * @author MoreThanHidden
  */
 public class BPMicroblockModel implements IBakedModel {
-    private Block defBlock = Blocks.STONE;
-    private Vector3f defVec = new Vector3f(1,0.5f,1);
+    private Block defBlock = BPBlocks.marble;
+    private Block defSize = BPBlocks.half_block;
     BPMicroblockModel(){}
 
-    private BPMicroblockModel(Block defBlock, Vector3f defVec){
+    private BPMicroblockModel(Block defBlock, Block defSize){
         this.defBlock = defBlock;
-        this.defVec = defVec;
+        this.defSize = defSize;
     }
 
     @Nonnull
@@ -60,41 +62,29 @@ public class BPMicroblockModel implements IBakedModel {
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
         Pair<Block, Integer> info = extraData.getData(TileBPMicroblock.PROPERTY_INFO);
         if (info != null) {
-            IBakedModel origModel = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(info.getKey().getDefaultState());
-            List<BakedQuad> quads = origModel.getQuads(info.getKey().getDefaultState(), side, rand);
-            List<BakedQuad> outquads = new ArrayList<>();
+            IBakedModel typeModel = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(info.getKey().getDefaultState());
+            IBakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
+
+            List<BakedQuad> bakedQuads = new ArrayList<>();
 
             if(state != null && state.getBlock() instanceof BlockBPMicroblock) {
-                VoxelShape size = ((BlockBPMicroblock) state.getBlock()).getSize();
-                this.defVec = new Vector3f((float) size.getBoundingBox().getXSize(), (float)size.getBoundingBox().getYSize(), (float)size.getBoundingBox().getZSize());
+                sizeModel = Minecraft.getInstance().getModelManager().getModel(
+                        new ModelResourceLocation(state.getBlock().getRegistryName(), "face=" + state.get(BlockBPMicroblock.FACING))
+                );
             }
 
-            TRSRTransformation transformation;
-            if (state != null) {
-                switch (state.get(BlockBPMicroblock.FACING)) {
-                    case UP:
-                        transformation = new TRSRTransformation(new Vector3f(0,-(0.5f - (defVec.y / 2)),0), null, defVec, null);
-                        break;
-                    case DOWN:
-                        transformation = new TRSRTransformation(new Vector3f(0,(0.5f - (defVec.y / 2)),0), null, defVec, null);
-                        break;
-                    case NORTH:
-                        transformation = new TRSRTransformation(new Vector3f(0,0,(0.5f - (defVec.y / 2))), null, new Vector3f(defVec.x,defVec.z,defVec.y), null);
-                        break;
-                    case SOUTH:
-                        transformation = new TRSRTransformation(new Vector3f(0,0,-(0.5f - (defVec.y / 2))), null, new Vector3f(defVec.x,defVec.z,defVec.y), null);
-                        break;
-                    case EAST:
-                        transformation = new TRSRTransformation(new Vector3f(-(0.5f - (defVec.y / 2)),0,0), null, new Vector3f(defVec.y,defVec.x,defVec.z), null);
-                        break;
-                    default:
-                        transformation = new TRSRTransformation(new Vector3f((0.5f - (defVec.y / 2)),0,0), null, new Vector3f(defVec.y,defVec.x,defVec.z), null);
-                }
+            List<BakedQuad> sizeModelQuads = sizeModel.getQuads(state, side, rand);
 
-                for (BakedQuad quad: quads) {
-                    outquads.add(transform(quad, TRSRTransformation.blockCenterToCorner(transformation), state.get(BlockBPMicroblock.FACING)));
+            if (state != null) {
+                TextureAtlasSprite sprite = typeModel.getParticleTexture();
+                for (BakedQuad quad: sizeModelQuads) {
+                    List<BakedQuad> typeModelQuads = typeModel.getQuads(info.getKey().getDefaultState(), quad.getFace(), rand);
+                    if(typeModelQuads.size() > 0){
+                        sprite = typeModelQuads.get(0).getSprite();
+                    }
+                    bakedQuads.add(transform(quad, sprite, state.get(BlockBPMicroblock.FACING)));
                 }
-                return outquads;
+                return bakedQuads;
             }
 
         }
@@ -104,12 +94,26 @@ public class BPMicroblockModel implements IBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
         List<BakedQuad> outquads = new ArrayList<>();
-        IBakedModel origModel = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(this.defBlock.getDefaultState());
-        List<BakedQuad> quads = origModel.getQuads(this.defBlock.getDefaultState(), side, rand);
+        IBakedModel typeModel = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(this.defBlock.getDefaultState());
+        IBakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
 
-        for (BakedQuad quad: quads) {
-            outquads.add(transform(quad, TRSRTransformation.blockCenterToCorner(new TRSRTransformation(null, null, new Vector3f(defVec.y, defVec.x, defVec.z), null)), Direction.EAST));
+        if(state != null && state.getBlock() instanceof BlockBPMicroblock) {
+            sizeModel = Minecraft.getInstance().getModelManager().getModel(
+                    new ModelResourceLocation(state.getBlock().getRegistryName(), "face=" + state.get(BlockBPMicroblock.FACING))
+            );
         }
+
+        List<BakedQuad> sizeModelQuads = sizeModel.getQuads(state, side, rand);
+
+        TextureAtlasSprite sprite = typeModel.getParticleTexture();
+        for (BakedQuad quad: sizeModelQuads) {
+            List<BakedQuad> typeModelQuads = typeModel.getQuads(this.defBlock.getDefaultState(), quad.getFace(), rand);
+            if(typeModelQuads.size() > 0){
+                sprite = typeModelQuads.get(0).getSprite();
+            }
+            outquads.add(transform(quad, sprite, Direction.EAST));
+        }
+
         return outquads;
     }
 
@@ -118,65 +122,24 @@ public class BPMicroblockModel implements IBakedModel {
         return PerspectiveMapWrapper.handlePerspective(this, ForgeBlockStateV1.Transforms.get("forge:default-block").get(), type);
     }
 
-    protected static BakedQuad transform(BakedQuad quad, final TRSRTransformation transform, Direction dir) {
+    private static BakedQuad transform(BakedQuad sizeQuad, TextureAtlasSprite sprite, Direction dir) {
         UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(DefaultVertexFormats.ITEM);
         final IVertexConsumer consumer = new VertexTransformer(builder) {
             @Override
             public void put(int element, float... data) {
                 VertexFormatElement formatElement = DefaultVertexFormats.ITEM.getElement(element);
-                switch(formatElement.getUsage()) {
-                    case POSITION: {
-                        float[] newData = new float[4];
-                        Vector4f vec = new Vector4f(data);
-                        transform.getMatrixVec().transform(vec);
-                        vec.y = vec.y + transform.getTranslation().y;
-                        vec.x = vec.x + transform.getTranslation().x;
-                        vec.z = vec.z + transform.getTranslation().z;
-                        vec.get(newData);
-                        parent.put(element, newData);
-                        break;
-                    }
-                    case UV: {
-                        Vector4f vec = new Vector4f(data);
-                        float u = quad.getSprite().getUnInterpolatedU(vec.x);
-                        float v = quad.getSprite().getUnInterpolatedV(vec.y);
-                        switch (dir){
-                            case UP:
-                                if(Direction.UP != quad.getFace() && Direction.DOWN != quad.getFace() && v < 1){v = 16 * (1.0f - transform.getScale().y);}
-                                break;
-                            case DOWN:
-                                if(Direction.UP != quad.getFace() && Direction.DOWN != quad.getFace() && v > 15){v = 16 * (1.0f - transform.getScale().y);}
-                                break;
-                            case EAST:
-                                if((Direction.UP == quad.getFace() || Direction.DOWN == quad.getFace()) && u > 15){u = 16 * transform.getScale().x;}
-                                if((Direction.NORTH == quad.getFace() || Direction.SOUTH == quad.getFace()) && u > 15){u = 16 * transform.getScale().x;}
-                                break;
-                            case WEST:
-                                if((Direction.UP == quad.getFace() || Direction.DOWN == quad.getFace()) && u < 1){u = 16 * (1.0f - transform.getScale().x);}
-                                if((Direction.NORTH == quad.getFace() || Direction.SOUTH == quad.getFace()) && u > 15){u = 16 * transform.getScale().x;}
-                                break;
-                            case SOUTH:
-                                if((Direction.UP == quad.getFace() || Direction.DOWN == quad.getFace()) && v > 15){v = 16 * transform.getScale().z;}
-                                if((Direction.EAST == quad.getFace() || Direction.WEST == quad.getFace()) && u > 15){u = 16 * transform.getScale().z;}
-                                break;
-                            case NORTH:
-                                if((Direction.UP == quad.getFace() || Direction.DOWN == quad.getFace()) && v < 1){v = 16 * (1.0f - transform.getScale().z);}
-                                if((Direction.EAST == quad.getFace() || Direction.WEST == quad.getFace()) && u > 15){u = 16 * transform.getScale().z;}
-                                break;
-                        }
+                if (formatElement.getUsage() == VertexFormatElement.Usage.UV) {
+                    Vector4f vec = new Vector4f(data);
+                    float u = sizeQuad.getSprite().getUnInterpolatedU(vec.x);
+                    float v = sizeQuad.getSprite().getUnInterpolatedV(vec.y);
 
-
-                        builder.put(element,quad.getSprite().getInterpolatedU(u),quad.getSprite().getInterpolatedV(v),0,1);
-                        break;
-                    }
-                    default: {
-                        parent.put(element, data);
-                        break;
-                    }
+                    builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v), 0, 1);
+                } else {
+                    parent.put(element, data);
                 }
             }
         };
-        quad.pipe(consumer);
+        sizeQuad.pipe(consumer);
         return builder.build();
     }
 
@@ -214,19 +177,9 @@ public class BPMicroblockModel implements IBakedModel {
             CompoundNBT nbt = stack.getTag();
             if(nbt != null && nbt.contains("block")){
                 Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
-                Vector3f vec = new Vector3f(1,0.5f,1);
-                if(Block.getBlockFromItem(stack.getItem()) instanceof BlockBPMicroblock) {
-                    VoxelShape size = ((BlockBPMicroblock) Block.getBlockFromItem(stack.getItem())).getSize();
-                    vec = new Vector3f((float) size.getBoundingBox().getXSize(), (float)size.getBoundingBox().getYSize(), (float)size.getBoundingBox().getZSize());
-                }
-                return new BPMicroblockModel(block, vec);
+                return new BPMicroblockModel(block, Block.getBlockFromItem(stack.getItem()));
             }
-            Vector3f vec = new Vector3f(1,0.5f,1);
-            if(Block.getBlockFromItem(stack.getItem()) instanceof BlockBPMicroblock) {
-                VoxelShape size = ((BlockBPMicroblock) Block.getBlockFromItem(stack.getItem())).getSize();
-                vec = new Vector3f((float) size.getBoundingBox().getXSize(), (float)size.getBoundingBox().getYSize(), (float)size.getBoundingBox().getZSize());
-            }
-            return new BPMicroblockModel(Blocks.STONE, vec);
+            return new BPMicroblockModel(Blocks.STONE, Block.getBlockFromItem(stack.getItem()));
         }
     }
 

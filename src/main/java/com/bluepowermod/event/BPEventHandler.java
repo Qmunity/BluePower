@@ -8,6 +8,7 @@
 package com.bluepowermod.event;
 
 import com.bluepowermod.ClientProxy;
+import com.bluepowermod.api.misc.PlacementType;
 import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.block.gates.BlockGateBase;
@@ -28,6 +29,7 @@ import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -286,7 +288,8 @@ public class BPEventHandler {
             double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) event.getPartialTicks();
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder vertexbuffer = tessellator.getBuffer();
-            vertexbuffer.setTranslation(-d0, -d1, -d2);
+            //Take 0.001 to avoid Z Fighting
+            vertexbuffer.setTranslation(-d0 - 0.001, -d1 - 0.001, -d2 - 0.001);
             GlStateManager.pushMatrix();
             GlStateManager.enableAlphaTest();
             position.add(0.5, 0.1, 0.5);
@@ -300,10 +303,17 @@ public class BPEventHandler {
                     .with(BlockGateBase.ROTATION, Direction.getFacingFromVector(lookVec.x, 0, lookVec.z).getOpposite().getHorizontalIndex());
             }else if(block instanceof BlockBlulectricCable){
                 state = state.with(BlockBlulectricCable.FACING, dir);
-            }else if(block instanceof BlockBPMicroblock){
-                state = state.with(BlockBPMicroblock.FACING, dir);
             }
             IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
+            if(block instanceof BlockBPMicroblock){
+                if(((BlockBPMicroblock) block).getPlacementType() == PlacementType.NEAR && !entity.isSneaking()){
+                    Vec3d vec = entity.getLookVec();
+                    dir = Direction.getFacingFromVector(vec.x, vec.y, vec.z);
+                }
+                ibakedmodel = Minecraft.getInstance().getModelManager().getModel(
+                        new ModelResourceLocation(block.getRegistryName(), "face=" + dir)
+                );
+            }
             blockrendererdispatcher.getBlockModelRenderer().renderModel(Minecraft.getInstance().world, ibakedmodel, state, position, vertexbuffer, false, new Random(), 0);
             tessellator.draw();
             GlStateManager.popMatrix();

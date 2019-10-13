@@ -44,7 +44,7 @@
             "faces": {
                 "north": { "texture": "#blulectric_cable", "uv": [ 2, 14, 8, 16 ] },
                 "south": { "texture": "#blulectric_cable", "uv": [ 1, 14, 7, 16 ] },
-                "west": { "texture": "#blulectric_cable", "uv": [ 0, 7, 4, 9 ] },
+                "west": { "texture": "#blulectric_cable", "uv": [ 0, 0, 4, 2 ] },
                 "up": { "texture": "#blulectric_cable", "uv": [ 8, 6, 14, 10 ] },
                 "down": { "texture": "#blulectric_cable", "uv": [ 14, 6, 8, 10 ] }
             }
@@ -54,7 +54,7 @@
             "to": [ 16, 2, 10 ], 
             "faces": {
                 "north": { "texture": "#blulectric_cable", "uv": [ 2, 14, 8, 16 ] },
-                "east": { "texture": "#blulectric_cable", "uv": [ 0, 7, 4, 9 ] },
+                "east": { "texture": "#blulectric_cable", "uv": [ 0, 0, 4, 2 ] },
                 "south": { "texture": "#blulectric_cable", "uv": [ 1, 14, 7, 16 ] },
                 "up": { "texture": "#blulectric_cable", "uv": [ 8, 6, 14, 10 ] },
                 "down": { "texture": "#blulectric_cable", "uv": [ 14, 6, 8, 10 ] }
@@ -65,7 +65,7 @@
             "to": [ 10, 2, 16 ], 
             "faces": {
                 "east": { "texture": "#blulectric_cable", "uv": [ 8, 14, 14, 16 ] },
-                "south": { "texture": "#blulectric_cable", "uv": [ 0, 7, 4, 9 ] },
+                "south": { "texture": "#blulectric_cable", "uv": [ 0, 0, 4, 2 ] },
                 "west": { "texture": "#blulectric_cable", "uv": [ 8, 14, 14, 16 ] },
                 "up": { "texture": "#blulectric_cable", "uv": [ 8, 6, 14, 10 ], "rotation": 90 },
                 "down": { "texture": "#blulectric_cable", "uv": [ 15, 6, 9, 10 ], "rotation": 90 }
@@ -75,7 +75,7 @@
             "from": [ 6, 0, 0 ], 
             "to": [ 10, 2, 6 ], 
             "faces": {
-                "north": { "texture": "#blulectric_cable", "uv": [ 0, 7, 4, 9 ] },
+                "north": { "texture": "#blulectric_cable", "uv": [ 0, 0, 4, 2 ] },
                 "east": { "texture": "#blulectric_cable", "uv": [ 8, 14, 14, 16 ] },
                 "west": { "texture": "#blulectric_cable", "uv": [ 8, 14, 14, 16 ] },
                 "up": { "texture": "#blulectric_cable", "uv": [ 8, 6, 15, 10 ], "rotation": 270 },

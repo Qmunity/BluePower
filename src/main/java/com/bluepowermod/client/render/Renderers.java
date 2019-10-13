@@ -119,8 +119,11 @@ public class Renderers {
 
         //Register Microblock Models
         for(Direction dir : Direction.values()) {
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "face=" + dir.getName()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName())));
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName()), new BPMicroblockModel());
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "face=" + dir.getName()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName())));
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName()), new BPMicroblockModel());
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "face=" + dir.getName()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName())));
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName()), new BPMicroblockModel());
         }
         event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "inventory"), new BPMicroblockModel());
