@@ -11,9 +11,11 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.block.power.BlockBlulectricCable;
 import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -64,10 +66,14 @@ public class TileBlulectricCable extends TileMachineBase {
                             );
                     } else {
                         TileEntity tile = world.getTileEntity(pos.offset(facing).offset(state.get(BlockBlulectricCable.FACING).getOpposite()));
-                        if (tile instanceof TileBlulectricCable)
+                        BlockState blockState = world.getBlockState(pos.offset(facing).offset(state.get(BlockBlulectricCable.FACING).getOpposite()));
+                        //If Blulectric Cable or Multipart Blulectric Cable are facing the correct direction.
+                        if ((tile instanceof TileBlulectricCable && blockState.getBlock() instanceof BlockBPMicroblock && blockState.get(BlockBlulectricCable.FACING) == facing)
+                                || (tile instanceof TileBPMultipart && ((TileBPMultipart) tile).getStates().stream().anyMatch(s -> s.getBlock() instanceof BlockBlulectricCable && s.get(BlockBlulectricCable.FACING) == facing))) {
                             tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, state.get(BlockBlulectricCable.FACING)).ifPresent(
                                     exStorage -> EnergyHelper.balancePower(exStorage, storage)
                             );
+                        }
                     }
                 }
             }

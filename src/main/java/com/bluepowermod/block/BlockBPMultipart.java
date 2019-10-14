@@ -14,6 +14,7 @@ import com.bluepowermod.tile.TileBPMultipart;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
@@ -63,6 +65,15 @@ public class BlockBPMultipart extends ContainerBlock {
             te.getStates().stream().map(s -> s.getDrops(finalBuilder)).forEach(itemStacks::addAll);
         }
         return itemStacks;
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        TileEntity te = worldIn.getTileEntity(pos);
+        if(te instanceof TileBPMultipart){
+            ((TileBPMultipart) te).getStates().forEach(s -> s.onReplaced(worldIn, pos, s, isMoving));
+        }
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
 
     @Override

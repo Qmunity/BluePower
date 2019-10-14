@@ -36,6 +36,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -91,6 +92,17 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
         FACING.getAllowedValues().forEach(f -> {
             BlockPos neighborPos = pos.offset(f).offset(state.get(FACING).getOpposite());
             worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
+        });
+    }
+
+    @Override
+    public void updateNeighbors(BlockState state, IWorld worldIn, BlockPos pos, int flags) {
+        super.updateNeighbors(state, worldIn, pos, flags);
+        FACING.getAllowedValues().forEach(f -> {
+            BlockPos neighborPos = pos.offset(f).offset(state.get(FACING).getOpposite());
+            BlockState neighborState = worldIn.getBlockState(neighborPos);
+            if(neighborState.getBlock() instanceof BlockBlulectricCable || neighborState.getBlock() instanceof BlockBPMultipart)
+                neighborState.neighborChanged((World) worldIn, neighborPos, state.getBlock(), pos, false);
         });
     }
 
@@ -210,8 +222,13 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
             internal = ((TileBPMultipart) ownTile).getStates().stream().filter(s -> s.getBlock() == this).map(s -> s.get(FACING)).collect(Collectors.toList());
         }
         //Make sure the cable is on the same side of the block
-        directions.removeIf(d -> world.getBlockState(pos.offset(d)).getBlock() instanceof BlockBlulectricCable
-                && world.getBlockState(pos.offset(d)).get(FACING) != face);
+        directions.removeIf(d -> {
+            TileEntity t = world.getTileEntity(pos.offset(d));
+            return (world.getBlockState(pos.offset(d)).getBlock() instanceof BlockBlulectricCable
+                && world.getBlockState(pos.offset(d)).get(FACING) != face)
+                || (t instanceof TileBPMultipart
+                && ((TileBPMultipart) t).getStates().stream().noneMatch(s -> s.get(FACING) == face));
+        });
 
         //Populate all directions
         for (Direction d : directions) {

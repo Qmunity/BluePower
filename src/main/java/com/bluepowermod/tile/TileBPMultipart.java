@@ -89,11 +89,12 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         markDirtyClient();
         if(stateMap.size() == 1) {
             //Convert back to Standalone Block
+            TileEntity te = (TileEntity)stateMap.values().toArray()[0];
             if (world != null) {
-                CompoundNBT nbt = ((TileEntity)stateMap.values().toArray()[0]).write(new CompoundNBT());
+                CompoundNBT nbt = te != null ? te.write(new CompoundNBT()) : null;
                 world.setBlockState(pos, stateMap.keySet().iterator().next());
                 TileEntity tile = world.getTileEntity(pos);
-                if (tile != null)
+                if (tile != null && nbt != null)
                     tile.read(nbt);
             }
         }else if(stateMap.size() == 0){
@@ -102,6 +103,8 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
                 world.removeBlock(pos, false);
             }
         }
+        if(world != null)
+            world.getBlockState(pos).neighborChanged(world, pos, world.getBlockState(pos).getBlock(), pos, false);
     }
 
     @Nonnull
