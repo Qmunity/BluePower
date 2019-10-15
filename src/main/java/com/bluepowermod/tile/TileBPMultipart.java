@@ -9,11 +9,9 @@
 package com.bluepowermod.tile;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
-import com.bluepowermod.block.BlockBPMultipart;
 import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.NetworkManager;
@@ -21,7 +19,6 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
@@ -29,15 +26,11 @@ import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.extensions.IForgeBlockState;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author MoreThanHidden
@@ -72,19 +65,21 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
     }
 
     public void addState(BlockState state) {
-        TileEntity tile = null;
-        if(state.hasTileEntity()){
-            tile = state.getBlock().createTileEntity(state, world);
-            if (tile != null) {
-                tile.setPos(pos);
-            }
+        TileEntity tile = state.getBlock().createTileEntity(state, world);
+        if (tile != null) {
+            tile.setPos(pos);
         }
         this.stateMap.put(state, tile);
+        state.getBlock().onBlockPlacedBy(world, pos, state,  null, new ItemStack(state.getBlock()));
         markDirtyClient();
     }
 
     public void removeState(BlockState state) {
-        stateMap.get(state).remove();
+        //Remove Tile Entity
+        if(stateMap.get(state) != null) {
+            stateMap.get(state).remove();
+        }
+        //Remove State
         this.stateMap.remove(state);
         markDirtyClient();
         if(stateMap.size() == 1) {

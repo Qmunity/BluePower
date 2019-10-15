@@ -10,10 +10,8 @@ package com.bluepowermod.block.power;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.api.power.CapabilityBlutricity;
-import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier3.TileBlulectricCable;
@@ -36,11 +34,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import org.apache.logging.log4j.core.net.Facility;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -92,17 +88,6 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
         FACING.getAllowedValues().forEach(f -> {
             BlockPos neighborPos = pos.offset(f).offset(state.get(FACING).getOpposite());
             worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
-        });
-    }
-
-    @Override
-    public void updateNeighbors(BlockState state, IWorld worldIn, BlockPos pos, int flags) {
-        super.updateNeighbors(state, worldIn, pos, flags);
-        FACING.getAllowedValues().forEach(f -> {
-            BlockPos neighborPos = pos.offset(f).offset(state.get(FACING).getOpposite());
-            BlockState neighborState = worldIn.getBlockState(neighborPos);
-            if(neighborState.getBlock() instanceof BlockBlulectricCable || neighborState.getBlock() instanceof BlockBPMultipart)
-                neighborState.neighborChanged((World) worldIn, neighborPos, state.getBlock(), pos, false);
         });
     }
 
@@ -183,11 +168,12 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
             ((TileBPMultipart) te).changeState(state, newState);
         }
         state = newState;
+
         //If not placed on a solid block break off
         if (!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()) {
             if(te instanceof TileBPMultipart){
-                ((TileBPMultipart)te).removeState(state);
                 if(world instanceof ServerWorld) {
+                ((TileBPMultipart)te).removeState(state);
                     NonNullList<ItemStack> drops = NonNullList.create();
                     drops.add(new ItemStack(this));
                     InventoryHelper.dropItems(world, pos, drops);
