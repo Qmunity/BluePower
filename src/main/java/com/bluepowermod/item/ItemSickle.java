@@ -17,6 +17,7 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
@@ -26,6 +27,7 @@ import net.minecraft.block.BushBlock;
 import net.minecraft.block.LilyPadBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
@@ -34,8 +36,13 @@ import net.minecraft.item.*;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Set;
 
 public class ItemSickle extends ToolItem {
@@ -51,6 +58,12 @@ public class ItemSickle extends ToolItem {
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new StringTextComponent(MinecraftColor.GREEN.getChatColor())
+                .appendSibling(new TranslationTextComponent("item." + Refs.MODID + ".sickle.info")) );
     }
 
     @Override

@@ -1,0 +1,18 @@
+{
+    "textures": {
+        "top": "bluepower:blocks/wire/wire",
+        "particle": "bluepower:blocks/wire/wire",
+        "side": "bluepower:blocks/wire/wire",
+        "wire": "bluepower:base/alloy_off"
+    },
+    "elements": [
+        {
+            "from": [ 16, 0, 6 ], 
+            "to": [ 18, 2, 10 ], 
+            "faces": {
+                "north": { "texture": "#side", "uv": [ 6, 14, 8, 16 ], "tintindex": 1 },
+                "up": { "texture": "#top", "uv": [ 14, 6, 16, 10 ], "tintindex": 1 }
+            }
+        }
+    ]
+}

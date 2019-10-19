@@ -17,8 +17,10 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.helper.BPItemTier;
 import com.bluepowermod.init.BPCreativeTabs;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.monster.EndermanEntity;
@@ -31,6 +33,13 @@ import net.minecraft.util.DamageSource;
 
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemAthame extends SwordItem {
     
@@ -41,6 +50,12 @@ public class ItemAthame extends SwordItem {
         super(athameMaterial, 1, -3, new Properties().group(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + Refs.ATHAME_NAME);
         BPItems.itemList.add(this);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new StringTextComponent(MinecraftColor.PURPLE.getChatColor())
+                .appendSibling(new TranslationTextComponent("item." + Refs.MODID + "." + Refs.ATHAME_NAME + ".info")) );
     }
 
     public float getDamageDealt() {

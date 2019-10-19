@@ -21,11 +21,7 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -37,11 +33,15 @@ import java.util.Set;
 public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBlock{
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
-    public static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
-    public static final BooleanProperty CONNECTED_BACK = BooleanProperty.create("connected_back");
-    public static final BooleanProperty CONNECTED_LEFT = BooleanProperty.create("connected_left");
-    public static final BooleanProperty CONNECTED_RIGHT = BooleanProperty.create("connected_right");
+    static final BooleanProperty POWERED = BooleanProperty.create("powered");
+    private static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
+    private static final BooleanProperty CONNECTED_BACK = BooleanProperty.create("connected_back");
+    private static final BooleanProperty CONNECTED_LEFT = BooleanProperty.create("connected_left");
+    private static final BooleanProperty CONNECTED_RIGHT = BooleanProperty.create("connected_right");
+    private static final BooleanProperty JOIN_FRONT = BooleanProperty.create("join_front");
+    private static final BooleanProperty JOIN_BACK = BooleanProperty.create("join_back");
+    private static final BooleanProperty JOIN_LEFT = BooleanProperty.create("join_left");
+    private static final BooleanProperty JOIN_RIGHT = BooleanProperty.create("join_right");
     private boolean canProvidePower = true;
     final String type;
     /** List of blocks to update with redstone. */
@@ -50,8 +50,18 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
     public BlockAlloyWire(String type) {
         super(Material.ROCK, TileWire.class);
         this.type = type;
-        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.UP).with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false).with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false).with(POWERED, false));
+        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.UP).with(POWERED, false)
+                .with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false)
+                .with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false)
+                .with(JOIN_FRONT, false).with(JOIN_BACK, false)
+                .with(JOIN_LEFT, false).with(JOIN_RIGHT, false));
         setRegistryName(Refs.MODID + ":" + type + "_wire");
+    }
+
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, POWERED, JOIN_FRONT, JOIN_BACK, JOIN_LEFT, JOIN_RIGHT);
     }
 
     public BlockAlloyWire(String type, Material material) {
@@ -205,12 +215,6 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
      */
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos){
         return worldIn.getBlockState(pos.down()).isSolid() || worldIn.getBlockState(pos.down()).getBlock() == Blocks.GLOWSTONE;
-    }
-
-
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
-        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, POWERED);
     }
 
     public boolean canProvidePower(BlockState state)

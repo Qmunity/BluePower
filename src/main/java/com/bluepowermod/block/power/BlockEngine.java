@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.block.power;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
@@ -16,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -29,10 +31,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author TheFjong, MoreThanHidden
@@ -53,6 +59,12 @@ public class BlockEngine extends BlockContainerBase {
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
         builder.add(ACTIVE, GEAR, GLIDER, FACING);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+        tooltip.add(new StringTextComponent(MinecraftColor.GREEN.getChatColor())
+                .appendSibling(new TranslationTextComponent("block." + Refs.MODID + ".engine.info")) );
     }
 
     @Override

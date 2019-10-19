@@ -1,5 +1,11 @@
 {
     "parent": "block/block",
+    "textures": {
+        "top": "bluepower:blocks/wire/wire",
+        "particle": "bluepower:blocks/wire/wire",
+        "side": "bluepower:blocks/wire/wire",
+        "wire": "bluepower:base/alloy_off"
+    },
     "elements": [
         {
             "from": [ 6.0, 0.0, 6.0 ],

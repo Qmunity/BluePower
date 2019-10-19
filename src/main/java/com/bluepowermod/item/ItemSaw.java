@@ -17,12 +17,21 @@
 
 package com.bluepowermod.item;
 
+import java.util.List;
 import java.util.Random;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.init.BPCreativeTabs;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class ItemSaw extends ItemBase{
 
@@ -37,6 +46,12 @@ public class ItemSaw extends ItemBase{
     public int getSawLevel() {
 
         return sawLevel;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new StringTextComponent(MinecraftColor.LIGHT_BLUE.getChatColor())
+                .appendSibling(new TranslationTextComponent("item." + Refs.MODID + ".saw.info")) );
     }
 
     @Override
