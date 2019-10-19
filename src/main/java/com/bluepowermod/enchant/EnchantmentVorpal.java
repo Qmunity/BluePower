@@ -7,7 +7,6 @@
  */
 package com.bluepowermod.enchant;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
