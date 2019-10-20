@@ -17,6 +17,7 @@
 
 package com.bluepowermod.init;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.reference.ContainerNames;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMicroblock;
