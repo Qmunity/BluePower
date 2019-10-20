@@ -34,14 +34,14 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     static final BooleanProperty POWERED = BooleanProperty.create("powered");
-    private static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
-    private static final BooleanProperty CONNECTED_BACK = BooleanProperty.create("connected_back");
-    private static final BooleanProperty CONNECTED_LEFT = BooleanProperty.create("connected_left");
-    private static final BooleanProperty CONNECTED_RIGHT = BooleanProperty.create("connected_right");
-    private static final BooleanProperty JOIN_FRONT = BooleanProperty.create("join_front");
-    private static final BooleanProperty JOIN_BACK = BooleanProperty.create("join_back");
-    private static final BooleanProperty JOIN_LEFT = BooleanProperty.create("join_left");
-    private static final BooleanProperty JOIN_RIGHT = BooleanProperty.create("join_right");
+    static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
+    static final BooleanProperty CONNECTED_BACK = BooleanProperty.create("connected_back");
+    static final BooleanProperty CONNECTED_LEFT = BooleanProperty.create("connected_left");
+    static final BooleanProperty CONNECTED_RIGHT = BooleanProperty.create("connected_right");
+    static final BooleanProperty JOIN_FRONT = BooleanProperty.create("join_front");
+    static final BooleanProperty JOIN_BACK = BooleanProperty.create("join_back");
+    static final BooleanProperty JOIN_LEFT = BooleanProperty.create("join_left");
+    static final BooleanProperty JOIN_RIGHT = BooleanProperty.create("join_right");
     private boolean canProvidePower = true;
     final String type;
     /** List of blocks to update with redstone. */

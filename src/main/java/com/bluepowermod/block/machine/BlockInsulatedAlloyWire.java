@@ -8,17 +8,13 @@ import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.IntegerProperty;
 import net.minecraft.block.BlockState;
-import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,88 +26,76 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
     private final MinecraftColor color;
     protected final VoxelShape[] shapes = makeShapes();
 
-    //0 = No Connection | 1 = Normal Connection  | 2 = Join Connection | 3 = Straight Connection
-    private static final IntegerProperty CONNECTION_FRONT = IntegerProperty.create("connection_front", 0, 3);
-    private static final IntegerProperty CONNECTION_BACK = IntegerProperty.create("connection_back", 0, 3);
-    private static final IntegerProperty CONNECTION_LEFT = IntegerProperty.create("connection_left", 0, 3);
-    private static final IntegerProperty CONNECTION_RIGHT = IntegerProperty.create("connection_right", 0, 3);
-
     public BlockInsulatedAlloyWire(String type, MinecraftColor color) {
         super(type, Material.ROCK);
         this.color = color;
-        this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.UP).with(POWERED, false)
-                .with(CONNECTION_FRONT, 0).with(CONNECTION_BACK, 0)
-                .with(CONNECTION_LEFT, 0).with(CONNECTION_RIGHT, 0));
+        setDefaultState(getStateContainer().getBaseState().with(FACING, Direction.UP).with(POWERED, false)
+                .with(CONNECTED_FRONT, false)
+                .with(CONNECTED_BACK, false)
+                .with(CONNECTED_LEFT, false)
+                .with(CONNECTED_RIGHT, false)
+                .with(JOIN_FRONT, false)
+                .with(JOIN_BACK, false)
+                .with(JOIN_LEFT, false)
+                .with(JOIN_RIGHT, false)
+        );
         setRegistryName(Refs.MODID + ":" + "wire." + type + "." + color.name().toLowerCase());
     }
 
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
-        builder.add(FACING, POWERED, CONNECTION_FRONT, CONNECTION_BACK, CONNECTION_LEFT, CONNECTION_RIGHT);
-    }
+    private int getShapeIndex(BlockState state) {
+        int i = 0;
 
+        if(state.get(CONNECTED_FRONT))
+            i |= getMask(Direction.NORTH);
+        if(state.get(CONNECTED_BACK))
+            i |= getMask(Direction.SOUTH);
+        if(state.get(CONNECTED_LEFT))
+            i |= getMask(Direction.WEST);
+        if(state.get(CONNECTED_RIGHT))
+            i |= getMask(Direction.EAST);
+
+        return i;
+    }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         World worldIn = context.getWorld();
         BlockPos pos = context.getPos();
-        int connection_back = 0;
-        int connection_front = 0;
-        int connection_left = 0;
-        int connection_right = 0;
-
-        int connections = 0;
-        boolean straight_front = true;
-        boolean straight_back = true;
-        boolean straight_left = true;
-        boolean straight_right = true;
+        boolean connection_back = false;
+        boolean connection_front = false;
+        boolean connection_left = false;
+        boolean connection_right = false;
 
         for (Direction face : FACING.getAllowedValues()){
             switch (face){
                 case NORTH:
                     if(worldIn.getBlockState(pos.offset(face)).getBlock().equals(this)){
-                        connection_front = 1;
-                        connections += 1;
-                        straight_front = false;
-                        straight_left = false;
-                        straight_right = false;
+                        connection_front = true;
                     }
                     break;
                 case SOUTH:
                     if(worldIn.getBlockState(pos.offset(face)).getBlock().equals(this)){
-                        connection_back = 1;
-                        connections += 1;
-                        straight_back = false;
-                        straight_left = false;
-                        straight_right = false;
+                        connection_back = true;
                     }
                     break;
                 case WEST:
                     if(worldIn.getBlockState(pos.offset(face)).getBlock().equals(this)){
-                        connection_left = 1;
-                        connections += 1;
-                        straight_left = false;
-                        straight_front = false;
-                        straight_back = false;
+                        connection_left = true;
                     }
                     break;
                 case EAST:
                     if(worldIn.getBlockState(pos.offset(face)).getBlock().equals(this)){
-                        connection_right = 1;
-                        connections += 1;
-                        straight_right = false;
-                        straight_front = false;
-                        straight_back = false;
+                        connection_right = true;
                     }
                     break;
             }
         }
 
-        return this.getDefaultState().with(CONNECTION_RIGHT, straight_right ? 3 : connection_right)
-                .with(CONNECTION_LEFT, straight_left ? 3 : connection_left)
-                .with(CONNECTION_FRONT, straight_front ? 3 : connection_front)
-                .with(CONNECTION_BACK, straight_back ? 3 : connection_back);
+        return this.getDefaultState().with(CONNECTED_RIGHT, connection_right)
+                .with(CONNECTED_LEFT, connection_left)
+                .with(CONNECTED_FRONT, connection_front)
+                .with(CONNECTED_BACK, connection_back);
     }
 
     protected VoxelShape[] makeShapes() {
@@ -151,21 +135,6 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
 
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return AABBUtils.rotate(this.shapes[this.getShapeIndex(state)], state.get(FACING));
-    }
-
-    private int getShapeIndex(BlockState state) {
-        int i = 0;
-
-        if(state.get(CONNECTION_FRONT) == 1 || state.get(CONNECTION_FRONT) == 2)
-            i |= getMask(Direction.NORTH);
-        if(state.get(CONNECTION_BACK) == 1 || state.get(CONNECTION_BACK) == 2)
-            i |= getMask(Direction.SOUTH);
-        if(state.get(CONNECTION_LEFT) == 1 || state.get(CONNECTION_LEFT) == 2)
-            i |= getMask(Direction.WEST);
-        if(state.get(CONNECTION_RIGHT) == 1 || state.get(CONNECTION_RIGHT) == 2)
-            i |= getMask(Direction.EAST);
-
-        return i;
     }
 
     private static int getMask(Direction facing) {
