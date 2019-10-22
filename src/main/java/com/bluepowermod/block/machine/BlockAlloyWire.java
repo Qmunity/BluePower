@@ -8,7 +8,6 @@ import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileWire;
-import com.bluepowermod.tile.tier3.TileBlulectricCable;
 import net.minecraft.block.*;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
@@ -42,7 +41,7 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
 
     @Override
     protected Capability<?> getCapability() {
-        return CapabilityRedstoneDevice.UNINSULATED_CAPABILITY;
+        return CapabilityRedstoneDevice.INSULATED_CAPABILITY;
     }
 
     public BlockAlloyWire(String type) {

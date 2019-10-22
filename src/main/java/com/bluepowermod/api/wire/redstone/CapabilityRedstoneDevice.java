@@ -1,5 +1,6 @@
 package com.bluepowermod.api.wire.redstone;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -31,6 +32,7 @@ public class CapabilityRedstoneDevice {
         @Override
         public INBT writeNBT(Capability<T> capability, T instance, Direction direction) {
             CompoundNBT nbt = new CompoundNBT();
+            nbt.putString("color", instance.getInsulationColor(direction).name());
             nbt.putByte("power", instance.getRedstonePower(direction));
             return nbt;
         }
@@ -39,6 +41,7 @@ public class CapabilityRedstoneDevice {
         public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
             CompoundNBT tags = (CompoundNBT) nbt;
             byte power = tags.getByte("power");
+            instance.setInsulationColor(MinecraftColor.valueOf(tags.getString("color")));
             instance.setRedstonePower(side, power);
         }
     }

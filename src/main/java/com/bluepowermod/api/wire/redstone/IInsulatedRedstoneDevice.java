@@ -9,6 +9,10 @@ public interface IInsulatedRedstoneDevice extends IRedstoneDevice {
     /**
      * Gets the insulation color on the specified side. This usually determines whether or not things can connect to it.
      */
-    public MinecraftColor getInsulationColor(Direction side);
+    MinecraftColor getInsulationColor(Direction side);
 
+    /**
+     * Sets the insulation color only for initialisation.
+     */
+    void setInsulationColor(MinecraftColor color);
 }

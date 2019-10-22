@@ -51,4 +51,9 @@ public class InsulatedRedstoneDevice implements IInsulatedRedstoneDevice {
     public MinecraftColor getInsulationColor(Direction side) {
         return color;
     }
+
+    @Override
+    public void setInsulationColor(MinecraftColor color) {
+        this.color = color;
+    }
 }

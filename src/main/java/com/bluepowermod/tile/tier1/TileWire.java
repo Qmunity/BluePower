@@ -1,12 +1,17 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.block.machine.BlockAlloyWire;
 import com.bluepowermod.block.machine.BlockInsulatedAlloyWire;
 import com.bluepowermod.tile.BPTileEntityType;
 import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -31,6 +36,39 @@ public class TileWire extends TileEntity {
         this.device = new InsulatedRedstoneDevice(MinecraftColor.NONE);
     }
 
+    @Override
+    public void read(CompoundNBT compound) {
+        super.read(compound);
+        if(compound.contains("device")) {
+            INBT nbtstorage = compound.get("device");
+            CapabilityRedstoneDevice.INSULATED_CAPABILITY.getStorage().readNBT(CapabilityRedstoneDevice.INSULATED_CAPABILITY, device, null, nbtstorage);
+        }
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT tCompound) {
+        INBT nbtstorage = CapabilityRedstoneDevice.INSULATED_CAPABILITY.getStorage().writeNBT(CapabilityRedstoneDevice.INSULATED_CAPABILITY, device, null);
+        tCompound.put("device", nbtstorage);
+        return super.write(tCompound);
+    }
+
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
+    }
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        return this.write(new CompoundNBT());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        super.onDataPacket(net, pkt);
+        handleUpdateTag(pkt.getNbtCompound());
+    }
+
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
@@ -48,12 +86,12 @@ public class TileWire extends TileEntity {
 
 
                 //Make sure the cable is the same color or none
+                if(device.getInsulationColor(null) != MinecraftColor.NONE)
                 directions.removeIf(d -> {
                     TileEntity tile = world.getTileEntity(pos.offset(d));
                     return tile instanceof TileWire
                             && !(((TileWire) tile).device.getInsulationColor(d) == device.getInsulationColor(d.getOpposite())
-                                || ((TileWire) tile).device.getInsulationColor(d) == MinecraftColor.NONE)
-                            && device.getInsulationColor(d.getOpposite()) != MinecraftColor.NONE;
+                                || ((TileWire) tile).device.getInsulationColor(d) == MinecraftColor.NONE);
                 });
             }
         }

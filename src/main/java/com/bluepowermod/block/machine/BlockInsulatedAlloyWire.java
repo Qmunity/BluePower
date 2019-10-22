@@ -1,7 +1,6 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.reference.Refs;

@@ -10,6 +10,7 @@ package com.bluepowermod;
 
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.power.CapabilityBlutricity;
+import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
 import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
@@ -87,6 +88,7 @@ public class BluePower {
         WorldGenFlowers.setupFlowers();
         BPWorldGen.setupGeneralWorldGen();
         CapabilityBlutricity.register();
+        CapabilityRedstoneDevice.register();
 
         proxy.setup(event);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> BPContainerType::registerScreenFactories);
