@@ -20,7 +20,6 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
 import com.bluepowermod.container.slot.SlotProjectTableCrafting;
-import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import com.bluepowermod.util.Dependencies;
 import invtweaks.api.container.ChestContainer;
@@ -36,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 /**
  * @author MineMaarten

@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.container.slot;
 
+import com.bluepowermod.helper.ItemStackHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
@@ -57,7 +58,7 @@ public class SlotProjectTableCrafting extends SlotCrafting {
 
     private ItemStack extractFromTable(ItemStack itemStack){
         for (int j = 0; j < projectTable.getSizeInventory(); j++) {
-            if (projectTable.getStackInSlot(j).getItem().equals(itemStack.getItem())) {
+            if (ItemStackHelper.areItemStacksEqual(projectTable.getStackInSlot(j), itemStack)) {
                 projectTable.decrStackSize(j, 1);
                 itemStack.setCount(itemStack.getCount() + 1);
             }
