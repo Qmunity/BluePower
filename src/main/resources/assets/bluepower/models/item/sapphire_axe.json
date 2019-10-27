@@ -1,5 +1,5 @@
 ﻿{
-  "parent": "minecraft:item/generated",
+  "parent": "item/handheld",
   "textures": {
     "layer0": "bluepower:items/sapphire_axe"
   }
