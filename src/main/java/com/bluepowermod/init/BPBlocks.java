@@ -335,15 +335,15 @@ public class BPBlocks {
         }.setRegistryName("bluepower:gate_nand");
 
         //Wires
-        blockAlloyWire = new Block[MinecraftColor.VALID_COLORS.length * 2 + 2];
+        //blockAlloyWire = new Block[MinecraftColor.VALID_COLORS.length * 2 + 2];
 
-        blockAlloyWire[0] = new BlockAlloyWire(RedwireType.BLUESTONE.getName()).setWIP(true);
-        blockAlloyWire[MinecraftColor.VALID_COLORS.length + 1] =  new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true);
+        //blockAlloyWire[0] = new BlockAlloyWire(RedwireType.BLUESTONE.getName()).setWIP(true);
+        //blockAlloyWire[MinecraftColor.VALID_COLORS.length + 1] =  new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true);
 
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
-            blockAlloyWire[i+1] = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName(), MinecraftColor.VALID_COLORS[i]).setWIP(true);
-            blockAlloyWire[i + MinecraftColor.VALID_COLORS.length +2] = new BlockInsulatedAlloyWire(RedwireType.RED_ALLOY.getName(), MinecraftColor.VALID_COLORS[i]).setWIP(true);
-        }
+        //for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
+           // blockAlloyWire[i+1] = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName(), MinecraftColor.VALID_COLORS[i]).setWIP(true);
+           // blockAlloyWire[i + MinecraftColor.VALID_COLORS.length +2] = new BlockInsulatedAlloyWire(RedwireType.RED_ALLOY.getName(), MinecraftColor.VALID_COLORS[i]).setWIP(true);
+        //}
     }
 
     private static void initModDependantBlocks() {

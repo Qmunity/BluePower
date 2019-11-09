@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=up": { "model": "bluepower:block/panel", "uvlock": true},
+    "facing=down": { "model": "bluepower:block/panel", "x": 180, "uvlock": true},
+    "facing=north": { "model": "bluepower:block/panel", "x": 90, "uvlock": true},
+    "facing=south": { "model": "bluepower:block/panel", "x": -90, "uvlock": true},
+    "facing=west": { "model": "bluepower:block/panel", "x": 90, "y": 270, "uvlock": true},
+    "facing=east": { "model": "bluepower:block/panel", "x": 90, "y": 90, "uvlock": true}
+  }
+}
