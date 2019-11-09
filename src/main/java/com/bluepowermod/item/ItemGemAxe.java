@@ -32,7 +32,7 @@ public class ItemGemAxe extends ItemAxe {
     protected boolean canRepair              = true;
 
     public ItemGemAxe(ToolMaterial material, String name, Item repairItem) {
-        super(material, material.getAttackDamage(), 1.4F);
+        super(material, 8.0F, -2.4F);
         this.setTranslationKey(name);
         this.setCreativeTab(BPCreativeTabs.tools);
         this.setRegistryName(Refs.MODID + ":" + name);
