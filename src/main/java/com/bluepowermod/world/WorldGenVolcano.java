@@ -20,6 +20,7 @@ package com.bluepowermod.world;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.BPConfig;
+import com.bluepowermod.init.TileEntities;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -29,6 +30,7 @@ import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.fluid.LavaFluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
@@ -263,11 +265,14 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
 
     private void generateLootChest(IWorld world, BlockPos pos, Random rand, Direction dir) {
         setBlockState(world, pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, dir.getOpposite()));
-        if (rand.nextInt(5) == 0) {
-            ((ChestTileEntity) world.getTileEntity(pos)).setInventorySlotContents(13,
-                    new ItemStack(BPItems.tungsten_ingot, 5 + rand.nextInt(10)));
-        } else {
-            ((ChestTileEntity) world.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextInt());//Possibly to be added with IC designs from the community.
+        TileEntity te = world.getTileEntity(pos);
+        if(te instanceof ChestTileEntity){
+            if (rand.nextInt(5) == 0) {
+                ((ChestTileEntity)te).setInventorySlotContents(13, new ItemStack(BPItems.tungsten_ingot,
+                        5 + rand.nextInt(10)));
+            } else {
+                ((ChestTileEntity)te).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextInt());
+            }
         }
     }
 
