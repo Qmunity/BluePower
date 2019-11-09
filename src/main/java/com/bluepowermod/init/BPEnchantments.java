@@ -7,13 +7,16 @@
  */
 package com.bluepowermod.init;
 
+import com.bluepowermod.reference.Refs;
 import net.minecraft.enchantment.Enchantment;
 
 import com.bluepowermod.enchant.EnchantmentDisjunction;
 import com.bluepowermod.enchant.EnchantmentVorpal;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BPEnchantments {
 
 	public static Enchantment vorpal;
