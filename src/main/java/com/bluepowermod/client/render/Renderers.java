@@ -117,15 +117,20 @@ public class Renderers {
         //Register Multipart Model
         event.getModelRegistry().put(new ModelResourceLocation("bluepower:multipart"), new BPMultipartModel());
 
+
+        BPMicroblockModel microblockModel = new BPMicroblockModel();
         //Register Microblock Models
         for(Direction dir : Direction.values()) {
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName()), new BPMicroblockModel());
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName()), new BPMicroblockModel());
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName()), new BPMicroblockModel());
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
         }
-        event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "inventory"), new BPMicroblockModel());
-        event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "inventory"), new BPMicroblockModel());
-        event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "inventory"), new BPMicroblockModel());
+        event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "inventory"), microblockModel);
+        event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "inventory"), microblockModel);
+        event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "inventory"), microblockModel);
 
     }
 
