@@ -281,7 +281,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
 
         if (var1 == 0) {
             outputInventory = itemStack;
-        } else {
+        } else if (var1 < 10) {
             inventory.set(var1 - 1, itemStack);
         }
         updatingRecipe = true;
@@ -311,11 +311,8 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
 
-        if (slot == 0) {// Output slot
-            return false;
-        } else {
-            return true;
-        }
+        // Output slot
+        return slot != 0 && slot <= 9;
     }
 
     @Override
@@ -342,7 +339,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
 
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, Direction direction) {
-        return slot == 1;
+        return slot == 0;
     }
 
     //Todo Fields
