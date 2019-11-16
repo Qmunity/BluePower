@@ -26,6 +26,11 @@ public class InventoryProjectTableCrafting extends InventoryCrafting{
     }
 
     @Override
+    public boolean isEmpty() {
+        return projectTable.isEmpty();
+    }
+
+    @Override
     public int getSizeInventory() {
         return this.length;
     }
