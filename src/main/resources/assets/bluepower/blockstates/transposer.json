@@ -1,6 +1,16 @@
 {
   "variants": {
-    "active=true":{"model": "bluepower:block/transposer_on"},
-    "active=false":{"model": "bluepower:block/transposer"}
+    "facing=up,active=false": { "model": "bluepower:block/transposer", "x": -90 },
+    "facing=down,active=false": { "model": "bluepower:block/transposer", "x": 90 },
+    "facing=north,active=false": { "model": "bluepower:block/transposer" },
+    "facing=south,active=false": { "model": "bluepower:block/transposer", "y": 180 },
+    "facing=west,active=false": { "model": "bluepower:block/transposer", "y": 270 },
+    "facing=east,active=false": { "model": "bluepower:block/transposer", "y": 90 },
+    "facing=up,active=true": { "model": "bluepower:block/transposer", "x": -90 },
+    "facing=down,active=true": { "model": "bluepower:block/transposer", "x": 90 },
+    "facing=north,active=true": { "model": "bluepower:block/transposer_on" },
+    "facing=south,active=true": { "model": "bluepower:block/transposer_on", "y": 180 },
+    "facing=west,active=true": { "model": "bluepower:block/transposer_on", "y": 270 },
+    "facing=east,active=true": { "model": "bluepower:block/transposer_on", "y": 90 }
   }
 }

@@ -1,5 +1,5 @@
 ﻿{
-   "model": "bluepower:block/cube_front_back",
+   "parent": "bluepower:block/cube_front_back",
    "textures": {
       "side": "bluepower:blocks/machines/transposer_side_active",
       "front": "bluepower:blocks/machines/transposer_front",
