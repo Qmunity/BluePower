@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:ores/amethyst",
+    "#forge:ores/copper",
+    "#forge:ores/malachite",
+    "#forge:ores/ruby",
+    "#forge:ores/sapphire",
+    "#forge:ores/silver",
+    "#forge:ores/teslatite",
+    "#forge:ores/tungsten",
+    "#forge:ores/zinc"
+  ]
+}
