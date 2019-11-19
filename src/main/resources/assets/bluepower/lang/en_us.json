@@ -633,7 +633,9 @@
   "itemGroup.bluepower:wiring": "Blue Power Wires",
 
   "enchantment.bluepower.vorpal": "Vorpal",
+  "enchantment.bluepower.vorpal.desc": "Increases the chances of mobs and players dropping a head on death",
   "enchantment.bluepower.disjunction": "Disjunction",
+  "enchantment.bluepower.disjunction.desc": "Increases Damage vs Endermen and the Dragon",
 
   "gui.bluepower:projectTable.clearGrid": "Clear Crafting Grid",
   "gui.bluepower:timer.interval": "Timer Interval",
