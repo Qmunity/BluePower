@@ -143,10 +143,6 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
                     tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
                             exStorage -> EnergyHelper.balancePower(exStorage, storage));
             }
-        }
-
-
-        if (world != null && !world.isRemote) {
             if (updatingRecipe) {
                 if(this.world.getRecipeManager().getRecipe(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, this, this.world).isPresent()) {
                     currentRecipe = (IAlloyFurnaceRecipe) this.world.getRecipeManager().getRecipe(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, this, this.world).get();
@@ -225,7 +221,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
 
     public void setIsActive(boolean _isActive) {
 
-        if (_isActive != isActive) {
+        if (world != null && _isActive != isActive && world.getGameTime() % 4 == 0) {
             isActive = _isActive;
             BlockBlulectricAlloyFurnace.setState(isActive, world, pos);
             sendUpdatePacket();

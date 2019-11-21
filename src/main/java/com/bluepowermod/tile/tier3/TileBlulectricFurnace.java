@@ -65,7 +65,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+        if (world != null && !world.isRemote) {
             storage.resetCurrent();
             //Balance power of attached blulectric blocks.
             for (Direction facing : Direction.values()) {
@@ -74,9 +74,6 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
                     tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
                             exStorage -> EnergyHelper.balancePower(exStorage, storage));
             }
-        }
-
-        if (world != null && !world.isRemote) {
             if (updatingRecipe) {
                 if(this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, this, this.world).isPresent()) {
                     currentRecipe = this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, this, this.world).get();
@@ -133,6 +130,36 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
         }
     }
 
+
+    /**
+     * This function gets called whenever the world/chunk loads
+     */
+    @Override
+    public void read(CompoundNBT tCompound) {
+        super.read(tCompound);
+        CompoundNBT tc = tCompound.getCompound("inventory");
+        inventory = ItemStack.read(tc);
+        outputInventory = ItemStack.read(tCompound.getCompound("outputInventory"));
+    }
+
+    /**
+     * This function gets called whenever the world/chunk is saved
+     */
+    @Override
+    public CompoundNBT write(CompoundNBT tCompound) {
+        super.write(tCompound);
+
+        CompoundNBT tc = new CompoundNBT();
+        inventory.write(tc);
+        tCompound.put("inventory", tc);
+
+        if (outputInventory != null) {
+            CompoundNBT outputCompound = new CompoundNBT();
+            outputInventory.write(outputCompound);
+            tCompound.put("outputInventory", outputCompound);
+        }
+        return tCompound;
+    }
 
     @Override
     public void readFromPacketNBT(CompoundNBT tag) {
@@ -216,9 +243,8 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
         return isActive;
     }
 
-    public void setIsActive(boolean _isActive) {
-
-        if (_isActive != isActive) {
+    private void setIsActive(boolean _isActive) {
+        if (world != null && _isActive != isActive && world.getGameTime() % 4 == 0) {
             isActive = _isActive;
             BlockBlulectricFurnace.setState(isActive, world, pos);
             sendUpdatePacket();
