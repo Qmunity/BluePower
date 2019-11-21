@@ -2,7 +2,7 @@ image: openjdk:8-jdk
 
 before_script:
   - chmod +x gradlew
-  - rm -rf build/libs
+  - rm -rf build
 
 stages:
   - build
