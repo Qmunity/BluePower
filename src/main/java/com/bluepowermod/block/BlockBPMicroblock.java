@@ -3,6 +3,7 @@ package com.bluepowermod.block;
 import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMicroblock;
+import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -29,10 +30,14 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, IWaterLoggable {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -90,6 +95,26 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        TileEntity tileentity = builder.get(LootParameters.BLOCK_ENTITY);
+        List<ItemStack> itemStacks = new ArrayList<>();
+        //if(tileentity instanceof TileBPMultipart){
+            //tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
+        //}
+        if (tileentity instanceof TileBPMicroblock) {
+            CompoundNBT nbt = new CompoundNBT();
+            nbt.putString("block", ((TileBPMicroblock)tileentity).getBlock().getRegistryName().toString());
+            ItemStack stack = new ItemStack(this);
+            stack.setTag(nbt);
+            stack.setDisplayName(new TranslationTextComponent(((TileBPMicroblock)tileentity).getBlock().getTranslationKey())
+                    .appendText(" ")
+                    .appendSibling(new TranslationTextComponent(this.getTranslationKey())));
+            itemStacks.add(stack);
+        }
+        return itemStacks;
+    }
+
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
@@ -116,24 +141,6 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
         if (tileentity instanceof TileBPMicroblock && stack.hasTag() && stack.getTag().contains("block")) {
             Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(stack.getTag().getString("block")));
             ((TileBPMicroblock) tileentity).setBlock(block);
-        }
-    }
-
-    @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (state.getBlock() != newState.getBlock()) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof TileBPMicroblock) {
-                CompoundNBT nbt = new CompoundNBT();
-                nbt.putString("block", ((TileBPMicroblock)tileentity).getBlock().getRegistryName().toString());
-                ItemStack stack = new ItemStack(this);
-                stack.setTag(nbt);
-                stack.setDisplayName(new TranslationTextComponent(((TileBPMicroblock)tileentity).getBlock().getTranslationKey())
-                        .appendText(" ")
-                        .appendSibling(new TranslationTextComponent(this.getTranslationKey())));
-                InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), stack);
-            }
-            super.onReplaced(state, worldIn, pos, newState, isMoving);
         }
     }
 
