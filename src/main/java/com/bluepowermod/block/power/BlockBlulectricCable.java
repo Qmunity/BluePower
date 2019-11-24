@@ -19,6 +19,8 @@ import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -33,10 +35,10 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import org.apache.logging.log4j.core.net.Facility;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ import java.util.List;
 /**
  * @author MoreThanHidden
  */
-public class BlockBlulectricCable extends BlockContainerBase implements IBPPartBlock {
+public class BlockBlulectricCable extends BlockContainerBase implements IBPPartBlock, IWaterLoggable {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     private static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
@@ -56,6 +58,7 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
     private static final BooleanProperty JOIN_BACK = BooleanProperty.create("join_back");
     private static final BooleanProperty JOIN_LEFT = BooleanProperty.create("join_left");
     private static final BooleanProperty JOIN_RIGHT = BooleanProperty.create("join_right");
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected final VoxelShape[] shapes = makeShapes();
 
     public BlockBlulectricCable() {
@@ -64,7 +67,8 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
                 .with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false)
                 .with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false)
                 .with(JOIN_FRONT, false).with(JOIN_BACK, false)
-                .with(JOIN_LEFT, false).with(JOIN_RIGHT, false));
+                .with(JOIN_LEFT, false).with(JOIN_RIGHT, false)
+                .with(WATERLOGGED, false));
         setRegistryName(Refs.MODID + ":" + Refs.BLULECTRICCABLE_NAME);
     }
 
@@ -87,7 +91,22 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
         FACING.getAllowedValues().forEach(f -> {
             BlockPos neighborPos = pos.offset(f).offset(state.get(FACING).getOpposite());
             worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
-        });    }
+        });
+    }
+
+
+    @Override
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.get(WATERLOGGED)) {
+            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+        }
+        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+    }
+
+    @Override
+    public IFluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+    }
 
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
@@ -183,7 +202,7 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
-        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, JOIN_FRONT, JOIN_BACK, JOIN_LEFT, JOIN_RIGHT);
+        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, JOIN_FRONT, JOIN_BACK, JOIN_LEFT, JOIN_RIGHT, WATERLOGGED);
     }
 
     private BlockState getStateForPos(World world, BlockPos pos, BlockState state, Direction face){
@@ -201,8 +220,9 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
             TileEntity tileEntity = world.getTileEntity(pos.offset(d));
 
             boolean join = false;
-            //If Air look for a change in Direction
-            if (world.getBlockState(pos.offset(d)).getBlock() == Blocks.AIR &&
+            //If Air or Water look for a change in Direction
+            Block dBlock = world.getBlockState(pos.offset(d)).getBlock();
+            if ((dBlock == Blocks.AIR || dBlock == Blocks.WATER) &&
                     world.getBlockState(pos.offset(d).offset(face.getOpposite())).getBlock() instanceof BlockBlulectricCable &&
                     world.getBlockState(pos.offset(d).offset(face.getOpposite())).get(FACING) == d) {
                 tileEntity = world.getTileEntity(pos.offset(d).offset(face.getOpposite()));
@@ -314,13 +334,14 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
                         }
                 }
         }
-        return state;
+        IFluidState fluidstate = world.getFluidState(pos);
+        return state.with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-       return getStateForPos(context.getWorld(), context.getPos(), getDefaultState().with(FACING, context.getFace()), context.getFace());
+        return getStateForPos(context.getWorld(), context.getPos(), getDefaultState().with(FACING, context.getFace()), context.getFace());
     }
 
 }

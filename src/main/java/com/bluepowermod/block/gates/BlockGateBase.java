@@ -11,12 +11,11 @@ import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.util.AABBUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.RedstoneWireBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
@@ -40,7 +39,7 @@ import java.util.*;
 /**
  * @author MoreThanHidden
  */
-public class BlockGateBase extends BlockBase {
+public class BlockGateBase extends BlockBase implements IWaterLoggable {
 
     private final String name;
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -49,6 +48,7 @@ public class BlockGateBase extends BlockBase {
     public static final BooleanProperty POWERED_BACK = BooleanProperty.create("powered_back");
     public static final BooleanProperty POWERED_LEFT = BooleanProperty.create("powered_left");
     public static final BooleanProperty POWERED_RIGHT = BooleanProperty.create("powered_right");
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public BlockGateBase(String name) {
         super(Material.CLAY);
@@ -64,7 +64,20 @@ public class BlockGateBase extends BlockBase {
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
-        builder.add(FACING, ROTATION, POWERED_BACK, POWERED_FRONT, POWERED_LEFT, POWERED_RIGHT);
+        builder.add(FACING, ROTATION, POWERED_BACK, POWERED_FRONT, POWERED_LEFT, POWERED_RIGHT, WATERLOGGED);
+    }
+
+    @Override
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.get(WATERLOGGED)) {
+            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+        }
+        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+    }
+
+    @Override
+    public IFluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
     @Override
@@ -80,8 +93,9 @@ public class BlockGateBase extends BlockBase {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
+        IFluidState fluidstate = context.getWorld().getFluidState(context.getPos());
         Direction face = context.getFace();
-        return this.getDefaultState().with(ROTATION, context.getPlacementHorizontalFacing().getOpposite().getHorizontalIndex()).with(FACING, face);
+        return this.getDefaultState().with(ROTATION, context.getPlacementHorizontalFacing().getOpposite().getHorizontalIndex()).with(FACING, face).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 
     @Override

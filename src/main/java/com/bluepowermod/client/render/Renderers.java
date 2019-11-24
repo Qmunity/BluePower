@@ -68,47 +68,61 @@ public class Renderers {
         if (baseModel instanceof OBJModel) {
             IBakedModel bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ForgeBlockStateV1.Transforms.get("forge:default-block").get(), false), DefaultVertexFormats.ITEM);
             engine.add(bakedModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=false,glider=false,waterlogged=false"), bakedModel);
             bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X180_Y0, false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=up,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=up,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=up,gear=false,glider=false,waterlogged=false"), bakedModel);
             bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X270_Y90, false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=east,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=east,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=east,gear=false,glider=false,waterlogged=false"), bakedModel);
             bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X90_Y90, false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=west,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=west,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=west,gear=false,glider=false,waterlogged=false"), bakedModel);
             bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X270_Y0, false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=north,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=north,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=north,gear=false,glider=false,waterlogged=false"), bakedModel);
             bakedModel = baseModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X90_Y0, false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=south,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=south,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=south,gear=false,glider=false,waterlogged=false"), bakedModel);
         }
 
         IUnbakedModel onModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("bluepower:block/engine/engine_base_on.obj"));
         if (onModel instanceof OBJModel) {
             IBakedModel bakedModel = onModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ForgeBlockStateV1.Transforms.get("forge:default-block").get(), false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=down,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=down,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=down,gear=false,glider=false,waterlogged=false"), bakedModel);
             bakedModel = onModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X180_Y0, false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=up,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=up,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=up,gear=false,glider=false,waterlogged=false"), bakedModel);
             bakedModel = onModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X270_Y90, false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=east,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=east,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=east,gear=false,glider=false,waterlogged=false"), bakedModel);
             bakedModel = onModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X90_Y90, false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=west,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=west,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=west,gear=false,glider=false,waterlogged=false"), bakedModel);
             bakedModel = onModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X270_Y0, false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=north,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=north,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=north,gear=false,glider=false,waterlogged=false"), bakedModel);
             bakedModel = onModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(ModelRotation.X90_Y0, false), DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=south,gear=false,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=south,gear=false,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=true,facing=south,gear=false,glider=false,waterlogged=false"), bakedModel);
         }
 
         IUnbakedModel gearModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("bluepower:block/engine/engine_gear.obj"));
         if (gearModel instanceof OBJModel) {
             IBakedModel bakedModel = gearModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(gearModel.getDefaultState(), false), DefaultVertexFormats.ITEM);
             engine.add(bakedModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=true,glider=false"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=true,glider=false,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=true,glider=false,waterlogged=false"), bakedModel);
         }
 
         IUnbakedModel gliderModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("bluepower:block/engine/engine_glider.obj"));
         if (gliderModel instanceof OBJModel) {
             IBakedModel bakedModel = gliderModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(gliderModel.getDefaultState(), false), DefaultVertexFormats.ITEM);
             engine.add(bakedModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=false,glider=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=false,glider=true,waterlogged=true"), bakedModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:engine", "active=false,facing=down,gear=false,glider=true,waterlogged=false"), bakedModel);
         }
 
         //Register Engine Inventory Model

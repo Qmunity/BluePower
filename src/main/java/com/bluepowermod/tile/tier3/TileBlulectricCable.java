@@ -15,6 +15,7 @@ import com.bluepowermod.block.power.BlockBlulectricCable;
 import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
@@ -56,7 +57,8 @@ public class TileBlulectricCable extends TileMachineBase {
 
                 //Balance power of attached blulectric blocks.
                 for (Direction facing : directions) {
-                    if (world.getBlockState(pos.offset(facing)).getBlock() != Blocks.AIR) {
+                    Block fBlock = world.getBlockState(pos.offset(facing)).getBlock();
+                    if (fBlock != Blocks.AIR && fBlock != Blocks.WATER) {
                         TileEntity tile = world.getTileEntity(pos.offset(facing));
                         if (tile != null)
                             tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
