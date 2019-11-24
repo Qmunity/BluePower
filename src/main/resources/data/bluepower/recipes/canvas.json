@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
-      "item": "minecraft:string"
+      "tag": "forge:string"
     },
     "i": {
       "tag": "forge:rods/wooden"
