@@ -13,21 +13,28 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
-import com.bluepowermod.init.*;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPEnchantments;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.init.Config;
+import com.bluepowermod.init.OreDictionarySetup;
+import com.bluepowermod.init.Recipes;
+import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import com.bluepowermod.recipe.FurnaceRecipeGetter;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
@@ -90,6 +97,7 @@ public class BluePower {
         CompatibilityUtils.postInit(event);
         Recipes.init();
         AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
+        FurnaceRecipeGetter.initRecipes();
     }
 
     @Mod.EventHandler

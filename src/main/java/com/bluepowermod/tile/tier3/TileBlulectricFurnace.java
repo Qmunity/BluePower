@@ -3,6 +3,8 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import com.bluepowermod.recipe.FurnaceRecipeGetter;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,10 +21,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.capabilities.Capability;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileBlulectricFurnace extends TileMachineBase implements ISidedInventory, ITickable, INamedContainerProvider {
+public class TileBlulectricFurnace extends TileMachineBase implements ISidedInventory, ITickable {
     private final BlutricityStorage storage = new BlutricityStorage(1000, 100);
     private LazyOptional<IPowerBase> blutricityCap;
     private boolean isActive;
@@ -30,12 +31,11 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     public static final int SLOTS = 2;
     private ItemStack inventory;
     private ItemStack outputInventory;
-    private FurnaceRecipe currentRecipe;
+    private FurnaceRecipeGetter.FurnaceRecipe currentRecipe;
     private boolean updatingRecipe = true;
 
 
     public TileBlulectricFurnace() {
-        super(BPTileEntityType.BLULECTRIC_FURNACE);
         this.inventory = ItemStack.EMPTY;
         this.outputInventory = ItemStack.EMPTY;
     }
@@ -52,11 +52,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
                             exStorage -> EnergyHelper.balancePower(exStorage, storage));
             }
             if (updatingRecipe) {
-                if(this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, this, this.world).isPresent()) {
-                    currentRecipe = this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, this, this.world).get();
-                }else{
-                    currentRecipe = null;
-                }
+                currentRecipe = FurnaceRecipeGetter.getInstance().getRecipe(inventory, outputInventory);
                 updatingRecipe = false;
             }
             if (currentRecipe != null) {
@@ -64,14 +60,14 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
                     storage.addEnergy(-1, false);
                     this.setIsActive(true);
                     //Check if progress completed, and output slot is empty and less then a stack of the same item.
-                    if (++currentProcessTime >= (100 / (storage.getEnergy() / storage.getMaxEnergy())) && ((outputInventory.getItem() == currentRecipe.getRecipeOutput().getItem()
-                            && (outputInventory.getCount() + currentRecipe.getCraftingResult(this).getCount()) <= 64)
+                    if (++currentProcessTime >= (100 / (storage.getEnergy() / storage.getMaxEnergy())) && ((outputInventory.getItem() == currentRecipe.getOutput().getItem()
+                            && (outputInventory.getCount() + currentRecipe.getOutput().getCount()) <= 64)
                             || outputInventory.isEmpty())) {
                         currentProcessTime = 0;
                         if (!outputInventory.isEmpty()) {
-                            outputInventory.setCount(outputInventory.getCount() + currentRecipe.getCraftingResult(this).getCount());
+                            outputInventory.setCount(outputInventory.getCount() + currentRecipe.getOutput().getCount());
                         } else {
-                            outputInventory = currentRecipe.getCraftingResult(this).copy();
+                            outputInventory = currentRecipe.getOutput().copy();
                         }
                         this.decrStackSize(0, 1);
                         updatingRecipe = true;
@@ -113,40 +109,52 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        isActive = compound.getBoolean("isActive");
-        currentProcessTime = compound.getInteger("currentProcessTime");
-        markForRenderUpdate();
-        if(compound.contains("energy")) {
-            NBTBase nbtstorage = compound.getTag("energy");
-            CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
-        }
-        NBTTagCompound tc = compound.getCompoundTag("inventory");
-        inventory = ItemStack.read(tc);
-        outputInventory = ItemStack.read(compound.getCompoundTag("outputInventory"));
-        super.readFromNBT(compound);
+    public void readFromNBT(NBTTagCompound tCompound) {
+        super.readFromNBT(tCompound);
+        inventory = new ItemStack(tCompound.getCompoundTag("inventory"));
+        outputInventory = new ItemStack(tCompound.getCompoundTag("outputInventory"));
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
 
-        NBTTagCompound tc = new NBTTagCompound();
-        inventory.write(tc);
-        compound.setTag("inventory", tc);
+        super.writeToNBT(tCompound);
+
+        if (inventory != null) {
+            NBTTagCompound fuelCompound = new NBTTagCompound();
+            inventory.writeToNBT(fuelCompound);
+            tCompound.setTag("inventory", fuelCompound);
+        }
 
         if (outputInventory != null) {
             NBTTagCompound outputCompound = new NBTTagCompound();
-            outputInventory.write(outputCompound);
-            compound.setTag("outputInventory", outputCompound);
+            outputInventory.writeToNBT(outputCompound);
+            tCompound.setTag("outputInventory", outputCompound);
         }
+        return tCompound;
 
-        compound.setInteger("currentProcessTime", currentProcessTime);
-        compound.setBoolean("isActive", isActive);
+    }
+
+    @Override
+    public void readFromPacketNBT(NBTTagCompound tCompound) {
+        super.readFromPacketNBT(tCompound);
+        isActive = tCompound.getBoolean("isActive");
+        currentProcessTime = tCompound.getInteger("currentProcessTime");
+        markForRenderUpdate();
+        if(tCompound.hasKey("energy")) {
+            NBTBase nbtstorage = tCompound.getTag("energy");
+            CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
+        }
+    }
+
+    @Override
+    public void writeToPacketNBT(NBTTagCompound tCompound) {
+        super.writeToNBT(tCompound);
+
+        tCompound.setInteger("currentProcessTime", currentProcessTime);
+        tCompound.setBoolean("isActive", isActive);
         NBTBase nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
-        compound.setTag("energy", nbtstorage);
-        return compound;
+        tCompound.setTag("energy", nbtstorage);
     }
 
     @Nullable
