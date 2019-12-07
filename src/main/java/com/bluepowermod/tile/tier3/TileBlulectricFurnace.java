@@ -3,10 +3,13 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.block.power.BlockBlulectricFurnace;
+import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.recipe.FurnaceRecipeGetter;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,6 +17,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.capabilities.Capability;
@@ -21,11 +25,11 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileBlulectricFurnace extends TileMachineBase implementsdInventory, ITickable {
-    private final BlutricityStorage storage = new BlutricityStorage(1000, 100);
+public class TileBlulectricFurnace extends TileMachineBase implements ISidedInventory, ITickable {
+    public final BlutricityStorage storage = new BlutricityStorage(1000, 100);
     private LazyOptional<IPowerBase> blutricityCap;
     private boolean isActive;
-    private int currentProcessTime;
+    public int currentProcessTime;
     public static final int SLOTS = 2;
     private ItemStack inventory;
     private ItemStack outputInventory;
@@ -309,6 +313,21 @@ public class TileBlulectricFurnace extends TileMachineBase implementsdInventory,
     }
 
     @Override
+    public int getField(int i) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int i, int i1) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
     public List<ItemStack> getDrops() {
 
         List<ItemStack> drops = super.getDrops();
@@ -346,13 +365,17 @@ public class TileBlulectricFurnace extends TileMachineBase implementsdInventory,
     }
 
     @Override
+    public String getName() {
+        return Refs.BLULECTRICFURNACE_NAME;
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return false;
+    }
+
+    @Override
     public ITextComponent getDisplayName() {
         return new TextComponentString(Refs.BLULECTRICFURNACE_NAME);
     }
-
-//    @Nullable
-//    @Override
-//    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
-//        return new ContainerBlulectricFurnace(id, inventory, this, fields);
-//    }
 }
