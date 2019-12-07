@@ -3,27 +3,25 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.recipe.FurnaceRecipeGetter;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
-public class TileBlulectricFurnace extends TileMachineBase implements ISidedInventory, ITickable {
+public class TileBlulectricFurnace extends TileMachineBase implementsdInventory, ITickable {
     private final BlutricityStorage storage = new BlutricityStorage(1000, 100);
     private LazyOptional<IPowerBase> blutricityCap;
     private boolean isActive;
@@ -159,19 +157,19 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(this.pos, 3, this.getUpdateTag());
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+    public NBTTagCompound getUpdateTag() {
+        return this.writeToNBT(new NBTTagCompound());
     }
 
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         super.onDataPacket(net, pkt);
-        handleUpdateTag(pkt.getNbtCompound());
+    //    handleUpdateTag(pkt.getNbtCompound());
     }
 
 
@@ -217,7 +215,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     }
 
     private void setIsActive(boolean _isActive) {
-        if (world != null && _isActive != isActive && world.getGameTime() % 4 == 0) {
+        if (_isActive != isActive) {
             isActive = _isActive;
             BlockBlulectricFurnace.setState(isActive, world, pos);
             sendUpdatePacket();
@@ -253,7 +251,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
             if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
-                itemStack = itemStack.split(amount);
+                itemStack = itemStack.splitStack(amount);
                 if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
@@ -287,7 +285,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return player.getPosition().withinDistance(pos, 64.0D);
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
@@ -311,9 +309,9 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     }
 
     @Override
-    public NonNullList<ItemStack> getDrops() {
+    public List<ItemStack> getDrops() {
 
-        NonNullList<ItemStack> drops = super.getDrops();
+        List<ItemStack> drops = super.getDrops();
         if (!outputInventory.isEmpty())
             drops.add(outputInventory);
         if (!inventory.isEmpty())
@@ -352,9 +350,9 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
         return new TextComponentString(Refs.BLULECTRICFURNACE_NAME);
     }
 
-    @Nullable
-    @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
-        return new ContainerBlulectricFurnace(id, inventory, this, fields);
-    }
+//    @Nullable
+//    @Override
+//    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+//        return new ContainerBlulectricFurnace(id, inventory, this, fields);
+//    }
 }
