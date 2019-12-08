@@ -94,7 +94,6 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
-            if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
             return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(storage);
         }
         return super.getCapability(capability, facing);
@@ -177,37 +176,37 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     }
 
 
-    protected final IIntArray fields = new IIntArray() {
-        public int get(int i) {
-            switch (i) {
-                case 0:
-                    return (int) TileBlulectricFurnace.this.storage.getEnergy();
-                case 1:
-                    return TileBlulectricFurnace.this.currentProcessTime;
-                case 2:
-                    return (int) TileBlulectricFurnace.this.storage.getMaxEnergy();
-                default:
-                    return 0;
-            }
-        }
-
-        public void set(int i, int value) {
-            switch (i) {
-                case 0:
-                    break;
-                case 1:
-                    TileBlulectricFurnace.this.currentProcessTime = value;
-                    break;
-                case 2:
-                    break;
-            }
-
-        }
-
-        public int size() {
-            return 3;
-        }
-    };
+//    protected final IIntArray fields = new IIntArray() {
+//        public int get(int i) {
+//            switch (i) {
+//                case 0:
+//                    return (int) TileBlulectricFurnace.this.storage.getEnergy();
+//                case 1:
+//                    return TileBlulectricFurnace.this.currentProcessTime;
+//                case 2:
+//                    return (int) TileBlulectricFurnace.this.storage.getMaxEnergy();
+//                default:
+//                    return 0;
+//            }
+//        }
+//
+//        public void set(int i, int value) {
+//            switch (i) {
+//                case 0:
+//                    break;
+//                case 1:
+//                    TileBlulectricFurnace.this.currentProcessTime = value;
+//                    break;
+//                case 2:
+//                    break;
+//            }
+//
+//        }
+//
+//        public int size() {
+//            return 3;
+//        }
+//    };
 
     /**
      * ************* ADDED FUNCTIONS *************
