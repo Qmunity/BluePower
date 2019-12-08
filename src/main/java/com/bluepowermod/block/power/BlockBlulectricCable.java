@@ -313,20 +313,6 @@ public class BlockBlulectricCable extends BlockContainerBase implements IMultipa
 
     @Override
     public IPartSlot getSlotFromWorld(IBlockAccess iBlockAccess, BlockPos blockPos, IBlockState state) {
-        switch (state.getValue(FACING)) {
-            case UP:
-                return EnumFaceSlot.fromFace(EnumFacing.UP);
-            case DOWN:
-                return EnumFaceSlot.fromFace(EnumFacing.DOWN);
-            case NORTH:
-                return EnumFaceSlot.fromFace(EnumFacing.NORTH);
-            case SOUTH:
-                return EnumFaceSlot.fromFace(EnumFacing.SOUTH);
-            case EAST:
-                return EnumFaceSlot.fromFace(EnumFacing.EAST);
-            case WEST:
-                return EnumFaceSlot.fromFace(EnumFacing.WEST);
-        }
-        return EnumFaceSlot.fromFace(EnumFacing.DOWN);
+        return EnumFaceSlot.fromFace(state.getValue(FACING));
     }
 }
