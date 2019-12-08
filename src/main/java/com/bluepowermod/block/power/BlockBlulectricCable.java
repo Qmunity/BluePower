@@ -8,6 +8,8 @@ import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier3.TileBlulectricCable;
 import com.bluepowermod.util.AABBUtils;
 import mcmultipart.api.multipart.IMultipart;
+import mcmultipart.api.slot.EnumCenterSlot;
+import mcmultipart.api.slot.EnumFaceSlot;
 import mcmultipart.api.slot.IPartSlot;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -30,11 +32,10 @@ import net.minecraft.world.WorldServer;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * @author MoreThanHidden
  */
-
-
 public class BlockBlulectricCable extends BlockContainerBase implements IMultipart {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
@@ -121,7 +122,7 @@ public class BlockBlulectricCable extends BlockContainerBase implements IMultipa
         return avoxelshape;
     }
 
-    public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(IBlockState state, IBlockAccess worldIn, BlockPos pos, ISelectionContext context) {
         return AABBUtils.rotate(this.shapes[this.getShapeIndex(state)], state.getValue(FACING));
     }
 
@@ -307,11 +308,25 @@ public class BlockBlulectricCable extends BlockContainerBase implements IMultipa
 
     @Override
     public IPartSlot getSlotForPlacement(World world, BlockPos blockPos, IBlockState iBlockState, EnumFacing enumFacing, float v, float v1, float v2, EntityLivingBase entityLivingBase) {
-        return null;
+        return EnumFaceSlot.fromFace(enumFacing);
     }
 
     @Override
-    public IPartSlot getSlotFromWorld(IBlockAccess iBlockAccess, BlockPos blockPos, IBlockState iBlockState) {
-        return null;
+    public IPartSlot getSlotFromWorld(IBlockAccess iBlockAccess, BlockPos blockPos, IBlockState state) {
+        switch (state.getValue(FACING)) {
+            case UP:
+                return EnumFaceSlot.fromFace(EnumFacing.UP);
+            case DOWN:
+                return EnumFaceSlot.fromFace(EnumFacing.DOWN);
+            case NORTH:
+                return EnumFaceSlot.fromFace(EnumFacing.NORTH);
+            case SOUTH:
+                return EnumFaceSlot.fromFace(EnumFacing.SOUTH);
+            case EAST:
+                return EnumFaceSlot.fromFace(EnumFacing.EAST);
+            case WEST:
+                return EnumFaceSlot.fromFace(EnumFacing.WEST);
+        }
+        return EnumFaceSlot.fromFace(EnumFacing.DOWN);
     }
 }
