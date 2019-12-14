@@ -68,8 +68,8 @@ public class BPOredictNames {
     public static final String BUNDLED_TILE = "waferBundled";
 
     // Other
-    public static final String MARBLE = "marble";
-    public static final String BASALT = "basalt";
+    public static final String MARBLE = "stoneMarble";
+    public static final String BASALT = "stoneBasalt";
 
     // Wires
     public static final String WIRE_INSULATED = "wireInsulated";
