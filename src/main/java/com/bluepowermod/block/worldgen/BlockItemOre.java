@@ -18,15 +18,11 @@
 package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.block.BlockBase;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IWorldReader;
 
 import java.util.Random;
 
@@ -41,9 +37,8 @@ public class BlockItemOre extends BlockBase {
     }
 
     @Override
-    public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
-        return MathHelper.nextInt(rand, 3, 7);
+    public int getExpDrop(BlockState state, net.minecraft.world.IWorldReader world, BlockPos pos, int fortune, int silktouch) {
+        return silktouch == 0 ? 1 + MathHelper.nextInt(rand, 3, 7) : 0;
     }
-
 
 }
