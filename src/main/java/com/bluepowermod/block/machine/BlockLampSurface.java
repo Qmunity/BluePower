@@ -12,7 +12,6 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -54,12 +53,6 @@ public class BlockLampSurface extends BlockLamp implements IWaterLoggable {
     public void initModel() {
 
     }
-
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {

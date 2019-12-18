@@ -11,10 +11,12 @@ package com.bluepowermod.client.render;
 import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMicroblock;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -28,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
+import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -35,8 +38,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector4f;
 import java.util.*;
 
 /**
@@ -113,29 +114,34 @@ public class BPMicroblockModel implements IBakedModel {
         return outquads;
     }
 
+
     @Override
-    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType type) {
-        return PerspectiveMapWrapper.handlePerspective(this, ForgeBlockStateV1.Transforms.get("forge:default-block").get(), type);
+    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType type, MatrixStack mat) {
+        return PerspectiveMapWrapper.handlePerspective(this, SimpleModelTransform.IDENTITY, type, mat);
     }
 
     private static BakedQuad transform(BakedQuad sizeQuad, TextureAtlasSprite sprite, Direction dir) {
-        UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(DefaultVertexFormats.ITEM);
+        UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(DefaultVertexFormats.field_227849_i_);
         final IVertexConsumer consumer = new VertexTransformer(builder) {
             @Override
             public void put(int element, float... data) {
-                VertexFormatElement formatElement = DefaultVertexFormats.ITEM.getElement(element);
-                if (formatElement.getUsage() == VertexFormatElement.Usage.UV) {
-                    Vector4f vec = new Vector4f(data);
-                    float u = sizeQuad.getSprite().getUnInterpolatedU(vec.x);
-                    float v = sizeQuad.getSprite().getUnInterpolatedV(vec.y);
+                //TODO: Fix this
+                if(element < DefaultVertexFormats.field_227849_i_.func_227894_c_().size()) {
+                    VertexFormatElement formatElement = DefaultVertexFormats.field_227849_i_.func_227894_c_().get(element);
+                    if (formatElement.getUsage() == VertexFormatElement.Usage.UV && data.length > 1) {
+                        float u = (data[0] / sizeQuad.getSprite().getMaxU()) * 16;
+                        float v = (data[1] / sizeQuad.getSprite().getMaxV()) * 16;
 
-                    builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v), 0, 1);
-                } else {
+                        builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v), 0, 1);
+                    } else {
+                        parent.put(element, data);
+                    }
+                }else{
                     parent.put(element, data);
                 }
             }
         };
-        sizeQuad.pipe(consumer);
+        LightUtil.putBakedQuad(consumer, sizeQuad);
         return builder.build();
     }
 
@@ -156,7 +162,7 @@ public class BPMicroblockModel implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return Minecraft.getInstance().getTextureMap().getAtlasSprite("minecraft:block/stone");
+        return Minecraft.getInstance().getModelManager().getMissingModel().getParticleTexture();
     }
 
     @Override

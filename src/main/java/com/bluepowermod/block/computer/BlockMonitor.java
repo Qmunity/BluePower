@@ -15,7 +15,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
@@ -28,7 +28,7 @@ public class BlockMonitor extends BlockContainerBase {
     }
 
     @Override
-    public void tick(BlockState state, World world, BlockPos pos, Random rand) {
+    public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TileMonitor) {
             // ((TileCPU)tileEntity).updateEntity();

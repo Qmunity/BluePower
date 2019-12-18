@@ -16,9 +16,7 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.IModelData;
 
 import javax.annotation.Nonnull;
@@ -67,7 +65,7 @@ public class BPMultipartModel implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return Minecraft.getInstance().getTextureMap().getAtlasSprite("minecraft:block/stone");
+        return Minecraft.getInstance().getModelManager().getMissingModel().getParticleTexture();
     }
 
     @Override

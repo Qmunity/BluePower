@@ -51,7 +51,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
         Block block = context.getWorld().getBlockState(context.getPos()).getBlock();
-            if (context.getPlayer().isSneaking()){
+            if (context.getPlayer().isCrouching()){
                 block.rotate(context.getWorld().getBlockState(context.getPos()), context.getWorld(), context.getPos(), Rotation.CLOCKWISE_180);
                 damage(context.getPlayer().getHeldItem(context.getHand()), 1, context.getPlayer(), false);
                 return ActionResultType.SUCCESS;

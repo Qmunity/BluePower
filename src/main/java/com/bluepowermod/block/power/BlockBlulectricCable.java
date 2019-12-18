@@ -29,7 +29,6 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -70,10 +69,6 @@ public class BlockBlulectricCable extends BlockContainerBase implements IBPPartB
                 .with(JOIN_LEFT, false).with(JOIN_RIGHT, false)
                 .with(WATERLOGGED, false));
         setRegistryName(Refs.MODID + ":" + Refs.BLULECTRICCABLE_NAME);
-    }
-
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
     }
 
     @Override

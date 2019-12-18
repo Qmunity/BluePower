@@ -2,20 +2,14 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.Block;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -30,11 +24,9 @@ public class BlockRubberLeaves extends LeavesBlock {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public BlockRenderLayer getRenderLayer() {
-        return Blocks.OAK_LEAVES.getRenderLayer();
+    public BlockRenderType getRenderType(BlockState state) {
+        return Blocks.OAK_LEAVES.getRenderType(state);
     }
-
 
     @Nonnull
     @Override

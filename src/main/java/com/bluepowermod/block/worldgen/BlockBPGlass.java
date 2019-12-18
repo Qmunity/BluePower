@@ -28,7 +28,6 @@ import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.projectile.WitherSkullEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -36,8 +35,6 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -61,12 +58,6 @@ public class BlockBPGlass extends StainedGlassBlock {
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         witherproof = false;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override

@@ -233,7 +233,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
 
     @Override
     public boolean isUsableByPlayer(PlayerEntity player) {
-        return pos.withinDistance(new Vec3i(player.posX, player.posY, player.posZ), 64.0D);
+        return pos.withinDistance(new Vec3i(player.serverPosX, player.serverPosY, player.serverPosZ), 64.0D);
     }
 
     @Override

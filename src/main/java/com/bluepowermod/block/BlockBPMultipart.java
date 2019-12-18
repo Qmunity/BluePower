@@ -17,7 +17,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -42,7 +42,7 @@ public class BlockBPMultipart extends ContainerBlock {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType func_225533_a_(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         Block block = Block.getBlockFromItem(player.getHeldItem(handIn).getItem());
         if(block != Blocks.AIR) {
             TileEntity te = worldIn.getTileEntity(pos);
@@ -50,11 +50,11 @@ public class BlockBPMultipart extends ContainerBlock {
                 BlockState partState = block.getStateForPlacement(new BlockItemUseContext(new ItemUseContext(player, handIn, hit)));
                 if (partState != null) {
                     ((TileBPMultipart)te).addState(partState);
-                    return true;
+                    return ActionResultType.SUCCESS;
                 }
             }
         }
-        return false;
+        return ActionResultType.FAIL;
     }
 
     @Override
@@ -75,11 +75,6 @@ public class BlockBPMultipart extends ContainerBlock {
         if(te instanceof TileBPMultipart) {
             ((TileBPMultipart) te).getStates().forEach(s -> s.neighborChanged(world, pos, blockIn, fromPos, bool));
         }
-    }
-
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
     }
 
     @Override

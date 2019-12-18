@@ -11,24 +11,19 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.client.render.ICustomModelBlock;
-import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.RedstoneTorchBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.ILightReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -75,7 +70,7 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
     }
 
     @Override
-    public int getLightValue(BlockState state, IEnviromentBlockReader w, BlockPos pos) {
+    public int getLightValue(BlockState state, ILightReader world, BlockPos pos) {
         return state.get(POWER);
     }
 
@@ -105,12 +100,6 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
     @Override
     public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
         return !(world.getBlockState(pos).getBlock() instanceof BlockLampRGB) && super.canConnectRedstone(state, world, pos, side);
-    }
-
-    @Override
-    public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
-        RenderLamp.pass = layer.ordinal();
-        return super.canRenderInLayer(state, layer);
     }
 
     @Override

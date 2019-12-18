@@ -19,6 +19,7 @@ package com.bluepowermod.block.machine;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -35,17 +36,17 @@ public class BlockCircuitDatabase extends BlockProjectTable {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if (super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult)) {
+    public ActionResultType func_225533_a_(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+        if (super.func_225533_a_(blockState, world, pos, player, hand, rayTraceResult) == ActionResultType.SUCCESS) {
             TileCircuitDatabase database = (TileCircuitDatabase) world.getTileEntity(pos);
             database.clientCurrentTab = 0;
             if (!world.isRemote) {
                 //BPNetworkHandler.INSTANCE.sendTo(new MessageSendClientServerTemplates(new ItemStackDatabase().loadItemStacks()),
                         //(ServerPlayerEntity) player);
             }
-            return true;
+            return ActionResultType.SUCCESS;
         } else {
-            return false;
+            return ActionResultType.FAIL;
         }
     }
 

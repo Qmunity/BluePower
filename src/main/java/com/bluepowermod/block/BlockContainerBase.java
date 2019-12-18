@@ -17,32 +17,26 @@
 
 package com.bluepowermod.block;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
-import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.tile.IRotatable;
 import com.bluepowermod.tile.TileBase;
-import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.block.BlockRenderType;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -164,24 +158,24 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if (player.isSneaking()) {
+    public ActionResultType func_225533_a_(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+        if (player.isCrouching()) {
             if (!player.getHeldItem(hand).isEmpty()) {
                 if (player.getHeldItem(hand).getItem() == BPItems.screwdriver) {
-                    return false;
+                    return ActionResultType.FAIL;
                 }
             }
         }
 
-        if (player.isSneaking()) {
-            return false;
+        if (player.isCrouching()) {
+            return ActionResultType.FAIL;
         }
 
         if (!world.isRemote && world.getTileEntity(pos) instanceof INamedContainerProvider) {
             NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider)world.getTileEntity(pos));
-            return true;
+            return ActionResultType.SUCCESS;
         }
-        return false;
+        return ActionResultType.FAIL;
     }
 
     protected boolean canRotateVertical() {

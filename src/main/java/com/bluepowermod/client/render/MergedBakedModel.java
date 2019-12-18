@@ -8,19 +8,15 @@
 
 package com.bluepowermod.client.render;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
-import net.minecraftforge.client.model.ForgeBlockStateV1;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import org.apache.commons.lang3.tuple.Pair;
+import net.minecraftforge.client.model.SimpleModelTransform;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -62,8 +58,8 @@ public class MergedBakedModel implements IBakedModel {
     }
 
     @Override
-    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType type) {
-        return PerspectiveMapWrapper.handlePerspective(this, ForgeBlockStateV1.Transforms.get("forge:default-block").get(), type);
+    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType cameraTransformType, MatrixStack mat) {
+        return PerspectiveMapWrapper.handlePerspective(this, SimpleModelTransform.IDENTITY, cameraTransformType, mat);
     }
 
     @Override

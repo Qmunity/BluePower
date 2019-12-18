@@ -92,10 +92,10 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent.LeftClickBlock event) {
 
-        if (event.getEntityPlayer().isCreative()) {
-            ItemStack heldItem = event.getEntityPlayer().getHeldItem(event.getHand());
+        if (event.getPlayer().isCreative()) {
+            ItemStack heldItem = event.getPlayer().getHeldItem(event.getHand());
             if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemSickle) {
-                heldItem.getItem().onBlockDestroyed(heldItem, event.getWorld(), event.getWorld().getBlockState(event.getPos()), event.getPos(), event.getEntityPlayer());
+                heldItem.getItem().onBlockDestroyed(heldItem, event.getWorld(), event.getWorld().getBlockState(event.getPos()), event.getPos(), event.getPlayer());
             }
         }
     }
@@ -103,7 +103,7 @@ public class BPEventHandler {
     @SubscribeEvent
     public void itemPickUp(EntityItemPickupEvent event) {
 
-        PlayerEntity player = event.getEntityPlayer();
+        PlayerEntity player = event.getPlayer();
         ItemStack pickUp = event.getItem().getItem();
         if (!(player.openContainer instanceof ContainerSeedBag)) {
             for (ItemStack is : player.inventory.mainInventory) {
@@ -281,18 +281,18 @@ public class BPEventHandler {
         if ((block instanceof BlockGateBase || block instanceof IBPPartBlock) && mop.getType() == RayTraceResult.Type.BLOCK) {
             BlockPos position = ((BlockRayTraceResult) mop).getPos().offset(((BlockRayTraceResult) mop).getFace());
             Entity entity = Minecraft.getInstance().getRenderViewEntity();
-            double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) event.getPartialTicks();
-            double d1 = (entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) event.getPartialTicks()) + entity.getEyeHeight();
-            double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) event.getPartialTicks();
+            double d0 = entity.lastTickPosX + (entity.serverPosX - entity.lastTickPosX) * (double) event.getPartialTicks();
+            double d1 = (entity.lastTickPosY + (entity.serverPosY - entity.lastTickPosY) * (double) event.getPartialTicks()) + entity.getEyeHeight();
+            double d2 = entity.lastTickPosZ + (entity.serverPosZ - entity.lastTickPosZ) * (double) event.getPartialTicks();
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder vertexbuffer = tessellator.getBuffer();
-            vertexbuffer.setTranslation(-d0, -d1, -d2);
-            GlStateManager.pushMatrix();
-            GlStateManager.enableAlphaTest();
+            vertexbuffer.func_225582_a_(-d0, -d1, -d2);
+            //TODO: GlStateManager.pushMatrix
+            //TODO: GlStateManager.enableAlphaTest();
             position.add(0.5, 0.1, 0.5);
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-            Vec3d lookVec = event.getInfo().getLookDirection();
+            Vec3d lookVec = event.getInfo().getProjectedView();
             Direction dir = ((BlockRayTraceResult) mop).getFace();
             BlockState state = block.getDefaultState();
             if(block instanceof BlockGateBase ){
@@ -304,10 +304,10 @@ public class BPEventHandler {
                 state = state.with(BlockBPMicroblock.FACING, dir);
             }
             IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
-            blockrendererdispatcher.getBlockModelRenderer().renderModel(Minecraft.getInstance().world, ibakedmodel, state, position, vertexbuffer, false, new Random(), 0);
+            //TODO: blockrendererdispatcher.getBlockModelRenderer().renderModel(Minecraft.getInstance().world, ibakedmodel, state, position, vertexbuffer, false, new Random(), 0);
             tessellator.draw();
-            GlStateManager.popMatrix();
-            vertexbuffer.setTranslation(0, 0, 0);
+            //TODO: GlStateManager.popMatrix();
+            //TODO: vertexbuffer.setTranslation(0, 0, 0);
         }
     }
 

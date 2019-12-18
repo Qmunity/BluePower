@@ -19,7 +19,6 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -28,18 +27,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.projectile.WitherSkullEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponentUtils;
 import net.minecraft.world.*;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;

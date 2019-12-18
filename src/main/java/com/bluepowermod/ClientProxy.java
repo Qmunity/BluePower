@@ -43,7 +43,8 @@ public class ClientProxy extends CommonProxy {
     public void preInitRenderers() {
         MinecraftForge.EVENT_BUS.register(new RenderDebugScreen());
         CompatibilityUtils.registerRenders();
-        OBJLoader.INSTANCE.addDomain(Refs.MODID);
+        //TODO: OBJ Loader maybe...
+        //OBJLoader.INSTANCE.addDomain(Refs.MODID);
 
         FMLJavaModLoadingContext.get().getModEventBus().register(new Renderers());
     }
@@ -62,9 +63,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public boolean isSneakingInGui() {
-
-
-        return Minecraft.getInstance().gameSettings.keyBindSneak.isKeyDown();
+        return Minecraft.getInstance().gameSettings.field_228046_af_.isKeyDown(); // Sneak
     }
 
     public static Screen getOpenedGui() {

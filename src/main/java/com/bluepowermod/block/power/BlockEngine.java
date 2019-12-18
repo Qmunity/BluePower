@@ -28,6 +28,7 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -126,15 +127,15 @@ public class BlockEngine extends BlockContainerBase implements IWaterLoggable {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+    public ActionResultType func_225533_a_(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (!player.inventory.getCurrentItem().isEmpty()) {
             Item item = player.inventory.getCurrentItem().getItem();
             if (item == BPItems.screwdriver) {
-                return true;
+                return ActionResultType.SUCCESS;
             }
         }
 
-        return super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult);
+        return super.func_225533_a_(blockState, world, pos, player, hand, rayTraceResult);
     }
 
     @Override

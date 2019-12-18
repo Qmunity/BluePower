@@ -18,29 +18,16 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerFacingBase;
-import com.bluepowermod.container.ContainerAlloyFurnace;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.ILightReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockAlloyFurnace extends BlockContainerFacingBase  {
@@ -52,7 +39,7 @@ public class BlockAlloyFurnace extends BlockContainerFacingBase  {
     }
 
     @Override
-    public void randomTick(BlockState stateIn, World world, BlockPos pos, Random rnd) {
+    public void func_225534_a_(BlockState stateIn, ServerWorld world, BlockPos pos, Random rnd) {
         if (stateIn.get(ACTIVE)) {
             int l = stateIn.get(FACING).ordinal();
             float f = pos.getX() + 0.5F;
@@ -78,7 +65,7 @@ public class BlockAlloyFurnace extends BlockContainerFacingBase  {
     }
 
     @Override
-    public int getLightValue(BlockState state, IEnviromentBlockReader world, BlockPos pos) {
+    public int getLightValue(BlockState state, ILightReader world, BlockPos pos) {
         return state.get(ACTIVE) ? 13 : 0;
     }
 

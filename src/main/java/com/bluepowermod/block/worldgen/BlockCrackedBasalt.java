@@ -25,16 +25,13 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.FallingBlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 
 import java.util.List;
@@ -50,14 +47,9 @@ public class BlockCrackedBasalt extends BlockStoneOre {
         super(name, Properties.create(Material.ROCK).hardnessAndResistance(25.0F).sound(SoundType.STONE));
     }
 
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
 
     @Override
-    public void tick(BlockState state, World world, BlockPos pos, Random random) {
+    public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         // When the random chance hit, spew lava.
         if (!world.isRemote && (random.nextInt(100) == 0)) {
                 spawnLava(world, pos, random);
@@ -67,12 +59,6 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         worldIn.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(worldIn));
     }
-
-    //TODO: Confirm this can't be silk touched
-    //@Override
-    //protected boolean canSilkHarvest() {
-    //     return false;
-    //}
 
     private void spawnLava(World world, BlockPos pos, Random random) {
         if (DateEventHandler.isEvent(Event.NEW_YEAR)) {

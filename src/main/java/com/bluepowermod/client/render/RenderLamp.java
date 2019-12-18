@@ -8,8 +8,11 @@
 package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.machine.BlockLamp;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -23,8 +26,13 @@ public class RenderLamp extends TileEntityRenderer {
 
     public static int pass;
 
+    public RenderLamp(TileEntityRendererDispatcher p_i226006_1_) {
+        super(p_i226006_1_);
+    }
+
+
     @Override
-    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void func_225616_a_(TileEntity te, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int partialTicks, int destroyStage) {
         if (!(te.getBlockState().getBlock() instanceof BlockLamp)) //|| Loader.isModLoaded("albedo"))
             return;
 
@@ -66,7 +74,7 @@ public class RenderLamp extends TileEntityRenderer {
             }
 
 
-            GL11.glTranslated(x, y, z);
+            //TODO: GL11.glTranslated(x, y, z);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -84,8 +92,7 @@ public class RenderLamp extends TileEntityRenderer {
             // GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
             GL11.glDisable(GL11.GL_BLEND);
 
-            GL11.glTranslated(-x, -y, -z);
+            //TODO: GL11.glTranslated(-x, -y, -z);
         }
     }
-
 }

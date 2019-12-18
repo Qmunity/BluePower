@@ -23,28 +23,20 @@ import com.bluepowermod.reference.Refs;
 import net.minecraft.block.*;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.block.BlockRenderType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.PlantType;
-
 import java.util.List;
 import java.util.Random;
 
@@ -78,7 +70,7 @@ public class BlockCrop extends CropsBlock implements IGrowable {
      * Ticks the block if it's been scheduled
      */
     @Override
-    public void tick(BlockState state, World world, BlockPos pos, Random random) {
+    public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 
         int age = getAge(state);
         if (world.getLight(pos) >= 9) {
@@ -127,10 +119,9 @@ public class BlockCrop extends CropsBlock implements IGrowable {
     /**
      * fertilize
      * @param world
-     * @param random
      */
     @Override
-    public void grow(World world, Random random, BlockPos pos, BlockState state) {
+    public void grow(World world, BlockPos pos, BlockState state) {
         int age = this.getAge(state);
         if (world.isAirBlock(pos.up()) && (age < 7) && !(world.getBlockState(pos.down()).getBlock() instanceof BlockCrop)) {
             age = age + MathHelper.nextInt(world.rand, 2, 5);

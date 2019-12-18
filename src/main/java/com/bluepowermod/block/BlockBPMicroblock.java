@@ -3,14 +3,12 @@ package com.bluepowermod.block;
 import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMicroblock;
-import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -19,7 +17,6 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -50,11 +47,6 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
         this.size = size;
         BPBlocks.blockList.add(this);
-    }
-
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
     }
 
     @Override

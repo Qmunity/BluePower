@@ -15,13 +15,13 @@ apply plugin: 'maven'
 
 project.ext {
     major = "0"
-    minor = "3"
+    minor = "4"
     if (System.getenv("CI_PIPELINE_IID") != null) {
         build = System.getenv("CI_PIPELINE_IID") + "-alpha"
     } else {
         build = "-custom"
     }
-    mcVersion = "1.14.4"
+    mcVersion = "1.15.1"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -54,37 +54,56 @@ repositories {
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20191006-1.14.3'
+    mappings channel: 'snapshot', version: '20191217-1.14.3'
 
     runs {
-        client = {
-            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
-            properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                bluepower {
+                    source sourceSets.main
+                }
+            }
         }
-        server = {
-            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
-            properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
+
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                bluepower {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'bluepower', '--all', '--output', file('src/generated/resources/')
+            mods {
+                bluepower {
+                    source sourceSets.main
+                }
+            }
         }
     }
 
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.39'
+    minecraft 'net.minecraftforge:forge:1.15.1-30.0.7'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
 	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
     compileOnly fg.deobf("mcp.mobius.waila:Hwyla:1.10.6-B67_1.14.4:api")
     compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.13:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.13")
+    //runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.13")
     //compile "team.chisel.ctm:CTM:MC1.12.2-0.3.3.22"
 }
-
-
 
 jar {
     appendix = "${project.ext.mcVersion}"

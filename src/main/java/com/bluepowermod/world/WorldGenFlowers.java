@@ -7,24 +7,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FlowersFeature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
+import net.minecraft.world.gen.blockstateprovider.WeightedBlockStateProvider;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Random;
 
-public class WorldGenFlowers {
+import static net.minecraft.world.biome.DefaultBiomeFeatures.field_226831_z_;
 
-    static final FlowersFeature INDIGO_FLOWER = new FlowersFeature(NoFeatureConfig::deserialize) {
-        @Override
-        public BlockState getRandomFlower(Random random, BlockPos blockPos) {
-            return BPBlocks.indigo_flower.getDefaultState();
-        }
-    };
+public class WorldGenFlowers {
 
     public static void setupFlowers(){
         for(Biome biome : ForgeRegistries.BIOMES) {
@@ -40,7 +34,9 @@ public class WorldGenFlowers {
                 n = 2 * BPConfig.CONFIG.flowerSpawnChance.get();
             else if (biome == Biomes.DARK_FOREST)
                 n = 2 * BPConfig.CONFIG.flowerSpawnChance.get();
-            biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(WorldGenFlowers.INDIGO_FLOWER, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig(n)));
+
+            BlockClusterFeatureConfig featureConfig = (new BlockClusterFeatureConfig.Builder((new WeightedBlockStateProvider()).func_227407_a_(BPBlocks.indigo_flower.getDefaultState(), 2), new SimpleBlockPlacer())).func_227315_a_(64).func_227322_d_();
+            biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.field_227247_y_.func_225566_b_(featureConfig).func_227228_a_(Placement.COUNT_HEIGHTMAP_DOUBLE.func_227446_a_(new FrequencyConfig(n))));
         }
     }
 

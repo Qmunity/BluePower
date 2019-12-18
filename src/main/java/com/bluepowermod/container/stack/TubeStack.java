@@ -199,7 +199,7 @@ public class TubeStack {
                 GL11.glTranslated(0, -0.15, 0);
             }
 
-            customRenderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND);
+            //TODO: customRenderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND);
             GL11.glPopMatrix();
         } else {
             float size = 0.02F;

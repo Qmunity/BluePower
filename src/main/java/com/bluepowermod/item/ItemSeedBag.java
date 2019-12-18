@@ -114,7 +114,7 @@ public class ItemSeedBag extends ItemBase implements INamedContainerProvider {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand handIn) {
-        if (!world.isRemote && player.isSneaking()) {
+        if (!world.isRemote && player.isCrouching()) {
             NetworkHooks.openGui((ServerPlayerEntity) player, this);
         }
         return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(handIn));
@@ -127,7 +127,7 @@ public class ItemSeedBag extends ItemBase implements INamedContainerProvider {
         Hand hand = context.getHand();
         BlockPos pos = context.getPos();
 
-        if (player.isSneaking()) {
+        if (player.isCrouching()) {
             return ActionResultType.PASS;
         }
 

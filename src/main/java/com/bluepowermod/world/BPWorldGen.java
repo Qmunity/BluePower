@@ -19,23 +19,14 @@ package com.bluepowermod.world;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPConfig;
-import net.minecraft.block.Blocks;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.AbstractChunkProvider;
-import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.*;
-import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Random;
 
 
 public class BPWorldGen {
@@ -46,8 +37,8 @@ public class BPWorldGen {
     public static void setupGeneralWorldGen() {
         for (Biome biome : ForgeRegistries.BIOMES) {
             if (!biome.getCategory().equals(Biome.Category.NETHER) && !biome.getCategory().equals(Biome.Category.THEEND)) {
-                biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(VOLCANO, IFeatureConfig.NO_FEATURE_CONFIG, new PlacementVolcano(NoPlacementConfig::deserialize), IPlacementConfig.NO_PLACEMENT_CONFIG));
-                biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, BPBlocks.marble.getDefaultState(), BPConfig.CONFIG.veinSizeMarble.get() / 32), Placement.COUNT_RANGE, new CountRangeConfig(1, 0, 0, 90)));
+                biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, VOLCANO.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(new PlacementVolcano(NoPlacementConfig::deserialize).func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+                biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.func_225566_b_(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, BPBlocks.marble.getDefaultState(), BPConfig.CONFIG.veinSizeMarble.get() / 32)).func_227228_a_(Placement.COUNT_RANGE.func_227446_a_(new CountRangeConfig(1, 0, 0, 90))));
             }
         }
     }
