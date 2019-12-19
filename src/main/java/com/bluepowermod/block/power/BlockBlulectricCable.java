@@ -7,6 +7,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier3.TileBlulectricCable;
 import com.bluepowermod.util.AABBUtils;
+import mcmultipart.api.container.IPartInfo;
 import mcmultipart.api.multipart.IMultipart;
 import mcmultipart.api.slot.EnumCenterSlot;
 import mcmultipart.api.slot.EnumFaceSlot;
@@ -24,6 +25,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -47,6 +49,7 @@ public class BlockBlulectricCable extends BlockContainerBase implements IMultipa
     private static final PropertyBool JOIN_BACK = PropertyBool.create("join_back");
     private static final PropertyBool JOIN_LEFT = PropertyBool.create("join_left");
     private static final PropertyBool JOIN_RIGHT = PropertyBool.create("join_right");
+    protected AxisAlignedBB[] shapes = makeShapes();
 
     public BlockBlulectricCable() {
         super(Material.IRON, TileBlulectricCable.class);
@@ -83,11 +86,16 @@ public class BlockBlulectricCable extends BlockContainerBase implements IMultipa
     }
 
     @Override
-    public boolean isPositionValid(IBlockState state, IWorldReader world, BlockPos pos) {
-        return world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid();
+    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side) {
+        return worldIn.getBlockState(pos).isSideSolid(worldIn, pos, side);
     }
 
-    protected VoxelShape[] makeShapes() {
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return super.isFullCube(state);
+    }
+
+    AxisAlignedBB[] makeShapes() {
 
         float width = 2;
         float gap = 0;
@@ -98,31 +106,33 @@ public class BlockBlulectricCable extends BlockContainerBase implements IMultipa
         float f2 = 8.0F - width;
         float f3 = 8.0F + width;
 
-        VoxelShape voxelshape = Block.makeCuboidShape((double)f, 0.0D, (double)f, (double)f1, (double)height, (double)f1);
-        VoxelShape voxelshape1 = Block.makeCuboidShape((double)f2, (double)gap, 0.0D, (double)f3, (double)height, (double)f3);
-        VoxelShape voxelshape2 = Block.makeCuboidShape((double)f2, (double)gap, (double)f2, (double)f3, (double)height, 16.0D);
-        VoxelShape voxelshape3 = Block.makeCuboidShape(0.0D, (double)gap, (double)f2, (double)f3, (double)height, (double)f3);
-        VoxelShape voxelshape4 = Block.makeCuboidShape((double)f2, (double)gap, (double)f2, 16.0D, (double)height, (double)f3);
-        VoxelShape voxelshape5 = VoxelShapes.or(voxelshape1, voxelshape4);
-        VoxelShape voxelshape6 = VoxelShapes.or(voxelshape2, voxelshape3);
 
-        VoxelShape[] avoxelshape = new VoxelShape[]{
-                VoxelShapes.empty(), voxelshape2, voxelshape3, voxelshape6, voxelshape1,
-                VoxelShapes.or(voxelshape2, voxelshape1), VoxelShapes.or(voxelshape3, voxelshape1),
-                VoxelShapes.or(voxelshape6, voxelshape1), voxelshape4, VoxelShapes.or(voxelshape2, voxelshape4),
-                VoxelShapes.or(voxelshape3, voxelshape4), VoxelShapes.or(voxelshape6, voxelshape4), voxelshape5,
-                VoxelShapes.or(voxelshape2, voxelshape5), VoxelShapes.or(voxelshape3, voxelshape5),
-                VoxelShapes.or(voxelshape6, voxelshape5)
+       AxisAlignedBB voxelshape = new AxisAlignedBB(f, 0.0D, f, f1, height, f1);
+       AxisAlignedBB voxelshape1 = new AxisAlignedBB(f2, gap, 0.0D, f3, height, f3);
+       AxisAlignedBB voxelshape2 = new AxisAlignedBB(f2, gap, f2, f3, height, 16.0D);
+       AxisAlignedBB voxelshape3 = new AxisAlignedBB(0.0D, gap, f2, f3, height, f3);
+       AxisAlignedBB voxelshape4 = new AxisAlignedBB(f2, gap, f2, 16.0D, height, f3);
+       AxisAlignedBB voxelshape5 = AxisAlignedBB.or(voxelshape1, voxelshape4);
+       AxisAlignedBB voxelshape6 = AxisAlignedBB.or(voxelshape2, voxelshape3);
+
+       AxisAlignedBB[] avoxelshape = new AxisAlignedBB[][]{
+                NULL_AABB, voxelshape2, voxelshape3, voxelshape6, voxelshape1,
+                AxisAlignedBB.or(voxelshape2, voxelshape1), AxisAlignedBB.or(voxelshape3, voxelshape1),
+                AxisAlignedBB.or(voxelshape6, voxelshape1), voxelshape4, AxisAlignedBB.or(voxelshape2, voxelshape4),
+                AxisAlignedBB.or(voxelshape3, voxelshape4), AxisAlignedBB.or(voxelshape6, voxelshape4), voxelshape5,
+                AxisAlignedBB.or(voxelshape2, voxelshape5), AxisAlignedBB.or(voxelshape3, voxelshape5),
+                AxisAlignedBB.or(voxelshape6, voxelshape5)
         };
 
         for(int i = 0; i < 16; ++i) {
-            avoxelshape[i] = VoxelShapes.or(voxelshape, avoxelshape[i]);
+            avoxelshape[i] = AxisAlignedBB.or(voxelshape, avoxelshape[i]);
         }
 
         return avoxelshape;
     }
 
-    public VoxelShape getShape(IBlockState state, IBlockAccess worldIn, BlockPos pos, ISelectionContext context) {
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return AABBUtils.rotate(this.shapes[this.getShapeIndex(state)], state.getValue(FACING));
     }
 
@@ -160,7 +170,7 @@ public class BlockBlulectricCable extends BlockContainerBase implements IMultipa
         }
         state = newState;
         //If not placed on a solid block break off
-        if (!world.getBlockState(pos.offset(state.getValue(FACING).getOpposite())).isSolid()) {
+        if (!world.getBlockState(pos).isSideSolid(world, pos, state.getValue(FACING).getOpposite())) {
             if(te instanceof TileBPMultipart){
                 ((TileBPMultipart)te).removeState(state);
                 if(world instanceof WorldServer) {
