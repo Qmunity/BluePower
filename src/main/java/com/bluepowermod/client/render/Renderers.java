@@ -8,30 +8,26 @@
 
 package com.bluepowermod.client.render;
 
+import com.bluepowermod.block.gates.BlockGateBase;
+import com.bluepowermod.block.machine.BlockLampSurface;
+import com.bluepowermod.block.power.BlockBattery;
+import com.bluepowermod.block.worldgen.BlockBPGlass;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.tile.tier1.TileLamp;
-import com.bluepowermod.tile.tier3.TileEngine;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.*;
-import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author MoreThanHidden
@@ -80,6 +76,7 @@ public class Renderers {
         //TODO: ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
         //TODO: ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
 
+
         for (Item item : BPItems.itemList) {
             if (item instanceof IBPColoredItem) {
                 Minecraft.getInstance().getItemColors().register(new BPItemColor(), item);
@@ -90,7 +87,22 @@ public class Renderers {
                 Minecraft.getInstance().getBlockColors().register(new BPBlockColor(), block);
                 Minecraft.getInstance().getItemColors().register(new BPBlockColor(), Item.getItemFromBlock(block));
             }
+            //func_228643_e_ = Cutout
+            //func_228645_f_ = Transparent
+            if(block instanceof BlockLampSurface)
+                RenderTypeLookup.setRenderLayer(block, RenderType.func_228643_e_());
+            if(block instanceof BlockGateBase)
+                RenderTypeLookup.setRenderLayer(block, RenderType.func_228643_e_());
+            if(block instanceof BlockBattery)
+                RenderTypeLookup.setRenderLayer(block, RenderType.func_228643_e_());
+            if(block instanceof BlockBPGlass)
+                RenderTypeLookup.setRenderLayer(block, RenderType.func_228645_f_());
         }
+
+        RenderTypeLookup.setRenderLayer(BPBlocks.indigo_flower, RenderType.func_228643_e_());
+        RenderTypeLookup.setRenderLayer(BPBlocks.flax_crop, RenderType.func_228643_e_());
+        RenderTypeLookup.setRenderLayer(BPBlocks.cracked_basalt_lava, RenderType.func_228643_e_());
+        RenderTypeLookup.setRenderLayer(BPBlocks.rubber_leaves, RenderType.func_228643_e_());
 
     }
 
