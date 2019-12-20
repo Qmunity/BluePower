@@ -97,22 +97,22 @@ public class BlockBlulectricCable extends BlockContainerBase implements IMultipa
 
     AxisAlignedBB[] makeShapes() {
 
-        float width = 2;
+        float width = 0.125F;
         float gap = 0;
-        float height = 2;
+        float height = 0.125F;
 
-        float f = 8.0F - width;
-        float f1 = 8.0F + width;
-        float f2 = 8.0F - width;
-        float f3 = 8.0F + width;
+        float f = 0.5F - width;
+        float f1 = 0.5F + width;
+        float f2 = 0.5F - width;
+        float f3 = 0.5F + width;
 
 
        AxisAlignedBB voxelshape = new AxisAlignedBB(f, 0.0D, f, f1, height, f1);
        AxisAlignedBB voxelshape1 = new AxisAlignedBB(f2, gap, 0.0D, f3, height, f3);
-       AxisAlignedBB voxelshape2 = new AxisAlignedBB(f2, gap, f2, f3, height, 16.0D);
+       AxisAlignedBB voxelshape2 = new AxisAlignedBB(f2, gap, f2, f3, height, 1.0D);
        AxisAlignedBB voxelshape3 = new AxisAlignedBB(0.0D, gap, f2, f3, height, f3);
-       AxisAlignedBB voxelshape4 = new AxisAlignedBB(f2, gap, f2, 16.0D, height, f3);
-       AxisAlignedBB voxelshape5 = AxisAlignedBB.or(voxelshape1, voxelshape4);
+       AxisAlignedBB voxelshape4 = new AxisAlignedBB(f2, gap, f2, 1.0D, height, f3);
+       AxisAlignedBB voxelshape5 = AxisAlignedBB.or(voxelshape1, voxelshape4;
        AxisAlignedBB voxelshape6 = AxisAlignedBB.or(voxelshape2, voxelshape3);
 
        AxisAlignedBB[] avoxelshape = new AxisAlignedBB[][]{
