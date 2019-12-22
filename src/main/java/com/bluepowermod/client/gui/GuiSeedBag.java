@@ -20,6 +20,7 @@
 package com.bluepowermod.client.gui;
 
 import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
@@ -33,6 +34,11 @@ public class GuiSeedBag extends GuiContainerBaseBP<ContainerSeedBag> implements 
 
     public GuiSeedBag(ContainerSeedBag container, PlayerInventory playerInventory, ITextComponent title){
         super(container, playerInventory, title, resLoc);
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        this.font.drawString(I18n.format("item.bluepower." + title.getFormattedText()), 8.0F, 6.0F, COLOR_TEXT);
     }
 
 }
