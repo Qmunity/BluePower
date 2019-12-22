@@ -8,6 +8,7 @@
 
 package com.bluepowermod.client.render;
 
+import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.machine.BlockLampSurface;
 import com.bluepowermod.block.power.BlockBattery;
@@ -90,14 +91,10 @@ public class Renderers {
                 Minecraft.getInstance().getItemColors().register(new BPBlockColor(), Item.getItemFromBlock(block));
             }
             //func_228643_e_ = Cutout
+            if(block instanceof BlockLampSurface || block instanceof BlockGateBase || block instanceof BlockBattery)
+                RenderTypeLookup.setRenderLayer(block, RenderType.func_228643_e_());
             //func_228645_f_ = Transparent
-            if(block instanceof BlockLampSurface)
-                RenderTypeLookup.setRenderLayer(block, RenderType.func_228643_e_());
-            if(block instanceof BlockGateBase)
-                RenderTypeLookup.setRenderLayer(block, RenderType.func_228643_e_());
-            if(block instanceof BlockBattery)
-                RenderTypeLookup.setRenderLayer(block, RenderType.func_228643_e_());
-            if(block instanceof BlockBPGlass)
+            if(block instanceof BlockBPGlass || block instanceof BlockBPMicroblock)
                 RenderTypeLookup.setRenderLayer(block, RenderType.func_228645_f_());
         }
 

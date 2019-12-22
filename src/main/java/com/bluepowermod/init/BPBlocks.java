@@ -260,7 +260,8 @@ public class BPBlocks {
         blulectric_cable = new BlockBlulectricCable();
         blulectric_furnace = new BlockBlulectricFurnace();
         blulectric_alloyfurnace = new BlockBlulectricAlloyFurnace();
-        engine = new BlockEngine();
+        //TODO: Fix Engine Renderer
+        engine = new BlockEngine().setWIP(true);
         kinetic_generator = new BlockKineticGenerator().setWIP(true);
         //windmill = new BlockWindmill();
         solarpanel = new BlockSolarPanel();
