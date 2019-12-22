@@ -14,6 +14,7 @@ import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.block.worldgen.BlockBPGlass;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.tile.BPTileEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -24,6 +25,7 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -73,8 +75,8 @@ public class Renderers {
 
     public static void init() {
 
-        //TODO: ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
-        //TODO: ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
+        ClientRegistry.bindTileEntityRenderer(BPTileEntityType.LAMP, new RenderLamp());
+        ClientRegistry.bindTileEntityRenderer(BPTileEntityType.ENGINE, new RenderEngine());
 
 
         for (Item item : BPItems.itemList) {
@@ -103,6 +105,7 @@ public class Renderers {
         RenderTypeLookup.setRenderLayer(BPBlocks.flax_crop, RenderType.func_228643_e_());
         RenderTypeLookup.setRenderLayer(BPBlocks.cracked_basalt_lava, RenderType.func_228643_e_());
         RenderTypeLookup.setRenderLayer(BPBlocks.rubber_leaves, RenderType.func_228643_e_());
+        RenderTypeLookup.setRenderLayer(BPBlocks.rubber_sapling, RenderType.func_228643_e_());
 
     }
 

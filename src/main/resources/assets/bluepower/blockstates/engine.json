@@ -1,12 +1,18 @@
 ﻿{
   "multipart":  [
-    {"when":{"active":"false","facing":"north","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj","x": -90}},
-    {"when":{"active":"false","facing":"south","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj","x": 90}},
-    {"when":{"active":"false","facing":"east","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj","x": 90,"y": 90}},
-    {"when":{"active":"false","facing":"west","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj","x": -90,"y": 90}},
-    {"when":{"active":"false","facing":"up","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj","x": 180}},
-    {"when":{"active":"false","facing":"down","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine/engine_base.obj"}},
-    {"when":{"gear":"true"},"apply":{"model":"bluepower:block/engine/engine_gear.obj"}},
-    {"when":{"glider":"true"},"apply":{"model":"bluepower:block/engine/engine_glider.obj"}}
+    {"when":{"active":"false","facing":"north","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine","x": -90}},
+    {"when":{"active":"false","facing":"south","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine","x": 90}},
+    {"when":{"active":"false","facing":"east","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine","x": 90,"y": 90}},
+    {"when":{"active":"false","facing":"west","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine","x": -90,"y": 90}},
+    {"when":{"active":"false","facing":"up","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine","x": 180}},
+    {"when":{"active":"false","facing":"down","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine"}},
+    {"when":{"active":"true","facing":"north","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine_on","x": -90}},
+    {"when":{"active":"true","facing":"south","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine_on","x": 90}},
+    {"when":{"active":"true","facing":"east","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine_on","x": 90,"y": 90}},
+    {"when":{"active":"true","facing":"west","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine_on","x": -90,"y": 90}},
+    {"when":{"active":"true","facing":"up","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine_on","x": 180}},
+    {"when":{"active":"true","facing":"down","gear":"false","glider":"false"},"apply":{"model":"bluepower:block/engine_on"}},
+    {"when":{"gear":"true"},"apply":{"model":"bluepower:block/engine_gear"}},
+    {"when":{"glider":"true"},"apply":{"model":"bluepower:block/engine_glider"}}
   ]
 }

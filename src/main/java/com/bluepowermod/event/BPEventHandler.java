@@ -12,20 +12,25 @@ import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.power.BlockBlulectricCable;
+import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
 import com.bluepowermod.client.render.BPMultipartModel;
+import com.bluepowermod.client.render.RenderEngine;
+import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Block;
 import net.minecraft.block.GrassBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -49,6 +54,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -286,11 +292,11 @@ public class BPEventHandler {
             double d2 = entity.lastTickPosZ + (entity.serverPosZ - entity.lastTickPosZ) * (double) event.getPartialTicks();
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder vertexbuffer = tessellator.getBuffer();
-            vertexbuffer.func_225582_a_(-d0, -d1, -d2);
-            //TODO: GlStateManager.pushMatrix
-            //TODO: GlStateManager.enableAlphaTest();
+            RenderSystem.pushMatrix();
+            RenderSystem.enableAlphaTest();
             position.add(0.5, 0.1, 0.5);
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+            vertexbuffer.func_225582_a_(-d0, -d1, -d2);
             BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
             Vec3d lookVec = event.getInfo().getProjectedView();
             Direction dir = ((BlockRayTraceResult) mop).getFace();
@@ -306,8 +312,7 @@ public class BPEventHandler {
             IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
             //TODO: blockrendererdispatcher.getBlockModelRenderer().renderModel(Minecraft.getInstance().world, ibakedmodel, state, position, vertexbuffer, false, new Random(), 0);
             tessellator.draw();
-            //TODO: GlStateManager.popMatrix();
-            //TODO: vertexbuffer.setTranslation(0, 0, 0);
+            RenderSystem.popMatrix();
         }
     }
 

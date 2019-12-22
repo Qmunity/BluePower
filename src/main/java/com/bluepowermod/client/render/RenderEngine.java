@@ -10,22 +10,19 @@ package com.bluepowermod.client.render;
 import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.init.BPBlocks;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.Direction;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.tile.tier3.TileEngine;
@@ -43,73 +40,24 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
 
     float rotateAmount  = 0F;
 
-    public RenderEngine(TileEntityRendererDispatcher rendererDispatcher) {
-        super(rendererDispatcher);
+    public RenderEngine() {
+        super(TileEntityRendererDispatcher.instance);
     }
 
 
     @Override
     public void func_225616_a_(TileEngine engine, float f, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
-        //GlStateManager.pushTextureAttributes();
-        matrixStack.func_227860_a_(); //GlStateManager.pushMatrix();
-
-        // Translate to the location of our tile entity
-        //GlStateManager.disableRescaleNormal();
-
-        // Render the rotating cog
-        matrixStack.func_227860_a_(); //GlStateManager.pushMatrix();
-
-        RenderHelper.disableStandardItemLighting();
-
-        //this.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-        if (Minecraft.isAmbientOcclusionEnabled()) {
-            //GlStateManager.shadeModel(GL11.GL_SMOOTH);
-        } else {
-            //GlStateManager.shadeModel(GL11.GL_FLAT);
-        }
 
         World world = engine.getWorld();
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        BlockState state = BPBlocks.engine.getDefaultState();
         BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
         BlockPos pos = engine.getPos();
 
-        matrixStack.func_227861_a_(0, 0, 0); //GlStateManager.translated(x, y, z);
-
         TileEngine tile = (TileEngine) engine.getWorld().getTileEntity(engine.getPos());
-        Direction direction = tile.getOrientation();
+        BlockState state = BPBlocks.engine.getDefaultState().with(BlockEngine.FACING, tile.getOrientation());
 
-        if (direction == Direction.UP) {
-            GL11.glTranslated(0,1,1);
-            GL11.glRotatef(180, 1, 0, 0);
-        }
-        if (direction == Direction.DOWN) {
-            GL11.glRotatef(0, 0, 0, 0);
-        }
-        if (direction == Direction.EAST) {
-            GL11.glTranslated(1,0,0);
-            GL11.glRotatef(90, 0, 0, 1);
-        }
-        if (direction == Direction.WEST) {
-            GL11.glTranslated(0,1,0);
-            GL11.glRotatef(90, 0, 0, -1);
-        }
-        if (direction == Direction.NORTH) {
-            GL11.glTranslated(0,1,0);
-            GL11.glRotatef(90, 1, 0, 0);
-        }
-        if (direction == Direction.SOUTH) {
-            GL11.glTranslated(0,0,1);
-            GL11.glRotatef(90, -1, 0, 0);
-        }
 
-        //tessellator.getBuffer().setTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
+        matrixStack.func_227860_a_();
 
-        //Render Glider
-        matrixStack.func_227860_a_(); //GlStateManager.pushMatrix();
-        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         float f2 = 0;
         if(tile.isActive) {
             f += tile.pumpTick;
@@ -120,33 +68,19 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
         }
         GL11.glTranslatef(0, f2, 0);
         IBakedModel glider = dispatcher.getModelForState(state.with(BlockEngine.GLIDER, true));
-        //TODO: dispatcher.getBlockModelRenderer().renderModel(world, glider, state, pos, bufferBuilder, false, new Random(), 0);
+        //Render the glider
+        dispatcher.getBlockModelRenderer().renderModel(world, glider, state.with(BlockEngine.GLIDER, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.func_228643_e_()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
-        tessellator.draw();
-        matrixStack.func_227865_b_(); //GlStateManager.popMatrix();
+        matrixStack.func_227865_b_();
+        matrixStack.func_227860_a_();
 
-        //Render Gear
-        matrixStack.func_227860_a_(); //GlStateManager.pushMatrix();
-        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-
-        //TODO: GlStateManager.translated(0.5, 0, 0.5);
         long angle = tile.isActive ? (System.currentTimeMillis() / 10) % 360 : 0;
-        //TODO: GlStateManager.rotated(angle, 0, 1, 0);
-        //TODO: GlStateManager.translated(-0.5, 0, -0.5);
+        RenderSystem.rotatef(angle, 0, 1, 0);
         IBakedModel gear = dispatcher.getModelForState(state.with(BlockEngine.GEAR, true));
-        //TODO: dispatcher.getBlockModelRenderer().renderModel(world, gear, state, pos, bufferBuilder, false, new Random(), 0);
+        // Render the rotating cog
+        dispatcher.getBlockModelRenderer().renderModel(world, gear, state.with(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.func_228643_e_()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
-        tessellator.draw();
-        matrixStack.func_227865_b_(); //GlStateManager.popMatrix();
-
-
-        //TODO: RenderHelper.enableStandardItemLighting();
-        //TODO: tessellator.getBuffer().setTranslation(0, 0, 0);
-
-        matrixStack.func_227865_b_(); //GlStateManager.popMatrix();
-
-        matrixStack.func_227865_b_(); //GlStateManager.popMatrix();
-        //TODO: GlStateManager.popAttributes();
+        matrixStack.func_227865_b_();
     }
 
 }

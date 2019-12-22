@@ -1,0 +1,8 @@
+﻿{
+   "parent": "block/cube_all",
+   "loader": "forge:obj",
+   "model": "bluepower:models/block/engine/engine_on.obj",
+   "textures": {
+      "all": "bluepower:blocks/models/engineon"
+   }
+}

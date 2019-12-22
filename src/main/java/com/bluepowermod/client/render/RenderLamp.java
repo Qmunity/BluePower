@@ -8,35 +8,32 @@
 package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.machine.BlockLamp;
+import com.bluepowermod.tile.tier1.TileLamp;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 
 @OnlyIn(Dist.CLIENT)
-public class RenderLamp extends TileEntityRenderer {
+public class RenderLamp extends TileEntityRenderer<TileLamp> {
 
-    public static int pass;
 
-    public RenderLamp(TileEntityRendererDispatcher p_i226006_1_) {
-        super(p_i226006_1_);
+    public RenderLamp() {
+        super(TileEntityRendererDispatcher.instance);
     }
 
-
     @Override
-    public void func_225616_a_(TileEntity te, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int partialTicks, int destroyStage) {
+    public void func_225616_a_(TileLamp te, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int partialTicks, int destroyStage) {
         if (!(te.getBlockState().getBlock() instanceof BlockLamp)) //|| Loader.isModLoaded("albedo"))
             return;
 
-        if (pass != 0) {
             BlockState stateLamp = te.getBlockState();
             BlockLamp bLamp = (BlockLamp) stateLamp.getBlock();
             if(te.getWorld() == null) {return;}
@@ -73,26 +70,10 @@ public class RenderLamp extends TileEntityRenderer {
                 }
             }
 
-
-            //TODO: GL11.glTranslated(x, y, z);
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glDisable(GL11.GL_LIGHTING);
-            // GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glBegin(GL11.GL_QUADS);
+            matrixStack.func_227860_a_();
             double powerDivision = power / 18D;
-            com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, r / 256D, g / 256D, b / 256D, powerDivision * 0.625D,
+            com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, iRenderTypeBuffer.getBuffer(RenderType.func_228657_l_()), matrixStack, r, g, b, (int)(powerDivision * 200), 200,
                     renderFaces);
-            GL11.glEnd();
-            GL11.glEnable(GL11.GL_CULL_FACE);
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            // GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-            GL11.glDisable(GL11.GL_BLEND);
-
-            //TODO: GL11.glTranslated(-x, -y, -z);
-        }
+            matrixStack.func_227865_b_();
     }
 }

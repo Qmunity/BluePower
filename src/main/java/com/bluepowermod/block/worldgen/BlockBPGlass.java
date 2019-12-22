@@ -47,14 +47,14 @@ public class BlockBPGlass extends StainedGlassBlock {
     private final boolean witherproof;
 
     public BlockBPGlass(String name, boolean witherproof) {
-        super(DyeColor.PURPLE, Properties.create(Material.GLASS).hardnessAndResistance(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.GLASS));
+        super(DyeColor.PURPLE, Properties.create(Material.GLASS).hardnessAndResistance(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.GLASS).func_226896_b_());
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         this.witherproof = witherproof;
     }
 
     public BlockBPGlass(String name) {
-        super(DyeColor.LIGHT_GRAY, Properties.create(Material.ROCK).hardnessAndResistance(5.0F).sound(SoundType.STONE));
+        super(DyeColor.LIGHT_GRAY, Properties.create(Material.ROCK).hardnessAndResistance(5.0F).sound(SoundType.STONE).func_226896_b_());
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         witherproof = false;

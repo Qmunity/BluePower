@@ -1,7 +1,7 @@
 ﻿{
    "parent": "block/cube_all",
    "loader": "forge:obj",
-   "model": "bluepower:models/block/engine/engine_base.obj",
+   "model": "bluepower:models/block/engine/engine_glider.obj",
    "textures": {
       "all": "bluepower:blocks/engine"
    }
