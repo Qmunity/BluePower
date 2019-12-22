@@ -165,6 +165,9 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
 
     @Override
     public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+        if (world.isRemote){
+            return true;
+        }
         if (player.isSneaking()) {
             if (!player.getHeldItem(hand).isEmpty()) {
                 if (player.getHeldItem(hand).getItem() == BPItems.screwdriver) {

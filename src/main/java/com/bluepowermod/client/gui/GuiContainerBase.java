@@ -98,11 +98,7 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-
-        font.drawString(I18n.format("container.inventory"), 8, ySize - 94 + 2, COLOR_TEXT);
-        if (inventory != null) {
-            drawHorizontalAlignedString(7, 5, xSize - 14, I18n.format(container.getType() + ".name"), false);
-        }
+        this.font.drawString(I18n.format("block.bluepower." + title.getFormattedText()), (float)(this.xSize / 2 - this.font.getStringWidth(I18n.format("block.bluepower." + title.getFormattedText())) / 2), 6.0F, COLOR_TEXT);
     }
 
     @Override
@@ -124,6 +120,7 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
 
     @Override
     public void render(int x, int y, float partialTick) {
+        this.renderBackground();
         super.render(x, y, partialTick);
         this.renderHoveredToolTip(x, y);
 
