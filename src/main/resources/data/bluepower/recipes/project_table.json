@@ -19,7 +19,7 @@
       "tag": "minecraft:planks"
     },
     "I": {
-      "item": "minecraft:chest"
+      "tag": "forge:chests/wooden"
     }
   }
 }

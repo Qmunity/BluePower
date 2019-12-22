@@ -159,6 +159,9 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
 
     @Override
     public ActionResultType func_225533_a_(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+        if (world.isRemote) {
+            return ActionResultType.SUCCESS;
+        }
         if (player.isCrouching()) {
             if (!player.getHeldItem(hand).isEmpty()) {
                 if (player.getHeldItem(hand).getItem() == BPItems.screwdriver) {
@@ -166,11 +169,9 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
                 }
             }
         }
-
         if (player.isCrouching()) {
             return ActionResultType.FAIL;
         }
-
         if (!world.isRemote && world.getTileEntity(pos) instanceof INamedContainerProvider) {
             NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider)world.getTileEntity(pos));
             return ActionResultType.SUCCESS;

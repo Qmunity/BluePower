@@ -16,7 +16,7 @@
       "item": "minecraft:redstone"
     },
     "C": {
-      "item": "minecraft:chest"
+      "tag": "forge:chests/wooden"
     },
     "P": {
       "item": "minecraft:piston"
