@@ -12,17 +12,12 @@ import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.power.BlockBlulectricCable;
-import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
-import com.bluepowermod.client.render.BPMultipartModel;
-import com.bluepowermod.client.render.RenderEngine;
-import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Block;
 import net.minecraft.block.GrassBlock;
@@ -30,7 +25,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -53,8 +47,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -281,7 +274,7 @@ public class BPEventHandler {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void blockHighlightEvent(DrawBlockHighlightEvent event) {
+    public void blockHighlightEvent(DrawHighlightEvent event) {
         RayTraceResult mop = event.getTarget();
         Block block = Block.getBlockFromItem(Minecraft.getInstance().player.getHeldItem(Hand.MAIN_HAND).getItem());
         if ((block instanceof BlockGateBase || block instanceof IBPPartBlock) && mop.getType() == RayTraceResult.Type.BLOCK) {
