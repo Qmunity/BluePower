@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * @author MoreThanHidden
  */
-public class BlockBlulectricCable extends BlockContainerBase implements IBPPartBlock, IWaterLoggable {
+public class BlockBlulectricCable extends BlockContainerBase implements IWaterLoggable {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     private static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");

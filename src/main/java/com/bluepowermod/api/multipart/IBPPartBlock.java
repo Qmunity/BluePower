@@ -9,6 +9,7 @@ package com.bluepowermod.api.multipart;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -29,5 +30,11 @@ public interface IBPPartBlock {
     default Boolean blockCapability (BlockState state, Capability capability, @Nullable Direction side){
         return false;
     }
+
+    /**
+     * Return the occluding area given the BlockState
+     * @param state
+     */
+    VoxelShape getOcclusionShape (BlockState state);
 
 }

@@ -16,9 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.TransformationMatrix;
-import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -28,15 +26,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.World;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import net.minecraftforge.client.model.SimpleModelTransform;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
+import net.minecraftforge.common.model.TransformationHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -123,11 +120,12 @@ public class BPMicroblockModel implements IBakedModel {
         final IVertexConsumer consumer = new VertexTransformer(builder) {
             @Override
             public void put(int element, float... data) {
-                if ((this.getVertexFormat().func_227894_c_().get(element)).getUsage() == VertexFormatElement.Usage.UV) {
-                    Vector4f vec = new Vector4f(data[0], data[1], data[2], data[3]);
-                    float u = (vec.getX() - sizeQuad.getSprite().getMinU()) / (sizeQuad.getSprite().getMaxU() - sizeQuad.getSprite().getMinU()) * 16;
-                    float v = (vec.getY() - sizeQuad.getSprite().getMinV()) / (sizeQuad.getSprite().getMaxV() - sizeQuad.getSprite().getMinV()) * 16;
-                    builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v), 0, 1);
+                VertexFormatElement e = this.getVertexFormat().func_227894_c_().get(element);
+                if (e.getUsage() == VertexFormatElement.Usage.UV && e.getIndex() == 0) {
+                    Vec2f vec = new Vec2f(data[0], data[1]);
+                    float u = (vec.x - sizeQuad.getSprite().getMinU()) / (sizeQuad.getSprite().getMaxU() - sizeQuad.getSprite().getMinU()) * 16;
+                    float v = (vec.y - sizeQuad.getSprite().getMinV()) / (sizeQuad.getSprite().getMaxV() - sizeQuad.getSprite().getMinV()) * 16;
+                    builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v));
                 } else {
                     parent.put(element, data);
                 }
@@ -143,9 +141,13 @@ public class BPMicroblockModel implements IBakedModel {
     }
 
     @Override
-    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType type, MatrixStack mat) {
+    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType type, MatrixStack stack) {
         IBakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
-        return ForgeHooksClient.handlePerspective(sizeModel, type, mat);
+        TransformationMatrix tr = TransformationHelper.toTransformation(sizeModel.getItemCameraTransforms().getTransform(type));
+        if(!tr.isIdentity()) {
+            tr.push(stack);
+        }
+        return this;
     }
 
     @Override

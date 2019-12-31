@@ -19,7 +19,6 @@ package com.bluepowermod.init;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.multipart.IBPPartBlock;
-import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.*;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.machine.*;
