@@ -25,8 +25,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class RenderLamp extends TileEntityRenderer<TileLamp> {
 
 
-    public RenderLamp() {
-        super(TileEntityRendererDispatcher.instance);
+    RenderLamp(TileEntityRendererDispatcher dispatcher) {
+        super(dispatcher);
     }
 
     @Override

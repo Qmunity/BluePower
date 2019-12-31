@@ -40,8 +40,8 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
 
     float rotateAmount  = 0F;
 
-    public RenderEngine() {
-        super(TileEntityRendererDispatcher.instance);
+    RenderEngine(TileEntityRendererDispatcher dispatcher) {
+        super(dispatcher);
     }
 
 

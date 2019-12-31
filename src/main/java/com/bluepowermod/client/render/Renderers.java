@@ -76,8 +76,8 @@ public class Renderers {
 
     public static void init() {
 
-        ClientRegistry.bindTileEntityRenderer(BPTileEntityType.LAMP, new RenderLamp());
-        ClientRegistry.bindTileEntityRenderer(BPTileEntityType.ENGINE, new RenderEngine());
+        ClientRegistry.bindTileEntityRenderer(BPTileEntityType.LAMP, RenderLamp::new);
+        ClientRegistry.bindTileEntityRenderer(BPTileEntityType.ENGINE, RenderEngine::new);
 
 
         for (Item item : BPItems.itemList) {
