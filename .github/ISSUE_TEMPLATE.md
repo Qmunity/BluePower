@@ -4,7 +4,7 @@
 
 ### What happened instead ###
 
-### Crashlog on pastebin/gist ###
+### Full Log and Crashlog on pastebin/gist ###
 
 ### Forge and Minecraft version ###
 
