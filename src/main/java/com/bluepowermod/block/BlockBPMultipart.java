@@ -13,17 +13,14 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -36,25 +33,9 @@ public class BlockBPMultipart extends ContainerBlock {
 
 
     public BlockBPMultipart() {
-        super(Block.Properties.create(Material.ROCK));
+        super(Block.Properties.create(Material.WOOD).func_226896_b_());
         setRegistryName(Refs.MODID + ":multipart");
         BPBlocks.blockList.add(this);
-    }
-
-    @Override
-    public ActionResultType func_225533_a_(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        Block block = Block.getBlockFromItem(player.getHeldItem(handIn).getItem());
-        if(block != Blocks.AIR) {
-            TileEntity te = worldIn.getTileEntity(pos);
-            if(te instanceof TileBPMultipart){
-                BlockState partState = block.getStateForPlacement(new BlockItemUseContext(new ItemUseContext(player, handIn, hit)));
-                if (partState != null) {
-                    ((TileBPMultipart)te).addState(partState);
-                    return ActionResultType.SUCCESS;
-                }
-            }
-        }
-        return ActionResultType.FAIL;
     }
 
     @Override
@@ -67,6 +48,16 @@ public class BlockBPMultipart extends ContainerBlock {
                 return shapeList.stream().reduce(shapeList.get(0), VoxelShapes::or);
         }
         return Block.makeCuboidShape(6,6,6,10,10,10);
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        TileEntity tileentity = builder.get(LootParameters.BLOCK_ENTITY);
+        List<ItemStack> itemStacks = new ArrayList<>();
+        if (tileentity instanceof TileBPMultipart) {
+            ((TileBPMultipart) tileentity).getStates().forEach(s -> itemStacks.addAll(s.getBlock().getDrops(s, builder)));
+        }
+        return itemStacks;
     }
 
     @Override

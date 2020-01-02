@@ -8,10 +8,19 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.api.multipart.IBPPartBlock;
+import com.bluepowermod.block.BlockBPMultipart;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.TileBPMultipart;
+import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 
 /**
  * IBPPartBlock's use this rather then BlockItem for their Items.
@@ -23,8 +32,63 @@ public class ItemBPPart extends BlockItem {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        return super.onItemUse(context);
+    public ActionResultType tryPlace(BlockItemUseContext context) {
+        BlockState state = context.getWorld().getBlockState(context.getPos());
+        BlockState thisState = getBlock().getStateForPlacement(context);
+
+        if(state.getBlock() instanceof IBPPartBlock && thisState != null && !AABBUtils.testOcclusion(((IBPPartBlock)thisState.getBlock()).getOcclusionShape(thisState), state.getShape(context.getWorld(), context.getPos()))) {
+
+            //Save the Tile Entity Data
+            CompoundNBT nbt = new CompoundNBT();
+            TileEntity tileEntity = context.getWorld().getTileEntity(context.getPos());
+            if(tileEntity != null){
+                nbt = tileEntity.write(nbt);
+            }
+
+            //Replace with Multipart
+            context.getWorld().setBlockState(context.getPos(), BPBlocks.multipart.getDefaultState());
+            tileEntity = context.getWorld().getTileEntity(context.getPos());
+            if(tileEntity instanceof TileBPMultipart){
+                //Add the original State to the Multipart
+                ((TileBPMultipart) tileEntity).addState(state);
+
+                //Restore the Tile Entity Data
+                TileEntity tile = ((TileBPMultipart) tileEntity).getTileForState(state);
+                if (tile != null)
+                    tile.read(nbt);
+
+                //Add the new State
+                ((TileBPMultipart) tileEntity).addState(thisState);
+                thisState.getBlock().onBlockPlacedBy( context.getWorld(),context.getPos(), thisState, context.getPlayer(), context.getItem());
+            }
+            //Update Self
+            state.neighborChanged(context.getWorld(), context.getPos(), state.getBlock(), context.getPos(), false);
+            context.getItem().shrink(1);
+            return ActionResultType.SUCCESS;
+
+        }else if(state.getBlock() instanceof BlockBPMultipart && thisState != null && !AABBUtils.testOcclusion(((IBPPartBlock)thisState.getBlock()).getOcclusionShape(thisState), state.getShape(context.getWorld(), context.getPos()))) {
+
+            // Add to the Existing Multipart
+            TileEntity tileEntity = context.getWorld().getTileEntity(context.getPos());
+            if (tileEntity instanceof TileBPMultipart) {
+                ((TileBPMultipart) tileEntity).addState(thisState);
+                thisState.getBlock().onBlockPlacedBy( context.getWorld(),context.getPos(), thisState, context.getPlayer(), context.getItem());
+                //Update Neighbors
+                for(Direction dir : Direction.values()){
+                    context.getWorld().getBlockState(context.getPos().offset(dir)).neighborChanged(context.getWorld(), context.getPos().offset(dir), state.getBlock(), context.getPos(), false);
+                }
+                //Update Self
+                state.neighborChanged(context.getWorld(), context.getPos(), state.getBlock(), context.getPos(), false);
+                context.getItem().shrink(1);
+                return ActionResultType.SUCCESS;
+            }
+
+        }
+        return super.tryPlace(context);
     }
 
+    @Override
+    protected boolean canPlace(BlockItemUseContext context, BlockState state) {
+        return true;
+    }
 }
