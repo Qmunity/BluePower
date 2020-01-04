@@ -5,8 +5,12 @@ package com.bluepowermod.api.power;
  */
 public interface IPowerBase {
 
+    double getEnergy();
+    double getMaxEnergy();
+
     double getVoltage();
     double getMaxVoltage();
+    double getCurrent();
 
     /**
      * Negative energy for removal

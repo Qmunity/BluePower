@@ -8,7 +8,6 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
 import javax.annotation.Nullable;
-import java.util.concurrent.Callable;
 
 /**
  * @author MoreThanHidden
@@ -28,7 +27,7 @@ public class CapabilityBlutricity {
         @Override
         public NBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side) {
             NBTTagCompound nbt = new NBTTagCompound();
-            nbt.setDouble("blutricity", instance.getVoltage());
+            nbt.setDouble("blutricity", instance.getEnergy());
             return nbt;
         }
 
@@ -36,7 +35,7 @@ public class CapabilityBlutricity {
         public void readNBT(Capability<T> capability, T instance, EnumFacing side, NBTBase nbt) {
             NBTTagCompound tags = (NBTTagCompound) nbt;
             double energy = tags.getDouble("blutricity");
-            instance.addEnergy(-(instance.getVoltage() - energy), false);
+            instance.addEnergy(-(instance.getEnergy() - energy), false);
         }
     }
 

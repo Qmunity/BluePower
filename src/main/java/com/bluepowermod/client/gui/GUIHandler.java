@@ -50,6 +50,8 @@ public class GUIHandler implements IGuiHandler {
         switch (GuiIDs.values()[ID]) {
         case ALLOY_FURNACE:
             return new ContainerAlloyFurnace(player.inventory, (TileAlloyFurnace) ent);
+        case BLULECTRIC_FURNACE:
+            return new ContainerBlulectricFurnace(player.inventory, (TileBlulectricFurnace) ent);
         case BUFFER:
             return new ContainerBuffer(player.inventory, (TileBuffer) ent);
         case SORTING_MACHINE:

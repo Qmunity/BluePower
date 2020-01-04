@@ -20,6 +20,7 @@ package com.bluepowermod.reference;
 public enum GuiIDs {
     INVALID,
     ALLOY_FURNACE,
+    BLULECTRIC_FURNACE,
     BUFFER,
     SORTING_MACHINE,
     SEEDBAG,
