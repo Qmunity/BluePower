@@ -29,9 +29,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
 import net.minecraftforge.client.model.pipeline.LightUtil;
-import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
 import net.minecraftforge.common.model.TransformationHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -116,7 +116,7 @@ public class BPMicroblockModel implements IBakedModel {
     }
 
     private static BakedQuad transform(BakedQuad sizeQuad, TextureAtlasSprite sprite, Direction dir) {
-        UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(DefaultVertexFormats.BLOCK);
+        BakedQuadBuilder builder = new BakedQuadBuilder();
         final IVertexConsumer consumer = new VertexTransformer(builder) {
             @Override
             public void put(int element, float... data) {
