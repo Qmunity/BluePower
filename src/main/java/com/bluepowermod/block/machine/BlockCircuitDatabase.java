@@ -36,8 +36,8 @@ public class BlockCircuitDatabase extends BlockProjectTable {
     }
 
     @Override
-    public ActionResultType func_225533_a_(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if (super.func_225533_a_(blockState, world, pos, player, hand, rayTraceResult) == ActionResultType.SUCCESS) {
+    public ActionResultType onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+        if (super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult) == ActionResultType.SUCCESS) {
             TileCircuitDatabase database = (TileCircuitDatabase) world.getTileEntity(pos);
             database.clientCurrentTab = 0;
             if (!world.isRemote) {

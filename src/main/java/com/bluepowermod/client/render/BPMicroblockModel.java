@@ -78,7 +78,7 @@ public class BPMicroblockModel implements IBakedModel {
                 for (BakedQuad quad: sizeModelQuads) {
                     List<BakedQuad> typeModelQuads = typeModel.getQuads(info.getKey().getDefaultState(), quad.getFace(), rand);
                     if(typeModelQuads.size() > 0){
-                        sprite = typeModelQuads.get(0).getSprite();
+                        sprite = typeModelQuads.get(0).func_187508_a();
                     }
                     bakedQuads.add(transform(quad, sprite, state.get(BlockBPMicroblock.FACING)));
                 }
@@ -107,7 +107,7 @@ public class BPMicroblockModel implements IBakedModel {
         for (BakedQuad quad: sizeModelQuads) {
             List<BakedQuad> typeModelQuads = typeModel.getQuads(this.defBlock.getDefaultState(), quad.getFace(), rand);
             if(typeModelQuads.size() > 0){
-                sprite = typeModelQuads.get(0).getSprite();
+                sprite = typeModelQuads.get(0).func_187508_a();
             }
             outquads.add(transform(quad, sprite, Direction.EAST));
         }
@@ -123,8 +123,8 @@ public class BPMicroblockModel implements IBakedModel {
                 VertexFormatElement e = this.getVertexFormat().func_227894_c_().get(element);
                 if (e.getUsage() == VertexFormatElement.Usage.UV && e.getIndex() == 0) {
                     Vec2f vec = new Vec2f(data[0], data[1]);
-                    float u = (vec.x - sizeQuad.getSprite().getMinU()) / (sizeQuad.getSprite().getMaxU() - sizeQuad.getSprite().getMinU()) * 16;
-                    float v = (vec.y - sizeQuad.getSprite().getMinV()) / (sizeQuad.getSprite().getMaxV() - sizeQuad.getSprite().getMinV()) * 16;
+                    float u = (vec.x - sizeQuad.func_187508_a().getMinU()) / (sizeQuad.func_187508_a().getMaxU() - sizeQuad.func_187508_a().getMinU()) * 16;
+                    float v = (vec.y - sizeQuad.func_187508_a().getMinV()) / (sizeQuad.func_187508_a().getMaxV() - sizeQuad.func_187508_a().getMinV()) * 16;
                     builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v));
                 } else {
                     parent.put(element, data);
@@ -157,6 +157,11 @@ public class BPMicroblockModel implements IBakedModel {
 
     @Override
     public boolean isGui3d() {
+        return false;
+    }
+
+    @Override
+    public boolean func_230044_c_() {
         return false;
     }
 

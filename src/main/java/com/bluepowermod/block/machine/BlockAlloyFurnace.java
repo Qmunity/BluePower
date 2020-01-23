@@ -24,6 +24,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.ILightReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -39,7 +40,7 @@ public class BlockAlloyFurnace extends BlockContainerFacingBase  {
     }
 
     @Override
-    public void func_225534_a_(BlockState stateIn, ServerWorld world, BlockPos pos, Random rnd) {
+    public void tick(BlockState stateIn, ServerWorld world, BlockPos pos, Random rnd) {
         if (stateIn.get(ACTIVE)) {
             int l = stateIn.get(FACING).ordinal();
             float f = pos.getX() + 0.5F;
@@ -65,7 +66,7 @@ public class BlockAlloyFurnace extends BlockContainerFacingBase  {
     }
 
     @Override
-    public int getLightValue(BlockState state, ILightReader world, BlockPos pos) {
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
         return state.get(ACTIVE) ? 13 : 0;
     }
 

@@ -397,9 +397,9 @@ public class RenderHelper {
      * @param vector
      */
     public static void drawColoredCube(AxisAlignedBB vector, IVertexBuilder vertexBuilder, MatrixStack matrixStack, int r, int g, int b, int a, int light, boolean... renderFaces) {
-        MatrixStack.Entry entry = matrixStack.func_227866_c_();
-        Matrix4f matrix4f = entry.func_227870_a_();
-        Matrix3f matrix3f = entry.func_227872_b_();
+        MatrixStack.Entry entry = matrixStack.getLast();
+        Matrix4f positionMatrix = entry.getPositionMatrix();
+        Matrix3f normalMatrix = entry.getNormalMatrix();
 
         TextureAtlasSprite sprite =  Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation("minecraft:white_concrete", "")).getParticleTexture();
         float minU = sprite.getMinU();
@@ -409,193 +409,193 @@ public class RenderHelper {
 
         // Top side
         if (renderFaces.length < 1 || renderFaces[0]) {
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 1.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(minU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 1.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(minU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 1.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 1.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
         }
 
         // Bottom side
         if (renderFaces.length < 2 || renderFaces[1]) {
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, -1.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(minU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, -1.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(minU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, -1.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, -1.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
         }
 
         // Draw west side:
         if (renderFaces.length < 3 || renderFaces[5]) {
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, -1.0F, 0.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(minU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, -1.0F, 0.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(minU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, -1.0F, 0.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, -1.0F, 0.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
         }
 
         // Draw east side:
         if (renderFaces.length < 4 || renderFaces[4]) {
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 1.0F, 0.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(minU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 1.0F, 0.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(minU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 1.0F, 0.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 1.0F, 0.0F, 0.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
         }
 
         // Draw north side
         if (renderFaces.length < 5 || renderFaces[3]) {
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 0.0F, -1.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(minU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 0.0F, -1.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(minU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 0.0F, -1.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 0.0F, -1.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
         }
 
         // Draw south side
         if (renderFaces.length < 6 || renderFaces[2]) {
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 0.0F, 1.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(minU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(minU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 0.0F, 1.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(minU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, minV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 0.0F, 1.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, minV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();
-            vertexBuilder.func_227888_a_(matrix4f, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
-                    .func_225586_a_(r,g,b,a)
-                    .func_225583_a_(maxU, maxV)
-                    .func_227891_b_(OverlayTexture.field_229196_a_)
-                    .func_227886_a_(light)
-                    .func_227887_a_(matrix3f, 0.0F, 0.0F, 1.0F)
+            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
+                    .color(r,g,b,a)
+                    .tex(maxU, maxV)
+                    .func_227891_b_(OverlayTexture.DEFAULT_LIGHT)
+                    .lightmap(light)
+                    .func_227887_a_(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();
         }
 
@@ -768,45 +768,45 @@ public class RenderHelper {
 
         // Top side
         //b.normal(0, 1, 0);
-        b.func_225582_a_(vector.minX, vector.maxY, vector.maxZ).func_225583_a_(minU, maxV).endVertex();
-        b.func_225582_a_(vector.maxX, vector.maxY, vector.maxZ).func_225583_a_(minU, minV).endVertex();
-        b.func_225582_a_(vector.maxX, vector.maxY, vector.minZ).func_225583_a_(maxU, minV).endVertex();
-        b.func_225582_a_(vector.minX, vector.maxY, vector.minZ).func_225583_a_(maxU, maxV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.maxZ).tex(minU, maxV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.maxZ).tex(minU, minV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.minZ).tex(maxU, minV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.minZ).tex(maxU, maxV).endVertex();
 
         // Bottom side
         //b.normal(0, -1, 0);
-        b.func_225582_a_(vector.maxX, vector.minY, vector.maxZ).func_225583_a_(minU, maxV).endVertex();
-        b.func_225582_a_(vector.minX, vector.minY, vector.maxZ).func_225583_a_(minU, minV).endVertex();
-        b.func_225582_a_(vector.minX, vector.minY, vector.minZ).func_225583_a_(maxU, minV).endVertex();
-        b.func_225582_a_(vector.maxX, vector.minY, vector.minZ).func_225583_a_(maxU, maxV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.maxZ).tex(minU, maxV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.maxZ).tex(minU, minV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.minZ).tex(maxU, minV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.minZ).tex(maxU, maxV).endVertex();
 
         // Draw west side:
         //b.normal(-1, 0, 0);
-        b.func_225582_a_(vector.minX, vector.minY, vector.maxZ).func_225583_a_(minU, maxV).endVertex();
-        b.func_225582_a_(vector.minX, vector.maxY, vector.maxZ).func_225583_a_(minU, minV).endVertex();
-        b.func_225582_a_(vector.minX, vector.maxY, vector.minZ).func_225583_a_(maxU, minV).endVertex();
-        b.func_225582_a_(vector.minX, vector.minY, vector.minZ).func_225583_a_(maxU, maxV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.maxZ).tex(minU, maxV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.maxZ).tex(minU, minV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.minZ).tex(maxU, minV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.minZ).tex(maxU, maxV).endVertex();
 
         // Draw east side:
         //b.normal(1, 0, 0);
-        b.func_225582_a_(vector.maxX, vector.minY, vector.minZ).func_225583_a_(minU, maxV).endVertex();
-        b.func_225582_a_(vector.maxX, vector.maxY, vector.minZ).func_225583_a_(minU, minV).endVertex();
-        b.func_225582_a_(vector.maxX, vector.maxY, vector.maxZ).func_225583_a_(maxU, minV).endVertex();
-        b.func_225582_a_(vector.maxX, vector.minY, vector.maxZ).func_225583_a_(maxU, maxV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.minZ).tex(minU, maxV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.minZ).tex(minU, minV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.maxZ).tex(maxU, minV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.maxZ).tex(maxU, maxV).endVertex();
 
         // Draw north side
         //b.normal(0, 0, -1);
-        b.func_225582_a_(vector.minX, vector.minY, vector.minZ).func_225583_a_(minU, maxV).endVertex();
-        b.func_225582_a_(vector.minX, vector.maxY, vector.minZ).func_225583_a_(minU, minV).endVertex();
-        b.func_225582_a_(vector.maxX, vector.maxY, vector.minZ).func_225583_a_(maxU, minV).endVertex();
-        b.func_225582_a_(vector.maxX, vector.minY, vector.minZ).func_225583_a_(maxU, maxV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.minZ).tex(minU, maxV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.minZ).tex(minU, minV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.minZ).tex(maxU, minV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.minZ).tex(maxU, maxV).endVertex();
 
         // Draw south side
         //b.normal(0, 0, 1);
-        b.func_225582_a_(vector.minX, vector.minY, vector.maxZ).func_225583_a_(minU, maxV).endVertex();
-        b.func_225582_a_(vector.maxX, vector.minY, vector.maxZ).func_225583_a_(minU, minV).endVertex();
-        b.func_225582_a_(vector.maxX, vector.maxY, vector.maxZ).func_225583_a_(maxU, minV).endVertex();
-        b.func_225582_a_(vector.minX, vector.maxY, vector.maxZ).func_225583_a_(maxU, maxV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.maxZ).tex(minU, maxV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.maxZ).tex(minU, minV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.maxZ).tex(maxU, minV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.maxZ).tex(maxU, maxV).endVertex();
 
         if (!wasTesselating) {
             t.draw();

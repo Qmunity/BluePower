@@ -70,7 +70,7 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
     }
 
     @Override
-    public int getLightValue(BlockState state, ILightReader world, BlockPos pos) {
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
         return state.get(POWER);
     }
 

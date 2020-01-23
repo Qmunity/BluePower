@@ -173,7 +173,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
-                if (!world.isAirBlock(new BlockPos(x, y, z)) && block.func_225533_a_(world.getBlockState(new BlockPos(x, y, z)), world, new BlockPos(x, y, z), player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vec3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == ActionResultType.SUCCESS) return true;
+                if (!world.isAirBlock(new BlockPos(x, y, z)) && block.onBlockActivated(world.getBlockState(new BlockPos(x, y, z)), world, new BlockPos(x, y, z), player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vec3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == ActionResultType.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {

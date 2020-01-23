@@ -30,7 +30,7 @@ public class RenderLamp extends TileEntityRenderer<TileLamp> {
     }
 
     @Override
-    public void func_225616_a_(TileLamp te, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int partialTicks, int destroyStage) {
+    public void render(TileLamp te, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int partialTicks, int destroyStage) {
         if (!(te.getBlockState().getBlock() instanceof BlockLamp)) //|| Loader.isModLoaded("albedo"))
             return;
 
@@ -70,10 +70,10 @@ public class RenderLamp extends TileEntityRenderer<TileLamp> {
                 }
             }
 
-            matrixStack.func_227860_a_();
+            matrixStack.push();
             double powerDivision = power / 18D;
-            com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, iRenderTypeBuffer.getBuffer(RenderType.func_228657_l_()), matrixStack, r, g, b, (int)(powerDivision * 200), 200,
+            com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, iRenderTypeBuffer.getBuffer(RenderType.lightning()), matrixStack, r, g, b, (int)(powerDivision * 200), 200,
                     renderFaces);
-            matrixStack.func_227865_b_();
+            matrixStack.pop();
     }
 }

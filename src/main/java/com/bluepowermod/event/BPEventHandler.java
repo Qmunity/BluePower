@@ -289,7 +289,7 @@ public class BPEventHandler {
             RenderSystem.enableAlphaTest();
             position.add(0.5, 0.1, 0.5);
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-            vertexbuffer.func_225582_a_(-d0, -d1, -d2);
+            vertexbuffer.pos(-d0, -d1, -d2);
             BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
             Vec3d lookVec = event.getInfo().getProjectedView();
             Direction dir = ((BlockRayTraceResult) mop).getFace();

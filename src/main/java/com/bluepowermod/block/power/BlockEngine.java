@@ -127,7 +127,7 @@ public class BlockEngine extends BlockContainerBase implements IWaterLoggable {
     }
 
     @Override
-    public ActionResultType func_225533_a_(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+    public ActionResultType onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (!player.inventory.getCurrentItem().isEmpty()) {
             Item item = player.inventory.getCurrentItem().getItem();
             if (item == BPItems.screwdriver) {
@@ -135,7 +135,7 @@ public class BlockEngine extends BlockContainerBase implements IWaterLoggable {
             }
         }
 
-        return super.func_225533_a_(blockState, world, pos, player, hand, rayTraceResult);
+        return super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult);
     }
 
     @Override

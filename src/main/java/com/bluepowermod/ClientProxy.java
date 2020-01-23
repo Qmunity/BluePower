@@ -63,7 +63,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public boolean isSneakingInGui() {
-        return Minecraft.getInstance().gameSettings.field_228046_af_.isKeyDown(); // Sneak
+        return Minecraft.getInstance().gameSettings.keyBindSneak.isKeyDown();
     }
 
     public static Screen getOpenedGui() {

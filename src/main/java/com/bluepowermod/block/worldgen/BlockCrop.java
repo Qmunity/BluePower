@@ -70,7 +70,7 @@ public class BlockCrop extends CropsBlock implements IGrowable {
      * Ticks the block if it's been scheduled
      */
     @Override
-    public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 
         int age = getAge(state);
         if (world.getLight(pos) >= 9) {

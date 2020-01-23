@@ -23,11 +23,9 @@ package com.bluepowermod.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraftforge.fml.client.IModGuiFactory;
 
-import java.util.Set;
 
-public class BPGuiFactory implements IModGuiFactory {
+public class BPGuiFactory { //implements IModGuiFactory
 
     /**
      * Called when instantiated to initialize with the active minecraft instance.
@@ -35,17 +33,17 @@ public class BPGuiFactory implements IModGuiFactory {
      * @param minecraftInstance
      *            the instance
      */
-    @Override
+    //@Override
     public void initialize(Minecraft minecraftInstance) {
 
     }
 
-    @Override
+    //@Override
     public boolean hasConfigGui() {
         return false;
     }
 
-    @Override
+    //@Override
     public Screen createConfigGui(Screen parentScreen) {
         return null;
     }
@@ -64,10 +62,10 @@ public class BPGuiFactory implements IModGuiFactory {
      *
      * @return the set of options this mod wishes to have available, or empty if none
      */
-    @Override
-    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
+   // @Override
+    //public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
 
-        return null;
-    }
+        //return null;
+    //}
 
 }

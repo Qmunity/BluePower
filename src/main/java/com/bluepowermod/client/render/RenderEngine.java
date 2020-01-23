@@ -46,7 +46,7 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
 
 
     @Override
-    public void func_225616_a_(TileEngine engine, float f, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
+    public void render(TileEngine engine, float f, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
 
         World world = engine.getWorld();
         BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
@@ -56,7 +56,7 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
         BlockState state = BPBlocks.engine.getDefaultState().with(BlockEngine.FACING, tile.getOrientation());
 
 
-        matrixStack.func_227860_a_();
+        matrixStack.push();
 
         float f2 = 0;
         if(tile.isActive) {
@@ -69,18 +69,18 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
         GL11.glTranslatef(0, f2, 0);
         IBakedModel glider = dispatcher.getModelForState(state.with(BlockEngine.GLIDER, true));
         //Render the glider
-        dispatcher.getBlockModelRenderer().renderModel(world, glider, state.with(BlockEngine.GLIDER, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.func_228643_e_()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
+        dispatcher.getBlockModelRenderer().renderModel(world, glider, state.with(BlockEngine.GLIDER, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.cutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
-        matrixStack.func_227865_b_();
-        matrixStack.func_227860_a_();
+        matrixStack.pop();
+        matrixStack.push();
 
         long angle = tile.isActive ? (System.currentTimeMillis() / 10) % 360 : 0;
         RenderSystem.rotatef(angle, 0, 1, 0);
         IBakedModel gear = dispatcher.getModelForState(state.with(BlockEngine.GEAR, true));
         // Render the rotating cog
-        dispatcher.getBlockModelRenderer().renderModel(world, gear, state.with(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.func_228643_e_()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
+        dispatcher.getBlockModelRenderer().renderModel(world, gear, state.with(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.cutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
-        matrixStack.func_227865_b_();
+        matrixStack.pop();
     }
 
 }

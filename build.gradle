@@ -21,7 +21,7 @@ project.ext {
     } else {
         build = "-custom"
     }
-    mcVersion = "1.15.1"
+    mcVersion = "1.15.2"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -54,7 +54,7 @@ repositories {
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20191217-1.14.3'
+    mappings channel: 'snapshot', version: '20200122-1.15.1'
 
     runs {
         client {
@@ -95,13 +95,13 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.1-30.0.35'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.0.0'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
 	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
     compileOnly fg.deobf("mcp.mobius.waila:Hwyla:1.10.6-B67_1.14.4:api")
-    compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.13:api")
-    //runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.13")
+    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
     //compile "team.chisel.ctm:CTM:MC1.12.2-0.3.3.22"
 }
 

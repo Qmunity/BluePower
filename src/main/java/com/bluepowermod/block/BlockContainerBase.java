@@ -158,7 +158,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public ActionResultType func_225533_a_(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+    public ActionResultType onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (world.isRemote) {
             return ActionResultType.SUCCESS;
         }

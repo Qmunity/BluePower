@@ -29,7 +29,7 @@ public class BlockCPU extends BlockContainerBase {
     }
 
     @Override
-    public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TileCPU) {
         }

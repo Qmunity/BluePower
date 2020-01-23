@@ -283,10 +283,10 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder buff = tess.getBuffer();
         buff.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION_TEX);
-        buff.func_225582_a_(renderBaseX, renderAffectedY, zLevel);
-        buff.func_225582_a_(renderBaseX + renderWidth, renderAffectedY, zLevel);
-        buff.func_225582_a_(renderBaseX + renderWidth, renderAffectedY + renderHeight, zLevel);
-        buff.func_225582_a_(renderBaseX, renderAffectedY + renderHeight, zLevel);
+        buff.pos(renderBaseX, renderAffectedY, zLevel);
+        buff.pos(renderBaseX + renderWidth, renderAffectedY, zLevel);
+        buff.pos(renderBaseX + renderWidth, renderAffectedY + renderHeight, zLevel);
+        buff.pos(renderBaseX, renderAffectedY + renderHeight, zLevel);
         tess.draw();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         if (leftSided)
@@ -348,10 +348,10 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buff = tessellator.getBuffer();
         buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buff.func_225582_a_(x, y + 16, 0).func_225583_a_(0.0F, 1.0F).endVertex();
-        buff.func_225582_a_(x + 16, y + 16, 0).func_225583_a_(1.0F, 1.0F).endVertex();
-        buff.func_225582_a_(x + 16, y, 0).func_225583_a_(1.0F, 0.0F).endVertex();
-        buff.func_225582_a_(x, y, 0).func_225583_a_(0.0F, 0.0F).endVertex();
+        buff.pos(x, y + 16, 0).tex(0.0F, 1.0F).endVertex();
+        buff.pos(x + 16, y + 16, 0).tex(1.0F, 1.0F).endVertex();
+        buff.pos(x + 16, y, 0).tex(1.0F, 0.0F).endVertex();
+        buff.pos(x, y, 0).tex(0.0F, 0.0F).endVertex();
         tessellator.draw();
     }
 

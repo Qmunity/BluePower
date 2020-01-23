@@ -49,7 +49,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
 
 
     @Override
-    public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         // When the random chance hit, spew lava.
         if (!world.isRemote && (random.nextInt(100) == 0)) {
                 spawnLava(world, pos, random);
