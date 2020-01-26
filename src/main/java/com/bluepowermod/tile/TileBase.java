@@ -97,7 +97,15 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         readFromPacketNBT(pkt.getNbtCompound());
+        handleUpdateTag(pkt.getNbtCompound());
     }
+
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        return this.write(new CompoundNBT());
+    }
+
 
     protected void sendUpdatePacket() {
 
@@ -108,7 +116,7 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
     protected void markForRenderUpdate() {
 
         if (world != null)
-            world.func_225319_b(pos, getBlockState(), getBlockState());
+            world.markBlockRangeForRenderUpdate(pos, getBlockState(), getBlockState());
     }
 
     protected void notifyNeighborBlockUpdate() {

@@ -49,7 +49,7 @@ public class WorldGenOres {
     private static void addOreToGenerate(int veinCount, int veinSize, int minY, int maxY, Block ore){
         for(Biome biome : ForgeRegistries.BIOMES) {
             if(!biome.getCategory().equals(Biome.Category.NETHER) && !biome.getCategory().equals(Biome.Category.THEEND)) {
-                biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.func_225566_b_(new OreFeatureConfig(NATURAL_STONE, ore.getDefaultState(), veinSize)).func_227228_a_(COUNT_RANGE.func_227446_a_(new CountRangeConfig(veinCount, minY, minY, maxY))));
+                biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(NATURAL_STONE, ore.getDefaultState(), veinSize)).func_227228_a_(COUNT_RANGE.func_227446_a_(new CountRangeConfig(veinCount, minY, minY, maxY))));
             }
         }
     }

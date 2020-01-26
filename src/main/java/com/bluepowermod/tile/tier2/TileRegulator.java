@@ -26,13 +26,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * @author MineMaarten
@@ -265,7 +263,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
             CompoundNBT tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, new ItemStack((IItemProvider) tagCompound));
+                inventory.set(slot, ItemStack.read(tagCompound));
             }
         }
     }

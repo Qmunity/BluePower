@@ -31,6 +31,8 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.*;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -219,7 +221,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         
         for (int i = 0; i < 9; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, new ItemStack((IItemProvider) tc));
+            inventory.set(i, ItemStack.read(tc));
         }
     }
     

@@ -28,15 +28,14 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class TileBuffer extends TileBase implements ISidedInventory, INamedContainerProvider {
 
@@ -57,7 +56,7 @@ public class TileBuffer extends TileBase implements ISidedInventory, INamedConta
         
         for (int i = 0; i < 20; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
-            allInventories.set(i, new ItemStack((IItemProvider) tc));
+            allInventories.set(i, ItemStack.read(tc));
         }
     }
     
@@ -76,7 +75,7 @@ public class TileBuffer extends TileBase implements ISidedInventory, INamedConta
         }
         return  tCompound;
     }
-    
+
     @Override
     public int getSizeInventory() {
     

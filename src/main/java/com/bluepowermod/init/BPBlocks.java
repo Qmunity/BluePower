@@ -213,7 +213,7 @@ public class BPBlocks {
 
         multipart = new BlockBPMultipart();
 
-        rubber_leaves = new BlockRubberLeaves(Block.Properties.create(Material.PLANTS).func_226896_b_());
+        rubber_leaves = new BlockRubberLeaves(Block.Properties.create(Material.PLANTS).notSolid());
         rubber_log = new BlockRubberLog(Block.Properties.create(Material.WOOD));
         rubber_sapling = new BlockRubberSapling(new OakTree(), Block.Properties.create(Material.PLANTS));
 

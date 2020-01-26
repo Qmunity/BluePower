@@ -166,14 +166,4 @@ public class TileEngine extends TileMachineBase  {
 		}
 	}
 
-	@Override
-	public CompoundNBT getUpdateTag() {
-		return this.write(new CompoundNBT());
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		super.onDataPacket(net, pkt);
-		handleUpdateTag(pkt.getNbtCompound());
-	}
 }

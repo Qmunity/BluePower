@@ -120,7 +120,7 @@ public class BPMicroblockModel implements IBakedModel {
         final IVertexConsumer consumer = new VertexTransformer(builder) {
             @Override
             public void put(int element, float... data) {
-                VertexFormatElement e = this.getVertexFormat().func_227894_c_().get(element);
+                VertexFormatElement e = this.getVertexFormat().getElements().get(element);
                 if (e.getUsage() == VertexFormatElement.Usage.UV && e.getIndex() == 0) {
                     Vec2f vec = new Vec2f(data[0], data[1]);
                     float u = (vec.x - sizeQuad.func_187508_a().getMinU()) / (sizeQuad.func_187508_a().getMaxU() - sizeQuad.func_187508_a().getMinU()) * 16;

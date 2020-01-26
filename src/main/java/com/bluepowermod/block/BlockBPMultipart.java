@@ -33,7 +33,7 @@ public class BlockBPMultipart extends ContainerBlock {
 
 
     public BlockBPMultipart() {
-        super(Block.Properties.create(Material.WOOD).func_226896_b_());
+        super(Block.Properties.create(Material.WOOD).notSolid());
         setRegistryName(Refs.MODID + ":multipart");
         BPBlocks.blockList.add(this);
     }

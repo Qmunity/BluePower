@@ -28,7 +28,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -403,7 +402,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             CompoundNBT tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, new ItemStack((IItemProvider) tagCompound));
+                inventory.set(slot, ItemStack.read(tagCompound));
             }
         }
     }
