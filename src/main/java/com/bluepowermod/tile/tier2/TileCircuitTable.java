@@ -8,7 +8,6 @@
 package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
 import com.bluepowermod.tile.TileBase;
@@ -18,10 +17,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
-
-import java.util.List;
 
 /**
  * @author MineMaarten
@@ -89,7 +85,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
             CompoundNBT tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, new ItemStack((IItemProvider) tagCompound));
+                inventory.set(slot, ItemStack.read(tagCompound));
             }
         }
 

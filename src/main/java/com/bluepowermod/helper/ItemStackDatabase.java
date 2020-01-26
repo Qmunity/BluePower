@@ -13,7 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -97,7 +96,7 @@ public class ItemStackDatabase {
                         dos.read(abyte);
                         ByteArrayInputStream byteStream = new ByteArrayInputStream(abyte);
                         CompoundNBT tag = CompressedStreamTools.readCompressed(byteStream);
-                        ItemStack stack = new ItemStack((IItemProvider) tag);
+                        ItemStack stack = ItemStack.read(tag);
                         if (stack.getItem() != Items.AIR) {
                             stacks.add(stack);
                         } else {

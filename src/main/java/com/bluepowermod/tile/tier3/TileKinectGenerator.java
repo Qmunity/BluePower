@@ -14,10 +14,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
-
-import java.util.List;
 
 public class TileKinectGenerator extends TileBase implements ISidedInventory{
 
@@ -47,7 +44,7 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
 
         for (int i = 0; i < 1; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
-            allInventories.set(i, new ItemStack((IItemProvider) tc));
+            allInventories.set(i, ItemStack.read(tc));
         }
     }
 

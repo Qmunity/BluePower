@@ -1,15 +1,12 @@
 package com.bluepowermod.tile.tier2;
 
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 
-import java.util.List;
 import java.util.Map;
 
 ;
@@ -49,7 +46,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
         super.read(tag);
 
         if (tag.contains("craftBuffer")) {
-            craftBuffer = new ItemStack((IItemProvider) tag.getCompound("craftBuffer"));
+            craftBuffer = ItemStack.read(tag.getCompound("craftBuffer"));
         } else {
             craftBuffer = ItemStack.EMPTY;
         }

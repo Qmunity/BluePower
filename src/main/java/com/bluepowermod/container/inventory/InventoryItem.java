@@ -24,7 +24,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.IItemProvider;
 
 public class InventoryItem extends Inventory {
     
@@ -140,7 +139,7 @@ public class InventoryItem extends Inventory {
             int j = slotEntry.getByte("Slot") & 0xff;
             
             if (j >= 0 && j < getSizeInventory()) {
-                setInventorySlotContents(j, new ItemStack((IItemProvider) slotEntry));
+                setInventorySlotContents(j, ItemStack.read(slotEntry));
             }
         }
         reading = false;
