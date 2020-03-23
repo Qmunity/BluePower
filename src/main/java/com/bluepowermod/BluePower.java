@@ -23,8 +23,12 @@ import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
@@ -75,7 +79,6 @@ public class BluePower {
         WorldGenFlowers.setupFlowers();
         BPWorldGen.setupGeneralWorldGen();
         CapabilityBlutricity.register();
-
         proxy.setup(event);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> BPContainerType::registerScreenFactories);
         CompatibilityUtils.init(event);
@@ -106,6 +109,15 @@ public class BluePower {
                 DatapackUtils.clearBPAlloyFurnaceDatapack(path);
             }
         });
+    }
+
+    @SubscribeEvent
+    public void onLootLoad(LootTableLoadEvent event)
+    {
+        ResourceLocation grass = new ResourceLocation("minecraft", "blocks/tall_grass");
+        if (event.getName().equals(grass)){
+                event.getTable().addPool(LootPool.builder().addEntry(TableLootEntry.builder(new ResourceLocation("bluepower", "blocks/tall_grass"))).build());
+        }
     }
 
     @SubscribeEvent
