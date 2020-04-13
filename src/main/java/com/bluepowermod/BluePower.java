@@ -116,7 +116,7 @@ public class BluePower {
     {
         ResourceLocation grass = new ResourceLocation("minecraft", "blocks/tall_grass");
         if (event.getName().equals(grass)){
-                event.getTable().addPool(LootPool.builder().addEntry(TableLootEntry.builder(new ResourceLocation("bluepower", "blocks/tall_grass"))).build());
+                event.getTable().addPool(LootPool.builder().addEntry(TableLootEntry.builder(new ResourceLocation("bluepower", "blocks/tall_grass"))).name("bluepower:inject").build());
         }
     }
 
