@@ -5,9 +5,8 @@ Blue Power is a collaborative effort to revive some of the things that are missi
 ## Installing
 
 1. Clone into an empty directory using your git client of choice.
-2. Open a command line and type the following: `gradlew setupDecompWorkspace` then `gradlew eclipse` or `gradlew idea`
-        
-3. Open the directory in your IDE of choice
+2. Open the directory in your IDE of choice
+3. To test your changes in game, you can use `gradlew runClient`
 4. After making code changes you can build with `gradlew build`
 5. The output jar will be in builds/lib
 
