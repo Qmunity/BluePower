@@ -17,7 +17,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.util.ArrayList;
@@ -228,13 +227,13 @@ public class TileCircuitDatabase extends TileCircuitTable {
         super.read(tag);
 
         if (tag.contains("copyTemplateStack")) {
-            copyInventory.setInventorySlotContents(0, new ItemStack((IItemProvider) tag.getCompound("copyTemplateStack")));
+            copyInventory.setInventorySlotContents(0, ItemStack.read(tag.getCompound("copyTemplateStack")));
         } else {
             copyInventory.setInventorySlotContents(0, ItemStack.EMPTY);
         }
 
         if (tag.contains("copyOutputStack")) {
-            copyInventory.setInventorySlotContents(1, new ItemStack((IItemProvider) tag.getCompound("copyOutputStack")));
+            copyInventory.setInventorySlotContents(1, ItemStack.read(tag.getCompound("copyOutputStack")));
         } else {
             copyInventory.setInventorySlotContents(1, ItemStack.EMPTY);
         }

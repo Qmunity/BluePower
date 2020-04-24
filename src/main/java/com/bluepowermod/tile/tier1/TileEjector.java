@@ -18,7 +18,6 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.container.ContainerEjector;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
@@ -29,14 +28,11 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class TileEjector extends TileMachineBase implements IInventory, INamedContainerProvider {
 
@@ -77,7 +73,7 @@ public class TileEjector extends TileMachineBase implements IInventory, INamedCo
 
         for (int i = 0; i < 9; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, new ItemStack((IItemProvider) tc));
+            inventory.set(i, ItemStack.read(tc));
         }
     }
 

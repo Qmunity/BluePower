@@ -219,7 +219,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         
         for (int i = 0; i < 9; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, new ItemStack((IItemProvider) tc));
+            inventory.set(i, ItemStack.read(tc));
         }
     }
     

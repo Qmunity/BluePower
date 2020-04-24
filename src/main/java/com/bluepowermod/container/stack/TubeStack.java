@@ -14,17 +14,14 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketThreadUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import org.lwjgl.opengl.GL11;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.RenderHelper;
@@ -142,7 +139,7 @@ public class TubeStack {
 
     public static TubeStack loadFromNBT(CompoundNBT tag) {
 
-        TubeStack stack = new TubeStack(new ItemStack((IItemProvider) tag), Direction.byIndex(tag.getByte("heading")),
+        TubeStack stack = new TubeStack(ItemStack.read(tag), Direction.byIndex(tag.getByte("heading")),
                 TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
         stack.speed = tag.getDouble("speed");

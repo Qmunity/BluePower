@@ -12,7 +12,6 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.ContainerFilter;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -23,13 +22,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
-import java.util.List;
 /**
  * @author MineMaarten
  */
@@ -105,7 +102,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
         for (int i = 0; i < 9; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, new ItemStack((IItemProvider) tc));
+            inventory.set(i, ItemStack.read(tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
         fuzzySetting = tCompound.getByte("fuzzySetting");

@@ -386,15 +386,4 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
         return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
     }
 
-    @Override
-    public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        super.onDataPacket(net, pkt);
-        handleUpdateTag(pkt.getNbtCompound());
-    }
-
 }

@@ -20,15 +20,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.Vec3i;
-
-import java.util.List;
 
 /**
  * @author MineMaarten
@@ -132,7 +127,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
 
         for (int i = 0; i < 24; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, new ItemStack((IItemProvider) tc));
+            inventory.set(i, ItemStack.read(tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
         mode = tCompound.getByte("mode");
