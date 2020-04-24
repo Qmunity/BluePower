@@ -120,12 +120,4 @@ public class BluePower {
         });
     }
 
-    @SubscribeEvent
-    public void onServerStarted(FMLServerStartedEvent event){
-        //Reload to make sure Recycling Recipes are available
-        if(BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()){
-            event.getServer().reload();
-        }
-    }
-
 }
