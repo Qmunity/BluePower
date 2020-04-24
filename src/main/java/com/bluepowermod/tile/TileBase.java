@@ -102,7 +102,6 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         readFromPacketNBT(pkt.getNbtCompound());
-        handleUpdateTag(pkt.getNbtCompound());
     }
 
     protected void sendUpdatePacket() {
