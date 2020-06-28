@@ -5,11 +5,18 @@ Blue Power is a collaborative effort to revive some of the things that are missi
 ## Installing
 
 1. Clone into an empty directory using your git client of choice.
-2. Open a command line and type the following: `gradlew setupDecompWorkspace` then `gradlew eclipse` or `gradlew idea`
-        
-3. Open the directory in your IDE of choice
-4. After making code changes you can build with `gradlew build`
-5. The output jar will be in builds/lib
+2. Import into the IDE of choice
+* Eclipse:
+     1. Run the following command: "gradlew genEclipseRuns" (./gradlew genEclipseRuns if you are on Mac/Linux)
+     2. Open Eclipse, Import > Existing Gradle Project > Select Folder 
+        or run "gradlew eclipse" to generate the project.
+
+* IntelliJ:
+     1. Open IDEA, and import project select the build.gradle file and have it import.
+     2. Run the following command: "gradlew genIntellijRuns" (./gradlew genIntellijRuns if you are on Mac/Linux)
+     3. Refresh the Gradle Project in IDEA if required.
+3. After making code changes you can build with gradlew build
+4. The output jar will be in builds/lib
 
 ## Contributions
 
