@@ -1,6 +1,5 @@
 {
   "variants": {
-    "":{"model": "bluepower:block/manager"},
     "active=false,powered=false,rejecting=false":{"model": "bluepower:block/manager"},
     "active=true,powered=false,rejecting=false":{"model": "bluepower:block/manager_active"},
     "active=true,powered=true,rejecting=false":{"model": "bluepower:block/manager_active_powered"},

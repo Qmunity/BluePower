@@ -19,6 +19,7 @@ package com.bluepowermod.init;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.multipart.IBPPartBlock;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.*;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.machine.*;
@@ -111,6 +112,7 @@ public class BPBlocks {
     public static Block buffer;
     public static Block deployer;
     public static Block transposer;
+    public static Block tube;
     public static Block sorting_machine;
     public static Block project_table;
     public static Block auto_project_table;
@@ -227,7 +229,7 @@ public class BPBlocks {
         block_breaker = new BlockContainerFacingBase(Material.ROCK, TileBlockBreaker.class).setRegistryName(Refs.MODID, Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
 
-        buffer = new BlockContainerFacingBase(Material.ROCK, TileBuffer.class){
+        buffer = new BlockContainerHorizontalFacingBase(Material.ROCK, TileBuffer.class){
             @Override
             protected boolean canRotateVertical(){return false;}
         }.setRegistryName(Refs.MODID, Refs.BLOCKBUFFER_NAME);
@@ -235,6 +237,7 @@ public class BPBlocks {
         deployer = new BlockContainerFacingBase(Material.ROCK, TileDeployer.class)
                 .setRegistryName(Refs.MODID, Refs.BLOCKDEPLOYER_NAME);
         transposer = new BlockContainerFacingBase(Material.ROCK, TileTransposer.class).setRegistryName(Refs.MODID, Refs.TRANSPOSER_NAME);
+        tube = new BlockTube().setRegistryName(Refs.MODID, Refs.TUBE_NAME);
         sorting_machine = new BlockContainerFacingBase(Material.ROCK, TileSortingMachine.class).setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.SORTING_MACHINE_NAME);
         project_table = new BlockProjectTable();
@@ -335,10 +338,10 @@ public class BPBlocks {
         }.setRegistryName("bluepower:gate_nand");
 
         //Wires
-        //blockAlloyWire = new Block[MinecraftColor.VALID_COLORS.length * 2 + 2];
+        blockAlloyWire = new Block[2]; //MinecraftColor.VALID_COLORS.length * 2 + 2
 
-        //blockAlloyWire[0] = new BlockAlloyWire(RedwireType.BLUESTONE.getName()).setWIP(true);
-        //blockAlloyWire[MinecraftColor.VALID_COLORS.length + 1] =  new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true);
+        blockAlloyWire[0] = new BlockAlloyWire(RedwireType.BLUESTONE.getName()).setWIP(true);
+        blockAlloyWire[1] =  new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true);
 
         //for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
            // blockAlloyWire[i+1] = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName(), MinecraftColor.VALID_COLORS[i]).setWIP(true);
@@ -364,7 +367,7 @@ public class BPBlocks {
     public static void registerBlockItems(RegistryEvent.Register<Item> event) {
         for (Block block : blockList) {
             if (block.getRegistryName() != null && !(block instanceof BlockCrop)) { // Crops have seeds rather than blocks
-                if((block instanceof BlockBase && ((BlockBase)block).getWIP()) || block instanceof BlockBPMultipart){
+                if((block instanceof BlockBase && ((BlockBase)block).getWIP()) || block instanceof BlockBPMultipart || block instanceof BlockTube ){
                     event.getRegistry().register(new BlockItem(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
                 }else{
                     ItemGroup group = BPCreativeTabs.blocks;

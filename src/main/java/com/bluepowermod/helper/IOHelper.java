@@ -196,7 +196,7 @@ public class IOHelper {
     public static ItemStack extractOneItem(TileEntity tile, Direction dir) {
 
         IInventory inv = getInventoryForTE(tile);
-        if (!inv.isEmpty()) {
+        if (inv != null && !inv.isEmpty()) {
             int[] accessibleSlots;
             if (inv instanceof ISidedInventory) {
                 accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(dir);

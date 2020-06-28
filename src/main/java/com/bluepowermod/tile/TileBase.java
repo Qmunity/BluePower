@@ -89,9 +89,7 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT tCompound = new CompoundNBT();
-        writeToPacketNBT(tCompound);
-        return new SUpdateTileEntityPacket(pos, 0, tCompound);
+        return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
     }
 
     @Override
@@ -99,7 +97,6 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
         readFromPacketNBT(pkt.getNbtCompound());
         handleUpdateTag(pkt.getNbtCompound());
     }
-
 
     @Override
     public CompoundNBT getUpdateTag() {

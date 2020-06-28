@@ -3,6 +3,6 @@
    "loader": "forge:obj",
    "model": "bluepower:models/block/engine/engine_base.obj",
    "textures": {
-      "all": "bluepower:blocks/engine"
+      "all": "bluepower:blocks/models/engineoff"
    }
 }

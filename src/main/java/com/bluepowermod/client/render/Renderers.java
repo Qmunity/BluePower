@@ -46,7 +46,6 @@ public class Renderers {
                 registerBakedModel(block);
             }
         }
-
     }
 
     @SubscribeEvent
@@ -68,6 +67,7 @@ public class Renderers {
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
         }
+
         event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "inventory"), microblockModel);
         event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "inventory"), microblockModel);
         event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "inventory"), microblockModel);
@@ -101,6 +101,7 @@ public class Renderers {
         RenderTypeLookup.setRenderLayer(BPBlocks.cracked_basalt_lava, RenderType.cutout());
         RenderTypeLookup.setRenderLayer(BPBlocks.rubber_leaves, RenderType.cutout());
         RenderTypeLookup.setRenderLayer(BPBlocks.rubber_sapling, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(BPBlocks.tube, RenderType.cutout());
 
     }
 

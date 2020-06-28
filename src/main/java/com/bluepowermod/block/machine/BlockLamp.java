@@ -8,14 +8,18 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.client.render.ICustomModelBlock;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -26,25 +30,30 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.ILightReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author Koen Beckers (K4Unl)
  *
  */
-public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, IBPColoredBlock{
+public class BlockLamp extends BlockBase implements IBPColoredBlock{
 
     public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 15);
 
     private final boolean isInverted;
     private final MinecraftColor color;
     private final String name;
+    private int tick = 0;
 
     public BlockLamp(String name, boolean isInverted, MinecraftColor color) {
-        super(Properties.create(Material.REDSTONE_LIGHT).sound(SoundType.STONE).hardnessAndResistance(1.0F).lightValue(15), TileLamp.class);
+        super(Properties.create(Material.REDSTONE_LIGHT).sound(SoundType.STONE).hardnessAndResistance(1.0F).lightValue(15));
         this.isInverted = isInverted;
         this.color = color;
         this.name = name;
@@ -53,20 +62,14 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void initModel() {
-
+    public boolean hasTileEntity(BlockState state) {
+        return true;
     }
 
-
-    protected TileLamp get(IBlockReader w, BlockPos pos) {
-
-        TileEntity te = w.getTileEntity(pos);
-
-        if (!(te instanceof TileLamp))
-            return null;
-
-        return (TileLamp) te;
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return new TileLamp();
     }
 
     @Override
@@ -107,10 +110,28 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
         builder.add(POWER);
     }
 
+    @Nullable
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        int redstoneValue = context.getWorld().getRedstonePowerFromNeighbors(context.getPos());
+        if(isInverted){redstoneValue = 15 - redstoneValue;}
+        return this.getDefaultState().with(POWER, redstoneValue);
+    }
+
     @Override
-    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand) {
-        return super.getStateForPlacement(state, facing, state2, world, pos1, pos2, hand);
-        //.with(POWER, world.getRedstonePowerFromNeighbors(pos));
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        List<ItemStack> drops =  super.getDrops(state, builder);
+        drops.add(new ItemStack(this));
+        return drops;
+    }
+
+    @Override
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        if(tick <= 1){
+            int redstoneValue = world.getRedstonePowerFromNeighbors(pos);
+            if(isInverted){redstoneValue = 15 - redstoneValue;}
+            world.setBlockState(pos, this.getDefaultState().with(POWER, redstoneValue), 2);
+        }
+        tick++;
     }
 
     @Override

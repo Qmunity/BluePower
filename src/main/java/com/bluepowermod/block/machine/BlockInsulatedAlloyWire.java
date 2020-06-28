@@ -24,7 +24,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
     public static final IntegerProperty STRAIGHT = IntegerProperty.create("straight", 0, 5);
 
     public BlockInsulatedAlloyWire(String type, MinecraftColor color) {
-        super(type, Material.ROCK);
+        super(type);
         this.color = color;
         this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.UP).with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false).with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false).with(STRAIGHT, 1).with(POWERED, false));
         setRegistryName(Refs.MODID + ":" + "wire." + type + "." + color.name().toLowerCase());

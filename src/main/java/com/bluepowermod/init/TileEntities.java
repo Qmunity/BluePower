@@ -48,6 +48,7 @@ public class TileEntities {
                     TileEntityType.Builder.create(TileBuffer::new, BPBlocks.buffer).build(null).setRegistryName(ContainerNames.BUFFER),
                     TileEntityType.Builder.create(TileTransposer::new, BPBlocks.transposer).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "transposer")),
                     TileEntityType.Builder.create(TileSortingMachine::new, BPBlocks.sorting_machine).build(null).setRegistryName(ContainerNames.SORTING_MACHINE),
+                    TileEntityType.Builder.create(TileTube::new, BPBlocks.tube).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "tube")),
                     //TileEntityType.Builder.create(TileSortron::new, BPBlocks.sortron).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "sortron")),
                     TileEntityType.Builder.create(TileEngine::new, BPBlocks.engine).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "engine")),
                     TileEntityType.Builder.create(TileBattery::new, BPBlocks.battery).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "battery")),
@@ -70,7 +71,7 @@ public class TileEntities {
                     TileEntityType.Builder.create(TileCircuitTable::new, BPBlocks.circuit_table).build(null).setRegistryName(ContainerNames.CIRCUIT_TABLE),
                     TileEntityType.Builder.create(TileCircuitDatabase::new, BPBlocks.circuit_database).build(null).setRegistryName(ContainerNames.CIRCUITDATABASE_MAIN),
                     TileEntityType.Builder.create(TileLamp::new, BPBlocks.allLamps.toArray(new Block[0])).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "lamp")),
-                    //TileEntityType.Builder.create(TileWire::new, BPBlocks.blockAlloyWire).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "wire")),
+                    TileEntityType.Builder.create(TileWire::new, BPBlocks.blockAlloyWire).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "wire")),
                     TileEntityType.Builder.create(TileBPMultipart::new, BPBlocks.multipart).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "multipart")),
                     TileEntityType.Builder.create(TileBPMicroblock::new, BPBlocks.microblocks.toArray(new Block[0])).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "microblock"))
             );

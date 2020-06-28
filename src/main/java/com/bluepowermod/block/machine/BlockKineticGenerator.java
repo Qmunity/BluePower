@@ -7,9 +7,9 @@
  */
 package com.bluepowermod.block.machine;
 
+import com.bluepowermod.block.BlockContainerFacingBase;
 import net.minecraft.block.material.Material;
 
-import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileKinectGenerator;
 
@@ -18,13 +18,12 @@ import com.bluepowermod.tile.tier3.TileKinectGenerator;
  * @author TheFjong
  * 
  */
-public class BlockKineticGenerator extends BlockContainerBase {
+public class BlockKineticGenerator extends BlockContainerFacingBase {
     
     public BlockKineticGenerator() {
     
         super(Material.IRON, TileKinectGenerator.class);
         setRegistryName(Refs.MODID, Refs.KINETICGENERATOR_NAME);
     }
-
     
 }

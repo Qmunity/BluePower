@@ -9,12 +9,12 @@ package com.bluepowermod.block;
 
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.state.DirectionProperty;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
@@ -23,14 +23,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * @author MineMaarten
+ * @author MoreThanHidden
  */
-public class BlockContainerFacingBase extends BlockContainerBase {
+public class BlockContainerHorizontalFacingBase extends BlockContainerBase {
 
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
-    public BlockContainerFacingBase(Material material, Class<? extends TileBase> tileEntityClass) {
+    public BlockContainerHorizontalFacingBase(Material material, Class<? extends TileBase> tileEntityClass) {
         super(material, tileEntityClass);
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(ACTIVE, false));
     }

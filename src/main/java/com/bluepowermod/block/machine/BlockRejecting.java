@@ -7,18 +7,30 @@
  */
 package com.bluepowermod.block.machine;
 
-import com.bluepowermod.block.BlockContainerFacingBase;
+import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
+
 
 /**
  * @author MineMaarten
  */
-public class BlockRejecting extends BlockContainerFacingBase {
+public class BlockRejecting extends BlockContainerBase {
+    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
+    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
+    public static final BooleanProperty REJECTING = BooleanProperty.create("rejecting");
 
     public BlockRejecting(Material material, Class<? extends TileBase> tileEntityClass) {
-
         super(material, tileEntityClass);
+        setDefaultState(getDefaultState().with(ACTIVE, false).with(POWERED, false).with(REJECTING, false));
     }
 
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+        builder.add(ACTIVE, POWERED, REJECTING);
+    }
 }

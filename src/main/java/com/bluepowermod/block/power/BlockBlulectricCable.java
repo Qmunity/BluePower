@@ -8,7 +8,6 @@
 
 package com.bluepowermod.block.power;
 
-import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
@@ -217,11 +216,14 @@ public class BlockBlulectricCable extends BlockContainerBase implements IWaterLo
             boolean join = false;
             //If Air or Water look for a change in Direction
             Block dBlock = world.getBlockState(pos.offset(d)).getBlock();
-            if ((dBlock == Blocks.AIR || dBlock == Blocks.WATER) &&
-                    world.getBlockState(pos.offset(d).offset(face.getOpposite())).getBlock() instanceof BlockBlulectricCable &&
-                    world.getBlockState(pos.offset(d).offset(face.getOpposite())).get(FACING) == d) {
-                tileEntity = world.getTileEntity(pos.offset(d).offset(face.getOpposite()));
-                join = true;
+            if (dBlock == Blocks.AIR || dBlock == Blocks.WATER){
+                TileEntity tileEntity2 = world.getTileEntity(pos.offset(d).offset(face.getOpposite()));
+                BlockState blockstate2 = world.getBlockState(pos.offset(d).offset(face.getOpposite()));
+                if((blockstate2.getBlock() instanceof BlockBlulectricCable && blockstate2.get(FACING) == d) ||
+                   (tileEntity2 instanceof TileBPMultipart && ((TileBPMultipart) tileEntity2).getStates().stream().anyMatch(s -> s.getBlock() instanceof BlockBlulectricCable && s.get(FACING) == d ))) {
+                    tileEntity = tileEntity2;
+                    join = true;
+                }
             }
 
             //Check Capability for Direction
@@ -339,4 +341,8 @@ public class BlockBlulectricCable extends BlockContainerBase implements IWaterLo
         return getStateForPos(context.getWorld(), context.getPos(), getDefaultState().with(FACING, context.getFace()), context.getFace());
     }
 
+    //@Override
+    public VoxelShape getOcclusionShape(BlockState state) {
+        return AABBUtils.rotate(this.shapes[this.getShapeIndex(state)], state.get(FACING));
+    }
 }

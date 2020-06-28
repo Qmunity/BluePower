@@ -17,7 +17,7 @@
 
 package com.bluepowermod.block.machine;
 
-import com.bluepowermod.block.BlockContainerFacingBase;
+import com.bluepowermod.block.BlockContainerHorizontalFacingBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.block.BlockState;
@@ -25,16 +25,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.ILightReader;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
-public class BlockAlloyFurnace extends BlockContainerFacingBase  {
+public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
 
     public BlockAlloyFurnace() {
-
         super(Material.ROCK, TileAlloyFurnace.class);
         setRegistryName(Refs.MODID, Refs.ALLOYFURNACE_NAME);
     }

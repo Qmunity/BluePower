@@ -184,12 +184,6 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
         tag.put("energy", nbtstorage);
     }
 
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
-    }
-
     protected final IIntArray fields = new IIntArray() {
         public int get(int i) {
             switch (i) {

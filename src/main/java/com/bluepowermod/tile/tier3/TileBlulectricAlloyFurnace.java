@@ -380,10 +380,4 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
         }
     }
 
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
-    }
-
 }

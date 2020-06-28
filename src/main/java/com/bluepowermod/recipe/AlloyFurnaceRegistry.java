@@ -29,23 +29,19 @@ import com.bluepowermod.util.ItemStackUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.*;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
 import java.util.*;
 
 /**
@@ -82,12 +78,12 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
      * Clears existing and generates an Alloy Furnace Recipe Data Pack,
      * Mainly for Dynamically generated Recycle Recipes.
      */
-    public void generateRecipeDatapack(FMLServerAboutToStartEvent event){
-        if(event.getServer() != null) {
-            String path = event.getServer().getDataDirectory().getPath() + "/saves/" + event.getServer().getFolderName() + "/datapacks";
+    public void generateRecipeDatapack(MinecraftServer server){
+        if(server != null) {
+            String path = server.getDataDirectory().getPath() + "/saves/" + server.getFolderName() + "/datapacks";
 
-            if (event.getServer().isDedicatedServer()) {
-                path = event.getServer().getDataDirectory().getPath() + "/" + event.getServer().getFolderName() + "/datapacks";
+            if (server.isDedicatedServer()) {
+                path = server.getDataDirectory().getPath() + "/" + server.getFolderName() + "/datapacks";
             }
 
             DatapackUtils.createBPDatapack(path);
@@ -135,7 +131,6 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         moltenDownMap.put(recycledItem, moltenDownItem);
     }
 
-    @SuppressWarnings("unchecked")
     public void generateRecyclingRecipes(RecipeManager recipeManager) {
 
         this.blacklist = Arrays.asList(BPConfig.CONFIG.alloyFurnaceBlacklist.get().split(","));
@@ -150,40 +145,28 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             }
         }
 
-
         for (IRecipe recipe : recipeManager.getRecipes()) {
-
             List<ItemStack> registeredRecycledItems = new ArrayList<ItemStack>();
             List<ItemStack> registeredResultItems = new ArrayList<ItemStack>();
 
             int recyclingAmount = 0;
             ItemStack currentlyRecycledInto = ItemStack.EMPTY;
+
             for (ItemStack recyclingItem : bufferedRecyclingItems) {
                 try {
-                    if (recipe instanceof ShapedRecipe) {
-                        ShapedRecipe shaped = (ShapedRecipe) recipe;
-                        if (!shaped.getIngredients().isEmpty()) {
-                            for (Ingredient input : shaped.getIngredients()) {
-                                if (input.test(recyclingItem)) {
-                                    ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
-                                    if (currentlyRecycledInto.isEmpty()
-                                            || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
-                                        currentlyRecycledInto = moltenDownItem;
-                                        recyclingAmount += moltenDownItem.getCount();
-                                    }
-                                }
-                            }
-                        }
-                    } else if (recipe instanceof ShapelessRecipe) {
-                        ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
-                        if (!shapeless.getIngredients().isEmpty()) {
-                            for (Ingredient input : shapeless.getIngredients()) {
-                                if (input.test(recyclingItem)) {
-                                    ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
-                                    if (currentlyRecycledInto.isEmpty()
-                                            || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
-                                        currentlyRecycledInto = moltenDownItem;
-                                        recyclingAmount += moltenDownItem.getCount();
+                    if (recipe instanceof ICraftingRecipe) {
+                        if (!recipe.getIngredients().isEmpty()) {
+                            for (Ingredient input : ((ICraftingRecipe)recipe).getIngredients()) {
+                                if (!input.hasNoMatchingItems()) {
+                                    //Serialize and Deserialize the Object so the base tag isn't affected.
+                                    Ingredient ingredient = Ingredient.deserialize(input.serialize());
+                                    if (ingredient.test(recyclingItem)) {
+                                        ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
+                                        if (currentlyRecycledInto.isEmpty()
+                                                || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
+                                            currentlyRecycledInto = moltenDownItem;
+                                            recyclingAmount += moltenDownItem.getCount();
+                                        }
                                     }
                                 }
                             }
@@ -195,22 +178,9 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                     e.printStackTrace();
                 }
             }
-            if (recyclingAmount > 0 && recipe.getRecipeOutput().getCount() > 0) {
-                boolean shouldAdd = true;
-                for (int i = 0; i < registeredRecycledItems.size(); i++) {
-                    if (ItemStackUtils.isItemFuzzyEqual(registeredRecycledItems.get(i), recipe.getRecipeOutput())) {
-                        if (registeredResultItems.get(i).getCount() < recyclingAmount) {
-                            shouldAdd = false;
-                            break;
-                        } else {
-                            registeredResultItems.remove(i);
-                            registeredRecycledItems.remove(i);
-                            i--;
-                        }
-                    }
-                }
 
-                if (shouldAdd) {
+            if (recyclingAmount > 0 && recipe.getRecipeOutput().getCount() > 0) {
+
                     if (blacklist.contains(recipe.getRecipeOutput().getItem())) {
                         BluePower.log.info("Skipped adding item/block " + recipe.getRecipeOutput().getDisplayName()
                                 + " to the Alloy Furnace recipes.");
@@ -220,8 +190,6 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                     ItemStack resultItem = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount / recipe.getRecipeOutput().getCount()));
                     registeredResultItems.add(resultItem);
                     registeredRecycledItems.add(recipe.getRecipeOutput());
-
-                }
             }
 
             for (int i = 0; i < registeredResultItems.size(); i++) {
@@ -231,9 +199,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                     addRecipe(registeredResultItems.get(i).getItem().getRegistryName(), registeredResultItems.get(i), Ingredient.fromStacks(registeredRecycledItems.get(i)));
                 }
             }
-
         }
-
     }
 
     private ItemStack getRecyclingStack(ItemStack original) {
@@ -252,7 +218,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
         private StandardAlloyFurnaceRecipe(ResourceLocation id, String group, ItemStack craftingResult, NonNullList<Ingredient> requiredItems, NonNullList<Integer> requiredCount) {
 
-            if (craftingResult.isEmpty())
+            if (craftingResult == null || craftingResult.isEmpty())
                 throw new IllegalArgumentException("Alloy Furnace crafting result can't be null!");
             if (requiredItems.size() > 9)
                 throw new IllegalArgumentException("There can't be more than 9 crafting ingredients for the Alloy Furnace!");

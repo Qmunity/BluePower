@@ -1,6 +1,6 @@
 {
   "variants": {
-    "normal": {
+    "": {
       "model": "bluepower:block/circuit_table"
     }
   }

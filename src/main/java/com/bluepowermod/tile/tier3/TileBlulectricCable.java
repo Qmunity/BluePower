@@ -127,12 +127,6 @@ public class TileBlulectricCable extends TileMachineBase {
             tCompound.put("energy", nbtstorage);
     }
 
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
-    }
-
     @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());

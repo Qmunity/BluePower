@@ -43,19 +43,16 @@ import javax.annotation.Nullable;
 public class BlockProjectTable extends BlockContainerBase {
 
     public BlockProjectTable() {
-
         super(Material.WOOD, TileProjectTable.class);
         setRegistryName(Refs.MODID, Refs.PROJECTTABLE_NAME);
     }
 
     public BlockProjectTable(Class<? extends TileBase> tileClass) {
-
         super(Material.WOOD, tileClass);
     }
 
     @Override
     protected boolean canRotateVertical() {
-
         return false;
     }
 }

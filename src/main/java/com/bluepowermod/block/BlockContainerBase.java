@@ -134,7 +134,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
         // Only do this on the server side.
-        if (!((World)world).isRemote) {
+        if (!world.isRemote) {
             TileBase tileEntity = get(world, pos);
             if (tileEntity != null) {
                 tileEntity.onBlockNeighbourChanged();
@@ -215,9 +215,4 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
         world.getTileEntity(pos).read(tag);
     }
 
-    @Override
-    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
-        TileEntity te = world.getTileEntity(pos);
-        return te != null && te instanceof TileBase && ((TileBase) te).canConnectRedstone();
-    }
 }

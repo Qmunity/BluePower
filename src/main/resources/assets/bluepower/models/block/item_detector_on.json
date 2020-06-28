@@ -4,7 +4,7 @@
       "top": "bluepower:blocks/machines/item_detector_side_0",
       "bottom": "bluepower:blocks/machines/item_detector_side_0",
       "side": "bluepower:blocks/machines/item_detector_side_active",
-      "front": "bluepower:blocks/machines/item_detector_front_active",
+      "front": "bluepower:blocks/machines/item_detector_front",
       "back": "bluepower:blocks/machines/item_detector_back",
       "particle": "bluepower:blocks/machines/item_detector_side"
    }

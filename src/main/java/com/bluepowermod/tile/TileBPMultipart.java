@@ -19,6 +19,8 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
@@ -104,6 +106,12 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
 
     public TileEntity getTileForState(BlockState state){
         return stateMap.get(state);
+    }
+
+    @Override
+    public void setWorldAndPos(World worldIn, BlockPos posIn) {
+        super.setWorldAndPos(worldIn, posIn);
+        stateMap.values().forEach(t -> t.setWorldAndPos(worldIn, posIn));
     }
 
     @Nonnull

@@ -150,12 +150,6 @@ public class TileEngine extends TileMachineBase  {
         }
 	}
 
-	@Nullable
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
-	}
-
 	@Override
 	protected void invalidateCaps(){
 		super.invalidateCaps();

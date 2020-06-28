@@ -2,6 +2,7 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.tile.tier1.TileLamp;
+import com.bluepowermod.tile.tier1.TileLampRGB;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -18,7 +19,7 @@ public class BlockLampRGBSurface extends BlockLampSurface {
     @Override
     public int getColor(IBlockReader w, BlockPos pos, int tint) {
         if(w != null){
-        TileLamp te = get(w, pos);
+        TileLampRGB te = (TileLampRGB) w.getTileEntity(pos);
         if (te != null)
             return te.getColor();
         }

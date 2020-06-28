@@ -10,19 +10,17 @@ package com.bluepowermod;
 
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.power.CapabilityBlutricity;
+import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
 import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
+import com.bluepowermod.event.BPRecyclingReloadListener;
 import com.bluepowermod.init.*;
 import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.util.DatapackUtils;
 import com.bluepowermod.world.BPWorldGen;
 import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.TableLootEntry;
@@ -79,6 +77,7 @@ public class BluePower {
         WorldGenFlowers.setupFlowers();
         BPWorldGen.setupGeneralWorldGen();
         CapabilityBlutricity.register();
+        CapabilityRedstoneDevice.register();
         proxy.setup(event);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> BPContainerType::registerScreenFactories);
         CompatibilityUtils.init(event);
@@ -95,20 +94,7 @@ public class BluePower {
     @SubscribeEvent
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
         //Add Reload Listener for the Alloy Furnace Recipe Generator
-        event.getServer().getResourceManager().addReloadListener((IResourceManagerReloadListener) resourceManager -> {
-            if(BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()) {
-                RecipeManager recipeManager = event.getServer().getRecipeManager();
-                AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes(recipeManager);
-                AlloyFurnaceRegistry.getInstance().generateRecipeDatapack(event);
-            }else{
-                //If disabled remove any generated recipes
-                String path = event.getServer().getDataDirectory().getPath() + "/saves/" + event.getServer().getFolderName() + "/datapacks";
-                if (event.getServer().isDedicatedServer()) {
-                    path = event.getServer().getDataDirectory().getPath() + "/" + event.getServer().getFolderName() + "/datapacks";
-                }
-                DatapackUtils.clearBPAlloyFurnaceDatapack(path);
-            }
-        });
+        event.getServer().getResourceManager().addReloadListener(new BPRecyclingReloadListener(event.getServer()));
     }
 
     @SubscribeEvent

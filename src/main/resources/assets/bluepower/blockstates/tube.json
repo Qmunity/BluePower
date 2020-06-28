@@ -1,0 +1,25 @@
+{
+  "multipart": [
+    {
+      "apply": { "model": "bluepower:block/tube"}
+    },
+    {   "when": { "north": true },
+      "apply": { "model": "bluepower:block/tube_extended" }
+    },
+    {   "when": { "east": true },
+      "apply": { "model": "bluepower:block/tube_extended", "y": 90, "uvlock": true }
+    },
+    {   "when": { "south": true },
+      "apply": { "model": "bluepower:block/tube_extended", "y": 180, "uvlock": true }
+    },
+    {   "when": { "west": true },
+      "apply": { "model": "bluepower:block/tube_extended", "y": 270, "uvlock": true }
+    },
+    {   "when": { "up": true },
+      "apply": { "model": "bluepower:block/tube_extended", "x": 270, "uvlock": true }
+    },
+    {   "when": { "down": true },
+      "apply": { "model": "bluepower:block/tube_extended", "x": 90, "uvlock": true }
+    }
+  ]
+}

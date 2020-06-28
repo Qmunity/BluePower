@@ -1,6 +1,6 @@
 package com.bluepowermod.block.power;
 
-import com.bluepowermod.block.BlockContainerFacingBase;
+import com.bluepowermod.block.BlockContainerHorizontalFacingBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileBlulectricFurnace;
 import net.minecraft.block.material.Material;
@@ -8,7 +8,7 @@ import net.minecraft.block.material.Material;
 /**
  * @author MoreThanHidden
  */
-public class BlockBlulectricFurnace  extends BlockContainerFacingBase {
+public class BlockBlulectricFurnace  extends BlockContainerHorizontalFacingBase {
 
     public BlockBlulectricFurnace() {
         super(Material.ROCK, TileBlulectricFurnace.class);

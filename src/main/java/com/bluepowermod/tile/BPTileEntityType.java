@@ -87,6 +87,9 @@ public class BPTileEntityType {
     @ObjectHolder(Refs.MODID + ":engine")
     public static TileEntityType<TileEngine> ENGINE;
 
+    @ObjectHolder(Refs.MODID + ":tube")
+    public static TileEntityType<TileEngine> TUBE;
+
     @ObjectHolder(Refs.MODID + ":sortron")
     public static TileEntityType<TileSortron> SORTRON;
 

@@ -21,15 +21,15 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockLampSurface extends BlockLamp implements IWaterLoggable {
 
-    private final String name;
-    private final Boolean isInverted;
     private final VoxelShape size;
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -37,8 +37,6 @@ public class BlockLampSurface extends BlockLamp implements IWaterLoggable {
 
     public BlockLampSurface(String name, boolean isInverted, MinecraftColor color, VoxelShape size) {
         super(name, isInverted, color);
-        this.name = name;
-        this.isInverted = isInverted;
         this.size = size;
         this.setDefaultState(stateContainer.getBaseState().with(POWER, isInverted ? 15 : 0).with(FACING, Direction.UP).with(WATERLOGGED, false));
     }
@@ -46,12 +44,6 @@ public class BlockLampSurface extends BlockLamp implements IWaterLoggable {
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return AABBUtils.rotate(size, state.get(FACING));
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void initModel() {
-
     }
 
     @Override
@@ -89,7 +81,7 @@ public class BlockLampSurface extends BlockLamp implements IWaterLoggable {
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         IFluidState fluidstate = context.getWorld().getFluidState(context.getPos());
-        return this.getDefaultState().with(FACING, context.getFace()).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+        return super.getStateForPlacement(context).with(FACING, context.getFace()).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 
     @Override

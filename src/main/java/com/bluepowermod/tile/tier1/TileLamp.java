@@ -7,72 +7,18 @@
  */
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.block.machine.BlockLampRGB;
-import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.tile.BPTileEntityType;
-import com.bluepowermod.tile.TileBase;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * @author Koen Beckers (K4Unl) and Amadornes.
  */
-public class TileLamp extends TileBase{
-
-    private byte[] bundledPower = new byte[16];
+public class TileLamp extends TileEntity {
 
     public TileLamp() {
         super(BPTileEntityType.LAMP);
     }
 
-    @Override
-    protected void writeToPacketNBT(CompoundNBT tCompound) {
-        if (getBlockState().getBlock() instanceof BlockLampRGB) {
-            tCompound.putByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
-            tCompound.putByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
-            tCompound.putByte("blue", bundledPower[MinecraftColor.BLUE.ordinal()]);
-        }
-    }
-
-    @Override
-    protected void readFromPacketNBT(CompoundNBT tCompound) {
-        if (tCompound.contains("red")) {
-            byte[] pow = bundledPower;
-            pow[MinecraftColor.RED.ordinal()] = tCompound.getByte("red");
-            pow[MinecraftColor.GREEN.ordinal()] = tCompound.getByte("green");
-            pow[MinecraftColor.BLUE.ordinal()] = tCompound.getByte("blue");
-            bundledPower = pow;
-        }
-    }
-
-    @Override
-    public World getWorld() {
-        return world;
-    }
-
-    @Override
-    public BlockPos getPos() {
-        return pos;
-    }
-
-    public int getColor() {
-
-        int r = MathHelper.map(bundledPower[MinecraftColor.RED.ordinal()] & 0xFF, 0, 255, 20, 235);
-        int g = MathHelper.map(bundledPower[MinecraftColor.GREEN.ordinal()] & 0xFF, 0, 255, 20, 235);
-        int b = MathHelper.map(bundledPower[MinecraftColor.BLUE.ordinal()] & 0xFF, 0, 255, 20, 235);
-
-        return (r << 16) + (g << 8) + b;
-    }
-
-    @Override
-    protected void onTileLoaded() {
-        if (world != null) {
-            world.getBlockState(pos).neighborChanged(world, pos, world.getBlockState(pos).getBlock(), pos, true);
-        }
-    }
 /*
     @Optional.Method(modid="albedo")
     @Override
