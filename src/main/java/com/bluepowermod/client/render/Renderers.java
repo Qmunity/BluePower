@@ -99,6 +99,7 @@ public class Renderers {
         RenderTypeLookup.setRenderLayer(BPBlocks.indigo_flower, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BPBlocks.flax_crop, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BPBlocks.cracked_basalt_lava, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BPBlocks.cracked_basalt_decorative, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BPBlocks.rubber_leaves, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BPBlocks.rubber_sapling, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BPBlocks.tube, RenderType.getCutout());
@@ -108,9 +109,5 @@ public class Renderers {
     public static void registerBakedModel(Block block) {
         ((ICustomModelBlock) block).initModel();
     }
-
-
-
-
 
 }

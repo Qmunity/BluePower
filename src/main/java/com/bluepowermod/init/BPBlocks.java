@@ -60,6 +60,7 @@ public class BPBlocks {
     public static Block basalt_brick;
     public static Block marble_brick;
     public static Block cracked_basalt_lava;
+    public static Block cracked_basalt_decorative;
 
     public static Block half_block;
     public static Block panel;
@@ -179,7 +180,8 @@ public class BPBlocks {
         basalt_cobble = new BlockStoneOre(Refs.BASALTCOBBLE_NAME);
         basalt_brick = new BlockStoneOre(Refs.BASALTBRICK_NAME);
         marble_brick = new BlockStoneOre(Refs.MARBLEBRICK_NAME);
-        cracked_basalt_lava = new BlockCrackedBasalt(Refs.CRACKED_BASALT);
+        cracked_basalt_lava = new BlockCrackedBasalt(Refs.CRACKED_BASALT_NAME);
+        cracked_basalt_decorative = new BlockStoneOre(Refs.CRACKED_BASALT_DECOR_NAME);
 
         basaltbrick_cracked = new BlockStoneOre(Refs.CRACKEDBASALTBRICK_NAME);
         basalt_brick_small = new BlockStoneOre(Refs.SMALLBASALTBRICK_NAME);

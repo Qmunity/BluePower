@@ -44,7 +44,8 @@ public class Refs {
     public static final String BASALTCOBBLE_NAME = "basalt_cobble";
     public static final String BASALTBRICK_NAME = "basalt_brick";
     public static final String MARBLEBRICK_NAME = "marble_brick";
-    public static final String CRACKED_BASALT = "cracked_basalt_lava";
+    public static final String CRACKED_BASALT_NAME = "cracked_basalt_lava";
+    public static final String CRACKED_BASALT_DECOR_NAME = "cracked_basalt_decorative";
     public static final String TILES = "tiles";
     public static final String ALLOYFURNACE_NAME = "alloyfurnace";
     public static final String AMETHYSTORE_NAME = "amethyst_ore";

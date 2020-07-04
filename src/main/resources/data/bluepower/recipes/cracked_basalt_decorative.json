@@ -1,0 +1,18 @@
+﻿{
+  "result": {
+    "item": "bluepower:cracked_basalt_decorative"
+  },
+  "pattern": [
+    "L",
+    "B"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "bluepower:basalt"
+    },
+    "L": {
+      "item": "minecraft:lava_bucket"
+    }
+  }
+}

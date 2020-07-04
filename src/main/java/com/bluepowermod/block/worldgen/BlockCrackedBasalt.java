@@ -47,7 +47,6 @@ public class BlockCrackedBasalt extends BlockStoneOre {
         super(name, Properties.create(Material.ROCK).hardnessAndResistance(25.0F).sound(SoundType.STONE));
     }
 
-
     @Override
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         // When the random chance hit, spew lava.
@@ -77,7 +76,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     @Override
     public List<ItemStack> getDrops(BlockState p_220076_1_, LootContext.Builder p_220076_2_) {
         NonNullList<ItemStack> itemStacks = NonNullList.create();
-        itemStacks.add(new ItemStack(Item.getItemFromBlock(BPBlocks.basalt_cobble)));
+        itemStacks.add(new ItemStack(Item.getItemFromBlock(BPBlocks.cracked_basalt_lava)));
         return itemStacks;
     }
 
