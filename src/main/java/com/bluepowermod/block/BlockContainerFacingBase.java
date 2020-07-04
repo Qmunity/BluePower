@@ -19,7 +19,9 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 /**
@@ -67,4 +69,54 @@ public class BlockContainerFacingBase extends BlockContainerBase {
         world.setBlockState(pos, state.with(FACING, canRotateVertical() ? Direction.getFacingDirections(placer)[0] : placer.getHorizontalFacing().getOpposite()), 2);
     }
 
+    @Override
+    public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
+        if(direction == Rotation.CLOCKWISE_90){
+            switch (state.get(FACING)) {
+                case DOWN:
+                    state = state.with(FACING, Direction.UP);
+                    break;
+                case UP:
+                    state = state.with(FACING, Direction.NORTH);
+                    break;
+                case NORTH:
+                    state = state.with(FACING, Direction.EAST);
+                    break;
+                case EAST:
+                    state = state.with(FACING, Direction.SOUTH);
+                    break;
+                case SOUTH:
+                    state = state.with(FACING, Direction.WEST);
+                    break;
+                case WEST:
+                    state = state.with(FACING, Direction.DOWN);
+                    break;
+            }
+        }if(direction == Rotation.COUNTERCLOCKWISE_90){
+            switch (state.get(FACING)) {
+                case DOWN:
+                    state = state.with(FACING, Direction.WEST);
+                    break;
+                case UP:
+                    state = state.with(FACING, Direction.DOWN);
+                    break;
+                case NORTH:
+                    state = state.with(FACING, Direction.UP);
+                    break;
+                case EAST:
+                    state = state.with(FACING, Direction.NORTH);
+                    break;
+                case SOUTH:
+                    state = state.with(FACING, Direction.EAST);
+                    break;
+                case WEST:
+                    state = state.with(FACING, Direction.SOUTH);
+                    break;
+            }
+        } else if (direction == Rotation.CLOCKWISE_180){
+            state = state.with(FACING, state.get(FACING).getOpposite());
+        }
+        world.setBlockState(pos, state, 2);
+        return state;
+    }
 }
