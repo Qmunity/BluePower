@@ -18,6 +18,7 @@
 package com.bluepowermod.client.gui;
 
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -42,19 +43,19 @@ public class GuiAlloyFurnace extends GuiContainerBaseBP<ContainerAlloyFurnace> i
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY){
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY){
 
-        super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+        super.drawGuiContainerBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
 
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
         int burningPercentage = (int)(furnace.getBurningPercentage() * 13);
         if (burningPercentage > 0)
-            this.blit(x + 22, y + 54 + 13 - burningPercentage, 177, 13 - burningPercentage, 14, burningPercentage + 1);
+            this.blit(matrixStack, x + 22, y + 54 + 13 - burningPercentage, 177, 13 - burningPercentage, 14, burningPercentage + 1);
 
         int processPercentage = (int)(furnace.getProcessPercentage() * 22);
-        this.blit(x + 103, y + 35, 178, 14, processPercentage, 15);
+        this.blit(matrixStack, x + 103, y + 35, 178, 14, processPercentage, 15);
     }
 
 }

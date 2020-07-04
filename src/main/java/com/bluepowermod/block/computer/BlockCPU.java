@@ -14,7 +14,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
@@ -35,9 +34,5 @@ public class BlockCPU extends BlockContainerBase {
         }
     }
 
-    @Override
-    public int tickRate(IWorldReader p_149738_1_) {
-        return 1;
-    }
 
 }

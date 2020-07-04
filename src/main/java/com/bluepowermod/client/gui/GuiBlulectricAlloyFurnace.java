@@ -20,6 +20,7 @@ package com.bluepowermod.client.gui;
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerBlulectricAlloyFurnace;
 import com.bluepowermod.reference.Refs;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -39,31 +40,31 @@ public class GuiBlulectricAlloyFurnace extends GuiContainerBaseBP<ContainerBlule
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY){
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY){
 
-        super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+        super.drawGuiContainerBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
 
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
         int bufferPercentage = (int)(furnace.getBufferPercentage() * 50);
         if (bufferPercentage > 0)
-            this.blit(x + 21, y + 72 - bufferPercentage, 176, 65 - bufferPercentage, 5, bufferPercentage);
+            this.blit(matrixStack, x + 21, y + 72 - bufferPercentage, 176, 65 - bufferPercentage, 5, bufferPercentage);
 
         double max = 0.55;
         double min = 0.49;
         int energyPercentage = (int)(Math.abs(Math.max(min,Math.min(furnace.getBufferPercentage(),max))-min)/Math.abs(max-min) * 50);
         if (energyPercentage > 0)
-            this.blit(x + 29, y + 72 - energyPercentage, 176, 65 - energyPercentage, 5, energyPercentage);
+            this.blit(matrixStack, x + 29, y + 72 - energyPercentage, 176, 65 - energyPercentage, 5, energyPercentage);
 
         if(furnace.getBufferPercentage() > 0.5)
-            this.blit(x + 20,y + 11,183,18,7,10);
+            this.blit(matrixStack, x + 20,y + 11,183,18,7,10);
 
         if(furnace.getBufferPercentage() > 0.55)
-            this.blit(x + 30,y + 9,184,32,7,12);
+            this.blit(matrixStack, x + 30,y + 9,184,32,7,12);
 
         int processPercentage = (int)(furnace.getProcessPercentage() * 22);
-        this.blit(x + 108, y + 35, 178, 0, processPercentage, 15);
+        this.blit(matrixStack, x + 108, y + 35, 178, 0, processPercentage, 15);
     }
 
 }

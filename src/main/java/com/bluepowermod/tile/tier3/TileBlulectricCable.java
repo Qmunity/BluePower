@@ -48,7 +48,7 @@ public class TileBlulectricCable extends TileMachineBase {
     public void tick() {
         if (world != null && !world.isRemote) {
             storage.resetCurrent();
-            BlockState state = world.getBlockState(pos);
+            BlockState state = getBlockState();
             if (state.getBlock() instanceof BlockBlulectricCable) {
                 List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getAllowedValues());
 
@@ -81,7 +81,7 @@ public class TileBlulectricCable extends TileMachineBase {
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getAllowedValues());
         if(world != null) {
-            BlockState state = world.getBlockState(pos);
+            BlockState state = getBlockState();
             if (state.getBlock() instanceof BlockBlulectricCable) {
 
                 //Remove upward connections
@@ -135,7 +135,7 @@ public class TileBlulectricCable extends TileMachineBase {
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
-        handleUpdateTag(pkt.getNbtCompound());
+        handleUpdateTag(getBlockState(), pkt.getNbtCompound());
     }
 
 }

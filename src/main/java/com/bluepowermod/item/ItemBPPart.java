@@ -55,7 +55,7 @@ public class ItemBPPart extends BlockItem {
                 //Restore the Tile Entity Data
                 TileEntity tile = ((TileBPMultipart) tileEntity).getTileForState(state);
                 if (tile != null)
-                    tile.read(nbt);
+                    tile.read(state, nbt);
 
                 //Add the new State
                 ((TileBPMultipart) tileEntity).addState(thisState);

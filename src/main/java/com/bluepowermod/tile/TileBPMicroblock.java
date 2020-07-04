@@ -71,8 +71,8 @@ public class TileBPMicroblock extends TileEntity {
     }
 
     @Override
-    public void read(CompoundNBT compound) {
-       super.read(compound);
+    public void read(BlockState state, CompoundNBT compound) {
+       super.read(state, compound);
        block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("block")));
        rotation = compound.getInt("block");
     }
@@ -97,7 +97,7 @@ public class TileBPMicroblock extends TileEntity {
         Block oldblock = getBlock();
         CompoundNBT tagCompound = packet.getNbtCompound();
         super.onDataPacket(networkManager, packet);
-        read(tagCompound);
+        read(getBlockState(), tagCompound);
         if (world.isRemote) {
             // Update if needed
             if (!getBlock().equals(oldblock)) {

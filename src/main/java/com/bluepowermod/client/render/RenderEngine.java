@@ -69,7 +69,7 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
         GL11.glTranslatef(0, f2, 0);
         IBakedModel glider = dispatcher.getModelForState(state.with(BlockEngine.GLIDER, true));
         //Render the glider
-        dispatcher.getBlockModelRenderer().renderModel(world, glider, state.with(BlockEngine.GLIDER, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.cutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
+        dispatcher.getBlockModelRenderer().renderModel(world, glider, state.with(BlockEngine.GLIDER, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.getCutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
         matrixStack.pop();
         matrixStack.push();
@@ -78,7 +78,7 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
         RenderSystem.rotatef(angle, 0, 1, 0);
         IBakedModel gear = dispatcher.getModelForState(state.with(BlockEngine.GEAR, true));
         // Render the rotating cog
-        dispatcher.getBlockModelRenderer().renderModel(world, gear, state.with(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.cutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
+        dispatcher.getBlockModelRenderer().renderModel(world, gear, state.with(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.getCutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
         matrixStack.pop();
     }

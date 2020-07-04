@@ -4,14 +4,13 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.LogBlock;
-import net.minecraft.block.material.MaterialColor;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 
-public class BlockRubberLog extends LogBlock {
+public class BlockRubberLog extends RotatedPillarBlock {
     public BlockRubberLog(Properties properties){
-        super(MaterialColor.BROWN, properties);
+        super(properties);
         this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERLOG_NAME);
         this.setDefaultState(this.stateContainer.getBaseState().with(AXIS, Direction.Axis.Y));
         BPBlocks.blockList.add(this);

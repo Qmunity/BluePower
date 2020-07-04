@@ -1,6 +1,7 @@
 package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.tile.tier1.TileProjectTable;
+import net.minecraft.block.BlockState;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -40,8 +41,8 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public void read(CompoundNBT tag) {
-        super.read(tag);
+    public void read(BlockState state, CompoundNBT tag) {
+        super.read(state, tag);
 
         if (tag.contains("craftBuffer")) {
             craftBuffer = ItemStack.read(tag.getCompound("craftBuffer"));

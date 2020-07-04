@@ -57,15 +57,15 @@ public class Renderers {
         //Register Microblock Models
         //Register Microblock Models
         for(Direction dir : Direction.values()) {
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "face=" + dir.getName()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "face=" + dir.getName()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "face=" + dir.getName()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "face=" + dir.getName2()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName2() + ",waterlogged=true")));
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName2() + ",waterlogged=true"), microblockModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName2() + ",waterlogged=false"), microblockModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "face=" + dir.getName2()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName2() + ",waterlogged=true")));
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName2() + ",waterlogged=true"), microblockModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName2() + ",waterlogged=false"), microblockModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "face=" + dir.getName2()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName2() + ",waterlogged=true")));
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName2() + ",waterlogged=true"), microblockModel);
+            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName2() + ",waterlogged=false"), microblockModel);
         }
 
         event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "inventory"), microblockModel);
@@ -91,17 +91,17 @@ public class Renderers {
                 Minecraft.getInstance().getItemColors().register(new BPBlockColor(), Item.getItemFromBlock(block));
             }
             if(block instanceof BlockLampSurface || block instanceof BlockGateBase || block instanceof BlockBattery)
-                RenderTypeLookup.setRenderLayer(block, RenderType.cutout());
+                RenderTypeLookup.setRenderLayer(block, RenderType.getCutout());
             if(block instanceof BlockBPGlass || block instanceof BlockBPMicroblock)
-                RenderTypeLookup.setRenderLayer(block, RenderType.translucent());
+                RenderTypeLookup.setRenderLayer(block, RenderType.getTranslucent());
         }
 
-        RenderTypeLookup.setRenderLayer(BPBlocks.indigo_flower, RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(BPBlocks.flax_crop, RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(BPBlocks.cracked_basalt_lava, RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(BPBlocks.rubber_leaves, RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(BPBlocks.rubber_sapling, RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(BPBlocks.tube, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(BPBlocks.indigo_flower, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BPBlocks.flax_crop, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BPBlocks.cracked_basalt_lava, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BPBlocks.rubber_leaves, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BPBlocks.rubber_sapling, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BPBlocks.tube, RenderType.getCutout());
 
     }
 

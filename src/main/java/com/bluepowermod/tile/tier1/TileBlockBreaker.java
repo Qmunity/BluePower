@@ -30,8 +30,6 @@ import net.minecraftforge.fluids.IFluidBlock;
 
 import java.util.List;
 
-;
-
 public class TileBlockBreaker extends TileMachineBase {
 
     public TileBlockBreaker() {
@@ -55,7 +53,7 @@ public class TileBlockBreaker extends TileMachineBase {
 
     private boolean canBreakBlock(Block block, World world, BlockState state, BlockPos pos) {
     
-        return !world.isAirBlock(pos) && !(block instanceof IFluidBlock) && block.getBlockHardness(state, world, pos) > -1.0F;
+        return !world.isAirBlock(pos) && !(block instanceof IFluidBlock) && state.getBlockHardness(world, pos) > -1.0F;
     }
     
     @Override

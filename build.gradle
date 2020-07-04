@@ -8,9 +8,14 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+
+plugins {
+    id "com.wynprice.cursemaven" version "2.1.5"
+}
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
+
 
 
 project.ext {
@@ -21,7 +26,7 @@ project.ext {
     } else {
         build = "-custom"
     }
-    mcVersion = "1.15.2"
+    mcVersion = "1.16.1"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -30,8 +35,8 @@ archivesBaseName = "bluepower"
 
 repositories {
     maven {
-        name "Hwyla"
-        url "http://tehnut.info/maven"
+        name "ModMaven"
+        url "https://modmaven.k-4u.nl"
     }
     maven {
         name "OpenComputers"
@@ -54,7 +59,7 @@ repositories {
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200126-1.15.1'
+    mappings channel: 'snapshot', version: '20200703-hidden-1.16.1'
 
     runs {
         client {
@@ -95,14 +100,14 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.2-31.2.27'
+    minecraft 'net.minecraftforge:forge:1.16.1-32.0.38'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
 	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
-    compileOnly fg.deobf("mcp.mobius.waila:Hwyla:1.10.6-B67_1.14.4:api")
-    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
-    //compile "team.chisel.ctm:CTM:MC1.12.2-0.3.3.22"
+    compileOnly fg.deobf("curse.maven:Hwyla:2880071")
+    compileOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.2:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.2")
+    //compile "team.chisel.ctm:CTM:MC1.16.1-1.1.0.1"
 }
 
 jar {

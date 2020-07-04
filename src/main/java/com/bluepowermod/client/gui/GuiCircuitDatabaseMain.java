@@ -11,6 +11,7 @@ import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerCircuitDatabaseMain;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -144,11 +145,11 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float par1, int par2, int par3) {
 
-        super.drawGuiContainerBackgroundLayer(par1, par2, par3);
+        super.drawGuiContainerBackgroundLayer(matrixStack, par1, par2, par3);
 
-        this.drawString(guiLeft + 95, guiTop + 25, I18n.format("gui.bluepower:circuitDatabase.name"), false);
+        this.drawString(matrixStack, guiLeft + 95, guiTop + 25, I18n.format("gui.bluepower:circuitDatabase.name"), false);
         //nameField.drawTextBox();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -156,11 +157,11 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
 
         int processPercentage = circuitDatabase.curCopyProgress * 22 / TileCircuitDatabase.UPLOAD_AND_COPY_TIME;
         if (processPercentage > 0)
-            blit(guiLeft + 77, guiTop + 64, 176, 0, processPercentage, 15);
+            blit(matrixStack, guiLeft + 77, guiTop + 64, 176, 0, processPercentage, 15);
 
         processPercentage = circuitDatabase.curUploadProgress * 22 / TileCircuitDatabase.UPLOAD_AND_COPY_TIME;
         if (processPercentage > 0)
-            blit(guiLeft + 57, guiTop + 57 - processPercentage, 176, 37 - processPercentage, 15, processPercentage);
+            blit(matrixStack, guiLeft + 57, guiTop + 57 - processPercentage, 176, 37 - processPercentage, 15, processPercentage);
 
     }
 

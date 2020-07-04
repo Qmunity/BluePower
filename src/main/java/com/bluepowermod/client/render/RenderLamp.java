@@ -72,7 +72,7 @@ public class RenderLamp extends TileEntityRenderer<TileLamp> {
 
             matrixStack.push();
             double powerDivision = power / 18D;
-            com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, iRenderTypeBuffer.getBuffer(RenderType.lightning()), matrixStack, r, g, b, (int)(powerDivision * 200), 200,
+            com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, iRenderTypeBuffer.getBuffer(RenderType.getLightning()), matrixStack, r, g, b, (int)(powerDivision * 200), 200,
                     renderFaces);
             matrixStack.pop();
     }

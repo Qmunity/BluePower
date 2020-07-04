@@ -24,6 +24,7 @@ import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -75,9 +76,9 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void read(CompoundNBT tCompound) {
+    public void read(BlockState blockState, CompoundNBT tCompound) {
 
-        super.read(tCompound);
+        super.read(blockState, tCompound);
 
         for (int i = 0; i < 9; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);

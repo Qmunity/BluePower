@@ -45,7 +45,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.event.AnvilUpdateEvent;
@@ -59,8 +59,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemStackHandler;
 import org.lwjgl.opengl.GL11;
-
-import java.util.Random;
 
 public class BPEventHandler {
 
@@ -205,7 +203,7 @@ public class BPEventHandler {
         if (event.getEntityLiving() instanceof PlayerEntity) {
             ItemStack drop = new ItemStack(Items.PLAYER_HEAD, 1);
             drop.setTag(new CompoundNBT());
-            drop.getTag().putString("SkullOwner", ((PlayerEntity) event.getEntityLiving()).getDisplayName().getFormattedText());
+            drop.getTag().putString("SkullOwner", event.getEntityLiving().getDisplayName().getString());
             event.getEntityLiving().entityDropItem(drop, 0.0F);
         }
 
@@ -291,7 +289,7 @@ public class BPEventHandler {
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             vertexbuffer.pos(-d0, -d1, -d2);
             BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-            Vec3d lookVec = event.getInfo().getProjectedView();
+            Vector3d lookVec = event.getInfo().getProjectedView();
             Direction dir = ((BlockRayTraceResult) mop).getFace();
             BlockState state = block.getDefaultState();
             if(block instanceof BlockGateBase ){

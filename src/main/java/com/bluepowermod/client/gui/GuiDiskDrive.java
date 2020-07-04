@@ -8,6 +8,7 @@
 package com.bluepowermod.client.gui;
 
 import com.bluepowermod.container.ContainerAlloyFurnace;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -29,7 +30,7 @@ public class GuiDiskDrive extends GuiContainerBaseBP<ContainerDiskDrive> impleme
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
 
     }
 }

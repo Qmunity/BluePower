@@ -18,6 +18,7 @@
 package com.bluepowermod.tile;
 
 import com.bluepowermod.block.BlockContainerFacingBase;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -51,9 +52,9 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void read(CompoundNBT tCompound) {
+    public void read(BlockState blockState, CompoundNBT tCompound) {
 
-        super.read(tCompound);
+        super.read(blockState, tCompound);
         isRedstonePowered = tCompound.getBoolean("isRedstonePowered");
         readFromPacketNBT(tCompound);
     }
@@ -95,7 +96,7 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         readFromPacketNBT(pkt.getNbtCompound());
-        handleUpdateTag(pkt.getNbtCompound());
+        handleUpdateTag(getBlockState(), pkt.getNbtCompound());
     }
 
     @Override
@@ -218,7 +219,7 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
 
     @Override
     public void setFacingDirection(Direction dir) {
-        if(world.getBlockState(pos).getBlock() instanceof BlockContainerFacingBase) {
+        if(getBlockState().getBlock() instanceof BlockContainerFacingBase) {
             BlockContainerFacingBase.setState(dir, world, pos);
             if (world != null) {
                 sendUpdatePacket();
@@ -229,8 +230,8 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
 
     @Override
     public Direction getFacingDirection() {
-        if(world.getBlockState(pos).getBlock() instanceof BlockContainerFacingBase) {
-            return world.getBlockState(pos).get(BlockContainerFacingBase.FACING);
+        if(getBlockState().getBlock() instanceof BlockContainerFacingBase) {
+            return getBlockState().get(BlockContainerFacingBase.FACING);
         }
         return Direction.UP;
     }

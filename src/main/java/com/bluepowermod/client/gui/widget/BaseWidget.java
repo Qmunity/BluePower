@@ -1,5 +1,6 @@
 package com.bluepowermod.client.gui.widget;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.AbstractGui;
@@ -60,7 +61,7 @@ public class BaseWidget implements IGuiWidget {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTick) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
 
         if (enabled) {
             GL11.glColor4d(1, 1, 1, 1);
@@ -69,7 +70,7 @@ public class BaseWidget implements IGuiWidget {
         }
         if (textures.length > 0)
             Minecraft.getInstance().getTextureManager().bindTexture(textures[textureIndex]);
-        AbstractGui.blit(x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
+        AbstractGui.blit(matrixStack, x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
     }
 
     protected int getTextureU() {

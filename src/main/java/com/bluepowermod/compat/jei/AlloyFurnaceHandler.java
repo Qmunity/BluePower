@@ -7,34 +7,22 @@
  */
 package com.bluepowermod.compat.jei;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.reference.Refs;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.api.recipe.transfer.IRecipeTransferError;
-import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
-import mezz.jei.api.runtime.IIngredientManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,8 +65,8 @@ public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnace
     }
 
     @Override
-    public void draw(StandardAlloyFurnaceRecipe recipe, double mouseX, double mouseY) {
-        progress.draw(95, 22);
+    public void draw(StandardAlloyFurnaceRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+        progress.draw(matrixStack, 95, 22);
     }
 
     @Override

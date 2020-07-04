@@ -16,17 +16,17 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.TransformationMatrix;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.math.vector.TransformationMatrix;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
@@ -122,7 +122,7 @@ public class BPMicroblockModel implements IBakedModel {
             public void put(int element, float... data) {
                 VertexFormatElement e = this.getVertexFormat().getElements().get(element);
                 if (e.getUsage() == VertexFormatElement.Usage.UV && e.getIndex() == 0) {
-                    Vec2f vec = new Vec2f(data[0], data[1]);
+                    Vector2f vec = new Vector2f(data[0], data[1]);
                     float u = (vec.x - sizeQuad.func_187508_a().getMinU()) / (sizeQuad.func_187508_a().getMaxU() - sizeQuad.func_187508_a().getMinU()) * 16;
                     float v = (vec.y - sizeQuad.func_187508_a().getMinV()) / (sizeQuad.func_187508_a().getMaxV() - sizeQuad.func_187508_a().getMinV()) * 16;
                     builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v));
@@ -186,7 +186,7 @@ public class BPMicroblockModel implements IBakedModel {
      */
     private static final class BakedMicroblockOverrideHandler extends ItemOverrideList{
         @Override
-        public IBakedModel getModelWithOverrides(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity){
+        public IBakedModel func_239290_a_(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity){
             CompoundNBT nbt = stack.getTag();
             if(nbt != null && nbt.contains("block")){
                 Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));

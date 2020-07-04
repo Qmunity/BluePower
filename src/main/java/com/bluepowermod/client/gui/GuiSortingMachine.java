@@ -23,6 +23,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
 import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
@@ -115,13 +116,13 @@ public class GuiSortingMachine extends GuiContainerBaseBP<ContainerSortingMachin
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float f, int i, int j) {
 
-        super.drawGuiContainerBackgroundLayer(f, i, j);
+        super.drawGuiContainerBackgroundLayer(matrixStack, f, i, j);
 
         if (sortingMachine.sortMode == SortMode.ALLSTACK_SEQUENTIAL || sortingMachine.sortMode == SortMode.ANYSTACK_SEQUENTIAL) {
             this.minecraft.getTextureManager().bindTexture(resLoc);
-            AbstractGui.blit(guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
+            AbstractGui.blit(matrixStack, guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
         }
     }
 

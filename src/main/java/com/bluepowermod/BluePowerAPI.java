@@ -12,6 +12,7 @@ import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -29,7 +30,7 @@ public class BluePowerAPI implements IBPApi {
     @Override
     public void loadSilkySettings(World world, BlockPos pos, ItemStack stack) {
         TileEntity te = world.getTileEntity(pos);
-        Block b = world.getBlockState(pos).getBlock();
+        BlockState blockState = world.getBlockState(pos);
         if (te == null)
             throw new IllegalStateException("This block doesn't have a tile entity?!");
         if (stack.isEmpty())
@@ -39,14 +40,14 @@ public class BluePowerAPI implements IBPApi {
             if (tag.hasUniqueId("tileData")) {
                 if (te instanceof IAdvancedSilkyRemovable) {
                     ((IAdvancedSilkyRemovable) te).readSilkyData(world, pos, tag.getCompound("tileData"));
-                } else if (b instanceof IAdvancedSilkyRemovable) {
-                    ((IAdvancedSilkyRemovable) b).readSilkyData(world, pos, tag.getCompound("tileData"));
+                } else if (blockState.getBlock() instanceof IAdvancedSilkyRemovable) {
+                    ((IAdvancedSilkyRemovable) blockState.getBlock()).readSilkyData(world, pos, tag.getCompound("tileData"));
                 } else {
                     CompoundNBT tileTag = tag.getCompound("tileData");
                     tileTag.putInt("x", pos.getX());
                     tileTag.putInt("y", pos.getY());
                     tileTag.putInt("z", pos.getZ());
-                    te.read(tileTag);
+                    te.read(blockState, tileTag);
                 }
             }
         }

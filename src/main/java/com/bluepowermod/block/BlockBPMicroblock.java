@@ -2,7 +2,6 @@ package com.bluepowermod.block;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMicroblock;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.AABBUtils;
@@ -10,10 +9,12 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
@@ -25,15 +26,14 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -67,16 +67,11 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
             ItemStack stack = new ItemStack(this);
             stack.setTag(nbt);
             stack.setDisplayName(new TranslationTextComponent(((TileBPMicroblock)tileentity).getBlock().getTranslationKey())
-                    .appendText(" ")
+                    .appendSibling(new StringTextComponent(" "))
                     .appendSibling(new TranslationTextComponent(this.getTranslationKey())));
             itemStacks.add(stack);
         }
         return itemStacks;
-    }
-
-    @Override
-    public ResourceLocation getLootTable() {
-        return new ResourceLocation(Refs.MODID + ":blocks/microblock");
     }
 
     @Override
@@ -119,7 +114,7 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
 
 
     @Override
-    public IFluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
@@ -127,11 +122,11 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         PlayerEntity player = context.getPlayer();
-        IFluidState fluidstate = context.getWorld().getFluidState(context.getPos());
+        FluidState fluidstate = context.getWorld().getFluidState(context.getPos());
         if(player != null && !player.isCrouching()) {
             return this.getDefaultState().with(FACING, context.getFace()).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
         }
-        Vec3d vec = context.getPlayer().getLookVec();
+        Vector3d vec = context.getPlayer().getLookVec();
         return this.getDefaultState().with(FACING, Direction.getFacingFromVector(vec.x, vec.y, vec.z)).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 

@@ -17,6 +17,7 @@ import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -31,8 +32,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.*;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -40,7 +39,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
@@ -162,20 +161,20 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                 for (int i = 0; i < useItems; i++) {
                     player.inventory.currentItem = i;
                     ItemStack stack = player.getHeldItemMainhand();
-                    if (canDeployItem(stack) && stack.getItem().itemInteractionForEntity(stack, player, (LivingEntity) entity, Hand.MAIN_HAND)) return true;
-                    if (entity instanceof AnimalEntity && ((AnimalEntity) entity).processInteract(player, Hand.MAIN_HAND)) return true;
+                    if (canDeployItem(stack) && stack.getItem().itemInteractionForEntity(stack, player, (LivingEntity) entity, Hand.MAIN_HAND).isSuccess()) return true;
+                    if (entity instanceof AnimalEntity && ((AnimalEntity) entity).func_230254_b_(player, Hand.MAIN_HAND).isSuccess()) return true;
                 }
             }
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
                 ItemStack stack = player.getHeldItemMainhand();
-                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, new ItemUseContext(player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vec3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == ActionResultType.SUCCESS) return true;
+                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, new ItemUseContext(player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == ActionResultType.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
-                if (!world.isAirBlock(new BlockPos(x, y, z)) && block.onBlockActivated(world.getBlockState(new BlockPos(x, y, z)), world, new BlockPos(x, y, z), player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vec3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == ActionResultType.SUCCESS) return true;
+                if (!world.isAirBlock(new BlockPos(x, y, z)) && block.onBlockActivated(world.getBlockState(new BlockPos(x, y, z)), world, new BlockPos(x, y, z), player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == ActionResultType.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
@@ -190,7 +189,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                 int useX = isGoingToShift ? pos.getX() : x;
                 int useY = isGoingToShift ? pos.getY() : y;
                 int useZ = isGoingToShift ? pos.getZ() : z;
-                if (canDeployItem(stack) && stack.getItem().onItemUse(new ItemUseContext(player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vec3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == ActionResultType.SUCCESS) return true;
+                if (canDeployItem(stack) && stack.getItem().onItemUse(new ItemUseContext(player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == ActionResultType.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
@@ -215,9 +214,9 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void read(CompoundNBT tCompound) {
+    public void read(BlockState blockState, CompoundNBT tCompound) {
     
-        super.read(tCompound);
+        super.read(blockState, tCompound);
         
         for (int i = 0; i < 9; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
@@ -347,7 +346,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     @Override
     public boolean isEjecting() {
     
-        return (world.getBlockState(pos)).get(BlockContainerFacingBase.ACTIVE);
+        return (getBlockState()).get(BlockContainerFacingBase.ACTIVE);
     }
  
     @Override

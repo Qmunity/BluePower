@@ -24,8 +24,8 @@ public class TileLamp extends TileEntity {
     @Override
     public Light provideLight() {
 
-        BlockLamp block = (BlockLamp) world.getBlockState(pos).getBlock();
-        int value = block.getLightValue(world.getBlockState(pos), world, pos);
+        BlockLamp block = (BlockLamp) getBlockState().getBlock();
+        int value = block.getLightValue(getBlockState(), world, pos);
 
         int color = block.getColor(world, pos, 0);
 

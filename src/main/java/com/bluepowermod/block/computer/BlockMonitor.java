@@ -36,9 +36,4 @@ public class BlockMonitor extends BlockContainerBase {
         }
     }
 
-    @Override
-    public int tickRate(IWorldReader p_149738_1_) {
-        return 1;
-    }
-
 }

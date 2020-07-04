@@ -10,11 +10,11 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.IRejectAnimator;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -23,7 +23,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 
 /**
  * @author MineMaarten
@@ -121,9 +121,9 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void read(CompoundNBT tCompound) {
+    public void read(BlockState blockState, CompoundNBT tCompound) {
 
-        super.read(tCompound);
+        super.read(blockState, tCompound);
 
         for (int i = 0; i < 24; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
@@ -228,7 +228,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
 
     @Override
     public boolean isUsableByPlayer(PlayerEntity player) {
-        return pos.withinDistance(new Vec3i(player.serverPosX, player.serverPosY, player.serverPosZ), 64.0D);
+        return pos.withinDistance(new Vector3i(player.serverPosX, player.serverPosY, player.serverPosZ), 64.0D);
     }
 
     @Override

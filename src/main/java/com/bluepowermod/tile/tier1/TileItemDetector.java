@@ -8,12 +8,12 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
-import com.bluepowermod.container.ContainerBuffer;
 import com.bluepowermod.container.ContainerItemDetector;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -28,9 +28,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
-import java.util.List;
-
-;
 
 /**
  * @author MineMaarten
@@ -104,9 +101,8 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void read(CompoundNBT tCompound) {
-
-        super.read(tCompound);
+    public void read(BlockState blockState, CompoundNBT tCompound) {
+        super.read(blockState, tCompound);
         for (int i = 0; i < 9; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
             inventory.set(i, new ItemStack((IItemProvider) tc));

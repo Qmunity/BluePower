@@ -28,6 +28,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.block.BlockRenderType;
@@ -38,7 +39,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -212,7 +212,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     @Override
     public void readSilkyData(World world, BlockPos pos, CompoundNBT tag) {
 
-        world.getTileEntity(pos).read(tag);
+        world.getTileEntity(pos).read(world.getBlockState(pos), tag);
     }
 
 }

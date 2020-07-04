@@ -9,10 +9,12 @@
 package com.bluepowermod.tile;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -92,7 +94,7 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
                 world.setBlockState(pos, stateMap.keySet().iterator().next());
                 TileEntity tile = world.getTileEntity(pos);
                 if (tile != null && nbt != null)
-                    tile.read(nbt);
+                    tile.read(getBlockState(), nbt);
             }
         }else if(stateMap.size() == 0){
             //Remove if this is empty
@@ -101,7 +103,7 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
             }
         }
         if(world != null)
-            world.getBlockState(pos).neighborChanged(world, pos, world.getBlockState(pos).getBlock(), pos, false);
+            getBlockState().neighborChanged(world, pos, getBlockState().getBlock(), pos, false);
     }
 
     public TileEntity getTileForState(BlockState state){
@@ -151,7 +153,8 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         compound.putInt("size", getStates().size());
         for (int i = 0; i < getStates().size(); i++) {
             //write state data
-            compound.put("state" + i, BlockState.serialize(NBTDynamicOps.INSTANCE, getStates().get(i)).getValue());
+            String stateSave = "state" + i;
+            BlockState.field_235877_b_.encodeStart(NBTDynamicOps.INSTANCE,  getStates().get(i)).result().ifPresent(nbt -> compound.put(stateSave, nbt));
             //write tile NBT data
             if(stateMap.get(getStates().get(i)) != null)
                 compound.put("tile" + i, stateMap.get(getStates().get(i)).write(new CompoundNBT()));
@@ -160,18 +163,21 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
-    public void read(CompoundNBT compound) {
-        super.read(compound);
+    public void read(BlockState blockState, CompoundNBT compound) {
+        super.read(blockState, compound);
         Map<BlockState, TileEntity> states = new HashMap<>();
         int size = compound.getInt("size");
         for (int i = 0; i < size; i++) {
-            BlockState state = BlockState.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("state" + i)));
-            TileEntity tile = state.getBlock().createTileEntity(state, getWorld());
-            if (tile != null) {
-                tile.read(compound.getCompound("tile" + i));
-                tile.setPos(pos);
+            Optional<Pair<BlockState, INBT>> result = BlockState.field_235877_b_.decode(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("state" + i))).result();
+            if(result.isPresent()){
+                BlockState state = result.get().getFirst();
+                TileEntity tile = state.getBlock().createTileEntity(state, getWorld());
+                if (tile != null) {
+                    tile.read(state, compound.getCompound("tile" + i));
+                    tile.setPos(pos);
+                }
+                states.put(state, tile);
             }
-            states.put(state, tile);
         }
         this.stateMap = states;
         markDirtyClient();
@@ -196,7 +202,7 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         List<BlockState> states = getStates();
         CompoundNBT tagCompound = packet.getNbtCompound();
         super.onDataPacket(networkManager, packet);
-        read(tagCompound);
+        read(getBlockState(), tagCompound);
         if (world.isRemote) {
             // Update if needed
             if (!getStates().equals(states)) {

@@ -10,6 +10,7 @@ package com.bluepowermod.client.gui;
 import com.bluepowermod.container.ContainerRedbusID;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.IRedBusWindow;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -30,11 +31,11 @@ public class GuiRedbusID extends GuiContainerBaseBP<ContainerRedbusID> implement
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
 
-        drawHorizontalAlignedString(7, 4, xSize - 14,  "gui.redbusgui", true);
+        drawHorizontalAlignedString(matrixStack, 7, 4, xSize - 14,  "gui.redbusgui", true);
 
-        drawHorizontalAlignedString(7, 60, xSize - 14, "gui.redbus.id" + ":" + IRedBusWindow.redbus_id,
+        drawHorizontalAlignedString(matrixStack, 7, 60, xSize - 14, "gui.redbus.id" + ":" + IRedBusWindow.redbus_id,
                 true);
     }
 

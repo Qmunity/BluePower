@@ -10,6 +10,7 @@ package com.bluepowermod.client.gui.widget;
 import java.util.List;
 
 import com.bluepowermod.reference.Refs;
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 public class WidgetFuzzySetting extends WidgetMode {
 
@@ -21,10 +22,10 @@ public class WidgetFuzzySetting extends WidgetMode {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float frame) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float frame) {
 
         textureIndex = value;
-        super.render(mouseX, mouseY, frame);
+        super.render(matrixStack, mouseX, mouseY, frame);
     }
 
     @Override

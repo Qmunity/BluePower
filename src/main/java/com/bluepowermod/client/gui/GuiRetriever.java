@@ -12,6 +12,7 @@ import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerRetriever;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileRetriever;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
@@ -55,13 +56,13 @@ public class GuiRetriever extends GuiContainerBaseBP<ContainerRetriever> impleme
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float f, int i, int j) {
 
-        super.drawGuiContainerBackgroundLayer(f, i, j);
+        super.drawGuiContainerBackgroundLayer(matrixStack, f, i, j);
 
         if (filter.mode == 0) {
             int curSlot = filter.slotIndex;
-            AbstractGui.blit(guiLeft + 60 + curSlot % 3 * 18, guiTop + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
+            AbstractGui.blit(matrixStack, guiLeft + 60 + curSlot % 3 * 18, guiTop + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
         }
     }
 

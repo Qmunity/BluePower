@@ -9,6 +9,7 @@ package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -38,9 +39,9 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void read(CompoundNBT tCompound) {
+    public void read(BlockState blockState, CompoundNBT tCompound) {
 
-        super.read(tCompound);
+        super.read(blockState, tCompound);
 
         for (int i = 0; i < 1; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);

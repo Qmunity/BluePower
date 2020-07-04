@@ -18,6 +18,7 @@ package com.bluepowermod.client.gui.widget;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.reference.Refs;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.item.DyeItem;
 import org.lwjgl.opengl.GL11;
@@ -48,11 +49,11 @@ public class WidgetColor extends BaseWidget {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float frame) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float frame) {
 
-        super.render(mouseX, mouseY, frame);
+        super.render(matrixStack, mouseX, mouseY, frame);
         if (value < 16) {
-            AbstractGui.fill(x + 5, y + 5, x + 9, y + 9, 0xFF000000 + MinecraftColor.values()[value].getHex());
+            AbstractGui.fill(matrixStack, x + 5, y + 5, x + 9, y + 9, 0xFF000000 + MinecraftColor.values()[value].getHex());
             GL11.glColor4d(1, 1, 1, 1);
         }
     }

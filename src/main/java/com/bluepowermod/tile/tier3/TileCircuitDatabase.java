@@ -12,6 +12,7 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackDatabase;
 import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
@@ -222,9 +223,9 @@ public class TileCircuitDatabase extends TileCircuitTable {
     }
 
     @Override
-    public void read(CompoundNBT tag) {
+    public void read(BlockState state, CompoundNBT tag) {
 
-        super.read(tag);
+        super.read(state, tag);
 
         if (tag.contains("copyTemplateStack")) {
             copyInventory.setInventorySlotContents(0, ItemStack.read(tag.getCompound("copyTemplateStack")));

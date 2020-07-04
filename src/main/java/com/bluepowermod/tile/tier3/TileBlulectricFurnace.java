@@ -17,6 +17,7 @@ import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -27,8 +28,6 @@ import net.minecraft.item.crafting.FurnaceRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
@@ -135,8 +134,8 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void read(CompoundNBT tCompound) {
-        super.read(tCompound);
+    public void read(BlockState blockState, CompoundNBT tCompound) {
+        super.read(blockState, tCompound);
         CompoundNBT tc = tCompound.getCompound("inventory");
         inventory = ItemStack.read(tc);
         outputInventory = ItemStack.read(tCompound.getCompound("outputInventory"));

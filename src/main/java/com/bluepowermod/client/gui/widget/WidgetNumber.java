@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.client.gui.widget;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 
 import com.bluepowermod.reference.Refs;
@@ -19,10 +20,10 @@ public class WidgetNumber extends WidgetMode {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float frame) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float frame) {
 
-        super.render(mouseX, mouseY, frame);
-        Minecraft.getInstance().fontRenderer.drawString("" + value, x + 4, y + 3, 4210752);
+        super.render(matrixStack, mouseX, mouseY, frame);
+        Minecraft.getInstance().fontRenderer.drawString(matrixStack, "" + value, x + 4, y + 3, 4210752);
     }
 
     @Override

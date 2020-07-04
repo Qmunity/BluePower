@@ -3,6 +3,7 @@ package com.bluepowermod.client.gui.widget;
 import java.awt.Rectangle;
 import java.util.List;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.FontRenderer;
 
 /**
@@ -164,11 +165,12 @@ public interface IGuiAnimatedStat {
     /**
      * Should be called every render tick when and where you want to render the stat.
      *
+     * @param matrixStack
      * @param fontRenderer
      * @param zLevel
      * @param partialTicks
      */
-    public void render(FontRenderer fontRenderer, float zLevel, float partialTicks);
+    public void render(MatrixStack matrixStack, FontRenderer fontRenderer, float zLevel, float partialTicks);
 
     /**
      * Forces the stat to close.

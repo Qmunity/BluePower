@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
@@ -121,9 +122,9 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
     @Override
-    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float par1, int par2, int par3) {
 
-        super.drawGuiContainerBackgroundLayer(par1, par2, par3);
+        super.drawGuiContainerBackgroundLayer(matrixStack, par1, par2, par3);
         //if (isTextfieldEnabled())
             //searchField.drawTextBox();
 
@@ -136,7 +137,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
                 if (displayRed[i * 8 + j]) {
-                    fill(guiLeft + 8 + j * 18, guiTop + 33 + i * 18, guiLeft + 24 + j * 18, guiTop + 49 + i * 18, 0x55FF0000);
+                    fill(matrixStack, guiLeft + 8 + j * 18, guiTop + 33 + i * 18, guiLeft + 24 + j * 18, guiTop + 49 + i * 18, 0x55FF0000);
                 }
             }
         }

@@ -19,7 +19,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -98,7 +98,7 @@ public class BlockBlulectricCable extends BlockContainerBase implements IWaterLo
     }
 
     @Override
-    public IFluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
@@ -331,7 +331,7 @@ public class BlockBlulectricCable extends BlockContainerBase implements IWaterLo
                         }
                 }
         }
-        IFluidState fluidstate = world.getFluidState(pos);
+        FluidState fluidstate = world.getFluidState(pos);
         return state.with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 

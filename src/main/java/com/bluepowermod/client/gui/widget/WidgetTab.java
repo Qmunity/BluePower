@@ -1,5 +1,6 @@
 package com.bluepowermod.client.gui.widget;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import org.lwjgl.opengl.GL11;
@@ -33,7 +34,7 @@ public class WidgetTab extends BaseWidget {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTick) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
 
         if (textures.length > 0)
             Minecraft.getInstance().getTextureManager().bindTexture(textures[0]);
@@ -48,7 +49,7 @@ public class WidgetTab extends BaseWidget {
                     GL11.glColor4d(0.2, 0.2, 0.2, 1);
                 }
             }
-            AbstractGui.blit(x, y + singleTabHeight * i, getTextureU(), getTextureV() + singleTabHeight * i, width, singleTabHeight, 256,
+            AbstractGui.blit(matrixStack, x, y + singleTabHeight * i, getTextureU(), getTextureV() + singleTabHeight * i, width, singleTabHeight, 256,
                     256);
         }
     }

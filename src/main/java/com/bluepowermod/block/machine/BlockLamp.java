@@ -9,31 +9,23 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockBase;
-import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
-import com.bluepowermod.client.render.ICustomModelBlock;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.ILightReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -53,7 +45,7 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     private int tick = 0;
 
     public BlockLamp(String name, boolean isInverted, MinecraftColor color) {
-        super(Properties.create(Material.REDSTONE_LIGHT).sound(SoundType.STONE).hardnessAndResistance(1.0F).lightValue(15));
+        super(Properties.create(Material.REDSTONE_LIGHT).sound(SoundType.STONE).hardnessAndResistance(1.0F));
         this.isInverted = isInverted;
         this.color = color;
         this.name = name;
@@ -74,11 +66,6 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
 
     @Override
     public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
-        return state.get(POWER);
-    }
-
-    @Override
-    public int getLightValue(BlockState state) {
         return state.get(POWER);
     }
 

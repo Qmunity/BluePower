@@ -32,13 +32,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class BPWorldGen {
 
     //VOLCANO
-    public static final Feature<NoFeatureConfig> VOLCANO = new WorldGenVolcano(NoFeatureConfig::deserialize);
+    public static final Feature<NoFeatureConfig> VOLCANO = new WorldGenVolcano(NoFeatureConfig.field_236558_a_);
 
     public static void setupGeneralWorldGen() {
         for (Biome biome : ForgeRegistries.BIOMES) {
             if (!biome.getCategory().equals(Biome.Category.NETHER) && !biome.getCategory().equals(Biome.Category.THEEND)) {
-                biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, VOLCANO.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(new PlacementVolcano(NoPlacementConfig::deserialize).func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-                biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, BPBlocks.marble.getDefaultState(), BPConfig.CONFIG.veinSizeMarble.get() / 32)).func_227228_a_(Placement.COUNT_RANGE.func_227446_a_(new CountRangeConfig(1, 0, 0, 90))));
+                biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, VOLCANO.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(new PlacementVolcano(NoPlacementConfig.field_236555_a_).configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+                biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, BPBlocks.marble.getDefaultState(), BPConfig.CONFIG.veinSizeMarble.get() / 32)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(1, 0, 0, 90))));
             }
         }
     }

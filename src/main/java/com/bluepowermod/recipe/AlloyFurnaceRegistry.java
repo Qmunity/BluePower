@@ -40,6 +40,7 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.FolderName;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
@@ -80,12 +81,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
      */
     public void generateRecipeDatapack(MinecraftServer server){
         if(server != null) {
-            String path = server.getDataDirectory().getPath() + "/saves/" + server.getFolderName() + "/datapacks";
-
-            if (server.isDedicatedServer()) {
-                path = server.getDataDirectory().getPath() + "/" + server.getFolderName() + "/datapacks";
-            }
-
+            String path = server.getPath(FolderName.DATAPACKS).toString();
             DatapackUtils.createBPDatapack(path);
             DatapackUtils.clearBPAlloyFurnaceDatapack(path);
             for (IAlloyFurnaceRecipe recipe : alloyFurnaceRecipes) {

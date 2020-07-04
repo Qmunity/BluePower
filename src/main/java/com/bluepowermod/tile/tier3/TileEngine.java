@@ -78,7 +78,7 @@ public class TileEngine extends TileMachineBase  {
 		//Server side capability check
 		isActive = false;
 		if(world != null && !world.isRemote && (storage.getEnergyStored() > 0 && world.isBlockPowered(pos))){
-			Direction facing = world.getBlockState(pos).get(BlockEngine.FACING).getOpposite();
+			Direction facing = getBlockState().get(BlockEngine.FACING).getOpposite();
 			TileEntity tileEntity = world.getTileEntity(pos.offset(facing));
 			if (tileEntity != null) {
 				tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).ifPresent(other -> {
@@ -93,13 +93,13 @@ public class TileEngine extends TileMachineBase  {
 		}
 
 		//Update BlockState
-		if(world != null && !world.isRemote && world.getBlockState(pos).get(BlockEngine.ACTIVE) != isActive){
-			world.setBlockState(pos, world.getBlockState(pos).with(BlockEngine.ACTIVE, isActive));
+		if(world != null && !world.isRemote && getBlockState().get(BlockEngine.ACTIVE) != isActive){
+			world.setBlockState(pos, getBlockState().with(BlockEngine.ACTIVE, isActive));
 			markForRenderUpdate();
 		}
 
 		//Update TESR from BlockState
-		if(world != null && world.getBlockState(pos).get(BlockEngine.ACTIVE)) {
+		if(world != null && getBlockState().get(BlockEngine.ACTIVE)) {
 			isActive = true;
 			pumpTick++;
 			if (pumpTick >= pumpSpeed * 2) {

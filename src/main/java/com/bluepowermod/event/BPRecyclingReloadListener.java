@@ -14,6 +14,7 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.storage.FolderName;
 
 public class BPRecyclingReloadListener implements IResourceManagerReloadListener {
     private final MinecraftServer server;
@@ -33,10 +34,7 @@ public class BPRecyclingReloadListener implements IResourceManagerReloadListener
                 AlloyFurnaceRegistry.getInstance().generateRecipeDatapack(server);
             } else {
                 //If disabled remove any generated recipes
-                String path = server.getDataDirectory().getPath() + "/saves/" + server.getFolderName() + "/datapacks";
-                if (server.isDedicatedServer()) {
-                    path = server.getDataDirectory().getPath() + "/" + server.getFolderName() + "/datapacks";
-                }
+                String path = server.getPath(FolderName.DATAPACKS).toString();
                 DatapackUtils.clearBPAlloyFurnaceDatapack(path);
             }
     }

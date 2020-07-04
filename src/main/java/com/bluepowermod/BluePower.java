@@ -21,9 +21,10 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.BPWorldGen;
 import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.TableLootEntry;
+import net.minecraft.resources.ResourcePackList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.LootTableLoadEvent;
@@ -91,11 +92,14 @@ public class BluePower {
         Recipes.init();
     }
 
+    /*
+    TODO: Waiting on PR MinecraftForge#6849
     @SubscribeEvent
-    public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
+    public void onResourceReload(AddReloadListenerEvent event) {
         //Add Reload Listener for the Alloy Furnace Recipe Generator
-        event.getServer().getResourceManager().addReloadListener(new BPRecyclingReloadListener(event.getServer()));
+        event.addReloadListener(new BPRecyclingReloadListener(event.getServer()));
     }
+    */
 
     @SubscribeEvent
     public void onLootLoad(LootTableLoadEvent event)
@@ -110,7 +114,9 @@ public class BluePower {
     public void onServerStarted(FMLServerStartedEvent event){
         //Reload to make sure Recycling Recipes are available
         if(BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()){
-            event.getServer().reload();
+            ResourcePackList<?> resourcepacklist = event.getServer().getResourcePacks();
+            resourcepacklist.reloadPacksFromFinders();
+            event.getServer().reloadPacks(resourcepacklist.getAllPackNames());
         }
     }
 

@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -41,12 +42,12 @@ public abstract class GuiScreenBase extends Screen {
     protected abstract ResourceLocation getTexture();
 
     @Override
-    public void render(int x, int y, float partialTicks) {
+    public void render(MatrixStack matrixStack, int x, int y, float partialTicks) {
         if (getTexture() != null) {
-            renderBackground();
+            renderBackground(matrixStack);
             this.minecraft.getTextureManager().bindTexture(getTexture());
-            blit(guiLeft, guiTop, 0, 0, xSize, ySize);
+            blit(matrixStack, guiLeft, guiTop, 0, 0, xSize, ySize);
         }
-        super.render(x, y, partialTicks);
+        super.render(matrixStack, x, y, partialTicks);
     }
 }

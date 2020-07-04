@@ -15,6 +15,7 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -170,9 +171,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public void read(CompoundNBT compound) {
+    public void read(BlockState state, CompoundNBT compound) {
 
-        super.read(compound);
+        super.read(state, compound);
         ListNBT nbttaglist = compound.getList("ItemBuffer", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {

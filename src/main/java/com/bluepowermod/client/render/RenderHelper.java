@@ -11,8 +11,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Matrix3f;
-import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.util.math.vector.Matrix3f;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -398,8 +398,8 @@ public class RenderHelper {
      */
     public static void drawColoredCube(AxisAlignedBB vector, IVertexBuilder vertexBuilder, MatrixStack matrixStack, int r, int g, int b, int a, int light, boolean... renderFaces) {
         MatrixStack.Entry entry = matrixStack.getLast();
-        Matrix4f positionMatrix = entry.getPositionMatrix();
-        Matrix3f normalMatrix = entry.getNormalMatrix();
+        Matrix4f positionMatrix = entry.getMatrix();
+        Matrix3f normalMatrix = entry.getNormal();
 
         TextureAtlasSprite sprite =  Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation("minecraft:white_concrete", "")).getParticleTexture();
         float minU = sprite.getMinU();
@@ -412,28 +412,28 @@ public class RenderHelper {
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(minU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(minU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(maxU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(maxU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
@@ -444,28 +444,28 @@ public class RenderHelper {
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(minU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(minU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(maxU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(maxU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
@@ -476,28 +476,28 @@ public class RenderHelper {
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(minU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(minU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(maxU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(maxU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
@@ -508,28 +508,28 @@ public class RenderHelper {
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(minU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(minU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(maxU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(maxU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
@@ -540,28 +540,28 @@ public class RenderHelper {
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(minU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(minU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(maxU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .tex(maxU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
@@ -572,28 +572,28 @@ public class RenderHelper {
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(minU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(minU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(maxU, minV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();
             vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .tex(maxU, maxV)
-                    .overlay(OverlayTexture.DEFAULT_LIGHT)
+                    .overlay(OverlayTexture.NO_OVERLAY)
                     .lightmap(light)
                     .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();

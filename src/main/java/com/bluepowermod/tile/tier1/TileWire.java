@@ -6,7 +6,6 @@ import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.block.machine.BlockAlloyWire;
 import com.bluepowermod.tile.BPTileEntityType;
-import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -94,18 +93,12 @@ public class TileWire extends TileMachineBase {
         return this.write(new CompoundNBT());
     }
 
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        super.onDataPacket(net, pkt);
-        handleUpdateTag(pkt.getNbtCompound());
-    }
-
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         List<Direction> directions = new ArrayList<>(BlockBPCableBase.FACING.getAllowedValues());
         if(world != null) {
-            BlockState state = world.getBlockState(pos);
+            BlockState state = getBlockState();
             if (state.getBlock() instanceof BlockAlloyWire) {
 
                 //Remove upward connections

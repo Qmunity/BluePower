@@ -8,16 +8,16 @@
 package com.bluepowermod.util;
 
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.Comparator;
 
 
 public class ComparatorMOP implements Comparator<RayTraceResult> {
 
-    private Vec3d start = null;
+    private Vector3d start = null;
 
-    public ComparatorMOP(Vec3d start) {
+    public ComparatorMOP(Vector3d start) {
 
         this.start = start;
     }

@@ -1,6 +1,7 @@
 package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.*;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
@@ -73,14 +74,16 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
         widget.setListener(this);
     }
 
+   /* TODO: Check the resize
     @Override
-    public void setSize(int par2, int par3) {
+    public void setSize( int par2, int par3) {
         widgets.clear();
         lastLeftStat = lastRightStat = null;
         super.setSize( par2, par3);
     }
+   */
 
-    public void drawHorizontalAlignedString(int xOffset, int yOffset, int w, String text, boolean useShadow) {
+    public void drawHorizontalAlignedString(MatrixStack matrixStack, int xOffset, int yOffset, int w, String text, boolean useShadow) {
 
         int stringWidth = font.getStringWidth(text);
         int newX = xOffset;
@@ -88,21 +91,21 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
             newX = w / 2 - stringWidth / 2 + xOffset;
         }
 
-        font.drawString(text, newX, yOffset, COLOR_TEXT);
+        font.drawString(matrixStack, text, newX, yOffset, COLOR_TEXT);
     }
 
-    public void drawString(int xOffset, int yOffset, String text, boolean useShadow) {
+    public void drawString(MatrixStack matrixStack, int xOffset, int yOffset, String text, boolean useShadow) {
 
-        font.drawString(text, xOffset, yOffset, COLOR_TEXT);
-    }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.font.drawString(I18n.format("block.bluepower." + title.getFormattedText()), (float)(this.xSize / 2 - this.font.getStringWidth(I18n.format("block.bluepower." + title.getFormattedText())) / 2), 6.0F, COLOR_TEXT);
+        font.drawString(matrixStack, text, xOffset, yOffset, COLOR_TEXT);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+        this.font.drawString(matrixStack, I18n.format("block.bluepower." + title.getUnformattedComponentText()), (float)(this.xSize / 2 - this.font.getStringWidth(I18n.format("block.bluepower." + title.getUnformattedComponentText())) / 2), 6.0F, COLOR_TEXT);
+    }
+
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float f, int i, int j) {
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(resLoc);
@@ -110,19 +113,19 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        blit(x, y, 0, 0, xSize, ySize);
+        blit(matrixStack, x, y, 0, 0, xSize, ySize);
 
         for (IGuiWidget widget : widgets) {
-            widget.render(i, j, f);
+            widget.render(matrixStack, i, j, f);
         }
     }
 
 
     @Override
-    public void render(int x, int y, float partialTick) {
-        this.renderBackground();
-        super.render(x, y, partialTick);
-        this.renderHoveredToolTip(x, y);
+    public void render(MatrixStack matrixStack, int x, int y, float partialTick) {
+        this.renderBackground(matrixStack);
+        super.render(matrixStack, x, y, partialTick);
+        this.renderHoveredToolTip(matrixStack, x, y);
 
     }
 

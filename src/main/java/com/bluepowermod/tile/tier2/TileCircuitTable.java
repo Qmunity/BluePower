@@ -11,6 +11,7 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
@@ -75,9 +76,9 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
     }
 
     @Override
-    public void read(CompoundNBT tag) {
+    public void read(BlockState state, CompoundNBT tag) {
 
-        super.read(tag);
+        super.read(state, tag);
 
         ListNBT tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(24, ItemStack.EMPTY);

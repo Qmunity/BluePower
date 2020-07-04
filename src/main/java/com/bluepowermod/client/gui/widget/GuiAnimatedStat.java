@@ -1,5 +1,6 @@
 package com.bluepowermod.client.gui.widget;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -266,7 +267,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     }
 
     @Override
-    public void render(FontRenderer fontRenderer, float zLevel, float partialTicks) {
+    public void render(MatrixStack matrixStack, FontRenderer fontRenderer, float zLevel, float partialTicks) {
 
         int renderBaseX = (int) (oldBaseX + (baseX - oldBaseX) * partialTicks);
         int renderAffectedY = (int) (oldAffectedY + (affectedY - oldAffectedY) * partialTicks);
@@ -275,7 +276,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
         if (leftSided)
             renderWidth *= -1;
-        AbstractGui.fill(renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
+        AbstractGui.fill(matrixStack, renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
                 backGroundColor);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glLineWidth(3.0F);
@@ -297,14 +298,14 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
             GL11.glTranslated(renderBaseX + (leftSided ? -renderWidth : 16), renderAffectedY, 0);
             GL11.glScaled(textSize, textSize, textSize);
             GL11.glTranslated(-renderBaseX - (leftSided ? -renderWidth : 16), -renderAffectedY, 0);
-            fontRenderer.drawStringWithShadow(title, renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + 2, 0xFFFF00);
+            fontRenderer.drawStringWithShadow(matrixStack, title, renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + 2, 0xFFFF00);
             for (int i = 0; i < textList.size(); i++) {
 
                 if (textList.get(i).contains("\u00a70") || textList.get(i).contains(TextFormatting.DARK_RED.toString())) {
-                    fontRenderer.drawString(textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + i * 10
+                    fontRenderer.drawString(matrixStack, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + i * 10
                             + 12, 0xFFFFFF);
                 } else {
-                    fontRenderer.drawStringWithShadow(textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY
+                    fontRenderer.drawStringWithShadow(matrixStack, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY
                             + i * 10 + 12, 0xFFFFFF);
                 }
             }
@@ -476,9 +477,9 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTick) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
 
-        render(Minecraft.getInstance().fontRenderer, 0, partialTick);
+        render(matrixStack, Minecraft.getInstance().fontRenderer, 0, partialTick);
 
     }
 

@@ -27,12 +27,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
 
 import java.util.List;
 import java.util.Random;
@@ -57,7 +57,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     }
 
     public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-        worldIn.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(worldIn));
+        worldIn.getPendingBlockTicks().scheduleTick(pos, this, 20);
     }
 
     private void spawnLava(World world, BlockPos pos, Random random) {

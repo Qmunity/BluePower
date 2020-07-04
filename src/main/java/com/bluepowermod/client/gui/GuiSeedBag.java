@@ -19,6 +19,7 @@
 
 package com.bluepowermod.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
@@ -37,8 +38,8 @@ public class GuiSeedBag extends GuiContainerBaseBP<ContainerSeedBag> implements 
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.font.drawString(I18n.format("item.bluepower." + title.getFormattedText()), 8.0F, 6.0F, COLOR_TEXT);
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+        this.font.drawString(matrixStack, I18n.format("item.bluepower." + title.getUnformattedComponentText()), 8.0F, 6.0F, COLOR_TEXT);
     }
 
 }

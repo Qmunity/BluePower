@@ -5,6 +5,7 @@ import com.bluepowermod.init.BPCreativeTabs;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;
 
 /**
@@ -28,7 +29,7 @@ public class ItemMultimeter extends ItemBase {
                 String ampere = String.format("%.2f", amps);
                 String watts = String.format("%.2f", volts * amps);
                 if (context.getPlayer() != null)
-                    context.getPlayer().sendMessage(new StringTextComponent("Reading " + voltage + "V " + ampere + "A (" + watts + "W)"));
+                    context.getPlayer().sendMessage(new StringTextComponent("Reading " + voltage + "V " + ampere + "A (" + watts + "W)"), Util.BLANK_UUID);
             }
             return ActionResultType.SUCCESS;
         }

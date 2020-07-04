@@ -3,8 +3,8 @@ package com.bluepowermod.api.gate;
 import com.bluepowermod.client.render.RenderHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,10 +24,10 @@ public interface IGateComponent {
     public void tick();
 
     @OnlyIn(Dist.CLIENT)
-    public void renderStatic(Vec3i translation, RenderHelper renderer, int pass);
+    public void renderStatic(Vector3i translation, RenderHelper renderer, int pass);
 
     @OnlyIn(Dist.CLIENT)
-    public void renderDynamic(Vec3d translation, double delta, int pass);
+    public void renderDynamic(Vector3d translation, double delta, int pass);
 
     public void onLayoutRefresh();
 

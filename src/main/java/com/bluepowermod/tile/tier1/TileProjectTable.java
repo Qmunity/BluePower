@@ -7,13 +7,11 @@
  */
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.client.gui.IGuiButtonSensitive;
-import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerProjectTable;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -22,14 +20,11 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * @author MineMaarten
@@ -83,9 +78,9 @@ public class TileProjectTable extends TileBase implements IInventory, INamedCont
     }
 
     @Override
-    public void read(CompoundNBT tag) {
+    public void read(BlockState blockState, CompoundNBT tag) {
 
-        super.read(tag);
+        super.read(blockState, tag);
 
         ListNBT tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(19, ItemStack.EMPTY);

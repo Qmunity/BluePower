@@ -56,7 +56,7 @@ public class TileBattery extends TileMachineBase {
 
             double energy = storage.getEnergy();
             int level = (int) ((energy / MAX_ENERGY) * 6);
-            BlockState state = world.getBlockState(pos);
+            BlockState state = getBlockState();
             if (state.get(BlockBattery.LEVEL) != level) {
                 world.setBlockState(pos, state.with(BlockBattery.LEVEL, level));
                 markForRenderUpdate();
@@ -109,7 +109,7 @@ public class TileBattery extends TileMachineBase {
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
-        handleUpdateTag(pkt.getNbtCompound());
+        handleUpdateTag(getBlockState(), pkt.getNbtCompound());
     }
 
 }
