@@ -16,6 +16,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.vector.TransformationMatrix;
 import net.minecraft.client.renderer.model.*;
@@ -80,7 +82,14 @@ public class BPMicroblockModel implements IBakedModel {
                     if(typeModelQuads.size() > 0){
                         sprite = typeModelQuads.get(0).func_187508_a();
                     }
-                    bakedQuads.add(transform(quad, sprite, state.get(BlockBPMicroblock.FACING)));
+
+                    int color = Minecraft.getInstance().getBlockColors().getColor(this.defBlock.getDefaultState(), null, null, 0);
+                    int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
+                    int r = (color & redMask) >> 16;
+                    int g = (color & greenMask) >> 8;
+                    int b = (color & blueMask);
+
+                    bakedQuads.add(transform(quad, sprite, state.get(BlockBPMicroblock.FACING), r,g,b, 1));
                 }
                 return bakedQuads;
             }
@@ -109,13 +118,20 @@ public class BPMicroblockModel implements IBakedModel {
             if(typeModelQuads.size() > 0){
                 sprite = typeModelQuads.get(0).func_187508_a();
             }
-            outquads.add(transform(quad, sprite, Direction.EAST));
+
+            int color = Minecraft.getInstance().getBlockColors().getColor(this.defBlock.getDefaultState(), null, null, 0);
+            int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
+            int r = (color & redMask) >> 16;
+            int g = (color & greenMask) >> 8;
+            int b = (color & blueMask);
+
+            outquads.add(transform(quad, sprite, Direction.EAST, r,g,b, 1));
         }
 
         return outquads;
     }
 
-    private static BakedQuad transform(BakedQuad sizeQuad, TextureAtlasSprite sprite, Direction dir) {
+    private static BakedQuad transform(BakedQuad sizeQuad, TextureAtlasSprite sprite, Direction dir, float r, float g, float b, float a) {
         BakedQuadBuilder builder = new BakedQuadBuilder();
         final IVertexConsumer consumer = new VertexTransformer(builder) {
             @Override
@@ -126,7 +142,9 @@ public class BPMicroblockModel implements IBakedModel {
                     float u = (vec.x - sizeQuad.func_187508_a().getMinU()) / (sizeQuad.func_187508_a().getMaxU() - sizeQuad.func_187508_a().getMinU()) * 16;
                     float v = (vec.y - sizeQuad.func_187508_a().getMinV()) / (sizeQuad.func_187508_a().getMaxV() - sizeQuad.func_187508_a().getMinV()) * 16;
                     builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v));
-                } else {
+                }else if(e.getUsage() == VertexFormatElement.Usage.COLOR){
+                    parent.put(element, r/255, g/255, b/255, a);
+                }else {
                     parent.put(element, data);
                 }
             }

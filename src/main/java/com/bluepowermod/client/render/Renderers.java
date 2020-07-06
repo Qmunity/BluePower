@@ -9,6 +9,7 @@
 package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.BlockBPMicroblock;
+import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.machine.BlockLampSurface;
 import com.bluepowermod.block.power.BlockBattery;
@@ -77,6 +78,7 @@ public class Renderers {
     public static void init() {
 
         ClientRegistry.bindTileEntityRenderer(BPTileEntityType.LAMP, RenderLamp::new);
+        ClientRegistry.bindTileEntityRenderer(BPTileEntityType.WIRE, RenderWire::new);
         ClientRegistry.bindTileEntityRenderer(BPTileEntityType.ENGINE, RenderEngine::new);
 
 
@@ -92,7 +94,7 @@ public class Renderers {
             }
             if(block instanceof BlockLampSurface || block instanceof BlockGateBase || block instanceof BlockBattery)
                 RenderTypeLookup.setRenderLayer(block, RenderType.getCutout());
-            if(block instanceof BlockBPGlass || block instanceof BlockBPMicroblock)
+            if(block instanceof BlockBPGlass || block instanceof BlockBPMicroblock || block instanceof BlockBPMultipart)
                 RenderTypeLookup.setRenderLayer(block, RenderType.getTranslucent());
         }
 
