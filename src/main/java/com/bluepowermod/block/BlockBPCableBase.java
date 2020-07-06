@@ -1,13 +1,16 @@
 package com.bluepowermod.block;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
+import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.AABBUtils;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
@@ -19,9 +22,11 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapeArray;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
@@ -41,10 +46,10 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
     protected static final BooleanProperty CONNECTED_BACK = BooleanProperty.create("connected_back");
     protected static final BooleanProperty CONNECTED_LEFT = BooleanProperty.create("connected_left");
     protected static final BooleanProperty CONNECTED_RIGHT = BooleanProperty.create("connected_right");
-    protected static final BooleanProperty JOIN_FRONT = BooleanProperty.create("join_front");
-    protected static final BooleanProperty JOIN_BACK = BooleanProperty.create("join_back");
-    protected static final BooleanProperty JOIN_LEFT = BooleanProperty.create("join_left");
-    protected static final BooleanProperty JOIN_RIGHT = BooleanProperty.create("join_right");
+    public static final BooleanProperty JOIN_FRONT = BooleanProperty.create("join_front");
+    public static final BooleanProperty JOIN_BACK = BooleanProperty.create("join_back");
+    public static final BooleanProperty JOIN_LEFT = BooleanProperty.create("join_left");
+    public static final BooleanProperty JOIN_RIGHT = BooleanProperty.create("join_right");
     protected final VoxelShape[] shapes;
 
 
@@ -56,6 +61,11 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
                 .with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false)
                 .with(JOIN_FRONT, false).with(JOIN_BACK, false)
                 .with(JOIN_LEFT, false).with(JOIN_RIGHT, false));
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
@@ -93,10 +103,10 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
         float f2 = 8.0F - width;
         float f3 = 8.0F + width;
 
-        VoxelShape voxelshape = Block.makeCuboidShape((double)f, 0.0D, (double)f, (double)f1, (double)height, (double)f1);
-        VoxelShape voxelshape1 = Block.makeCuboidShape((double)f2, (double)gap, 0.0D, (double)f3, (double)height, (double)f3);
+        VoxelShape voxelshape = Block.makeCuboidShape((double)f, 0, (double)f, (double)f1, (double)height, (double)f1);
+        VoxelShape voxelshape1 = Block.makeCuboidShape((double)f2, (double)gap, 0, (double)f3, (double)height, (double)f3);
         VoxelShape voxelshape2 = Block.makeCuboidShape((double)f2, (double)gap, (double)f2, (double)f3, (double)height, 16.0D);
-        VoxelShape voxelshape3 = Block.makeCuboidShape(0.0D, (double)gap, (double)f2, (double)f3, (double)height, (double)f3);
+        VoxelShape voxelshape3 = Block.makeCuboidShape(0, (double)gap, (double)f2, (double)f3, (double)height, (double)f3);
         VoxelShape voxelshape4 = Block.makeCuboidShape((double)f2, (double)gap, (double)f2, 16.0D, (double)height, (double)f3);
         VoxelShape voxelshape5 = VoxelShapes.or(voxelshape1, voxelshape4);
         VoxelShape voxelshape6 = VoxelShapes.or(voxelshape2, voxelshape3);
@@ -107,7 +117,11 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
                 VoxelShapes.or(voxelshape6, voxelshape1), voxelshape4, VoxelShapes.or(voxelshape2, voxelshape4),
                 VoxelShapes.or(voxelshape3, voxelshape4), VoxelShapes.or(voxelshape6, voxelshape4), voxelshape5,
                 VoxelShapes.or(voxelshape2, voxelshape5), VoxelShapes.or(voxelshape3, voxelshape5),
-                VoxelShapes.or(voxelshape6, voxelshape5)
+                VoxelShapes.or(voxelshape6, voxelshape5),
+                Block.makeCuboidShape(7,0,-height,9, height,0),
+                Block.makeCuboidShape(7,0,16 + height,9, height,16),
+                Block.makeCuboidShape(-height,0,7,0, height,9),
+                Block.makeCuboidShape(16 + height,0,7F,16, height,9)
         };
 
         for(int i = 0; i < 16; ++i) {
@@ -118,7 +132,19 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
     }
 
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return AABBUtils.rotate(this.shapes[this.getShapeIndex(state)], state.get(FACING));
+        VoxelShape shapes = this.shapes[this.getShapeIndex(state)];
+
+        //Draw the joins
+        if(state.get(JOIN_FRONT))
+            shapes = VoxelShapes.or(shapes, this.shapes[16]);
+        //if(state.get(JOIN_BACK))
+            //shapes = VoxelShapes.or(shapes, this.shapes[17]);
+        if(state.get(JOIN_LEFT))
+            shapes = VoxelShapes.or(shapes, this.shapes[18]);
+        //if(state.get(JOIN_RIGHT))
+            //shapes = VoxelShapes.or(shapes, this.shapes[19]);
+
+        return AABBUtils.rotate(shapes, state.get(FACING));
     }
 
     private int getShapeIndex(BlockState state) {

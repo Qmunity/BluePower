@@ -6,6 +6,7 @@ import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.block.machine.BlockAlloyWire;
 import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -57,7 +58,7 @@ class RedstoneDevice implements IRedstoneDevice {
 
 }
 
-public class TileWire extends TileMachineBase {
+public class TileWire extends TileBase {
     private final IRedstoneDevice device = new RedstoneDevice();
     private LazyOptional<IRedstoneDevice> redstoneCap;
 

@@ -1,6 +1,7 @@
 package com.bluepowermod.block;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
+import com.bluepowermod.block.worldgen.BlockBPGlass;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMicroblock;
 import com.bluepowermod.tile.TileBPMultipart;
@@ -26,6 +27,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;

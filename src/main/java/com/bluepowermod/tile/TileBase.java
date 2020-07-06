@@ -208,7 +208,7 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
      */
     protected void onTileLoaded() {
 
-        if (!world.isRemote)
+        if (world != null && !world.isRemote)
             onBlockNeighbourChanged();
     }
 

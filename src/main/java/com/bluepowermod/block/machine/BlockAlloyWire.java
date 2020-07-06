@@ -23,9 +23,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nullable;
 
 public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
-
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    static final BooleanProperty POWERED = BooleanProperty.create("powered");
+    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     final String type;
 
     @Override
@@ -45,7 +43,7 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
     }
 
     public BlockAlloyWire(String type) {
-        super(1,1);
+        super(1,2F);
         this.type = type;
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.UP).with(POWERED, false)
                 .with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false)
@@ -72,12 +70,12 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
 
     @Override
     public int getColor(IBlockReader w, BlockPos pos, int tint) {
-        return tint == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
+        return RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
     }
 
     @Override
     public int getColor(int tint) {
-        return tint == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
+        return RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
     }
 
 }
