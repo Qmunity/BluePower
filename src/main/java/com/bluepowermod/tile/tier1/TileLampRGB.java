@@ -8,7 +8,7 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.block.machine.BlockLampRGB;
+import com.bluepowermod.block.lighting.BlockLampRGB;
 import com.bluepowermod.helper.MathHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;

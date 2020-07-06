@@ -1,4 +1,4 @@
-package com.bluepowermod.block.machine;
+package com.bluepowermod.block.lighting;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.util.AABBUtils;

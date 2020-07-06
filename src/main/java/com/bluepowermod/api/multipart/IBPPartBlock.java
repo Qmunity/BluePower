@@ -32,7 +32,7 @@ public interface IBPPartBlock {
     }
 
     /**
-     * Return the occluding area given the BlockState
+     * Return the occluding area given the BlockState, where other parts cannot be placed.
      * @param state
      */
     VoxelShape getOcclusionShape (BlockState state);

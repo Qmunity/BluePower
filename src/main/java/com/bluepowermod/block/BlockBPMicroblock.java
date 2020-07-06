@@ -27,6 +27,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -74,6 +75,25 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
             itemStacks.add(stack);
         }
         return itemStacks;
+    }
+
+    @Override
+    public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {
+        TileEntity tileentity = world.getTileEntity(pos);
+        ItemStack stack = ItemStack.EMPTY;
+        if(tileentity instanceof TileBPMultipart){
+            tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
+        }
+        if (tileentity instanceof TileBPMicroblock) {
+            CompoundNBT nbt = new CompoundNBT();
+            nbt.putString("block", ((TileBPMicroblock) tileentity).getBlock().getRegistryName().toString());
+            stack = new ItemStack(this);
+            stack.setTag(nbt);
+            stack.setDisplayName(new TranslationTextComponent(((TileBPMicroblock) tileentity).getBlock().getTranslationKey())
+                    .appendSibling(new StringTextComponent(" "))
+                    .appendSibling(new TranslationTextComponent(this.getTranslationKey())));
+        }
+        return stack;
     }
 
     @Override

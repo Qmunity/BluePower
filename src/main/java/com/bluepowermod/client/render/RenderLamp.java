@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.client.render;
 
-import com.bluepowermod.block.machine.BlockLamp;
+import com.bluepowermod.block.lighting.BlockLamp;
 import com.bluepowermod.tile.tier1.TileLamp;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.BlockState;

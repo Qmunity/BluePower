@@ -11,16 +11,22 @@ package com.bluepowermod.block;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
+import com.bluepowermod.util.AABBUtils;
+import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -47,7 +53,22 @@ public class BlockBPMultipart extends ContainerBlock {
             if(shapeList.size() > 0)
                 return shapeList.stream().reduce(shapeList.get(0), VoxelShapes::or);
         }
+        //Shouldn't be required but allows the player to break an empty multipart
         return Block.makeCuboidShape(6,6,6,10,10,10);
+    }
+
+    @Override
+    public VoxelShape func_230322_a_(BlockState p_230322_1_, IBlockReader p_230322_2_, BlockPos p_230322_3_, ISelectionContext p_230322_4_) {
+        return super.func_230322_a_(p_230322_1_, p_230322_2_, p_230322_3_, p_230322_4_);
+    }
+
+    @Override
+    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+        ItemStack itemStack = ItemStack.EMPTY;
+        BlockState partState = MultipartUtils.getClosestState(player, pos);
+        if(partState != null)
+            itemStack = partState.getPickBlock(target, world, pos, player);
+        return itemStack;
     }
 
     @Override

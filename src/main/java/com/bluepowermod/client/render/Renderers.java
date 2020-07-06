@@ -11,7 +11,7 @@ package com.bluepowermod.client.render;
 import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.block.gates.BlockGateBase;
-import com.bluepowermod.block.machine.BlockLampSurface;
+import com.bluepowermod.block.lighting.BlockLampSurface;
 import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.block.worldgen.BlockBPGlass;
 import com.bluepowermod.init.BPBlocks;
