@@ -8,29 +8,21 @@
 package com.bluepowermod.event;
 
 import com.bluepowermod.ClientProxy;
-import com.bluepowermod.api.multipart.IBPPartBlock;
-import com.bluepowermod.block.BlockBPMicroblock;
-import com.bluepowermod.block.gates.BlockGateBase;
-import com.bluepowermod.block.power.BlockBlulectricCable;
+import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.block.Block;
+import com.bluepowermod.util.MultipartUtils;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.GrassBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,14 +31,16 @@ import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.TickEvent;
@@ -58,7 +52,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemStackHandler;
-import org.lwjgl.opengl.GL11;
 
 public class BPEventHandler {
 
@@ -273,38 +266,35 @@ public class BPEventHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void blockHighlightEvent(DrawHighlightEvent event) {
+        PlayerEntity player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
+        }
+        World world = player.world;
+        if (world == null) {
+            return;
+        }
         RayTraceResult mop = event.getTarget();
-        Block block = Block.getBlockFromItem(Minecraft.getInstance().player.getHeldItem(Hand.MAIN_HAND).getItem());
-        if ((block instanceof BlockGateBase || block instanceof IBPPartBlock) && mop.getType() == RayTraceResult.Type.BLOCK) {
-            BlockPos position = ((BlockRayTraceResult) mop).getPos().offset(((BlockRayTraceResult) mop).getFace());
-            Entity entity = Minecraft.getInstance().getRenderViewEntity();
-            double d0 = entity.lastTickPosX + (entity.serverPosX - entity.lastTickPosX) * (double) event.getPartialTicks();
-            double d1 = (entity.lastTickPosY + (entity.serverPosY - entity.lastTickPosY) * (double) event.getPartialTicks()) + entity.getEyeHeight();
-            double d2 = entity.lastTickPosZ + (entity.serverPosZ - entity.lastTickPosZ) * (double) event.getPartialTicks();
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder vertexbuffer = tessellator.getBuffer();
-            RenderSystem.pushMatrix();
-            RenderSystem.enableAlphaTest();
-            position.add(0.5, 0.1, 0.5);
-            vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-            vertexbuffer.pos(-d0, -d1, -d2);
-            BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-            Vector3d lookVec = event.getInfo().getProjectedView();
-            Direction dir = ((BlockRayTraceResult) mop).getFace();
-            BlockState state = block.getDefaultState();
-            if(block instanceof BlockGateBase ){
-                state = state.with(BlockGateBase.FACING, dir)
-                    .with(BlockGateBase.ROTATION, Direction.getFacingFromVector(lookVec.x, 0, lookVec.z).getOpposite().getHorizontalIndex());
-            }else if(block instanceof BlockBlulectricCable){
-                state = state.with(BlockBlulectricCable.FACING, dir);
-            }else if(block instanceof BlockBPMicroblock){
-                state = state.with(BlockBPMicroblock.FACING, dir);
+        if(mop instanceof BlockRayTraceResult) {
+            BlockPos pos = ((BlockRayTraceResult) mop).getPos();
+            BlockState state = world.getBlockState(pos);
+            if(state.getBlock() instanceof BlockBPMultipart){
+                BlockState partstate = MultipartUtils.getClosestState(player, pos);
+                IVertexBuilder builder = event.getBuffers().getBuffer(RenderType.getLines());
+                if(partstate != null) {
+                    VoxelShape shape = partstate.getShape(world, pos, ISelectionContext.forEntity(player));
+                    Vector3d projectedView = event.getInfo().getProjectedView();
+                    double d0 = pos.getX() - projectedView.getX();
+                    double d1 = pos.getY() - projectedView.getY();
+                    double d2 = pos.getZ() - projectedView.getZ();
+                    Matrix4f matrix4f = event.getMatrix().getLast().getMatrix();
+                    shape.forEachEdge((startX, startY, startZ, endX, endY, endZ) -> {
+                        builder.pos(matrix4f, (float)(startX + d0), (float)(startY + d1), (float)(startZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
+                        builder.pos(matrix4f, (float)(endX + d0), (float)(endY + d1), (float)(endZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
+                    });
+                    event.setCanceled(true);
+                }
             }
-            IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
-            //TODO: blockrendererdispatcher.getBlockModelRenderer().renderModel(Minecraft.getInstance().world, ibakedmodel, state, position, vertexbuffer, false, new Random(), 0);
-            tessellator.draw();
-            RenderSystem.popMatrix();
         }
     }
-
 }

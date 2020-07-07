@@ -9,6 +9,7 @@
 package com.bluepowermod.client.render;
 
 import com.bluepowermod.tile.TileBPMultipart;
+import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -18,6 +19,8 @@ import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.model.data.IModelData;
 
 import javax.annotation.Nonnull;
@@ -71,6 +74,12 @@ public class BPMultipartModel implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
+        RayTraceResult rayTraceResult = Minecraft.getInstance().objectMouseOver;
+        if(Minecraft.getInstance().player != null && rayTraceResult instanceof BlockRayTraceResult){
+            BlockState state = MultipartUtils.getClosestState(Minecraft.getInstance().player, ((BlockRayTraceResult)rayTraceResult).getPos());
+            if(state != null)
+                return Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state).getParticleTexture();
+        }
         return Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation("minecraft:stone", "")).getParticleTexture();
     }
 

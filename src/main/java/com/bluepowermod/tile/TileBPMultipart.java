@@ -91,7 +91,7 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
             TileEntity te = (TileEntity)stateMap.values().toArray()[0];
             if (world != null) {
                 CompoundNBT nbt = te != null ? te.write(new CompoundNBT()) : null;
-                world.setBlockState(pos, stateMap.keySet().iterator().next());
+                world.setBlockState(pos, ((BlockState)stateMap.keySet().toArray()[0]));
                 TileEntity tile = world.getTileEntity(pos);
                 if (tile != null && nbt != null)
                     tile.read(getBlockState(), nbt);

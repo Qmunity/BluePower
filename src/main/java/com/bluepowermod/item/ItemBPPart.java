@@ -21,6 +21,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 
 /**
  * IBPPartBlock's use this rather then BlockItem for their Items.
@@ -64,6 +66,8 @@ public class ItemBPPart extends BlockItem {
             //Update Self
             state.neighborChanged(context.getWorld(), context.getPos(), state.getBlock(), context.getPos(), false);
             context.getItem().shrink(1);
+            //Place Sound
+            context.getWorld().playSound(null, context.getPos(), SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
             return ActionResultType.SUCCESS;
 
         }else if(state.getBlock() instanceof BlockBPMultipart && thisState != null && !AABBUtils.testOcclusion(((IBPPartBlock)thisState.getBlock()).getOcclusionShape(thisState), state.getShape(context.getWorld(), context.getPos()))) {
@@ -80,6 +84,8 @@ public class ItemBPPart extends BlockItem {
                 //Update Self
                 state.neighborChanged(context.getWorld(), context.getPos(), state.getBlock(), context.getPos(), false);
                 context.getItem().shrink(1);
+                //Place Sound
+                context.getWorld().playSound(null, context.getPos(), SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return ActionResultType.SUCCESS;
             }
 

@@ -5,7 +5,6 @@ import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.ICustomModelBlock;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.StateContainer;

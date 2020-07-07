@@ -18,6 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
@@ -57,15 +58,27 @@ public class MultipartUtils {
      */
     @Nullable
     public static BlockState getClosestState(Entity entity, BlockPos pos){
-        TileEntity te = entity.world.getTileEntity(pos);
+        Pair<Vector3d, Vector3d> lookVec = MultipartUtils.getRayTraceVectors(entity);
+        return getClosestState(entity.world, lookVec.getLeft(), lookVec.getRight(), pos);
+    }
+
+    /**
+     * Returns the closest Multipart state to the Vec3 in in a given position.
+     * @param world
+     * @param start
+     * @param end
+     * @param pos
+     */
+    @Nullable
+    public static BlockState getClosestState(World world, Vector3d start, Vector3d end, BlockPos pos){
+        TileEntity te = world.getTileEntity(pos);
         BlockState state = null;
         double distance = Double.POSITIVE_INFINITY;
         if(te instanceof TileBPMultipart) {
-            Pair<Vector3d, Vector3d> lookVec = MultipartUtils.getRayTraceVectors(entity);
             for (BlockState part : ((TileBPMultipart) te).getStates()) {
-                RayTraceResult res = part.getRaytraceShape(entity.world, pos, ISelectionContext.dummy()).rayTrace(lookVec.getLeft(), lookVec.getRight(), pos);
+                RayTraceResult res = part.getRaytraceShape(world, pos, ISelectionContext.dummy()).rayTrace(start, end, pos);
                 if (res != null) {
-                    double partDistance = lookVec.getLeft().squareDistanceTo(res.getHitVec());
+                    double partDistance = start.squareDistanceTo(res.getHitVec());
                     if(distance > partDistance) {
                         distance = partDistance;
                         state = part;

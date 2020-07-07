@@ -11,22 +11,22 @@ package com.bluepowermod.block;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
-import com.bluepowermod.util.AABBUtils;
 import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.*;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -58,8 +58,17 @@ public class BlockBPMultipart extends ContainerBlock {
     }
 
     @Override
-    public VoxelShape func_230322_a_(BlockState p_230322_1_, IBlockReader p_230322_2_, BlockPos p_230322_3_, ISelectionContext p_230322_4_) {
-        return super.func_230322_a_(p_230322_1_, p_230322_2_, p_230322_3_, p_230322_4_);
+    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
+        BlockState partState = MultipartUtils.getClosestState(player, pos);
+        TileEntity te = world.getTileEntity(pos);
+        if(partState != null && te instanceof TileBPMultipart) {
+            //Remove Selected Part
+            ((TileBPMultipart) te).removeState(partState);
+            //Play Break Sound
+            world.playSound(null, pos, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            return false;
+        }
+        return false;
     }
 
     @Override

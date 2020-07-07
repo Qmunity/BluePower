@@ -20,7 +20,7 @@ apply plugin: 'maven'
 
 project.ext {
     major = "0"
-    minor = "4"
+    minor = "5"
     if (System.getenv("CI_PIPELINE_IID") != null) {
         build = System.getenv("CI_PIPELINE_IID") + "-alpha"
     } else {

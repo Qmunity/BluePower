@@ -16,8 +16,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.vector.TransformationMatrix;
 import net.minecraft.client.renderer.model.*;
@@ -29,7 +27,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.world.World;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
@@ -192,6 +189,14 @@ public class BPMicroblockModel implements IBakedModel {
     public TextureAtlasSprite getParticleTexture() {
         IBakedModel typeModel = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(this.defBlock.getDefaultState());
         return typeModel.getParticleTexture();
+    }
+
+    @Override
+    public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data) {
+        Pair<Block, Integer> info = data.getData(TileBPMicroblock.PROPERTY_INFO);
+        if(info != null)
+            return Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(info.getKey().getDefaultState()).getParticleTexture();
+        return getParticleTexture();
     }
 
     @Override

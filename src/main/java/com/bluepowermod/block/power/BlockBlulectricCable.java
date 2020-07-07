@@ -8,6 +8,7 @@
 
 package com.bluepowermod.block.power;
 
+import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
@@ -45,7 +46,7 @@ import java.util.List;
 /**
  * @author MoreThanHidden
  */
-public class BlockBlulectricCable extends BlockContainerBase implements IWaterLoggable {
+public class BlockBlulectricCable extends BlockContainerBase implements IWaterLoggable, IBPPartBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     private static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
@@ -142,6 +143,7 @@ public class BlockBlulectricCable extends BlockContainerBase implements IWaterLo
         return avoxelshape;
     }
 
+    @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return AABBUtils.rotate(this.shapes[this.getShapeIndex(state)], state.get(FACING));
     }
@@ -341,7 +343,7 @@ public class BlockBlulectricCable extends BlockContainerBase implements IWaterLo
         return getStateForPos(context.getWorld(), context.getPos(), getDefaultState().with(FACING, context.getFace()), context.getFace());
     }
 
-    //@Override
+    @Override
     public VoxelShape getOcclusionShape(BlockState state) {
         return AABBUtils.rotate(this.shapes[this.getShapeIndex(state)], state.get(FACING));
     }
