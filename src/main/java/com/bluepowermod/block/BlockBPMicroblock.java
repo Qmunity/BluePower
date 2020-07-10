@@ -1,7 +1,6 @@
 package com.bluepowermod.block;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
-import com.bluepowermod.block.worldgen.BlockBPGlass;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMicroblock;
 import com.bluepowermod.tile.TileBPMultipart;
@@ -23,12 +22,9 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -152,17 +148,11 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
         return this.getDefaultState().with(FACING, Direction.getFacingFromVector(vec.x, vec.y, vec.z)).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 
-    @Override
-    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand) {
-        return getDefaultState().with(FACING, facing);
-    }
-
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileBPMicroblock();
     }
-
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {

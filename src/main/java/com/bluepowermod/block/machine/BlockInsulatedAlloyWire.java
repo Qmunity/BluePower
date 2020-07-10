@@ -35,60 +35,6 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld worldIn, BlockPos pos, BlockPos pos2, Hand hand) {
-        Boolean connected_back = state.get(CONNECTED_BACK);
-        Boolean connected_front = state.get(CONNECTED_FRONT);
-        Boolean connected_left = state.get(CONNECTED_LEFT);
-        Boolean connected_right = state.get(CONNECTED_RIGHT);
-
-        int connections = 0;
-        int straight = 1;
-
-        for (Direction face : FACING.getAllowedValues()){
-            switch (face){
-                case NORTH:
-                    connected_front = worldIn.getBlockState(pos.offset(face)).getBlock().equals(this);
-                    if(connected_front){
-                        connections += 1;
-                        straight = 4;
-                    }
-                    break;
-                case SOUTH:
-                    connected_back = worldIn.getBlockState(pos.offset(face)).getBlock().equals(this);
-                    if(connected_back){
-                        connections += 1;
-                        straight = 3;
-                    }
-                    break;
-                case WEST:
-                    connected_left = worldIn.getBlockState(pos.offset(face)).getBlock().equals(this);
-                    if(connected_left){
-                        connections += 1;
-                        straight = 5;
-                    }
-                    break;
-                case EAST:
-                    connected_right = worldIn.getBlockState(pos.offset(face)).getBlock().equals(this);
-                    if(connected_right){
-                        connections += 1;
-                        straight = 2;
-                    }
-                    break;
-            }
-        }
-        if(connections > 1){
-            straight = 0;
-        }
-
-        return super.getStateForPlacement(state, facing, state2, worldIn, pos, pos2, hand)
-                .with(CONNECTED_RIGHT, connected_right)
-                .with(CONNECTED_LEFT, connected_left)
-                .with(CONNECTED_FRONT, connected_front)
-                .with(CONNECTED_BACK, connected_back)
-                .with(STRAIGHT, straight);
-    }
-
-    @Override
     public int getColor(IBlockReader world, BlockPos pos, int tintIndex) {
         //Color for Block
         return tintIndex == 1 ? color.getHex() : tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;

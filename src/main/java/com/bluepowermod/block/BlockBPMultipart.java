@@ -99,11 +99,6 @@ public class BlockBPMultipart extends ContainerBlock {
     }
 
     @Override
-    public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
-        return state;
-    }
-
-    @Override
     public BlockRenderType getRenderType(BlockState state){
         return BlockRenderType.MODEL;
     }

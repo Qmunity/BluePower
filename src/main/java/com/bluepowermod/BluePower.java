@@ -27,6 +27,7 @@ import net.minecraft.resources.ResourcePackList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
@@ -37,10 +38,11 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
 
 
 @Mod(Refs.MODID)
@@ -92,14 +94,11 @@ public class BluePower {
         Recipes.init();
     }
 
-    /*
-    TODO: Waiting on PR MinecraftForge#6849
     @SubscribeEvent
     public void onResourceReload(AddReloadListenerEvent event) {
         //Add Reload Listener for the Alloy Furnace Recipe Generator
-        event.addReloadListener(new BPRecyclingReloadListener(event.getServer()));
+        event.addListener(new BPRecyclingReloadListener(event.getDataPackRegistries()));
     }
-    */
 
     @SubscribeEvent
     public void onLootLoad(LootTableLoadEvent event)
@@ -111,12 +110,16 @@ public class BluePower {
     }
 
     @SubscribeEvent
-    public void onServerStarted(FMLServerStartedEvent event){
+    public void onServerStarted(FMLServerAboutToStartEvent event){
+        BPRecyclingReloadListener.server = event.getServer();
         //Reload to make sure Recycling Recipes are available
         if(BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()){
             ResourcePackList<?> resourcepacklist = event.getServer().getResourcePacks();
             resourcepacklist.reloadPacksFromFinders();
-            event.getServer().reloadPacks(resourcepacklist.getAllPackNames());
+            ArrayList<String> packs = new ArrayList<>();
+            packs.add("file/bluepower");
+            packs.add("mod:bluepower");
+            event.getServer().reloadPacks(packs);
         }
     }
 

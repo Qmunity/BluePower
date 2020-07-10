@@ -25,8 +25,15 @@ import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class BPCreativeTabs {
 
@@ -37,6 +44,7 @@ public class BPCreativeTabs {
     public static ItemGroup circuits;
     public static ItemGroup wiring;
     public static ItemGroup lighting;
+    public static ItemGroup microblocks;
 
     static {
 
@@ -147,6 +155,45 @@ public class BPCreativeTabs {
                 }
             }
         };
+
+        microblocks = new BPCreativeTab("bluepower:microblocks", true) {
+
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public ItemStack createIcon() {
+                ItemStack iconItem = new ItemStack(BPBlocks.microblocks.get(0));
+                if (!iconItem.isEmpty()) {
+                    return iconItem;
+                } else {
+                    return new ItemStack(Blocks.STONE);
+                }
+            }
+
+            @Override
+            public void fill(NonNullList<ItemStack> items) {
+                for (Block block : ForgeRegistries.BLOCKS) {
+                    VoxelShape shape = null;
+                    try{
+                        shape = block.getDefaultState().getShape(null, null);
+                    }catch (NullPointerException ignored){
+                        //Shulker Boxes try to query the Tile Entity
+                    }
+                    if(block.getRegistryName() != null && shape == VoxelShapes.fullCube()) {
+                        for (Block mb : BPBlocks.microblocks){
+                            CompoundNBT nbt = new CompoundNBT();
+                            nbt.putString("block", block.getRegistryName().toString());
+                            ItemStack stack = new ItemStack(mb);
+                            stack.setTag(nbt);
+                            stack.setDisplayName(new TranslationTextComponent(block.getTranslationKey())
+                                    .appendSibling(new StringTextComponent(" "))
+                                    .appendSibling(new TranslationTextComponent(mb.getTranslationKey())));
+                            items.add(stack);
+                        }
+                    }
+                }
+            }
+        };
+
     }
 
     private static abstract class BPCreativeTab extends ItemGroup {

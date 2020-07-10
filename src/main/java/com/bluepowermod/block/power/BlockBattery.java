@@ -16,13 +16,12 @@ import com.bluepowermod.tile.tier3.TileBattery;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+
+import javax.annotation.Nullable;
 
 /**
  * @author MoreThanHidden
@@ -38,16 +37,17 @@ public class BlockBattery extends BlockContainerBase {
 
     }
 
+    @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld worldIn, BlockPos pos, BlockPos pos2, Hand hand) {
-        TileEntity tile = worldIn.getTileEntity(pos);
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        TileEntity tile = context.getWorld().getTileEntity(context.getPos());
         if(tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()) {
             IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null);
             double voltage = storage.getVoltage();
             int level = (int)((voltage / storage.getMaxVoltage()) * 6);
             return this.stateContainer.getBaseState().with(LEVEL, level);
         }
-        return super.getStateForPlacement(state, facing, state2, worldIn, pos, pos2, hand);
+        return super.getStateForPlacement(context);
     }
 
     @Override

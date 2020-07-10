@@ -10,17 +10,18 @@ package com.bluepowermod.event;
 import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.util.DatapackUtils;
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.resources.DataPackRegistries;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.storage.FolderName;
 
 public class BPRecyclingReloadListener implements IResourceManagerReloadListener {
-    private final MinecraftServer server;
+    private final DataPackRegistries registries;
+    public static MinecraftServer server;
 
-    public BPRecyclingReloadListener(MinecraftServer server){
-        this.server = server;
+    public BPRecyclingReloadListener(DataPackRegistries registries){
+        this.registries = registries;
     }
 
     /**
@@ -29,8 +30,7 @@ public class BPRecyclingReloadListener implements IResourceManagerReloadListener
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
             if (BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()) {
-                RecipeManager recipeManager = server.getRecipeManager();
-                AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes(recipeManager);
+                AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes(registries.func_240967_e_());
                 AlloyFurnaceRegistry.getInstance().generateRecipeDatapack(server);
             } else {
                 //If disabled remove any generated recipes
@@ -38,4 +38,5 @@ public class BPRecyclingReloadListener implements IResourceManagerReloadListener
                 DatapackUtils.clearBPAlloyFurnaceDatapack(path);
             }
     }
+
 }

@@ -632,6 +632,7 @@
   "itemGroup.bluepower:circuits": "Blue Power Gates",
   "itemGroup.bluepower:lighting": "Blue Power Lighting",
   "itemGroup.bluepower:wiring": "Blue Power Wires",
+  "itemGroup.bluepower:microblocks": "BP Microblocks",
 
   "enchantment.bluepower.vorpal": "Vorpal",
   "enchantment.bluepower.vorpal.desc": "Increases the chances of mobs and players dropping a head on death",

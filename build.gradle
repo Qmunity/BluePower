@@ -100,7 +100,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.1-32.0.38'
+    minecraft 'net.minecraftforge:forge:1.16.1-32.0.61'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
 	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"

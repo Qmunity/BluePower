@@ -77,12 +77,7 @@ public class BlockLampSurface extends BlockLamp implements IWaterLoggable {
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         FluidState fluidstate = context.getWorld().getFluidState(context.getPos());
-        return super.getStateForPlacement(context).with(FACING, context.getFace()).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
-    }
-
-    @Override
-    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand) {
-        return super.getStateForPlacement(state, facing, state2, world, pos1, pos2, hand).with(FACING, facing);
+        return super.getStateForPlacement(context).with(FACING, context.getFace()).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER).with(FACING, context.getFace());
     }
 
 }

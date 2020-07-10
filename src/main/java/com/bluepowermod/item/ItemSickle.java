@@ -33,6 +33,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -69,12 +70,12 @@ public class ItemSickle extends ToolItem {
         if (!(entityLiving instanceof PlayerEntity)) return false;
         PlayerEntity player = (PlayerEntity) entityLiving;
 
-        if (state.isFoliage(world, pos) || state.getBlock() instanceof  LeavesBlock) {
+        if (state.getBlock().getTags().contains(new ResourceLocation("minecraft:leaves")) || state.getBlock() instanceof  LeavesBlock) {
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     for (int k = -1; k <= 1; k++) {
                         BlockState blockToCheck = world.getBlockState(pos.add(i,j,k));
-                        if (blockToCheck.isFoliage(world, pos.add(i,j,k)) || blockToCheck.getBlock() instanceof  LeavesBlock) {
+                        if (blockToCheck.getBlock().getTags().contains(new ResourceLocation("minecraft:leaves")) || blockToCheck.getBlock() instanceof LeavesBlock) {
                             if (blockToCheck.canHarvestBlock(world, pos.add(i,j,k), player)) {
                                 world.destroyBlock(pos.add(i,j,k), true);
                             }

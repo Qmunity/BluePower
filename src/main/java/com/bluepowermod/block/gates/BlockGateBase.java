@@ -98,16 +98,6 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand) {
-        Map<String, Byte> map = getSidePower(world, state, pos1);
-        return super.getStateForPlacement(state, facing, state2, world, pos1, pos2, hand)
-                .with(POWERED_FRONT, map.get("front") > 0)
-                .with(POWERED_BACK, map.get("back") > 0)
-                .with(POWERED_LEFT, map.get("left") > 0)
-                .with(POWERED_RIGHT, map.get("right") > 0);
-    }
-
-    @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
         super.onBlockPlacedBy(world, pos, state, entity, stack);
         Map<String, Byte> map = getSidePower(world, state, pos);
