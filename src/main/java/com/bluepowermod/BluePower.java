@@ -42,8 +42,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-
 
 @Mod(Refs.MODID)
 public class BluePower {
@@ -110,17 +108,8 @@ public class BluePower {
     }
 
     @SubscribeEvent
-    public void onServerStarted(FMLServerAboutToStartEvent event){
+    public void onServerAboutToStart(FMLServerAboutToStartEvent event){
         BPRecyclingReloadListener.server = event.getServer();
-        //Reload to make sure Recycling Recipes are available
-        if(BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()){
-            ResourcePackList<?> resourcepacklist = event.getServer().getResourcePacks();
-            resourcepacklist.reloadPacksFromFinders();
-            ArrayList<String> packs = new ArrayList<>();
-            packs.add("file/bluepower");
-            packs.add("mod:bluepower");
-            event.getServer().reloadPacks(packs);
-        }
     }
 
 }

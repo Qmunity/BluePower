@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "bluepower:iron_saw",
+    "bluepower:diamond_saw",
+    "bluepower:ruby_saw",
+    "bluepower:sapphire_saw",
+    "bluepower:amethyst_saw",
+    "bluepower:malachite_saw",
+    "bluepower:tungcarb_saw"
+  ]
+}

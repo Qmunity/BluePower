@@ -12,6 +12,7 @@ import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.block.BlockState;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -21,8 +22,10 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
@@ -79,6 +82,12 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
     }
 
     public void removeState(BlockState state) {
+        //Drop Items
+        if (world instanceof  ServerWorld) {
+            NonNullList<ItemStack> drops = NonNullList.create();
+            drops.add(state.getBlock().getItem(world, pos, state));
+            InventoryHelper.dropItems(world, pos, drops);
+        }
         //Remove Tile Entity
         if(stateMap.get(state) != null) {
             stateMap.get(state).remove();

@@ -184,12 +184,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
         //If not placed on a solid block break off
         if (!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()) {
             if(te instanceof TileBPMultipart){
-                if(world instanceof ServerWorld) {
-                    ((TileBPMultipart)te).removeState(state);
-                    NonNullList<ItemStack> drops = NonNullList.create();
-                    drops.add(new ItemStack(this));
-                    InventoryHelper.dropItems(world, pos, drops);
-                }
+                ((TileBPMultipart)te).removeState(state);
             }else {
                 world.destroyBlock(pos, true);
             }

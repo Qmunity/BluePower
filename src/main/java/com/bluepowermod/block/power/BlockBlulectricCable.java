@@ -185,11 +185,6 @@ public class BlockBlulectricCable extends BlockContainerBase implements IWaterLo
         if (!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()) {
             if(te instanceof TileBPMultipart){
                 ((TileBPMultipart)te).removeState(state);
-                if(world instanceof ServerWorld) {
-                    NonNullList<ItemStack> drops = NonNullList.create();
-                    drops.add(new ItemStack(this));
-                    InventoryHelper.dropItems(world, pos, drops);
-                }
             }else {
                 world.destroyBlock(pos, true);
             }

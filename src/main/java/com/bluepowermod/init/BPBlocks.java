@@ -371,8 +371,12 @@ public class BPBlocks {
     public static void registerBlockItems(RegistryEvent.Register<Item> event) {
         for (Block block : blockList) {
             if (block.getRegistryName() != null && !(block instanceof BlockCrop)) { // Crops have seeds rather than blocks
-                if((block instanceof BlockBase && ((BlockBase)block).getWIP()) || block instanceof BlockBPMultipart || block instanceof BlockTube ){
-                    event.getRegistry().register(new BlockItem(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
+                if((block instanceof BlockBase && ((BlockBase)block).getWIP()) || block instanceof BlockBPMultipart || block instanceof BlockBPMicroblock || block instanceof BlockTube ){
+                    if(block instanceof IBPPartBlock) {
+                        event.getRegistry().register(new ItemBPPart(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
+                    }else{
+                        event.getRegistry().register(new BlockItem(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
+                    }
                 }else{
                     ItemGroup group = BPCreativeTabs.blocks;
                     if(block instanceof BlockContainerBase){group = BPCreativeTabs.machines;}

@@ -23,12 +23,21 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.*;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.*;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +69,7 @@ public class JEIPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registryIn) {
         registryIn.addRecipes(getRecipes(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
+        registryIn.addRecipes(getMicroblockRecipes(), VanillaRecipeCategoryUid.CRAFTING);
     }
 
     private static List<IRecipe<?>> getRecipes(IRecipeType<?> recipeType) {
@@ -67,6 +77,42 @@ public class JEIPlugin implements IModPlugin {
                 .filter(recipe -> recipe.getType() == recipeType)
                 .collect(Collectors.toList());
     }
+
+    private static List<IRecipe<?>> getMicroblockRecipes() {
+        List<IRecipe<?>> recipes = new ArrayList<>();
+        for (Block block : ForgeRegistries.BLOCKS) {
+            VoxelShape shape = null;
+            try{
+                shape = block.getDefaultState().getShape(null, null);
+            }catch (NullPointerException ignored){
+                //Shulker Boxes try to query the Tile Entity
+            }
+            if(block.getRegistryName() != null && shape == VoxelShapes.fullCube()) {
+                ItemStack output = ItemStack.EMPTY;
+                for (Block mb : BPBlocks.microblocks){
+                    NonNullList<Ingredient> input = NonNullList.create();
+                    input.add(Ingredient.fromTag(ItemTags.getCollection().getOrCreate(new ResourceLocation("bluepower:saw"))));
+                    if(mb == BPBlocks.half_block){
+                        input.add(Ingredient.fromStacks(new ItemStack(block)));
+                    }else{
+                        input.add(Ingredient.fromStacks(output));
+                    }
+
+                    CompoundNBT nbt = new CompoundNBT();
+                    nbt.putString("block", block.getRegistryName().toString());
+                    ItemStack stack = new ItemStack(mb);
+                    stack.setTag(nbt);
+                    stack.setDisplayName(new TranslationTextComponent(block.getTranslationKey())
+                            .appendSibling(new StringTextComponent(" "))
+                            .appendSibling(new TranslationTextComponent(mb.getTranslationKey())));
+                    output = stack;
+                    recipes.add(new ShapelessRecipe(new ResourceLocation("bluepower:" + mb.getTranslationKey() + block.getTranslationKey()), "", output, input));
+                }
+            }
+        }
+        return recipes;
+    }
+
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
