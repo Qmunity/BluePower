@@ -1,18 +1,14 @@
 package com.bluepowermod.block;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
-import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.AABBUtils;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
@@ -21,17 +17,14 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapeArray;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -39,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
+public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterLoggable {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     protected static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
@@ -50,6 +43,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
     public static final BooleanProperty JOIN_BACK = BooleanProperty.create("join_back");
     public static final BooleanProperty JOIN_LEFT = BooleanProperty.create("join_left");
     public static final BooleanProperty JOIN_RIGHT = BooleanProperty.create("join_right");
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected final VoxelShape[] shapes;
 
 
@@ -60,12 +54,8 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
                 .with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false)
                 .with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false)
                 .with(JOIN_FRONT, false).with(JOIN_BACK, false)
-                .with(JOIN_LEFT, false).with(JOIN_RIGHT, false));
-    }
-
-    @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.ENTITYBLOCK_ANIMATED;
+                .with(JOIN_LEFT, false).with(JOIN_RIGHT, false)
+                .with(WATERLOGGED, false));
     }
 
     @Override
@@ -76,6 +66,20 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
             worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, isMoving);
         });
     }
+
+    @Override
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.get(WATERLOGGED)) {
+            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+        }
+        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+    }
+
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity p_180633_4_, ItemStack p_180633_5_) {
@@ -118,10 +122,10 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
                 VoxelShapes.or(voxelshape3, voxelshape4), VoxelShapes.or(voxelshape6, voxelshape4), voxelshape5,
                 VoxelShapes.or(voxelshape2, voxelshape5), VoxelShapes.or(voxelshape3, voxelshape5),
                 VoxelShapes.or(voxelshape6, voxelshape5),
-                Block.makeCuboidShape(7,0,-height,9, height,0),
-                Block.makeCuboidShape(7,0,16 + height,9, height,16),
-                Block.makeCuboidShape(-height,0,7,0, height,9),
-                Block.makeCuboidShape(16 + height,0,7F,16, height,9)
+                Block.makeCuboidShape(f2,0,-height,f3, height,0),
+                Block.makeCuboidShape(f2,0,16 + height,f3, height,16),
+                Block.makeCuboidShape(-height,0,f2,0, height,f3),
+                Block.makeCuboidShape(16 + height,0,f2,16, height,f3)
         };
 
         for(int i = 0; i < 16; ++i) {
@@ -193,7 +197,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
-        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, JOIN_FRONT, JOIN_BACK, JOIN_LEFT, JOIN_RIGHT);
+        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, JOIN_FRONT, JOIN_BACK, JOIN_LEFT, JOIN_RIGHT, WATERLOGGED);
     }
 
     private BlockState getStateForPos(World world, BlockPos pos, BlockState state, Direction face){
@@ -437,6 +441,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
                 }
             }
 
+        FluidState fluidstate = world.getFluidState(pos);
         return state.with(CONNECTED_LEFT, connected_left)
                 .with(CONNECTED_RIGHT, connected_right)
                 .with(CONNECTED_FRONT, connected_front)
@@ -444,7 +449,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock {
                 .with(JOIN_LEFT, join_left)
                 .with(JOIN_RIGHT, join_right)
                 .with(JOIN_FRONT, join_front)
-                .with(JOIN_BACK, join_back);
+                .with(JOIN_BACK, join_back).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 
     @Nullable

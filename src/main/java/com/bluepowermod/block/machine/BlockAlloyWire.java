@@ -65,7 +65,7 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
-        builder.add(FACING, POWERED, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, JOIN_FRONT, JOIN_BACK, JOIN_LEFT, JOIN_RIGHT);
+        builder.add(FACING, POWERED, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, JOIN_FRONT, JOIN_BACK, JOIN_LEFT, JOIN_RIGHT, WATERLOGGED);
     }
 
     @Override

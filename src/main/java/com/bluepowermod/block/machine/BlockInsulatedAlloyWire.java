@@ -31,7 +31,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
-        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, STRAIGHT, POWERED);
+        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, STRAIGHT, POWERED, WATERLOGGED);
     }
 
     @Override

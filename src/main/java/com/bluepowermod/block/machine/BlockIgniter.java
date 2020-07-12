@@ -24,6 +24,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 
 public class BlockIgniter extends BlockContainerFacingBase {
@@ -37,7 +38,12 @@ public class BlockIgniter extends BlockContainerFacingBase {
     @Override
     public boolean isFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
         TileIgniter tile = (TileIgniter) world.getTileEntity(pos);
-        boolean orientation = world.getBlockState(pos).get(FACING) == Direction.UP;
-        return orientation && tile.getIsRedstonePowered();
+        boolean orientation = state.getBlock() == this && state.get(FACING) == Direction.UP;
+        return orientation && tile != null && tile.getIsRedstonePowered();
+    }
+
+    @Override
+    public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+        return false;
     }
 }
