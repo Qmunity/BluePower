@@ -18,9 +18,7 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.reference.Refs;
-import jdk.internal.dynalink.beans.StaticClass;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class BPConfig {
 
@@ -68,14 +66,17 @@ public class BPConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> maxSapphireY;
         public final ForgeConfigSpec.ConfigValue<Integer> veinCountSapphire;
         public final ForgeConfigSpec.ConfigValue<Integer> veinSizeSapphire;
+        public final ForgeConfigSpec.BooleanValue generateVolcano;
         public final ForgeConfigSpec.ConfigValue<Double> volcanoActiveToInactiveRatio;
         public final ForgeConfigSpec.ConfigValue<Double> volcanoSpawnChance; // chance of a volcano spawning per chunk.
         public final ForgeConfigSpec.ConfigValue<Integer> flowerSpawnChance;
+        public final ForgeConfigSpec.BooleanValue generateTungstenInVolcano;
         public final ForgeConfigSpec.ConfigValue<String> alloyFurnaceBlacklist;
         public final ForgeConfigSpec.ConfigValue<Boolean> alloyFurnaceDatapackGenerator;
         public final ForgeConfigSpec.ConfigValue<Float> albedoBrightness;
         //public final ForgeConfigSpec.BooleanValue enableTubeCaching;
         public final ForgeConfigSpec.BooleanValue enableGateSounds;
+        public final ForgeConfigSpec.BooleanValue generateMarble;
         public final ForgeConfigSpec.ConfigValue<Integer> veinSizeMarble;
         public final ForgeConfigSpec.BooleanValue serverCircuitSavingOpOnly;
 
@@ -121,9 +122,12 @@ public class BPConfig {
             maxSapphireY = builder.comment("Sapphire Max Y").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".max_y").define("maxSapphireY", 48);
             veinCountSapphire = builder.comment("Vein Count Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".vein_count").define("veinCountSapphire", 2);
             veinSizeSapphire = builder.comment("Vein Size Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".vein_size").define("veinSizeSapphire", 5);
+            generateVolcano = builder.comment("Generate Volcano").translation("bluepower.config.volcano.generate").define("generateVolcano", true);
             volcanoSpawnChance = builder.comment("Volcano Spawn Chance").translation("bluepower.config.volcano_spawn_chance").define("volcanoSpawnChance", 0.005);
             flowerSpawnChance = builder.comment("Indigo Flower Spawn Chance").translation("bluepower.config.flower_spawn_chance").define("flowerSpawnChance", 1);
+            generateTungstenInVolcano = builder.comment("Possible to generate Tungsten in the Volcano").translation("bluepower.config.volcano.tungsten.generate").define("generateTungstenInVolcano", true);
             volcanoActiveToInactiveRatio = builder.comment("Volcano Active To Inactive Ratio").translation("bluepower.config.volcano_inactive_ratio").define("volcanoActiveToInactiveRatio", 0.5);
+            generateMarble = builder.comment("Generate Marble").translation("bluepower.config.marble.generate").define("generateMarble", true);
             veinSizeMarble = builder.comment("veinSizeMarble").translation("bluepower.config.marble.vein_size").define("veinSizeMarble", 2048);
 
             builder.push(Refs.CONFIG_RECIPES).comment("Toggle recipes to be enabled or not");

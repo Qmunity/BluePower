@@ -40,11 +40,7 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Function;
+import java.util.*;
 
 /**
  * 
@@ -55,11 +51,16 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
     private static final int MAX_VOLCANO_RADIUS = 200; // absolute max radius a volcano can have, this should be a
     // magnitude bigger than an average volcano radius.
     private HashMap<Pos, Integer> volcanoMap;
-    private static final Block[] ALTAR_BLOCKS = new Block[] { BPBlocks.amethyst_block, BPBlocks.ruby_block, BPBlocks.sapphire_block,
-            BPBlocks.tungsten_block };
+    private final List<Block> alterBlocks = new ArrayList<>();
 
     public WorldGenVolcano(Codec<NoFeatureConfig> codec) {
         super(codec);
+        alterBlocks.add( BPBlocks.amethyst_block);
+        alterBlocks.add(BPBlocks.ruby_block);
+        alterBlocks.add(BPBlocks.sapphire_block);
+        if(BPConfig.CONFIG.generateTungstenInVolcano.get()) {
+            alterBlocks.add(BPBlocks.tungsten_block);
+        }
     }
 
     @Override
@@ -236,7 +237,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
     private void generateAltar(IWorld world, int startX, int startY, int startZ, Random rand, Direction dir) {
         generateLootChest(world, new BlockPos(startX, startY + 1, startZ), rand, dir);
         Direction opDir = dir.getOpposite();
-        Block altarBlock = ALTAR_BLOCKS[new Random().nextInt(ALTAR_BLOCKS.length)];
+        Block altarBlock = alterBlocks.get(new Random().nextInt(alterBlocks.size()));
         setAltarBlockAndPossiblyTrap(world, startX, startY, startZ, rand, altarBlock);
         setAltarBlockAndPossiblyTrap(world, startX + opDir.getXOffset(), startY, startZ + opDir.getZOffset(), rand, altarBlock);
         Direction sideDir = Direction.DOWN;
@@ -262,7 +263,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
         func_230367_a_(world, pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, dir.getOpposite()));
         TileEntity te = world.getTileEntity(pos);
         if(te instanceof ChestTileEntity){
-            if (rand.nextInt(5) == 0) {
+            if (rand.nextInt(5) == 0 && BPConfig.CONFIG.generateTungstenInVolcano.get()) {
                 ((ChestTileEntity)te).setInventorySlotContents(13, new ItemStack(BPItems.tungsten_ingot,
                         5 + rand.nextInt(10)));
             } else {
