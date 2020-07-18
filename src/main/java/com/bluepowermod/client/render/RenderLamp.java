@@ -12,7 +12,6 @@ import com.bluepowermod.tile.tier1.TileLamp;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.Direction;
@@ -72,7 +71,7 @@ public class RenderLamp extends TileEntityRenderer<TileLamp> {
 
             matrixStack.push();
             double powerDivision = power / 18D;
-            com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, iRenderTypeBuffer.getBuffer(RenderType.func_239269_g_()), matrixStack, r, g, b, (int)(powerDivision * 200), 200,
+            com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, iRenderTypeBuffer.getBuffer(BPRenderTypes.LAMP_GLOW), matrixStack, r, g, b, (int)(powerDivision * 200), 200,
                     renderFaces);
             matrixStack.pop();
     }
