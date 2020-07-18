@@ -11,6 +11,7 @@ import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.init.BPBlocks;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
@@ -18,12 +19,15 @@ import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 
+import net.minecraft.client.renderer.vertex.VertexBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.tile.tier3.TileEngine;
 
@@ -32,7 +36,6 @@ import java.util.Random;
 /**
  *
  * @author TheFjong, MoreThanHidden
- * TODO: Create Rotation Helper and re-implement as Fast TESR
  *
  */
 @OnlyIn(Dist.CLIENT)
@@ -51,35 +54,64 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
         World world = engine.getWorld();
         BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
         BlockPos pos = engine.getPos();
+        BlockState state = BPBlocks.engine.getDefaultState().with(BlockEngine.FACING, engine.getOrientation());
+        Direction facing = engine.getOrientation();
 
-        TileEngine tile = (TileEngine) engine.getWorld().getTileEntity(engine.getPos());
-        BlockState state = BPBlocks.engine.getDefaultState().with(BlockEngine.FACING, tile.getOrientation());
+        matrixStack.push();
 
+        float rotationX = 90.0F;
+        float rotation = 0.0F;
+        if (facing == Direction.NORTH) {
+            matrixStack.translate(0,1,0);
+            rotation = 0F;
+        } else if (facing == Direction.SOUTH) {
+            matrixStack.translate(1,1,1);
+            rotation = 180F;
+        } else if (facing == Direction.EAST) {
+            matrixStack.translate(1,1,0);
+            rotation = 90F;
+        } else if (facing == Direction.WEST) {
+            matrixStack.translate(0,1,1);
+            rotation = -90F;
+        } else if (facing == Direction.UP) {
+            matrixStack.translate(0,1,1);
+            rotationX = 180F;
+        } else if (facing == Direction.DOWN) {
+            rotationX = 0F;
+        }
+
+        matrixStack.rotate(Vector3f.XP.rotationDegrees(rotationX));
+        matrixStack.rotate(Vector3f.ZP.rotationDegrees(rotation));
 
         matrixStack.push();
 
         float f2 = 0;
-        if(tile.isActive) {
-            f += tile.pumpTick;
-            if (tile.pumpSpeed > 0) {
-                f /= tile.pumpSpeed;
+        if(engine.isActive) {
+            f += engine.pumpTick;
+            if (engine.pumpSpeed > 0) {
+                f /= engine.pumpSpeed;
             }
             f2 = ((float) (.5 - .5 * Math.cos(3.1415926535897931D * (double) f)) / 4);
         }
-        GL11.glTranslatef(0, f2, 0);
+
+        matrixStack.translate(0, f2, 0);
+
         IBakedModel glider = dispatcher.getModelForState(state.with(BlockEngine.GLIDER, true));
         //Render the glider
-        dispatcher.getBlockModelRenderer().renderModel(world, glider, state.with(BlockEngine.GLIDER, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.getCutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
+        IVertexBuilder builder = iRenderTypeBuffer.getBuffer(RenderType.getCutout());
+        dispatcher.getBlockModelRenderer().renderModel(world, glider, state.with(BlockEngine.GLIDER, true), pos, matrixStack, builder, false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
         matrixStack.pop();
         matrixStack.push();
-
-        long angle = tile.isActive ? (System.currentTimeMillis() / 10) % 360 : 0;
-        RenderSystem.rotatef(angle, 0, 1, 0);
+        matrixStack.translate(0.5, 0, 0.5);
+        long angle = engine.isActive ? (System.currentTimeMillis() / 10) % 360 : 0;
+        matrixStack.rotate(Vector3f.YP.rotationDegrees(angle));
+        matrixStack.translate(-0.5, 0, -0.5);
         IBakedModel gear = dispatcher.getModelForState(state.with(BlockEngine.GEAR, true));
         // Render the rotating cog
         dispatcher.getBlockModelRenderer().renderModel(world, gear, state.with(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.getCutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
+        matrixStack.pop();
         matrixStack.pop();
     }
 

@@ -2,6 +2,8 @@
    "parent": "block/cube_all",
    "loader": "forge:obj",
    "model": "bluepower:models/block/engine/engine_base.obj",
+   "diffuseLighting": true,
+   "ambientToFullbright": false,
    "textures": {
       "all": "bluepower:blocks/models/engineoff"
    }

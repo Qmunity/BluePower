@@ -37,7 +37,7 @@ import java.util.Optional;
  */
 public class TileEngine extends TileMachineBase  {
 
-	private Direction orientation;
+	private Direction orientation = Direction.DOWN;
 	public boolean isActive = false;
     public byte pumpTick;
     public byte pumpSpeed;

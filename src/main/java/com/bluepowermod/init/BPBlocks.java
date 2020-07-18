@@ -266,8 +266,7 @@ public class BPBlocks {
         blulectric_cable = new BlockBlulectricCable();
         blulectric_furnace = new BlockBlulectricFurnace();
         blulectric_alloyfurnace = new BlockBlulectricAlloyFurnace();
-        //TODO: Fix Engine Renderer
-        engine = new BlockEngine().setWIP(true);
+        engine = new BlockEngine();
         kinetic_generator = new BlockKineticGenerator().setWIP(true);
         //windmill = new BlockWindmill();
         solarpanel = new BlockSolarPanel();
@@ -348,8 +347,8 @@ public class BPBlocks {
         blockAlloyWire[1] =  new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true);
 
         //for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
-           // blockAlloyWire[i+1] = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName(), MinecraftColor.VALID_COLORS[i]).setWIP(true);
-           // blockAlloyWire[i + MinecraftColor.VALID_COLORS.length +2] = new BlockInsulatedAlloyWire(RedwireType.RED_ALLOY.getName(), MinecraftColor.VALID_COLORS[i]).setWIP(true);
+        // blockAlloyWire[i+1] = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName(), MinecraftColor.VALID_COLORS[i]).setWIP(true);
+        // blockAlloyWire[i + MinecraftColor.VALID_COLORS.length +2] = new BlockInsulatedAlloyWire(RedwireType.RED_ALLOY.getName(), MinecraftColor.VALID_COLORS[i]).setWIP(true);
         //}
     }
 
