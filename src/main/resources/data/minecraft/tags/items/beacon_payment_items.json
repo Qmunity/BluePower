@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "bluepower:brass_ingot",
+    "bluepower:copper_ingot",
+    "bluepower:silver_ingot",
+    "bluepower:tungsten_ingot",
+    "bluepower:zinc_ingot",
+    "bluepower:amethyst_gem",
+    "bluepower:malachite_gem",
+    "bluepower:ruby_gem",
+    "bluepower:sapphire_gem"
+  ]
+}

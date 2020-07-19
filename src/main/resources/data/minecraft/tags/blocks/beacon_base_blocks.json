@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "bluepower:amethyst_block",
+    "bluepower:copper_block",
+    "bluepower:malachite_block",
+    "bluepower:ruby_block",
+    "bluepower:sapphire_block",
+    "bluepower:silver_block",
+    "bluepower:tungsten_block",
+    "bluepower:zinc_block"
+  ]
+}
