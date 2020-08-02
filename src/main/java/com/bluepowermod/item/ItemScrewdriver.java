@@ -18,7 +18,6 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.IScrewdriver;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,19 +26,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
-;
 
 public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
@@ -51,15 +44,13 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
         Block block = context.getWorld().getBlockState(context.getPos()).getBlock();
-            if (context.getPlayer().isCrouching()){
-                block.rotate(context.getWorld().getBlockState(context.getPos()), context.getWorld(), context.getPos(), Rotation.CLOCKWISE_180);
-                damage(context.getPlayer().getHeldItem(context.getHand()), 1, context.getPlayer(), false);
-                return ActionResultType.SUCCESS;
-            } else{
-                block.rotate(context.getWorld().getBlockState(context.getPos()), context.getWorld(), context.getPos(), Rotation.CLOCKWISE_90);
-                damage(context.getPlayer().getHeldItem(context.getHand()), 1, context.getPlayer(), false);
-                return ActionResultType.SUCCESS;
-            }
+        if (context.getPlayer() != null && context.getPlayer().isCrouching()){
+            block.rotate(context.getWorld().getBlockState(context.getPos()), context.getWorld(), context.getPos(), Rotation.CLOCKWISE_180);
+        } else{
+            block.rotate(context.getWorld().getBlockState(context.getPos()), context.getWorld(), context.getPos(), Rotation.CLOCKWISE_90);
+        }
+        damage(context.getPlayer().getHeldItem(context.getHand()), 1, context.getPlayer(), false);
+        return ActionResultType.SUCCESS;
     }
 
     @Override
@@ -71,13 +62,10 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
             return false;
 
         if (!simulated) {
-            if (stack.attemptDamageItem(damage, new Random(), (ServerPlayerEntity) player)) {
-                if (player != null)
-                    player.sendBreakAnimation(Hand.MAIN_HAND);
+            if (player instanceof ServerPlayerEntity && stack.attemptDamageItem(damage, new Random(), (ServerPlayerEntity) player)) {
+                player.sendBreakAnimation(Hand.MAIN_HAND);
                 stack.setCount(stack.getCount() - 1);
-
-                if (player != null && player instanceof PlayerEntity)
-                    player.addStat(Stats.ITEM_BROKEN.get(stack.getItem()), 1);
+                player.addStat(Stats.ITEM_BROKEN.get(stack.getItem()), 1);
 
                 if (stack.getCount() < 0)
                     stack.setCount(0);
