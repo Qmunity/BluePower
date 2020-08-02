@@ -111,6 +111,9 @@ public class BPTileEntityType {
     @ObjectHolder(Refs.MODID + ":wire")
     public static TileEntityType<TileWire> WIRE;
 
+    @ObjectHolder(Refs.MODID + ":insulatedwire")
+    public static TileEntityType<TileInsulatedWire> INSULATEDWIRE;
+
     @ObjectHolder(Refs.MODID + ":battery")
     public static TileEntityType<TileBattery> BATTERY;
 

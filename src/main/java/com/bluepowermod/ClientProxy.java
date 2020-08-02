@@ -17,6 +17,7 @@
 
 package com.bluepowermod;
 
+import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.client.render.RenderDebugScreen;
 import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
@@ -26,6 +27,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -34,7 +36,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void setup(FMLCommonSetupEvent event) {
-
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> BPContainerType::registerScreenFactories);
     }
 
     @Override

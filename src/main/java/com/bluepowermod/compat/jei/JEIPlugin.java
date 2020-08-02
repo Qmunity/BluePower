@@ -103,8 +103,8 @@ public class JEIPlugin implements IModPlugin {
                     ItemStack stack = new ItemStack(mb);
                     stack.setTag(nbt);
                     stack.setDisplayName(new TranslationTextComponent(block.getTranslationKey())
-                            .appendSibling(new StringTextComponent(" "))
-                            .appendSibling(new TranslationTextComponent(mb.getTranslationKey())));
+                            .append(new StringTextComponent(" "))
+                            .append(new TranslationTextComponent(mb.getTranslationKey())));
                     output = stack;
                     recipes.add(new ShapelessRecipe(new ResourceLocation("bluepower:" + mb.getTranslationKey() + block.getTranslationKey()), "", output, input));
                 }

@@ -1,19 +1,24 @@
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.api.connect.ConnectionType;
-import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
+import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.block.machine.BlockAlloyWire;
+import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.TileBase;
-import com.bluepowermod.tile.TileMachineBase;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -22,71 +27,50 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-class RedstoneDevice implements IRedstoneDevice {
-
-    private byte power = 0;
-
-    @Override
-    public boolean canConnect(Direction side, IRedstoneDevice dev, ConnectionType type) {
-        return true;
-    }
-
-    @Override
-    public IConnectionCache<? extends IRedstoneDevice> getRedstoneConnectionCache() {
-        return null;
-    }
-
-    @Override
-    public byte getRedstonePower(Direction side) {
-        return power;
-    }
-
-    @Override
-    public void setRedstonePower(Direction side, byte power) {
-        this.power = power;
-    }
-
-    @Override
-    public void onRedstoneUpdate() {
-
-    }
-
-    @Override
-    public boolean isNormalFace(Direction side) {
-        return false;
-    }
-
-}
-
 public class TileWire extends TileBase {
-    private final IRedstoneDevice device = new RedstoneDevice();
+    private IRedstoneDevice device;
+    @Nullable
+    private BlockState cachedBlockState;
     private LazyOptional<IRedstoneDevice> redstoneCap;
 
-
-    //public TileWire(MinecraftColor color) {
-        //super(BPTileEntityType.WIRE);
-        //this.device = UNINSULATED_CAPABILITY.getDefaultInstance();
-    //}
-
+    public static final ModelProperty<Pair<Integer, Integer>> COLOR_INFO = new ModelProperty<>();
+    public static final ModelProperty<Boolean> LIGHT_INFO = new ModelProperty<>();
 
     public TileWire() {
         super(BPTileEntityType.WIRE);
     }
 
+    public TileWire(TileEntityType type) {
+        super(type);
+    }
+
+
+    @Nonnull
+    @OnlyIn(Dist.CLIENT)
+    public IModelData getModelData(BlockState state) {
+
+            //Add Color and Light Data
+            Pair<Integer, Integer> colorData = Pair.of(((IBPColoredBlock)state.getBlock()).getColor(state, world, pos, -1), ((IBPColoredBlock)state.getBlock()).getColor(state, world, pos, 2));
+            Boolean lightData = state.get(BlockAlloyWire.POWERED);
+
+            return new ModelDataMap.Builder().withInitial(COLOR_INFO, colorData).withInitial(LIGHT_INFO, lightData).build();
+
+    }
+
     @Override
     protected void readFromPacketNBT(CompoundNBT compound) {
         super.readFromPacketNBT(compound);
-        if(compound.contains("device")) {
-            INBT nbtstorage = compound.get("device");
-            CapabilityRedstoneDevice.UNINSULATED_CAPABILITY.getStorage().readNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null, nbtstorage);
-        }
+        //if(compound.contains("device")) {
+        //    INBT nbtstorage = compound.get("device");
+        //    CapabilityRedstoneDevice.UNINSULATED_CAPABILITY.getStorage().readNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null, nbtstorage);
+        //}
     }
 
     @Override
     protected void writeToPacketNBT(CompoundNBT tCompound) {
         super.writeToPacketNBT(tCompound);
-        INBT nbtstorage = CapabilityRedstoneDevice.UNINSULATED_CAPABILITY.getStorage().writeNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null);
-        tCompound.put("device", nbtstorage);
+        //INBT nbtstorage = CapabilityRedstoneDevice.UNINSULATED_CAPABILITY.getStorage().writeNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null);
+        //tCompound.put("device", nbtstorage);
     }
 
     @Override
@@ -138,6 +122,4 @@ public class TileWire extends TileBase {
             redstoneCap = null;
         }
     }
-
-
 }

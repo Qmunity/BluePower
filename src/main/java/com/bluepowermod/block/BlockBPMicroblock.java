@@ -66,8 +66,8 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
             ItemStack stack = new ItemStack(this);
             stack.setTag(nbt);
             stack.setDisplayName(new TranslationTextComponent(((TileBPMicroblock)tileentity).getBlock().getTranslationKey())
-                    .appendSibling(new StringTextComponent(" "))
-                    .appendSibling(new TranslationTextComponent(this.getTranslationKey())));
+                    .append(new StringTextComponent(" "))
+                    .append(new TranslationTextComponent(this.getTranslationKey())));
             itemStacks.add(stack);
         }
         return itemStacks;
@@ -86,8 +86,8 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
             stack = new ItemStack(this);
             stack.setTag(nbt);
             stack.setDisplayName(new TranslationTextComponent(((TileBPMicroblock) tileentity).getBlock().getTranslationKey())
-                    .appendSibling(new StringTextComponent(" "))
-                    .appendSibling(new TranslationTextComponent(this.getTranslationKey())));
+                    .append(new StringTextComponent(" "))
+                    .append(new TranslationTextComponent(this.getTranslationKey())));
         }
         return stack;
     }

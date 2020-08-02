@@ -80,13 +80,7 @@ public class BPMicroblockModel implements IBakedModel {
                         sprite = typeModelQuads.get(0).func_187508_a();
                     }
 
-                    int color = Minecraft.getInstance().getBlockColors().getColor(this.defBlock.getDefaultState(), null, null, 0);
-                    int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-                    int r = (color & redMask) >> 16;
-                    int g = (color & greenMask) >> 8;
-                    int b = (color & blueMask);
-
-                    bakedQuads.add(transform(quad, sprite, state.get(BlockBPMicroblock.FACING), r,g,b, 1));
+                    bakedQuads.add(transform(quad, sprite, state.get(BlockBPMicroblock.FACING), defBlock));
                 }
                 return bakedQuads;
             }
@@ -116,19 +110,13 @@ public class BPMicroblockModel implements IBakedModel {
                 sprite = typeModelQuads.get(0).func_187508_a();
             }
 
-            int color = Minecraft.getInstance().getBlockColors().getColor(this.defBlock.getDefaultState(), null, null, 0);
-            int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-            int r = (color & redMask) >> 16;
-            int g = (color & greenMask) >> 8;
-            int b = (color & blueMask);
-
-            outquads.add(transform(quad, sprite, Direction.EAST, r,g,b, 1));
+            outquads.add(transform(quad, sprite, Direction.EAST , defBlock));
         }
 
         return outquads;
     }
 
-    private static BakedQuad transform(BakedQuad sizeQuad, TextureAtlasSprite sprite, Direction dir, float r, float g, float b, float a) {
+    private static BakedQuad transform(BakedQuad sizeQuad, TextureAtlasSprite sprite, Direction dir, Block block) {
         BakedQuadBuilder builder = new BakedQuadBuilder();
         final IVertexConsumer consumer = new VertexTransformer(builder) {
             @Override
@@ -140,7 +128,14 @@ public class BPMicroblockModel implements IBakedModel {
                     float v = (vec.y - sizeQuad.func_187508_a().getMinV()) / (sizeQuad.func_187508_a().getMaxV() - sizeQuad.func_187508_a().getMinV()) * 16;
                     builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v));
                 }else if(e.getUsage() == VertexFormatElement.Usage.COLOR){
-                    parent.put(element, r/255, g/255, b/255, a);
+
+                    int color = Minecraft.getInstance().getBlockColors().getColor(block.getDefaultState(), null, null, sizeQuad.getTintIndex());
+                    int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
+                    int r = (color & redMask) >> 16;
+                    int g = (color & greenMask) >> 8;
+                    int b = (color & blueMask);
+
+                    parent.put(element, r/255F, g/255F, b/255F, 1);
                 }else {
                     parent.put(element, data);
                 }

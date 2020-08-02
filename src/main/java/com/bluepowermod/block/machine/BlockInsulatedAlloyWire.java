@@ -1,54 +1,90 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.RedwireType;
-import com.bluepowermod.client.render.ICustomModelBlock;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.Block;
-import net.minecraft.state.IntegerProperty;
+import com.bluepowermod.tile.TileBPMultipart;
+import com.bluepowermod.tile.tier1.TileInsulatedWire;
+import com.bluepowermod.tile.tier1.TileWire;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.block.BlockState;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomModelBlock{
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-    private final MinecraftColor color;
+public class BlockInsulatedAlloyWire extends BlockAlloyWire{
 
-    public static final IntegerProperty STRAIGHT = IntegerProperty.create("straight", 0, 5);
+    public BlockInsulatedAlloyWire(String type) {
+        super(type, 2F , 2F);
+        setRegistryName(Refs.MODID + ":" + "insulatedwire." + type );
+    }
 
-    public BlockInsulatedAlloyWire(String type, MinecraftColor color) {
-        super(type);
-        this.color = color;
-        this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.UP).with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false).with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false).with(STRAIGHT, 1).with(POWERED, false));
-        setRegistryName(Refs.MODID + ":" + "wire." + type + "." + color.name().toLowerCase());
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return new TileInsulatedWire();
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
-        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, STRAIGHT, POWERED, WATERLOGGED);
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        TileEntity tileentity = builder.get(LootParameters.BLOCK_ENTITY);
+        List<ItemStack> itemStacks = new ArrayList<>();
+        if(tileentity instanceof TileBPMultipart){
+            tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
+        }
+        if (tileentity instanceof TileInsulatedWire) {
+            CompoundNBT nbt = new CompoundNBT();
+            nbt.putString("color", ((TileInsulatedWire)tileentity).getColor().name());
+            ItemStack stack = new ItemStack(this, 1, nbt);
+            itemStacks.add(stack);
+        }
+        return itemStacks;
     }
 
     @Override
-    public int getColor(IBlockReader world, BlockPos pos, int tintIndex) {
+    public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {
+        TileEntity tileentity = world.getTileEntity(pos);
+        ItemStack stack = ItemStack.EMPTY;
+        if(tileentity instanceof TileBPMultipart){
+            tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
+        }
+        if (tileentity instanceof TileInsulatedWire) {
+            CompoundNBT nbt = new CompoundNBT();
+            nbt.putString("color", ((TileInsulatedWire)tileentity).getColor().name());
+            stack = new ItemStack(this, 1, nbt);
+        }
+        return stack;
+    }
+
+
+    @Override
+    public int getColor(BlockState state, IBlockReader world, BlockPos pos, int tintIndex) {
         //Color for Block
+        TileEntity tile = (world.getTileEntity(pos));
+        if(tile instanceof TileBPMultipart){
+            tile = ((TileBPMultipart)tile).getTileForState(state);
+        }
+        if(tile instanceof TileWire && tintIndex == 1) {
+            return tile.getCapability(CapabilityRedstoneDevice.INSULATED_CAPABILITY).orElse(null).getInsulationColor(null).getHex();
+        }
+        return RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
+    }
+
+    @Override
+    public int getColor(ItemStack stack, int tintIndex) {
+        //Color for Block
+        MinecraftColor color = MinecraftColor.BLUE;
+        if(stack.getTag() != null && stack.getTag().contains("color"))
+            color = MinecraftColor.valueOf(stack.getTag().getString("color"));
         return tintIndex == 1 ? color.getHex() : tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
     }
 
-    @Override
-    public int getColor(int tintIndex) {
-        //Color for Block
-        return tintIndex == 1 ? color.getHex() : tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void initModel() {
-
-    }
 }

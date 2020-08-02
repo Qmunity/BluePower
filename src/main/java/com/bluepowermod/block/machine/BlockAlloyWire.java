@@ -9,15 +9,15 @@ import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileWire;
 import net.minecraft.block.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -37,6 +37,7 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
         return new TileWire();
     }
 
+
     @Override
     protected Capability<?> getCapability() {
         return CapabilityRedstoneDevice.UNINSULATED_CAPABILITY;
@@ -45,22 +46,21 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
     public BlockAlloyWire(String type) {
         super(1,2F);
         this.type = type;
-        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.UP).with(POWERED, false)
-                .with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false)
-                .with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false)
-                .with(JOIN_FRONT, false).with(JOIN_BACK, false)
-                .with(JOIN_LEFT, false).with(JOIN_RIGHT, false));
+        this.setDefaultState(super.getDefaultState().with(POWERED, false));
         setRegistryName(Refs.MODID + ":" + type + "_wire");
     }
 
-    protected BlockAlloyWire(String type, float width, float height){
-        super(width,height);
+    public BlockAlloyWire(String type, float width, float height) {
+        super(width, height);
         this.type = type;
-        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.UP).with(POWERED, false)
-                .with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false)
-                .with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false)
-                .with(JOIN_FRONT, false).with(JOIN_BACK, false)
-                .with(JOIN_LEFT, false).with(JOIN_RIGHT, false));
+        this.setDefaultState(super.getDefaultState().with(POWERED, false));
+    }
+
+    @Override
+    protected boolean canConnect(World world, BlockPos pos, BlockState state, TileEntity tileEntity, Direction direction) {
+        if(state.canConnectRedstone(world, pos, direction))
+            return true;
+        return super.canConnect(world, pos, state, tileEntity, direction);
     }
 
     @Override
@@ -69,12 +69,12 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
     }
 
     @Override
-    public int getColor(IBlockReader w, BlockPos pos, int tint) {
+    public int getColor(BlockState state, IBlockReader w, BlockPos pos, int tint) {
         return RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
     }
 
     @Override
-    public int getColor(int tint) {
+    public int getColor(ItemStack stack, int tint) {
         return RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
     }
 

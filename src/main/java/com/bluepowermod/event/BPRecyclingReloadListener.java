@@ -30,11 +30,11 @@ public class BPRecyclingReloadListener implements IResourceManagerReloadListener
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
             if (BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()) {
-                AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes(registries.func_240967_e_());
+                AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes(registries.getRecipeManager());
                 AlloyFurnaceRegistry.getInstance().generateRecipeDatapack(server);
             } else {
                 //If disabled remove any generated recipes
-                String path = server.getPath(FolderName.DATAPACKS).toString();
+                String path = server.func_240776_a_(FolderName.field_237251_g_).toString();
                 DatapackUtils.clearBPAlloyFurnaceDatapack(path);
             }
     }

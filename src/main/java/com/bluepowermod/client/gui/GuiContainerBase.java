@@ -125,7 +125,7 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
     public void render(MatrixStack matrixStack, int x, int y, float partialTick) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, x, y, partialTick);
-        this.renderHoveredToolTip(matrixStack, x, y);
+        this.func_230459_a_(matrixStack, x, y);
 
     }
 

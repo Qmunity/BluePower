@@ -70,20 +70,16 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     }
 
     @Override
-    public int getColor(IBlockReader w, BlockPos pos, int tint) {
-
+    public int getColor(BlockState state, IBlockReader w, BlockPos pos, int tint) {
         return color.getHex();
     }
 
     @Override
-    public int getColor(int tint) {
-
+    public int getColor(ItemStack stack, int tint) {
         return color.getHex();
-
     }
 
     public boolean isInverted() {
-
         return isInverted;
     }
 

@@ -185,8 +185,8 @@ public class BPCreativeTabs {
                             ItemStack stack = new ItemStack(mb);
                             stack.setTag(nbt);
                             stack.setDisplayName(new TranslationTextComponent(block.getTranslationKey())
-                                    .appendSibling(new StringTextComponent(" "))
-                                    .appendSibling(new TranslationTextComponent(mb.getTranslationKey())));
+                                    .append(new StringTextComponent(" "))
+                                    .append(new TranslationTextComponent(mb.getTranslationKey())));
                             items.add(stack);
                         }
                     }

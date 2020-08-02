@@ -81,7 +81,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
      */
     public void generateRecipeDatapack(MinecraftServer server){
         if(server != null) {
-            String path = server.getPath(FolderName.DATAPACKS).toString();
+            String path = server.func_240776_a_(FolderName.field_237251_g_).toString();
             DatapackUtils.createBPDatapack(path);
             DatapackUtils.clearBPAlloyFurnaceDatapack(path);
             for (IAlloyFurnaceRecipe recipe : alloyFurnaceRecipes) {

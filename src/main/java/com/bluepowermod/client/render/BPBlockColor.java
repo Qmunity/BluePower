@@ -17,12 +17,12 @@ public class BPBlockColor implements IBlockColor, IItemColor {
 
     @Override
     public int getColor(BlockState state, @Nullable IBlockDisplayReader world, @Nullable BlockPos pos, int tintIndex) {
-        return ((IBPColoredBlock)state.getBlock()).getColor(world, pos, tintIndex);
+        return ((IBPColoredBlock)state.getBlock()).getColor(state, world, pos, tintIndex);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public int getColor(ItemStack stack, int tintIndex) {
-        return ((IBPColoredBlock)Block.getBlockFromItem(stack.getItem())).getColor(tintIndex);
+        return ((IBPColoredBlock)Block.getBlockFromItem(stack.getItem())).getColor(stack, tintIndex);
     }
 }

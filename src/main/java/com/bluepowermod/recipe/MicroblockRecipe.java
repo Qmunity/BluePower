@@ -66,8 +66,8 @@ public class MicroblockRecipe extends SpecialRecipe {
                     ItemStack outStack = new ItemStack(BPBlocks.half_block, 2);
                     outStack.setTag(nbt);
                     outStack.setDisplayName(new TranslationTextComponent(stack.getItem().getTranslationKey())
-                            .appendText(" ")
-                            .appendSibling(new TranslationTextComponent(BPBlocks.half_block.getTranslationKey())));
+                            .appendString(" ")
+                            .append(new TranslationTextComponent(BPBlocks.half_block.getTranslationKey())));
                     return outStack;
                 }else if (Block.getBlockFromItem(stack.getItem()) == BPBlocks.half_block){
                     CompoundNBT nbt = new CompoundNBT();
@@ -76,8 +76,8 @@ public class MicroblockRecipe extends SpecialRecipe {
                     outStack.setTag(nbt);
                     Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
                     outStack.setDisplayName(new TranslationTextComponent(block.getTranslationKey())
-                            .appendText(" ")
-                            .appendSibling(new TranslationTextComponent(BPBlocks.panel.getTranslationKey())));
+                            .appendString(" ")
+                            .append(new TranslationTextComponent(BPBlocks.panel.getTranslationKey())));
                     return outStack;
                 }else if (Block.getBlockFromItem(stack.getItem()) == BPBlocks.panel){
                     CompoundNBT nbt = new CompoundNBT();
@@ -86,8 +86,8 @@ public class MicroblockRecipe extends SpecialRecipe {
                     outStack.setTag(nbt);
                     Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
                     outStack.setDisplayName(new TranslationTextComponent(block.getTranslationKey())
-                            .appendText(" ")
-                            .appendSibling(new TranslationTextComponent(BPBlocks.cover.getTranslationKey())));
+                            .appendString(" ")
+                            .append(new TranslationTextComponent(BPBlocks.cover.getTranslationKey())));
                     return outStack;
                 }
             }

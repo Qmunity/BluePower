@@ -10,7 +10,8 @@
     "model": "bluepower:cable/wire"
   },
   "variants": {
-    "normal": [{}],
+    "": [{}],
+    "waterlogged": {"true": {},"false":{}},
     "inventory": [{"submodel":{
       "extended1":{"model":"bluepower:cable/wire_extended","y": -90},
       "extended2":{"model":"bluepower:cable/wire_extended","y": 90},

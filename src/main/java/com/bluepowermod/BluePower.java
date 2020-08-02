@@ -11,7 +11,6 @@ package com.bluepowermod;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
-import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.event.BPRecyclingReloadListener;
@@ -23,9 +22,7 @@ import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.TableLootEntry;
-import net.minecraft.resources.ResourcePackList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
@@ -53,9 +50,10 @@ public class BluePower {
     public BluePower(){
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BPConfig.spec);
         instance = this;
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
-        MinecraftForge.EVENT_BUS.register(this);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::complete);
 
+        MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
 
         BPEventHandler eventHandler = new BPEventHandler();
@@ -70,7 +68,6 @@ public class BluePower {
 
     public static Logger log = LogManager.getLogger(Refs.MODID);
 
-    @SubscribeEvent
     public void setup(FMLCommonSetupEvent event) {
         DeferredWorkQueue.runLater(BPNetworkHandler::init);
         OreDictionarySetup.init();
@@ -80,12 +77,9 @@ public class BluePower {
         CapabilityBlutricity.register();
         CapabilityRedstoneDevice.register();
         proxy.setup(event);
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> BPContainerType::registerScreenFactories);
         CompatibilityUtils.init(event);
-
     }
 
-    @SubscribeEvent
     public void complete(FMLLoadCompleteEvent event) {
         proxy.initRenderers();
         CompatibilityUtils.postInit(event);

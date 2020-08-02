@@ -51,14 +51,16 @@ public class Renderers {
 
     @SubscribeEvent
     public void onModelBakeEvent(ModelBakeEvent event) {
+
         //Register Multipart Model
-        event.getModelRegistry().put(new ModelResourceLocation("bluepower:multipart","waterlogged=false"), new BPMultipartModel());
-        event.getModelRegistry().put(new ModelResourceLocation("bluepower:multipart","waterlogged=true"), new BPMultipartModel());
+        BPMultipartModel multipartModel = new BPMultipartModel();
+        event.getModelRegistry().put(new ModelResourceLocation("bluepower:multipart","waterlogged=false"), multipartModel);
+        event.getModelRegistry().put(new ModelResourceLocation("bluepower:multipart","waterlogged=true"), multipartModel);
 
         BPMicroblockModel microblockModel = new BPMicroblockModel();
 
-        //Register Microblock Models
         for(Direction dir : Direction.values()) {
+            //Register Microblock Models
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "face=" + dir.getName2()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName2() + ",waterlogged=true")));
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName2() + ",waterlogged=true"), microblockModel);
             event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName2() + ",waterlogged=false"), microblockModel);
@@ -79,7 +81,6 @@ public class Renderers {
     public static void init() {
 
         ClientRegistry.bindTileEntityRenderer(BPTileEntityType.LAMP, RenderLamp::new);
-        ClientRegistry.bindTileEntityRenderer(BPTileEntityType.WIRE, RenderWire::new);
         ClientRegistry.bindTileEntityRenderer(BPTileEntityType.ENGINE, RenderEngine::new);
 
 

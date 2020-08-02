@@ -29,7 +29,7 @@ public class ItemMultimeter extends ItemBase {
                 String ampere = String.format("%.2f", amps);
                 String watts = String.format("%.2f", volts * amps);
                 if (context.getPlayer() != null)
-                    context.getPlayer().sendMessage(new StringTextComponent("Reading " + voltage + "V " + ampere + "A (" + watts + "W)"), Util.BLANK_UUID);
+                    context.getPlayer().sendMessage(new StringTextComponent("Reading " + voltage + "V " + ampere + "A (" + watts + "W)"), Util.DUMMY_UUID);
             }
             return ActionResultType.SUCCESS;
         }

@@ -1,0 +1,17 @@
+{
+	"textures": {
+		"particle": "bluepower:blocks/wire/wire",
+		"wire": "bluepower:blocks/wire/wire"
+	},
+	"elements": [
+		{
+			"from": [16, 0, 7],
+			"to": [18, 2, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [15, 8, 8]},
+			"faces": {
+				"north": {"uv": [14, 7, 16, 9], "texture": "#wire", "tintindex": 2},
+				"up": {"uv": [6, 0, 8, 2], "texture": "#wire", "tintindex": 2}
+			}
+		}
+	]
+}

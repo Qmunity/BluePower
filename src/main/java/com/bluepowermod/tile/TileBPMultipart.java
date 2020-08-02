@@ -9,6 +9,7 @@
 package com.bluepowermod.tile;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
+import com.bluepowermod.tile.tier1.TileWire;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.block.BlockState;
@@ -44,7 +45,7 @@ import java.util.stream.Collectors;
  */
 public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
 
-    public static final ModelProperty<Map<BlockState, IModelData>> PROPERTY_INFO = new ModelProperty<>();
+    public static final ModelProperty<Map<BlockState, IModelData>> STATE_INFO = new ModelProperty<>();
     private Map<BlockState, TileEntity> stateMap = new HashMap<>();
 
     public TileBPMultipart() {
@@ -61,13 +62,17 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         //Add States without Tile Entities
         stateMap.keySet().stream().filter(s -> !s.hasTileEntity()).forEach(s -> modelDataMap.put(s, null));
 
-        return new ModelDataMap.Builder().withInitial(PROPERTY_INFO, modelDataMap).build();
+        return new ModelDataMap.Builder().withInitial(STATE_INFO, modelDataMap).build();
     }
 
     private IModelData getModelData(BlockState state) {
         //Get Model Data for specific state
-        if(stateMap.get(state) != null)
-            return stateMap.get(state).getModelData();
+        TileEntity tileEntity = stateMap.get(state);
+        if(tileEntity != null) {
+            if (tileEntity instanceof TileWire)
+                return ((TileWire) tileEntity).getModelData(state);
+            return tileEntity.getModelData();
+        }
         return EmptyModelData.INSTANCE;
     }
 
@@ -163,7 +168,7 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         for (int i = 0; i < getStates().size(); i++) {
             //write state data
             String stateSave = "state" + i;
-            BlockState.field_235877_b_.encodeStart(NBTDynamicOps.INSTANCE,  getStates().get(i)).result().ifPresent(nbt -> compound.put(stateSave, nbt));
+            BlockState.BLOCKSTATE_CODEC.encodeStart(NBTDynamicOps.INSTANCE,  getStates().get(i)).result().ifPresent(nbt -> compound.put(stateSave, nbt));
             //write tile NBT data
             if(stateMap.get(getStates().get(i)) != null)
                 compound.put("tile" + i, stateMap.get(getStates().get(i)).write(new CompoundNBT()));
@@ -177,7 +182,7 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         Map<BlockState, TileEntity> states = new HashMap<>();
         int size = compound.getInt("size");
         for (int i = 0; i < size; i++) {
-            Optional<Pair<BlockState, INBT>> result = BlockState.field_235877_b_.decode(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("state" + i))).result();
+            Optional<Pair<BlockState, INBT>> result = BlockState.BLOCKSTATE_CODEC.decode(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("state" + i))).result();
             if(result.isPresent()){
                 BlockState state = result.get().getFirst();
                 TileEntity tile = state.getBlock().createTileEntity(state, getWorld());

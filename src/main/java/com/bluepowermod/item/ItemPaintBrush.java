@@ -8,22 +8,41 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.tier1.TileInsulatedWire;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 
 public class ItemPaintBrush extends ItemDamageableColorableOverlay {
-    
+    private final MinecraftColor color;
+
     public ItemPaintBrush() {
         super(Refs.PAINTBRUSH_NAME + "_blank", new Properties());
+        color = MinecraftColor.ANY;
     }
 
     public ItemPaintBrush(MinecraftColor color) {
         super(color, Refs.PAINTBRUSH_NAME, new Properties());
+        this.color = color;
     }
 
     @Override
     protected int getMaxUses() {
-    
         return 256;
     }
-    
+
+    @Override
+    public ActionResultType onItemUse(ItemUseContext context) {
+        TileEntity tile = context.getWorld().getTileEntity(context.getPos());
+        boolean changed = false;
+        if(tile instanceof TileInsulatedWire){
+           changed = ((TileInsulatedWire) tile).setColor(color);
+        if(changed && context.getPlayer() != null)
+            context.getPlayer().setHeldItem(context.getHand(), new ItemStack(BPItems.paint_brush.get(0)));
+        }
+        return super.onItemUse(context);
+    }
 }
