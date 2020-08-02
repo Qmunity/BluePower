@@ -7,6 +7,8 @@
 modLoader="javafml" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
 loaderVersion="[30,)" #mandatory (30 is current forge version)
+# The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
+license="GNU General Public License v3.0"
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/Qmunity/BluePower/issues" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
