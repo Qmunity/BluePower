@@ -20,6 +20,7 @@ package com.bluepowermod.block.worldgen;
 import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -31,8 +32,7 @@ public class BlockItemOre extends BlockBase {
     protected Random rand = new Random();
 
     public BlockItemOre(String type) {
-
-        super(Material.IRON);
+        super(Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(5.0F).sound(SoundType.STONE));
         this.setRegistryName(Refs.MODID + ":" + type);
     }
 

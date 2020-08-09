@@ -41,14 +41,14 @@ public class BlockStoneOre extends Block {
     private final boolean witherproof;
 
     public BlockStoneOre(String name, boolean witherproof) {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.STONE));
+        super(Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.STONE));
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         this.witherproof = witherproof;
     }
 
     public BlockStoneOre(String name) {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(5.0F).sound(SoundType.STONE));
+        super(Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(5.0F).sound(SoundType.STONE));
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         witherproof = false;
