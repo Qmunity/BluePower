@@ -20,6 +20,7 @@ package com.bluepowermod.network;
 import com.bluepowermod.network.message.*;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
@@ -32,7 +33,7 @@ public class BPNetworkHandler {
         wrapper = NetworkRegistry.newSimpleChannel(new ResourceLocation(Refs.MODID, "network"), () -> "1.0", client -> true, server -> true);
 
         wrapper.registerMessage(0, MessageGuiUpdate.class, MessageGuiUpdate::encode, MessageGuiUpdate::decode,  MessageGuiUpdate::handle);
-        //wrapper.registerMessage(1, MessageCraftingSync.class, MessageCraftingSync.class, Dist.DEDICATED_SERVER);
+        wrapper.registerMessage(1, MessageCraftingSync.class, MessageCraftingSync::encode, MessageCraftingSync::decode, MessageCraftingSync::handle);
         //wrapper.registerMessage(2, MessageUpdateTextfield.class, MessageUpdateTextfield.class, Dist.DEDICATED_SERVER);
         //wrapper.registerMessage(3, MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Dist.DEDICATED_SERVER);
         //wrapper.registerMessage(4, MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Dist.CLIENT);

@@ -1,5 +1,8 @@
 package com.bluepowermod.container.inventory;
 
+import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.network.message.MessageCraftingSync;
+import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
@@ -40,8 +43,7 @@ public class InventoryProjectTableCrafting extends CraftingInventory {
     public void markDirty() {
         this.projectTable.markDirty();
         this.eventHandler.onCraftMatrixChanged(this);
-
-        //BPNetworkHandler.INSTANCE.sendToServer(new MessageCraftingSync());
+        BPNetworkHandler.wrapper.sendToServer(new MessageCraftingSync());
     }
 
     @Nonnull
