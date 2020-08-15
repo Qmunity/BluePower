@@ -46,7 +46,7 @@ public class BlockBPMultipart extends ContainerBlock implements IWaterLoggable {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public BlockBPMultipart() {
-        super(Block.Properties.create(Material.WOOD).notSolid());
+        super(Block.Properties.create(Material.ROCK).notSolid().hardnessAndResistance(2));
         setRegistryName(Refs.MODID + ":multipart");
         BPBlocks.blockList.add(this);
         this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, false));
