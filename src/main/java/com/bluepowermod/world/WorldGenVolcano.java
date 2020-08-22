@@ -64,7 +64,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_230362_a_(ISeedReader world, StructureManager structureManager, ChunkGenerator chunkGenerator, Random rand, BlockPos blockPos, NoFeatureConfig noFeatureConfig) {
+    public boolean func_241855_a(ISeedReader world, ChunkGenerator chunkGenerator, Random rand, BlockPos blockPos, NoFeatureConfig noFeatureConfig) {
         int startChunkX = blockPos.getX() >> 8;
         int startChunkZ = blockPos.getZ() >> 8;
         volcanoMap = new HashMap<>();

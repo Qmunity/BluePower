@@ -63,7 +63,9 @@ public class BluePower {
         BPEnchantments.init();
         BPBlocks.init();
         proxy.preInitRenderers();
-
+        BPWorldGen.init();
+        WorldGenOres.initOres();
+        WorldGenFlowers.initFlowers();
     }
 
     public static Logger log = LogManager.getLogger(Refs.MODID);
@@ -72,12 +74,12 @@ public class BluePower {
         DeferredWorkQueue.runLater(BPNetworkHandler::init);
         OreDictionarySetup.init();
         WorldGenOres.setupOres();
-        WorldGenFlowers.setupFlowers();
         BPWorldGen.setupGeneralWorldGen();
         CapabilityBlutricity.register();
         CapabilityRedstoneDevice.register();
         proxy.setup(event);
         CompatibilityUtils.init(event);
+        WorldGenFlowers.setupFlowers();
     }
 
     public void complete(FMLLoadCompleteEvent event) {

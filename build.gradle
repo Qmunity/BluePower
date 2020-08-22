@@ -26,7 +26,7 @@ project.ext {
     } else {
         build = "-custom"
     }
-    mcVersion = "1.16.1"
+    mcVersion = "1.16.2"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -96,13 +96,13 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.1-32.0.98'
+    minecraft 'net.minecraftforge:forge:1.16.2-33.0.20'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
 	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
-    compileOnly fg.deobf("curse.maven:Hwyla:2880071")
-    compileOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.2:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.2")
+    compileOnly fg.deobf("curse.maven:Hwyla:3033595")
+    compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.1.1.15:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.1.1.15")
     //compile "team.chisel.ctm:CTM:MC1.16.1-1.1.0.1"
 }
 
