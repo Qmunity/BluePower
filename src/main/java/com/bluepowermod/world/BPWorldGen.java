@@ -30,6 +30,7 @@ import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.*;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +54,13 @@ public class BPWorldGen {
     }
 
     public static void setupGeneralWorldGen() {
-        for (Map.Entry<RegistryKey<Biome>, Biome> biome : WorldGenRegistries.field_243657_i.getEntries()) {
-            if (!biome.getValue().getCategory().equals(Biome.Category.NETHER) && !biome.getValue().getCategory().equals(Biome.Category.THEEND)) {
+        for (Biome biome : ForgeRegistries.BIOMES) {
+            if (!biome.getCategory().equals(Biome.Category.NETHER) && !biome.getCategory().equals(Biome.Category.THEEND)) {
                 if(BPConfig.CONFIG.generateVolcano.get()) {
-                    addFeatureToBiome(biome.getValue(), GenerationStage.Decoration.LOCAL_MODIFICATIONS, VOLCANO_FEATURE);
+                    addFeatureToBiome(biome, GenerationStage.Decoration.LOCAL_MODIFICATIONS, VOLCANO_FEATURE);
                 }
                 if(BPConfig.CONFIG.generateMarble.get()) {
-                    addFeatureToBiome(biome.getValue(), GenerationStage.Decoration.UNDERGROUND_ORES, MARBLE_FEATURE);
+                    addFeatureToBiome(biome, GenerationStage.Decoration.UNDERGROUND_ORES, MARBLE_FEATURE);
                 }
             }
         }
