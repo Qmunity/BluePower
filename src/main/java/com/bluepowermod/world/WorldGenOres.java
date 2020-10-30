@@ -76,13 +76,13 @@ public class WorldGenOres {
 
     private static void registerConfiguredOre(int veinCount, int veinSize, int minY, int maxY, Block ore){
         if(ore.getRegistryName() != null)
-         Registry.register(WorldGenRegistries.field_243653_e, ore.getRegistryName(), Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.field_241882_a, ore.getDefaultState(), veinSize)).withPlacement(Placement.field_242907_l.configure(new TopSolidRangeConfig(minY, minY, maxY))).func_242728_a().func_242731_b(veinCount));
+         Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, ore.getRegistryName(), Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, ore.getDefaultState(), veinSize)).withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(minY, minY, maxY))).square().func_242731_b(veinCount));
     }
 
     private static void addOreToGenerate(Block ore){
         for(Biome biome : ForgeRegistries.BIOMES) {
             if(!biome.getCategory().equals(Biome.Category.NETHER) && !biome.getCategory().equals(Biome.Category.THEEND)) {
-                addFeatureToBiome(biome, GenerationStage.Decoration.UNDERGROUND_ORES, WorldGenRegistries.field_243653_e.getOrDefault(ore.getRegistryName()));
+                addFeatureToBiome(biome, GenerationStage.Decoration.UNDERGROUND_ORES, WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(ore.getRegistryName()));
             }
         }
     }

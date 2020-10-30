@@ -77,7 +77,7 @@ public class BPMicroblockModel implements IBakedModel {
                 for (BakedQuad quad: sizeModelQuads) {
                     List<BakedQuad> typeModelQuads = typeModel.getQuads(info.getKey().getDefaultState(), quad.getFace(), rand);
                     if(typeModelQuads.size() > 0){
-                        sprite = typeModelQuads.get(0).func_187508_a();
+                        sprite = typeModelQuads.get(0).getSprite();
                     }
 
                     bakedQuads.add(transform(quad, sprite, state.get(BlockBPMicroblock.FACING), defBlock));
@@ -107,7 +107,7 @@ public class BPMicroblockModel implements IBakedModel {
         for (BakedQuad quad: sizeModelQuads) {
             List<BakedQuad> typeModelQuads = typeModel.getQuads(this.defBlock.getDefaultState(), quad.getFace(), rand);
             if(typeModelQuads.size() > 0){
-                sprite = typeModelQuads.get(0).func_187508_a();
+                sprite = typeModelQuads.get(0).getSprite();
             }
 
             outquads.add(transform(quad, sprite, Direction.EAST , defBlock));
@@ -124,8 +124,8 @@ public class BPMicroblockModel implements IBakedModel {
                 VertexFormatElement e = this.getVertexFormat().getElements().get(element);
                 if (e.getUsage() == VertexFormatElement.Usage.UV && e.getIndex() == 0) {
                     Vector2f vec = new Vector2f(data[0], data[1]);
-                    float u = (vec.x - sizeQuad.func_187508_a().getMinU()) / (sizeQuad.func_187508_a().getMaxU() - sizeQuad.func_187508_a().getMinU()) * 16;
-                    float v = (vec.y - sizeQuad.func_187508_a().getMinV()) / (sizeQuad.func_187508_a().getMaxV() - sizeQuad.func_187508_a().getMinV()) * 16;
+                    float u = (vec.x - sizeQuad.getSprite().getMinU()) / (sizeQuad.getSprite().getMaxU() - sizeQuad.getSprite().getMinU()) * 16;
+                    float v = (vec.y - sizeQuad.getSprite().getMinV()) / (sizeQuad.getSprite().getMaxV() - sizeQuad.getSprite().getMinV()) * 16;
                     builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v));
                 }else if(e.getUsage() == VertexFormatElement.Usage.COLOR){
 
@@ -171,7 +171,7 @@ public class BPMicroblockModel implements IBakedModel {
     }
 
     @Override
-    public boolean func_230044_c_() {
+    public boolean isSideLit() {
         return false;
     }
 
@@ -204,7 +204,7 @@ public class BPMicroblockModel implements IBakedModel {
      */
     private static final class BakedMicroblockOverrideHandler extends ItemOverrideList{
         @Override
-        public IBakedModel func_239290_a_(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity){
+        public IBakedModel getOverrideModel(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity){
             CompoundNBT nbt = stack.getTag();
             if(nbt != null && nbt.contains("block")){
                 Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));

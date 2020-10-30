@@ -23,7 +23,7 @@ public class WorldGenFlowers {
             int n = getConfigAmount(ForgeRegistries.BIOMES.getKey(biome));
             if(n > 0) {
                 BlockClusterFeatureConfig featureConfig = (new BlockClusterFeatureConfig.Builder((new WeightedBlockStateProvider()).addWeightedBlockstate(BPBlocks.indigo_flower.getDefaultState(), 2), new SimpleBlockPlacer())).tries(64).build();
-                Registry.register(WorldGenRegistries.field_243653_e, "bluepower:" + Refs.INDIGOFLOWER_NAME + n, Feature.FLOWER.withConfiguration(featureConfig).withPlacement(Features.Placements.field_244000_k).withPlacement(Features.Placements.field_244001_l).func_242729_a(n));
+                Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "bluepower:" + Refs.INDIGOFLOWER_NAME + n, Feature.FLOWER.withConfiguration(featureConfig).withPlacement(Features.Placements.VEGETATION_PLACEMENT).withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT).chance(n));
             }
         }
     }
@@ -31,7 +31,7 @@ public class WorldGenFlowers {
         for(Biome biome : ForgeRegistries.BIOMES) {
             int n = getConfigAmount(ForgeRegistries.BIOMES.getKey(biome));
             if(n > 0) {
-                addFeatureToBiome(biome, GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenRegistries.field_243653_e.getOrDefault(new ResourceLocation("bluepower:" + Refs.INDIGOFLOWER_NAME + n)));
+                addFeatureToBiome(biome, GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(new ResourceLocation("bluepower:" + Refs.INDIGOFLOWER_NAME + n)));
             }
         }
     }

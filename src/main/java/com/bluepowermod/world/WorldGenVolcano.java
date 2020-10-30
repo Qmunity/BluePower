@@ -64,7 +64,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader world, ChunkGenerator chunkGenerator, Random rand, BlockPos blockPos, NoFeatureConfig noFeatureConfig) {
+    public boolean generate(ISeedReader world, ChunkGenerator chunkGenerator, Random rand, BlockPos blockPos, NoFeatureConfig noFeatureConfig) {
         int startChunkX = blockPos.getX() >> 8;
         int startChunkZ = blockPos.getZ() >> 8;
         volcanoMap = new HashMap<>();
@@ -86,12 +86,12 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
                     if (!first && middleX + p.x >> 4 == blockPos.getX() >> 4 && middleZ + p.z >> 4 == blockPos.getZ() >> 4) {
                         int worldHeight = world.getHeight(Heightmap.Type.WORLD_SURFACE, p.x + middleX, p.z + middleZ);
                         for (int i = posHeight; i > 0 && (i > worldHeight || canReplace(world, p.x + middleX, i, p.z + middleZ)); i--) {
-                            func_230367_a_(world, new BlockPos(p.x + middleX, i, p.z + middleZ), BPBlocks.basalt.getDefaultState());
+                            setBlockState(world, new BlockPos(p.x + middleX, i, p.z + middleZ), BPBlocks.basalt.getDefaultState());
                         }
                         for (int i = posHeight + 1; i < volcanoHeight; i++) {
                             if (canReplace(world, p.x + middleX, i, p.z + middleZ)
                                     && world.getBlockState(new BlockPos(p.x + middleX, i, p.z + middleZ)).getMaterial() != Material.WATER)
-                                func_230367_a_(world, new BlockPos(p.x + middleX, i, p.z + middleZ), Blocks.AIR.getDefaultState());
+                                setBlockState(world, new BlockPos(p.x + middleX, i, p.z + middleZ), Blocks.AIR.getDefaultState());
                         }
                     }
                     isFinished = false;
@@ -122,18 +122,18 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
     private void generateLavaColumn(IWorld world, int x, int topY, int z, Random rand) {
         // world.setBlock(x, topY, z, Blocks.lava);
         if (rand.nextDouble() < BPConfig.CONFIG.volcanoActiveToInactiveRatio.get()) {
-            func_230367_a_(world, new BlockPos(x, topY, z), BPBlocks.cracked_basalt_lava.getDefaultState());
+            setBlockState(world, new BlockPos(x, topY, z), BPBlocks.cracked_basalt_lava.getDefaultState());
         } else {
-            func_230367_a_(world, new BlockPos(x, topY, z), Blocks.LAVA.getDefaultState());
+            setBlockState(world, new BlockPos(x, topY, z), Blocks.LAVA.getDefaultState());
             world.getPendingFluidTicks().scheduleTick(new BlockPos(x, topY, z), Blocks.LAVA.getDefaultState().getFluidState().getFluid(), 10);
         }
         for (int y = topY - 1; y >= 10; y--) {
             if (world.getBlockState(new BlockPos(x, y, z)) != Blocks.BEDROCK.getDefaultState()) {
-                func_230367_a_(world, new BlockPos(x + 1, y, z), BPBlocks.basalt.getDefaultState());
-                func_230367_a_(world, new BlockPos(x - 1, y, z), BPBlocks.basalt.getDefaultState());
-                func_230367_a_(world, new BlockPos(x, y, z + 1), BPBlocks.basalt.getDefaultState());
-                func_230367_a_(world, new BlockPos(x, y, z - 1), BPBlocks.basalt.getDefaultState());
-                func_230367_a_(world, new BlockPos(x, y, z), Blocks.LAVA.getDefaultState());
+                setBlockState(world, new BlockPos(x + 1, y, z), BPBlocks.basalt.getDefaultState());
+                setBlockState(world, new BlockPos(x - 1, y, z), BPBlocks.basalt.getDefaultState());
+                setBlockState(world, new BlockPos(x, y, z + 1), BPBlocks.basalt.getDefaultState());
+                setBlockState(world, new BlockPos(x, y, z - 1), BPBlocks.basalt.getDefaultState());
+                setBlockState(world, new BlockPos(x, y, z), Blocks.LAVA.getDefaultState());
             }
         }
     }
@@ -219,7 +219,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
                     int zOffset = Math.abs(z - middleZ);
                     if (xOffset != 0 || zOffset != 0) {
                         boolean spawnGlass = xOffset <= 1 && zOffset <= 1;
-                        func_230367_a_(world, new BlockPos(x, y, z), spawnGlass ? BPBlocks.reinforced_sapphire_glass.getDefaultState() : Blocks.AIR.getDefaultState());
+                        setBlockState(world, new BlockPos(x, y, z), spawnGlass ? BPBlocks.reinforced_sapphire_glass.getDefaultState() : Blocks.AIR.getDefaultState());
                     }
                 }
             }
@@ -252,15 +252,15 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
     }
 
     private void setAltarBlockAndPossiblyTrap(IWorld world, int x, int y, int z, Random rand, Block altarBlock) {
-        func_230367_a_(world, new BlockPos(x, y, z), altarBlock.getDefaultState());
+        setBlockState(world, new BlockPos(x, y, z), altarBlock.getDefaultState());
         if (rand.nextInt(6) == 0) {
-            func_230367_a_(world, new BlockPos(x, y - 1, z), Blocks.TNT.getDefaultState());
-            func_230367_a_(world, new BlockPos(x, y - 2, z), Blocks.REDSTONE_BLOCK.getDefaultState());
+            setBlockState(world, new BlockPos(x, y - 1, z), Blocks.TNT.getDefaultState());
+            setBlockState(world, new BlockPos(x, y - 2, z), Blocks.REDSTONE_BLOCK.getDefaultState());
         }
     }
 
     private void generateLootChest(IWorld world, BlockPos pos, Random rand, Direction dir) {
-        func_230367_a_(world, pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, dir.getOpposite()));
+        setBlockState(world, pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, dir.getOpposite()));
         TileEntity te = world.getTileEntity(pos);
         if(te instanceof ChestTileEntity){
             if (rand.nextInt(5) == 0 && BPConfig.CONFIG.generateTungstenInVolcano.get()) {

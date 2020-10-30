@@ -168,7 +168,7 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         for (int i = 0; i < getStates().size(); i++) {
             //write state data
             String stateSave = "state" + i;
-            BlockState.BLOCKSTATE_CODEC.encodeStart(NBTDynamicOps.INSTANCE,  getStates().get(i)).result().ifPresent(nbt -> compound.put(stateSave, nbt));
+            BlockState.CODEC.encodeStart(NBTDynamicOps.INSTANCE,  getStates().get(i)).result().ifPresent(nbt -> compound.put(stateSave, nbt));
             //write tile NBT data
             if(stateMap.get(getStates().get(i)) != null)
                 compound.put("tile" + i, stateMap.get(getStates().get(i)).write(new CompoundNBT()));
@@ -182,7 +182,7 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         Map<BlockState, TileEntity> states = new HashMap<>();
         int size = compound.getInt("size");
         for (int i = 0; i < size; i++) {
-            Optional<Pair<BlockState, INBT>> result = BlockState.BLOCKSTATE_CODEC.decode(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("state" + i))).result();
+            Optional<Pair<BlockState, INBT>> result = BlockState.CODEC.decode(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("state" + i))).result();
             if(result.isPresent()){
                 BlockState state = result.get().getFirst();
                 TileEntity tile = state.getBlock().createTileEntity(state, getWorld());

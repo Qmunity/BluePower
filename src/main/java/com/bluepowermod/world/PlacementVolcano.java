@@ -18,8 +18,9 @@ public class PlacementVolcano extends Placement<NoPlacementConfig> {
         super(codec);
     }
 
+
     @Override
-    public Stream<BlockPos> func_241857_a(WorldDecoratingHelper decoratingHelper, Random random, NoPlacementConfig configIn, BlockPos pos) {
+    public Stream<BlockPos> getPositions(WorldDecoratingHelper decoratingHelper, Random random, NoPlacementConfig configIn, BlockPos pos) {
         ISeedReader world = ObfuscationReflectionHelper.getPrivateValue(WorldDecoratingHelper.class, decoratingHelper, "field_242889_a");
         int chunkPosX = pos.getX() >> 8;
         int chuckPosZ = pos.getZ() >> 8;

@@ -40,17 +40,17 @@ import java.util.function.Supplier;
 
 public class BPWorldGen {
     //VOLCANO
-    public static Feature<NoFeatureConfig> VOLCANO;
-    private static PlacementVolcano VOLCANO_PLACEMENT;
+    public static Feature<NoFeatureConfig> VOLCANO = new WorldGenVolcano(NoFeatureConfig.field_236558_a_);
+    private static PlacementVolcano VOLCANO_PLACEMENT = new PlacementVolcano(NoPlacementConfig.CODEC);
     private static ConfiguredFeature<?, ?> VOLCANO_FEATURE;
     //MARBLE
     private static ConfiguredFeature<?, ?> MARBLE_FEATURE;
 
     public static void init() {
-        VOLCANO = Registry.register(Registry.FEATURE, "bluepower:volcano", new WorldGenVolcano(NoFeatureConfig.field_236558_a_));
-        VOLCANO_PLACEMENT = Registry.register(Registry.DECORATOR, "bluepower:volcano", new PlacementVolcano(NoPlacementConfig.field_236555_a_));
-        VOLCANO_FEATURE = Registry.register(WorldGenRegistries.field_243653_e, "bluepower:volcano", VOLCANO.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(VOLCANO_PLACEMENT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-        MARBLE_FEATURE = Registry.register(WorldGenRegistries.field_243653_e, "bluepower:marble", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.field_241882_a, BPBlocks.marble.getDefaultState(), BPConfig.CONFIG.veinSizeMarble.get() / 32)).withPlacement(Placement.field_242907_l.configure(new TopSolidRangeConfig(0, 0, 90)).func_242728_a().func_242731_b(1)));
+        ForgeRegistries.FEATURES.register(VOLCANO.setRegistryName("bluepower:volcano"));
+        ForgeRegistries.DECORATORS.register(VOLCANO_PLACEMENT.setRegistryName("bluepower:volcano"));
+        VOLCANO_FEATURE = Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "bluepower:volcano", VOLCANO.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(VOLCANO_PLACEMENT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+        MARBLE_FEATURE = Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "bluepower:marble", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, BPBlocks.marble.getDefaultState(), BPConfig.CONFIG.veinSizeMarble.get() / 32)).withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(0, 0, 90)).square().func_242731_b(1)));
     }
 
     public static void setupGeneralWorldGen() {
@@ -67,7 +67,7 @@ public class BPWorldGen {
     }
 
     public static void addFeatureToBiome(Biome biome, GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> configuredFeature) {
-        List<List<Supplier<ConfiguredFeature<?, ?>>>> biomeFeatures = new ArrayList<>(biome.func_242440_e().func_242498_c());
+        List<List<Supplier<ConfiguredFeature<?, ?>>>> biomeFeatures = new ArrayList<>(biome.getGenerationSettings().getFeatures());
         while (biomeFeatures.size() <= decoration.ordinal()) {
             biomeFeatures.add(Lists.newArrayList());
         }
@@ -75,7 +75,7 @@ public class BPWorldGen {
         features.add(() -> configuredFeature);
         biomeFeatures.set(decoration.ordinal(), features);
 
-        ObfuscationReflectionHelper.setPrivateValue(BiomeGenerationSettings.class, biome.func_242440_e(), biomeFeatures, "field_242484_f");
+        ObfuscationReflectionHelper.setPrivateValue(BiomeGenerationSettings.class, biome.getGenerationSettings(), biomeFeatures, "field_242484_f");
     }
 
 }
