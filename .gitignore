@@ -22,3 +22,4 @@
 /*.iws
 /atlassian-ide-plugin.xml
 run
+/logs/
