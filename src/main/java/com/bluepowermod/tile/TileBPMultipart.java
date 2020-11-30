@@ -117,7 +117,7 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
             }
         }
         if(world != null)
-            getBlockState().neighborChanged(world, pos, getBlockState().getBlock(), pos, false);
+            world.getBlockState(pos).neighborChanged(world, pos, getBlockState().getBlock(), pos, false);
     }
 
     public TileEntity getTileForState(BlockState state){
