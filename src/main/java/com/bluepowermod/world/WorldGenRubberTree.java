@@ -22,7 +22,12 @@ public class WorldGenRubberTree extends AbstractTreeFeature {
     }
 
     @Override
-    protected boolean func_225557_a_(IWorldGenerationReader iWorldGenerationReader, Random random, BlockPos blockPos, Set set, Set set1, MutableBoundingBox mutableBoundingBox, BaseTreeFeatureConfig baseTreeFeatureConfig) {
+    protected boolean place(IWorldGenerationReader generationReader, Random rand, BlockPos positionIn, Set p_225557_4_, Set p_225557_5_, MutableBoundingBox boundingBoxIn, BaseTreeFeatureConfig configIn) {
+        return false;
+    }
+
+    @Override
+    public boolean place(IWorld worldIn, ChunkGenerator generator, Random rand, BlockPos pos, IFeatureConfig config) {
         return false;
     }
 }

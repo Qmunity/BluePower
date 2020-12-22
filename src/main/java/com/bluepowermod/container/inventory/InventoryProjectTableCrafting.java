@@ -1,10 +1,14 @@
 package com.bluepowermod.container.inventory;
 
+import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.network.message.MessageCraftingSync;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nonnull;
 
@@ -40,8 +44,8 @@ public class InventoryProjectTableCrafting extends CraftingInventory {
     public void markDirty() {
         this.projectTable.markDirty();
         this.eventHandler.onCraftMatrixChanged(this);
-
-        //BPNetworkHandler.INSTANCE.sendToServer(new MessageCraftingSync());
+        if(FMLEnvironment.dist == Dist.CLIENT)
+            BPNetworkHandler.wrapper.sendToServer(new MessageCraftingSync());
     }
 
     @Nonnull

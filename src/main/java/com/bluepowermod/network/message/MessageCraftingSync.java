@@ -1,33 +1,35 @@
 package com.bluepowermod.network.message;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import java.util.function.Supplier;
 
 /**
  * @Author MoreThanHidden
  */
 public class MessageCraftingSync{
 
-    public void handleClientSide(PlayerEntity player) {
-        throw new UnsupportedOperationException("This isn't the Server");
+    public static void handle(MessageCraftingSync msg, Supplier<NetworkEvent.Context> contextSupplier) {
+        NetworkEvent.Context context = contextSupplier.get();
+        context.enqueueWork(() -> {
+            ServerPlayerEntity player = context.getSender();
+            if (player != null) {
+                Container container = player.openContainer;
+                if (container != null) {
+                    container.onCraftMatrixChanged(null);
+                }
+            }
+        });
+        contextSupplier.get().setPacketHandled(true);
     }
 
-    public void handleServerSide(PlayerEntity player) {
-        Container container = player.openContainer;
-        if(container != null) {
-            container.onCraftMatrixChanged(null);
-        }
+    public static MessageCraftingSync decode(PacketBuffer buffer){
+        return new MessageCraftingSync();
     }
 
-    public void read(DataInput buffer) throws IOException {
-
-    }
-
-    public void write(DataOutput buffer) throws IOException {
-
+    public static void encode(MessageCraftingSync message, PacketBuffer buffer) {
     }
 }

@@ -48,7 +48,7 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
     private final VoxelShape size;
 
     public BlockBPMicroblock(VoxelShape size) {
-        super(Properties.create(Material.WOOD).notSolid());
+        super(Properties.create(Material.ROCK).notSolid().hardnessAndResistance(2));
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
         this.size = size;
         BPBlocks.blockList.add(this);
