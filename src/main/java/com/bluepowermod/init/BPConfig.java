@@ -18,9 +18,7 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.reference.Refs;
-import jdk.internal.dynalink.beans.StaticClass;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class BPConfig {
 
