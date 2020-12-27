@@ -33,6 +33,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -55,7 +56,7 @@ public class BPWorldGen {
 
     public static void setupGeneralWorldGen() {
         for (Biome biome : ForgeRegistries.BIOMES) {
-            if (!biome.getCategory().equals(Biome.Category.NETHER) && !biome.getCategory().equals(Biome.Category.THEEND)) {
+            if (Arrays.stream(BPConfig.CONFIG.volcanoBiomeCategoryWhitelist.get().split(",")).anyMatch(s -> s.equals(biome.getCategory().getName()))) {
                 if(BPConfig.CONFIG.generateVolcano.get()) {
                     addFeatureToBiome(biome, GenerationStage.Decoration.LOCAL_MODIFICATIONS, VOLCANO_FEATURE);
                 }

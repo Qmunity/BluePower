@@ -70,6 +70,7 @@ public class BPConfig {
         public final ForgeConfigSpec.ConfigValue<Double> volcanoActiveToInactiveRatio;
         public final ForgeConfigSpec.ConfigValue<Double> volcanoSpawnChance; // chance of a volcano spawning per chunk.
         public final ForgeConfigSpec.ConfigValue<Integer> flowerSpawnChance;
+        public final ForgeConfigSpec.ConfigValue<String> volcanoBiomeCategoryWhitelist;
         public final ForgeConfigSpec.BooleanValue generateTungstenInVolcano;
         public final ForgeConfigSpec.ConfigValue<String> alloyFurnaceBlacklist;
         public final ForgeConfigSpec.ConfigValue<Boolean> alloyFurnaceDatapackGenerator;
@@ -81,58 +82,82 @@ public class BPConfig {
         public final ForgeConfigSpec.BooleanValue serverCircuitSavingOpOnly;
 
         General(ForgeConfigSpec.Builder builder) {
-            builder.push(Refs.CONFIG_WORLDGEN).comment("Toggle blocks being generated into the world");
-            generateTungsten = builder.comment("Generate Tungsten").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".generate").define("generateTungsten", true);
-            minTungstenY = builder.comment("Tungsten Min Y").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".min_y").define("minTungstenY", 1);
-            maxTungstenY = builder.comment("Tungsten Max Y").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".max_y").define("maxTungstenY", 10);
-            veinCountTungsten = builder.comment("Vein Count Tungsten").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".vein_count").define("veinCountTungsten", 2);
-            veinSizeTungsten = builder.comment("Vein Size Tungsten").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".vein_size").define("veinSizeTungsten", 3);
-            generateCopper = builder.comment("Generate Copper").translation("bluepower.config." + Refs.CONFIG_COPPER + ".generate").define("generateCopper", true);
-            minCopperY = builder.comment("Copper Min Y").translation("bluepower.config." + Refs.CONFIG_COPPER + ".min_y").define("minCopperY", 35);
-            maxCopperY = builder.comment("Copper Max Y").translation("bluepower.config." + Refs.CONFIG_COPPER + ".max_y").define("maxCopperY", 90);
-            veinCountCopper = builder.comment("Vein Count Copper").translation("bluepower.config." + Refs.CONFIG_COPPER + ".vein_count").define("veinCountCopper", 8);
-            veinSizeCopper = builder.comment("Vein Size Copper").translation("bluepower.config." + Refs.CONFIG_COPPER + ".vein_size").define("veinSizeCopper", 7);
-            generateZinc = builder.comment("Generate Zinc").translation("bluepower.config." + Refs.CONFIG_ZINC + ".generate").define("generateZinc", true);
-            minZincY = builder.comment("Zinc Min Y").translation("bluepower.config." + Refs.CONFIG_ZINC + ".min_y").define("minZincY", 15);
-            maxZincY = builder.comment("Zinc Max Y").translation("bluepower.config." + Refs.CONFIG_ZINC + ".max_y").define("maxZincY", 40);
-            veinCountZinc = builder.comment("Vein Count Zinc").translation("bluepower.config." + Refs.CONFIG_ZINC + ".vein_count").define("veinCountZinc", 6);
-            veinSizeZinc = builder.comment("Vein Size Zinc").translation("bluepower.config." + Refs.CONFIG_ZINC + ".vein_size").define("veinSizeZinc", 6);
-            generateSilver = builder.comment("Generate Silver").translation("bluepower.config." + Refs.CONFIG_SILVER + ".generate").define("generateSilver", true);
-            minSilverY = builder.comment("Silver Min Y").translation("bluepower.config." + Refs.CONFIG_SILVER + ".min_y").define("minSilverY", 1);
-            maxSilverY = builder.comment("Silver Max Y").translation("bluepower.config." + Refs.CONFIG_SILVER + ".max_y").define("maxSilverY", 20);
-            veinCountSilver = builder.comment("Vein Count Silver").translation("bluepower.config." + Refs.CONFIG_SILVER + ".vein_count").define("veinCountSilver", 3);
-            veinSizeSilver = builder.comment("Vein Size Silver").translation("bluepower.config." + Refs.CONFIG_SILVER + ".vein_size").define("veinSizeSilver", 6);
-            generateTeslatite = builder.comment("Generate Teslatite").translation("bluepower.config." + Refs.CONFIG_TESLATITE + ".generate").define("generateTeslatite", true);
-            minTeslatiteY = builder.comment("Teslatite Min Y").translation("bluepower.config." + Refs.CONFIG_TESLATITE + ".min_y").define("minTeslatiteY", 1);
-            maxTeslatiteY = builder.comment("Teslatite Max Y").translation("bluepower.config." + Refs.CONFIG_TESLATITE + ".max_y").define("maxTeslatiteY", 20);
-            veinCountTeslatite = builder.comment("Vein Count Teslatite").translation("bluepower.config." + Refs.CONFIG_TESLATITE + ".vein_count").define("veinCountTeslatite", 4);
-            veinSizeTeslatite = builder.comment("Vein Size Teslatite").translation("bluepower.config." + Refs.CONFIG_TESLATITE + ".vein_size").define("veinSizeTeslatite", 8);
-            generateRuby = builder.comment("Generate Ruby").translation("bluepower.config." + Refs.CONFIG_RUBY + ".generate").define("generateRuby", true);
-            minRubyY = builder.comment("Ruby Min Y").translation("bluepower.config." + Refs.CONFIG_RUBY + ".min_y").define("minRubyY", 0);
-            maxRubyY = builder.comment("Ruby Max Y").translation("bluepower.config." + Refs.CONFIG_RUBY + ".max_y").define("maxRubyY", 48);
-            veinCountRuby = builder.comment("Vein Count Ruby").translation("bluepower.config." + Refs.CONFIG_RUBY + ".vein_count").define("veinCountRuby", 2);
-            veinSizeRuby = builder.comment("Vein Size Ruby").translation("bluepower.config." + Refs.CONFIG_RUBY + ".vein_size").define("veinSizeRuby", 5);
-            generateAmethyst = builder.comment("Generate Amethyst").translation("bluepower.config." + Refs.CONFIG_AMETHYST + ".generate").define("generateAmethyst", true);
-            minAmethystY = builder.comment("Amethyst Min Y").translation("bluepower.config." + Refs.CONFIG_AMETHYST + ".min_y").define("minAmethystY", 0);
-            maxAmethystY = builder.comment("Amethyst Max Y").translation("bluepower.config." + Refs.CONFIG_AMETHYST + ".max_y").define("maxAmethystY", 48);
-            veinCountAmethyst = builder.comment("Vein Count Amethyst").translation("bluepower.config." + Refs.CONFIG_AMETHYST + ".vein_count").define("veinCountAmethyst", 2);
-            veinSizeAmethyst = builder.comment("Vein Size Amethyst").translation("bluepower.config." + Refs.CONFIG_AMETHYST + ".vein_size").define("veinSizeAmethyst", 5);
-            generateSapphire = builder.comment("Generate Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".generate").define("generateSapphire", true);
-            minSapphireY = builder.comment("Sapphire Min Y").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".min_y").define("minSapphireY", 0);
-            maxSapphireY = builder.comment("Sapphire Max Y").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".max_y").define("maxSapphireY", 48);
-            veinCountSapphire = builder.comment("Vein Count Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".vein_count").define("veinCountSapphire", 2);
-            veinSizeSapphire = builder.comment("Vein Size Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".vein_size").define("veinSizeSapphire", 5);
-            generateVolcano = builder.comment("Generate Volcano").translation("bluepower.config.volcano.generate").define("generateVolcano", true);
-            volcanoSpawnChance = builder.comment("Volcano Spawn Chance").translation("bluepower.config.volcano_spawn_chance").define("volcanoSpawnChance", 0.005);
-            flowerSpawnChance = builder.comment("Indigo Flower Spawn Chance").translation("bluepower.config.flower_spawn_chance").define("flowerSpawnChance", 1);
-            generateTungstenInVolcano = builder.comment("Possible to generate Tungsten in the Volcano").translation("bluepower.config.volcano.tungsten.generate").define("generateTungstenInVolcano", true);
-            volcanoActiveToInactiveRatio = builder.comment("Volcano Active To Inactive Ratio").translation("bluepower.config.volcano_inactive_ratio").define("volcanoActiveToInactiveRatio", 0.5);
-            generateMarble = builder.comment("Generate Marble").translation("bluepower.config.marble.generate").define("generateMarble", true);
-            veinSizeMarble = builder.comment("veinSizeMarble").translation("bluepower.config.marble.vein_size").define("veinSizeMarble", 2048);
-
-            builder.push(Refs.CONFIG_RECIPES).comment("Toggle recipes to be enabled or not");
-            alloyFurnaceBlacklist = builder.comment( "Any item name (minecraft:bucket,minecraft:minecart) added here will be blacklisted from being able to melt down into its raw materials.").translation("bluepower.config.alloy_furnace.blacklist").define("alloyFurnaceBlacklist", "minecraft:iron_nugget,minecraft:gold_nugget,minecraft:gold_ingot,minecraft:iron_ingot");
-            alloyFurnaceDatapackGenerator = builder.comment( "Generate Json Datapack for Alloy Furnace (Only used to generate recycling recipes)").translation("bluepower.config.alloy_furnace.datapack").define("alloyFurnaceDatapackGenerator", true);
+            builder.push("WorldGen").comment("Toggle blocks being generated into the world");
+                builder.push("Tungsten").comment("Tungsten related configs");
+                    generateTungsten = builder.comment("Generate Tungsten").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".generate").define("generateTungsten", true);
+                    minTungstenY = builder.comment("Tungsten Min Y").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".min_y").define("minTungstenY", 1);
+                    maxTungstenY = builder.comment("Tungsten Max Y").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".max_y").define("maxTungstenY", 10);
+                    veinCountTungsten = builder.comment("Vein Count Tungsten").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".vein_count").define("veinCountTungsten", 2);
+                    veinSizeTungsten = builder.comment("Vein Size Tungsten").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".vein_size").define("veinSizeTungsten", 3);
+                builder.pop();
+                builder.push("Copper").comment("Copper related configs");
+                    generateCopper = builder.comment("Generate Copper").translation("bluepower.config." + Refs.CONFIG_COPPER + ".generate").define("generateCopper", true);
+                    minCopperY = builder.comment("Copper Min Y").translation("bluepower.config." + Refs.CONFIG_COPPER + ".min_y").define("minCopperY", 35);
+                    maxCopperY = builder.comment("Copper Max Y").translation("bluepower.config." + Refs.CONFIG_COPPER + ".max_y").define("maxCopperY", 90);
+                    veinCountCopper = builder.comment("Vein Count Copper").translation("bluepower.config." + Refs.CONFIG_COPPER + ".vein_count").define("veinCountCopper", 8);
+                    veinSizeCopper = builder.comment("Vein Size Copper").translation("bluepower.config." + Refs.CONFIG_COPPER + ".vein_size").define("veinSizeCopper", 7);
+                builder.pop();
+                builder.push("Zinc").comment("Zinc related configs");
+                    generateZinc = builder.comment("Generate Zinc").translation("bluepower.config." + Refs.CONFIG_ZINC + ".generate").define("generateZinc", true);
+                    minZincY = builder.comment("Zinc Min Y").translation("bluepower.config." + Refs.CONFIG_ZINC + ".min_y").define("minZincY", 15);
+                    maxZincY = builder.comment("Zinc Max Y").translation("bluepower.config." + Refs.CONFIG_ZINC + ".max_y").define("maxZincY", 40);
+                    veinCountZinc = builder.comment("Vein Count Zinc").translation("bluepower.config." + Refs.CONFIG_ZINC + ".vein_count").define("veinCountZinc", 6);
+                    veinSizeZinc = builder.comment("Vein Size Zinc").translation("bluepower.config." + Refs.CONFIG_ZINC + ".vein_size").define("veinSizeZinc", 6);
+                builder.pop();
+                builder.push("Silver").comment("Silver related configs");
+                    generateSilver = builder.comment("Generate Silver").translation("bluepower.config." + Refs.CONFIG_SILVER + ".generate").define("generateSilver", true);
+                    minSilverY = builder.comment("Silver Min Y").translation("bluepower.config." + Refs.CONFIG_SILVER + ".min_y").define("minSilverY", 1);
+                    maxSilverY = builder.comment("Silver Max Y").translation("bluepower.config." + Refs.CONFIG_SILVER + ".max_y").define("maxSilverY", 20);
+                    veinCountSilver = builder.comment("Vein Count Silver").translation("bluepower.config." + Refs.CONFIG_SILVER + ".vein_count").define("veinCountSilver", 3);
+                    veinSizeSilver = builder.comment("Vein Size Silver").translation("bluepower.config." + Refs.CONFIG_SILVER + ".vein_size").define("veinSizeSilver", 6);
+                builder.pop();
+                builder.push("Teslatite").comment("Teslatite related configs");
+                    generateTeslatite = builder.comment("Generate Teslatite").translation("bluepower.config." + Refs.CONFIG_TESLATITE + ".generate").define("generateTeslatite", true);
+                    minTeslatiteY = builder.comment("Teslatite Min Y").translation("bluepower.config." + Refs.CONFIG_TESLATITE + ".min_y").define("minTeslatiteY", 1);
+                    maxTeslatiteY = builder.comment("Teslatite Max Y").translation("bluepower.config." + Refs.CONFIG_TESLATITE + ".max_y").define("maxTeslatiteY", 20);
+                    veinCountTeslatite = builder.comment("Vein Count Teslatite").translation("bluepower.config." + Refs.CONFIG_TESLATITE + ".vein_count").define("veinCountTeslatite", 4);
+                    veinSizeTeslatite = builder.comment("Vein Size Teslatite").translation("bluepower.config." + Refs.CONFIG_TESLATITE + ".vein_size").define("veinSizeTeslatite", 8);
+                builder.pop();
+                builder.push("Ruby").comment("Ruby related configs");
+                    generateRuby = builder.comment("Generate Ruby").translation("bluepower.config." + Refs.CONFIG_RUBY + ".generate").define("generateRuby", true);
+                    minRubyY = builder.comment("Ruby Min Y").translation("bluepower.config." + Refs.CONFIG_RUBY + ".min_y").define("minRubyY", 0);
+                    maxRubyY = builder.comment("Ruby Max Y").translation("bluepower.config." + Refs.CONFIG_RUBY + ".max_y").define("maxRubyY", 48);
+                    veinCountRuby = builder.comment("Vein Count Ruby").translation("bluepower.config." + Refs.CONFIG_RUBY + ".vein_count").define("veinCountRuby", 2);
+                    veinSizeRuby = builder.comment("Vein Size Ruby").translation("bluepower.config." + Refs.CONFIG_RUBY + ".vein_size").define("veinSizeRuby", 5);
+                builder.pop();
+                builder.push("Amethyst").comment("Amethyst related configs");
+                    generateAmethyst = builder.comment("Generate Amethyst").translation("bluepower.config." + Refs.CONFIG_AMETHYST + ".generate").define("generateAmethyst", true);
+                    minAmethystY = builder.comment("Amethyst Min Y").translation("bluepower.config." + Refs.CONFIG_AMETHYST + ".min_y").define("minAmethystY", 0);
+                    maxAmethystY = builder.comment("Amethyst Max Y").translation("bluepower.config." + Refs.CONFIG_AMETHYST + ".max_y").define("maxAmethystY", 48);
+                    veinCountAmethyst = builder.comment("Vein Count Amethyst").translation("bluepower.config." + Refs.CONFIG_AMETHYST + ".vein_count").define("veinCountAmethyst", 2);
+                    veinSizeAmethyst = builder.comment("Vein Size Amethyst").translation("bluepower.config." + Refs.CONFIG_AMETHYST + ".vein_size").define("veinSizeAmethyst", 5);
+                builder.pop();
+                builder.push("Sapphire").comment("Sapphire related configs");
+                    generateSapphire = builder.comment("Generate Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".generate").define("generateSapphire", true);
+                    minSapphireY = builder.comment("Sapphire Min Y").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".min_y").define("minSapphireY", 0);
+                    maxSapphireY = builder.comment("Sapphire Max Y").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".max_y").define("maxSapphireY", 48);
+                    veinCountSapphire = builder.comment("Vein Count Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".vein_count").define("veinCountSapphire", 2);
+                    veinSizeSapphire = builder.comment("Vein Size Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".vein_size").define("veinSizeSapphire", 5);
+                builder.pop();
+                builder.push("IndigoFlower").comment("Indigo Flower related configs");
+                    flowerSpawnChance = builder.comment("Indigo Flower Spawn Chance").translation("bluepower.config.flower_spawn_chance").define("flowerSpawnChance", 1);
+                builder.pop();
+                builder.push("Volcano").comment("Volcano related configs");
+                    generateVolcano = builder.comment("Generate Volcano").translation("bluepower.config.volcano.generate").define("generateVolcano", true);
+                    volcanoSpawnChance = builder.comment("Volcano Spawn Chance").translation("bluepower.config.volcano_spawn_chance").define("volcanoSpawnChance", 0.005);
+                    generateTungstenInVolcano = builder.comment("Possible to generate Tungsten in the Volcano").translation("bluepower.config.volcano.tungsten.generate").define("generateTungstenInVolcano", true);
+                    volcanoActiveToInactiveRatio = builder.comment("Volcano Active To Inactive Ratio").translation("bluepower.config.volcano_inactive_ratio").define("volcanoActiveToInactiveRatio", 0.5);
+                    volcanoBiomeCategoryWhitelist = builder.comment("Biomes that volcanoes should generate").translation("bluepower.config.volcano_biomecategory_whitelist").define("volcanoBiomeCategoryWhitelist", "taiga,extreme_hills,jungle,mesa,plains,savanna,icy,beach,forest,ocean,desert,river,swamp,mushroom");
+                builder.pop();
+                builder.push("Marble").comment("Marble related configs");
+                    generateMarble = builder.comment("Generate Marble").translation("bluepower.config.marble.generate").define("generateMarble", true);
+                    veinSizeMarble = builder.comment("veinSizeMarble").translation("bluepower.config.marble.vein_size").define("veinSizeMarble", 2048);
+                builder.pop();
+            builder.pop();
+            builder.push("Recipes").comment("Toggle recipes to be enabled or not");
+                alloyFurnaceBlacklist = builder.comment( "Any item name (minecraft:bucket,minecraft:minecart) added here will be blacklisted from being able to melt down into its raw materials.").translation("bluepower.config.alloy_furnace.blacklist").define("alloyFurnaceBlacklist", "minecraft:iron_nugget,minecraft:gold_nugget,minecraft:gold_ingot,minecraft:iron_ingot");
+                alloyFurnaceDatapackGenerator = builder.comment( "Generate Json Datapack for Alloy Furnace (Only used to generate recycling recipes)").translation("bluepower.config.alloy_furnace.datapack").define("alloyFurnaceDatapackGenerator", true);
+            builder.pop();
 
             /*
             builder.push(Refs.CONFIG_TUBES).comment("Tube Options");
@@ -147,10 +172,11 @@ public class BPConfig {
                 tubeRenderMode = "auto";
             }*/
 
-            serverCircuitSavingOpOnly = builder.comment("Server Template Saving by Ops only").translation("bluepower.config.template_ops_only").define("ServerTemplateOpsonly", false);
-            enableGateSounds = builder.comment("Enable Gate Ticking Sounds").translation("bluepower.config.ticking_sounds").define("tickingSounds", true);
-            albedoBrightness = builder.comment("Albedo Support Lamp Brightness").translation("bluepower.config.albedo_brightness").define("albedoBrightness", 0.01F);
-
+            builder.push("Other").comment("Miscellaneous other configs");
+                serverCircuitSavingOpOnly = builder.comment("Server Template Saving by Ops only").translation("bluepower.config.template_ops_only").define("ServerTemplateOpsonly", false);
+                enableGateSounds = builder.comment("Enable Gate Ticking Sounds").translation("bluepower.config.ticking_sounds").define("tickingSounds", true);
+                albedoBrightness = builder.comment("Albedo Support Lamp Brightness").translation("bluepower.config.albedo_brightness").define("albedoBrightness", 0.01F);
+            builder.pop();
             }
 
     }

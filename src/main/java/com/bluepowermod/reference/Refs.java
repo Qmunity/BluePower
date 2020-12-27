@@ -250,7 +250,6 @@ public class Refs {
 
 
    //Configs
-    public static final String CONFIG_WORLDGEN = "world gen";
     public static final String CONFIG_TUNGSTEN = "tungsten";
     public static final String CONFIG_COPPER = "copper";
     public static final String CONFIG_ZINC = "zinc";
@@ -259,9 +258,6 @@ public class Refs {
     public static final String CONFIG_RUBY = "ruby";
     public static final String CONFIG_AMETHYST = "amethyst";
     public static final String CONFIG_SAPPHIRE = "sapphire";
-    public static final String CONFIG_SETTINGS = "settings";
-    public static final String CONFIG_RECIPES = "recipe enabling";
-    public static final String CONFIG_ENCHANTS = "enchantment ids";
     public static final String CONFIG_TUBES = "pneumatic tube options";
     public static final String CONFIG_CIRCUIT_DATABASE = "circuit database options";
 
