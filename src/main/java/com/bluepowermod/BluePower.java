@@ -22,6 +22,7 @@ import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.TableLootEntry;
+import net.minecraft.resources.ResourcePackList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -106,6 +107,16 @@ public class BluePower {
     @SubscribeEvent
     public void onServerAboutToStart(FMLServerAboutToStartEvent event){
         BPRecyclingReloadListener.server = event.getServer();
+
+        if (BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()) {
+            //Generate Datapack
+            BPRecyclingReloadListener.onResourceManagerReload(event.getServer().getRecipeManager());
+            //Reload Datapacks
+            ResourcePackList resourcepacklist = event.getServer().getResourcePacks();
+            resourcepacklist.reloadPacksFromFinders();
+            event.getServer().func_240780_a_(resourcepacklist.func_232616_b_()).exceptionally(ex -> null);
+        }
+
     }
 
 }

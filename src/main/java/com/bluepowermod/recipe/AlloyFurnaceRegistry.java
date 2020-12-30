@@ -141,9 +141,9 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             }
         }
 
+        HashMap<ItemStack, ItemStack> generated_recipes = new HashMap<>();
+
         for (IRecipe recipe : recipeManager.getRecipes()) {
-            List<ItemStack> registeredRecycledItems = new ArrayList<ItemStack>();
-            List<ItemStack> registeredResultItems = new ArrayList<ItemStack>();
 
             int recyclingAmount = 0;
             ItemStack currentlyRecycledInto = ItemStack.EMPTY;
@@ -169,31 +169,35 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                         }
                     }
                 } catch (Throwable e) {
-                    BluePower.log.error("Error when generating an Alloy Furnace recipe for item " + recyclingItem.getDisplayName()
-                            + ", recipe output: " + recipe.getRecipeOutput().getDisplayName());
+                    BluePower.log.error("Error when generating an Alloy Furnace recipe for item " + recyclingItem.getDisplayName().getString()
+                            + ", recipe output: " + recipe.getRecipeOutput().getDisplayName().getString());
                     e.printStackTrace();
                 }
             }
 
+
             if (recyclingAmount > 0 && recipe.getRecipeOutput().getCount() > 0) {
+                    //Try to avoid Duping
+                    if(!blacklist.contains(recipe.getRecipeOutput().getItem()) && recipe.getRecipeOutput().getCount() > recyclingAmount){
+                        blacklist.add(recipe.getRecipeOutput().getItem());
+                    }
 
                     if (blacklist.contains(recipe.getRecipeOutput().getItem())) {
-                        BluePower.log.info("Skipped adding item/block " + recipe.getRecipeOutput().getDisplayName()
+                        BluePower.log.info("Skipped adding item/block " + recipe.getRecipeOutput().getDisplayName().getString()
                                 + " to the Alloy Furnace recipes.");
                         continue;
                     }
                     //Divide by the Recipe Output
                     ItemStack resultItem = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount / recipe.getRecipeOutput().getCount()));
-                    registeredResultItems.add(resultItem);
-                    registeredRecycledItems.add(recipe.getRecipeOutput());
+                    generated_recipes.put(recipe.getRecipeOutput(), resultItem);
             }
+        }
 
-            for (int i = 0; i < registeredResultItems.size(); i++) {
-                //Check if for null output
-                if(registeredResultItems.get(i).getCount() > 0) {
-                    //Register Recipe
-                    addRecipe(registeredResultItems.get(i).getItem().getRegistryName(), registeredResultItems.get(i), Ingredient.fromStacks(registeredRecycledItems.get(i)));
-                }
+        for (ItemStack inputItem : generated_recipes.keySet()) {
+            //Check if for null output or blacklist
+            if(generated_recipes.get(inputItem).getCount() > 0 && !blacklist.contains(inputItem.getItem())) {
+                //Register Recipe
+                addRecipe(inputItem.getItem().getRegistryName(), generated_recipes.get(inputItem), Ingredient.fromStacks(inputItem));
             }
         }
     }
