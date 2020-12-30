@@ -19,27 +19,20 @@ package com.bluepowermod.world;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPConfig;
-import com.google.common.collect.Lists;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.*;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 
 
 public class BPWorldGen {
+
     //VOLCANO
     public static Feature<NoFeatureConfig> VOLCANO = new WorldGenVolcano(NoFeatureConfig.field_236558_a_);
     private static PlacementVolcano VOLCANO_PLACEMENT = new PlacementVolcano(NoPlacementConfig.CODEC);
@@ -54,29 +47,19 @@ public class BPWorldGen {
         MARBLE_FEATURE = Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "bluepower:marble", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, BPBlocks.marble.getDefaultState(), BPConfig.CONFIG.veinSizeMarble.get() / 32)).withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(0, 0, 90)).square().func_242731_b(1)));
     }
 
-    public static void setupGeneralWorldGen() {
-        for (Biome biome : ForgeRegistries.BIOMES) {
-            if (Arrays.stream(BPConfig.CONFIG.volcanoBiomeCategoryWhitelist.get().split(",")).anyMatch(s -> s.equals(biome.getCategory().getName()))) {
-                if(BPConfig.CONFIG.generateVolcano.get()) {
-                    addFeatureToBiome(biome, GenerationStage.Decoration.LOCAL_MODIFICATIONS, VOLCANO_FEATURE);
-                }
-                if(BPConfig.CONFIG.generateMarble.get()) {
-                    addFeatureToBiome(biome, GenerationStage.Decoration.UNDERGROUND_ORES, MARBLE_FEATURE);
-                }
+    @SubscribeEvent
+    public void onBiomeLoad(BiomeLoadingEvent event){
+        BiomeGenerationSettingsBuilder generation = event.getGeneration();
+        //Volcano
+        if(BPConfig.CONFIG.volcanoBiomeCategoryWhitelist.get().contains(event.getCategory().getName())) {
+            if(BPConfig.CONFIG.generateVolcano.get()) {
+                generation.withFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, VOLCANO_FEATURE);
             }
         }
-    }
-
-    public static void addFeatureToBiome(Biome biome, GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> configuredFeature) {
-        List<List<Supplier<ConfiguredFeature<?, ?>>>> biomeFeatures = new ArrayList<>(biome.getGenerationSettings().getFeatures());
-        while (biomeFeatures.size() <= decoration.ordinal()) {
-            biomeFeatures.add(Lists.newArrayList());
+        //Marble
+        if(BPConfig.CONFIG.generateMarble.get() && !event.getCategory().equals(Biome.Category.NETHER) && !event.getCategory().equals(Biome.Category.THEEND)) {
+            generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, MARBLE_FEATURE);
         }
-        List<Supplier<ConfiguredFeature<?, ?>>> features = new ArrayList<>(biomeFeatures.get(decoration.ordinal()));
-        features.add(() -> configuredFeature);
-        biomeFeatures.set(decoration.ordinal(), features);
-
-        ObfuscationReflectionHelper.setPrivateValue(BiomeGenerationSettings.class, biome.getGenerationSettings(), biomeFeatures, "field_242484_f");
     }
 
 }

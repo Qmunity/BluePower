@@ -64,8 +64,11 @@ public class BluePower {
         BPBlocks.init();
         proxy.preInitRenderers();
         BPWorldGen.init();
+        MinecraftForge.EVENT_BUS.register(new BPWorldGen());
         WorldGenOres.initOres();
+        MinecraftForge.EVENT_BUS.register(new WorldGenOres());
         WorldGenFlowers.initFlowers();
+        MinecraftForge.EVENT_BUS.register(new WorldGenFlowers());
     }
 
     public static Logger log = LogManager.getLogger(Refs.MODID);
@@ -73,13 +76,10 @@ public class BluePower {
     public void setup(FMLCommonSetupEvent event) {
         DeferredWorkQueue.runLater(BPNetworkHandler::init);
         OreDictionarySetup.init();
-        WorldGenOres.setupOres();
-        BPWorldGen.setupGeneralWorldGen();
         CapabilityBlutricity.register();
         CapabilityRedstoneDevice.register();
         proxy.setup(event);
         CompatibilityUtils.init(event);
-        WorldGenFlowers.setupFlowers();
     }
 
     public void complete(FMLLoadCompleteEvent event) {
