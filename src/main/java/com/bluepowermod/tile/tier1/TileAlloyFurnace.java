@@ -28,7 +28,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -39,11 +38,8 @@ import net.minecraft.util.IIntArray;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  *
@@ -178,14 +174,13 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
                 //Check if progress completed, and output slot is empty and less then a stack of the same item.
                 if (++currentProcessTime >= 200 && ((outputInventory.getItem() == currentRecipe.getRecipeOutput().getItem()
                         && (outputInventory.getCount() + currentRecipe.getCraftingResult(inventory).getCount()) <= 64)
-                                        || outputInventory.isEmpty())) {
+                                        || outputInventory.isEmpty()) && currentRecipe.useItems(inventory)) {
                     currentProcessTime = 0;
                     if (!outputInventory.isEmpty()) {
                         outputInventory.setCount(outputInventory.getCount() + currentRecipe.getCraftingResult(inventory).getCount());
                     } else {
                         outputInventory = currentRecipe.getCraftingResult(inventory).copy();
                     }
-                    currentRecipe.useItems(inventory);
                     updatingRecipe = true;
                 }
             } else {

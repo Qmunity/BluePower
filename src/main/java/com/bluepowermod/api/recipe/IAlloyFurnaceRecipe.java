@@ -41,7 +41,7 @@ public interface IAlloyFurnaceRecipe extends IRecipe<ISidedInventory> {
     /**
      * The items that are needed in this recipe need to be removed from the input inventory.
      */
-    void useItems(NonNullList<ItemStack> input);
+    boolean useItems(NonNullList<ItemStack> input);
 
     ItemStack getCraftingResult(NonNullList<ItemStack> input);
 

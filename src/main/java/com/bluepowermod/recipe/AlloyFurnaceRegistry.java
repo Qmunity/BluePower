@@ -323,8 +323,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         }
 
         @Override
-        public void useItems(NonNullList<ItemStack> input) {
-
+        public boolean useItems(NonNullList<ItemStack> input) {
             for (int j = 0; j < requiredItems.size(); j++) {
                 int itemsNeeded = requiredCount.get(j);
                 for (int i = 0; i < input.size(); i++) {
@@ -339,10 +338,12 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                             break;
                     }
                 }
-                if (itemsNeeded > 0)
-                    throw new IllegalArgumentException(
-                            "Alloy Furnace recipe using items, after using still items required?? This is a bug!");
+                if (itemsNeeded > 0) {
+                    BluePower.log.error("Alloy Furnace recipe using items, after using still items required?? This is a bug!");
+                    return false;
+                }
             }
+            return true;
         }
 
         @Override
