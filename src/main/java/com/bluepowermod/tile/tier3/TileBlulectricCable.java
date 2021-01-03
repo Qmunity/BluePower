@@ -46,8 +46,8 @@ public class TileBlulectricCable extends TileMachineBase {
 
     @Override
     public void tick() {
+        storage.resetCurrent();
         if (world != null && !world.isRemote) {
-            storage.resetCurrent();
             BlockState state = getBlockState();
             if (state.getBlock() instanceof BlockBlulectricCable) {
                 List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getAllowedValues());
@@ -66,7 +66,7 @@ public class TileBlulectricCable extends TileMachineBase {
                             );
                     } else {
                         TileEntity tile = world.getTileEntity(pos.offset(facing).offset(state.get(BlockBlulectricCable.FACING).getOpposite()));
-                        if (tile instanceof TileBlulectricCable)
+                        if (tile != null)
                             tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, state.get(BlockBlulectricCable.FACING)).ifPresent(
                                     exStorage -> EnergyHelper.balancePower(exStorage, storage)
                             );
@@ -92,9 +92,8 @@ public class TileBlulectricCable extends TileMachineBase {
                         && world.getBlockState(pos.offset(d)).get(BlockBlulectricCable.FACING) != state.get(BlockBlulectricCable.FACING));
             }
         }
-
-        if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY && (side == null || directions.contains(side))){
-            if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
+        if (cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY && (side == null || directions.contains(side))) {
+            if (blutricityCap == null) blutricityCap = LazyOptional.of(() -> storage);
             return blutricityCap.cast();
         }
 
@@ -104,8 +103,7 @@ public class TileBlulectricCable extends TileMachineBase {
     @Override
     protected void invalidateCaps(){
         super.invalidateCaps();
-        if( blutricityCap != null )
-        {
+        if( blutricityCap != null ){
             blutricityCap.invalidate();
             blutricityCap = null;
         }

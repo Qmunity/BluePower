@@ -101,6 +101,8 @@ public class BlockBPMultipart extends ContainerBlock implements IWaterLoggable {
         BlockState partState = MultipartUtils.getClosestState(player, pos);
         TileEntity te = world.getTileEntity(pos);
         if(partState != null && te instanceof TileBPMultipart) {
+            //Call onReplaced
+            partState.onReplaced(world, pos, state, false);
             //Remove Selected Part
             ((TileBPMultipart) te).removeState(partState);
             //Play Break Sound
