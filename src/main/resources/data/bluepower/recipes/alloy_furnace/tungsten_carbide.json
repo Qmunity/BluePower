@@ -1,0 +1,16 @@
+{
+  "type": "bluepower:alloy_smelting",
+  "ingredients": [
+    {
+      "item": "minecraft:coal",
+      "count": 4
+    },
+    {
+      "tag": "forge:ingots/tungsten"
+    }
+  ],
+  "result": {
+    "item": "bluepower:tungsten_carbide",
+    "count": 4
+  }
+}
