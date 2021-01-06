@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:malachite_block"
+    "item": "bluepower:green_sapphire_block"
   },
   "pattern": [
     "###",
@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "tag": "forge:gems/malachite"
+      "tag": "forge:gems/green_sapphire"
     }
   }
 }

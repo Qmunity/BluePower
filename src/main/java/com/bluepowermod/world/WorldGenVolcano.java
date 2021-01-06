@@ -58,6 +58,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
         alterBlocks.add( BPBlocks.amethyst_block);
         alterBlocks.add(BPBlocks.ruby_block);
         alterBlocks.add(BPBlocks.sapphire_block);
+        alterBlocks.add(BPBlocks.green_sapphire_block);
         if(BPConfig.CONFIG.generateTungstenInVolcano.get()) {
             alterBlocks.add(BPBlocks.tungsten_block);
         }

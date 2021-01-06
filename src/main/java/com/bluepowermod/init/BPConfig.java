@@ -66,6 +66,11 @@ public class BPConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> maxSapphireY;
         public final ForgeConfigSpec.ConfigValue<Integer> veinCountSapphire;
         public final ForgeConfigSpec.ConfigValue<Integer> veinSizeSapphire;
+        public final ForgeConfigSpec.BooleanValue generateGreenSapphire;
+        public final ForgeConfigSpec.ConfigValue<Integer> minGreenSapphireY;
+        public final ForgeConfigSpec.ConfigValue<Integer> maxGreenSapphireY;
+        public final ForgeConfigSpec.ConfigValue<Integer> veinCountGreenSapphire;
+        public final ForgeConfigSpec.ConfigValue<Integer> veinSizeGreenSapphire;
         public final ForgeConfigSpec.BooleanValue generateVolcano;
         public final ForgeConfigSpec.ConfigValue<Double> volcanoActiveToInactiveRatio;
         public final ForgeConfigSpec.ConfigValue<Double> volcanoSpawnChance; // chance of a volcano spawning per chunk.
@@ -138,6 +143,13 @@ public class BPConfig {
                     maxSapphireY = builder.comment("Sapphire Max Y").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".max_y").define("maxSapphireY", 48);
                     veinCountSapphire = builder.comment("Vein Count Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".vein_count").define("veinCountSapphire", 2);
                     veinSizeSapphire = builder.comment("Vein Size Sapphire").translation("bluepower.config." + Refs.CONFIG_SAPPHIRE + ".vein_size").define("veinSizeSapphire", 5);
+                builder.pop();
+                builder.push("GreenSapphire").comment("Green Sapphire related configs");
+                    generateGreenSapphire = builder.comment("Generate Green Sapphire").translation("bluepower.config." + Refs.CONFIG_GREENSAPPHIRE + ".generate").define("generateGreenSapphire", true);
+                    minGreenSapphireY = builder.comment("Green Sapphire Min Y").translation("bluepower.config." + Refs.CONFIG_GREENSAPPHIRE + ".min_y").define("minGreenSapphireY", 0);
+                    maxGreenSapphireY = builder.comment("Green Sapphire Max Y").translation("bluepower.config." + Refs.CONFIG_GREENSAPPHIRE + ".max_y").define("maxGreenSapphireY", 48);
+                    veinCountGreenSapphire = builder.comment("Vein Count Green Sapphire").translation("bluepower.config." + Refs.CONFIG_GREENSAPPHIRE + ".vein_count").define("veinCountGreenSapphire", 2);
+                    veinSizeGreenSapphire = builder.comment("Vein Size Green Sapphire").translation("bluepower.config." + Refs.CONFIG_GREENSAPPHIRE + ".vein_size").define("veinSizeGreenSapphire", 5);
                 builder.pop();
                 builder.push("IndigoFlower").comment("Indigo Flower related configs");
                     flowerSpawnChance = builder.comment("Indigo Flower Spawn Chance").translation("bluepower.config.flower_spawn_chance").define("flowerSpawnChance", 1);

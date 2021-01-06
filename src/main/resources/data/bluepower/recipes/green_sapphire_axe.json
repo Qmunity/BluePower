@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:malachite_axe"
+    "item": "bluepower:green_sapphire_axe"
   },
   "pattern": [
     "GG ",
@@ -13,7 +13,7 @@
       "tag": "forge:rods/wooden"
     },
     "G": {
-      "tag": "forge:gems/malachite"
+      "tag": "forge:gems/green_sapphire"
     }
   }
 }

@@ -49,18 +49,18 @@ public class Refs {
     public static final String TILES = "tiles";
     public static final String ALLOYFURNACE_NAME = "alloyfurnace";
     public static final String AMETHYSTORE_NAME = "amethyst_ore";
-    public static final String MALACHITEORE_NAME = "malachite_ore";
+    public static final String GREENSAPPHIREORE_NAME = "green_sapphire_ore";
     public static final String RUBYORE_NAME = "ruby_ore";
     public static final String SAPPHIREORE_NAME = "sapphire_ore";
     public static final String TESLATITEORE_NAME = "teslatite_ore";
     public static final String AMETHYSTBLOCK_NAME = "amethyst_block";
     public static final String SAPPHIREBLOCK_NAME = "sapphire_block";
-    public static final String MALACHITEBLOCK_NAME = "malachite_block";
+    public static final String GREENSAPPHIREBLOCK_NAME = "green_sapphire_block";
     public static final String RUBYBLOCK_NAME = "ruby_block";
     public static final String TESLATITEBLOCK_NAME = "teslatite_block";
     public static final String AMETHYST_NAME = "amethyst_gem";
     public static final String SAPPHIRE_NAME = "sapphire_gem";
-    public static final String MALACHITE_NAME = "malachite_gem";
+    public static final String GREENSAPPHIRE_NAME = "green_sapphire_gem";
     public static final String RUBY_NAME = "ruby_gem";
     public static final String TESLATITE_NAME = "teslatite_dust";
     public static final String COPPERORE_NAME = "copper_ore";
@@ -90,7 +90,7 @@ public class Refs {
     public static final String INFUSEDTESLATITEDUST_NAME = "infused_teslatite_dust";
 
     public static final String TUNGCARBSAW_NAME = "tungcarb_saw";
-    public static final String MALACHITESAW_NAME = "malachite_saw";
+    public static final String GREENSAPPHIRESAW_NAME = "green_sapphire_saw";
     public static final String AMETHYSTSAW_NAME = "amethyst_saw";
     public static final String SAPPHIRESAW_NAME = "sapphire_saw";
     public static final String RUBYSAW_NAME = "ruby_saw";
@@ -146,12 +146,12 @@ public class Refs {
     public static final String SAPPHIREHOE_NAME = "sapphire_hoe";
     public static final String SAPPHIRESICKLE_NAME = "sapphire_sickle";
 
-    public static final String MALACHITEAXE_NAME = "malachite_axe";
-    public static final String MALACHITESWORD_NAME = "malachite_sword";
-    public static final String MALACHITEPICKAXE_NAME = "malachite_pickaxe";
-    public static final String MALACHITESPADE_NAME = "malachite_shovel";
-    public static final String MALACHITEHOE_NAME = "malachite_hoe";
-    public static final String MALACHITESICKLE_NAME = "malachite_sickle";
+    public static final String GREENSAPPHIREAXE_NAME = "green_sapphire_axe";
+    public static final String GREENSAPPHIRESWORD_NAME = "green_sapphire_sword";
+    public static final String GREENSAPPHIREPICKAXE_NAME = "green_sapphire_pickaxe";
+    public static final String GREENSAPPHIRESPADE_NAME = "green_sapphire_shovel";
+    public static final String GREENSAPPHIREHOE_NAME = "green_sapphire_hoe";
+    public static final String GREENSAPPHIRESICKLE_NAME = "green_sapphire_sickle";
 
     public static final String AMETHYSTAXE_NAME = "amethyst_axe";
     public static final String AMETHYSTSWORD_NAME = "amethyst_sword";
@@ -258,6 +258,7 @@ public class Refs {
     public static final String CONFIG_RUBY = "ruby";
     public static final String CONFIG_AMETHYST = "amethyst";
     public static final String CONFIG_SAPPHIRE = "sapphire";
+    public static final String CONFIG_GREENSAPPHIRE = "green_sapphire";
     public static final String CONFIG_TUBES = "pneumatic tube options";
     public static final String CONFIG_CIRCUIT_DATABASE = "circuit database options";
 

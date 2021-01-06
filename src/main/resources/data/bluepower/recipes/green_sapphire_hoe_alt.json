@@ -1,11 +1,11 @@
 ﻿{
   "result": {
-    "item": "bluepower:malachite_shovel"
+    "item": "bluepower:green_sapphire_hoe"
   },
   "pattern": [
-    "G",
-    "S",
-    "S"
+    " GG",
+    " S ",
+    " S "
   ],
   "type": "minecraft:crafting_shaped",
   "key": {
@@ -13,7 +13,7 @@
       "tag": "forge:rods/wooden"
     },
     "G": {
-      "tag": "forge:gems/malachite"
+      "tag": "forge:gems/green_sapphire"
     }
   }
 }

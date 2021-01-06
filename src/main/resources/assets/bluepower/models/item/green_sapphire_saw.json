@@ -1,6 +1,6 @@
 ﻿{
   "parent": "item/handheld",
   "textures": {
-    "layer0": "bluepower:items/malachite_axe"
+    "layer0": "bluepower:items/green_sapphire_saw"
   }
 }

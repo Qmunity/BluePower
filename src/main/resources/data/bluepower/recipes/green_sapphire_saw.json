@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:malachite_saw"
+    "item": "bluepower:green_sapphire_saw"
   },
   "pattern": [
     "SSS",
@@ -16,7 +16,7 @@
       "tag": "forge:ingots/iron"
     },
     "D": {
-      "tag": "forge:gems/malachite"
+      "tag": "forge:gems/green_sapphire"
     }
   }
 }

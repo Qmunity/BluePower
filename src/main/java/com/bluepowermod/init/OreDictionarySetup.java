@@ -43,7 +43,7 @@ public class OreDictionarySetup {
         //OreDictionary.registerOre(BPOredictNames.BLOCK_AMETHYST, BPBlocks.amethyst_block);
         //OreDictionary.registerOre(BPOredictNames.BLOCK_RUBY, BPBlocks.ruby_block);
         //OreDictionary.registerOre(BPOredictNames.BLOCK_SAPPHIRE, BPBlocks.sapphire_block);
-        //OreDictionary.registerOre(BPOredictNames.BLOCK_MALACHITE, BPBlocks.malachite_block);
+        //OreDictionary.registerOre(BPOredictNames.BLOCK_GREENSAPPHIRE, BPBlocks.green_sapphire_block);
 
         // Ingots
         //OreDictionary.registerOre(BPOredictNames.INGOT_COPPER, BPItems.copper_ingot);

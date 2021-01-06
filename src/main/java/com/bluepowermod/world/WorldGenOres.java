@@ -28,6 +28,9 @@ public class WorldGenOres {
         if (BPConfig.CONFIG.generateSapphire.get()) {
             registerConfiguredOre(BPConfig.CONFIG.veinCountSapphire.get(), BPConfig.CONFIG.veinSizeSapphire.get(), BPConfig.CONFIG.minSapphireY.get(), BPConfig.CONFIG.maxSapphireY.get(), BPBlocks.sapphire_ore);
         }
+        if (BPConfig.CONFIG.generateGreenSapphire.get()) {
+            registerConfiguredOre(BPConfig.CONFIG.veinCountGreenSapphire.get(), BPConfig.CONFIG.veinSizeGreenSapphire.get(), BPConfig.CONFIG.minGreenSapphireY.get(), BPConfig.CONFIG.maxGreenSapphireY.get(), BPBlocks.green_sapphire_ore);
+        }
         if (BPConfig.CONFIG.generateSilver.get()) {
             registerConfiguredOre(BPConfig.CONFIG.veinCountSilver.get(), BPConfig.CONFIG.veinSizeSilver.get(), BPConfig.CONFIG.minSilverY.get(), BPConfig.CONFIG.maxSilverY.get(), BPBlocks.silver_ore);
         }
@@ -68,6 +71,11 @@ public class WorldGenOres {
                 ConfiguredFeature<?,?> sapphire_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.sapphire_ore.getRegistryName());
                 if(sapphire_feature != null)
                     generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, sapphire_feature);
+            }
+            if (BPConfig.CONFIG.generateGreenSapphire.get()) {
+                ConfiguredFeature<?,?> green_sapphire_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.green_sapphire_ore.getRegistryName());
+                if(green_sapphire_feature != null)
+                    generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, green_sapphire_feature);
             }
             if (BPConfig.CONFIG.generateSilver.get()) {
                 ConfiguredFeature<?,?> silver_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.silver_ore.getRegistryName());

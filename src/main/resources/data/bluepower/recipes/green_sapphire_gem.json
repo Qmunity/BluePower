@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:malachite_gem",
+    "item": "bluepower:green_sapphire_gem",
     "count": 9
   },
   "pattern": [
@@ -9,7 +9,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "item": "bluepower:malachite_block"
+      "item": "bluepower:green_sapphire_block"
     }
   }
 }

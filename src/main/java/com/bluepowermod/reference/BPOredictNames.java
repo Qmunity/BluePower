@@ -21,7 +21,7 @@ public class BPOredictNames {
     public static final String BLOCK_AMETHYST = "forge:blocks/amethyst";
     public static final String BLOCK_RUBY = "forge:blocks/ruby";
     public static final String BLOCK_SAPPHIRE = "forge:blocks/sapphire";
-    public static final String BLOCK_MALACHITE = "forge:blocks/malachite";
+    public static final String BLOCK_GREENSAPPHIRE = "forge:blocks/green_sapphire";
 
     // Ingots
     public static final String INGOT_COPPER = "forge:ingots/copper";

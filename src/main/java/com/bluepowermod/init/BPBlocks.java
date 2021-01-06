@@ -87,7 +87,7 @@ public class BPBlocks {
     public static Block silver_ore;
     public static Block zinc_ore;
     public static Block tungsten_ore;
-    public static Block malachite_ore;
+    public static Block green_sapphire_ore;
 
     public static Block ruby_block;
     public static Block sapphire_block;
@@ -97,7 +97,7 @@ public class BPBlocks {
     public static Block silver_block;
     public static Block zinc_block;
     public static Block tungsten_block;
-    public static Block malachite_block;
+    public static Block green_sapphire_block;
 
     public static Block rubber_log;
     public static Block rubber_leaves;
@@ -201,7 +201,7 @@ public class BPBlocks {
         ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME);
         sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME);
         amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME);
-        malachite_ore = new BlockItemOre(Refs.MALACHITEORE_NAME);
+        green_sapphire_ore = new BlockItemOre(Refs.GREENSAPPHIREORE_NAME);
 
         copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
         silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);
@@ -212,7 +212,7 @@ public class BPBlocks {
         sapphire_block = new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME);
         amethyst_block = new BlockStoneOre(Refs.AMETHYSTBLOCK_NAME);
         teslatite_block = new BlockStoneOre(Refs.TESLATITEBLOCK_NAME);
-        malachite_block = new BlockStoneOre(Refs.MALACHITEBLOCK_NAME);
+        green_sapphire_block = new BlockStoneOre(Refs.GREENSAPPHIREBLOCK_NAME);
         copper_block = new BlockStoneOre(Refs.COPPERBLOCK_NAME);
         silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME);
         zinc_block = new BlockStoneOre(Refs.ZINCBLOCK_NAME);
