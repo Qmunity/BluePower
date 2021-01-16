@@ -20,9 +20,12 @@ package com.bluepowermod.block.worldgen;
 import com.bluepowermod.init.BPBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
+import net.minecraft.loot.*;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,11 +36,17 @@ public class BlockBasalt extends BlockStoneOre {
         super(name);
     }
 
-    @Override
-    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
-        List<ItemStack> drops = new ArrayList<>();
-        drops.add(new ItemStack(BPBlocks.basalt_cobble));
-        return drops;
+    @Deprecated
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        ResourceLocation resourcelocation = this.getLootTable();
+        if (resourcelocation == LootTables.EMPTY) {
+            return Collections.emptyList();
+        } else {
+            LootContext lootcontext = builder.withParameter(LootParameters.BLOCK_STATE, state).build(LootParameterSets.BLOCK);
+            ServerWorld serverworld = lootcontext.getWorld();
+            LootTable loottable = serverworld.getServer().getLootTableManager().getLootTableFromLocation(resourcelocation);
+            return loottable.generate(lootcontext);
+        }
     }
 
 }
