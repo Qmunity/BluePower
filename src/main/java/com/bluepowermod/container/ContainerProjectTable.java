@@ -30,12 +30,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.*;
+import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.play.server.SSetSlotPacket;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import java.util.Optional;
@@ -101,6 +103,49 @@ public class ContainerProjectTable extends Container implements IGuiButtonSensit
         }
     }
 
+    @Override
+    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+
+        boolean clickTypeCrafting = slotId == 0 && inventorySlots.get(slotId).getHasStack() &&
+                (clickTypeIn.equals(ClickType.PICKUP) || clickTypeIn.equals(ClickType.QUICK_MOVE));
+
+        //Save the Matrix State before Crafting
+        NonNullList<ItemStack> beforeAction = NonNullList.withSize(9, ItemStack.EMPTY);
+        if(clickTypeCrafting){
+            for (int i = 1; i < 10; ++i) {
+                Slot matrixSlot = inventorySlots.get(i);
+                ItemStack matrixStack = matrixSlot.getStack();
+                beforeAction.set(i - 1, matrixStack);
+            }
+        }
+
+        ItemStack itemStack = super.slotClick(slotId, dragType, clickTypeIn, player);
+
+        //Try to pull from the Project Table Inventory if the last of an item for a recipe.
+        if(clickTypeCrafting){
+            for (int i = 1; i < 10; ++i) {
+                ItemStack beforeStack = beforeAction.get(i - 1);
+                Slot matrixSlot = inventorySlots.get(i);
+                ItemStack matrixStack = matrixSlot.getStack();
+
+                if (matrixStack.getCount() == 0 && beforeStack.getCount() != 0) {
+                    for (int ptSlot = 10; ptSlot < 28; ++ptSlot) {
+                        Slot inventorySlot = inventorySlots.get(ptSlot);
+                        ItemStack ptStack = inventorySlot.getStack();
+                        if (ptStack.getItem() == beforeStack.getItem() && ptStack.getTag() == beforeStack.getTag()) {
+                            ptStack.setCount(ptStack.getCount() - 1);
+                            inventorySlot.putStack(ptStack);
+                            beforeStack.setCount(1);
+                            matrixSlot.putStack(beforeStack);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return itemStack;
+    }
 
     protected static void updateCrafting(int id, World world, PlayerEntity playerEntity, CraftingInventory craftingInventory, CraftResultInventory craftResultInventory) {
         if (!world.isRemote) {
