@@ -20,8 +20,10 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.BPWorldGen;
 import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
+import com.google.common.collect.Lists;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.TableLootEntry;
+import net.minecraft.resources.ResourcePackInfo;
 import net.minecraft.resources.ResourcePackList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,6 +41,9 @@ import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Mod(Refs.MODID)
@@ -111,10 +116,27 @@ public class BluePower {
         if (BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()) {
             //Generate Datapack
             BPRecyclingReloadListener.onResourceManagerReload(event.getServer().getRecipeManager());
-            //Reload Datapacks
+
+            //Get Datapacks
             ResourcePackList resourcepacklist = event.getServer().getResourcePacks();
             resourcepacklist.reloadPacksFromFinders();
-            event.getServer().func_240780_a_(resourcepacklist.func_232616_b_()).exceptionally(ex -> null);
+            List<ResourcePackInfo> list = Lists.newArrayList(resourcepacklist.getEnabledPacks());
+
+            //Enable the Blue Power Dynamic Datapack
+            ResourcePackInfo bluepowerDatapack = resourcepacklist.getPackInfo("file/bluepower");
+            if(!list.contains(bluepowerDatapack)) {
+                list.add(2, bluepowerDatapack);
+            }
+
+            //Fix Forge / Vanilla Order (Issue RestrictedPortals#34)
+            ResourcePackInfo vanillaDatapack = resourcepacklist.getPackInfo("vanilla");
+            if(list.get(0) != vanillaDatapack) {
+                list.remove(vanillaDatapack);
+                list.add(0, vanillaDatapack);
+            }
+
+            //Reload Datapacks
+            event.getServer().func_240780_a_(list.stream().map(ResourcePackInfo::getName).collect(Collectors.toList())).exceptionally(ex -> null);
         }
 
     }
