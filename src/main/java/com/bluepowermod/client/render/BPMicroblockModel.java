@@ -17,6 +17,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.TransformationMatrix;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -129,7 +130,12 @@ public class BPMicroblockModel implements IBakedModel {
                     builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v));
                 }else if(e.getUsage() == VertexFormatElement.Usage.COLOR){
 
-                    int color = Minecraft.getInstance().getBlockColors().getColor(block.getDefaultState(), null, null, sizeQuad.getTintIndex());
+                    int color;
+                    try {
+                        color = Minecraft.getInstance().getBlockColors().getColor(block.getDefaultState(), null, null, sizeQuad.getTintIndex());
+                    }catch(Exception ex){
+                        color = Minecraft.getInstance().getBlockColors().getColor(block.getDefaultState(), null, BlockPos.ZERO, sizeQuad.getTintIndex());
+                    }
                     int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
                     int r = (color & redMask) >> 16;
                     int g = (color & greenMask) >> 8;

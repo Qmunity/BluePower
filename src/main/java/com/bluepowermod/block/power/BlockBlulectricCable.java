@@ -13,11 +13,14 @@ import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileBlulectricCable;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author MoreThanHidden
@@ -44,6 +47,13 @@ public class BlockBlulectricCable extends BlockBPCableBase {
     @Override
     protected Capability<?> getCapability() {
         return CapabilityBlutricity.BLUTRICITY_CAPABILITY;
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        List<ItemStack> drops =  super.getDrops(state, builder);
+        drops.add(new ItemStack(this));
+        return drops;
     }
 
 }

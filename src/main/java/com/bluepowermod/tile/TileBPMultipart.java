@@ -12,6 +12,7 @@ import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
@@ -88,9 +89,9 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
 
     public void removeState(BlockState state) {
         //Drop Items
-        if (world instanceof  ServerWorld) {
+        if (world instanceof ServerWorld) {
             NonNullList<ItemStack> drops = NonNullList.create();
-            drops.add(state.getBlock().getItem(world, pos, state));
+            drops.addAll(Block.getDrops(state, (ServerWorld) world,  pos, this));
             InventoryHelper.dropItems(world, pos, drops);
         }
         //Remove Tile Entity
