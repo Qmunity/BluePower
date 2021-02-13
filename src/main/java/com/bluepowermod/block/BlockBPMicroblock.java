@@ -54,6 +54,13 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
     }
 
     @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (worldIn.getTileEntity(pos) instanceof TileBPMicroblock){
+            super.onReplaced(state,worldIn,pos,newState,isMoving);
+        }
+    }
+
+    @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         TileEntity tileentity = builder.get(LootParameters.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();

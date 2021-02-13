@@ -9,7 +9,9 @@ package com.bluepowermod.api.multipart;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -36,5 +38,15 @@ public interface IBPPartBlock {
      * @param state
      */
     VoxelShape getOcclusionShape (BlockState state);
+
+    /**
+     * Override the Minecraft default so that the TileEntity isn't removed.
+     * @param state
+     * @param worldIn
+     * @param pos
+     * @param newState
+     * @param isMoving
+     */
+    void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving);
 
 }

@@ -16,7 +16,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -47,6 +49,14 @@ public class BlockBlulectricCable extends BlockBPCableBase {
     @Override
     protected Capability<?> getCapability() {
         return CapabilityBlutricity.BLUTRICITY_CAPABILITY;
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (worldIn.getTileEntity(pos) instanceof TileBlulectricCable) {
+            worldIn.removeTileEntity(pos);
+        }
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
 
     @Override
