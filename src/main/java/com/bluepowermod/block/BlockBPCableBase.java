@@ -60,6 +60,12 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
 
     @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        this.onMultipartReplaced(state, worldIn, pos, newState, isMoving);
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
+    }
+
+    @Override
+    public void onMultipartReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         FACING.getAllowedValues().forEach(f ->{
             BlockPos neighborPos = pos.offset(f).offset(state.get(FACING).getOpposite());
             worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, isMoving);

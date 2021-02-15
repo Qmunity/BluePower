@@ -8,6 +8,7 @@
 
 package com.bluepowermod.block;
 
+import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
@@ -100,11 +101,11 @@ public class BlockBPMultipart extends ContainerBlock implements IWaterLoggable {
     public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
         BlockState partState = MultipartUtils.getClosestState(player, pos);
         TileEntity te = world.getTileEntity(pos);
-        if(partState != null && te instanceof TileBPMultipart) {
-            //Call onReplaced
-            partState.onReplaced(world, pos, state, false);
+        if(partState != null && partState.getBlock() instanceof IBPPartBlock && te instanceof TileBPMultipart) {
             //Remove Selected Part
             ((TileBPMultipart) te).removeState(partState);
+            //Call onMultipartReplaced
+            ((IBPPartBlock)partState.getBlock()).onMultipartReplaced(partState, world, pos, state, false);
             //Play Break Sound
             world.playSound(null, pos, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
             return false;

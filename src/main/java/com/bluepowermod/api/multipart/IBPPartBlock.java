@@ -40,13 +40,13 @@ public interface IBPPartBlock {
     VoxelShape getOcclusionShape (BlockState state);
 
     /**
-     * Override the Minecraft default so that the TileEntity isn't removed.
+     * Separate onReplaced for Multipart so that the TileEntity isn't removed.
      * @param state
      * @param worldIn
      * @param pos
      * @param newState
-     * @param isMoving
      */
-    void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving);
+    default void onMultipartReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving){
+    }
 
 }
