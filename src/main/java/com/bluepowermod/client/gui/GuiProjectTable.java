@@ -23,7 +23,6 @@ import java.util.List;
 
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
-import com.bluepowermod.container.ContainerAlloyFurnace;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -32,7 +31,6 @@ import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.util.text.ITextComponent;
 
 /**
@@ -65,6 +63,7 @@ public class GuiProjectTable extends GuiContainerBaseBP<ContainerProjectTable> i
 
     @Override
     public void actionPerformed(IGuiWidget button) {
-        BPNetworkHandler.wrapper.sendToServer(new MessageGuiUpdate(0, 0));
+        if(button.getID() == 0)
+            BPNetworkHandler.wrapper.sendToServer(new MessageGuiUpdate(0, 0));
     }
 }

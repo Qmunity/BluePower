@@ -14,22 +14,25 @@ import com.bluepowermod.tile.TileBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
+import java.util.stream.IntStream;
 
 /**
  * @author MineMaarten
  */
-public class TileProjectTable extends TileBase implements IInventory, INamedContainerProvider {
+public class TileProjectTable extends TileBase implements ISidedInventory, INamedContainerProvider {
 
     public final static int SLOTS = 28;
     private NonNullList<ItemStack> inventory = NonNullList.withSize(18, ItemStack.EMPTY);
@@ -37,6 +40,10 @@ public class TileProjectTable extends TileBase implements IInventory, INamedCont
 
     public TileProjectTable() {
         super(BPTileEntityType.PROJECT_TABLE);
+    }
+
+    public TileProjectTable(TileEntityType<?> type) {
+        super(type);
     }
 
     @Override
@@ -113,6 +120,7 @@ public class TileProjectTable extends TileBase implements IInventory, INamedCont
     public ItemStack getStackInSlot(int i) {
         return i < 18 ? inventory.get(i) : craftingGrid.get(i - 18);
     }
+
     public ItemStack getStackInCraftingSlot(int i) {
         return craftingGrid.get(i);
     }
@@ -208,5 +216,20 @@ public class TileProjectTable extends TileBase implements IInventory, INamedCont
     @Override
     public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
         return new ContainerProjectTable(id, inventory, this);
+    }
+
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        return IntStream.range(0, getSizeInventory() - 1).toArray();
+    }
+
+    @Override
+    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+        return index < getSizeInventory();
+    }
+
+    @Override
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+        return index < getSizeInventory();
     }
 }

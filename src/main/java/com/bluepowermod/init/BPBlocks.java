@@ -247,7 +247,7 @@ public class BPBlocks {
                 .setRegistryName(Refs.MODID, Refs.SORTING_MACHINE_NAME);
         project_table = new BlockProjectTable();
         project_tables[0] = project_table;
-        auto_project_table = new BlockProjectTable(TileAutoProjectTable.class).setWIP(true).setRegistryName(Refs.MODID, Refs.AUTOPROJECTTABLE_NAME);
+        auto_project_table = new BlockProjectTable(TileAutoProjectTable.class).setRegistryName(Refs.MODID, Refs.AUTOPROJECTTABLE_NAME);
         project_tables[1] = auto_project_table;
 
         circuit_table = new BlockProjectTable(TileCircuitTable.class).setWIP(true).setRegistryName(Refs.MODID, Refs.CIRCUITTABLE_NAME);

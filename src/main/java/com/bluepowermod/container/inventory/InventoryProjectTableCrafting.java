@@ -2,8 +2,6 @@ package com.bluepowermod.container.inventory;
 
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageCraftingSync;
-import com.bluepowermod.network.message.MessageGuiUpdate;
-import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.CraftingInventory;
@@ -38,7 +36,6 @@ public class InventoryProjectTableCrafting extends CraftingInventory {
     public void setInventorySlotContents(int slot, ItemStack stack) {
         this.projectTable.setInventorySlotContents(18 + slot, stack);
         eventHandler.onCraftMatrixChanged(this);
-
     }
 
     @Override

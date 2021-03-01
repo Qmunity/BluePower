@@ -11,10 +11,7 @@ package com.bluepowermod.tile;
 import com.bluepowermod.reference.ContainerNames;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.*;
-import com.bluepowermod.tile.tier2.TileCircuitTable;
-import com.bluepowermod.tile.tier2.TileRegulator;
-import com.bluepowermod.tile.tier2.TileRetriever;
-import com.bluepowermod.tile.tier2.TileSortingMachine;
+import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.*;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
@@ -71,6 +68,9 @@ public class BPTileEntityType {
 
     @ObjectHolder(ContainerNames.PROJECT_TABLE)
     public static TileEntityType<TileProjectTable> PROJECT_TABLE;
+
+    @ObjectHolder(ContainerNames.AUTO_PROJECT_TABLE)
+    public static TileEntityType<TileAutoProjectTable> AUTO_PROJECT_TABLE;
 
     @ObjectHolder(ContainerNames.CIRCUIT_TABLE)
     public static TileEntityType<TileCircuitTable> CIRCUIT_TABLE;

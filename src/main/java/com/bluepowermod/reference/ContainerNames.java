@@ -37,6 +37,7 @@ public class ContainerNames {
     public static final String REGULATOR = Refs.MODID + ":regulator";
     public static final String ITEM_DETECTOR = Refs.MODID + ":item_detector";
     public static final String PROJECT_TABLE = Refs.MODID + ":project_table";
+    public static final String AUTO_PROJECT_TABLE = Refs.MODID + ":auto_project_table";
     public static final String CIRCUIT_TABLE = Refs.MODID + ":circuit_table";
     public static final String MANAGER = Refs.MODID + ":manager";
     public static final String CIRCUITDATABASE_MAIN = Refs.MODID + ":circuitdatabase_main";

@@ -1,128 +1,115 @@
 package com.bluepowermod.tile.tier2;
 
+import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
+import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.tier1.TileProjectTable;
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
-import java.util.Map;
+import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
-public class TileAutoProjectTable extends TileProjectTable implements ISidedInventory {
-    private static int[] slots;
-    protected ItemStack craftBuffer = ItemStack.EMPTY;
-    private boolean markedForBufferFill = true;
+public class TileAutoProjectTable extends TileProjectTable {
 
-    static {
-        slots = new int[19];
-        for (int i = 0; i < slots.length; i++)
-            slots[i] = i;
+    public TileAutoProjectTable() {
+        super(BPTileEntityType.AUTO_PROJECT_TABLE);
     }
+    private final int OUTPUT_SLOT = 100;
 
     @Override
-    public NonNullList<ItemStack> getDrops() {
+    public ItemStack decrStackSize(int slot, int amount) {
+        if(slot == OUTPUT_SLOT) {
+            InventoryProjectTableCrafting craftingInv = new InventoryProjectTableCrafting(null, this, 3, 3);
+            ItemStack itemstack = ItemStack.EMPTY;
+            Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInv, world);
+            if (optional.isPresent()) {
+                ICraftingRecipe icraftingrecipe = optional.get();
+                itemstack = icraftingrecipe.getCraftingResult(craftingInv);
+            }
 
-        NonNullList<ItemStack> drops = super.getDrops();
-        if (!craftBuffer.isEmpty())
-            drops.add(craftBuffer);
-        return drops;
-    }
+            for (int i = 0; i < 9; i++) {
+                ItemStack slotStack = craftingGrid.get(i);
+                if (slotStack.getCount() == 1) {
+                    //Get items from the Inventory to Craft
+                    for (int ptSlot = 0; ptSlot < 19; ++ptSlot) {
+                        if (ptSlot == 18) {
+                            //No available items so end here to keep template
+                            return ItemStack.EMPTY;
+                        }
+                        ItemStack ptStack = getStackInSlot(ptSlot);
+                        if (ptStack.getItem() == slotStack.getItem() && ptStack.getTag() == slotStack.getTag()) {
+                            slotStack.setCount(2);
+                            craftingGrid.set(i, slotStack);
+                            decrStackSize(ptSlot, 1);
+                            break;
+                        }
+                    }
+                }
+            }
 
-    @Override
-    public CompoundNBT write(CompoundNBT tag) {
-        super.write(tag);
-            CompoundNBT bufferTag = new CompoundNBT();
-            craftBuffer.write(bufferTag);
-            tag.put("craftBuffer", bufferTag);
+            for (int i = 0; i < 9; i++) {
+                ItemStack currentItem = craftingGrid.get(i);
+                currentItem.setCount(currentItem.getCount() - 1);
+                craftingGrid.set(i, currentItem);
+            }
 
-        return tag;
-    }
-
-    @Override
-    public void read(BlockState state, CompoundNBT tag) {
-        super.read(state, tag);
-
-        if (tag.contains("craftBuffer")) {
-            craftBuffer = ItemStack.read(tag.getCompound("craftBuffer"));
-        } else {
-            craftBuffer = ItemStack.EMPTY;
+            return itemstack;
+        }else{
+            return super.decrStackSize(slot, amount);
         }
     }
 
     @Override
-    public int getSizeInventory() {
-
-        return super.getSizeInventory() + 1;
+    public ItemStack getStackInSlot(int i) {
+        if(i == OUTPUT_SLOT){
+            InventoryProjectTableCrafting craftingInv = new InventoryProjectTableCrafting(null, this, 3, 3);
+            ItemStack itemstack = ItemStack.EMPTY;
+            Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInv, world);
+            if (optional.isPresent()) {
+                ICraftingRecipe icraftingrecipe = optional.get();
+                itemstack = icraftingrecipe.getCraftingResult(craftingInv);
+            }
+            return itemstack;
+        }else {
+            return super.getStackInSlot(i);
+        }
     }
+
+    @Override
+    public void setInventorySlotContents(int i, ItemStack itemStack) {
+        if(i != OUTPUT_SLOT){
+            super.setInventorySlotContents(i, itemStack);
+        }
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent(Refs.AUTOPROJECTTABLE_NAME);
+    }
+
 
     @Override
     public int[] getSlotsForFace(Direction side) {
-        return new int[0];
-    }
-
-    public static int[] getSlots() {
-        return slots;
-    }
-
-    @Override
-    public boolean canInsertItem(int slot, ItemStack itemStackIn, Direction direction) {
-        return slot < 18;
-    }
-
-    @Override
-    public boolean canExtractItem(int slot, ItemStack stack, Direction side) {
-        if (slot == 18) {
-            return true;
-        } else {
-            return side.ordinal() > 5;
+        if(side == Direction.DOWN) {
+            return new int[]{OUTPUT_SLOT};
         }
-    }
-
-    private void addItem(Map<ItemStack, Integer> collection, ItemStack stack) {
-        for (Map.Entry<ItemStack, Integer> entry : collection.entrySet()) {
-            ItemStack s = entry.getKey();
-            if (s.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(stack, s)) {
-                entry.setValue(entry.getValue() + 1);
-                return;
-            }
-        }
-        collection.put(stack, 1);
+        return IntStream.range(0, getSizeInventory() - 1).toArray();
     }
 
     @Override
-    public ItemStack getStackInSlot(int slot) {
-        markedForBufferFill = true;
-        return slot < super.getSizeInventory() ? super.getStackInSlot(slot) : craftBuffer;
+    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+        return direction != Direction.DOWN;
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack stack) {
-        if (slot < super.getSizeInventory()) {
-            super.setInventorySlotContents(slot, stack);
-        } else {
-            craftBuffer = stack;
-        }
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (markedForBufferFill) {
-            markedForBufferFill = false;
-        }
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return craftBuffer == ItemStack.EMPTY;
-    }
-
-
-    @Override
-    public void clear() {
-
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+        return true;
     }
 
 }

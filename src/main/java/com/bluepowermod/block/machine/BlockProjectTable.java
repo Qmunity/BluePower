@@ -18,29 +18,18 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.util.Hand;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.ISidedInventoryProvider;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
-
-import javax.annotation.Nullable;
+import net.minecraft.world.IWorld;
 
 
-public class BlockProjectTable extends BlockContainerBase {
+public class BlockProjectTable extends BlockContainerBase implements ISidedInventoryProvider {
 
     public BlockProjectTable() {
         super(Material.WOOD, TileProjectTable.class);
@@ -54,5 +43,10 @@ public class BlockProjectTable extends BlockContainerBase {
     @Override
     protected boolean canRotateVertical() {
         return false;
+    }
+
+    @Override
+    public ISidedInventory createInventory(BlockState state, IWorld world, BlockPos pos) {
+        return ((TileProjectTable)world.getTileEntity(pos));
     }
 }
