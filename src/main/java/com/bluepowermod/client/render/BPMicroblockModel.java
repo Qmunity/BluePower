@@ -133,8 +133,12 @@ public class BPMicroblockModel implements IBakedModel {
                     int color;
                     try {
                         color = Minecraft.getInstance().getBlockColors().getColor(block.getDefaultState(), null, null, sizeQuad.getTintIndex());
-                    }catch(Exception ex){
-                        color = Minecraft.getInstance().getBlockColors().getColor(block.getDefaultState(), null, BlockPos.ZERO, sizeQuad.getTintIndex());
+                    } catch(Exception ex){
+                        try {
+                            color = Minecraft.getInstance().getBlockColors().getColor(block.getDefaultState(), null, BlockPos.ZERO, sizeQuad.getTintIndex());
+                        } catch (Exception ex2){
+                            color = 0;
+                        }
                     }
                     int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
                     int r = (color & redMask) >> 16;
