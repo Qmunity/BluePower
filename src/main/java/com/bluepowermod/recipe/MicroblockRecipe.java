@@ -34,7 +34,7 @@ public class MicroblockRecipe extends SpecialRecipe {
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
-                if (stack.getItem() instanceof BlockItem){
+                if (stack.getItem() instanceof BlockItem && !Block.byItem(stack.getItem()).hasTileEntity(Block.byItem(stack.getItem()).defaultBlockState())){
                     VoxelShape shape = null;
                     try{
                        shape = Block.byItem(stack.getItem()).defaultBlockState().getShape(null, null);
