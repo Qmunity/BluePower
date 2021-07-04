@@ -27,7 +27,7 @@ project.ext {
     } else {
         build = "-custom"
     }
-    mcVersion = "1.16.4"
+    mcVersion = "1.16.5"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -36,20 +36,8 @@ archivesBaseName = "bluepower"
 
 repositories {
     maven {
-        name "OpenComputers"
-        url "http://maven.cil.li"
-    }
-    maven {
-        name "IC2"
-        url "http://maven.ic2.player.to"
-    }
-    maven {
         name "JEI"
         url "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        name 'CTM'
-        url 'https://maven.tterrag.com/'
     }
 }
 
@@ -97,14 +85,12 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.4-35.0.18'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.1.32'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
-	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
     compileOnly fg.deobf("curse.maven:Hwyla:3033595")
-    compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.2.25:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.2.25")
-    //compile "team.chisel.ctm:CTM:MC1.16.1-1.1.0.1"
+    compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107")
 }
 
 jar {
