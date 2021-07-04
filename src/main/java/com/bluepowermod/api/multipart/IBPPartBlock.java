@@ -40,7 +40,7 @@ public interface IBPPartBlock {
     VoxelShape getOcclusionShape (BlockState state);
 
     /**
-     * Separate onReplaced for Multipart so that the TileEntity isn't removed.
+     * Separate onRemove for Multipart so that the TileEntity isn't removed.
      * @param state
      * @param worldIn
      * @param pos

@@ -52,11 +52,11 @@ public class GuiFilter extends GuiContainerBaseBP<ContainerFilter> implements IH
     public void init() {
 
         super.init();
-        WidgetColor colorWidget = new WidgetColor(0, guiLeft + 117, guiTop + 55);
+        WidgetColor colorWidget = new WidgetColor(0, leftPos + 117, topPos + 55);
         colorWidget.value = filter.filterColor.ordinal();
         addWidget(colorWidget);
 
-        WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(1, guiLeft + 134, guiTop + 55);
+        WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(1, leftPos + 134, topPos + 55);
         fuzzyWidget.value = filter.fuzzySetting;
         addWidget(fuzzyWidget);
     }

@@ -28,50 +28,50 @@ public class InventoryProjectTableCrafting extends CraftingInventory {
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return this.length;
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack stack) {
-        this.projectTable.setInventorySlotContents(18 + slot, stack);
-        eventHandler.onCraftMatrixChanged(this);
+    public void setItem(int slot, ItemStack stack) {
+        this.projectTable.setItem(18 + slot, stack);
+        eventHandler.slotsChanged(this);
     }
 
     @Override
-    public void markDirty() {
-        this.projectTable.markDirty();
-        this.eventHandler.onCraftMatrixChanged(this);
+    public void setChanged() {
+        this.projectTable.setChanged();
+        this.eventHandler.slotsChanged(this);
         if(FMLEnvironment.dist == Dist.CLIENT)
             BPNetworkHandler.wrapper.sendToServer(new MessageCraftingSync());
     }
 
     @Nonnull
     @Override
-    public ItemStack getStackInSlot(int index) {
-        return 18 + index >= 18 + this.getSizeInventory() ? ItemStack.EMPTY : this.projectTable.getStackInSlot(18 + index);
+    public ItemStack getItem(int index) {
+        return 18 + index >= 18 + this.getContainerSize() ? ItemStack.EMPTY : this.projectTable.getItem(18 + index);
     }
 
     @Nonnull
     @Override
-    public ItemStack decrStackSize(int index, int count) {
-        if(!this.getStackInSlot(index).isEmpty()) {
+    public ItemStack removeItem(int index, int count) {
+        if(!this.getItem(index).isEmpty()) {
             ItemStack itemstack;
 
-            if(this.getStackInSlot(index).getCount() <= count) {
-                itemstack = this.getStackInSlot(index);
-                this.setInventorySlotContents(index, ItemStack.EMPTY);
-                this.eventHandler.onCraftMatrixChanged(this);
+            if(this.getItem(index).getCount() <= count) {
+                itemstack = this.getItem(index);
+                this.setItem(index, ItemStack.EMPTY);
+                this.eventHandler.slotsChanged(this);
                 return itemstack;
             }
             else {
-                itemstack = this.getStackInSlot(index).split(count);
+                itemstack = this.getItem(index).split(count);
 
-                if(this.getStackInSlot(index).getCount() == 0) {
-                    this.setInventorySlotContents(index, ItemStack.EMPTY);
+                if(this.getItem(index).getCount() == 0) {
+                    this.setItem(index, ItemStack.EMPTY);
                 }
 
-                this.eventHandler.onCraftMatrixChanged(this);
+                this.eventHandler.slotsChanged(this);
                 return itemstack;
             }
         }

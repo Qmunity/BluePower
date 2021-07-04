@@ -19,20 +19,20 @@ public class ItemMultimeter extends ItemBase {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        TileEntity tileEntity = context.getWorld().getTileEntity(context.getPos());
+    public ActionResultType useOn(ItemUseContext context) {
+        TileEntity tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
         if (tileEntity != null && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()){
-            if(!context.getWorld().isRemote) {
+            if(!context.getLevel().isClientSide) {
                 double volts = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null).getVoltage();
                 double amps = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null).getCurrent();
                 String voltage = String.format("%.2f", volts);
                 String ampere = String.format("%.2f", amps);
                 String watts = String.format("%.2f", volts * amps);
                 if (context.getPlayer() != null)
-                    context.getPlayer().sendMessage(new StringTextComponent("Reading " + voltage + "V " + ampere + "A (" + watts + "W)"), Util.DUMMY_UUID);
+                    context.getPlayer().sendMessage(new StringTextComponent("Reading " + voltage + "V " + ampere + "A (" + watts + "W)"), Util.NIL_UUID);
             }
             return ActionResultType.SUCCESS;
         }
-        return super.onItemUse(context);
+        return super.useOn(context);
     }
 }

@@ -55,24 +55,24 @@ public class TileBPMicroblock extends TileEntity {
     }
 
     private void markDirtyClient() {
-        markDirty();
-        if (getWorld() != null) {
-            BlockState state = getWorld().getBlockState(getPos());
-            getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+        setChanged();
+        if (getLevel() != null) {
+            BlockState state = getLevel().getBlockState(getBlockPos());
+            getLevel().sendBlockUpdated(getBlockPos(), state, state, 3);
         }
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putString("block", block.getRegistryName().toString());
         compound.putInt("rotation", rotation);
         return compound;
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
-       super.read(state, compound);
+    public void load(BlockState state, CompoundNBT compound) {
+       super.load(state, compound);
        block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("block")));
        rotation = compound.getInt("block");
     }
@@ -81,27 +81,27 @@ public class TileBPMicroblock extends TileEntity {
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT updateTag = super.getUpdateTag();
-        write(updateTag);
+        save(updateTag);
         return updateTag;
     }
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
         CompoundNBT nbtTag = new CompoundNBT();
-        write(nbtTag);
-        return new SUpdateTileEntityPacket(getPos(), 1, nbtTag);
+        save(nbtTag);
+        return new SUpdateTileEntityPacket(getBlockPos(), 1, nbtTag);
     }
 
     @Override
     public void onDataPacket(NetworkManager networkManager, SUpdateTileEntityPacket packet) {
         Block oldblock = getBlock();
-        CompoundNBT tagCompound = packet.getNbtCompound();
+        CompoundNBT tagCompound = packet.getTag();
         super.onDataPacket(networkManager, packet);
-        read(getBlockState(), tagCompound);
-        if (world.isRemote) {
+        load(getBlockState(), tagCompound);
+        if (level.isClientSide) {
             // Update if needed
             if (!getBlock().equals(oldblock)) {
-                world.markChunkDirty(getPos(), this.getTileEntity());
+                level.blockEntityChanged(getBlockPos(), this.getTileEntity());
             }
         }
     }

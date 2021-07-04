@@ -24,7 +24,7 @@ public class PlacementVolcano extends Placement<NoPlacementConfig> {
         ISeedReader world = ObfuscationReflectionHelper.getPrivateValue(WorldDecoratingHelper.class, decoratingHelper, "field_242889_a");
         int chunkPosX = pos.getX() >> 8;
         int chuckPosZ = pos.getZ() >> 8;
-        ((SharedSeedRandom) random).setLargeFeatureSeed(world.func_234938_ad_(), chunkPosX, chuckPosZ);
+        ((SharedSeedRandom) random).setLargeFeatureSeed(world.getHeight(), chunkPosX, chuckPosZ);
         if (random.nextDouble() < (BPConfig.CONFIG.volcanoSpawnChance.get() * 16)) {
             return Stream.of(pos);
         } else {

@@ -42,10 +42,10 @@ public class BlockBasalt extends BlockStoneOre {
         if (resourcelocation == LootTables.EMPTY) {
             return Collections.emptyList();
         } else {
-            LootContext lootcontext = builder.withParameter(LootParameters.BLOCK_STATE, state).build(LootParameterSets.BLOCK);
-            ServerWorld serverworld = lootcontext.getWorld();
-            LootTable loottable = serverworld.getServer().getLootTableManager().getLootTableFromLocation(resourcelocation);
-            return loottable.generate(lootcontext);
+            LootContext lootcontext = builder.withParameter(LootParameters.BLOCK_STATE, state).create(LootParameterSets.BLOCK);
+            ServerWorld serverworld = lootcontext.getLevel();
+            LootTable loottable = serverworld.getServer().getLootTables().get(resourcelocation);
+            return loottable.getRandomItems(lootcontext);
         }
     }
 

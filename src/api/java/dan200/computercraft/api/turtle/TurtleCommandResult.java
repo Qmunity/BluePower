@@ -42,7 +42,7 @@ public final class TurtleCommandResult
         m_errorMessage = errorMessage;
     }
 
-    public boolean isSuccess()
+    public boolean shouldSwing()
     {
         return m_success;
     }

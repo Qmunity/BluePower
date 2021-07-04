@@ -30,7 +30,7 @@ public class GuiDiskDrive extends GuiContainerBaseBP<ContainerDiskDrive> impleme
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
 
     }
 }

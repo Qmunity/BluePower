@@ -44,14 +44,14 @@ public class GuiProjectTable extends GuiContainerBaseBP<ContainerProjectTable> i
     public GuiProjectTable(ContainerProjectTable container, PlayerInventory playerInventory, ITextComponent title){
         super(container, playerInventory, title, resLoc);
         this.projectTable = container;
-        ySize = 208;
+        imageHeight = 208;
     }
 
     @Override
     public void init() {
 
         super.init();
-        addWidget(new WidgetMode(0, guiLeft + 15, guiTop + 20, 176, 1, Refs.MODID + ":textures/gui/project_table.png") {
+        addWidget(new WidgetMode(0, leftPos + 15, topPos + 20, 176, 1, Refs.MODID + ":textures/gui/project_table.png") {
 
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shift) {

@@ -61,7 +61,7 @@ public class BPEventHandler {
             if (event.world.getGameTime() % 200 == 0) {
                 //double tickTime = MathHelper.mean(event.world.getServer().tickTimeArray) * 1.0E-6D;
                 //In case world are going to get their own thread: MinecraftServer.getServer().worldTickTimes.get(event.world.provider.dimensionId)
-                //BPNetworkHandler.wrapper.send(PacketDistributor.DIMENSION.with(event.world.getDimension().getType()), new MessageServerTickTime(tickTime));
+                //BPNetworkHandler.wrapper.send(PacketDistributor.DIMENSION.setValue(event.world.getDimension().getType()), new MessageServerTickTime(tickTime));
             }
         }
     }
@@ -83,9 +83,9 @@ public class BPEventHandler {
     public void onPlayerInteract(PlayerInteractEvent.LeftClickBlock event) {
 
         if (event.getPlayer().isCreative()) {
-            ItemStack heldItem = event.getPlayer().getHeldItem(event.getHand());
+            ItemStack heldItem = event.getPlayer().getItemInHand(event.getHand());
             if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemSickle) {
-                heldItem.getItem().onBlockDestroyed(heldItem, event.getWorld(), event.getWorld().getBlockState(event.getPos()), event.getPos(), event.getPlayer());
+                heldItem.getItem().mineBlock(heldItem, event.getWorld(), event.getWorld().getBlockState(event.getPos()), event.getPos(), event.getPlayer());
             }
         }
     }
@@ -95,11 +95,11 @@ public class BPEventHandler {
 
         PlayerEntity player = event.getPlayer();
         ItemStack pickUp = event.getItem().getItem();
-        if (!(player.openContainer instanceof ContainerSeedBag)) {
-            for (ItemStack is : player.inventory.mainInventory) {
+        if (!(player.containerMenu instanceof ContainerSeedBag)) {
+            for (ItemStack is : player.inventory.items) {
                 if (!is.isEmpty() && is.getItem() instanceof ItemSeedBag) {
                     ItemStack seedType = ItemSeedBag.getSeedType(is);
-                    if (!seedType.isEmpty() && seedType.isItemEqual(pickUp)) {
+                    if (!seedType.isEmpty() && seedType.sameItem(pickUp)) {
                         ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
 
                         //Get Items from the NBT Handler
@@ -136,19 +136,19 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onEntityAttack(LivingAttackEvent event) {
 
-        if (!isAttacking && event.getSource() instanceof EntityDamageSource) {// this event will be trigger recursively by EntityLiving#attackEntityFrom,
+        if (!isAttacking && event.getSource() instanceof EntityDamageSource) {// this event will be trigger recursively by EntityLiving#hurt,
             // so we need to stop the loop.
             EntityDamageSource entitySource = (EntityDamageSource) event.getSource();
 
-            if (entitySource.getTrueSource() instanceof PlayerEntity) {
-                PlayerEntity killer = (PlayerEntity) entitySource.getTrueSource();
+            if (entitySource.getEntity() instanceof PlayerEntity) {
+                PlayerEntity killer = (PlayerEntity) entitySource.getEntity();
 
-                if (!killer.inventory.getCurrentItem().isEmpty()) {
-                    if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.disjunction)) {
+                if (!killer.inventory.getSelected().isEmpty()) {
+                    if (EnchantmentHelper.getEnchantments(killer.inventory.getSelected()).containsKey(BPEnchantments.disjunction)) {
                         if (event.getEntityLiving() instanceof EndermanEntity || event.getEntityLiving() instanceof EnderDragonEntity) {
-                            int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction, killer.inventory.getCurrentItem());
+                            int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.disjunction, killer.inventory.getSelected());
                             isAttacking = true;
-                            event.getEntityLiving().attackEntityFrom(event.getSource(), event.getAmount() * (level * 0.5F + 1));
+                            event.getEntityLiving().hurt(event.getSource(), event.getAmount() * (level * 0.5F + 1));
                             isAttacking = false;
                             event.setCanceled(true);
                         }
@@ -165,19 +165,19 @@ public class BPEventHandler {
         if (event.getSource() instanceof EntityDamageSource) {
             EntityDamageSource entitySource = (EntityDamageSource) event.getSource();
 
-            if (entitySource.getTrueSource() instanceof PlayerEntity) {
-                PlayerEntity killer = (PlayerEntity) entitySource.getTrueSource();
+            if (entitySource.getEntity() instanceof PlayerEntity) {
+                PlayerEntity killer = (PlayerEntity) entitySource.getEntity();
 
-                if (!killer.inventory.getCurrentItem().isEmpty()) {
-                    if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.vorpal)) {
-                        int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.vorpal, killer.inventory.getCurrentItem());
+                if (!killer.inventory.getSelected().isEmpty()) {
+                    if (EnchantmentHelper.getEnchantments(killer.inventory.getSelected()).containsKey(BPEnchantments.vorpal)) {
+                        int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.vorpal, killer.inventory.getSelected());
 
                         if (level == 1) {
-                            if (killer.world.rand.nextInt(6) == 1) {
+                            if (killer.level.random.nextInt(6) == 1) {
                                 dropHeads(event);
                             }
                         } else if (level == 2) {
-                            if (killer.world.rand.nextInt(3) == 1) {
+                            if (killer.level.random.nextInt(3) == 1) {
                                 dropHeads(event);
                             }
                         }
@@ -190,28 +190,28 @@ public class BPEventHandler {
     private void dropHeads(LivingDeathEvent event) {
 
         if (event.getEntityLiving() instanceof CreeperEntity) {
-            event.getEntityLiving().entityDropItem(new ItemStack(Items.CREEPER_HEAD, 1), 0.0F);
+            event.getEntityLiving().spawnAtLocation(new ItemStack(Items.CREEPER_HEAD, 1), 0.0F);
         }
 
         if (event.getEntityLiving() instanceof PlayerEntity) {
             ItemStack drop = new ItemStack(Items.PLAYER_HEAD, 1);
             drop.setTag(new CompoundNBT());
             drop.getTag().putString("SkullOwner", event.getEntityLiving().getDisplayName().getString());
-            event.getEntityLiving().entityDropItem(drop, 0.0F);
+            event.getEntityLiving().spawnAtLocation(drop, 0.0F);
         }
 
         if (event.getEntityLiving() instanceof AbstractSkeletonEntity) {
             AbstractSkeletonEntity sk = (AbstractSkeletonEntity) event.getEntityLiving();
 
             if (sk instanceof SkeletonEntity) {
-                event.getEntityLiving().entityDropItem(new ItemStack(Items.SKELETON_SKULL, 1), 0.0F);
+                event.getEntityLiving().spawnAtLocation(new ItemStack(Items.SKELETON_SKULL, 1), 0.0F);
             } else {
-                event.getEntityLiving().entityDropItem(new ItemStack(Items.WITHER_SKELETON_SKULL, 1), 0.0F);
+                event.getEntityLiving().spawnAtLocation(new ItemStack(Items.WITHER_SKELETON_SKULL, 1), 0.0F);
             }
         }
 
         if (event.getEntityLiving() instanceof ZombieEntity) {
-            event.getEntityLiving().entityDropItem(new ItemStack(Items.ZOMBIE_HEAD, 1), 0.0F);
+            event.getEntityLiving().spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD, 1), 0.0F);
         }
     }
 
@@ -238,22 +238,22 @@ public class BPEventHandler {
     public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
 
         Item item = event.getCrafting().getItem();
-        if (item == Item.getItemFromBlock(Blocks.AIR))
+        if (item == Item.byBlock(Blocks.AIR))
             return;
     }
 
     @SubscribeEvent
     public void onBonemealEvent(BonemealEvent event) {
 
-        if (!event.getWorld().isRemote) {
+        if (!event.getWorld().isClientSide) {
             if (event.getBlock().getBlock() instanceof GrassBlock) {
                 for (int x = event.getPos().getX() - 2; x < event.getPos().getX() + 3; x++) {
                     for (int z = event.getPos().getZ() - 2; z < event.getPos().getZ() + 3; z++) {
-                        if (event.getWorld().isAirBlock(new BlockPos(x, event.getPos().getY() + 1, z))) {
-                            if (event.getWorld().rand.nextInt(50) == 1) {
+                        if (event.getWorld().isEmptyBlock(new BlockPos(x, event.getPos().getY() + 1, z))) {
+                            if (event.getWorld().random.nextInt(50) == 1) {
                                 //TODO: Flower Chance
-                                //if (BPBlocks.indigo_flower.canSustainPlant(event.getWorld().getBlockState(event.getPos().up()), event.getWorld(), event.getPos().up())) {
-                                //    event.getWorld().setBlockState(event.getPos().up(), BPBlocks.indigo_flower.getDefaultState());
+                                //if (BPBlocks.indigo_flower.canSustainPlant(event.getLevel().getBlockState(event.getPos().up()), event.getLevel(), event.getPos().up())) {
+                                //    event.getLevel().setBlock(event.getPos().up(), BPBlocks.indigo_flower.defaultBlockState());
                                 //}
                             }
                         }
@@ -270,27 +270,27 @@ public class BPEventHandler {
         if (player == null) {
             return;
         }
-        World world = player.world;
+        World world = player.level;
         if (world == null) {
             return;
         }
         RayTraceResult mop = event.getTarget();
         if(mop instanceof BlockRayTraceResult) {
-            BlockPos pos = ((BlockRayTraceResult) mop).getPos();
+            BlockPos pos = ((BlockRayTraceResult) mop).getBlockPos();
             BlockState state = world.getBlockState(pos);
             if(state.getBlock() instanceof BlockBPMultipart){
                 BlockState partstate = MultipartUtils.getClosestState(player, pos);
-                IVertexBuilder builder = event.getBuffers().getBuffer(RenderType.getLines());
+                IVertexBuilder builder = event.getBuffers().getBuffer(RenderType.lines());
                 if(partstate != null) {
-                    VoxelShape shape = partstate.getShape(world, pos, ISelectionContext.forEntity(player));
-                    Vector3d projectedView = event.getInfo().getProjectedView();
-                    double d0 = pos.getX() - projectedView.getX();
-                    double d1 = pos.getY() - projectedView.getY();
-                    double d2 = pos.getZ() - projectedView.getZ();
-                    Matrix4f matrix4f = event.getMatrix().getLast().getMatrix();
-                    shape.forEachEdge((startX, startY, startZ, endX, endY, endZ) -> {
-                        builder.pos(matrix4f, (float)(startX + d0), (float)(startY + d1), (float)(startZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
-                        builder.pos(matrix4f, (float)(endX + d0), (float)(endY + d1), (float)(endZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
+                    VoxelShape shape = partstate.getShape(world, pos, ISelectionContext.of(player));
+                    Vector3d projectedView = event.getInfo().getPosition();
+                    double d0 = pos.getX() - projectedView.x();
+                    double d1 = pos.getY() - projectedView.y();
+                    double d2 = pos.getZ() - projectedView.z();
+                    Matrix4f matrix4f = event.getMatrix().last().pose();
+                    shape.forAllEdges((startX, startY, startZ, endX, endY, endZ) -> {
+                        builder.vertex(matrix4f, (float)(startX + d0), (float)(startY + d1), (float)(startZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
+                        builder.vertex(matrix4f, (float)(endX + d0), (float)(endY + d1), (float)(endZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
                     });
                     event.setCanceled(true);
                 }

@@ -52,70 +52,70 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     public BlockGateBase(String name) {
         super(Material.CLAY);
         this.name = name;
-        this.setDefaultState(stateContainer.getBaseState()
-                .with(FACING, Direction.UP)
-                .with(POWERED_BACK, false)
-                .with(POWERED_FRONT, false)
-                .with(POWERED_LEFT, false)
-                .with(POWERED_RIGHT, false)
-                .with(ROTATION, 0));
+        this.registerDefaultState(stateDefinition.any()
+                .setValue(FACING, Direction.UP)
+                .setValue(POWERED_BACK, false)
+                .setValue(POWERED_FRONT, false)
+                .setValue(POWERED_LEFT, false)
+                .setValue(POWERED_RIGHT, false)
+                .setValue(ROTATION, 0));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(FACING, ROTATION, POWERED_BACK, POWERED_FRONT, POWERED_LEFT, POWERED_RIGHT, WATERLOGGED);
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        if (stateIn.get(WATERLOGGED)) {
-            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.getValue(WATERLOGGED)) {
+            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
-        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return AABBUtils.rotate(Refs.GATE_AABB, state.get(FACING));
+        return AABBUtils.rotate(Refs.GATE_AABB, state.getValue(FACING));
     }
 
     @Override
     public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
-        return state.get(FACING) != side && (state.get(FACING).getOpposite() != side);
+        return state.getValue(FACING) != side && (state.getValue(FACING).getOpposite() != side);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        FluidState fluidstate = context.getWorld().getFluidState(context.getPos());
-        Direction face = context.getFace();
-        return this.getDefaultState().with(ROTATION, context.getPlacementHorizontalFacing().getOpposite().getHorizontalIndex()).with(FACING, face).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+        FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
+        Direction face = context.getClickedFace();
+        return this.defaultBlockState().setValue(ROTATION, context.getHorizontalDirection().getOpposite().get2DDataValue()).setValue(FACING, face).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-        super.onBlockPlacedBy(world, pos, state, entity, stack);
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+        super.setPlacedBy(world, pos, state, entity, stack);
         Map<String, Byte> map = getSidePower(world, state, pos);
-        world.setBlockState(pos, state.with(POWERED_FRONT, map.get("front") > 0)
-                .with(POWERED_BACK, map.get("back") > 0)
-                .with(POWERED_LEFT, map.get("left") > 0)
-                .with(POWERED_RIGHT, map.get("right") > 0));
+        world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get("front") > 0)
+                .setValue(POWERED_BACK, map.get("back") > 0)
+                .setValue(POWERED_LEFT, map.get("left") > 0)
+                .setValue(POWERED_RIGHT, map.get("right") > 0));
     }
 
     @Override
-    public boolean canProvidePower(BlockState p_149744_1_) {
+    public boolean isSignalSource(BlockState p_149744_1_) {
         return true;
     }
 
     @Override
-    public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side){
-        Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.get(FACING));
-        if(side == dirs[blockState.get(ROTATION)]) {
+    public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side){
+        Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
+        if(side == dirs[blockState.getValue(ROTATION)]) {
             Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
             return map.get("front");
         }
@@ -123,9 +123,9 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-        Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.get(FACING));
-        if(side == dirs[blockState.get(ROTATION)]) {
+    public int getDirectSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+        Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
+        if(side == dirs[blockState.getValue(ROTATION)]) {
             Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
             return map.get("front");
         }
@@ -134,22 +134,22 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
 
     private Map<String, Byte> getSidePower(IBlockReader worldIn, BlockState state, BlockPos pos){
          Map<String, Byte> map = new HashMap<>();
-         Direction[] dirs = DirectionHelper.ArrayFromDirection(state.get(FACING));
-         Direction side_left = dirs[state.get(ROTATION) == 3 ? 0 : state.get(ROTATION) + 1];
+         Direction[] dirs = DirectionHelper.ArrayFromDirection(state.getValue(FACING));
+         Direction side_left = dirs[state.getValue(ROTATION) == 3 ? 0 : state.getValue(ROTATION) + 1];
          Direction side_right = side_left.getOpposite();
-         Direction side_back = dirs[state.get(ROTATION)];
-         BlockPos pos_left = pos.offset(side_left);
-         BlockPos pos_right = pos.offset(side_right);
-         BlockPos pos_back = pos.offset(side_back);
+         Direction side_back = dirs[state.getValue(ROTATION)];
+         BlockPos pos_left = pos.relative(side_left);
+         BlockPos pos_right = pos.relative(side_right);
+         BlockPos pos_back = pos.relative(side_back);
          BlockState state_left = worldIn.getBlockState(pos_left);
          BlockState state_right = worldIn.getBlockState(pos_right);
          BlockState state_back = worldIn.getBlockState(pos_back);
-         byte left = (byte) state_left.getWeakPower(worldIn, pos_left, side_right);
-         byte right = (byte) state_right.getWeakPower(worldIn, pos_right, side_left);
-         byte back = (byte) state_back.getWeakPower(worldIn, pos_back, side_back.getOpposite());
-         if(state_left.getBlock() instanceof RedstoneWireBlock){left = state_left.get(RedstoneWireBlock.POWER).byteValue();}
-         if(state_right.getBlock() instanceof RedstoneWireBlock){right = state_right.get(RedstoneWireBlock.POWER).byteValue();}
-         if(state_back.getBlock() instanceof RedstoneWireBlock){back = state_back.get(RedstoneWireBlock.POWER).byteValue();}
+         byte left = (byte) state_left.getSignal(worldIn, pos_left, side_right);
+         byte right = (byte) state_right.getSignal(worldIn, pos_right, side_left);
+         byte back = (byte) state_back.getSignal(worldIn, pos_back, side_back.getOpposite());
+         if(state_left.getBlock() instanceof RedstoneWireBlock){left = state_left.getValue(RedstoneWireBlock.POWER).byteValue();}
+         if(state_right.getBlock() instanceof RedstoneWireBlock){right = state_right.getValue(RedstoneWireBlock.POWER).byteValue();}
+         if(state_back.getBlock() instanceof RedstoneWireBlock){back = state_back.getValue(RedstoneWireBlock.POWER).byteValue();}
          map.put("left", left);
          map.put("right", right);
          map.put("back", back);
@@ -168,15 +168,15 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
-        if(!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isNormalCube(world,pos.offset(state.get(FACING).getOpposite()))) {
+        if(!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isCollisionShapeFullBlock(world,pos.relative(state.getValue(FACING).getOpposite()))) {
             world.destroyBlock(pos, true);
             return;
         }
         Map<String, Byte> map = getSidePower(world, state, pos);
-        world.setBlockState(pos, state.with(POWERED_FRONT, map.get("front") > 0)
-                .with(POWERED_BACK, map.get("back") > 0)
-                .with(POWERED_LEFT, map.get("left") > 0)
-                .with(POWERED_RIGHT, map.get("right") > 0));
+        world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get("front") > 0)
+                .setValue(POWERED_BACK, map.get("back") > 0)
+                .setValue(POWERED_LEFT, map.get("left") > 0)
+                .setValue(POWERED_RIGHT, map.get("right") > 0));
     }
 
 }

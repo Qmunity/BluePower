@@ -94,7 +94,7 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     @Override
     public void onBundledUpdate() {
 
-        getWorld().notifyNeighborsOfStateChange(getPos(), Blocks.AIR, true);
+        getWorld().updateNeighborsAt(getPos(), Blocks.AIR, true);
     }
 
     public byte[] getCurPow(EnumFacing side) {

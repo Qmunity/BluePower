@@ -91,7 +91,7 @@ public class ContainerRegulator extends Container {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void updateProgressBar(int id, int value) {
+    public void setData(int id, int value) {
 
         if (id == 0) {
             color = TubeColor.values()[value];
@@ -108,32 +108,32 @@ public class ContainerRegulator extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
 
-        return regulator.isUsableByPlayer(player);
+        return regulator.stillValid(player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = (Slot) inventorySlots.get(par2);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = (Slot) slots.get(par2);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (par2 >= 9 && par2 < 18) {
-                if (!mergeItemStack(itemstack1, 27, 63, true))
+                if (!moveItemStackTo(itemstack1, 27, 63, true))
                     return ItemStack.EMPTY;
-            } else if (par2 >= 27 && !mergeItemStack(itemstack1, 9, 18, false)) {
+            } else if (par2 >= 27 && !moveItemStackTo(itemstack1, 9, 18, false)) {
                 return ItemStack.EMPTY;
             }
             if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
             if (itemstack1.getCount() != itemstack.getCount()) {
-                slot.onSlotChange(itemstack, itemstack1);
+                slot.onQuickCraft(itemstack, itemstack1);
             } else {
                 return ItemStack.EMPTY;
             }

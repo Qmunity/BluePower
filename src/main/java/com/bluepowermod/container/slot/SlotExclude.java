@@ -29,15 +29,13 @@ public class SlotExclude extends Slot {
     Item filter;
     
     public SlotExclude(IInventory par1iInventory, int par2, int par3, int par4, Item filter) {
-    
         super(par1iInventory, par2, par3, par4);
         
         this.filter = filter;
     }
     
     @Override
-    public boolean isItemValid(ItemStack par1ItemStack) {
-
+    public boolean mayPlace(ItemStack par1ItemStack) {
         return par1ItemStack.isEmpty() || !(par1ItemStack.getItem() == filter);
     }
 }

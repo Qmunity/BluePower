@@ -34,22 +34,22 @@ public class ItemBPPart extends BlockItem {
     }
 
     @Override
-    public ActionResultType tryPlace(BlockItemUseContext context) {
-        BlockState state = context.getWorld().getBlockState(context.getPos());
+    public ActionResultType place(BlockItemUseContext context) {
+        BlockState state = context.getLevel().getBlockState(context.getClickedPos());
         BlockState thisState = getBlock().getStateForPlacement(context);
 
-        if(state.getBlock() instanceof IBPPartBlock && thisState != null && !AABBUtils.testOcclusion(((IBPPartBlock)thisState.getBlock()).getOcclusionShape(thisState), state.getShape(context.getWorld(), context.getPos()))) {
+        if(state.getBlock() instanceof IBPPartBlock && thisState != null && !AABBUtils.testOcclusion(((IBPPartBlock)thisState.getBlock()).getOcclusionShape(thisState), state.getShape(context.getLevel(), context.getClickedPos()))) {
 
             //Save the Tile Entity Data
             CompoundNBT nbt = new CompoundNBT();
-            TileEntity tileEntity = context.getWorld().getTileEntity(context.getPos());
+            TileEntity tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
             if(tileEntity != null){
-                nbt = tileEntity.write(nbt);
+                nbt = tileEntity.save(nbt);
             }
 
             //Replace with Multipart
-            context.getWorld().setBlockState(context.getPos(), BPBlocks.multipart.getDefaultState());
-            tileEntity = context.getWorld().getTileEntity(context.getPos());
+            context.getLevel().setBlockAndUpdate(context.getClickedPos(), BPBlocks.multipart.defaultBlockState());
+            tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
             if(tileEntity instanceof TileBPMultipart){
                 //Add the original State to the Multipart
                 ((TileBPMultipart) tileEntity).addState(state);
@@ -57,40 +57,40 @@ public class ItemBPPart extends BlockItem {
                 //Restore the Tile Entity Data
                 TileEntity tile = ((TileBPMultipart) tileEntity).getTileForState(state);
                 if (tile != null)
-                    tile.read(state, nbt);
+                    tile.load(state, nbt);
 
                 //Add the new State
                 ((TileBPMultipart) tileEntity).addState(thisState);
-                thisState.getBlock().onBlockPlacedBy( context.getWorld(),context.getPos(), thisState, context.getPlayer(), context.getItem());
+                thisState.getBlock().setPlacedBy( context.getLevel(),context.getClickedPos(), thisState, context.getPlayer(), context.getItemInHand());
             }
             //Update Self
-            state.neighborChanged(context.getWorld(), context.getPos(), state.getBlock(), context.getPos(), false);
-            context.getItem().shrink(1);
+            state.neighborChanged(context.getLevel(), context.getClickedPos(), state.getBlock(), context.getClickedPos(), false);
+            context.getItemInHand().shrink(1);
             //Place Sound
-            context.getWorld().playSound(null, context.getPos(), SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
             return ActionResultType.SUCCESS;
 
-        }else if(state.getBlock() instanceof BlockBPMultipart && thisState != null && !AABBUtils.testOcclusion(((IBPPartBlock)thisState.getBlock()).getOcclusionShape(thisState), state.getShape(context.getWorld(), context.getPos()))) {
+        }else if(state.getBlock() instanceof BlockBPMultipart && thisState != null && !AABBUtils.testOcclusion(((IBPPartBlock)thisState.getBlock()).getOcclusionShape(thisState), state.getShape(context.getLevel(), context.getClickedPos()))) {
 
             // Add to the Existing Multipart
-            TileEntity tileEntity = context.getWorld().getTileEntity(context.getPos());
+            TileEntity tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
             if (tileEntity instanceof TileBPMultipart) {
                 ((TileBPMultipart) tileEntity).addState(thisState);
-                thisState.getBlock().onBlockPlacedBy( context.getWorld(),context.getPos(), thisState, context.getPlayer(), context.getItem());
+                thisState.getBlock().setPlacedBy( context.getLevel(),context.getClickedPos(), thisState, context.getPlayer(), context.getItemInHand());
                 //Update Neighbors
                 for(Direction dir : Direction.values()){
-                    context.getWorld().getBlockState(context.getPos().offset(dir)).neighborChanged(context.getWorld(), context.getPos().offset(dir), state.getBlock(), context.getPos(), false);
+                    context.getLevel().getBlockState(context.getClickedPos().relative(dir)).neighborChanged(context.getLevel(), context.getClickedPos().relative(dir), state.getBlock(), context.getClickedPos(), false);
                 }
                 //Update Self
-                state.neighborChanged(context.getWorld(), context.getPos(), state.getBlock(), context.getPos(), false);
-                context.getItem().shrink(1);
+                state.neighborChanged(context.getLevel(), context.getClickedPos(), state.getBlock(), context.getClickedPos(), false);
+                context.getItemInHand().shrink(1);
                 //Place Sound
-                context.getWorld().playSound(null, context.getPos(), SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return ActionResultType.SUCCESS;
             }
 
         }
-        return super.tryPlace(context);
+        return super.place(context);
     }
 
     @Override

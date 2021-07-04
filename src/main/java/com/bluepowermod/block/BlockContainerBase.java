@@ -56,15 +56,15 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
 
     public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass) {
         super(material);
-        setTileEntityClass(tileEntityClass);
+        setBlockEntityClass(tileEntityClass);
     }
 
     public BlockContainerBase(Properties properties, Class<? extends TileBase> tileEntityClass) {
         super(properties);
-        setTileEntityClass(tileEntityClass);
+        setBlockEntityClass(tileEntityClass);
     }
 
-    public BlockContainerBase setTileEntityClass(Class<? extends TileBase> tileEntityClass) {
+    public BlockContainerBase setBlockEntityClass(Class<? extends TileBase> tileEntityClass) {
 
         this.tileEntityClass = tileEntityClass;
         return this;
@@ -84,14 +84,14 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
+            TileEntity tileentity = worldIn.getBlockEntity(pos);
             if (tileentity instanceof TileBase) {
-                InventoryHelper.dropItems(worldIn, pos, ((TileBase)tileentity).getDrops());
-                worldIn.updateComparatorOutputLevel(pos, this);
+                InventoryHelper.dropContents(worldIn, pos, ((TileBase)tileentity).getDrops());
+                worldIn.updateNeighbourForOutputSignal(pos, this);
             }
-            super.onReplaced(state, worldIn, pos, newState, isMoving);
+            super.onRemove(state, worldIn, pos, newState, isMoving);
         }
     }
 
@@ -122,7 +122,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
 
     protected TileBase get(IBlockReader w, BlockPos pos) {
 
-        TileEntity te = w.getTileEntity(pos);
+        TileEntity te = w.getBlockEntity(pos);
 
         if (te == null || !(te instanceof TileBase))
             return null;
@@ -134,7 +134,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
         // Only do this on the server side.
-        if (!world.isRemote) {
+        if (!world.isClientSide) {
             TileBase tileEntity = get(world, pos);
             if (tileEntity != null) {
                 tileEntity.onBlockNeighbourChanged();
@@ -143,12 +143,12 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public boolean canProvidePower(BlockState state) {
+    public boolean isSignalSource(BlockState state) {
         return isRedstoneEmitter;
     }
 
     @Override
-    public int getWeakPower(BlockState blockState, IBlockReader par1IBlockReader, BlockPos pos, Direction side) {
+    public int getSignal(BlockState blockState, IBlockReader par1IBlockReader, BlockPos pos, Direction side) {
         TileEntity te = get(par1IBlockReader, pos);
         if (te instanceof TileBase) {
             TileBase tileBase = (TileBase) te;
@@ -158,13 +158,13 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if (world.isRemote) {
+    public ActionResultType use(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+        if (world.isClientSide) {
             return ActionResultType.SUCCESS;
         }
         if (player.isCrouching()) {
-            if (!player.getHeldItem(hand).isEmpty()) {
-                if (player.getHeldItem(hand).getItem() == BPItems.screwdriver) {
+            if (!player.getItemInHand(hand).isEmpty()) {
+                if (player.getItemInHand(hand).getItem() == BPItems.screwdriver) {
                     return ActionResultType.FAIL;
                 }
             }
@@ -172,8 +172,8 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
         if (player.isCrouching()) {
             return ActionResultType.FAIL;
         }
-        if (!world.isRemote && world.getTileEntity(pos) instanceof INamedContainerProvider) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider)world.getTileEntity(pos));
+        if (!world.isClientSide && world.getBlockEntity(pos) instanceof INamedContainerProvider) {
+            NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider)world.getBlockEntity(pos));
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;
@@ -184,8 +184,9 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
         return true;
     }
 
+
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
@@ -205,14 +206,14 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     @Override
     public boolean writeSilkyData(World world, BlockPos pos, CompoundNBT tag) {
 
-        world.getTileEntity(pos).write(tag);
+        world.getBlockEntity(pos).save(tag);
         return false;
     }
 
     @Override
     public void readSilkyData(World world, BlockPos pos, CompoundNBT tag) {
 
-        world.getTileEntity(pos).read(world.getBlockState(pos), tag);
+        world.getBlockEntity(pos).load(world.getBlockState(pos), tag);
     }
 
 }

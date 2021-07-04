@@ -27,12 +27,12 @@ public class Debugger {
 
     public static void indicateBlock(TileEntity te) {
 
-        indicateBlock(te.getWorld(), te.getPos());
+        indicateBlock(te.getLevel(), te.getBlockPos());
     }
     public static void indicateBlock(World world, BlockPos pos) {
 
         if (world != null) {
-            if (world.isRemote) {
+            if (world.isClientSide) {
                 for (int i = 0; i < 5; i++) {
                     double dx = pos.getX() + 0.5;
                     double dy = pos.getY() + 0.5;

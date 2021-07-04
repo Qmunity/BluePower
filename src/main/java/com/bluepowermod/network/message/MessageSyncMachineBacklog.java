@@ -50,7 +50,7 @@ public class MessageSyncMachineBacklog{
 
     public void handleClientSide(PlayerEntity player) {
 
-        //TileEntity te = player.world.getTileEntity(pos);
+        //TileEntity te = player.world.getBlockEntity(pos);
         //if (te instanceof TileMachineBase) {
             //((TileMachineBase) te).setBacklog(stacks);
             // GuiContainerBase gui = (GuiContainerBase) ClientProxy.getOpenedGui();

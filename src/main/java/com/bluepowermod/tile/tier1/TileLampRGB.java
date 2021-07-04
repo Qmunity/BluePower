@@ -22,7 +22,7 @@ public class TileLampRGB extends TileLamp {
     private byte[] bundledPower = new byte[16];
 
     @Override
-    public CompoundNBT write(CompoundNBT tCompound) {
+    public CompoundNBT save(CompoundNBT tCompound) {
         if (getBlockState().getBlock() instanceof BlockLampRGB) {
             tCompound.putByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
             tCompound.putByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
@@ -32,7 +32,7 @@ public class TileLampRGB extends TileLamp {
     }
 
     @Override
-    public void read(BlockState blockState, CompoundNBT tCompound) {
+    public void load(BlockState blockState, CompoundNBT tCompound) {
         if (tCompound.contains("red")) {
             byte[] pow = bundledPower;
             pow[MinecraftColor.RED.ordinal()] = tCompound.getByte("red");

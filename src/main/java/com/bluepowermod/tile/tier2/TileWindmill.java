@@ -23,7 +23,7 @@ public class TileWindmill extends TileBase implements ITickable {
 
 	@Override
 	public void tick() {
-		if(world.isRemote){
+		if(level.isClientSide){
 			turbineTick++;
 		}
 	}

@@ -59,17 +59,17 @@ public class InventoryItem extends Inventory {
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
+    public void startOpen(PlayerEntity player) {
         loadInventory();
     }
 
     @Override
-    public void closeInventory(PlayerEntity player) {
-        super.closeInventory(player);
+    public void stopOpen(PlayerEntity player) {
+        super.stopOpen(player);
     }
 
     
-    public void closeInventory(ItemStack is) {
+    public void stopOpen(ItemStack is) {
         saveInventory(is);
     }
     
@@ -90,11 +90,11 @@ public class InventoryItem extends Inventory {
             item.setTag(new CompoundNBT());
         }
         ListNBT itemList = new ListNBT();
-        for (int i = 0; i < getSizeInventory(); i++) {
-            if (!getStackInSlot(i).isEmpty()) {
+        for (int i = 0; i < getContainerSize(); i++) {
+            if (!getItem(i).isEmpty()) {
                 CompoundNBT slotEntry = new CompoundNBT();
                 slotEntry.putByte("Slot", (byte) i);
-                getStackInSlot(i).write(slotEntry);
+                getItem(i).save(slotEntry);
                 itemList.add(slotEntry);
             }
         }
@@ -109,9 +109,9 @@ public class InventoryItem extends Inventory {
     }
     
     @Override
-    public void markDirty() {
+    public void setChanged() {
     
-        super.markDirty();
+        super.setChanged();
         
         if (!reading) {
             saveInventory(ItemStack.EMPTY);
@@ -121,7 +121,7 @@ public class InventoryItem extends Inventory {
     protected void setNBT(ItemStack is) {
     
         if (is.isEmpty() && player != null) {
-            is = player.getHeldItemMainhand();
+            is = player.getMainHandItem();
         }
         
         if (!is.isEmpty() && is.getItem() == this.item.getItem()) {
@@ -138,8 +138,8 @@ public class InventoryItem extends Inventory {
             CompoundNBT slotEntry = itemList.getCompound(i);
             int j = slotEntry.getByte("Slot") & 0xff;
             
-            if (j >= 0 && j < getSizeInventory()) {
-                setInventorySlotContents(j, ItemStack.read(slotEntry));
+            if (j >= 0 && j < getContainerSize()) {
+                setItem(j, ItemStack.of(slotEntry));
             }
         }
         reading = false;

@@ -51,7 +51,7 @@ public class WidgetVerticalScrollbar extends BaseWidget {
         if (dragging)
             currentScroll = (float) (mouseY - 7 - getBounds().y) / (getBounds().height - 17);
         currentScroll = MathHelper.clamp(currentScroll, 0, 1);
-        Minecraft.getInstance().getTextureManager().bindTexture(textures[0]);
+        Minecraft.getInstance().getTextureManager().bind(textures[0]);
         AbstractGui.blit(matrixStack, x, y, 12, 0, getBounds().width, 1, 26, 15);
         for (int i = 0; i < getBounds().height - 2; i++)
             AbstractGui.blit(matrixStack, x, y + 1 + i, 12, 1, getBounds().width, 1, 26, 15);

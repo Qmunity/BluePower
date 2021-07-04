@@ -41,15 +41,15 @@ import javax.annotation.Nullable;
 public class ItemCanvasBag extends ItemColorableOverlay implements INamedContainerProvider{
     
     public ItemCanvasBag(MinecraftColor color) {
-        super(color, Refs.CANVASBAG_NAME, new Properties().maxStackSize(1));
+        super(color, Refs.CANVASBAG_NAME, new Properties().stacksTo(1));
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand handIn) {
-        if (!world.isRemote) {
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand handIn) {
+        if (!world.isClientSide) {
             NetworkHooks.openGui((ServerPlayerEntity) player, this);
         }
-        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(handIn));
+        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getItemInHand(handIn));
     }
 
     @Override

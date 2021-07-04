@@ -80,7 +80,7 @@ public class ContainerManager extends Container {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void updateProgressBar(int id, int value) {
+    public void setData(int id, int value) {
 
         if (id == 0) {
             filterColor = TubeColor.values()[value];
@@ -101,32 +101,32 @@ public class ContainerManager extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
 
-        return manager.isUsableByPlayer(player);
+        return manager.stillValid(player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = (Slot) inventorySlots.get(par2);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = (Slot) slots.get(par2);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (par2 < 24) {
-                if (!mergeItemStack(itemstack1, 24, 60, false))
+                if (!moveItemStackTo(itemstack1, 24, 60, false))
                     return ItemStack.EMPTY;
-            } else if (!mergeItemStack(itemstack1, 0, 24, false)) {
+            } else if (!moveItemStackTo(itemstack1, 0, 24, false)) {
                 return ItemStack.EMPTY;
             }
             if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
             if (itemstack1.getCount() != itemstack.getCount()) {
-                slot.onSlotChange(itemstack, itemstack1);
+                slot.onQuickCraft(itemstack, itemstack1);
             } else {
                 return ItemStack.EMPTY;
             }

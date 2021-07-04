@@ -52,15 +52,15 @@ public class TileSolarPanel extends TileMachineBase  {
 
 	@Override
 	public void tick() {
-		if (!world.isRemote) {
+		if (!level.isClientSide) {
 			storage.resetCurrent();
 
-			if (world.isDaytime() && world.canBlockSeeSky(pos) && storage.getEnergy() < MAX_VOLTAGE && !world.isRaining())
+			if (level.isDay() && level.canSeeSky(worldPosition) && storage.getEnergy() < MAX_VOLTAGE && !level.isRaining())
 				storage.addEnergy(0.2, false);
 
 			//Balance power of attached blulectric blocks.
 			for (Direction facing : Direction.values()) {
-				TileEntity tile = world.getTileEntity(pos.offset(facing));
+				TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
 				if (tile != null)
 					tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
 							exStorage -> EnergyHelper.balancePower(exStorage, storage));

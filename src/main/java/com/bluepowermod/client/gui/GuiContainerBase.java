@@ -44,8 +44,8 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
 
     protected GuiAnimatedStat addAnimatedStat(String title, ItemStack icon, int color, boolean leftSided) {
 
-        GuiAnimatedStat stat = new GuiAnimatedStat(this, title, icon, guiLeft + (leftSided ? 0 : xSize), leftSided && lastLeftStat != null
-                || !leftSided && lastRightStat != null ? 3 : guiTop + 5, color, leftSided ? lastLeftStat : lastRightStat, leftSided);
+        GuiAnimatedStat stat = new GuiAnimatedStat(this, title, icon, leftPos + (leftSided ? 0 : imageWidth), leftSided && lastLeftStat != null
+                || !leftSided && lastRightStat != null ? 3 : topPos + 5, color, leftSided ? lastLeftStat : lastRightStat, leftSided);
         addWidget(stat);
         if (leftSided) {
             lastLeftStat = stat;
@@ -57,8 +57,8 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
 
     protected GuiAnimatedStat addAnimatedStat(String title, String icon, int color, boolean leftSided) {
 
-        GuiAnimatedStat stat = new GuiAnimatedStat(this, title, icon, guiLeft + (leftSided ? 0 : xSize), leftSided && lastLeftStat != null
-                || !leftSided && lastRightStat != null ? 3 : guiTop + 5, color, leftSided ? lastLeftStat : lastRightStat, leftSided);
+        GuiAnimatedStat stat = new GuiAnimatedStat(this, title, icon, leftPos + (leftSided ? 0 : imageWidth), leftSided && lastLeftStat != null
+                || !leftSided && lastRightStat != null ? 3 : topPos + 5, color, leftSided ? lastLeftStat : lastRightStat, leftSided);
         addWidget(stat);
         if (leftSided) {
             lastLeftStat = stat;
@@ -85,35 +85,36 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
 
     public void drawHorizontalAlignedString(MatrixStack matrixStack, int xOffset, int yOffset, int w, String text, boolean useShadow) {
 
-        int stringWidth = font.getStringWidth(text);
+        int stringWidth = font.width(text);
         int newX = xOffset;
         if (stringWidth < w) {
             newX = w / 2 - stringWidth / 2 + xOffset;
         }
 
-        font.drawString(matrixStack, text, newX, yOffset, COLOR_TEXT);
+        font.draw(matrixStack, text, newX, yOffset, COLOR_TEXT);
     }
 
     public void drawString(MatrixStack matrixStack, int xOffset, int yOffset, String text, boolean useShadow) {
 
-        font.drawString(matrixStack, text, xOffset, yOffset, COLOR_TEXT);
+        font.draw(matrixStack, text, xOffset, yOffset, COLOR_TEXT);
+    }
+
+
+    @Override
+    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+        this.font.draw(matrixStack, I18n.get("block.bluepower." + title.getContents()), (float)(this.imageWidth / 2 - this.font.width(I18n.get("block.bluepower." + title.getContents())) / 2), 6.0F, COLOR_TEXT);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
-        this.font.drawString(matrixStack, I18n.format("block.bluepower." + title.getUnformattedComponentText()), (float)(this.xSize / 2 - this.font.getStringWidth(I18n.format("block.bluepower." + title.getUnformattedComponentText())) / 2), 6.0F, COLOR_TEXT);
-    }
-
-    @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float f, int i, int j) {
+    protected void renderBg(MatrixStack matrixStack, float f, int i, int j) {
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(resLoc);
+        this.minecraft.getTextureManager().bind(resLoc);
 
-        int x = (width - xSize) / 2;
-        int y = (height - ySize) / 2;
+        int x = (width - imageWidth) / 2;
+        int y = (height - imageHeight) / 2;
 
-        blit(matrixStack, x, y, 0, 0, xSize, ySize);
+        blit(matrixStack, x, y, 0, 0, imageWidth, imageHeight);
 
         for (IGuiWidget widget : widgets) {
             widget.render(matrixStack, i, j, f);
@@ -125,7 +126,7 @@ public class GuiContainerBase<T extends Container> extends ContainerScreen<T> im
     public void render(MatrixStack matrixStack, int x, int y, float partialTick) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, x, y, partialTick);
-        this.renderHoveredTooltip(matrixStack, x, y);
+        this.renderTooltip(matrixStack, x, y);
 
     }
 

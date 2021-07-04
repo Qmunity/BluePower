@@ -23,7 +23,7 @@ public class IC2RecipeInput implements IRecipeInput{
 
     @Override
     public boolean matches(ItemStack subject){
-        return subject.isEmpty() && input.isItemEqual(subject);
+        return subject.isEmpty() && input.sameItem(subject);
     }
 
     @Override

@@ -55,7 +55,7 @@ public class MessageWirelessNewFreq{
 
     public void write(DataOutput buffer) throws IOException {
 
-        //super.write(buffer);
+        //super.save(buffer);
 
         buffer.writeInt(acc.ordinal());
         buffer.writeUTF(name);
@@ -65,11 +65,11 @@ public class MessageWirelessNewFreq{
 
     public void read(DataInput buffer) throws IOException {
 
-        //super.read(buffer);
+        //super.load(buffer);
 
         acc = Accessibility.values()[buffer.readInt()];
         name = buffer.readUTF();
         bundled = buffer.readBoolean();
-        face = Direction.byIndex(buffer.readInt());
+        face = Direction.from3DDataValue(buffer.readInt());
     }
 }

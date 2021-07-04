@@ -40,9 +40,9 @@ public class ContainerRetriever extends ContainerFilter {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void updateProgressBar(int id, int value) {
+    public void setData(int id, int value) {
 
-        super.updateProgressBar(id, value);
+        super.setData(id, value);
 
         if (id == 2) {
             slotIndex = value;

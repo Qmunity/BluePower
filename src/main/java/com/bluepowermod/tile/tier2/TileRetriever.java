@@ -31,16 +31,16 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
 
 
     @Override
-    public CompoundNBT write(CompoundNBT tag) {
-        super.write(tag);
+    public CompoundNBT save(CompoundNBT tag) {
+        super.save(tag);
         tag.putByte("slotIndex", (byte) slotIndex);
         tag.putByte("mode", (byte) mode);
         return tag;
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT tag) {
-        super.read(state, tag);
+    public void load(BlockState state, CompoundNBT tag) {
+        super.load(state, tag);
         slotIndex = tag.getByte("slotIndex");
         mode = tag.getByte("mode");
     }

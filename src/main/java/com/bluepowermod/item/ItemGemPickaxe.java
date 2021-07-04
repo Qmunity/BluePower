@@ -29,15 +29,14 @@ public class ItemGemPickaxe extends PickaxeItem {
     protected boolean canRepair              = true;
 
     public ItemGemPickaxe(IItemTier itemTier, String name, Item repairItem) {
-        super(itemTier, 3,-1.4F, new Properties().group(BPCreativeTabs.tools));
+        super(itemTier, 3,-1.4F, new Properties().tab(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack is1, ItemStack is2) {
-
+    public boolean isValidRepairItem(ItemStack is1, ItemStack is2) {
         return ((is1.getItem() == this || is2.getItem() == this) && (is1.getItem() == this.customCraftingMaterial || is2.getItem() == this.customCraftingMaterial));
     }
 }

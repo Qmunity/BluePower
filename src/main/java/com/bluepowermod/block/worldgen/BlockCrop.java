@@ -42,26 +42,26 @@ import java.util.Random;
 
 public class BlockCrop extends CropsBlock implements IGrowable {
     private static final VoxelShape[] SHAPES = new VoxelShape[]{
-            Block.makeCuboidShape(0.0D, -1.0D, 0.0D, 16.0D, 2.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, -1.0D, 0.0D, 16.0D, 4.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, -1.0D, 0.0D, 16.0D, 6.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, -1.0D, 0.0D, 16.0D, 8.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, -1.0D, 0.0D, 16.0D, 10.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, -1.0D, 0.0D, 16.0D, 12.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, -1.0D, 0.0D, 16.0D, 14.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, -1.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+            Block.box(0.0D, -1.0D, 0.0D, 16.0D, 2.0D, 16.0D),
+            Block.box(0.0D, -1.0D, 0.0D, 16.0D, 4.0D, 16.0D),
+            Block.box(0.0D, -1.0D, 0.0D, 16.0D, 6.0D, 16.0D),
+            Block.box(0.0D, -1.0D, 0.0D, 16.0D, 8.0D, 16.0D),
+            Block.box(0.0D, -1.0D, 0.0D, 16.0D, 10.0D, 16.0D),
+            Block.box(0.0D, -1.0D, 0.0D, 16.0D, 12.0D, 16.0D),
+            Block.box(0.0D, -1.0D, 0.0D, 16.0D, 14.0D, 16.0D),
+            Block.box(0.0D, -1.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     public BlockCrop(Properties properties) {
-        super(properties.hardnessAndResistance(0.0F).sound(SoundType.PLANT).tickRandomly().doesNotBlockMovement());
+        super(properties.strength(0.0F).sound(SoundType.CROP).randomTicks().noCollission());
         this.setRegistryName(Refs.MODID + ":" + Refs.FLAXCROP_NAME);
         BPBlocks.blockList.add(this);
     }
 
     @Override
-    public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (state.getBlock() instanceof BlockCrop) {
-            if (isMaxAge(state) && world.getBlockState(pos.down()).getBlock() == this) {
-                world.setBlockState(pos.down(), withAge(4), 2);
+            if (isMaxAge(state) && world.getBlockState(pos.below()).getBlock() == this) {
+                world.setBlock(pos.below(), getStateForAge(4), 2);
             }
         }
     }
@@ -73,25 +73,25 @@ public class BlockCrop extends CropsBlock implements IGrowable {
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 
         int age = getAge(state);
-        if (world.getLight(pos) >= 9) {
-            if ((age < 6) && world.getBlockState(pos.down()).getBlock().isFertile(world.getBlockState(pos.down()), world, pos.down())) {
+        if (world.getLightEmission(pos) >= 9) {
+            if ((age < 6) && world.getBlockState(pos.below()).getBlock().isFertile(world.getBlockState(pos.below()), world, pos.below())) {
                 if (random.nextInt(10) == 0) {
-                    world.setBlockState(pos, withAge(age + 1), 2);
+                    world.setBlock(pos, getStateForAge(age + 1), 2);
                     if (age == 5) {
-                        world.setBlockState(pos.up(), withAge(7), 2);
+                        world.setBlock(pos.above(), getStateForAge(7), 2);
                     }
                 }
             }
         }
-        if ((age == 6) && world.getBlockState(pos.down()).getBlock().isFertile(world.getBlockState(pos.down()), world, pos.down()) && world.getBlockState(pos.up()).getBlock().isAir(world.getBlockState(pos.up()), world, pos.up())) {
-            world.setBlockState(pos, withAge(4), 2);
+        if ((age == 6) && world.getBlockState(pos.below()).getBlock().isFertile(world.getBlockState(pos.below()), world, pos.below()) && world.getBlockState(pos.above()).getBlock().isAir(world.getBlockState(pos.above()), world, pos.above())) {
+            world.setBlock(pos, getStateForAge(4), 2);
         }
         // If the bottom somehow becomes fully grown, correct it
-        if ((age > 6) && (world.getBlockState(pos.down()).getBlock().isFertile(world.getBlockState(pos.down()), world, pos.down()))) {
-            world.setBlockState(pos, withAge(4), 2);
+        if ((age > 6) && (world.getBlockState(pos.below()).getBlock().isFertile(world.getBlockState(pos.below()), world, pos.below()))) {
+            world.setBlock(pos, getStateForAge(4), 2);
         }
-        if ((age == 7) && world.getBlockState(pos.down()).getBlock().isAir(world.getBlockState(pos.down()), world, pos.down())) {
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        if ((age == 7) && world.getBlockState(pos.below()).getBlock().isAir(world.getBlockState(pos.below()), world, pos.below())) {
+            world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         }
     }
 
@@ -99,12 +99,12 @@ public class BlockCrop extends CropsBlock implements IGrowable {
      * The type of render function that is called for this block
      */
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @Override
-    protected IItemProvider getSeedsItem() {
+    protected IItemProvider getBaseSeedId() {
         return BPItems.flax_seeds;
     }
 
@@ -112,7 +112,7 @@ public class BlockCrop extends CropsBlock implements IGrowable {
      * boolean canFertilise
      */
     @Override
-    public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(World world, Random rand, BlockPos pos, BlockState state) {
         return !isMaxAge(state);
     }
 
@@ -121,15 +121,15 @@ public class BlockCrop extends CropsBlock implements IGrowable {
      * @param world
      */
     @Override
-    public void grow(World world, BlockPos pos, BlockState state) {
+    public void growCrops(World world, BlockPos pos, BlockState state) {
         int age = this.getAge(state);
-        if (world.isAirBlock(pos.up()) && (age < 7) && !(world.getBlockState(pos.down()).getBlock() instanceof BlockCrop)) {
-            age = age + MathHelper.nextInt(world.rand, 2, 5);
+        if (world.isEmptyBlock(pos.above()) && (age < 7) && !(world.getBlockState(pos.below()).getBlock() instanceof BlockCrop)) {
+            age = age + MathHelper.nextInt(world.random, 2, 5);
             if (age >= 6) {
-                world.setBlockState(pos, withAge(6), 2);
-                world.setBlockState(pos.up(), withAge(7), 2);
+                world.setBlock(pos, getStateForAge(6), 2);
+                world.setBlock(pos.above(), getStateForAge(7), 2);
             } else {
-                world.setBlockState(pos, withAge(age), 2);
+                world.setBlock(pos, getStateForAge(age), 2);
             }
         }
     }
@@ -145,12 +145,12 @@ public class BlockCrop extends CropsBlock implements IGrowable {
                 }
             }
             if (RANDOM.nextBoolean()) {
-                drops.add(new ItemStack(this.getSeedsItem(), 1));
+                drops.add(new ItemStack(this.getBaseSeedId(), 1));
             }
         } else if (getAge(state) == 6) {
-            drops.add(new ItemStack(this.getSeedsItem(), 1 + RANDOM.nextInt(2)));
+            drops.add(new ItemStack(this.getBaseSeedId(), 1 + RANDOM.nextInt(2)));
         } else {
-            drops.add(new ItemStack(this.getSeedsItem(), 1));
+            drops.add(new ItemStack(this.getBaseSeedId(), 1));
         }
         return drops;
     }
@@ -161,7 +161,7 @@ public class BlockCrop extends CropsBlock implements IGrowable {
     }
 
     public VoxelShape getShape(BlockState state, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
-        return SHAPES[state.get(this.getAgeProperty())];
+        return SHAPES[state.getValue(this.getAgeProperty())];
     }
 
 

@@ -27,17 +27,17 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 
 public class BlockCustomFlower extends BushBlock {
-    protected static final VoxelShape SHAPE = Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 14.0D, 13.0D);
+    protected static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 14.0D, 13.0D);
 
     public BlockCustomFlower(String name, Properties properties) {
-        super(properties.hardnessAndResistance(0.0F).sound(SoundType.PLANT).doesNotBlockMovement());
+        super(properties.strength(0.0F).sound(SoundType.CROP).noCollission());
         this.setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
     }
 
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         Vector3d vec3d = state.getOffset(worldIn, pos);
-        return SHAPE.withOffset(vec3d.x, vec3d.y, vec3d.z);
+        return SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
     }
 
 }

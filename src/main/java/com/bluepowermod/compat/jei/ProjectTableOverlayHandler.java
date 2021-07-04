@@ -148,7 +148,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
                 for (Slot slot : recipeSlots[i]) {
                     if (avaliableSlots.contains(slot)) {
                         avaliableSlots.remove(slot);
-                        if (slot.getHasStack())
+                        if (slot.hasItem())
                             continue;
 
                         istack.numSlots++;
@@ -173,11 +173,11 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
 
         for (Slot slot : (List<Slot>) gui.inventorySlots.inventorySlots)
             if (slot.inventory instanceof InventoryCrafting) {
-                if (!slot.getHasStack())
+                if (!slot.hasItem())
                     continue;
                 //todo check this
                 FastTransferManager.clickSlot(gui, slot.slotNumber, 0, ClickType.PICKUP);
-                if (slot.getHasStack())
+                if (slot.hasItem())
                     return false;
             }
 
@@ -189,8 +189,8 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
 
         for (Slot slot : (List<Slot>) gui.inventorySlots.inventorySlots)// work out how much we have to go round
         {
-            if (slot.getHasStack() && (slot.inventory instanceof TileProjectTable || slot.inventory instanceof InventoryPlayer)) {
-                ItemStack pstack = slot.getStack();
+            if (slot.hasItem() && (slot.inventory instanceof TileProjectTable || slot.inventory instanceof InventoryPlayer)) {
+                ItemStack pstack = slot.getItem();
                 DistributedIngred istack = findIngred(ingredStacks, pstack);
                 if (istack != null)
                     istack.invAmount += pstack.getCount();
@@ -220,10 +220,10 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
             int slotTransferCap = pstack.getMaxStackSize();
 
             for (Slot slot : (List<Slot>) gui.inventorySlots.inventorySlots) {
-                if (!slot.getHasStack() || !(slot.inventory instanceof TileProjectTable) && !(slot.inventory instanceof InventoryPlayer))
+                if (!slot.hasItem() || !(slot.inventory instanceof TileProjectTable) && !(slot.inventory instanceof InventoryPlayer))
                     continue;
 
-                ItemStack stack = slot.getStack();
+                ItemStack stack = slot.getItem();
                 if (!ItemStackHelper.canStack(stack, pstack))
                     continue;
 

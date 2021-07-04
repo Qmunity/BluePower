@@ -65,11 +65,11 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean generate(ISeedReader world, ChunkGenerator chunkGenerator, Random rand, BlockPos blockPos, NoFeatureConfig noFeatureConfig) {
+    public boolean place(ISeedReader world, ChunkGenerator chunkGenerator, Random rand, BlockPos blockPos, NoFeatureConfig noFeatureConfig) {
         int startChunkX = blockPos.getX() >> 8;
         int startChunkZ = blockPos.getZ() >> 8;
         volcanoMap = new HashMap<>();
-        ((SharedSeedRandom)rand).setLargeFeatureSeed(world.func_234938_ad_(), startChunkX, startChunkZ);
+        ((SharedSeedRandom)rand).setLargeFeatureSeed(world.getHeight(), startChunkX, startChunkZ);
         int volcanoHeight = 100 + rand.nextInt(40);
 
         List<Pos>[] distMap = calculateDistMap();
@@ -87,12 +87,12 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
                     if (!first && middleX + p.x >> 4 == blockPos.getX() >> 4 && middleZ + p.z >> 4 == blockPos.getZ() >> 4) {
                         int worldHeight = world.getHeight(Heightmap.Type.WORLD_SURFACE, p.x + middleX, p.z + middleZ);
                         for (int i = posHeight; i > 0 && (i > worldHeight || canReplace(world, p.x + middleX, i, p.z + middleZ)); i--) {
-                            setBlockState(world, new BlockPos(p.x + middleX, i, p.z + middleZ), BPBlocks.basalt.getDefaultState());
+                            setBlock(world, new BlockPos(p.x + middleX, i, p.z + middleZ), BPBlocks.basalt.defaultBlockState());
                         }
                         for (int i = posHeight + 1; i < volcanoHeight; i++) {
                             if (canReplace(world, p.x + middleX, i, p.z + middleZ)
                                     && world.getBlockState(new BlockPos(p.x + middleX, i, p.z + middleZ)).getMaterial() != Material.WATER)
-                                setBlockState(world, new BlockPos(p.x + middleX, i, p.z + middleZ), Blocks.AIR.getDefaultState());
+                                setBlock(world, new BlockPos(p.x + middleX, i, p.z + middleZ), Blocks.AIR.defaultBlockState());
                         }
                     }
                     isFinished = false;
@@ -112,29 +112,29 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
 
     private boolean canReplace(IWorld world, int x, int y, int z) {
 
-        if (world.isAirBlock(new BlockPos(x, y, z)))
+        if (world.isEmptyBlock(new BlockPos(x, y, z)))
             return true;
         Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
         Material material = world.getBlockState(new BlockPos(x, y, z)).getMaterial();
-        return material == Material.WOOD || material == Material.CACTUS || material == Material.LEAVES || material == Material.PLANTS
-                || material == Material.TALL_PLANTS || block == Blocks.WATER;
+        return material == Material.WOOD || material == Material.CACTUS || material == Material.LEAVES || material == Material.PLANT
+                || material == Material.REPLACEABLE_PLANT || block == Blocks.WATER;
     }
 
     private void generateLavaColumn(IWorld world, int x, int topY, int z, Random rand) {
         // world.setBlock(x, topY, z, Blocks.lava);
         if (rand.nextDouble() < BPConfig.CONFIG.volcanoActiveToInactiveRatio.get()) {
-            setBlockState(world, new BlockPos(x, topY, z), BPBlocks.cracked_basalt_lava.getDefaultState());
+            setBlock(world, new BlockPos(x, topY, z), BPBlocks.cracked_basalt_lava.defaultBlockState());
         } else {
-            setBlockState(world, new BlockPos(x, topY, z), Blocks.LAVA.getDefaultState());
-            world.getPendingFluidTicks().scheduleTick(new BlockPos(x, topY, z), Blocks.LAVA.getDefaultState().getFluidState().getFluid(), 10);
+            setBlock(world, new BlockPos(x, topY, z), Blocks.LAVA.defaultBlockState());
+            world.getLiquidTicks().scheduleTick(new BlockPos(x, topY, z), Blocks.LAVA.defaultBlockState().getFluidState().getType(), 10);
         }
         for (int y = topY - 1; y >= 10; y--) {
-            if (world.getBlockState(new BlockPos(x, y, z)) != Blocks.BEDROCK.getDefaultState()) {
-                setBlockState(world, new BlockPos(x + 1, y, z), BPBlocks.basalt.getDefaultState());
-                setBlockState(world, new BlockPos(x - 1, y, z), BPBlocks.basalt.getDefaultState());
-                setBlockState(world, new BlockPos(x, y, z + 1), BPBlocks.basalt.getDefaultState());
-                setBlockState(world, new BlockPos(x, y, z - 1), BPBlocks.basalt.getDefaultState());
-                setBlockState(world, new BlockPos(x, y, z), Blocks.LAVA.getDefaultState());
+            if (world.getBlockState(new BlockPos(x, y, z)) != Blocks.BEDROCK.defaultBlockState()) {
+                setBlock(world, new BlockPos(x + 1, y, z), BPBlocks.basalt.defaultBlockState());
+                setBlock(world, new BlockPos(x - 1, y, z), BPBlocks.basalt.defaultBlockState());
+                setBlock(world, new BlockPos(x, y, z + 1), BPBlocks.basalt.defaultBlockState());
+                setBlock(world, new BlockPos(x, y, z - 1), BPBlocks.basalt.defaultBlockState());
+                setBlock(world, new BlockPos(x, y, z), Blocks.LAVA.defaultBlockState());
             }
         }
     }
@@ -220,7 +220,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
                     int zOffset = Math.abs(z - middleZ);
                     if (xOffset != 0 || zOffset != 0) {
                         boolean spawnGlass = xOffset <= 1 && zOffset <= 1;
-                        setBlockState(world, new BlockPos(x, y, z), spawnGlass ? BPBlocks.reinforced_sapphire_glass.getDefaultState() : Blocks.AIR.getDefaultState());
+                        setBlock(world, new BlockPos(x, y, z), spawnGlass ? BPBlocks.reinforced_sapphire_glass.defaultBlockState() : Blocks.AIR.defaultBlockState());
                     }
                 }
             }
@@ -229,7 +229,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
         for (Direction d : Direction.values()) {
             if (d != Direction.UP && d != Direction.DOWN) {
                 if (rand.nextInt(2) == 0) {
-                    generateAltar(world, middleX + d.getXOffset() * roomSize / 2, startY - 1, middleZ + d.getZOffset() * roomSize / 2, rand, d);
+                    generateAltar(world, middleX + d.getStepX() * roomSize / 2, startY - 1, middleZ + d.getStepZ() * roomSize / 2, rand, d);
                 }
             }
         }
@@ -240,35 +240,35 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
         Direction opDir = dir.getOpposite();
         Block altarBlock = alterBlocks.get(new Random().nextInt(alterBlocks.size()));
         setAltarBlockAndPossiblyTrap(world, startX, startY, startZ, rand, altarBlock);
-        setAltarBlockAndPossiblyTrap(world, startX + opDir.getXOffset(), startY, startZ + opDir.getZOffset(), rand, altarBlock);
+        setAltarBlockAndPossiblyTrap(world, startX + opDir.getStepX(), startY, startZ + opDir.getStepZ(), rand, altarBlock);
         Direction sideDir = Direction.DOWN;
-        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getXOffset(), startY, startZ + sideDir.getZOffset(), rand, altarBlock);
-        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getXOffset() + opDir.getXOffset(), startY, startZ + sideDir.getZOffset() + opDir.getZOffset(), rand,
+        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getStepX(), startY, startZ + sideDir.getStepZ(), rand, altarBlock);
+        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getStepX() + opDir.getStepX(), startY, startZ + sideDir.getStepZ() + opDir.getStepZ(), rand,
                 altarBlock);
         sideDir = sideDir.getOpposite();
-        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getXOffset(), startY, startZ + sideDir.getZOffset(), rand, altarBlock);
-        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getXOffset() + opDir.getXOffset(), startY, startZ + sideDir.getZOffset() + opDir.getZOffset(), rand,
+        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getStepX(), startY, startZ + sideDir.getStepZ(), rand, altarBlock);
+        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getStepX() + opDir.getStepX(), startY, startZ + sideDir.getStepZ() + opDir.getStepZ(), rand,
                 altarBlock);
 
     }
 
     private void setAltarBlockAndPossiblyTrap(IWorld world, int x, int y, int z, Random rand, Block altarBlock) {
-        setBlockState(world, new BlockPos(x, y, z), altarBlock.getDefaultState());
+        setBlock(world, new BlockPos(x, y, z), altarBlock.defaultBlockState());
         if (rand.nextInt(6) == 0) {
-            setBlockState(world, new BlockPos(x, y - 1, z), Blocks.TNT.getDefaultState());
-            setBlockState(world, new BlockPos(x, y - 2, z), Blocks.REDSTONE_BLOCK.getDefaultState());
+            setBlock(world, new BlockPos(x, y - 1, z), Blocks.TNT.defaultBlockState());
+            setBlock(world, new BlockPos(x, y - 2, z), Blocks.REDSTONE_BLOCK.defaultBlockState());
         }
     }
 
     private void generateLootChest(IWorld world, BlockPos pos, Random rand, Direction dir) {
-        setBlockState(world, pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, dir.getOpposite()));
-        TileEntity te = world.getTileEntity(pos);
+        setBlock(world, pos, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, dir.getOpposite()));
+        TileEntity te = world.getBlockEntity(pos);
         if(te instanceof ChestTileEntity){
             if (rand.nextInt(5) == 0 && BPConfig.CONFIG.generateTungstenInVolcano.get()) {
-                ((ChestTileEntity)te).setInventorySlotContents(13, new ItemStack(BPItems.tungsten_ingot,
+                ((ChestTileEntity)te).setItem(13, new ItemStack(BPItems.tungsten_ingot,
                         5 + rand.nextInt(10)));
             } else {
-                ((ChestTileEntity)te).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextInt());
+                ((ChestTileEntity)te).setLootTable(LootTables.SIMPLE_DUNGEON, rand.nextInt());
             }
         }
     }

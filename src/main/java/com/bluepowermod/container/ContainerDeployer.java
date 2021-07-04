@@ -70,41 +70,41 @@ public class ContainerDeployer extends Container {
     }
     
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
     
-        return deployer.isUsableByPlayer(player);
+        return deployer.stillValid(player);
     }
     
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
+    public ItemStack quickMoveStack(PlayerEntity par1EntityPlayer, int par2) {
     
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = (Slot) inventorySlots.get(par2);
+        Slot slot = (Slot) slots.get(par2);
         
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             
             if (par2 < 9) {
-                if (!mergeItemStack(itemstack1, 9, 45, true)) { return ItemStack.EMPTY; }
-            } else if (!mergeItemStack(itemstack1, 0, 9, false)) { return ItemStack.EMPTY; }
+                if (!moveItemStackTo(itemstack1, 9, 45, true)) { return ItemStack.EMPTY; }
+            } else if (!moveItemStackTo(itemstack1, 0, 9, false)) { return ItemStack.EMPTY; }
             
             if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
             
             if (itemstack1.getCount() == itemstack.getCount()) { return ItemStack.EMPTY; }
             
-            slot.onSlotChange(itemstack, itemstack1);
+            slot.onQuickCraft(itemstack, itemstack1);
         }
         
         return itemstack;
     }
     
     @Override
-    public boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4) {
+    public boolean moveItemStackTo(ItemStack par1ItemStack, int par2, int par3, boolean par4) {
     
         boolean flag1 = false;
         int k = par2;
@@ -118,21 +118,21 @@ public class ContainerDeployer extends Container {
         
         if (par1ItemStack.isStackable()) {
             while (par1ItemStack.getCount() > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
-                slot = (Slot) inventorySlots.get(k);
-                itemstack1 = slot.getStack();
+                slot = (Slot) slots.get(k);
+                itemstack1 = slot.getItem();
                 
-                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.hasContainerItem() || par1ItemStack.getDamage() == itemstack1.getDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
+                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.hasContainerItem() || par1ItemStack.getDamageValue() == itemstack1.getDamageValue()) && ItemStack.tagMatches(par1ItemStack, itemstack1) && slot.mayPlace(par1ItemStack)) {
                     int l = itemstack1.getCount() + par1ItemStack.getCount();
                     
                     if (l <= par1ItemStack.getMaxStackSize()) {
                         par1ItemStack.setCount(0);
                         itemstack1.setCount(l);
-                        slot.onSlotChanged();
+                        slot.setChanged();
                         flag1 = true;
                     } else if (itemstack1.getCount() < par1ItemStack.getMaxStackSize()) {
                         par1ItemStack.setCount(par1ItemStack.getCount() - par1ItemStack.getMaxStackSize() - itemstack1.getCount());
                         itemstack1.setCount(par1ItemStack.getMaxStackSize());
-                        slot.onSlotChanged();
+                        slot.setChanged();
                         flag1 = true;
                     }
                 }
@@ -153,21 +153,21 @@ public class ContainerDeployer extends Container {
             }
             
             while (!par4 && k < par3 || par4 && k >= par2) {
-                slot = (Slot) inventorySlots.get(k);
-                itemstack1 = slot.getStack();
+                slot = (Slot) slots.get(k);
+                itemstack1 = slot.getItem();
                 
-                if (itemstack1.isEmpty() && slot.isItemValid(par1ItemStack)) {
+                if (itemstack1.isEmpty() && slot.mayPlace(par1ItemStack)) {
                     if (1 < par1ItemStack.getCount()) {
                         ItemStack copy = par1ItemStack.copy();
                         copy.setCount(1);
-                        slot.putStack(copy);
+                        slot.set(copy);
 
                         par1ItemStack.setCount(par1ItemStack.getCount() - 1);
                         flag1 = true;
                         break;
                     } else {
-                        slot.putStack(par1ItemStack.copy());
-                        slot.onSlotChanged();
+                        slot.set(par1ItemStack.copy());
+                        slot.setChanged();
                         par1ItemStack.setCount(0);
                         flag1 = true;
                         break;

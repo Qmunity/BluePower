@@ -32,7 +32,7 @@ public class BlockItemOre extends BlockBase {
     protected Random rand = new Random();
 
     public BlockItemOre(String type) {
-        super(Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(5.0F).sound(SoundType.STONE));
+        super(Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.STONE));
         this.setRegistryName(Refs.MODID + ":" + type);
     }
 

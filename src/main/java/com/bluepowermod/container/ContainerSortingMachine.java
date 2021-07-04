@@ -83,14 +83,13 @@ public class ContainerSortingMachine extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
-
+    public ItemStack quickMoveStack(PlayerEntity par1EntityPlayer, int par2) {
         return ItemStack.EMPTY;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void updateProgressBar(int id, int value) {
+    public void setData(int id, int value) {
 
         if (id < 9) {
             colors[id] = TubeColor.values()[value];
@@ -118,8 +117,8 @@ public class ContainerSortingMachine extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity entityplayer) {
-        return inventory.isUsableByPlayer(entityplayer);
+    public boolean stillValid(PlayerEntity entityplayer) {
+        return inventory.stillValid(entityplayer);
     }
 
 }

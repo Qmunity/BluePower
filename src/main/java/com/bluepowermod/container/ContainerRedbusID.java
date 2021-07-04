@@ -30,8 +30,8 @@ public class ContainerRedbusID extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerEntity) {
-		return inventory.isUsableByPlayer(playerEntity);
+	public boolean stillValid(PlayerEntity playerEntity) {
+		return inventory.stillValid(playerEntity);
 	}
 
 

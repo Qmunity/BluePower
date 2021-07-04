@@ -17,9 +17,9 @@ public class MessageCraftingSync{
         context.enqueueWork(() -> {
             ServerPlayerEntity player = context.getSender();
             if (player != null) {
-                Container container = player.openContainer;
+                Container container = player.containerMenu;
                 if (container != null) {
-                    container.onCraftMatrixChanged(null);
+                    container.slotsChanged(null);
                 }
             }
         });

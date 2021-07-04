@@ -60,28 +60,28 @@ public class BPMicroblockModel implements IBakedModel {
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
         Pair<Block, Integer> info = extraData.getData(TileBPMicroblock.PROPERTY_INFO);
         if (info != null) {
-            IBakedModel typeModel = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(info.getKey().getDefaultState());
+            IBakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(info.getKey().defaultBlockState());
             IBakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
 
             List<BakedQuad> bakedQuads = new ArrayList<>();
 
             if(state != null && state.getBlock() instanceof BlockBPMicroblock) {
                 sizeModel = Minecraft.getInstance().getModelManager().getModel(
-                        new ModelResourceLocation(state.getBlock().getRegistryName(), "face=" + state.get(BlockBPMicroblock.FACING))
+                        new ModelResourceLocation(state.getBlock().getRegistryName(), "face=" + state.getValue(BlockBPMicroblock.FACING))
                 );
             }
 
             List<BakedQuad> sizeModelQuads = sizeModel.getQuads(state, side, rand);
 
             if (state != null) {
-                TextureAtlasSprite sprite = typeModel.getParticleTexture();
+                TextureAtlasSprite sprite = typeModel.getParticleIcon();
                 for (BakedQuad quad: sizeModelQuads) {
-                    List<BakedQuad> typeModelQuads = typeModel.getQuads(info.getKey().getDefaultState(), quad.getFace(), rand);
+                    List<BakedQuad> typeModelQuads = typeModel.getQuads(info.getKey().defaultBlockState(), quad.getDirection(), rand);
                     if(typeModelQuads.size() > 0){
                         sprite = typeModelQuads.get(0).getSprite();
                     }
 
-                    bakedQuads.add(transform(quad, sprite, state.get(BlockBPMicroblock.FACING), defBlock));
+                    bakedQuads.add(transform(quad, sprite, state.getValue(BlockBPMicroblock.FACING), defBlock));
                 }
                 return bakedQuads;
             }
@@ -93,20 +93,20 @@ public class BPMicroblockModel implements IBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
         List<BakedQuad> outquads = new ArrayList<>();
-        IBakedModel typeModel = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(this.defBlock.getDefaultState());
+        IBakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(this.defBlock.defaultBlockState());
         IBakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
 
         if(state != null && state.getBlock() instanceof BlockBPMicroblock) {
             sizeModel = Minecraft.getInstance().getModelManager().getModel(
-                    new ModelResourceLocation(state.getBlock().getRegistryName(), "face=" + state.get(BlockBPMicroblock.FACING))
+                    new ModelResourceLocation(state.getBlock().getRegistryName(), "face=" + state.getValue(BlockBPMicroblock.FACING))
             );
         }
 
         List<BakedQuad> sizeModelQuads = sizeModel.getQuads(state, side, rand);
 
-        TextureAtlasSprite sprite = typeModel.getParticleTexture();
+        TextureAtlasSprite sprite = typeModel.getParticleIcon();
         for (BakedQuad quad: sizeModelQuads) {
-            List<BakedQuad> typeModelQuads = typeModel.getQuads(this.defBlock.getDefaultState(), quad.getFace(), rand);
+            List<BakedQuad> typeModelQuads = typeModel.getQuads(this.defBlock.defaultBlockState(), quad.getDirection(), rand);
             if(typeModelQuads.size() > 0){
                 sprite = typeModelQuads.get(0).getSprite();
             }
@@ -125,17 +125,17 @@ public class BPMicroblockModel implements IBakedModel {
                 VertexFormatElement e = this.getVertexFormat().getElements().get(element);
                 if (e.getUsage() == VertexFormatElement.Usage.UV && e.getIndex() == 0) {
                     Vector2f vec = new Vector2f(data[0], data[1]);
-                    float u = (vec.x - sizeQuad.getSprite().getMinU()) / (sizeQuad.getSprite().getMaxU() - sizeQuad.getSprite().getMinU()) * 16;
-                    float v = (vec.y - sizeQuad.getSprite().getMinV()) / (sizeQuad.getSprite().getMaxV() - sizeQuad.getSprite().getMinV()) * 16;
-                    builder.put(element, sprite.getInterpolatedU(u), sprite.getInterpolatedV(v));
+                    float u = (vec.x - sizeQuad.getSprite().getU0()) / (sizeQuad.getSprite().getU1() - sizeQuad.getSprite().getU0()) * 16;
+                    float v = (vec.y - sizeQuad.getSprite().getV0()) / (sizeQuad.getSprite().getV1() - sizeQuad.getSprite().getV0()) * 16;
+                    builder.put(element, sprite.getU(u), sprite.getV(v));
                 }else if(e.getUsage() == VertexFormatElement.Usage.COLOR){
 
                     int color;
                     try {
-                        color = Minecraft.getInstance().getBlockColors().getColor(block.getDefaultState(), null, null, sizeQuad.getTintIndex());
+                        color = Minecraft.getInstance().getBlockColors().getColor(block.defaultBlockState(), null, null, sizeQuad.getTintIndex());
                     } catch(Exception ex){
                         try {
-                            color = Minecraft.getInstance().getBlockColors().getColor(block.getDefaultState(), null, BlockPos.ZERO, sizeQuad.getTintIndex());
+                            color = Minecraft.getInstance().getBlockColors().getColor(block.defaultBlockState(), null, BlockPos.ZERO, sizeQuad.getTintIndex());
                         } catch (Exception ex2){
                             color = 0;
                         }
@@ -163,7 +163,7 @@ public class BPMicroblockModel implements IBakedModel {
     @Override
     public IBakedModel handlePerspective(ItemCameraTransforms.TransformType type, MatrixStack stack) {
         IBakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
-        TransformationMatrix tr = TransformationHelper.toTransformation(sizeModel.getItemCameraTransforms().getTransform(type));
+        TransformationMatrix tr = TransformationHelper.toTransformation(sizeModel.getTransforms().getTransform(type));
         if(!tr.isIdentity()) {
             tr.push(stack);
         }
@@ -171,7 +171,7 @@ public class BPMicroblockModel implements IBakedModel {
     }
 
     @Override
-    public boolean isAmbientOcclusion() {
+    public boolean useAmbientOcclusion() {
         return true;
     }
 
@@ -181,27 +181,27 @@ public class BPMicroblockModel implements IBakedModel {
     }
 
     @Override
-    public boolean isSideLit() {
+    public boolean usesBlockLight() {
         return false;
     }
 
     @Override
-    public boolean isBuiltInRenderer() {
+    public boolean isCustomRenderer() {
         return false;
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture() {
-        IBakedModel typeModel = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(this.defBlock.getDefaultState());
-        return typeModel.getParticleTexture();
+    public TextureAtlasSprite getParticleIcon() {
+        IBakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(this.defBlock.defaultBlockState());
+        return typeModel.getParticleIcon();
     }
 
     @Override
     public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data) {
         Pair<Block, Integer> info = data.getData(TileBPMicroblock.PROPERTY_INFO);
         if(info != null)
-            return Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(info.getKey().getDefaultState()).getParticleTexture();
-        return getParticleTexture();
+            return Minecraft.getInstance().getBlockRenderer().getBlockModel(info.getKey().defaultBlockState()).getParticleIcon();
+        return getParticleIcon();
     }
 
     @Override
@@ -213,14 +213,15 @@ public class BPMicroblockModel implements IBakedModel {
      * Overwrites the model with NBT definition
      */
     private static final class BakedMicroblockOverrideHandler extends ItemOverrideList{
+        @Nullable
         @Override
-        public IBakedModel getOverrideModel(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity){
+        public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity){
             CompoundNBT nbt = stack.getTag();
             if(nbt != null && nbt.contains("block")){
                 Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
-                return new BPMicroblockModel(block, Block.getBlockFromItem(stack.getItem()));
+                return new BPMicroblockModel(block, Block.byItem(stack.getItem()));
             }
-            return new BPMicroblockModel(Blocks.STONE, Block.getBlockFromItem(stack.getItem()));
+            return new BPMicroblockModel(Blocks.STONE, Block.byItem(stack.getItem()));
         }
     }
 

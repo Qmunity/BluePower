@@ -162,7 +162,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
         textList.clear();
         for (String line : text) {
-            for (String s : WordUtils.wrap(I18n.format(line), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))) {
+            for (String s : WordUtils.wrap(I18n.get(line), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))) {
                 textList.add(s);
             }
         }
@@ -173,7 +173,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     public IGuiAnimatedStat setText(String text) {
 
         textList.clear();
-        for (String s : WordUtils.wrap(I18n.format(text), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))) {
+        for (String s : WordUtils.wrap(I18n.get(text), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))) {
             textList.add(s);
         }
         return this;
@@ -203,7 +203,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         oldWidth = width;
         oldHeight = height;
 
-        FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+        FontRenderer fontRenderer = Minecraft.getInstance().font;
         doneExpanding = true;
         if (isClicked) {
             // calculate the width and height needed for the box to fit the
@@ -245,11 +245,11 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
     protected int getMaxWidth(FontRenderer fontRenderer) {
 
-        int maxWidth = fontRenderer.getStringWidth(title);
+        int maxWidth = fontRenderer.width(title);
 
         for (String line : textList) {
-            if (fontRenderer.getStringWidth(line) > maxWidth)
-                maxWidth = fontRenderer.getStringWidth(line);
+            if (fontRenderer.width(line) > maxWidth)
+                maxWidth = fontRenderer.width(line);
         }
         maxWidth = (int) (maxWidth * textSize);
         maxWidth += 20;
@@ -282,13 +282,13 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         GL11.glLineWidth(3.0F);
         GL11.glColor4d(0, 0, 0, 1);
         Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buff = tess.getBuffer();
+        BufferBuilder buff = tess.getBuilder();
         buff.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION_TEX);
-        buff.pos(renderBaseX, renderAffectedY, zLevel);
-        buff.pos(renderBaseX + renderWidth, renderAffectedY, zLevel);
-        buff.pos(renderBaseX + renderWidth, renderAffectedY + renderHeight, zLevel);
-        buff.pos(renderBaseX, renderAffectedY + renderHeight, zLevel);
-        tess.draw();
+        buff.vertex(renderBaseX, renderAffectedY, zLevel);
+        buff.vertex(renderBaseX + renderWidth, renderAffectedY, zLevel);
+        buff.vertex(renderBaseX + renderWidth, renderAffectedY + renderHeight, zLevel);
+        buff.vertex(renderBaseX, renderAffectedY + renderHeight, zLevel);
+        tess.end();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         if (leftSided)
             renderWidth *= -1;
@@ -298,14 +298,14 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
             GL11.glTranslated(renderBaseX + (leftSided ? -renderWidth : 16), renderAffectedY, 0);
             GL11.glScaled(textSize, textSize, textSize);
             GL11.glTranslated(-renderBaseX - (leftSided ? -renderWidth : 16), -renderAffectedY, 0);
-            fontRenderer.drawStringWithShadow(matrixStack, title, renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + 2, 0xFFFF00);
+            fontRenderer.drawShadow(matrixStack, title, renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + 2, 0xFFFF00);
             for (int i = 0; i < textList.size(); i++) {
 
                 if (textList.get(i).contains("\u00a70") || textList.get(i).contains(TextFormatting.DARK_RED.toString())) {
-                    fontRenderer.drawString(matrixStack, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + i * 10
+                    fontRenderer.draw(matrixStack, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + i * 10
                             + 12, 0xFFFFFF);
                 } else {
-                    fontRenderer.drawStringWithShadow(matrixStack, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY
+                    fontRenderer.drawShadow(matrixStack, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY
                             + i * 10 + 12, 0xFFFFFF);
                 }
             }
@@ -329,31 +329,31 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     protected void renderItem(FontRenderer fontRenderer, int x, int y, ItemStack stack) {
 
         if (itemRenderer == null)
-            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelMesher().getModelManager(), Minecraft.getInstance().getItemColors());
+            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelShaper().getModelManager(), Minecraft.getInstance().getItemColors());
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0, -50);
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         //TODO: RenderHelper.enableGUIStandardItemLighting();
-        itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
-        itemRenderer.renderItemOverlayIntoGUI(fontRenderer, stack, x, y, null);
+        itemRenderer.renderAndDecorateItem(stack, x, y);
+        itemRenderer.renderGuiItemDecorations(fontRenderer, stack, x, y, null);
 
         GL11.glEnable(GL11.GL_ALPHA_TEST);
-        RenderHelper.disableStandardItemLighting();
+        RenderHelper.turnOff();
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         GL11.glPopMatrix();
     }
 
     public static void drawTexture(ResourceLocation texture, int x, int y) {
 
-        Minecraft.getInstance().getTextureManager().bindTexture(texture);
+        Minecraft.getInstance().getTextureManager().bind(texture);
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buff = tessellator.getBuffer();
+        BufferBuilder buff = tessellator.getBuilder();
         buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buff.pos(x, y + 16, 0).tex(0.0F, 1.0F).endVertex();
-        buff.pos(x + 16, y + 16, 0).tex(1.0F, 1.0F).endVertex();
-        buff.pos(x + 16, y, 0).tex(1.0F, 0.0F).endVertex();
-        buff.pos(x, y, 0).tex(0.0F, 0.0F).endVertex();
-        tessellator.draw();
+        buff.vertex(x, y + 16, 0).uv(0.0F, 1.0F).endVertex();
+        buff.vertex(x + 16, y + 16, 0).uv(1.0F, 1.0F).endVertex();
+        buff.vertex(x + 16, y, 0).uv(1.0F, 0.0F).endVertex();
+        buff.vertex(x, y, 0).uv(0.0F, 0.0F).endVertex();
+        tessellator.end();
     }
 
     /*
@@ -443,7 +443,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     @Override
     public void setTitle(String title) {
 
-        this.title = I18n.format(title);
+        this.title = I18n.get(title);
     }
 
     @Override
@@ -479,7 +479,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
 
-        render(matrixStack, Minecraft.getInstance().fontRenderer, 0, partialTick);
+        render(matrixStack, Minecraft.getInstance().font, 0, partialTick);
 
     }
 

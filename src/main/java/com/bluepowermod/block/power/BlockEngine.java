@@ -54,88 +54,88 @@ public class BlockEngine extends BlockContainerBase implements IWaterLoggable {
 
     public BlockEngine() {
 
-        super(Material.IRON, TileEngine.class);
-        setDefaultState(this.stateContainer.getBaseState()
-                .with(ACTIVE, false)
-                .with(GEAR, false)
-                .with(GLIDER, false)
-                .with(FACING, Direction.DOWN)
-                .with(WATERLOGGED, false));
+        super(Material.METAL, TileEngine.class);
+        registerDefaultState(this.stateDefinition.any()
+                .setValue(ACTIVE, false)
+                .setValue(GEAR, false)
+                .setValue(GLIDER, false)
+                .setValue(FACING, Direction.DOWN)
+                .setValue(WATERLOGGED, false));
         setRegistryName(Refs.MODID, Refs.ENGINE_NAME);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(ACTIVE, GEAR, GLIDER, FACING, WATERLOGGED);
     }
 
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        if (stateIn.get(WATERLOGGED)) {
-            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.getValue(WATERLOGGED)) {
+            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
-        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        FluidState fluidstate = context.getWorld().getFluidState(context.getPos());
-        return super.getStateForPlacement(context).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+        FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
+        return super.getStateForPlacement(context).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
 
     @Override
     public VoxelShape getShape(BlockState blockState, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-        return AABBUtils.rotate(Block.makeCuboidShape(0.01,0,0.01,15.99F,10,15.99F), blockState.get(FACING).getOpposite());
+        return AABBUtils.rotate(Block.box(0.01,0,0.01,15.99F,10,15.99F), blockState.getValue(FACING).getOpposite());
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @SuppressWarnings("cast")
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity player, ItemStack iStack) {
-        if (world.getTileEntity(pos) instanceof TileEngine) {
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity player, ItemStack iStack) {
+        if (world.getBlockEntity(pos) instanceof TileEngine) {
             Direction facing;
 
-            if (player.rotationPitch > 45) {
+            if (player.xRot > 45) {
 
                 facing = Direction.DOWN;
-            } else if (player.rotationPitch < -45) {
+            } else if (player.xRot < -45) {
 
                 facing = Direction.UP;
             } else {
 
-                facing = player.getHorizontalFacing().getOpposite();
+                facing = player.getDirection().getOpposite();
             }
 
-            TileEngine tile = (TileEngine) world.getTileEntity(pos);
+            TileEngine tile = (TileEngine) world.getBlockEntity(pos);
             if (tile != null) {
                 tile.setOrientation(facing);
             }
-            world.setBlockState(pos, state.with(FACING, facing), 2);
+            world.setBlock(pos, state.setValue(FACING, facing), 2);
         }
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if (!player.inventory.getCurrentItem().isEmpty()) {
-            Item item = player.inventory.getCurrentItem().getItem();
+    public ActionResultType use(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+        if (!player.inventory.getSelected().isEmpty()) {
+            Item item = player.inventory.getSelected().getItem();
             if (item == BPItems.screwdriver) {
                 return ActionResultType.SUCCESS;
             }
         }
 
-        return super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult);
+        return super.use(blockState, world, pos, player, hand, rayTraceResult);
     }
 
     @Override

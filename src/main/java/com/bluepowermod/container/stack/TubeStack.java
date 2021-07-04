@@ -88,7 +88,7 @@ public class TubeStack {
         oldProgress = progress;
         if (enabled) {
             boolean isEntering = progress < 0.5;
-            progress += speed * (worldObj.isRemote ? tickTimeMultiplier : 1);
+            progress += speed * (worldObj.isClientSide ? tickTimeMultiplier : 1);
             return progress >= 0.5 && isEntering;
         } else {
             idleCounter++;
@@ -99,7 +99,7 @@ public class TubeStack {
     public TileEntity getTarget(World world) {
 
         if (target == null && (targetX != 0 || targetY != 0 || targetZ != 0)) {
-            target = world.getTileEntity(new BlockPos(targetX, targetY, targetZ));
+            target = world.getBlockEntity(new BlockPos(targetX, targetY, targetZ));
         }
         return target;
     }
@@ -108,9 +108,9 @@ public class TubeStack {
     public void setTarget(TileEntity tileEntity) {
         target = tileEntity;
         if (target != null) {
-            targetX = target.getPos().getX();
-            targetY = target.getPos().getY();
-            targetZ = target.getPos().getZ();
+            targetX = target.getBlockPos().getX();
+            targetY = target.getBlockPos().getY();
+            targetZ = target.getBlockPos().getZ();
         } else {
             targetX = 0;
             targetY = 0;
@@ -127,7 +127,7 @@ public class TubeStack {
 
     public void writeToNBT(CompoundNBT tag) {
 
-        stack.write(tag);
+        stack.save(tag);
         tag.putByte("color", (byte) color.ordinal());
         tag.putByte("heading", (byte) heading.ordinal());
         tag.putDouble("progress", progress);
@@ -139,7 +139,7 @@ public class TubeStack {
 
     public static TubeStack loadFromNBT(CompoundNBT tag) {
 
-        TubeStack stack = new TubeStack(ItemStack.read(tag), Direction.byIndex(tag.getByte("heading")),
+        TubeStack stack = new TubeStack(ItemStack.of(tag), Direction.from3DDataValue(tag.getByte("heading")),
                 TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
         stack.speed = tag.getDouble("speed");
@@ -161,7 +161,7 @@ public class TubeStack {
     public static TubeStack loadFromPacket(ByteBuf buf) {
         //TODO: Add Items
         //ByteBufUtils.readItemStack(buf)
-        TubeStack stack = new TubeStack(null, Direction.byIndex(buf.readByte()),
+        TubeStack stack = new TubeStack(null, Direction.from3DDataValue(buf.readByte()),
                 TubeColor.values()[buf.readByte()]);
         stack.speed = buf.readDouble();
         stack.progress = buf.readDouble();
@@ -172,20 +172,20 @@ public class TubeStack {
     public void render(float partialTick) {
 
         if (renderMode == RenderMode.AUTO) {
-            renderMode = Minecraft.getInstance().gameSettings.graphicFanciness == GraphicsFanciness.FANCY ? RenderMode.NORMAL : RenderMode.REDUCED;
+            renderMode = Minecraft.getInstance().options.graphicsMode == GraphicsFanciness.FANCY ? RenderMode.NORMAL : RenderMode.REDUCED;
         }
         final RenderMode finalRenderMode = renderMode;
 
         if (customRenderItem == null) {
             customRenderItem = Minecraft.getInstance().getItemRenderer();
 
-            renderedItem = new ItemEntity(Minecraft.getInstance().world, 0,0,0);
+            renderedItem = new ItemEntity(Minecraft.getInstance().level, 0,0,0);
         }
 
         double renderProgress = (oldProgress + (progress - oldProgress) * partialTick) * 2 - 1;
 
         GL11.glPushMatrix();
-        GL11.glTranslated(heading.getXOffset() * renderProgress * 0.5, heading.getYOffset() * renderProgress * 0.5, heading.getZOffset() * renderProgress * 0.5);
+        GL11.glTranslated(heading.getStepX() * renderProgress * 0.5, heading.getStepY() * renderProgress * 0.5, heading.getStepZ() * renderProgress * 0.5);
         if (finalRenderMode != RenderMode.NONE) {
             GL11.glPushMatrix();
             if (stack.getCount() > 5) {

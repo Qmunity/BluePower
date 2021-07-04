@@ -60,15 +60,15 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag) {
+    public CompoundNBT save(CompoundNBT tag) {
 
-        super.write(tag);
+        super.save(tag);
 
         ListNBT tagList = new ListNBT();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
                 CompoundNBT tagCompound = new CompoundNBT();
                 tagCompound.putByte("Slot", (byte)currentIndex);
-                inventory.get(currentIndex).write(tagCompound);
+                inventory.get(currentIndex).save(tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("Items", tagList);
@@ -77,7 +77,7 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
         for (int currentIndex = 0; currentIndex < craftingGrid.size(); ++currentIndex) {
                 CompoundNBT tagCompound = new CompoundNBT();
                 tagCompound.putByte("Slot", (byte) currentIndex);
-                craftingGrid.get(currentIndex).write(tagCompound);
+                craftingGrid.get(currentIndex).save(tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("CraftingGrid", tagList);
@@ -85,9 +85,9 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public void read(BlockState blockState, CompoundNBT tag) {
+    public void load(BlockState blockState, CompoundNBT tag) {
 
-        super.read(blockState, tag);
+        super.load(blockState, tag);
 
         ListNBT tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(19, ItemStack.EMPTY);
@@ -95,7 +95,7 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
             CompoundNBT tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, ItemStack.read(tagCompound));
+                inventory.set(slot, ItemStack.of(tagCompound));
             }
         }
 
@@ -105,19 +105,19 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
             CompoundNBT tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < craftingGrid.size()) {
-                craftingGrid.set(slot, ItemStack.read(tagCompound));
+                craftingGrid.set(slot, ItemStack.of(tagCompound));
             }
         }
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
 
         return inventory.size();
     }
 
     @Override
-    public ItemStack getStackInSlot(int i) {
+    public ItemStack getItem(int i) {
         return i < 18 ? inventory.get(i) : craftingGrid.get(i - 18);
     }
 
@@ -126,16 +126,16 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount) {
+    public ItemStack removeItem(int slot, int amount) {
 
-        ItemStack itemStack = getStackInSlot(slot);
+        ItemStack itemStack = getItem(slot);
         if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, ItemStack.EMPTY);
+                setItem(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, ItemStack.EMPTY);
+                    setItem(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -144,16 +144,16 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int i) {
-        ItemStack itemStack = getStackInSlot(i);
+    public ItemStack removeItemNoUpdate(int i) {
+        ItemStack itemStack = getItem(i);
         if (!itemStack.isEmpty()) {
-            setInventorySlotContents(i, ItemStack.EMPTY);
+            setItem(i, ItemStack.EMPTY);
         }
         return itemStack;
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemStack) {
+    public void setItem(int i, ItemStack itemStack) {
         if(i < 18){
             inventory.set(i, itemStack);
         }else{
@@ -167,27 +167,27 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
 
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
 
         return 64;
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        return player.getPosition().withinDistance(pos, 64.0D);
+    public boolean stillValid(PlayerEntity player) {
+        return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
+    public void startOpen(PlayerEntity player) {
     }
 
     @Override
-    public void closeInventory(PlayerEntity player) {
+    public void stopOpen(PlayerEntity player) {
 
     }
 
     @Override
-    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+    public boolean canPlaceItem(int p_94041_1_, ItemStack p_94041_2_) {
 
         return true;
     }
@@ -203,7 +203,7 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
 
     }
 
@@ -220,16 +220,16 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
 
     @Override
     public int[] getSlotsForFace(Direction side) {
-        return IntStream.range(0, getSizeInventory() - 1).toArray();
+        return IntStream.range(0, getContainerSize() - 1).toArray();
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-        return index < getSizeInventory();
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+        return index < getContainerSize();
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-        return index < getSizeInventory();
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+        return index < getContainerSize();
     }
 }

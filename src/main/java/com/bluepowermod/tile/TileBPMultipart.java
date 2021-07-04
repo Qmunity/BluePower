@@ -78,25 +78,25 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
     }
 
     public void addState(BlockState state) {
-        TileEntity tile = state.getBlock().createTileEntity(state, world);
+        TileEntity tile = state.getBlock().createTileEntity(state, level);
         if (tile != null) {
-            tile.setPos(pos);
+            tile.setPosition(worldPosition);
         }
         this.stateMap.put(state, tile);
-        state.getBlock().onBlockPlacedBy(world, pos, state,  null, new ItemStack(state.getBlock()));
+        state.getBlock().setPlacedBy(level, worldPosition, state,  null, new ItemStack(state.getBlock()));
         markDirtyClient();
     }
 
     public void removeState(BlockState state) {
         //Drop Items
-        if (world instanceof ServerWorld) {
+        if (level instanceof ServerWorld) {
             NonNullList<ItemStack> drops = NonNullList.create();
-            drops.addAll(Block.getDrops(state, (ServerWorld) world,  pos, this));
-            InventoryHelper.dropItems(world, pos, drops);
+            drops.addAll(Block.getDrops(state, (ServerWorld) level, worldPosition, this));
+            InventoryHelper.dropContents(level,worldPosition, drops);
         }
         //Remove Tile Entity
         if(stateMap.get(state) != null) {
-            stateMap.get(state).remove();
+            stateMap.get(state).setRemoved();
         }
         //Remove State
         this.stateMap.remove(state);
@@ -104,21 +104,21 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         if(stateMap.size() == 1) {
             //Convert back to Standalone Block
             TileEntity te = (TileEntity)stateMap.values().toArray()[0];
-            if (world != null) {
-                CompoundNBT nbt = te != null ? te.write(new CompoundNBT()) : null;
-                world.setBlockState(pos, ((BlockState)stateMap.keySet().toArray()[0]));
-                TileEntity tile = world.getTileEntity(pos);
+            if (level != null) {
+                CompoundNBT nbt = te != null ? te.save(new CompoundNBT()) : null;
+                level.setBlockAndUpdate(worldPosition, ((BlockState)stateMap.keySet().toArray()[0]));
+                TileEntity tile = level.getBlockEntity(worldPosition);
                 if (tile != null && nbt != null)
-                    tile.read(getBlockState(), nbt);
+                    tile.load(getBlockState(), nbt);
             }
         }else if(stateMap.size() == 0){
             //Remove if this is empty
-            if (world != null) {
-                world.removeBlock(pos, false);
+            if (level != null) {
+                level.removeBlock(worldPosition, false);
             }
         }
-        if(world != null)
-            world.getBlockState(pos).neighborChanged(world, pos, getBlockState().getBlock(), pos, false);
+        if(level != null)
+            level.getBlockState(worldPosition).neighborChanged(level, worldPosition, getBlockState().getBlock(), worldPosition, false);
     }
 
     public TileEntity getTileForState(BlockState state){
@@ -126,9 +126,9 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
-    public void setWorldAndPos(World worldIn, BlockPos posIn) {
-        super.setWorldAndPos(worldIn, posIn);
-        stateMap.values().forEach(t -> t.setWorldAndPos(worldIn, posIn));
+    public void setLevelAndPosition(World levelIn, BlockPos posIn) {
+        super.setLevelAndPosition(levelIn, posIn);
+        stateMap.values().forEach(t -> t.setLevelAndPosition(levelIn, posIn));
     }
 
     @Nonnull
@@ -154,17 +154,17 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
     }
 
     private void markDirtyClient() {
-        markDirty();
-        if (getWorld() != null) {
-            BlockState state = getWorld().getBlockState(getPos());
-            getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+        setChanged();
+        if (getLevel() != null) {
+            BlockState state = getLevel().getBlockState(getBlockPos());
+            getLevel().sendBlockUpdated(getBlockPos(), state, state, 3);
         }
         this.requestModelDataUpdate();
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putInt("size", getStates().size());
         for (int i = 0; i < getStates().size(); i++) {
             //write state data
@@ -172,24 +172,24 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
             BlockState.CODEC.encodeStart(NBTDynamicOps.INSTANCE,  getStates().get(i)).result().ifPresent(nbt -> compound.put(stateSave, nbt));
             //write tile NBT data
             if(stateMap.get(getStates().get(i)) != null)
-                compound.put("tile" + i, stateMap.get(getStates().get(i)).write(new CompoundNBT()));
+                compound.put("tile" + i, stateMap.get(getStates().get(i)).save(new CompoundNBT()));
         }
         return compound;
     }
 
     @Override
-    public void read(BlockState blockState, CompoundNBT compound) {
-        super.read(blockState, compound);
+    public void load(BlockState blockState, CompoundNBT compound) {
+        super.load(blockState, compound);
         Map<BlockState, TileEntity> states = new HashMap<>();
         int size = compound.getInt("size");
         for (int i = 0; i < size; i++) {
             Optional<Pair<BlockState, INBT>> result = BlockState.CODEC.decode(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("state" + i))).result();
             if(result.isPresent()){
                 BlockState state = result.get().getFirst();
-                TileEntity tile = state.getBlock().createTileEntity(state, getWorld());
+                TileEntity tile = state.getBlock().createTileEntity(state, getLevel());
                 if (tile != null) {
-                    tile.read(state, compound.getCompound("tile" + i));
-                    tile.setPos(pos);
+                    tile.load(state, compound.getCompound("tile" + i));
+                    tile.setPosition(worldPosition);
                 }
                 states.put(state, tile);
             }
@@ -201,27 +201,27 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT updateTag = super.getUpdateTag();
-        write(updateTag);
+        save(updateTag);
         return updateTag;
     }
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
         CompoundNBT nbtTag = new CompoundNBT();
-        write(nbtTag);
-        return new SUpdateTileEntityPacket(getPos(), 1, nbtTag);
+        save(nbtTag);
+        return new SUpdateTileEntityPacket(getBlockPos(), 1, nbtTag);
     }
 
     @Override
     public void onDataPacket(NetworkManager networkManager, SUpdateTileEntityPacket packet) {
         List<BlockState> states = getStates();
-        CompoundNBT tagCompound = packet.getNbtCompound();
+        CompoundNBT tagCompound = packet.getTag();
         super.onDataPacket(networkManager, packet);
-        read(getBlockState(), tagCompound);
-        if (world.isRemote) {
+        load(getBlockState(), tagCompound);
+        if (level.isClientSide) {
             // Update if needed
             if (!getStates().equals(states)) {
-                world.markChunkDirty(getPos(), this.getTileEntity());
+                level.blockEntityChanged(getBlockPos(), this.getTileEntity());
             }
         }
     }

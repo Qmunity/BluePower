@@ -32,14 +32,14 @@ import java.util.Random;
 public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
 
     public BlockAlloyFurnace() {
-        super(Material.ROCK, TileAlloyFurnace.class);
+        super(Material.STONE, TileAlloyFurnace.class);
         setRegistryName(Refs.MODID, Refs.ALLOYFURNACE_NAME);
     }
 
     @Override
     public void tick(BlockState stateIn, ServerWorld world, BlockPos pos, Random rnd) {
-        if (stateIn.get(ACTIVE)) {
-            int l = stateIn.get(FACING).ordinal();
+        if (stateIn.getValue(ACTIVE)) {
+            int l = stateIn.getValue(FACING).ordinal();
             float f = pos.getX() + 0.5F;
             float f1 = pos.getY() + 0.0F + rnd.nextFloat() * 6.0F / 16.0F;
             float f2 = pos.getZ() + 0.5F;
@@ -64,7 +64,7 @@ public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
 
     @Override
     public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
-        return state.get(ACTIVE) ? 13 : 0;
+        return state.getValue(ACTIVE) ? 13 : 0;
     }
 
     @Override

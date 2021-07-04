@@ -994,10 +994,10 @@ public class TileCPU extends TileBase implements IRedBusWindow {
         availableCycles = -1;
         halt = true;
         BluePower.log.info("self block=" + this.getType());
-        if ( this.world.isAirBlock(this.pos)) {
+        if ( this.level.isEmptyBlock(this.worldPosition)) {
             //set CPU on fire for the lolz
-            this.world.playSound((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, this.world.rand.nextFloat() * 0.4F + 0.8F, true);
-            this.world.setBlockState(this.pos, Blocks.FIRE.getDefaultState());
+            this.level.playLocalSound((double)this.worldPosition.getX() + 0.5D, (double)this.worldPosition.getY() + 0.5D, (double)this.worldPosition.getZ() + 0.5D, SoundEvents.FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, this.level.random.nextFloat() * 0.4F + 0.8F, true);
+            this.level.setBlockAndUpdate(this.worldPosition, Blocks.FIRE.defaultBlockState());
         }
     }
     public void opTRX() {// 65EL02

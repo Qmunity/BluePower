@@ -22,7 +22,7 @@ public class GuiContainerBaseBP<T extends Container> extends GuiContainerBase<T>
 
         if (inventory instanceof TileMachineBase) {
             WidgetTabItemLister backlogTab = new WidgetTabItemLister(this, "gui.bluepower:tab.stuffed", Refs.MODID
-                    + ":textures/gui/widgets/gui_stuffed.png", guiLeft + xSize, guiTop + 5, 0xFFc13d40, null, false);
+                    + ":textures/gui/widgets/gui_stuffed.png", leftPos + imageWidth, topPos + 5, 0xFFc13d40, null, false);
             lastRightStat = backlogTab;
             backlogTab.setItems(((TileMachineBase) inventory).getBacklog());
             addWidget(backlogTab);

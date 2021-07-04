@@ -34,89 +34,89 @@ public class BlockContainerFacingBase extends BlockContainerBase {
 
     public BlockContainerFacingBase(Material material, Class<? extends TileBase> tileEntityClass) {
         super(material, tileEntityClass);
-        setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(ACTIVE, false));
+        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(ACTIVE, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(FACING, ACTIVE);
     }
 
     public static void setState(boolean active, World worldIn, BlockPos pos){
         BlockState iblockstate = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+        TileEntity tileentity = worldIn.getBlockEntity(pos);
 
-        worldIn.setBlockState(pos, iblockstate.with(ACTIVE, active), 3);
+        worldIn.setBlock(pos, iblockstate.setValue(ACTIVE, active), 3);
         if (tileentity != null){
-            tileentity.validate();
-            worldIn.setTileEntity(pos, tileentity);
+            tileentity.clearRemoved();
+            worldIn.setBlockEntity(pos, tileentity);
         }
     }
     public static void setState(Direction facing, World worldIn, BlockPos pos){
         BlockState iblockstate = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+        TileEntity tileentity = worldIn.getBlockEntity(pos);
 
-        worldIn.setBlockState(pos, iblockstate.with(FACING, facing), 3);
+        worldIn.setBlock(pos, iblockstate.setValue(FACING, facing), 3);
         if (tileentity != null){
-            tileentity.validate();
-            worldIn.setTileEntity(pos, tileentity);
+            tileentity.clearRemoved();
+            worldIn.setBlockEntity(pos, tileentity);
         }
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack iStack) {
-        super.onBlockPlacedBy(world, pos, state, placer, iStack);
-        world.setBlockState(pos, state.with(FACING, canRotateVertical() ? Direction.getFacingDirections(placer)[0] : placer.getHorizontalFacing().getOpposite()), 2);
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack iStack) {
+        super.setPlacedBy(world, pos, state, placer, iStack);
+        world.setBlock(pos, state.setValue(FACING, canRotateVertical() ? Direction.orderedByNearest(placer)[0] : placer.getDirection().getOpposite()), 2);
     }
 
     @Override
     public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
         if(direction == Rotation.CLOCKWISE_90){
-            switch (state.get(FACING)) {
+            switch (state.getValue(FACING)) {
                 case DOWN:
-                    state = state.with(FACING, Direction.UP);
+                    state = state.setValue(FACING, Direction.UP);
                     break;
                 case UP:
-                    state = state.with(FACING, Direction.NORTH);
+                    state = state.setValue(FACING, Direction.NORTH);
                     break;
                 case NORTH:
-                    state = state.with(FACING, Direction.EAST);
+                    state = state.setValue(FACING, Direction.EAST);
                     break;
                 case EAST:
-                    state = state.with(FACING, Direction.SOUTH);
+                    state = state.setValue(FACING, Direction.SOUTH);
                     break;
                 case SOUTH:
-                    state = state.with(FACING, Direction.WEST);
+                    state = state.setValue(FACING, Direction.WEST);
                     break;
                 case WEST:
-                    state = state.with(FACING, Direction.DOWN);
+                    state = state.setValue(FACING, Direction.DOWN);
                     break;
             }
         }if(direction == Rotation.COUNTERCLOCKWISE_90){
-            switch (state.get(FACING)) {
+            switch (state.getValue(FACING)) {
                 case DOWN:
-                    state = state.with(FACING, Direction.WEST);
+                    state = state.setValue(FACING, Direction.WEST);
                     break;
                 case UP:
-                    state = state.with(FACING, Direction.DOWN);
+                    state = state.setValue(FACING, Direction.DOWN);
                     break;
                 case NORTH:
-                    state = state.with(FACING, Direction.UP);
+                    state = state.setValue(FACING, Direction.UP);
                     break;
                 case EAST:
-                    state = state.with(FACING, Direction.NORTH);
+                    state = state.setValue(FACING, Direction.NORTH);
                     break;
                 case SOUTH:
-                    state = state.with(FACING, Direction.EAST);
+                    state = state.setValue(FACING, Direction.EAST);
                     break;
                 case WEST:
-                    state = state.with(FACING, Direction.SOUTH);
+                    state = state.setValue(FACING, Direction.SOUTH);
                     break;
             }
         } else if (direction == Rotation.CLOCKWISE_180){
-            state = state.with(FACING, state.get(FACING).getOpposite());
+            state = state.setValue(FACING, state.getValue(FACING).getOpposite());
         }
-        world.setBlockState(pos, state, 2);
+        world.setBlock(pos, state, 2);
         return state;
     }
 }

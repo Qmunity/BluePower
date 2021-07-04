@@ -49,9 +49,9 @@ public class ContainerSeedBag extends Container {
         
         //Get Active hand
         activeHand = Hand.MAIN_HAND;
-        ItemStack seedBag = playerInventory.player.getHeldItem(activeHand);
+        ItemStack seedBag = playerInventory.player.getItemInHand(activeHand);
         if(!(seedBag.getItem() instanceof ItemSeedBag)){
-            seedBag = playerInventory.player.getHeldItemOffhand();
+            seedBag = playerInventory.player.getOffhandItem();
             activeHand = Hand.OFF_HAND;
         }
 
@@ -71,7 +71,7 @@ public class ContainerSeedBag extends Container {
         }
         
         for (int i = 0; i < 9; ++i) {
-            if (playerInventory.currentItem == i) {
+            if (playerInventory.selected == i) {
                 this.addSlot(new SlotLocked(playerInventory, i, 8 + i * 18, 142));
             } else {
                 this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
@@ -81,46 +81,46 @@ public class ContainerSeedBag extends Container {
     }
     
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
     
-        return !player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemSeedBag;
+        return !player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() instanceof ItemSeedBag;
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
+    public void removed(PlayerEntity playerIn) {
         //Update items in the NBT
-        ItemStack seedBag = playerIn.getHeldItem(activeHand);
+        ItemStack seedBag = playerIn.getItemInHand(activeHand);
         if (!seedBag.hasTag())
             seedBag.setTag(new CompoundNBT());
         if (seedBag.getTag() != null) {
             seedBag.getTag().put("inv", seedBagInvHandler.serializeNBT());
         }
-        super.onContainerClosed(playerIn);
+        super.removed(playerIn);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
+    public ItemStack quickMoveStack(PlayerEntity par1EntityPlayer, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = (Slot) this.inventorySlots.get(par2);
+        Slot slot = (Slot) this.slots.get(par2);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
             if (par2 < 9) {
-                if (!this.mergeItemStack(itemstack1, 9, 45, true)) { return ItemStack.EMPTY; }
-            } else if (!this.mergeItemStack(itemstack1, 0, 9, false)) { return ItemStack.EMPTY; }
+                if (!this.moveItemStackTo(itemstack1, 9, 45, true)) { return ItemStack.EMPTY; }
+            } else if (!this.moveItemStackTo(itemstack1, 0, 9, false)) { return ItemStack.EMPTY; }
 
             if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) { return ItemStack.EMPTY; }
 
-            slot.onSlotChange(itemstack, itemstack1);
+            slot.onQuickCraft(itemstack, itemstack1);
         }
 
         return itemstack;

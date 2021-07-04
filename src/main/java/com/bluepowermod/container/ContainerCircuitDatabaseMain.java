@@ -36,21 +36,20 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
         addSlot(new SlotPhantom(circuitDatabase, 0, 57, 64) {
 
             @Override
-            public boolean isItemValid(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
 
                 return stack.getItem() instanceof IDatabaseSaveable && ((IDatabaseSaveable) stack.getItem()).canGoInCopySlot(stack);
             }
 
             @Override
-            public int getSlotStackLimit() {
-
+            public int getMaxStackSize() {
                 return 1;
             }
         });
         addSlot(new Slot(circuitDatabase, 1, 108, 64) {
 
             @Override
-            public boolean isItemValid(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
 
                 return stack.getItem() instanceof IDatabaseSaveable && ((IDatabaseSaveable) stack.getItem()).canGoInCopySlot(stack);
             }
@@ -86,7 +85,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
 
         return true;
     }
@@ -94,7 +93,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void updateProgressBar(int id, int value) {
+    public void setData(int id, int value) {
 
         if (id == 0) {
             curUploadProgress = value;
@@ -109,27 +108,27 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = (Slot) inventorySlots.get(par2);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = (Slot) slots.get(par2);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (par2 < 20) {
-                if (!mergeItemStack(itemstack1, 20, 55, false))
+                if (!moveItemStackTo(itemstack1, 20, 55, false))
                     return ItemStack.EMPTY;
             } else {
-                if (!mergeItemStack(itemstack1, 2, 20, false))
+                if (!moveItemStackTo(itemstack1, 2, 20, false))
                     return ItemStack.EMPTY;
             }
             if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
             if (itemstack1.getCount() != itemstack.getCount()) {
-                slot.onSlotChange(itemstack, itemstack1);
+                slot.onQuickCraft(itemstack, itemstack1);
             } else {
                 return ItemStack.EMPTY;
             }

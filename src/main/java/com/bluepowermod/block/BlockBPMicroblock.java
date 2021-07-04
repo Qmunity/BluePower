@@ -47,15 +47,15 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
     private final VoxelShape size;
 
     public BlockBPMicroblock(VoxelShape size) {
-        super(Properties.create(Material.ROCK).notSolid().hardnessAndResistance(2));
-        setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
+        super(Properties.of(Material.STONE).noOcclusion().strength(2));
+        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
         this.size = size;
         BPBlocks.blockList.add(this);
     }
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        TileEntity tileentity = builder.get(LootParameters.BLOCK_ENTITY);
+        TileEntity tileentity = builder.getParameter(LootParameters.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if(tileentity instanceof TileBPMultipart){
             tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
@@ -65,17 +65,17 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
             nbt.putString("block", ((TileBPMicroblock)tileentity).getBlock().getRegistryName().toString());
             ItemStack stack = new ItemStack(this);
             stack.setTag(nbt);
-            stack.setDisplayName(new TranslationTextComponent(((TileBPMicroblock)tileentity).getBlock().getTranslationKey())
+            stack.setHoverName(new TranslationTextComponent(((TileBPMicroblock)tileentity).getBlock().getDescriptionId())
                     .append(new StringTextComponent(" "))
-                    .append(new TranslationTextComponent(this.getTranslationKey())));
+                    .append(new TranslationTextComponent(this.getDescriptionId())));
             itemStacks.add(stack);
         }
         return itemStacks;
     }
 
     @Override
-    public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {
-        TileEntity tileentity = world.getTileEntity(pos);
+    public ItemStack getCloneItemStack(IBlockReader world, BlockPos pos, BlockState state) {
+        TileEntity tileentity = world.getBlockEntity(pos);
         ItemStack stack = ItemStack.EMPTY;
         if(tileentity instanceof TileBPMultipart){
             tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
@@ -85,26 +85,26 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
             nbt.putString("block", ((TileBPMicroblock) tileentity).getBlock().getRegistryName().toString());
             stack = new ItemStack(this);
             stack.setTag(nbt);
-            stack.setDisplayName(new TranslationTextComponent(((TileBPMicroblock) tileentity).getBlock().getTranslationKey())
+            stack.setHoverName(new TranslationTextComponent(((TileBPMicroblock) tileentity).getBlock().getDescriptionId())
                     .append(new StringTextComponent(" "))
-                    .append(new TranslationTextComponent(this.getTranslationKey())));
+                    .append(new TranslationTextComponent(this.getDescriptionId())));
         }
         return stack;
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(FACING, WATERLOGGED);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return AABBUtils.rotate(size, state.get(FACING));
+        return AABBUtils.rotate(size, state.getValue(FACING));
     }
 
     public VoxelShape getSize() {
@@ -113,51 +113,51 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
 
     @Override
     public Boolean blockCapability(BlockState state, Capability capability, @Nullable Direction side) {
-        return side == state.get(FACING).getOpposite();
+        return side == state.getValue(FACING).getOpposite();
     }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state) {
-        AxisAlignedBB aabb = size.getBoundingBox();
-        return AABBUtils.rotate(Block.makeCuboidShape(3, aabb.minY * 16, 3, 13, aabb.maxY, 13), state.get(FACING));
+        AxisAlignedBB aabb = size.bounds();
+        return AABBUtils.rotate(Block.box(3, aabb.minY * 16, 3, 13, aabb.maxY, 13), state.getValue(FACING));
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        if (stateIn.get(WATERLOGGED)) {
-            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.getValue(WATERLOGGED)) {
+            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
-        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         PlayerEntity player = context.getPlayer();
-        FluidState fluidstate = context.getWorld().getFluidState(context.getPos());
+        FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         if(player != null && !player.isCrouching()) {
-            return this.getDefaultState().with(FACING, context.getFace()).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+            return this.defaultBlockState().setValue(FACING, context.getClickedFace()).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
         }
-        Vector3d vec = context.getPlayer().getLookVec();
-        return this.getDefaultState().with(FACING, Direction.getFacingFromVector(vec.x, vec.y, vec.z)).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+        Vector3d vec = context.getPlayer().getLookAngle();
+        return this.defaultBlockState().setValue(FACING, Direction.getNearest(vec.x, vec.y, vec.z)).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         return new TileBPMicroblock();
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(worldIn, pos, state, placer, stack);
+        TileEntity tileentity = worldIn.getBlockEntity(pos);
         if (tileentity instanceof TileBPMicroblock && stack.hasTag() && stack.getTag().contains("block")) {
             //Update Microblock Type based on Stack
             Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(stack.getTag().getString("block")));

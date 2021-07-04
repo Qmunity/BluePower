@@ -47,7 +47,7 @@ import javax.annotation.Nullable;
 public class ItemSeedBag extends ItemBase implements INamedContainerProvider {
 
     public ItemSeedBag(String name) {
-        super(new Properties().maxStackSize(1));
+        super(new Properties().stacksTo(1));
         this.setRegistryName(Refs.MODID + ":" + name);
     }
 
@@ -104,20 +104,22 @@ public class ItemSeedBag extends ItemBase implements INamedContainerProvider {
         return 576;
     }
 
+
+
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand handIn) {
-        if (!world.isRemote && player.isCrouching()) {
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand handIn) {
+        if (!world.isClientSide && player.isCrouching()) {
             NetworkHooks.openGui((ServerPlayerEntity) player, this);
         }
-        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(handIn));
+        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getItemInHand(handIn));
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
-        World worldIn = context.getWorld();
+        World worldIn = context.getLevel();
         Hand hand = context.getHand();
-        BlockPos pos = context.getPos();
+        BlockPos pos = context.getClickedPos();
 
         if (player.isCrouching()) {
             return ActionResultType.PASS;
@@ -127,26 +129,26 @@ public class ItemSeedBag extends ItemBase implements INamedContainerProvider {
 
         //Get Active hand
         Hand activeHand = Hand.MAIN_HAND;
-        ItemStack seedBag = player.getHeldItem(activeHand);
+        ItemStack seedBag = player.getItemInHand(activeHand);
         if(!(seedBag.getItem() instanceof ItemSeedBag)){
-            seedBag = player.getHeldItemOffhand();
+            seedBag = player.getOffhandItem();
             activeHand = Hand.OFF_HAND;
         }
 
         //Get Items from the NBT Handler
         if (seedBag.hasTag()) seedBagInvHandler.deserializeNBT(seedBag.getTag().getCompound("inv"));
 
-        ItemStack seed = getSeedType(player.getHeldItem(hand));
-        Block block = Block.getBlockFromItem(seed.getItem());
+        ItemStack seed = getSeedType(player.getItemInHand(hand));
+        Block block = Block.byItem(seed.getItem());
         if (!seed.isEmpty() && block instanceof IPlantable) {
             IPlantable plant = (IPlantable) block;
             BlockState b = worldIn.getBlockState(pos);
             if (b.getBlock().canSustainPlant(b, worldIn, pos, Direction.UP, plant)
-                    && worldIn.isAirBlock(pos.offset(Direction.UP))) {
+                    && worldIn.isEmptyBlock(pos.relative(Direction.UP))) {
                 for (int i = 0; i < 9; i++) {
                     ItemStack is = seedBagInvHandler.getStackInSlot(i);
                     if (!is.isEmpty()) {
-                        worldIn.setBlockState(pos.offset(Direction.UP), block.getDefaultState(), 0);
+                        worldIn.setBlock(pos.relative(Direction.UP), block.defaultBlockState(), 0);
                         seedBagInvHandler.extractItem(i, 1, false);
                         break;
                     }

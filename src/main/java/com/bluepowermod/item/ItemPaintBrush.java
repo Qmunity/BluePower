@@ -35,14 +35,14 @@ public class ItemPaintBrush extends ItemDamageableColorableOverlay {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        TileEntity tile = context.getWorld().getTileEntity(context.getPos());
+    public ActionResultType useOn(ItemUseContext context) {
+        TileEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
         boolean changed = false;
         if(tile instanceof TileInsulatedWire){
            changed = ((TileInsulatedWire) tile).setColor(color);
         if(changed && context.getPlayer() != null)
-            context.getPlayer().setHeldItem(context.getHand(), new ItemStack(BPItems.paint_brush.get(0)));
+            context.getPlayer().setItemInHand(context.getHand(), new ItemStack(BPItems.paint_brush.get(0)));
         }
-        return super.onItemUse(context);
+        return super.useOn(context);
     }
 }

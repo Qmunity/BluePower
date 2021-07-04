@@ -23,13 +23,13 @@ public class BlockCPU extends BlockContainerBase {
 
     public BlockCPU() {
 
-        super(Material.IRON, TileCPU.class);
+        super(Material.METAL, TileCPU.class);
         setRegistryName(Refs.BLOCKCPU_NAME);
     }
 
     @Override
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+        TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof TileCPU) {
         }
     }

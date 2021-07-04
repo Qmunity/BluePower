@@ -14,13 +14,13 @@ public class BlockRubberSapling extends SaplingBlock {
 
     public BlockRubberSapling(Tree tree, Properties properties) {
         super(tree, properties);
-        this.setDefaultState(this.stateContainer.getBaseState().with(STAGE, 0));
+        this.registerDefaultState(this.stateDefinition.any().setValue(STAGE, 0));
         this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERSAPLING_NAME);
         BPBlocks.blockList.add(this);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(STAGE);
     }
 

@@ -34,50 +34,50 @@ public class BlockLampSurface extends BlockLamp implements IWaterLoggable {
     public BlockLampSurface(String name, boolean isInverted, MinecraftColor color, VoxelShape size) {
         super(name, isInverted, color);
         this.size = size;
-        this.setDefaultState(stateContainer.getBaseState().with(POWER, isInverted ? 15 : 0).with(FACING, Direction.UP).with(WATERLOGGED, false));
+        this.registerDefaultState(stateDefinition.any().setValue(POWER, isInverted ? 15 : 0).setValue(FACING, Direction.UP).setValue(WATERLOGGED, false));
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return AABBUtils.rotate(size, state.get(FACING));
+        return AABBUtils.rotate(size, state.getValue(FACING));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(POWER, FACING, WATERLOGGED);
     }
 
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
-        if (!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()) {
+        if (!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude()) {
             world.destroyBlock(pos, true);
         }
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        if (stateIn.get(WATERLOGGED)) {
-            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.getValue(WATERLOGGED)) {
+            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
-        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
-        return world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid();
+    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos) {
+        return world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude();
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        FluidState fluidstate = context.getWorld().getFluidState(context.getPos());
-        return super.getStateForPlacement(context).with(FACING, context.getFace()).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER).with(FACING, context.getFace());
+        FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
+        return super.getStateForPlacement(context).setValue(FACING, context.getClickedFace()).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER).setValue(FACING, context.getClickedFace());
     }
 
 }

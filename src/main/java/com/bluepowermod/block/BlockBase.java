@@ -37,7 +37,7 @@ public abstract class BlockBase extends Block {
     private boolean wip = false;
     
     public BlockBase(Material material) {
-        super(Properties.create(material).sound(SoundType.STONE).hardnessAndResistance(3.0F));
+        super(Properties.of(material).sound(SoundType.STONE).strength(3.0F));
         BPBlocks.blockList.add(this);
     }
 
@@ -57,8 +57,8 @@ public abstract class BlockBase extends Block {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-        super.addInformation(stack, world, tooltip, advanced);
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+        super.appendHoverText(stack, world, tooltip, advanced);
         if(wip){
             tooltip.add(new StringTextComponent(MinecraftColor.RED.getChatColor() + "WIP") );
         }

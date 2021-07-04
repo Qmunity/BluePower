@@ -78,7 +78,7 @@ public class ContainerProjectTable extends Container implements IGuiButtonSensit
         }
 
         bindPlayerInventory(invPlayer);
-        this.onCraftMatrixChanged(this.craftingGrid);
+        this.slotsChanged(this.craftingGrid);
     }
 
     public ContainerProjectTable( int id, PlayerInventory player )    {
@@ -101,39 +101,39 @@ public class ContainerProjectTable extends Container implements IGuiButtonSensit
     }
 
     @Override
-    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
 
-        boolean clickTypeCrafting = slotId == 0 && inventorySlots.get(slotId).getHasStack() &&
+        boolean clickTypeCrafting = slotId == 0 && slots.get(slotId).hasItem() &&
                 (clickTypeIn.equals(ClickType.PICKUP) || clickTypeIn.equals(ClickType.QUICK_MOVE));
 
         //Save the Matrix State before Crafting
         NonNullList<ItemStack> beforeAction = NonNullList.withSize(9, ItemStack.EMPTY);
         if(clickTypeCrafting){
             for (int i = 1; i < 10; ++i) {
-                Slot matrixSlot = inventorySlots.get(i);
-                ItemStack matrixStack = matrixSlot.getStack();
+                Slot matrixSlot = slots.get(i);
+                ItemStack matrixStack = matrixSlot.getItem();
                 beforeAction.set(i - 1, matrixStack);
             }
         }
 
-        ItemStack itemStack = super.slotClick(slotId, dragType, clickTypeIn, player);
+        ItemStack itemStack = super.clicked(slotId, dragType, clickTypeIn, player);
 
         //Try to pull from the Project Table Inventory if the last of an item for a recipe.
         if(clickTypeCrafting){
             for (int i = 1; i < 10; ++i) {
                 ItemStack beforeStack = beforeAction.get(i - 1);
-                Slot matrixSlot = inventorySlots.get(i);
-                ItemStack matrixStack = matrixSlot.getStack();
+                Slot matrixSlot = slots.get(i);
+                ItemStack matrixStack = matrixSlot.getItem();
 
                 if (matrixStack.getCount() == 0 && beforeStack.getCount() != 0) {
                     for (int ptSlot = 10; ptSlot < 28; ++ptSlot) {
-                        Slot inventorySlot = inventorySlots.get(ptSlot);
-                        ItemStack ptStack = inventorySlot.getStack();
+                        Slot inventorySlot = slots.get(ptSlot);
+                        ItemStack ptStack = inventorySlot.getItem();
                         if (ptStack.getItem() == beforeStack.getItem() && ptStack.getTag() == beforeStack.getTag()) {
                             ptStack.setCount(ptStack.getCount() - 1);
-                            inventorySlot.putStack(ptStack);
+                            inventorySlot.set(ptStack);
                             beforeStack.setCount(1);
-                            matrixSlot.putStack(beforeStack);
+                            matrixSlot.set(beforeStack);
                             break;
                         }
                     }
@@ -145,48 +145,48 @@ public class ContainerProjectTable extends Container implements IGuiButtonSensit
     }
 
     protected static void updateCrafting(int id, World world, PlayerEntity playerEntity, CraftingInventory craftingInventory, CraftResultInventory craftResultInventory) {
-        if (!world.isRemote) {
+        if (!world.isClientSide) {
             ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)playerEntity;
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInventory, world);
+            Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, craftingInventory, world);
             if (optional.isPresent()) {
                 ICraftingRecipe icraftingrecipe = optional.get();
-                if (craftResultInventory.canUseRecipe(world, serverplayerentity, icraftingrecipe)) {
-                    itemstack = icraftingrecipe.getCraftingResult(craftingInventory);
+                if (craftResultInventory.setRecipeUsed(world, serverplayerentity, icraftingrecipe)) {
+                    itemstack = icraftingrecipe.assemble(craftingInventory);
                 }
             }
 
-            craftResultInventory.setInventorySlotContents(0, itemstack);
-            serverplayerentity.connection.sendPacket(new SSetSlotPacket(id, 0, itemstack));
+            craftResultInventory.setItem(0, itemstack);
+            serverplayerentity.connection.send(new SSetSlotPacket(id, 0, itemstack));
         }
     }
 
     /**
      * Callback for when the crafting matrix is changed.
      */
-    public void onCraftMatrixChanged(IInventory inventoryIn) {
-            updateCrafting(this.windowId, this.player.getEntityWorld(), this.player, this.craftingGrid, this.craftResult);
+    public void slotsChanged(IInventory inventoryIn) {
+            updateCrafting(this.containerId, this.player.getCommandSenderWorld(), this.player, this.craftingGrid, this.craftResult);
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return true;
     }
 
     public void clearCraftingGrid() {
         for (int i = 1; i < 10; i++) {
-            Slot slot = (Slot) inventorySlots.get(i);
-            if (slot.getHasStack()) {
-                mergeItemStack(slot.getStack(), 10, 28, false);
-                if (slot.getStack().getCount() <= 0)
-                    slot.putStack(ItemStack.EMPTY);
+            Slot slot = (Slot) slots.get(i);
+            if (slot.hasItem()) {
+                moveItemStackTo(slot.getItem(), 10, 28, false);
+                if (slot.getItem().getCount() <= 0)
+                    slot.set(ItemStack.EMPTY);
             }
         }
     }
 
     @Override
-    public boolean canMergeSlot(ItemStack stack, Slot slotIn) {
-        return slotIn.inventory != this.craftResult && super.canMergeSlot(stack, slotIn);
+    public boolean canTakeItemForPickAll(ItemStack stack, Slot slotIn) {
+        return slotIn.container != this.craftResult && super.canTakeItemForPickAll(stack, slotIn);
     }
 
     public CraftingInventory getCraftingGrid() {
@@ -197,44 +197,44 @@ public class ContainerProjectTable extends Container implements IGuiButtonSensit
      * 0 result, 1-9 matrix,  10 - 27 inventory, 28 - 63 player inv.
      */
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = inventorySlots.get(par2);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = slots.get(par2);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (0 < par2 && par2 < 10) {
-                if (!mergeItemStack(itemstack1, 10, 28, false))
+                if (!moveItemStackTo(itemstack1, 10, 28, false))
                     return ItemStack.EMPTY;
             } else if (par2 < 28) {
-                if (!mergeItemStack(itemstack1, 28, 64, false))
+                if (!moveItemStackTo(itemstack1, 28, 64, false))
                     return ItemStack.EMPTY;
             } else {
-                if (!mergeItemStack(itemstack1, 10, 28, false))
+                if (!moveItemStackTo(itemstack1, 10, 28, false))
                     return ItemStack.EMPTY;
             }
             if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
             if (itemstack1.getCount() != itemstack.getCount()) {
-                slot.onSlotChange(itemstack, itemstack1);
+                slot.onQuickCraft(itemstack, itemstack1);
             } else {
 
-                this.onCraftMatrixChanged(this.craftingGrid);
+                this.slotsChanged(this.craftingGrid);
                 return ItemStack.EMPTY;
             }
             ItemStack itemstack2 = slot.onTake(player, itemstack1);
 
             if (par2 == 0)
             {
-                player.dropItem(itemstack2, false);
+                player.drop(itemstack2, false);
             }
         }
 
-        this.onCraftMatrixChanged(this.craftingGrid);
+        this.slotsChanged(this.craftingGrid);
         return itemstack;
     }
 

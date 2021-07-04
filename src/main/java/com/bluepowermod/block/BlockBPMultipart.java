@@ -47,18 +47,18 @@ public class BlockBPMultipart extends ContainerBlock implements IWaterLoggable {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public BlockBPMultipart() {
-        super(Block.Properties.create(Material.ROCK).notSolid().hardnessAndResistance(2));
+        super(Block.Properties.of(Material.STONE).noOcclusion().strength(2));
         setRegistryName(Refs.MODID + ":multipart");
         BPBlocks.blockList.add(this);
-        this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
     }
 
     @Override
-    public boolean receiveFluid(IWorld worldIn, BlockPos pos, BlockState state, FluidState fluidStateIn) {
-        if (!state.get(BlockStateProperties.WATERLOGGED) && fluidStateIn.getFluid() == Fluids.WATER && !getShape(state, worldIn, pos, ISelectionContext.dummy()).equals(VoxelShapes.fullCube())) {
-            if (!worldIn.isRemote()) {
-                worldIn.setBlockState(pos, state.with(BlockStateProperties.WATERLOGGED, Boolean.TRUE), 3);
-                worldIn.getPendingFluidTicks().scheduleTick(pos, fluidStateIn.getFluid(), fluidStateIn.getFluid().getTickRate(worldIn));
+    public boolean placeLiquid(IWorld worldIn, BlockPos pos, BlockState state, FluidState fluidStateIn) {
+        if (!state.getValue(BlockStateProperties.WATERLOGGED) && fluidStateIn.getType() == Fluids.WATER && !getShape(state, worldIn, pos, ISelectionContext.empty()).equals(VoxelShapes.block())) {
+            if (!worldIn.isClientSide()) {
+                worldIn.setBlock(pos, state.setValue(BlockStateProperties.WATERLOGGED, Boolean.TRUE), 3);
+                worldIn.getLiquidTicks().scheduleTick(pos, fluidStateIn.getType(), fluidStateIn.getType().getTickDelay(worldIn));
             }
             return true;
         } else {
@@ -67,26 +67,26 @@ public class BlockBPMultipart extends ContainerBlock implements IWaterLoggable {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(WATERLOGGED);
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        if (stateIn.get(WATERLOGGED)) {
-            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.getValue(WATERLOGGED)) {
+            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
-        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        TileEntity te = worldIn.getTileEntity(pos);
+        TileEntity te = worldIn.getBlockEntity(pos);
         if(te instanceof TileBPMultipart){
             List<VoxelShape> shapeList = new ArrayList<>();
             ((TileBPMultipart) te).getStates().forEach(s -> shapeList.add(s.getShape(worldIn, pos)));
@@ -94,20 +94,20 @@ public class BlockBPMultipart extends ContainerBlock implements IWaterLoggable {
                 return shapeList.stream().reduce(shapeList.get(0), VoxelShapes::or);
         }
         //Shouldn't be required but allows the player to break an empty multipart
-        return Block.makeCuboidShape(6,6,6,10,10,10);
+        return Block.box(6,6,6,10,10,10);
     }
 
     @Override
     public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
         BlockState partState = MultipartUtils.getClosestState(player, pos);
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if(partState != null && partState.getBlock() instanceof IBPPartBlock && te instanceof TileBPMultipart) {
             //Remove Selected Part
             ((TileBPMultipart) te).removeState(partState);
             //Call onMultipartReplaced
             ((IBPPartBlock)partState.getBlock()).onMultipartReplaced(partState, world, pos, state, false);
             //Play Break Sound
-            world.playSound(null, pos, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.playSound(null, pos, SoundEvents.STONE_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
             return false;
         }
         return false;
@@ -124,7 +124,7 @@ public class BlockBPMultipart extends ContainerBlock implements IWaterLoggable {
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        TileEntity tileentity = builder.get(LootParameters.BLOCK_ENTITY);
+        TileEntity tileentity = builder.getParameter(LootParameters.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if (tileentity instanceof TileBPMultipart) {
             ((TileBPMultipart) tileentity).getStates().forEach(s -> itemStacks.addAll(s.getBlock().getDrops(s, builder)));
@@ -134,20 +134,20 @@ public class BlockBPMultipart extends ContainerBlock implements IWaterLoggable {
 
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if(te instanceof TileBPMultipart) {
             ((TileBPMultipart) te).getStates().forEach(s -> s.neighborChanged(world, pos, blockIn, fromPos, bool));
         }
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state){
+    public BlockRenderType getRenderShape(BlockState state){
         return BlockRenderType.MODEL;
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         return new TileBPMultipart();
     }
 

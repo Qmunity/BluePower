@@ -26,13 +26,11 @@ import net.minecraft.inventory.container.Slot;
 public class SlotLocked extends Slot {
     
     public SlotLocked(IInventory par1iInventory, int par2, int par3, int par4) {
-    
         super(par1iInventory, par2, par3, par4);
     }
     
     @Override
-    public boolean canTakeStack(PlayerEntity par1EntityPlayer) {
-    
+    public boolean mayPickup(PlayerEntity par1EntityPlayer) {
         return false;
     }
 }

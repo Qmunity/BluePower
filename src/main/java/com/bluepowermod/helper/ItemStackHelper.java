@@ -20,7 +20,7 @@ public class ItemStackHelper {
     public static boolean areItemStacksEqual(ItemStack itemStack1, ItemStack itemStack2) {
 
         return itemStack1.isEmpty() && itemStack2.isEmpty() || !(itemStack1.isEmpty() || itemStack2.isEmpty())
-                && itemStack1.getItem() == itemStack2.getItem() && itemStack1.getDamage() == itemStack2.getDamage()
+                && itemStack1.getItem() == itemStack2.getItem() && itemStack1.getDamageValue() == itemStack2.getDamageValue()
                 && !(itemStack1.getTag() == null && itemStack2.getTag() != null)
                 && (itemStack1.getTag() == null || itemStack1.getTag().equals(itemStack2.getTag()));
     }
@@ -43,19 +43,19 @@ public class ItemStackHelper {
 
         if (mode == 0) {
             //TODO: Make sure this is right
-            return ItemTags.getCollection().getOwningTags(stack1.getItem()).stream().anyMatch(item->ItemTags.getCollection().getOwningTags(stack2.getItem()) == item);
+            return ItemTags.getAllTags().getMatchingTags(stack1.getItem()).stream().anyMatch(item->ItemTags.getAllTags().getMatchingTags(stack2.getItem()) == item);
         } else if (mode == 1) {
             return ItemStackUtils.isItemFuzzyEqual(stack1, stack2);
         } else {
-            return ItemTags.getCollection().getOwningTags(stack1.getItem()).stream().anyMatch(item->ItemTags.getCollection().getOwningTags(stack2.getItem()) == item) && ItemStack.areItemStackTagsEqual(stack1, stack2);
+            return ItemTags.getAllTags().getMatchingTags(stack1.getItem()).stream().anyMatch(item->ItemTags.getAllTags().getMatchingTags(stack2.getItem()) == item) && ItemStack.tagMatches(stack1, stack2);
         }
     }
 
     public static boolean canStack(ItemStack stack1, ItemStack stack2) {
         return stack1 == ItemStack.EMPTY || stack2 == ItemStack.EMPTY ||
                 (stack1.getItem() == stack2.getItem() &&
-                        (stack2.getDamage() == stack1.getDamage()) &&
-                        ItemStack.areItemStackTagsEqual(stack2, stack1)) &&
+                        (stack2.getDamageValue() == stack1.getDamageValue()) &&
+                        ItemStack.tagMatches(stack2, stack1)) &&
                         stack1.isStackable();
     }
 

@@ -27,7 +27,7 @@ public class WailaProviderParts implements IServerDataProvider<TileEntity>{
 
     @Override
     public void appendServerData(CompoundNBT compoundNBT, ServerPlayerEntity serverPlayerEntity, World world, TileEntity tileEntity) {
-        // ITilePartHolder h = MultipartCompatibility.getPartHolder(data.getWorld(), data.getPosition().blockX, data.getPosition().blockY,
+        // ITilePartHolder h = MultipartCompatibility.getPartHolder(data.getLevel(), data.getPosition().blockX, data.getPosition().blockY,
         // data.getPosition().blockZ);
         //
         // if (h == null)

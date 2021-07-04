@@ -28,7 +28,7 @@ import net.minecraft.world.IBlockReader;
 public class BlockThermopile extends BlockContainerHorizontalFacingBase {
 
     public BlockThermopile() {
-        super(Material.IRON, TileThermopile.class);
+        super(Material.METAL, TileThermopile.class);
         setRegistryName(Refs.MODID, Refs.THERMOPILE_NAME);
     }
 

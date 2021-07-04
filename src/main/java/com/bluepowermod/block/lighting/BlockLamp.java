@@ -45,11 +45,11 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     private int tick = 0;
 
     public BlockLamp(String name, boolean isInverted, MinecraftColor color) {
-        super(Properties.create(Material.REDSTONE_LIGHT).sound(SoundType.STONE).hardnessAndResistance(1.0F));
+        super(Properties.of(Material.DECORATION).sound(SoundType.STONE).strength(1.0F));
         this.isInverted = isInverted;
         this.color = color;
         this.name = name;
-        setDefaultState(this.getDefaultState().with(POWER, isInverted ? 15 : 0));
+        registerDefaultState(this.defaultBlockState().setValue(POWER, isInverted ? 15 : 0));
         setRegistryName(name + (isInverted ? "inverted" : "") + "_"+ (color == MinecraftColor.NONE ? "rgb" : color.name().toLowerCase()));
     }
 
@@ -66,7 +66,7 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
 
     @Override
     public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
-        return state.get(POWER);
+        return state.getValue(POWER);
     }
 
     @Override
@@ -89,15 +89,15 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(POWER);
     }
 
     @Nullable
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        int redstoneValue = context.getWorld().getRedstonePowerFromNeighbors(context.getPos());
+        int redstoneValue = context.getLevel().getBestNeighborSignal(context.getClickedPos());
         if(isInverted){redstoneValue = 15 - redstoneValue;}
-        return this.getDefaultState().with(POWER, redstoneValue);
+        return this.defaultBlockState().setValue(POWER, redstoneValue);
     }
 
     @Override
@@ -110,9 +110,9 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     @Override
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if(tick <= 1){
-            int redstoneValue = world.getRedstonePowerFromNeighbors(pos);
+            int redstoneValue = world.getBestNeighborSignal(pos);
             if(isInverted){redstoneValue = 15 - redstoneValue;}
-            world.setBlockState(pos, this.getDefaultState().with(POWER, redstoneValue), 2);
+            world.setBlock(pos, this.defaultBlockState().setValue(POWER, redstoneValue), 2);
         }
         tick++;
     }
@@ -120,9 +120,9 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
-        int redstoneValue = world.getRedstonePowerFromNeighbors(pos);
+        int redstoneValue = world.getBestNeighborSignal(pos);
         if(isInverted){redstoneValue = 15 - redstoneValue;}
-        world.setBlockState(pos, state.with(POWER, redstoneValue), 2);
+        world.setBlock(pos, state.setValue(POWER, redstoneValue), 2);
     }
 
 }

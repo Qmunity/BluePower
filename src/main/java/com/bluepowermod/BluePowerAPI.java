@@ -29,7 +29,7 @@ public class BluePowerAPI implements IBPApi {
 
     @Override
     public void loadSilkySettings(World world, BlockPos pos, ItemStack stack) {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         BlockState blockState = world.getBlockState(pos);
         if (te == null)
             throw new IllegalStateException("This block doesn't have a tile entity?!");
@@ -37,7 +37,7 @@ public class BluePowerAPI implements IBPApi {
             throw new IllegalArgumentException("ItemStack is empty!");
         if (stack.hasTag()) {
             CompoundNBT tag = stack.getTag();
-            if (tag.hasUniqueId("tileData")) {
+            if (tag.contains("tileData")) {
                 if (te instanceof IAdvancedSilkyRemovable) {
                     ((IAdvancedSilkyRemovable) te).readSilkyData(world, pos, tag.getCompound("tileData"));
                 } else if (blockState.getBlock() instanceof IAdvancedSilkyRemovable) {
@@ -47,7 +47,7 @@ public class BluePowerAPI implements IBPApi {
                     tileTag.putInt("x", pos.getX());
                     tileTag.putInt("y", pos.getY());
                     tileTag.putInt("z", pos.getZ());
-                    te.read(blockState, tileTag);
+                    te.load(blockState, tileTag);
                 }
             }
         }

@@ -37,7 +37,7 @@ public class TileSortron extends TileMachineBase {
     //
     // super.onBlockNeighbourChanged();
     // EnumFacing direction = EnumFacing.byIndex(getBlockMetadata());
-    // TileEntity tile = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+    // TileEntity tile = worldObj.getBlockEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
     // if (tile instanceof IInventory) {
     // connectedInventory = (IInventory) tile;
     // } else {
@@ -100,7 +100,7 @@ public class TileSortron extends TileMachineBase {
     // public Object[] getNumSlots(Object[] arguments) throws Exception {
     //
     // if (connectedInventory != null) {
-    // return new Integer[] { connectedInventory.getSizeInventory() };
+    // return new Integer[] { connectedInventory.getContainerSize() };
     // }
     // throw new Exception("Sortron has no connected Inventory");
     // }
@@ -110,8 +110,8 @@ public class TileSortron extends TileMachineBase {
     // if (connectedInventory != null) {
     // if (arguments.length > 0 && arguments[0] instanceof Double) {
     // int slot = ((Double) arguments[0]).intValue();
-    // if (slot >= 0 && slot < connectedInventory.getSizeInventory()) {
-    // return new String[] { getStringFromStack(connectedInventory.getStackInSlot(slot)) };
+    // if (slot >= 0 && slot < connectedInventory.getContainerSize()) {
+    // return new String[] { getStringFromStack(connectedInventory.getItem(slot)) };
     // }
     // throw new IllegalArgumentException("Slot value should be greater than or equal to 0 and smaller than the number of slots");
     // }
@@ -125,8 +125,8 @@ public class TileSortron extends TileMachineBase {
     // if (connectedInventory != null) {
     // if (arguments.length > 0 && arguments[0] instanceof Double) {
     // int slot = ((Double) arguments[0]).intValue();
-    // if (slot >= 0 && slot < connectedInventory.getSizeInventory()) {
-    // ItemStack stack = connectedInventory.getStackInSlot(slot);
+    // if (slot >= 0 && slot < connectedInventory.getContainerSize()) {
+    // ItemStack stack = connectedInventory.getItem(slot);
     // if (stack != null) {
     // if (arguments.length > 1) {
     // byte color = parseColorFromObject(arguments[1]);
@@ -134,7 +134,7 @@ public class TileSortron extends TileMachineBase {
     // } else {
     // addItemToOutputBuffer(stack);
     // }
-    // connectedInventory.setInventorySlotContents(slot, null);
+    // connectedInventory.setItem(slot, null);
     // return new String[] { getStringFromStack(stack) };
     // }
     // return new Boolean[] { false };

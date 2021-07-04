@@ -38,13 +38,13 @@ public class ItemPaintCan extends ItemDamageableColorableOverlay {
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
 
-        if (itemStack.getDamage() >= 16)
+        if (itemStack.getDamageValue() >= 16)
             return ItemStack.EMPTY;
         ItemStack stack = itemStack.copy();
         int newUses = getUsesUsed(stack) + 1;
 
         if (newUses == getMaxUses()) {
-            stack.setDamage(16);
+            stack.setDamageValue(16);
             setUsesUsed(stack, 0);
         } else {
             setUsesUsed(stack, newUses);

@@ -40,7 +40,7 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
     @Override
     protected void redstoneChanged(boolean newValue) {
         super.redstoneChanged(newValue);
-        BlockIgniter.setState(newValue, world, pos);
+        BlockIgniter.setState(newValue, level, worldPosition);
         sendUpdatePacket();
         if (getIsRedstonePowered()) {
             ignite();
@@ -50,20 +50,19 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
     }
 
     private void ignite() {
-        Direction facing = getBlockState().get(FACING);
-        if (world.getRedstonePowerFromNeighbors(pos) > 0 && world.isAirBlock(pos.offset(facing)) && world.getBlockState(pos.offset(facing)).isAir()) {
-            world.setBlockState(pos.offset(facing), Blocks.FIRE.getDefaultState());
+        Direction facing = getBlockState().getValue(FACING);
+        if (level.getBestNeighborSignal(worldPosition) > 0 && level.isEmptyBlock(worldPosition.relative(facing)) && level.getBlockState(worldPosition.relative(facing)).isAir()) {
+            level.setBlockAndUpdate(worldPosition.relative(facing), Blocks.FIRE.defaultBlockState());
         }
     }
 
     private void extinguish() {
-        Direction facing = getBlockState().get(FACING);
-        Block target = world.getBlockState(pos.offset(facing)).getBlock();
-        if (world.getRedstonePowerFromNeighbors(pos) == 0 && (target == Blocks.FIRE || target == Blocks.NETHER_PORTAL)) {
-            world.setBlockState(pos.offset(facing), Blocks.AIR.getDefaultState());
+        Direction facing = getBlockState().getValue(FACING);
+        Block target = level.getBlockState(worldPosition.relative(facing)).getBlock();
+        if (level.getBestNeighborSignal(worldPosition) == 0 && (target == Blocks.FIRE || target == Blocks.NETHER_PORTAL)) {
+            level.setBlockAndUpdate(worldPosition.relative(facing), Blocks.AIR.defaultBlockState());
         }
     }
-
 
     @Override
     public void tick() {
@@ -77,6 +76,6 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
     @Override
     public boolean isEjecting() {
 
-        return getBlockState().get(ACTIVE);
+        return getBlockState().getValue(ACTIVE);
     }
 }

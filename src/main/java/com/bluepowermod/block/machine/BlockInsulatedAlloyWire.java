@@ -35,7 +35,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        TileEntity tileentity = builder.get(LootParameters.BLOCK_ENTITY);
+        TileEntity tileentity = builder.getParameter(LootParameters.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if(tileentity instanceof TileBPMultipart){
             tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
@@ -50,8 +50,8 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
     }
 
     @Override
-    public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {
-        TileEntity tileentity = world.getTileEntity(pos);
+    public ItemStack getCloneItemStack(IBlockReader world, BlockPos pos, BlockState state) {
+        TileEntity tileentity = world.getBlockEntity(pos);
         ItemStack stack = ItemStack.EMPTY;
         if(tileentity instanceof TileBPMultipart){
             tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
@@ -68,7 +68,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
     @Override
     public int getColor(BlockState state, IBlockReader world, BlockPos pos, int tintIndex) {
         //Color for Block
-        TileEntity tile = (world.getTileEntity(pos));
+        TileEntity tile = (world.getBlockEntity(pos));
         if(tile instanceof TileBPMultipart){
             tile = ((TileBPMultipart)tile).getTileForState(state);
         }

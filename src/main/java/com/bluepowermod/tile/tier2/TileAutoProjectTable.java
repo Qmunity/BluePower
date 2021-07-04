@@ -23,14 +23,14 @@ public class TileAutoProjectTable extends TileProjectTable {
     private final int OUTPUT_SLOT = 100;
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount) {
+    public ItemStack removeItem(int slot, int amount) {
         if(slot == OUTPUT_SLOT) {
             InventoryProjectTableCrafting craftingInv = new InventoryProjectTableCrafting(null, this, 3, 3);
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInv, world);
+            Optional<ICraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, craftingInv, level);
             if (optional.isPresent()) {
                 ICraftingRecipe icraftingrecipe = optional.get();
-                itemstack = icraftingrecipe.getCraftingResult(craftingInv);
+                itemstack = icraftingrecipe.assemble(craftingInv);
             }
 
             for (int i = 0; i < 9; i++) {
@@ -42,11 +42,11 @@ public class TileAutoProjectTable extends TileProjectTable {
                             //No available items so end here to keep template
                             return ItemStack.EMPTY;
                         }
-                        ItemStack ptStack = getStackInSlot(ptSlot);
+                        ItemStack ptStack = getItem(ptSlot);
                         if (ptStack.getItem() == slotStack.getItem() && ptStack.getTag() == slotStack.getTag()) {
                             slotStack.setCount(2);
                             craftingGrid.set(i, slotStack);
-                            decrStackSize(ptSlot, 1);
+                            removeItem(ptSlot, 1);
                             break;
                         }
                     }
@@ -61,30 +61,30 @@ public class TileAutoProjectTable extends TileProjectTable {
 
             return itemstack;
         }else{
-            return super.decrStackSize(slot, amount);
+            return super.removeItem(slot, amount);
         }
     }
 
     @Override
-    public ItemStack getStackInSlot(int i) {
+    public ItemStack getItem(int i) {
         if(i == OUTPUT_SLOT){
             InventoryProjectTableCrafting craftingInv = new InventoryProjectTableCrafting(null, this, 3, 3);
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInv, world);
+            Optional<ICraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, craftingInv, level);
             if (optional.isPresent()) {
                 ICraftingRecipe icraftingrecipe = optional.get();
-                itemstack = icraftingrecipe.getCraftingResult(craftingInv);
+                itemstack = icraftingrecipe.assemble(craftingInv);
             }
             return itemstack;
         }else {
-            return super.getStackInSlot(i);
+            return super.getItem(i);
         }
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemStack) {
+    public void setItem(int i, ItemStack itemStack) {
         if(i != OUTPUT_SLOT){
-            super.setInventorySlotContents(i, itemStack);
+            super.setItem(i, itemStack);
         }
     }
 
@@ -99,16 +99,16 @@ public class TileAutoProjectTable extends TileProjectTable {
         if(side == Direction.DOWN) {
             return new int[]{OUTPUT_SLOT};
         }
-        return IntStream.range(0, getSizeInventory() - 1).toArray();
+        return IntStream.range(0, getContainerSize() - 1).toArray();
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
         return direction != Direction.DOWN;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return true;
     }
 

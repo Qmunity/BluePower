@@ -19,19 +19,16 @@ public class SlotPhantom extends Slot implements IPhantomSlot {
     
     // used for filters
     public SlotPhantom(IInventory par2IInventory, int par3, int par4, int par5) {
-    
         super(par2IInventory, par3, par4, par5);
     }
     
     @Override
-    public boolean canTakeStack(PlayerEntity par1EntityPlayer) {
-    
+    public boolean mayPickup(PlayerEntity playerEntity) {
         return false;
     }
     
     @Override
     public boolean canAdjust() {
-    
         return true;
     }
     

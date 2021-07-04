@@ -54,7 +54,7 @@ public class ContainerAlloyFurnace extends Container {
             }
         }
         bindPlayerInventory(invPlayer);
-        this.trackIntArray(fields);
+        this.addDataSlots(fields);
     }
 
     public ContainerAlloyFurnace( int id, PlayerInventory player )    {
@@ -77,42 +77,42 @@ public class ContainerAlloyFurnace extends Container {
     }
     
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
+    public ItemStack quickMoveStack(PlayerEntity par1EntityPlayer, int par2) {
     
         ItemStack var3 = ItemStack.EMPTY;
-        Slot var4 = inventorySlots.get(par2);
+        Slot var4 = slots.get(par2);
         
-        if (var4 != null && var4.getHasStack()) {
-            ItemStack var5 = var4.getStack();
+        if (var4 != null && var4.hasItem()) {
+            ItemStack var5 = var4.getItem();
             var3 = var5.copy();
             
             if (par2 < 11) {
-                if (!mergeItemStack(var5, 12, 47, false)) return ItemStack.EMPTY;
-                var4.onSlotChange(var5, var3);
+                if (!moveItemStackTo(var5, 12, 47, false)) return ItemStack.EMPTY;
+                var4.onQuickCraft(var5, var3);
             } else {
-                if (FurnaceTileEntity.isFuel(var5) && mergeItemStack(var5, 0, 1, false)) {
+                if (FurnaceTileEntity.isFuel(var5) && moveItemStackTo(var5, 0, 1, false)) {
                     
-                } else if (!mergeItemStack(var5, 2, 11, false)) return ItemStack.EMPTY;
-                var4.onSlotChange(var5, var3);
+                } else if (!moveItemStackTo(var5, 2, 11, false)) return ItemStack.EMPTY;
+                var4.onQuickCraft(var5, var3);
             }
             
             if (var5.getCount() == 0) {
-                var4.putStack(ItemStack.EMPTY);
+                var4.set(ItemStack.EMPTY);
             } else {
-                var4.onSlotChanged();
+                var4.setChanged();
             }
             
             if (var5.getCount() == var3.getCount()) return ItemStack.EMPTY;
             
-            var4.onSlotChange(var3, var5);
+            var4.onQuickCraft(var3, var5);
         }
         
         return var3;
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerEntity) {
-        return inventory.isUsableByPlayer( playerEntity );
+    public boolean stillValid(PlayerEntity playerEntity) {
+        return inventory.stillValid( playerEntity );
     }
 
     @OnlyIn(Dist.CLIENT)

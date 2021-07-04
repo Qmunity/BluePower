@@ -22,13 +22,13 @@ public class BlockRubberLeaves extends LeavesBlock {
     public BlockRubberLeaves(Properties properties){
         super(properties);
         this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERLEAVES_NAME);
-        this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, true));
+        this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, 7).setValue(PERSISTENT, true));
         BPBlocks.blockList.add(this);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return Blocks.OAK_LEAVES.getRenderType(state);
+    public BlockRenderType getRenderShape(BlockState state) {
+        return Blocks.OAK_LEAVES.getRenderShape(state);
     }
 
     @Nonnull
@@ -38,14 +38,14 @@ public class BlockRubberLeaves extends LeavesBlock {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(DISTANCE, PERSISTENT);
     }
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> drops = super.getDrops(state, builder);
-        drops.add(new ItemStack(Item.getItemFromBlock(BPBlocks.rubber_sapling)));
+        drops.add(new ItemStack(Item.byBlock(BPBlocks.rubber_sapling)));
         return drops;
     }
 

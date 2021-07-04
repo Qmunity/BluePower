@@ -76,14 +76,14 @@ public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnace
 
     @Override
     public void setIngredients(StandardAlloyFurnaceRecipe recipe, IIngredients ingredients) {
-        List<List<ItemStack>> items = recipe.getRequiredItems().stream().map(ingredient -> Arrays.asList(ingredient.getMatchingStacks())).collect(Collectors.toList());
+        List<List<ItemStack>> items = recipe.getRequiredItems().stream().map(ingredient -> Arrays.asList(ingredient.getItems())).collect(Collectors.toList());
         for (int i = 0; i < items.size(); i++) {
             for(ItemStack itemStack : items.get(i)){
                 itemStack.setCount(recipe.getRequiredCount().get(i));
             }
         }
         ingredients.setInputLists(VanillaTypes.ITEM, items);
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
+        ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
     }
 
     @Override

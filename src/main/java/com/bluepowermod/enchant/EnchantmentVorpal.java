@@ -25,7 +25,7 @@ public class EnchantmentVorpal extends Enchantment {
     }
 
     @Override
-    public int getMinEnchantability(int par1) {
+    public int getMinCost(int par1) {
 
         return 10 + 20 * (par1 - 1);
     }

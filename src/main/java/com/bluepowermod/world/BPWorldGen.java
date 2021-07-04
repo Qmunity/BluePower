@@ -34,7 +34,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class BPWorldGen {
 
     //VOLCANO
-    public static Feature<NoFeatureConfig> VOLCANO = new WorldGenVolcano(NoFeatureConfig.field_236558_a_);
+    public static Feature<NoFeatureConfig> VOLCANO = new WorldGenVolcano(NoFeatureConfig.CODEC);
     private static PlacementVolcano VOLCANO_PLACEMENT = new PlacementVolcano(NoPlacementConfig.CODEC);
     private static ConfiguredFeature<?, ?> VOLCANO_FEATURE;
     //MARBLE
@@ -43,8 +43,8 @@ public class BPWorldGen {
     public static void init() {
         ForgeRegistries.FEATURES.register(VOLCANO.setRegistryName("bluepower:volcano"));
         ForgeRegistries.DECORATORS.register(VOLCANO_PLACEMENT.setRegistryName("bluepower:volcano"));
-        VOLCANO_FEATURE = Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "bluepower:volcano", VOLCANO.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(VOLCANO_PLACEMENT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-        MARBLE_FEATURE = Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "bluepower:marble", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, BPBlocks.marble.getDefaultState(), BPConfig.CONFIG.veinSizeMarble.get() / 32)).withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(0, 0, 90)).square().func_242731_b(1)));
+        VOLCANO_FEATURE = Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "bluepower:volcano", VOLCANO.configured(IFeatureConfig.NONE).decorated(VOLCANO_PLACEMENT.configured(IPlacementConfig.NONE)));
+        MARBLE_FEATURE = Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "bluepower:marble", Feature.ORE.configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, BPBlocks.marble.defaultBlockState(), BPConfig.CONFIG.veinSizeMarble.get() / 32)).decorated(Placement.RANGE.configured(new TopSolidRangeConfig(0, 0, 90)).squared().count(1)));
     }
 
     @SubscribeEvent
@@ -53,12 +53,12 @@ public class BPWorldGen {
         //Volcano
         if(BPConfig.CONFIG.volcanoBiomeCategoryWhitelist.get().contains(event.getCategory().getName())) {
             if(BPConfig.CONFIG.generateVolcano.get()) {
-                generation.withFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, VOLCANO_FEATURE);
+                generation.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, VOLCANO_FEATURE);
             }
         }
         //Marble
         if(BPConfig.CONFIG.generateMarble.get() && !event.getCategory().equals(Biome.Category.NETHER) && !event.getCategory().equals(Biome.Category.THEEND)) {
-            generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, MARBLE_FEATURE);
+            generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, MARBLE_FEATURE);
         }
     }
 

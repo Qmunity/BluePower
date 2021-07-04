@@ -33,19 +33,19 @@ import javax.annotation.Nullable;
 public class BlockWindmill extends BlockContainerBase implements ITileEntityProvider {
     
     public BlockWindmill() {
-        super(Material.IRON, TileWindmill.class);
+        super(Material.METAL, TileWindmill.class);
         setRegistryName(Refs.MODID, Refs.WINDMILL_NAME);
         BPBlocks.blockList.add(this);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader iBlockReader) {
+    public TileEntity newBlockEntity(IBlockReader iBlockReader) {
         return new TileWindmill();
     }
 }

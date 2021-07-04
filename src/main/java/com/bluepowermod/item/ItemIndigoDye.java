@@ -36,11 +36,11 @@ public class ItemIndigoDye extends ItemBase {
     }
 
 	@Override
-	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
+	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
 		if (entity instanceof SheepEntity) {
 			SheepEntity sheep = (SheepEntity) entity;
-			if (!sheep.getSheared() && sheep.getFleeceColor() != DyeColor.PURPLE) {
-				sheep.setFleeceColor(DyeColor.PURPLE);
+			if (!sheep.isSheared() && sheep.getColor() != DyeColor.PURPLE) {
+				sheep.setColor(DyeColor.PURPLE);
 				stack.setCount(stack.getCount() - 1);
 			}
 			return ActionResultType.SUCCESS;

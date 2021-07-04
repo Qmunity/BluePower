@@ -68,7 +68,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     @Override
     public void tick() {
 
-        if (!world.isRemote && getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
+        if (!level.isClientSide && getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
             dumpUnwantedItems();
             retrieveItemsFromManagers();
             setOutputtingRedstone(mode == 0 && shouldEmitRedstone());
@@ -92,7 +92,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     private void retrieveItemsFromManagers() {
-        //Optional<IMultipartContainer> container = MultipartHelper.getContainer(world, pos.offset(getOutputDirection()));
+        //Optional<IMultipartContainer> container = MultipartHelper.getContainer(world, worldPosition.relative(getOutputDirection()));
         //if (container.isPresent()) {
         //}
     }
@@ -103,7 +103,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
         IInventory inv = IOHelper.getInventoryForTE(te);
         int[] slots = IOHelper.getAccessibleSlotsForInventory(inv, getFacingDirection().getOpposite());
         for (int slot : slots) {
-            ItemStack stack = inv.getStackInSlot(slot);
+            ItemStack stack = inv.getItem(slot);
             int acceptedItems = acceptedItems(stack);
             if (acceptedItems < 0) {
                 int rejectedItems = -acceptedItems;
@@ -121,13 +121,13 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void read(BlockState blockState, CompoundNBT tCompound) {
+    public void load(BlockState blockState, CompoundNBT tCompound) {
 
-        super.read(blockState, tCompound);
+        super.load(blockState, tCompound);
 
         for (int i = 0; i < 24; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.read(tc));
+            inventory.set(i, ItemStack.of(tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
         mode = tCompound.getByte("mode");
@@ -139,13 +139,13 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT write(CompoundNBT tCompound) {
+    public CompoundNBT save(CompoundNBT tCompound) {
 
-        super.write(tCompound);
+        super.save(tCompound);
 
         for (int i = 0; i < 24; i++) {
                 CompoundNBT tc = new CompoundNBT();
-                inventory.get(i).write(tc);
+                inventory.get(i).save(tc);
                 tCompound.put("inventory" + i, tc);
         }
 
@@ -171,7 +171,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
 
         return inventory.size();
     }
@@ -182,22 +182,22 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public ItemStack getStackInSlot(int i) {
+    public ItemStack getItem(int i) {
 
         return inventory.get(i);
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount) {
+    public ItemStack removeItem(int slot, int amount) {
 
-        ItemStack itemStack = getStackInSlot(slot);
+        ItemStack itemStack = getItem(slot);
         if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, ItemStack.EMPTY);
+                setItem(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, ItemStack.EMPTY);
+                    setItem(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -206,49 +206,49 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int i) {
-        ItemStack itemStack = getStackInSlot(i);
+    public ItemStack removeItemNoUpdate(int i) {
+        ItemStack itemStack = getItem(i);
         if (itemStack != ItemStack.EMPTY) {
-            setInventorySlotContents(i, ItemStack.EMPTY);
+            setItem(i, ItemStack.EMPTY);
         }
         return itemStack;
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemStack) {
+    public void setItem(int i, ItemStack itemStack) {
 
         inventory.set(i, itemStack);
     }
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
 
         return 64;
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        return pos.withinDistance(new Vector3i(player.getPosX(), player.getPosY(), player.getPosZ()), 64.0D);
+    public boolean stillValid(PlayerEntity player) {
+        return worldPosition.closerThan(new Vector3i(player.getX(), player.getY(), player.getZ()), 64.0D);
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
-
-    }
-
-    @Override
-    public void closeInventory(PlayerEntity player) {
+    public void startOpen(PlayerEntity player) {
 
     }
 
     @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemStack) {
+    public void stopOpen(PlayerEntity player) {
+
+    }
+
+    @Override
+    public boolean canPlaceItem(int i, ItemStack itemStack) {
 
         return true;
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
 
     }
 
@@ -276,12 +276,12 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return true;
     }
 

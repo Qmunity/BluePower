@@ -33,6 +33,6 @@ public class GuiBuffer extends GuiContainerBaseBP<ContainerBuffer> implements IH
 
     public GuiBuffer(ContainerBuffer container, PlayerInventory playerInventory, ITextComponent title){
         super(container, playerInventory, title, resLoc);
-        ySize = 186;
+        imageHeight = 186;
     }
 }

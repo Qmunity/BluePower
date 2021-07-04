@@ -48,7 +48,7 @@ public class MessageGuiUpdate{
                 return;
             }
 
-            Container container = player.openContainer;
+            Container container = player.containerMenu;
             if (container instanceof IGuiButtonSensitive) {
                 ((IGuiButtonSensitive) container).onButtonPress(player, msg.messageId, msg.value);
             }

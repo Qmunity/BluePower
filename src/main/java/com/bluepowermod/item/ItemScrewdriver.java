@@ -37,19 +37,19 @@ import java.util.Random;
 public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
     public ItemScrewdriver() {
-        super(new Properties().maxDamage(250));
+        super(new Properties().durability(250));
         setRegistryName(Refs.MODID + ":" + Refs.SCREWDRIVER_NAME);
     }
 
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        Block block = context.getWorld().getBlockState(context.getPos()).getBlock();
+        Block block = context.getLevel().getBlockState(context.getClickedPos()).getBlock();
         if (context.getPlayer() != null && context.getPlayer().isCrouching()){
-            block.rotate(context.getWorld().getBlockState(context.getPos()), context.getWorld(), context.getPos(), Rotation.CLOCKWISE_180);
+            block.rotate(context.getLevel().getBlockState(context.getClickedPos()), context.getLevel(), context.getClickedPos(), Rotation.CLOCKWISE_180);
         } else{
-            block.rotate(context.getWorld().getBlockState(context.getPos()), context.getWorld(), context.getPos(), Rotation.CLOCKWISE_90);
+            block.rotate(context.getLevel().getBlockState(context.getClickedPos()), context.getLevel(), context.getClickedPos(), Rotation.CLOCKWISE_90);
         }
-        damage(context.getPlayer().getHeldItem(context.getHand()), 1, context.getPlayer(), false);
+        damage(context.getPlayer().getItemInHand(context.getHand()), 1, context.getPlayer(), false);
         return ActionResultType.SUCCESS;
     }
 
@@ -58,19 +58,19 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
         if (player != null && player.isCreative())
             return true;
-        if ((stack.getDamage() % stack.getMaxDamage()) + damage > stack.getMaxDamage())
+        if ((stack.getDamageValue() % stack.getMaxDamage()) + damage > stack.getMaxDamage())
             return false;
 
         if (!simulated) {
-            if (player instanceof ServerPlayerEntity && stack.attemptDamageItem(damage, new Random(), (ServerPlayerEntity) player)) {
-                player.sendBreakAnimation(Hand.MAIN_HAND);
+            if (player instanceof ServerPlayerEntity && stack.hurt(damage, new Random(), (ServerPlayerEntity) player)) {
+                player.broadcastBreakEvent(Hand.MAIN_HAND);
                 stack.setCount(stack.getCount() - 1);
-                player.addStat(Stats.ITEM_BROKEN.get(stack.getItem()), 1);
+                player.awardStat(Stats.ITEM_BROKEN.get(stack.getItem()), 1);
 
                 if (stack.getCount() < 0)
                     stack.setCount(0);
 
-                stack.setDamage(0);
+                stack.setDamageValue(0);
             }
         }
 

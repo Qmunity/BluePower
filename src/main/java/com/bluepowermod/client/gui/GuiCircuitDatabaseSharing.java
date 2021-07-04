@@ -48,7 +48,7 @@ public class GuiCircuitDatabaseSharing extends GuiContainerBaseBP<ContainerCircu
 
         super.init();
 
-        WidgetTab widget = new WidgetTab(1, guiLeft - 32, guiTop + 10, 33, 35, 198, 3, Refs.MODID + ":textures/gui/circuit_database.png") {
+        WidgetTab widget = new WidgetTab(1, leftPos - 32, topPos + 10, 33, 35, 198, 3, Refs.MODID + ":textures/gui/circuit_database.png") {
 
             @Override
             protected void addTooltip(int curHoveredTab, List<String> curTip, boolean shiftPressed) {
@@ -62,29 +62,29 @@ public class GuiCircuitDatabaseSharing extends GuiContainerBaseBP<ContainerCircu
                     break;
                 case 2:
                     curTip.add("gui.bluepower:circuitDatabase.tab.server");
-                    if (Minecraft.getInstance().isSingleplayer())
+                    if (Minecraft.getInstance().hasSingleplayerServer())
                         curTip.add("gui.bluepower:circuitDatabase.info.serverOnly");
                     break;
                 }
             }
         };
         //widget.value = circuitDatabase.clientCurrentTab;
-        widget.enabledTabs[2] = !Minecraft.getInstance().isSingleplayer();
+        widget.enabledTabs[2] = !Minecraft.getInstance().hasSingleplayerServer();
         addWidget(widget);
 
     }
 
     @Override
-    protected void handleMouseClick(Slot slot, int slotId, int mouseButton, ClickType type) {
+    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type) {
 
-        if (slot != null && slot.getHasStack() && slot.inventory == inventory) {
+        if (slot != null && slot.hasItem() && slot.container == inventory) {
             if (BluePower.proxy.isSneakingInGui()) {
                 if (slot.getSlotIndex() == curDeletingTemplate) {
                     //if (circuitDatabase.clientCurrentTab == 1) {
-                        //circuitDatabase.stackDatabase.deleteStack(slot.getStack());
+                        //circuitDatabase.stackDatabase.deleteStack(slot.getItem());
                        // circuitDatabase.updateGateInventory();
                     //} else {
-                        //BPNetworkHandler.INSTANCE.sendToServer(new MessageCircuitDatabaseTemplate(circuitDatabase, slot.getStack(), true));
+                        //BPNetworkHandler.INSTANCE.sendToServer(new MessageCircuitDatabaseTemplate(circuitDatabase, slot.getItem(), true));
                     //}
                 } else {
                     curDeletingTemplate = slot.getSlotIndex();
@@ -92,17 +92,17 @@ public class GuiCircuitDatabaseSharing extends GuiContainerBaseBP<ContainerCircu
                 }
             } else {
                 //circuitDatabase.clientCurrentTab = 0;// Navigate to the copy & share tab.
-                //BPNetworkHandler.INSTANCE.sendToServer(new MessageCircuitDatabaseTemplate(circuitDatabase, slot.getStack()));
+                //BPNetworkHandler.INSTANCE.sendToServer(new MessageCircuitDatabaseTemplate(circuitDatabase, slot.getItem()));
             }
         } else {
-            super.handleMouseClick(slot, slotId, mouseButton, type);
+            super.slotClicked(slot, slotId, mouseButton, type);
         }
         curDeletingTemplate = -1;
     }
 
     public ItemStack getCurrentDeletingTemplate() {
 
-        return curDeletingTemplate == -1 ? ItemStack.EMPTY : inventory.getStackInSlot(curDeletingTemplate);
+        return curDeletingTemplate == -1 ? ItemStack.EMPTY : inventory.getItem(curDeletingTemplate);
     }
 /*
 
@@ -110,8 +110,8 @@ public class GuiCircuitDatabaseSharing extends GuiContainerBaseBP<ContainerCircu
     protected boolean shouldDisplayRed(ItemStack stack) {
 
         if ((circuitDatabase.clientCurrentTab == 1 || circuitDatabase.clientCurrentTab == 2)
-                && !circuitDatabase.copyInventory.getStackInSlot(1).isEmpty()) {
-            return !circuitDatabase.copy(Minecraft.getInstance().player, stack, circuitDatabase.copyInventory.getStackInSlot(1), true);
+                && !circuitDatabase.copyInventory.getItem(1).isEmpty()) {
+            return !circuitDatabase.copy(Minecraft.getInstance().player, stack, circuitDatabase.copyInventory.getItem(1), true);
         } else {
             return false;
         }

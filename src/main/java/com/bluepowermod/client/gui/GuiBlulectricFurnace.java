@@ -40,12 +40,12 @@ public class GuiBlulectricFurnace extends GuiContainerBaseBP<ContainerBlulectric
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY){
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY){
 
-        super.drawGuiContainerBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
+        super.renderBg(matrixStack, partialTicks, mouseX, mouseY);
 
-        int x = (width - xSize) / 2;
-        int y = (height - ySize) / 2;
+        int x = (width - imageWidth) / 2;
+        int y = (height - imageHeight) / 2;
 
         int bufferPercentage = (int)(furnace.getBufferPercentage() * 50);
         if (bufferPercentage > 0)

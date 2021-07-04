@@ -52,7 +52,7 @@ public class BPCreativeTabs {
 
             @Override
             @OnlyIn(Dist.CLIENT)
-            public ItemStack createIcon() {
+            public ItemStack makeIcon() {
                 Block iconBlock = BPBlocks.amethyst_ore;
                 if (iconBlock != null) {
                     return new ItemStack(iconBlock);
@@ -66,7 +66,7 @@ public class BPCreativeTabs {
 
             @Override
             @OnlyIn(Dist.CLIENT)
-            public ItemStack createIcon() {
+            public ItemStack makeIcon() {
 
                 Block iconBlock = BPBlocks.alloyfurnace;
                 if (iconBlock != null) {
@@ -81,7 +81,7 @@ public class BPCreativeTabs {
 
             @Override
             @OnlyIn(Dist.CLIENT)
-            public ItemStack createIcon() {
+            public ItemStack makeIcon() {
 
                 Item iconItem = BPItems.ruby_gem;
                 if (iconItem != null) {
@@ -96,7 +96,7 @@ public class BPCreativeTabs {
 
             @Override
             @OnlyIn(Dist.CLIENT)
-            public ItemStack createIcon() {
+            public ItemStack makeIcon() {
 
                 Item iconItem = BPItems.screwdriver;
                 if (iconItem != null) {
@@ -111,7 +111,7 @@ public class BPCreativeTabs {
 
             @Override
             @OnlyIn(Dist.CLIENT)
-            public ItemStack createIcon() {
+            public ItemStack makeIcon() {
 
                 ItemStack iconItem = new ItemStack(BPItems.redstone_pointer_tile);
                 if (!iconItem.isEmpty()) {
@@ -126,7 +126,7 @@ public class BPCreativeTabs {
 
             @Override
             @OnlyIn(Dist.CLIENT)
-            public ItemStack createIcon() {
+            public ItemStack makeIcon() {
                 ItemStack iconItem = new ItemStack(BPBlocks.blulectric_cable);
                 if (!iconItem.isEmpty()) {
                     return iconItem;
@@ -140,7 +140,7 @@ public class BPCreativeTabs {
 
             @Override
             @OnlyIn(Dist.CLIENT)
-            public ItemStack createIcon() {
+            public ItemStack makeIcon() {
                 int t = 1000;
 
                 int i = (int) ((System.currentTimeMillis() / t) % MinecraftColor.VALID_COLORS.length);
@@ -160,7 +160,7 @@ public class BPCreativeTabs {
 
             @Override
             @OnlyIn(Dist.CLIENT)
-            public ItemStack createIcon() {
+            public ItemStack makeIcon() {
                 ItemStack iconItem = new ItemStack(BPBlocks.microblocks.get(0));
                 if (!iconItem.isEmpty()) {
                     return iconItem;
@@ -170,23 +170,23 @@ public class BPCreativeTabs {
             }
 
             @Override
-            public void fill(NonNullList<ItemStack> items) {
+            public void fillItemList(NonNullList<ItemStack> items) {
                 for (Block block : ForgeRegistries.BLOCKS) {
                     VoxelShape shape = null;
                     try{
-                        shape = block.getDefaultState().getShape(null, null);
+                        shape = block.defaultBlockState().getShape(null, null);
                     }catch (NullPointerException ignored){
                         //Shulker Boxes try to query the Tile Entity
                     }
-                    if(block.getRegistryName() != null && shape == VoxelShapes.fullCube()) {
+                    if(block.getRegistryName() != null && shape == VoxelShapes.block()) {
                         for (Block mb : BPBlocks.microblocks){
                             CompoundNBT nbt = new CompoundNBT();
                             nbt.putString("block", block.getRegistryName().toString());
                             ItemStack stack = new ItemStack(mb);
                             stack.setTag(nbt);
-                            stack.setDisplayName(new TranslationTextComponent(block.getTranslationKey())
+                            stack.setHoverName(new TranslationTextComponent(block.getDescriptionId())
                                     .append(new StringTextComponent(" "))
-                                    .append(new TranslationTextComponent(mb.getTranslationKey())));
+                                    .append(new TranslationTextComponent(mb.getDescriptionId())));
                             items.add(stack);
                         }
                     }
@@ -219,9 +219,9 @@ public class BPCreativeTabs {
 
         @Override
         @OnlyIn(Dist.CLIENT)
-        public String getBackgroundImageName() {
+        public String getBackgroundSuffix() {
 
-            return searchbar ? "bp_search.png" : super.getBackgroundImageName();
+            return searchbar ? "bp_search.png" : super.getBackgroundSuffix();
         }
 
         @Override

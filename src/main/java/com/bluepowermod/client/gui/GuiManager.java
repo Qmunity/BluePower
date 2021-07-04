@@ -45,18 +45,18 @@ public class GuiManager extends GuiContainerBaseBP<ContainerManager> implements 
     public GuiManager(ContainerManager container, PlayerInventory playerInventory, ITextComponent title){
         super(container, playerInventory, title, resLoc);
         this.manager = container;
-        ySize = 187;
+        imageHeight = 187;
     }
 
     @Override
     public void init() {
 
         super.init();
-        WidgetColor colorWidget = new WidgetColor(0, guiLeft + 155, guiTop + 55);
+        WidgetColor colorWidget = new WidgetColor(0, leftPos + 155, topPos + 55);
         colorWidget.value = manager.filterColor.ordinal();
         addWidget(colorWidget);
 
-        WidgetMode modeWidget = new WidgetMode(1, guiLeft + 155, guiTop + 21, 176, 2, Refs.MODID + ":textures/gui/manager.png") {
+        WidgetMode modeWidget = new WidgetMode(1, leftPos + 155, topPos + 21, 176, 2, Refs.MODID + ":textures/gui/manager.png") {
 
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
@@ -82,7 +82,7 @@ public class GuiManager extends GuiContainerBaseBP<ContainerManager> implements 
         modeWidget.value = manager.mode;
         addWidget(modeWidget);
 
-        WidgetNumber numberWidget = new WidgetNumber(2, guiLeft + 155, guiTop + 38, 9) {
+        WidgetNumber numberWidget = new WidgetNumber(2, leftPos + 155, topPos + 38, 9) {
 
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
@@ -94,7 +94,7 @@ public class GuiManager extends GuiContainerBaseBP<ContainerManager> implements 
         numberWidget.value = manager.priority;
         addWidget(numberWidget);
 
-        WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(3, guiLeft + 155, guiTop + 72);
+        WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(3, leftPos + 155, topPos + 72);
         fuzzyWidget.value = manager.fuzzySetting;
         addWidget(fuzzyWidget);
     }

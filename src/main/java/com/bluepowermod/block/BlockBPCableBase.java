@@ -48,56 +48,56 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
 
 
     public BlockBPCableBase(float width, float height) {
-        super(Material.IRON);
+        super(Material.METAL);
         shapes = makeShapes(width, height);
-        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.UP)
-                .with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false)
-                .with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false)
-                .with(JOIN_FRONT, false).with(JOIN_BACK, false)
-                .with(JOIN_LEFT, false).with(JOIN_RIGHT, false)
-                .with(WATERLOGGED, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP)
+                .setValue(CONNECTED_FRONT, false).setValue(CONNECTED_BACK, false)
+                .setValue(CONNECTED_LEFT, false).setValue(CONNECTED_RIGHT, false)
+                .setValue(JOIN_FRONT, false).setValue(JOIN_BACK, false)
+                .setValue(JOIN_LEFT, false).setValue(JOIN_RIGHT, false)
+                .setValue(WATERLOGGED, false));
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         this.onMultipartReplaced(state, worldIn, pos, newState, isMoving);
-        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
     @Override
     public void onMultipartReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        FACING.getAllowedValues().forEach(f ->{
-            BlockPos neighborPos = pos.offset(f).offset(state.get(FACING).getOpposite());
+        FACING.getPossibleValues().forEach(f ->{
+            BlockPos neighborPos = pos.relative(f).relative(state.getValue(FACING).getOpposite());
             worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, isMoving);
         });
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        if (stateIn.get(WATERLOGGED)) {
-            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.getValue(WATERLOGGED)) {
+            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
-        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity p_180633_4_, ItemStack p_180633_5_) {
-        super.onBlockPlacedBy(worldIn, pos, state, p_180633_4_, p_180633_5_);
-        FACING.getAllowedValues().forEach(f -> {
-            BlockPos neighborPos = pos.offset(f).offset(state.get(FACING).getOpposite());
+    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity p_180633_4_, ItemStack p_180633_5_) {
+        super.setPlacedBy(worldIn, pos, state, p_180633_4_, p_180633_5_);
+        FACING.getPossibleValues().forEach(f -> {
+            BlockPos neighborPos = pos.relative(f).relative(state.getValue(FACING).getOpposite());
             worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
         });
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
-        return world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid();
+    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos) {
+        return world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude();
     }
 
     protected Capability<?> getCapability(){
@@ -112,11 +112,11 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
         float f2 = 8.0F - width;
         float f3 = 8.0F + width;
 
-        VoxelShape voxelshape = Block.makeCuboidShape((double)f, 0, (double)f, (double)f1, (double)height, (double)f1);
-        VoxelShape voxelshape1 = Block.makeCuboidShape((double)f2, (double)gap, 0, (double)f3, (double)height, (double)f3);
-        VoxelShape voxelshape2 = Block.makeCuboidShape((double)f2, (double)gap, (double)f2, (double)f3, (double)height, 16.0D);
-        VoxelShape voxelshape3 = Block.makeCuboidShape(0, (double)gap, (double)f2, (double)f3, (double)height, (double)f3);
-        VoxelShape voxelshape4 = Block.makeCuboidShape((double)f2, (double)gap, (double)f2, 16.0D, (double)height, (double)f3);
+        VoxelShape voxelshape = Block.box((double)f, 0, (double)f, (double)f1, (double)height, (double)f1);
+        VoxelShape voxelshape1 = Block.box((double)f2, (double)gap, 0, (double)f3, (double)height, (double)f3);
+        VoxelShape voxelshape2 = Block.box((double)f2, (double)gap, (double)f2, (double)f3, (double)height, 16.0D);
+        VoxelShape voxelshape3 = Block.box(0, (double)gap, (double)f2, (double)f3, (double)height, (double)f3);
+        VoxelShape voxelshape4 = Block.box((double)f2, (double)gap, (double)f2, 16.0D, (double)height, (double)f3);
         VoxelShape voxelshape5 = VoxelShapes.or(voxelshape1, voxelshape4);
         VoxelShape voxelshape6 = VoxelShapes.or(voxelshape2, voxelshape3);
 
@@ -127,10 +127,10 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
                 VoxelShapes.or(voxelshape3, voxelshape4), VoxelShapes.or(voxelshape6, voxelshape4), voxelshape5,
                 VoxelShapes.or(voxelshape2, voxelshape5), VoxelShapes.or(voxelshape3, voxelshape5),
                 VoxelShapes.or(voxelshape6, voxelshape5),
-                Block.makeCuboidShape(f2,0,-height,f3, height,0),
-                Block.makeCuboidShape(f2,0,16 + height,f3, height,16),
-                Block.makeCuboidShape(-height,0,f2,0, height,f3),
-                Block.makeCuboidShape(16 + height,0,f2,16, height,f3)
+                Block.box(f2,0,-height,f3, height,0),
+                Block.box(f2,0,16 + height,f3, height,16),
+                Block.box(-height,0,f2,0, height,f3),
+                Block.box(16 + height,0,f2,16, height,f3)
         };
 
         for(int i = 0; i < 16; ++i) {
@@ -144,46 +144,46 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
         VoxelShape shapes = this.shapes[this.getShapeIndex(state)];
 
         //Draw the joins
-        if(state.get(JOIN_FRONT))
+        if(state.getValue(JOIN_FRONT))
             shapes = VoxelShapes.or(shapes, this.shapes[16]);
-        //if(state.get(JOIN_BACK))
+        //if(state.getValue(JOIN_BACK))
             //shapes = VoxelShapes.or(shapes, this.shapes[17]);
-        if(state.get(JOIN_LEFT))
+        if(state.getValue(JOIN_LEFT))
             shapes = VoxelShapes.or(shapes, this.shapes[18]);
-        //if(state.get(JOIN_RIGHT))
+        //if(state.getValue(JOIN_RIGHT))
             //shapes = VoxelShapes.or(shapes, this.shapes[19]);
 
-        return AABBUtils.rotate(shapes, state.get(FACING));
+        return AABBUtils.rotate(shapes, state.getValue(FACING));
     }
 
     private int getShapeIndex(BlockState state) {
         int i = 0;
 
-        if(state.get(CONNECTED_FRONT))
+        if(state.getValue(CONNECTED_FRONT))
             i |= getMask(Direction.NORTH);
-        if(state.get(CONNECTED_BACK))
+        if(state.getValue(CONNECTED_BACK))
             i |= getMask(Direction.SOUTH);
-        if(state.get(CONNECTED_LEFT))
+        if(state.getValue(CONNECTED_LEFT))
             i |= getMask(Direction.WEST);
-        if(state.get(CONNECTED_RIGHT))
+        if(state.getValue(CONNECTED_RIGHT))
             i |= getMask(Direction.EAST);
 
         return i;
     }
 
     private static int getMask(Direction facing) {
-        return 1 << facing.getHorizontalIndex();
+        return 1 << facing.get2DDataValue();
     }
 
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         //Get new state based on surrounding capabilities
-        BlockState newState = getStateForPos(world, pos, getDefaultState().with(FACING, state.get(FACING)), state.get(FACING));
+        BlockState newState = getStateForPos(world, pos, defaultBlockState().setValue(FACING, state.getValue(FACING)), state.getValue(FACING));
 
         if (!(te instanceof TileBPMultipart)){
             //Change the block state
-            world.setBlockState(pos, newState, 2);
+            world.setBlock(pos, newState, 2);
         }else{
             //Update the state in the Multipart
             ((TileBPMultipart) te).changeState(state, newState);
@@ -191,7 +191,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
         state = newState;
 
         //If not placed on a solid block break off
-        if (!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()) {
+        if (!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude()) {
             if(te instanceof TileBPMultipart){
                 ((TileBPMultipart)te).removeState(state);
             }else {
@@ -201,7 +201,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, JOIN_FRONT, JOIN_BACK, JOIN_LEFT, JOIN_RIGHT, WATERLOGGED);
     }
 
@@ -215,7 +215,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
     }
 
     private BlockState getStateForPos(World world, BlockPos pos, BlockState state, Direction face){
-        List<Direction> directions = new ArrayList<>(FACING.getAllowedValues());
+        List<Direction> directions = new ArrayList<>(FACING.getPossibleValues());
         List<Direction> internal = null;
         boolean connected_left = false;
         boolean connected_right = false;
@@ -227,37 +227,37 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
         boolean join_back = false;
 
         //Make sure the side we are trying to connect on isn't blocked.
-        TileEntity ownTile = world.getTileEntity(pos);
+        TileEntity ownTile = world.getBlockEntity(pos);
         if(ownTile instanceof TileBPMultipart) {
             directions.removeIf(d -> ((TileBPMultipart) ownTile).isSideBlocked(getCapability(), d));
-            internal = ((TileBPMultipart) ownTile).getStates().stream().filter(s -> s.getBlock() == this).map(s -> s.get(FACING)).collect(Collectors.toList());
+            internal = ((TileBPMultipart) ownTile).getStates().stream().filter(s -> s.getBlock() == this).map(s -> s.getValue(FACING)).collect(Collectors.toList());
         }
         //Make sure the cable is on the same side of the block
         directions.removeIf(d -> {
-            TileEntity t = world.getTileEntity(pos.offset(d));
-            return (world.getBlockState(pos.offset(d)).getBlock() == this
-                    && world.getBlockState(pos.offset(d)).get(FACING) != face)
+            TileEntity t = world.getBlockEntity(pos.relative(d));
+            return (world.getBlockState(pos.relative(d)).getBlock() == this
+                    && world.getBlockState(pos.relative(d)).getValue(FACING) != face)
                     || (t instanceof TileBPMultipart
-                    && ((TileBPMultipart) t).getStates().stream().noneMatch(s -> s.get(FACING) == face));
+                    && ((TileBPMultipart) t).getStates().stream().noneMatch(s -> s.getValue(FACING) == face));
         });
 
         //Populate all directions
         for (Direction d : directions) {
-            TileEntity tileEntity = world.getTileEntity(pos.offset(d));
-            BlockState dirState = world.getBlockState(pos.offset(d));
-            BlockPos dirPos = pos.offset(d);
+            TileEntity tileEntity = world.getBlockEntity(pos.relative(d));
+            BlockState dirState = world.getBlockState(pos.relative(d));
+            BlockPos dirPos = pos.relative(d);
 
             boolean join = false;
             //If Air look for a change in Direction
-            if (world.getBlockState(pos.offset(d)).getBlock() == Blocks.AIR) {
-                dirState = world.getBlockState(pos.offset(d).offset(face.getOpposite()));
-                dirPos = pos.offset(d).offset(face.getOpposite());
-                if (dirState.getBlock() == this && dirState.get(FACING) == d) {
-                    tileEntity = world.getTileEntity(pos.offset(d).offset(face.getOpposite()));
+            if (world.getBlockState(pos.relative(d)).getBlock() == Blocks.AIR) {
+                dirState = world.getBlockState(pos.relative(d).relative(face.getOpposite()));
+                dirPos = pos.relative(d).relative(face.getOpposite());
+                if (dirState.getBlock() == this && dirState.getValue(FACING) == d) {
+                    tileEntity = world.getBlockEntity(pos.relative(d).relative(face.getOpposite()));
                     join = true;
                 } else if (dirState.getBlock() instanceof BlockBPMultipart) {
-                    tileEntity = world.getTileEntity(pos.offset(d).offset(face.getOpposite()));
-                    if (tileEntity instanceof TileBPMultipart && ((TileBPMultipart) tileEntity).getStates().stream().filter(s -> s.getBlock() == this).anyMatch(s -> s.get(FACING) == d)) {
+                    tileEntity = world.getBlockEntity(pos.relative(d).relative(face.getOpposite()));
+                    if (tileEntity instanceof TileBPMultipart && ((TileBPMultipart) tileEntity).getStates().stream().filter(s -> s.getBlock() == this).anyMatch(s -> s.getValue(FACING) == d)) {
                         join = true;
                     } else {
                         tileEntity = null;
@@ -266,7 +266,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
             }
 
             //Check Capability for Direction
-                switch (state.get(FACING)) {
+                switch (state.getValue(FACING)) {
                     case UP:
                     case DOWN:
                         switch (d) {
@@ -372,7 +372,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
 
         if (internal != null)
             for(Direction d : internal){
-                switch (state.get(FACING)) {
+                switch (state.getValue(FACING)) {
                     case UP:
                     case DOWN:
                         switch (d) {
@@ -457,24 +457,24 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, IWaterL
             }
 
         FluidState fluidstate = world.getFluidState(pos);
-        return state.with(CONNECTED_LEFT, connected_left)
-                .with(CONNECTED_RIGHT, connected_right)
-                .with(CONNECTED_FRONT, connected_front)
-                .with(CONNECTED_BACK, connected_back)
-                .with(JOIN_LEFT, join_left)
-                .with(JOIN_RIGHT, join_right)
-                .with(JOIN_FRONT, join_front)
-                .with(JOIN_BACK, join_back).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+        return state.setValue(CONNECTED_LEFT, connected_left)
+                .setValue(CONNECTED_RIGHT, connected_right)
+                .setValue(CONNECTED_FRONT, connected_front)
+                .setValue(CONNECTED_BACK, connected_back)
+                .setValue(JOIN_LEFT, join_left)
+                .setValue(JOIN_RIGHT, join_right)
+                .setValue(JOIN_FRONT, join_front)
+                .setValue(JOIN_BACK, join_back).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return getStateForPos(context.getWorld(), context.getPos(), getDefaultState().with(FACING, context.getFace()), context.getFace());
+        return getStateForPos(context.getLevel(), context.getClickedPos(), defaultBlockState().setValue(FACING, context.getClickedFace()), context.getClickedFace());
     }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state) {
-        return AABBUtils.rotate(this.shapes[this.getShapeIndex(state)], state.get(FACING));
+        return AABBUtils.rotate(this.shapes[this.getShapeIndex(state)], state.getValue(FACING));
     }
 }

@@ -43,7 +43,7 @@ public interface IAlloyFurnaceRecipe extends IRecipe<ISidedInventory> {
      */
     boolean useItems(NonNullList<ItemStack> input);
 
-    ItemStack getCraftingResult(NonNullList<ItemStack> input);
+    ItemStack assemble(NonNullList<ItemStack> input);
 
     NonNullList<Ingredient> getRequiredItems();
 

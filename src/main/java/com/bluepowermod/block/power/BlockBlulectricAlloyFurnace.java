@@ -11,7 +11,7 @@ import net.minecraft.block.material.Material;
 public class BlockBlulectricAlloyFurnace extends BlockContainerHorizontalFacingBase {
 
     public BlockBlulectricAlloyFurnace() {
-        super(Material.ROCK, TileBlulectricAlloyFurnace.class);
+        super(Material.STONE, TileBlulectricAlloyFurnace.class);
         setRegistryName(Refs.MODID, Refs.BLULECTRICALLOYFURNACE_NAME);
     }
 

@@ -34,12 +34,12 @@ import net.minecraftforge.event.RegistryEvent;
 public class ItemBase extends Item {
 
     public ItemBase(Properties properties) {
-        super(properties.group(BPCreativeTabs.items));
+        super(properties.tab(BPCreativeTabs.items));
         BPItems.itemList.add(this);
     }
 
     public ItemBase(Properties properties, ItemGroup group) {
-        super(properties.group(group));
+        super(properties.tab(group));
         BPItems.itemList.add(this);
     }
 

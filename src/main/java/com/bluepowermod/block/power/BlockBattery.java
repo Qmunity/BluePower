@@ -31,27 +31,27 @@ public class BlockBattery extends BlockContainerBase {
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 6);
 
     public BlockBattery() {
-        super(Material.IRON, TileBattery.class);
+        super(Material.METAL, TileBattery.class);
         setRegistryName(Refs.MODID, Refs.BATTERYBLOCK_NAME);
-        this.setDefaultState(this.stateContainer.getBaseState().with(LEVEL, 0));
+        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0));
 
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        TileEntity tile = context.getWorld().getTileEntity(context.getPos());
+        TileEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
         if(tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()) {
             IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null);
             double voltage = storage.getVoltage();
             int level = (int)((voltage / storage.getMaxVoltage()) * 6);
-            return this.stateContainer.getBaseState().with(LEVEL, level);
+            return this.stateDefinition.any().setValue(LEVEL, level);
         }
         return super.getStateForPlacement(context);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(LEVEL);
     }
 

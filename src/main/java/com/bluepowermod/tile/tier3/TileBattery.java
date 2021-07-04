@@ -43,24 +43,24 @@ public class TileBattery extends TileMachineBase {
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             storage.resetCurrent();
 
             //Balance power of attached blulectric blocks.
             for (Direction facing : Direction.values()) {
-                TileEntity tile = world.getTileEntity(pos.offset(facing));
+                TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
                 if (tile != null)
                     tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
                             exStorage -> EnergyHelper.balancePower(exStorage, storage));
             }
 
             double energy = storage.getEnergy();
-            int level = (int) ((energy / MAX_ENERGY) * 6);
+            int batteryLevel = (int) ((energy / MAX_ENERGY) * 6);
             BlockState state = getBlockState();
-            if (state.get(BlockBattery.LEVEL) != level) {
-                world.setBlockState(pos, state.with(BlockBattery.LEVEL, level));
+            if (state.getValue(BlockBattery.LEVEL) != batteryLevel) {
+                this.level.setBlockAndUpdate(worldPosition, state.setValue(BlockBattery.LEVEL, batteryLevel));
                 markForRenderUpdate();
-                markDirty();
+                setChanged();
             }
         }
     }
@@ -103,13 +103,13 @@ public class TileBattery extends TileMachineBase {
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+        return this.save(new CompoundNBT());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
-        handleUpdateTag(getBlockState(), pkt.getNbtCompound());
+        handleUpdateTag(getBlockState(), pkt.getTag());
     }
 
 }

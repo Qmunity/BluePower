@@ -47,9 +47,9 @@ public class ContainerCanvasBag extends Container {
 
         //Get Active hand
         activeHand = Hand.MAIN_HAND;
-        ItemStack canvasbag = playerInventory.player.getHeldItem(activeHand);
+        ItemStack canvasbag = playerInventory.player.getItemInHand(activeHand);
         if(!(canvasbag.getItem() instanceof ItemCanvasBag)){
-            canvasbag = playerInventory.player.getHeldItemOffhand();
+            canvasbag = playerInventory.player.getOffhandItem();
             activeHand = Hand.OFF_HAND;
         }
 
@@ -62,8 +62,8 @@ public class ContainerCanvasBag extends Container {
             for (int k = 0; k < 9; ++k) {
                 addSlot(new SlotItemHandler(canvasBagInvHandler, k + j * 9, 8 + k * 18, 18 + j * 18){
                     @Override
-                    public boolean isItemValid(ItemStack stack) {
-                        return super.isItemValid(stack) && !(stack.getItem() instanceof ItemCanvasBag);
+                    public boolean mayPlace(ItemStack stack) {
+                        return super.mayPlace(stack) && !(stack.getItem() instanceof ItemCanvasBag);
                     }
                 });
             }
@@ -78,7 +78,7 @@ public class ContainerCanvasBag extends Container {
 
         //Lock the Current Item
         for (int j = 0; j < 9; ++j) {
-            if (playerInventory.currentItem == j) {
+            if (playerInventory.selected == j) {
                 addSlot(new SlotLocked(playerInventory, j, 8 + j * 18, 161 + i));
             } else {
                 addSlot(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
@@ -87,55 +87,55 @@ public class ContainerCanvasBag extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
-        return player.getHeldItem(activeHand).getItem() instanceof ItemCanvasBag;
+    public boolean stillValid(PlayerEntity player) {
+        return player.getItemInHand(activeHand).getItem() instanceof ItemCanvasBag;
     }
 
     @Override
-    public ItemStack slotClick(int par1, int par2, ClickType par3, PlayerEntity player) {
+    public ItemStack clicked(int par1, int par2, ClickType par3, PlayerEntity player) {
 
-        if (par3.ordinal() != 2 || player.inventory.currentItem != par2) {
-            return super.slotClick(par1, par2, par3, player);
+        if (par3.ordinal() != 2 || player.inventory.selected != par2) {
+            return super.clicked(par1, par2, par3, player);
         } else {
             return ItemStack.EMPTY;
         }
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
+    public void removed(PlayerEntity playerIn) {
         //Update items in the NBT
-        ItemStack canvasBag = playerIn.getHeldItem(activeHand);
+        ItemStack canvasBag = playerIn.getItemInHand(activeHand);
         if (!canvasBag.hasTag())
             canvasBag.setTag(new CompoundNBT());
         if (canvasBag.getTag() != null) {
             canvasBag.getTag().put("inv", canvasBagInvHandler.serializeNBT());
         }
-        super.onContainerClosed(playerIn);
+        super.removed(playerIn);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
+    public ItemStack quickMoveStack(PlayerEntity par1EntityPlayer, int par2) {
     
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = (Slot) inventorySlots.get(par2);
+        Slot slot = (Slot) slots.get(par2);
         
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             
             if (par2 < 27) {
-                if (!mergeItemStack(itemstack1, 27, 63, true)) { return ItemStack.EMPTY; }
-            } else if (!mergeItemStack(itemstack1, 0, 27, false)) { return ItemStack.EMPTY; }
+                if (!moveItemStackTo(itemstack1, 27, 63, true)) { return ItemStack.EMPTY; }
+            } else if (!moveItemStackTo(itemstack1, 0, 27, false)) { return ItemStack.EMPTY; }
             
             if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
             
             if (itemstack1.getCount() == itemstack.getCount()) { return ItemStack.EMPTY; }
             
-            slot.onSlotChange(itemstack, itemstack1);
+            slot.onQuickCraft(itemstack, itemstack1);
         }
         
         return itemstack;

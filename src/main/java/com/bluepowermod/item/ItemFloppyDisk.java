@@ -47,7 +47,7 @@ public class ItemFloppyDisk extends ItemBase implements IItemColor{
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if(stack.getTag() != null && stack.getTag().contains("name")) {
             tooltip.add(new StringTextComponent(stack.getTag().getString("name")));
         }

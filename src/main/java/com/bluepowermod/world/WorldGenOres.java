@@ -50,7 +50,7 @@ public class WorldGenOres {
 
     private static void registerConfiguredOre(int veinCount, int veinSize, int minY, int maxY, Block ore){
         if(ore.getRegistryName() != null)
-         Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, ore.getRegistryName(), Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, ore.getDefaultState(), veinSize)).withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(minY, minY, maxY))).square().func_242731_b(veinCount));
+         Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, ore.getRegistryName(), Feature.ORE.configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.defaultBlockState(), veinSize)).decorated(Placement.RANGE.configured(new TopSolidRangeConfig(minY, minY, maxY))).squared().count(veinCount));
     }
 
     @SubscribeEvent
@@ -58,49 +58,49 @@ public class WorldGenOres {
         if(!event.getCategory().equals(Biome.Category.NETHER) && !event.getCategory().equals(Biome.Category.THEEND)) {
             BiomeGenerationSettingsBuilder generation = event.getGeneration();
             if (BPConfig.CONFIG.generateAmethyst.get()) {
-                ConfiguredFeature<?,?> amethyst_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.amethyst_ore.getRegistryName());
+                ConfiguredFeature<?,?> amethyst_feature = WorldGenRegistries.CONFIGURED_FEATURE.get(BPBlocks.amethyst_ore.getRegistryName());
                 if(amethyst_feature != null)
-                    generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, amethyst_feature);
+                    generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, amethyst_feature);
             }
             if (BPConfig.CONFIG.generateRuby.get()) {
-                ConfiguredFeature<?,?> ruby_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.ruby_ore.getRegistryName());
+                ConfiguredFeature<?,?> ruby_feature = WorldGenRegistries.CONFIGURED_FEATURE.get(BPBlocks.ruby_ore.getRegistryName());
                 if(ruby_feature != null)
-                    generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ruby_feature);
+                    generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ruby_feature);
             }
             if (BPConfig.CONFIG.generateSapphire.get()) {
-                ConfiguredFeature<?,?> sapphire_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.sapphire_ore.getRegistryName());
+                ConfiguredFeature<?,?> sapphire_feature = WorldGenRegistries.CONFIGURED_FEATURE.get(BPBlocks.sapphire_ore.getRegistryName());
                 if(sapphire_feature != null)
-                    generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, sapphire_feature);
+                    generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, sapphire_feature);
             }
             if (BPConfig.CONFIG.generateGreenSapphire.get()) {
-                ConfiguredFeature<?,?> green_sapphire_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.green_sapphire_ore.getRegistryName());
+                ConfiguredFeature<?,?> green_sapphire_feature = WorldGenRegistries.CONFIGURED_FEATURE.get(BPBlocks.green_sapphire_ore.getRegistryName());
                 if(green_sapphire_feature != null)
-                    generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, green_sapphire_feature);
+                    generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, green_sapphire_feature);
             }
             if (BPConfig.CONFIG.generateSilver.get()) {
-                ConfiguredFeature<?,?> silver_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.silver_ore.getRegistryName());
+                ConfiguredFeature<?,?> silver_feature = WorldGenRegistries.CONFIGURED_FEATURE.get(BPBlocks.silver_ore.getRegistryName());
                 if(silver_feature != null)
-                    generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, silver_feature);
+                    generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, silver_feature);
             }
             if (BPConfig.CONFIG.generateTeslatite.get()) {
-                ConfiguredFeature<?,?> teslatite_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.teslatite_ore.getRegistryName());
+                ConfiguredFeature<?,?> teslatite_feature = WorldGenRegistries.CONFIGURED_FEATURE.get(BPBlocks.teslatite_ore.getRegistryName());
                 if(teslatite_feature != null)
-                    generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, teslatite_feature);
+                    generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, teslatite_feature);
             }
             if (BPConfig.CONFIG.generateZinc.get()) {
-                ConfiguredFeature<?,?> zinc_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.zinc_ore.getRegistryName());
+                ConfiguredFeature<?,?> zinc_feature = WorldGenRegistries.CONFIGURED_FEATURE.get(BPBlocks.zinc_ore.getRegistryName());
                 if(zinc_feature != null)
-                    generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, zinc_feature);
+                    generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, zinc_feature);
             }
             if (BPConfig.CONFIG.generateCopper.get()) {
-                ConfiguredFeature<?,?> copper_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.copper_ore.getRegistryName());
+                ConfiguredFeature<?,?> copper_feature = WorldGenRegistries.CONFIGURED_FEATURE.get(BPBlocks.copper_ore.getRegistryName());
                 if(copper_feature != null)
-                    generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, copper_feature);
+                    generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, copper_feature);
             }
             if (BPConfig.CONFIG.generateTungsten.get()) {
-                ConfiguredFeature<?,?> tungsten_feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(BPBlocks.tungsten_ore.getRegistryName());
+                ConfiguredFeature<?,?> tungsten_feature = WorldGenRegistries.CONFIGURED_FEATURE.get(BPBlocks.tungsten_ore.getRegistryName());
                 if(tungsten_feature != null)
-                    generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, tungsten_feature);
+                    generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, tungsten_feature);
             }
         }
     }

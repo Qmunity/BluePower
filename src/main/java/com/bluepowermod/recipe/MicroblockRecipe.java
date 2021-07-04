@@ -31,17 +31,17 @@ public class MicroblockRecipe extends SpecialRecipe {
         int blockCount = 0;
         int saw = 0;
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 if (stack.getItem() instanceof BlockItem){
                     VoxelShape shape = null;
                     try{
-                       shape = Block.getBlockFromItem(stack.getItem()).getDefaultState().getShape(null, null);
+                       shape = Block.byItem(stack.getItem()).defaultBlockState().getShape(null, null);
                     }catch (NullPointerException ignored){
                         //Shulker Boxes try to query the Tile Entity
                     }
-                    if (shape == VoxelShapes.fullCube() || Block.getBlockFromItem(stack.getItem()) == BPBlocks.half_block || Block.getBlockFromItem(stack.getItem()) == BPBlocks.panel) {
+                    if (shape == VoxelShapes.block() || Block.byItem(stack.getItem()) == BPBlocks.half_block || Block.byItem(stack.getItem()) == BPBlocks.panel) {
                         blockCount++;
                     }
                 } else if (stack.getItem() instanceof ItemSaw) {
@@ -56,38 +56,38 @@ public class MicroblockRecipe extends SpecialRecipe {
 
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+    public ItemStack assemble(CraftingInventory inv) {
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem) {
-                if (Block.getBlockFromItem(stack.getItem()).getDefaultState().getShape(null, null) == VoxelShapes.fullCube()){
+                if (Block.byItem(stack.getItem()).defaultBlockState().getShape(null, null) == VoxelShapes.block()){
                     CompoundNBT nbt = new CompoundNBT();
                     nbt.putString("block", stack.getItem().getRegistryName().toString());
                     ItemStack outStack = new ItemStack(BPBlocks.half_block, 2);
                     outStack.setTag(nbt);
-                    outStack.setDisplayName(new TranslationTextComponent(stack.getItem().getTranslationKey())
-                            .appendString(" ")
-                            .append(new TranslationTextComponent(BPBlocks.half_block.getTranslationKey())));
+                    outStack.setHoverName(new TranslationTextComponent(stack.getItem().getDescriptionId())
+                            .append(" ")
+                            .append(new TranslationTextComponent(BPBlocks.half_block.getDescriptionId())));
                     return outStack;
-                }else if (Block.getBlockFromItem(stack.getItem()) == BPBlocks.half_block){
+                }else if (Block.byItem(stack.getItem()) == BPBlocks.half_block){
                     CompoundNBT nbt = new CompoundNBT();
                     nbt.putString("block", stack.getTag().getString("block"));
                     ItemStack outStack = new ItemStack(BPBlocks.panel, 2);
                     outStack.setTag(nbt);
                     Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
-                    outStack.setDisplayName(new TranslationTextComponent(block.getTranslationKey())
-                            .appendString(" ")
-                            .append(new TranslationTextComponent(BPBlocks.panel.getTranslationKey())));
+                    outStack.setHoverName(new TranslationTextComponent(block.getDescriptionId())
+                            .append(" ")
+                            .append(new TranslationTextComponent(BPBlocks.panel.getDescriptionId())));
                     return outStack;
-                }else if (Block.getBlockFromItem(stack.getItem()) == BPBlocks.panel){
+                }else if (Block.byItem(stack.getItem()) == BPBlocks.panel){
                     CompoundNBT nbt = new CompoundNBT();
                     nbt.putString("block", stack.getTag().getString("block"));
                     ItemStack outStack = new ItemStack(BPBlocks.cover, 2);
                     outStack.setTag(nbt);
                     Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
-                    outStack.setDisplayName(new TranslationTextComponent(block.getTranslationKey())
-                            .appendString(" ")
-                            .append(new TranslationTextComponent(BPBlocks.cover.getTranslationKey())));
+                    outStack.setHoverName(new TranslationTextComponent(block.getDescriptionId())
+                            .append(" ")
+                            .append(new TranslationTextComponent(BPBlocks.cover.getDescriptionId())));
                     return outStack;
                 }
             }
@@ -96,7 +96,7 @@ public class MicroblockRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 2;
     }
 
@@ -107,17 +107,17 @@ public class MicroblockRecipe extends SpecialRecipe {
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MicroblockRecipe> {
         @Override
-        public MicroblockRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public MicroblockRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new MicroblockRecipe(recipeId);
         }
 
         @Override
-        public MicroblockRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public MicroblockRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
             return new MicroblockRecipe(recipeId);
         }
 
         @Override
-        public void write(PacketBuffer buffer, MicroblockRecipe recipe) {
+        public void toNetwork(PacketBuffer buffer, MicroblockRecipe recipe) {
         }
     }
 }

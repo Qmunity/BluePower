@@ -44,14 +44,14 @@ public class GuiSortingMachine extends GuiContainerBaseBP<ContainerSortingMachin
     public GuiSortingMachine(ContainerSortingMachine container, PlayerInventory playerInventory, ITextComponent title){
         super(container, playerInventory, title, resLoc);
         this.sortingMachine = container;
-        ySize = 239;
+        imageHeight = 239;
     }
 
     @Override
     public void init() {
         super.init();
         for (int i = 0; i < 8; i++) {
-            WidgetColor colorWidget = new WidgetColor(i, guiLeft + 27 + 18 * i, guiTop + 110);
+            WidgetColor colorWidget = new WidgetColor(i, leftPos + 27 + 18 * i, topPos + 110);
             colorWidget.value = i;
             addWidget(colorWidget);
         }
@@ -59,12 +59,12 @@ public class GuiSortingMachine extends GuiContainerBaseBP<ContainerSortingMachin
         switch (sortingMachine.sortMode) {
         case ANY_ITEM_DEFAULT:
         case ANY_STACK_DEFAULT:
-            WidgetColor colorWidget = new WidgetColor(8, guiLeft + 7, guiTop + 122);
+            WidgetColor colorWidget = new WidgetColor(8, leftPos + 7, topPos + 122);
             colorWidget.value = 8;
             addWidget(colorWidget);
         }
 
-        WidgetMode pullModeWidget = new WidgetMode(9, guiLeft + 7, guiTop + 90, 196, PullMode.values().length, Refs.MODID
+        WidgetMode pullModeWidget = new WidgetMode(9, leftPos + 7, topPos + 90, 196, PullMode.values().length, Refs.MODID
                 + ":textures/gui/sorting_machine.png") {
 
             @Override
@@ -82,7 +82,7 @@ public class GuiSortingMachine extends GuiContainerBaseBP<ContainerSortingMachin
         pullModeWidget.value = sortingMachine.pullMode.ordinal();
         addWidget(pullModeWidget);
 
-        WidgetMode sortModeWidget = new WidgetMode(10, guiLeft + 7, guiTop + 106, 210, TileSortingMachine.SortMode.values().length,
+        WidgetMode sortModeWidget = new WidgetMode(10, leftPos + 7, topPos + 106, 210, TileSortingMachine.SortMode.values().length,
                 Refs.MODID + ":textures/gui/sorting_machine.png") {
 
             @Override
@@ -101,7 +101,7 @@ public class GuiSortingMachine extends GuiContainerBaseBP<ContainerSortingMachin
         addWidget(sortModeWidget);
 
         for (int i = 0; i < 8; i++) {
-            WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(i + 11, guiLeft + 27 + 18 * i, guiTop + 126);
+            WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(i + 11, leftPos + 27 + 18 * i, topPos + 126);
             fuzzyWidget.value = sortingMachine.fuzzySettings[i];
             addWidget(fuzzyWidget);
         }
@@ -116,13 +116,12 @@ public class GuiSortingMachine extends GuiContainerBaseBP<ContainerSortingMachin
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float f, int i, int j) {
-
-        super.drawGuiContainerBackgroundLayer(matrixStack, f, i, j);
+    protected void renderBg(MatrixStack matrixStack, float f, int i, int j) {
+        super.renderBg(matrixStack, f, i, j);
 
         if (sortingMachine.sortMode == SortMode.ALLSTACK_SEQUENTIAL || sortingMachine.sortMode == SortMode.ANYSTACK_SEQUENTIAL) {
-            this.minecraft.getTextureManager().bindTexture(resLoc);
-            AbstractGui.blit(matrixStack, guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
+            this.minecraft.getTextureManager().bind(resLoc);
+            AbstractGui.blit(matrixStack, leftPos + 24 + sortingMachine.curColumn * 18, topPos + 16, 176, 0, 20, 92, 256, 256);
         }
     }
 

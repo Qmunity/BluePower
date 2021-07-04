@@ -41,19 +41,19 @@ public class TileBlockBreaker extends TileMachineBase {
     
         super.redstoneChanged(newValue);
         
-        if (!world.isRemote && newValue) {
+        if (!level.isClientSide && newValue) {
             Direction direction = getFacingDirection();
-            BlockState breakState = world.getBlockState(pos.offset(direction));
-            if (!canBreakBlock(breakState.getBlock(), world, breakState, pos.offset(direction))) return;
-            List<ItemStack> breakStacks = breakState.getBlock().getDrops(breakState, (ServerWorld) world, pos.offset(direction),this);
-            world.destroyBlock(pos.offset(direction), false); // destroyBlock
+            BlockState breakState = level.getBlockState(worldPosition.relative(direction));
+            if (!canBreakBlock(breakState.getBlock(), level, breakState, worldPosition.relative(direction))) return;
+            List<ItemStack> breakStacks = breakState.getBlock().getDrops(breakState, (ServerWorld) level, worldPosition.relative(direction),this);
+            level.destroyBlock(worldPosition.relative(direction), false); // destroyBlock
             addItemsToOutputBuffer(breakStacks);
         }
     }
 
     private boolean canBreakBlock(Block block, World world, BlockState state, BlockPos pos) {
     
-        return !world.isAirBlock(pos) && !(block instanceof IFluidBlock) && state.getBlockHardness(world, pos) > -1.0F;
+        return !world.isEmptyBlock(pos) && !(block instanceof IFluidBlock) && state.getDestroySpeed(level, pos) > -1.0F;
     }
     
     @Override

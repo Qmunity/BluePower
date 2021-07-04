@@ -1,13 +1,10 @@
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
-import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.block.machine.BlockAlloyWire;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.tile.BPTileEntityType;
-import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.BlockState;
@@ -50,8 +47,8 @@ public class TileWire extends TileBase {
     public IModelData getModelData(BlockState state) {
 
             //Add Color and Light Data
-            Pair<Integer, Integer> colorData = Pair.of(((IBPColoredBlock)state.getBlock()).getColor(state, world, pos, -1), ((IBPColoredBlock)state.getBlock()).getColor(state, world, pos, 2));
-            Boolean lightData = state.get(BlockAlloyWire.POWERED);
+            Pair<Integer, Integer> colorData = Pair.of(((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, -1), ((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, 2));
+            Boolean lightData = state.getValue(BlockAlloyWire.POWERED);
 
             return new ModelDataMap.Builder().withInitial(COLOR_INFO, colorData).withInitial(LIGHT_INFO, lightData).build();
 
@@ -75,29 +72,29 @@ public class TileWire extends TileBase {
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+        return this.save(new CompoundNBT());
     }
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        List<Direction> directions = new ArrayList<>(BlockBPCableBase.FACING.getAllowedValues());
-        if(world != null) {
+        List<Direction> directions = new ArrayList<>(BlockBPCableBase.FACING.getPossibleValues());
+        if(level != null) {
             BlockState state = getBlockState();
             if (state.getBlock() instanceof BlockAlloyWire) {
 
                 //Remove upward connections
-                directions.remove(state.get(BlockAlloyWire.FACING));
+                directions.remove(state.getValue(BlockAlloyWire.FACING));
 
                 //Make sure the cable is on the same side of the block
-                directions.removeIf(d -> world.getBlockState(pos.offset(d)).getBlock() instanceof BlockAlloyWire
-                        && world.getBlockState(pos.offset(d)).get(BlockAlloyWire.FACING) != state.get(BlockAlloyWire.FACING));
+                directions.removeIf(d -> level.getBlockState(worldPosition.relative(d)).getBlock() instanceof BlockAlloyWire
+                        && level.getBlockState(worldPosition.relative(d)).getValue(BlockAlloyWire.FACING) != state.getValue(BlockAlloyWire.FACING));
 
 
                 //Make sure the cable is the same color or none
                 //if(device.getInsulationColor(null) != MinecraftColor.NONE)
                     //directions.removeIf(d -> {
-                        //TileEntity tile = world.getTileEntity(pos.offset(d));
+                        //TileEntity tile = world.getBlockEntity(worldPosition.relative(d));
                         //return tile instanceof TileWire
                                 //&& !(((TileWire) tile).device.getInsulationColor(d) == device.getInsulationColor(d.getOpposite())
                                 //|| ((TileWire) tile).device.getInsulationColor(d) == MinecraftColor.NONE);

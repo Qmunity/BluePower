@@ -31,7 +31,7 @@ public class SlotProjectTableCrafting extends CraftingResultSlot {
     }
 
     @Override
-    public void onSlotChange(ItemStack p_75220_1_, ItemStack p_75220_2_) {
+    public void onQuickCraft(ItemStack p_75220_1_, ItemStack p_75220_2_) {
 
     }
 
@@ -44,10 +44,10 @@ public class SlotProjectTableCrafting extends CraftingResultSlot {
     private boolean extractedFromTable(){
         boolean remaining = true;
         for (int i = 0; i < 10; i++) {
-            ItemStack itemStack = craftMatrix.getStackInSlot(i + 18);
+            ItemStack itemStack = craftMatrix.getItem(i + 18);
             if (itemStack.getCount() == 1) {
                 itemStack = extractFromTable(itemStack);
-                craftMatrix.setInventorySlotContents(i + 18, itemStack);
+                craftMatrix.setItem(i + 18, itemStack);
             }
             if (itemStack.getCount() == 1) {
                 remaining  =  false;
@@ -57,9 +57,9 @@ public class SlotProjectTableCrafting extends CraftingResultSlot {
     }
 
     private ItemStack extractFromTable(ItemStack itemStack){
-        for (int j = 18; j < projectTable.getSizeInventory() + 18; j++) {
-            if (projectTable.getStackInSlot(j + 18).getItem().equals(itemStack.getItem())) {
-                projectTable.decrStackSize(j + 18, 1);
+        for (int j = 18; j < projectTable.getContainerSize() + 18; j++) {
+            if (projectTable.getItem(j + 18).getItem().equals(itemStack.getItem())) {
+                projectTable.removeItem(j + 18, 1);
                 itemStack.setCount(itemStack.getCount() + 1);
             }
         }

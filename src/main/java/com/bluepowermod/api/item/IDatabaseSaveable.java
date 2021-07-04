@@ -27,7 +27,7 @@ public interface IDatabaseSaveable {
     
     /**
      * Return true if the ItemStack that's being 'injected' with info is a stack that can be injected.
-     * This method is only called when templateStack.isItemEqual(outputStack) returned true.
+     * This method is only called when templateStack.sameItem(outputStack) returned true.
      * @param templateStack
      * @param outputStack
      * @return false to disallow copying.

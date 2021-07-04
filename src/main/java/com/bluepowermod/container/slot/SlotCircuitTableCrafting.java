@@ -27,6 +27,7 @@ public class SlotCircuitTableCrafting extends CraftingResultSlot {
 
     private final TileCircuitTable circuitTable;
 
+
     public SlotCircuitTableCrafting(PlayerEntity p_i1823_1_, IInventory circuitTable, CraftingInventory craftSlot, int p_i1823_4_, int p_i1823_5_,
                                     int p_i1823_6_) {
 
@@ -35,8 +36,8 @@ public class SlotCircuitTableCrafting extends CraftingResultSlot {
     }
 
     @Override
-    public boolean canTakeStack(PlayerEntity player) {
-        ItemStack stack = getStack();
+    public boolean mayPickup(PlayerEntity player) {
+        ItemStack stack = getItem();
         if (!stack.isEmpty()) {
             return canCraft(stack, circuitTable);
         } else {
@@ -58,16 +59,16 @@ public class SlotCircuitTableCrafting extends CraftingResultSlot {
     }
 
     @Override
-    public void onSlotChange(ItemStack p_75220_1_,  ItemStack craftedItem) {
+    public void onQuickCraft(ItemStack p_75220_1_,  ItemStack craftedItem) {
         //FMLCommonHandler.instance().firePlayerCraftingEvent(player, craftedItem, circuitTable);
-        this.onCrafting(craftedItem);
+        this.checkTakeAchievements(craftedItem);
         List<ItemStack> requiredItems = getCraftingComponents(craftedItem);
         for (ItemStack requiredItem : requiredItems) {
             IOHelper.extract(circuitTable, null, requiredItem, true, false, 1);
         }
         ItemStack item = craftedItem.copy();
         item.setCount(1);
-        putStack(item);
+        set(item);
     }
 
 
@@ -76,8 +77,8 @@ public class SlotCircuitTableCrafting extends CraftingResultSlot {
       /* TODO: Update this for 1.14
       List<ItemStack> requiredItems = new ArrayList<ItemStack>();
         for (IRecipe r : CraftingManager.REGISTRY) {
-            ItemStack result = r.getRecipeOutput();
-            if (!result.isEmpty() && result.isItemEqual(gate)) {
+            ItemStack result = r.getResultItem();
+            if (!result.isEmpty() && result.sameItem(gate)) {
                 if (r instanceof ShapedOreRecipe) {
                     ShapedOreRecipe recipe = (ShapedOreRecipe) r;
                     for (Object o : recipe.getIngredients()) {
@@ -92,7 +93,7 @@ public class SlotCircuitTableCrafting extends CraftingResultSlot {
                             if (!stack.isEmpty()) {
                                 boolean needsAdding = true;
                                 for (ItemStack listStack : requiredItems) {
-                                    if (listStack.isItemEqual(stack)) {
+                                    if (listStack.sameItem(stack)) {
                                         listStack.setCount(listStack.getCount() + 1);
                                         needsAdding = false;
                                         break;
@@ -107,17 +108,17 @@ public class SlotCircuitTableCrafting extends CraftingResultSlot {
                 } else if (r instanceof ShapedRecipe) {
                     ShapedRecipe recipe = (ShapedRecipe) r;
                     for (Ingredient stack : recipe.recipeItems) {
-                        if (!stack.getMatchingStacks()[0].isEmpty()) {
+                        if (!stack.getItems()[0].isEmpty()) {
                             boolean needsAdding = true;
                             for (ItemStack listStack : requiredItems) {
-                                if (listStack.isItemEqual(stack.getMatchingStacks()[0])) {
+                                if (listStack.sameItem(stack.getItems()[0])) {
                                     listStack.setCount(listStack.getCount() + 1);
                                     needsAdding = false;
                                     break;
                                 }
                             }
                             if (needsAdding)
-                                requiredItems.add(stack.getMatchingStacks()[0]);
+                                requiredItems.add(stack.getItems()[0]);
                         }
                     }
                     return requiredItems;

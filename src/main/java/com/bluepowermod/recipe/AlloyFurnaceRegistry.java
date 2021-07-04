@@ -43,6 +43,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.FolderName;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -81,7 +82,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
      */
     public void generateRecipeDatapack(MinecraftServer server){
         if(server != null) {
-            String path = server.func_240776_a_(FolderName.DATAPACKS).toString();
+            String path = server.getWorldPath(FolderName.DATAPACK_DIR).toString();
             DatapackUtils.createBPDatapack(path);
             DatapackUtils.clearBPAlloyFurnaceDatapack(path);
             for (IAlloyFurnaceRecipe recipe : alloyFurnaceRecipes) {
@@ -153,9 +154,9 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                     if (recipe instanceof ICraftingRecipe) {
                         if (!recipe.getIngredients().isEmpty()) {
                             for (Ingredient input : ((ICraftingRecipe)recipe).getIngredients()) {
-                                if (!input.hasNoMatchingItems()) {
+                                if (!input.isEmpty()) {
                                     //Serialize and Deserialize the Object so the base tag isn't affected.
-                                    Ingredient ingredient = Ingredient.deserialize(input.serialize());
+                                    Ingredient ingredient = Ingredient.fromJson(input.toJson());
                                     if (ingredient.test(recyclingItem)) {
                                         ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
                                         if (currentlyRecycledInto.isEmpty()
@@ -170,26 +171,26 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                     }
                 } catch (Throwable e) {
                     BluePower.log.error("Error when generating an Alloy Furnace recipe for item " + recyclingItem.getDisplayName().getString()
-                            + ", recipe output: " + recipe.getRecipeOutput().getDisplayName().getString());
+                            + ", recipe output: " + recipe.getResultItem().getDisplayName().getString());
                     e.printStackTrace();
                 }
             }
 
 
-            if (recyclingAmount > 0 && recipe.getRecipeOutput().getCount() > 0) {
+            if (recyclingAmount > 0 && recipe.getResultItem().getCount() > 0) {
                     //Try to avoid Duping
-                    if(!blacklist.contains(recipe.getRecipeOutput().getItem()) && recipe.getRecipeOutput().getCount() > recyclingAmount){
-                        blacklist.add(recipe.getRecipeOutput().getItem());
+                    if(!blacklist.contains(recipe.getResultItem().getItem()) && recipe.getResultItem().getCount() > recyclingAmount){
+                        blacklist.add(recipe.getResultItem().getItem());
                     }
 
-                    if (blacklist.contains(recipe.getRecipeOutput().getItem())) {
-                        BluePower.log.info("Skipped adding item/block " + recipe.getRecipeOutput().getDisplayName().getString()
+                    if (blacklist.contains(recipe.getResultItem().getItem())) {
+                        BluePower.log.info("Skipped adding item/block " + recipe.getResultItem().getDisplayName().getString()
                                 + " to the Alloy Furnace recipes.");
                         continue;
                     }
                     //Divide by the Recipe Output
-                    ItemStack resultItem = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount / recipe.getRecipeOutput().getCount()));
-                    generated_recipes.put(recipe.getRecipeOutput(), resultItem);
+                    ItemStack resultItem = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount / recipe.getResultItem().getCount()));
+                    generated_recipes.put(recipe.getResultItem(), resultItem);
             }
         }
 
@@ -197,7 +198,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             //Check if for null output or blacklist
             if(generated_recipes.get(inputItem).getCount() > 0 && !blacklist.contains(inputItem.getItem())) {
                 //Register Recipe
-                addRecipe(inputItem.getItem().getRegistryName(), generated_recipes.get(inputItem), Ingredient.fromStacks(inputItem));
+                addRecipe(inputItem.getItem().getRegistryName(), generated_recipes.get(inputItem), Ingredient.of(inputItem));
             }
         }
     }
@@ -223,7 +224,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             if (requiredItems.size() > 9)
                 throw new IllegalArgumentException("There can't be more than 9 crafting ingredients for the Alloy Furnace!");
             for (Ingredient requiredItem : requiredItems) {
-                if (requiredItem.hasNoMatchingItems())
+                if (requiredItem.isEmpty())
                     throw new NullPointerException("An Alloy Furnace crafting ingredient can't be null!");
             }
 
@@ -240,42 +241,42 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             if(inv instanceof TileAlloyFurnace) {
                 //Get Input Slots first 2 are Fuel and Output
                 for (int i = 2; i < 11; i++) {
-                    input.set(i - 2, inv.getStackInSlot(i));
+                    input.set(i - 2, inv.getItem(i));
                 }
             }else{
                 //Get Input Slots first slot is Output
                 for (int i = 1; i < 10; i++) {
-                    input.set(i - 1, inv.getStackInSlot(i));
+                    input.set(i - 1, inv.getItem(i));
                 }
             }
             return matches(input);
         }
 
         @Override
-        public ItemStack getCraftingResult(ISidedInventory inv) {
+        public ItemStack assemble(ISidedInventory inv) {
             NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
             if(inv instanceof TileAlloyFurnace) {
                 //Get Input Slots first 2 are Fuel and Output
                 for (int i = 2; i < 12; i++) {
-                    input.set(i - 2, inv.getStackInSlot(i));
+                    input.set(i - 2, inv.getItem(i));
                 }
             }else{
                 //Get Input Slots first is Output
                 for (int i = 1; i < 11; i++) {
-                    input.set(i - 1, inv.getStackInSlot(i));
+                    input.set(i - 1, inv.getItem(i));
                 }
             }
 
-            return getCraftingResult(input);
+            return assemble(input);
         }
 
         @Override
-        public boolean canFit(int width, int height) {
+        public boolean canCraftInDimensions(int width, int height) {
             return width <= 3 && height <= 3;
         }
 
         @Override
-        public ItemStack getRecipeOutput() {
+        public ItemStack getResultItem() {
             return craftingResult;
         }
 
@@ -290,7 +291,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         }
 
         @Override
-        public ItemStack getIcon() {
+        public ItemStack getToastSymbol() {
             return new ItemStack(BPBlocks.alloyfurnace);
         }
 
@@ -347,7 +348,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         }
 
         @Override
-        public ItemStack getCraftingResult(NonNullList<ItemStack> input) {
+        public ItemStack assemble(NonNullList<ItemStack> input) {
             return craftingResult;
         }
 
@@ -368,16 +369,16 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<IAlloyFurnaceRecipe> {
 
         @Override
-        public IAlloyFurnaceRecipe read(ResourceLocation recipeId, JsonObject json) {
-            String s = JSONUtils.getString(json, "group", "");
-            NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
-            NonNullList<Integer> countlist = readCount(JSONUtils.getJsonArray(json, "ingredients"));
+        public IAlloyFurnaceRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            String s = JSONUtils.getAsString(json, "group", "");
+            NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getAsJsonArray(json, "ingredients"));
+            NonNullList<Integer> countlist = readCount(JSONUtils.getAsJsonArray(json, "ingredients"));
             if (nonnulllist.isEmpty()) {
                 throw new JsonParseException("No ingredients for alloy furnace recipe");
             } else if (nonnulllist.size() > 9) {
                 throw new JsonParseException("Too many ingredients for shapeless recipe the max is 9");
             } else {
-                ItemStack itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+                ItemStack itemstack = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "result"));
                 return new StandardAlloyFurnaceRecipe(recipeId, s, itemstack, nonnulllist, countlist);
             }
         }
@@ -385,8 +386,8 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         private static NonNullList<Ingredient> readIngredients(JsonArray jsonArray) {
             NonNullList<Ingredient> nonnulllist = NonNullList.create();
             for(int i = 0; i < jsonArray.size(); ++i) {
-                Ingredient ingredient = Ingredient.deserialize(jsonArray.get(i));
-                if (!ingredient.hasNoMatchingItems()) {
+                Ingredient ingredient = Ingredient.fromJson(jsonArray.get(i));
+                if (!ingredient.isEmpty()) {
                     nonnulllist.add(ingredient);
                 }
             }
@@ -396,54 +397,55 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         private static NonNullList<Integer> readCount(JsonArray jsonArray) {
             NonNullList<Integer> countlist = NonNullList.create();
             for(int i = 0; i < jsonArray.size(); ++i) {
-                Ingredient ingredient = Ingredient.deserialize(jsonArray.get(i));
+                Ingredient ingredient = Ingredient.fromJson(jsonArray.get(i));
                 int count;
                 if (jsonArray.get(i).isJsonObject() && ((JsonObject)jsonArray.get(i)).has("count")) {
                     count = ((JsonObject) jsonArray.get(i)).get("count").getAsInt();
                 }else{
                     count = 1;
                 }
-                if (!ingredient.hasNoMatchingItems()) {
+                if (!ingredient.isEmpty()) {
                     countlist.add(i, count);
                 }
             }
             return countlist;
         }
 
+        @Nullable
         @Override
-        public IAlloyFurnaceRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            String s = buffer.readString(32767);
+        public IAlloyFurnaceRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+            String s = buffer.readUtf(32767);
             int i = buffer.readVarInt();
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
             NonNullList<Integer> countlist = NonNullList.withSize(i, 0);
 
             for(int j = 0; j < nonnulllist.size(); ++j) {
-                nonnulllist.set(j, Ingredient.read(buffer));
+                nonnulllist.set(j, Ingredient.fromNetwork(buffer));
             }
 
             for(int j = 0; j < nonnulllist.size(); ++j) {
                 countlist.set(j, buffer.readInt());
             }
 
-            ItemStack itemstack = buffer.readItemStack();
+            ItemStack itemstack = buffer.readItem();
             return new StandardAlloyFurnaceRecipe(recipeId, s, itemstack, nonnulllist, countlist);
         }
 
         @Override
-        public void write(PacketBuffer buffer, IAlloyFurnaceRecipe recipe) {
+        public void toNetwork(PacketBuffer buffer, IAlloyFurnaceRecipe recipe) {
             if(recipe instanceof StandardAlloyFurnaceRecipe) {
-                buffer.writeString(((StandardAlloyFurnaceRecipe)recipe).group);
+                buffer.writeUtf(((StandardAlloyFurnaceRecipe)recipe).group);
                 buffer.writeVarInt(((StandardAlloyFurnaceRecipe)recipe).requiredItems.size());
 
                 for (Ingredient ingredient :((StandardAlloyFurnaceRecipe)recipe).requiredItems ) {
-                    ingredient.write(buffer);
+                    ingredient.toNetwork(buffer);
                 }
 
                 for (int i :((StandardAlloyFurnaceRecipe)recipe).requiredCount ) {
                     buffer.writeInt(i);
                 }
 
-                buffer.writeItemStack(((StandardAlloyFurnaceRecipe)recipe).craftingResult);
+                buffer.writeItem(((StandardAlloyFurnaceRecipe)recipe).craftingResult);
             }
         }
     }

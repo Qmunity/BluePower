@@ -29,7 +29,7 @@ public class ItemSaw extends ItemBase{
     private final int sawLevel;
 
     public ItemSaw(int sawLevel, String name) {
-        super(new Properties().maxStackSize(1).maxDamage(1 << sawLevel + 8), BPCreativeTabs.tools);
+        super(new Properties().stacksTo(1).durability(1 << sawLevel + 8), BPCreativeTabs.tools);
         setRegistryName(Refs.MODID + ":" + name);
         this.sawLevel = sawLevel;
     }
@@ -43,7 +43,7 @@ public class ItemSaw extends ItemBase{
     public ItemStack getContainerItem(ItemStack itemStack) {
 
         ItemStack container = itemStack.copy();
-        container.attemptDamageItem(1, new Random(), null);
+        container.hurt(1, new Random(), null);
         return container;
     }
 

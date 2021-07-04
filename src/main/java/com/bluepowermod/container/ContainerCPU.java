@@ -25,7 +25,7 @@ public class ContainerCPU extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity entityplayer) {
+	public boolean stillValid(PlayerEntity entityplayer) {
 		return true;
 	}
 

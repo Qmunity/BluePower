@@ -46,14 +46,14 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
     public BlockAlloyWire(String type) {
         super(1,2F);
         this.type = type;
-        this.setDefaultState(super.getDefaultState().with(POWERED, false));
+        this.registerDefaultState(super.defaultBlockState().setValue(POWERED, false));
         setRegistryName(Refs.MODID + ":" + type + "_wire");
     }
 
     public BlockAlloyWire(String type, float width, float height) {
         super(width, height);
         this.type = type;
-        this.setDefaultState(super.getDefaultState().with(POWERED, false));
+        this.registerDefaultState(super.defaultBlockState().setValue(POWERED, false));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(FACING, POWERED, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, JOIN_FRONT, JOIN_BACK, JOIN_LEFT, JOIN_RIGHT, WATERLOGGED);
     }
 

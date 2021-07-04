@@ -23,6 +23,6 @@ public class BPBlockColor implements IBlockColor, IItemColor {
     @Override
     @OnlyIn(Dist.CLIENT)
     public int getColor(ItemStack stack, int tintIndex) {
-        return ((IBPColoredBlock)Block.getBlockFromItem(stack.getItem())).getColor(stack, tintIndex);
+        return ((IBPColoredBlock)Block.byItem(stack.getItem())).getColor(stack, tintIndex);
     }
 }

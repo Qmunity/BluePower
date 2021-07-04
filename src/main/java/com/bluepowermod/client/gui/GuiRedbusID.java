@@ -26,16 +26,16 @@ public class GuiRedbusID extends GuiContainerBaseBP<ContainerRedbusID> implement
         super(container, playerInventory, title, resLoc);
         this.device = container;
 
-        xSize = 123;
-        ySize = 81;
+        imageWidth = 123;
+        imageHeight = 81;
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
 
-        drawHorizontalAlignedString(matrixStack, 7, 4, xSize - 14,  "gui.redbusgui", true);
+        drawHorizontalAlignedString(matrixStack, 7, 4, imageWidth - 14,  "gui.redbusgui", true);
 
-        drawHorizontalAlignedString(matrixStack, 7, 60, xSize - 14, "gui.redbus.id" + ":" + IRedBusWindow.redbus_id,
+        drawHorizontalAlignedString(matrixStack, 7, 60, imageWidth - 14, "gui.redbus.id" + ":" + IRedBusWindow.redbus_id,
                 true);
     }
 

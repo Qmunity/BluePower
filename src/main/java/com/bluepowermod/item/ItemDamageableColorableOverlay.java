@@ -47,7 +47,7 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
 
     public boolean tryUseItem(ItemStack stack) {
 
-        if (stack.getDamage() == 16)
+        if (stack.getDamageValue() == 16)
             return true;
         if (getUsesUsed(stack) < getMaxUses()) {
             int newUses = getUsesUsed(stack) + 1;
@@ -55,7 +55,7 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
                 setUsesUsed(stack, newUses);
             } else {
                 setUsesUsed(stack, 0);
-                stack.setDamage(16);
+                stack.setDamageValue(16);
             }
             return true;
         } else {

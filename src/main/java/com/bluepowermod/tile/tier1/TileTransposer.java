@@ -41,7 +41,7 @@ public class TileTransposer extends TileMachineBase {
     @Override
     public void tick() {
         super.tick();
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             suckEntity();
         }
 
@@ -53,8 +53,8 @@ public class TileTransposer extends TileMachineBase {
         super.redstoneChanged(newValue);
         Direction direction = getFacingDirection();
 
-        if (!world.isRemote && newValue) {
-            if (world.isAirBlock(pos.offset(direction))) {
+        if (!level.isClientSide && newValue) {
+            if (level.isEmptyBlock(worldPosition.relative(direction))) {
                 suckItems();
             } else {
                 pullItem();
@@ -85,7 +85,7 @@ public class TileTransposer extends TileMachineBase {
 
     private void suckItems() {
 
-        for (ItemEntity entity : (List<ItemEntity>) world.getEntitiesWithinAABB(ItemEntity.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()].offset(pos))) {
+        for (ItemEntity entity : (List<ItemEntity>) level.getEntitiesOfClass(ItemEntity.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()].move(worldPosition))) {
             ItemStack stack = entity.getItem();
             if (isItemAccepted(stack) && entity.isAlive()) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
@@ -97,9 +97,9 @@ public class TileTransposer extends TileMachineBase {
     private void suckEntity() {
 
         Direction direction = getFacingDirection();
-        AxisAlignedBB box = new AxisAlignedBB(pos.getX() + direction.getXOffset(), pos.getY() + direction.getYOffset(), pos.getZ() + direction.getZOffset(), pos.getX()
-                + direction.getXOffset() + 1, pos.getY() + direction.getYOffset() + 1, pos.getZ() + direction.getZOffset() + 1);
-        for (ItemEntity entity : (List<ItemEntity>) world.getEntitiesWithinAABB(ItemEntity.class, box)) {
+        AxisAlignedBB box = new AxisAlignedBB(worldPosition.getX() + direction.getStepX(), worldPosition.getY() + direction.getStepY(), worldPosition.getZ() + direction.getStepZ(), worldPosition.getX()
+                + direction.getStepX() + 1, worldPosition.getY() + direction.getStepY() + 1, worldPosition.getZ() + direction.getStepZ() + 1);
+        for (ItemEntity entity : (List<ItemEntity>) level.getEntitiesOfClass(ItemEntity.class, box)) {
             ItemStack stack = entity.getItem();
             if (isItemAccepted(stack) && entity.isAlive()) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));

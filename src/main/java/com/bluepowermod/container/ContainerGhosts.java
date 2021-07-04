@@ -33,42 +33,42 @@ public abstract class ContainerGhosts extends Container {
      * @author CovertJaguar <http://www.railcraft.info>
      */
     @Override
-    public ItemStack slotClick(int slotNum, int dragType, ClickType clickTypeIn, PlayerEntity player) {
-        Slot slot = slotNum < 0 ? null : (Slot) inventorySlots.get(slotNum);
-        if (slot instanceof IPhantomSlot) { return slotClickPhantom(slot, dragType, clickTypeIn,  player); }
-        return super.slotClick(slotNum, dragType, clickTypeIn, player);
+    public ItemStack clicked(int slotNum, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+        Slot slot = slotNum < 0 ? null : (Slot) slots.get(slotNum);
+        if (slot instanceof IPhantomSlot) { return clickedPhantom(slot, dragType, clickTypeIn,  player); }
+        return super.clicked(slotNum, dragType, clickTypeIn, player);
     }
 
     /**
      * This method is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
      * @author CovertJaguar <http://www.railcraft.info>
      */
-    private ItemStack slotClickPhantom(Slot slot, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    private ItemStack clickedPhantom(Slot slot, int dragType, ClickType clickTypeIn, PlayerEntity player) {
     
         ItemStack stack = ItemStack.EMPTY;
         
         if (clickTypeIn.ordinal() == 2) {
             if (((IPhantomSlot) slot).canAdjust()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             }
         } else if (clickTypeIn.ordinal() == 0 || clickTypeIn.ordinal() == 1) {
             PlayerInventory playerInv = player.inventory;
-            slot.onSlotChanged();
-            ItemStack stackSlot = slot.getStack();
-            ItemStack stackHeld = playerInv.getItemStack();
+            slot.setChanged();
+            ItemStack stackSlot = slot.getItem();
+            ItemStack stackHeld = playerInv.getCarried();
             
             if (stackSlot != ItemStack.EMPTY) {
                 stack = stackSlot.copy();
             }
             
             if (stackSlot == ItemStack.EMPTY) {
-                if (stackHeld != ItemStack.EMPTY && slot.isItemValid(stackHeld)) {
+                if (stackHeld != ItemStack.EMPTY && slot.mayPlace(stackHeld)) {
                     fillPhantomSlot(slot, stackHeld, clickTypeIn.ordinal(), dragType);
                 }
             } else if (stackHeld == ItemStack.EMPTY) {
                 adjustPhantomSlot(slot, clickTypeIn.ordinal(), dragType);
-                slot.onSlotChange(stack, playerInv.getItemStack());
-            } else if (slot.isItemValid(stackHeld)) {
+                slot.onQuickCraft(stack, playerInv.getCarried());
+            } else if (slot.mayPlace(stackHeld)) {
                 if (canStacksMerge(stackSlot, stackHeld)) {
                     adjustPhantomSlot(slot, clickTypeIn.ordinal(), dragType);
                 } else {
@@ -86,8 +86,8 @@ public abstract class ContainerGhosts extends Container {
     public boolean canStacksMerge(ItemStack stack1, ItemStack stack2) {
     
         if (stack1.isEmpty() || stack2.isEmpty()) return false;
-        if (!stack1.isItemEqual(stack2)) return false;
-        if (!ItemStack.areItemStackTagsEqual(stack1, stack2)) return false;
+        if (!stack1.sameItem(stack2)) return false;
+        if (!ItemStack.tagMatches(stack1, stack2)) return false;
         return true;
         
     }
@@ -99,7 +99,7 @@ public abstract class ContainerGhosts extends Container {
     protected void adjustPhantomSlot(Slot slot, int mouseButton, int modifier) {
     
         if (!((IPhantomSlot) slot).canAdjust()) { return; }
-        ItemStack stackSlot = slot.getStack();
+        ItemStack stackSlot = slot.getItem();
         int stackSize;
         if (modifier == 1) {
             stackSize = mouseButton == 0 ? (stackSlot.getCount() + 1) / 2 : stackSlot.getCount() * 2;
@@ -107,14 +107,14 @@ public abstract class ContainerGhosts extends Container {
             stackSize = mouseButton == 0 ? stackSlot.getCount() - 1 : stackSlot.getCount() + 1;
         }
         
-        if (stackSize > slot.getSlotStackLimit()) {
-            stackSize = slot.getSlotStackLimit();
+        if (stackSize > slot.getMaxStackSize()) {
+            stackSize = slot.getMaxStackSize();
         }
         
         stackSlot.setCount(stackSize);
         
         if (!stackSlot.isEmpty() && stackSlot.getCount() <= 0) {
-            slot.putStack(ItemStack.EMPTY);
+            slot.set(ItemStack.EMPTY);
         }
     }
     
@@ -126,13 +126,13 @@ public abstract class ContainerGhosts extends Container {
     
         if (!((IPhantomSlot) slot).canAdjust()) { return; }
         int stackSize = mouseButton == 0 ? stackHeld.getCount() : 1;
-        if (stackSize > slot.getSlotStackLimit()) {
-            stackSize = slot.getSlotStackLimit();
+        if (stackSize > slot.getMaxStackSize()) {
+            stackSize = slot.getMaxStackSize();
         }
         ItemStack phantomStack = stackHeld.copy();
         phantomStack.setCount(stackSize);
         
-        slot.putStack(phantomStack);
+        slot.set(phantomStack);
     }
     
 }

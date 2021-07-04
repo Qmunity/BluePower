@@ -57,7 +57,7 @@ public class ContainerBlulectricFurnace extends Container {
         addSlot(new SlotMachineOutput(inventory, 1, 126, 35));
 
         bindPlayerInventory(invPlayer);
-        this.trackIntArray(fields);
+        this.addDataSlots(fields);
     }
 
 
@@ -78,29 +78,29 @@ public class ContainerBlulectricFurnace extends Container {
 
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 
         ItemStack stack1 = ItemStack.EMPTY;
-        Slot slot = inventorySlots.get(index);
+        Slot slot = slots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack stack = slot.getItem();
             stack1 = stack.copy();
 
             if (index < 2) {
-                if (!mergeItemStack(stack, 2, 37, false))
+                if (!moveItemStackTo(stack, 2, 37, false))
                     return ItemStack.EMPTY;
-                slot.onSlotChange(stack, stack1);
+                slot.onQuickCraft(stack, stack1);
             } else {
-                if (!mergeItemStack(stack, 0, 1, false))
+                if (!moveItemStackTo(stack, 0, 1, false))
                     return ItemStack.EMPTY;
-                slot.onSlotChange(stack, stack1);
+                slot.onQuickCraft(stack, stack1);
             }
 
             if (stack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (stack.getCount() == stack1.getCount())
@@ -113,8 +113,8 @@ public class ContainerBlulectricFurnace extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerEntity) {
-        return inventory.isUsableByPlayer( playerEntity );
+    public boolean stillValid(PlayerEntity playerEntity) {
+        return inventory.stillValid( playerEntity );
     }
 
     //fields.get(2) = Max | fields.get(0) = Amount

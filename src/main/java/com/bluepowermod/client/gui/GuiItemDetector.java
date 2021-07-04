@@ -42,7 +42,7 @@ public class GuiItemDetector extends GuiContainerBaseBP<ContainerItemDetector> i
     public void init() {
 
         super.init();
-        WidgetMode modeWidget = new WidgetMode(0, guiLeft + 152, guiTop + 10, 176, 3, Refs.MODID + ":textures/gui/item_detector.png") {
+        WidgetMode modeWidget = new WidgetMode(0, leftPos + 152, topPos + 10, 176, 3, Refs.MODID + ":textures/gui/item_detector.png") {
 
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
@@ -71,7 +71,7 @@ public class GuiItemDetector extends GuiContainerBaseBP<ContainerItemDetector> i
         modeWidget.value = itemDetector.mode;
         addWidget(modeWidget);
 
-        WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(1, guiLeft + 152, guiTop + 55);
+        WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(1, leftPos + 152, topPos + 55);
         fuzzyWidget.value = itemDetector.fuzzySetting;
         addWidget(fuzzyWidget);
     }

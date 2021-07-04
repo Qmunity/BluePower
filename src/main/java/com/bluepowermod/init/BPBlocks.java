@@ -220,30 +220,30 @@ public class BPBlocks {
 
         multipart = new BlockBPMultipart();
 
-        rubber_leaves = new BlockRubberLeaves(Block.Properties.create(Material.PLANTS).notSolid());
-        rubber_log = new BlockRubberLog(Block.Properties.create(Material.WOOD));
-        rubber_sapling = new BlockRubberSapling(new OakTree(), Block.Properties.create(Material.PLANTS));
+        rubber_leaves = new BlockRubberLeaves(Block.Properties.of(Material.PLANT).noOcclusion());
+        rubber_log = new BlockRubberLog(Block.Properties.of(Material.WOOD));
+        rubber_sapling = new BlockRubberSapling(new OakTree(), Block.Properties.of(Material.PLANT));
 
         sapphire_glass = new BlockBPGlass(Refs.SAPPHIREGLASS_NAME);
         reinforced_sapphire_glass = new BlockBPGlass(Refs.REINFORCEDSAPPHIREGLASS_NAME, true);
 
-        flax_crop = new BlockCrop(Block.Properties.create(Material.PLANTS));
-        indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME, Block.Properties.create(Material.PLANTS));
+        flax_crop = new BlockCrop(Block.Properties.of(Material.PLANT));
+        indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME, Block.Properties.of(Material.PLANT));
 
         alloyfurnace = new BlockAlloyFurnace();
-        block_breaker = new BlockContainerFacingBase(Material.ROCK, TileBlockBreaker.class).setRegistryName(Refs.MODID, Refs.BLOCKBREAKER_NAME);
+        block_breaker = new BlockContainerFacingBase(Material.STONE, TileBlockBreaker.class).setRegistryName(Refs.MODID, Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
 
-        buffer = new BlockContainerHorizontalFacingBase(Material.ROCK, TileBuffer.class){
+        buffer = new BlockContainerHorizontalFacingBase(Material.STONE, TileBuffer.class){
             @Override
             protected boolean canRotateVertical(){return false;}
         }.setRegistryName(Refs.MODID, Refs.BLOCKBUFFER_NAME);
 
-        deployer = new BlockContainerFacingBase(Material.ROCK, TileDeployer.class)
+        deployer = new BlockContainerFacingBase(Material.STONE, TileDeployer.class)
                 .setRegistryName(Refs.MODID, Refs.BLOCKDEPLOYER_NAME);
-        transposer = new BlockContainerFacingBase(Material.ROCK, TileTransposer.class).setRegistryName(Refs.MODID, Refs.TRANSPOSER_NAME);
+        transposer = new BlockContainerFacingBase(Material.STONE, TileTransposer.class).setRegistryName(Refs.MODID, Refs.TRANSPOSER_NAME);
         tube = new BlockTube().setRegistryName(Refs.MODID, Refs.TUBE_NAME);
-        sorting_machine = new BlockContainerFacingBase(Material.ROCK, TileSortingMachine.class).setWIP(true)
+        sorting_machine = new BlockContainerFacingBase(Material.STONE, TileSortingMachine.class).setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.SORTING_MACHINE_NAME);
         project_table = new BlockProjectTable();
         project_tables[0] = project_table;
@@ -253,15 +253,15 @@ public class BPBlocks {
         circuit_table = new BlockProjectTable(TileCircuitTable.class).setWIP(true).setRegistryName(Refs.MODID, Refs.CIRCUITTABLE_NAME);
         circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.CIRCUITDATABASE_NAME);
-        ejector = new BlockContainerFacingBase(Material.ROCK, TileEjector.class).setRegistryName(Refs.MODID, Refs.EJECTOR_NAME);
-        relay = new BlockContainerFacingBase(Material.ROCK, TileRelay.class).setWIP(true).setRegistryName(Refs.MODID, Refs.RELAY_NAME);
-        filter = new BlockContainerFacingBase(Material.ROCK, TileFilter.class).setWIP(true).setRegistryName(Refs.MODID, Refs.FILTER_NAME);
-        retriever = new BlockContainerFacingBase(Material.ROCK, TileRetriever.class).setWIP(true).setRegistryName(Refs.MODID, Refs.RETRIEVER_NAME);
-        regulator = new BlockContainerFacingBase(Material.ROCK, TileRegulator.class).emitsRedstone().setWIP(true)
+        ejector = new BlockContainerFacingBase(Material.STONE, TileEjector.class).setRegistryName(Refs.MODID, Refs.EJECTOR_NAME);
+        relay = new BlockContainerFacingBase(Material.STONE, TileRelay.class).setWIP(true).setRegistryName(Refs.MODID, Refs.RELAY_NAME);
+        filter = new BlockContainerFacingBase(Material.STONE, TileFilter.class).setWIP(true).setRegistryName(Refs.MODID, Refs.FILTER_NAME);
+        retriever = new BlockContainerFacingBase(Material.STONE, TileRetriever.class).setWIP(true).setRegistryName(Refs.MODID, Refs.RETRIEVER_NAME);
+        regulator = new BlockContainerFacingBase(Material.STONE, TileRegulator.class).emitsRedstone().setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.REGULATOR_NAME);
-        item_detector = new BlockContainerFacingBase(Material.ROCK, TileItemDetector.class).emitsRedstone().setWIP(true)
+        item_detector = new BlockContainerFacingBase(Material.STONE, TileItemDetector.class).emitsRedstone().setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.ITEMDETECTOR_NAME);
-        manager = new BlockRejecting(Material.ROCK, TileManager.class).emitsRedstone().setWIP(true).setRegistryName(Refs.MODID, Refs.MANAGER_NAME);
+        manager = new BlockRejecting(Material.STONE, TileManager.class).emitsRedstone().setWIP(true).setRegistryName(Refs.MODID, Refs.MANAGER_NAME);
 
         battery = new BlockBattery();
         blulectric_cable = new BlockBlulectricCable();
@@ -273,9 +273,9 @@ public class BPBlocks {
         solarpanel = new BlockSolarPanel();
         thermopile = new BlockThermopile().setWIP(true);
 
-        half_block = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,8,16)).setRegistryName(Refs.MODID + ":half_block");
-        panel = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,4,16)).setRegistryName(Refs.MODID + ":panel");
-        cover = new BlockBPMicroblock(Block.makeCuboidShape(0,0,0,16,2,16)).setRegistryName(Refs.MODID + ":cover");
+        half_block = new BlockBPMicroblock(Block.box(0,0,0,16,8,16)).setRegistryName(Refs.MODID + ":half_block");
+        panel = new BlockBPMicroblock(Block.box(0,0,0,16,4,16)).setRegistryName(Refs.MODID + ":panel");
+        cover = new BlockBPMicroblock(Block.box(0,0,0,16,2,16)).setRegistryName(Refs.MODID + ":cover");
         microblocks.add(half_block);
         microblocks.add(panel);
         microblocks.add(cover);
@@ -380,9 +380,9 @@ public class BPBlocks {
                     if(block instanceof BlockBlulectricCable){group = BPCreativeTabs.wiring;}
                     if(block instanceof BlockGateBase){group = BPCreativeTabs.circuits;}
                     if(block instanceof IBPPartBlock){
-                        event.getRegistry().register(new ItemBPPart(block, new Item.Properties().group(group)).setRegistryName(block.getRegistryName()));
+                        event.getRegistry().register(new ItemBPPart(block, new Item.Properties().tab(group)).setRegistryName(block.getRegistryName()));
                     }else {
-                        event.getRegistry().register(new BlockItem(block, new Item.Properties().group(group)).setRegistryName(block.getRegistryName()));
+                        event.getRegistry().register(new BlockItem(block, new Item.Properties().tab(group)).setRegistryName(block.getRegistryName()));
                     }
                 }
             }

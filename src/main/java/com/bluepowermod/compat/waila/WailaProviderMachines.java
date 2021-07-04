@@ -27,12 +27,12 @@ public class WailaProviderMachines implements IServerDataProvider<TileEntity> {
 
     @Override
     public void appendServerData(CompoundNBT compoundNBT, ServerPlayerEntity serverPlayerEntity, World world, TileEntity tileEntity) {
-        if(tileEntity instanceof TileMachineBase && world.isRemote) {
+        if(tileEntity instanceof TileMachineBase && world.isClientSide) {
             TileMachineBase machine = (TileMachineBase) tileEntity;
 
             machine.addWailaInfo(info);
             //TODO: Check this works and add the engine
-            compoundNBT.keySet().addAll(info);
+            compoundNBT.getAllKeys().addAll(info);
             info.clear();
         }
     }

@@ -77,9 +77,9 @@ public class TileEngine extends TileMachineBase  {
 
 		//Server side capability check
 		isActive = false;
-		if(world != null && !world.isRemote && (storage.getEnergyStored() > 0 && world.isBlockPowered(pos))){
-			Direction facing = getBlockState().get(BlockEngine.FACING).getOpposite();
-			TileEntity tileEntity = world.getTileEntity(pos.offset(facing));
+		if(level != null && !level.isClientSide && (storage.getEnergyStored() > 0 && level.hasNeighborSignal(worldPosition))){
+			Direction facing = getBlockState().getValue(BlockEngine.FACING).getOpposite();
+			TileEntity tileEntity = level.getBlockEntity(worldPosition.relative(facing));
 			if (tileEntity != null) {
 				tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).ifPresent(other -> {
 					int simulated = storage.extractEnergy(320, true);
@@ -93,13 +93,13 @@ public class TileEngine extends TileMachineBase  {
 		}
 
 		//Update BlockState
-		if(world != null && !world.isRemote && getBlockState().get(BlockEngine.ACTIVE) != isActive){
-			world.setBlockState(pos, getBlockState().with(BlockEngine.ACTIVE, isActive));
+		if(level != null && !level.isClientSide && getBlockState().getValue(BlockEngine.ACTIVE) != isActive){
+			level.setBlockAndUpdate(worldPosition, getBlockState().setValue(BlockEngine.ACTIVE, isActive));
 			markForRenderUpdate();
 		}
 
 		//Update TESR from BlockState
-		if(world != null && getBlockState().get(BlockEngine.ACTIVE)) {
+		if(level != null && getBlockState().getValue(BlockEngine.ACTIVE)) {
 			isActive = true;
 			pumpTick++;
 			if (pumpTick >= pumpSpeed * 2) {
@@ -117,7 +117,7 @@ public class TileEngine extends TileMachineBase  {
 
     public void setOrientation(Direction orientation){
         this.orientation = orientation;
-        markDirty();
+        setChanged();
     }
 
     public Direction getOrientation()
@@ -129,7 +129,7 @@ public class TileEngine extends TileMachineBase  {
 	@Override
 	protected void writeToPacketNBT(CompoundNBT compound) {
 		super.writeToPacketNBT(compound);
-		int rotation = orientation.getIndex();
+		int rotation = orientation.get3DDataValue();
 		compound.putInt("rotation", rotation);
         compound.putByte("pumpspeed", pumpSpeed);
         compound.putByte("pumptick", pumpTick);
@@ -141,7 +141,7 @@ public class TileEngine extends TileMachineBase  {
 	@Override
 	protected void readFromPacketNBT(CompoundNBT compound) {
 		super.readFromPacketNBT(compound);
-		orientation = Direction.byIndex(compound.getInt("rotation"));
+		orientation = Direction.from3DDataValue(compound.getInt("rotation"));
         pumpSpeed = compound.getByte("pumpspeed");
         pumpTick = compound.getByte("pumptick");
         if(compound.contains("energy")) {

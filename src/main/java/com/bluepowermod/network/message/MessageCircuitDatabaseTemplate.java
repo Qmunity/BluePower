@@ -41,7 +41,7 @@ public class MessageCircuitDatabaseTemplate{
     }
 
     public void handleClientSide(PlayerEntity player) {
-        //TileEntity te = player.world.getTileEntity(pos);
+        //TileEntity te = player.world.getBlockEntity(pos);
         //if (te instanceof TileCircuitDatabase) {
             //((TileCircuitDatabase) te).saveToPrivateLibrary(stack);
         //}
@@ -56,9 +56,9 @@ public class MessageCircuitDatabaseTemplate{
                 //BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
             }
         } else {
-            //TileEntity te = player.world.getTileEntity(pos);
+            //TileEntity te = player.world.getBlockEntity(pos);
             //if (te instanceof TileCircuitDatabase) {
-                //((TileCircuitDatabase) te).copyInventory.setInventorySlotContents(0, stack);
+                //((TileCircuitDatabase) te).copyInventory.setItem(0, stack);
                 //TODO: Open GUI
                 //player.openGui(BluePower.instance, GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal(), player.world, pos.getX(), pos.getY(), pos.getZ());
             //}

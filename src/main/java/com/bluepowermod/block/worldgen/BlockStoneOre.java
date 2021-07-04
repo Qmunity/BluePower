@@ -41,14 +41,14 @@ public class BlockStoneOre extends Block {
     private final boolean witherproof;
 
     public BlockStoneOre(String name, boolean witherproof) {
-        super(Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.STONE));
+        super(Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.STONE));
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         this.witherproof = witherproof;
     }
 
     public BlockStoneOre(String name) {
-        super(Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(5.0F).sound(SoundType.STONE));
+        super(Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.STONE));
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         witherproof = false;
@@ -60,10 +60,10 @@ public class BlockStoneOre extends Block {
         BPBlocks.blockList.add(this);
         witherproof = false;
     }
-
+    
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (witherproof) {
             tooltip.add(new StringTextComponent(MinecraftColor.RED.getChatColor() + "Witherproof"));
         }
@@ -78,14 +78,14 @@ public class BlockStoneOre extends Block {
     }
 
     @Override
-    public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
+    public void wasExploded(World worldIn, BlockPos pos, Explosion explosionIn) {
         if (!witherproof)
-            super.onExplosionDestroy(worldIn, pos, explosionIn);
+            super.wasExploded(worldIn, pos, explosionIn);
     }
 
     @Override
-    public boolean canDropFromExplosion(Explosion explosion) {
-        return !witherproof && super.canDropFromExplosion(explosion);
+    public boolean dropFromExplosion(Explosion explosion) {
+        return !witherproof && super.dropFromExplosion(explosion);
     }
 
     @Override

@@ -48,7 +48,7 @@ public class ItemSickle extends ToolItem {
             BlockTags.SMALL_FLOWERS);
 
     public ItemSickle(IItemTier itemTier, String name, Item repairItem) {
-        super(2,-1.4F, itemTier, toolBlocks, new Properties().group(BPCreativeTabs.tools));
+        super(2,-1.4F, itemTier, toolBlocks, new Properties().tab(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);
@@ -56,14 +56,14 @@ public class ItemSickle extends ToolItem {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if ((state.getMaterial() == Material.LEAVES) || (state.getMaterial() == Material.PLANTS) || toolBlocks.contains(state)) {
-            return this.efficiency;
+        if ((state.getMaterial() == Material.LEAVES) || (state.getMaterial() == Material.PLANT) || toolBlocks.contains(state)) {
+            return this.speed;
         }
         return 1.0F;
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
 
         boolean used = false;
 
@@ -74,10 +74,10 @@ public class ItemSickle extends ToolItem {
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     for (int k = -1; k <= 1; k++) {
-                        BlockState blockToCheck = world.getBlockState(pos.add(i,j,k));
+                        BlockState blockToCheck = world.getBlockState(pos.offset(i,j,k));
                         if (blockToCheck.getBlock().getTags().contains(new ResourceLocation("minecraft:leaves")) || blockToCheck.getBlock() instanceof LeavesBlock) {
-                            if (blockToCheck.canHarvestBlock(world, pos.add(i,j,k), player)) {
-                                world.destroyBlock(pos.add(i,j,k), true);
+                            if (blockToCheck.canHarvestBlock(world, pos.offset(i,j,k), player)) {
+                                world.destroyBlock(pos.offset(i,j,k), true);
                             }
                             used = true;
                         }
@@ -85,8 +85,8 @@ public class ItemSickle extends ToolItem {
                 }
             }
             if (used) {
-                stack.damageItem(1, player, (playerEntity) ->
-                        playerEntity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+                stack.hurtAndBreak(1, player, (playerEntity) ->
+                        playerEntity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
             }
             return used;
         }
@@ -94,11 +94,11 @@ public class ItemSickle extends ToolItem {
         if ((state.getBlock() instanceof LilyPadBlock)) {
             for (int i = -2; i <= 2; i++) {
                 for (int j = -2; j <= 2; j++) {
-                    Block blockToCheck = world.getBlockState(pos.add(i,0,j)).getBlock();
-                    BlockState meta = world.getBlockState(pos.add(i,0,j));
+                    Block blockToCheck = world.getBlockState(pos.offset(i,0,j)).getBlock();
+                    BlockState meta = world.getBlockState(pos.offset(i,0,j));
                     if (blockToCheck instanceof LilyPadBlock) {
-                        if (blockToCheck.canHarvestBlock(meta, world, pos.add(i,0,j), player)) {
-                            world.destroyBlock(pos.add(i,0,j), true);
+                        if (blockToCheck.canHarvestBlock(meta, world, pos.offset(i,0,j), player)) {
+                            world.destroyBlock(pos.offset(i,0,j), true);
                         }
                         used = true;
                     }
@@ -109,10 +109,10 @@ public class ItemSickle extends ToolItem {
         if (!(state.getBlock() instanceof LilyPadBlock)) {
             for (int i = -2; i <= 2; i++) {
                 for (int j = -2; j <= 2; j++) {
-                    Block blockToCheck = world.getBlockState(pos.add(i,0,j)).getBlock();
+                    Block blockToCheck = world.getBlockState(pos.offset(i,0,j)).getBlock();
                     if (blockToCheck instanceof BushBlock && !(blockToCheck instanceof LilyPadBlock)) {
-                        if (blockToCheck.canHarvestBlock(world.getBlockState(pos.add(i,0,j)), world,  pos.add(i,0,j), player)) {
-                            world.destroyBlock(pos.add(i,0,j), true);
+                        if (blockToCheck.canHarvestBlock(world.getBlockState(pos.offset(i,0,j)), world,  pos.offset(i,0,j), player)) {
+                            world.destroyBlock(pos.offset(i,0,j), true);
                         }
                         used = true;
                     }
@@ -121,15 +121,14 @@ public class ItemSickle extends ToolItem {
         }
 
         if (used) {
-            stack.damageItem(1, player, (playerEntity) ->
-                    playerEntity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+            stack.hurtAndBreak(1, player, (playerEntity) ->
+                    playerEntity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
         }
         return used;
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack is1, ItemStack is2) {
-
+    public boolean isValidRepairItem(ItemStack is1, ItemStack is2) {
         return ((is1.getItem() == this || is2.getItem() == this) && (is1.getItem() == this.customCraftingMaterial || is2.getItem() == this.customCraftingMaterial));
     }
 }

@@ -58,7 +58,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
 
         super.tick();
 
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             if (ejectionScheduled || getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
                 ejectItems();
                 ejectionScheduled = false;
@@ -75,11 +75,11 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                         false);
                 if (returnedStack.isEmpty()) {
                     iterator.remove();
-                    markDirty();
+                    setChanged();
                     if (!ejectionScheduled)
                         break;
                 } else if (returnedStack.getCount() != tubeStack.stack.getCount()) {
-                    markDirty();
+                    setChanged();
                     if (!ejectionScheduled)
                         break;
                 } else {
@@ -87,11 +87,11 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                 }
             } else if (spawnItemsInWorld) {
                 Direction direction = getFacingDirection().getOpposite();
-                Block block = world.getBlockState(pos.offset(direction)).getBlock();
-                if (!world.getBlockState( pos.offset(direction)).isSolid() || block instanceof IFluidBlock) {
+                Block block = level.getBlockState(worldPosition.relative(direction)).getBlock();
+                if (!level.getBlockState( worldPosition.relative(direction)).canOcclude() || block instanceof IFluidBlock) {
                     ejectItemInWorld(tubeStack.stack, direction);
                     iterator.remove();
-                    markDirty();
+                    setChanged();
                 } else {
                     break;
                 }
@@ -100,9 +100,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public void validate() {
+    public void clearRemoved() {
 
-        super.validate();
+        super.clearRemoved();
         tileCache = null;
     }
 
@@ -114,13 +114,13 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             internalItemStackBuffer.add(new TubeStack(stack, getOutputDirection().getOpposite(), color));
             if (internalItemStackBuffer.size() == 1)
                 ejectionScheduled = true;
             animationTicker = 0;
             sendUpdatePacket();
-            markDirty();
+            setChanged();
         }
     }
 
@@ -160,7 +160,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     public TileEntity getTileCache(Direction d) {
 
         if (tileCache == null) {
-            tileCache = new TileEntityCache(world, pos);
+            tileCache = new TileEntityCache(level, worldPosition);
         }
         return tileCache.getValue(d);
     }
@@ -171,9 +171,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
+    public void load(BlockState state, CompoundNBT compound) {
 
-        super.read(state, compound);
+        super.load(state, compound);
         ListNBT nbttaglist = compound.getList("ItemBuffer", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -184,9 +184,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundNBT save(CompoundNBT compound) {
 
-        super.write(compound);
+        super.save(compound);
         ListNBT nbttaglist = new ListNBT();
 
         for (TubeStack tubeStack : internalItemStackBuffer) {
@@ -202,13 +202,13 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
 
     public void ejectItemInWorld(ItemStack stack, Direction oppDirection) {
 
-        float spawnX = pos.getX() + 0.5F + oppDirection.getXOffset() * 0.8F;
-        float spawnY = pos.getY() + 0.5F + oppDirection.getYOffset() * 0.8F;
-        float spawnZ = pos.getZ() + 0.5F + oppDirection.getZOffset() * 0.8F;
+        float spawnX = worldPosition.getX() + 0.5F + oppDirection.getStepX() * 0.8F;
+        float spawnY = worldPosition.getY() + 0.5F + oppDirection.getStepY() * 0.8F;
+        float spawnZ = worldPosition.getZ() + 0.5F + oppDirection.getStepZ() * 0.8F;
 
-        ItemEntity droppedItem = new ItemEntity(world, spawnX, spawnY, spawnZ, stack);
-        droppedItem.setMotion(oppDirection.getXOffset() * 0.20F, oppDirection.getYOffset() * 0.20F, oppDirection.getZOffset() * 0.20F);
-        world.addEntity(droppedItem);
+        ItemEntity droppedItem = new ItemEntity(level, spawnX, spawnY, spawnZ, stack);
+        droppedItem.setDeltaMovement(oppDirection.getStepX() * 0.20F, oppDirection.getStepY() * 0.20F, oppDirection.getStepZ() * 0.20F);
+        level.addFreshEntity(droppedItem);
     }
 
     @Override
@@ -250,7 +250,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     public void addWailaInfo(List<String> info) {
 
         if (isEjecting()) {
-            info.add(MinecraftColor.RED.getChatColor() + "[" + I18n.format("waila.machine.stuffed") + "]");
+            info.add(MinecraftColor.RED.getChatColor() + "[" + I18n.get("waila.machine.stuffed") + "]");
         }
 
     }

@@ -38,7 +38,7 @@ public class MergedBakedModel implements IBakedModel {
     }
 
     @Override
-    public boolean isAmbientOcclusion() {
+    public boolean useAmbientOcclusion() {
         return true;
     }
 
@@ -48,18 +48,18 @@ public class MergedBakedModel implements IBakedModel {
     }
 
     @Override
-    public boolean isSideLit() {
+    public boolean usesBlockLight() {
         return false;
     }
 
     @Override
-    public boolean isBuiltInRenderer() {
+    public boolean isCustomRenderer() {
         return false;
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture() {
-        return bakedModels.get(0).getParticleTexture();
+    public TextureAtlasSprite getParticleIcon() {
+        return bakedModels.get(0).getParticleIcon();
     }
 
     @Override

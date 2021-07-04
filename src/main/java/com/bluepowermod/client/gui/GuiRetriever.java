@@ -37,7 +37,7 @@ public class GuiRetriever extends GuiContainerBaseBP<ContainerRetriever> impleme
     public void init() {
 
         super.init();
-        WidgetMode colorWidget = new WidgetMode(2, guiLeft + 117, guiTop + 20, 202, 2, Refs.MODID + ":textures/gui/retriever.png") {
+        WidgetMode colorWidget = new WidgetMode(2, leftPos + 117, topPos + 20, 202, 2, Refs.MODID + ":textures/gui/retriever.png") {
 
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
@@ -56,13 +56,13 @@ public class GuiRetriever extends GuiContainerBaseBP<ContainerRetriever> impleme
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float f, int i, int j) {
+    protected void renderBg(MatrixStack matrixStack, float f, int i, int j) {
 
-        super.drawGuiContainerBackgroundLayer(matrixStack, f, i, j);
+        super.renderBg(matrixStack, f, i, j);
 
         if (filter.mode == 0) {
             int curSlot = filter.slotIndex;
-            AbstractGui.blit(matrixStack, guiLeft + 60 + curSlot % 3 * 18, guiTop + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
+            AbstractGui.blit(matrixStack, leftPos + 60 + curSlot % 3 * 18, topPos + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
         }
     }
 

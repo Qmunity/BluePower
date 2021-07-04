@@ -47,27 +47,27 @@ public class TileBlulectricCable extends TileMachineBase {
     @Override
     public void tick() {
         storage.resetCurrent();
-        if (world != null && !world.isRemote) {
+        if (level != null && !level.isClientSide) {
             BlockState state = getBlockState();
             if (state.getBlock() instanceof BlockBlulectricCable) {
-                List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getAllowedValues());
+                List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getPossibleValues());
 
                 //Check the side has capability
                 directions.removeIf(d -> !getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d).isPresent());
 
                 //Balance power of attached blulectric blocks.
                 for (Direction facing : directions) {
-                    Block fBlock = world.getBlockState(pos.offset(facing)).getBlock();
+                    Block fBlock = level.getBlockState(worldPosition.relative(facing)).getBlock();
                     if (fBlock != Blocks.AIR && fBlock != Blocks.WATER) {
-                        TileEntity tile = world.getTileEntity(pos.offset(facing));
+                        TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
                         if (tile != null)
                             tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
                                     exStorage -> EnergyHelper.balancePower(exStorage, storage)
                             );
                     } else {
-                        TileEntity tile = world.getTileEntity(pos.offset(facing).offset(state.get(BlockBlulectricCable.FACING).getOpposite()));
+                        TileEntity tile = level.getBlockEntity(worldPosition.relative(facing).relative(state.getValue(BlockBlulectricCable.FACING).getOpposite()));
                         if (tile != null)
-                            tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, state.get(BlockBlulectricCable.FACING)).ifPresent(
+                            tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, state.getValue(BlockBlulectricCable.FACING)).ifPresent(
                                     exStorage -> EnergyHelper.balancePower(exStorage, storage)
                             );
                     }
@@ -79,17 +79,17 @@ public class TileBlulectricCable extends TileMachineBase {
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getAllowedValues());
-        if(world != null) {
+        List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getPossibleValues());
+        if(level != null) {
             BlockState state = getBlockState();
             if (state.getBlock() instanceof BlockBlulectricCable) {
 
                 //Remove upward connections
-                directions.remove(state.get(BlockBlulectricCable.FACING));
+                directions.remove(state.getValue(BlockBlulectricCable.FACING));
 
                 //Make sure the cable is on the same side of the block
-                directions.removeIf(d -> world.getBlockState(pos.offset(d)).getBlock() instanceof BlockBlulectricCable
-                        && world.getBlockState(pos.offset(d)).get(BlockBlulectricCable.FACING) != state.get(BlockBlulectricCable.FACING));
+                directions.removeIf(d -> level.getBlockState(worldPosition.relative(d)).getBlock() instanceof BlockBlulectricCable
+                        && level.getBlockState(worldPosition.relative(d)).getValue(BlockBlulectricCable.FACING) != state.getValue(BlockBlulectricCable.FACING));
             }
         }
         if (cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY && (side == null || directions.contains(side))) {
@@ -127,13 +127,13 @@ public class TileBlulectricCable extends TileMachineBase {
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+        return this.save(new CompoundNBT());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
-        handleUpdateTag(getBlockState(), pkt.getNbtCompound());
+        handleUpdateTag(getBlockState(), pkt.getTag());
     }
 
 }

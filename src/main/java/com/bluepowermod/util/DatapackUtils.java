@@ -28,24 +28,24 @@ public class DatapackUtils {
         try {
             Optional<Ingredient> ingredient = recipe.getRequiredItems().stream().findFirst();
             if(ingredient.isPresent()) {
-                Optional<ItemStack> requiredItem = Arrays.stream(ingredient.get().getMatchingStacks()).findFirst();
+                Optional<ItemStack> requiredItem = Arrays.stream(ingredient.get().getItems()).findFirst();
                 if (requiredItem.isPresent()) {
                     //Name the file
                     String shortname = requiredItem.get().getItem().getRegistryName().getPath() +
-                            recipe.getRecipeOutput().getItem().getRegistryName().getPath() + "_generated";
+                            recipe.getResultItem().getItem().getRegistryName().getPath() + "_generated";
 
                     //Serialize Json
                     JsonArray ingredientArray = new JsonArray();
 
                     for (int i = 0; i < recipe.getRequiredItems().size(); i++) {
                         JsonObject ingredients = new JsonObject();
-                        ingredients.add("item", new JsonPrimitive(recipe.getRequiredItems().get(i).getMatchingStacks()[0].getItem().getRegistryName().toString()));
+                        ingredients.add("item", new JsonPrimitive(recipe.getRequiredItems().get(i).getItems()[0].getItem().getRegistryName().toString()));
                         ingredients.add("count", new JsonPrimitive(recipe.getRequiredCount().get(i)));
                         ingredientArray.add(ingredients);
                     }
 
                     //Output Item
-                    ItemStack outputItem = recipe.getRecipeOutput();
+                    ItemStack outputItem = recipe.getResultItem();
                     JsonObject outitem = new JsonObject();
                     outitem.add("item", new JsonPrimitive(outputItem.getItem().getRegistryName().toString()));
                     outitem.add("count", new JsonPrimitive(outputItem.getCount()));

@@ -30,7 +30,7 @@ public abstract class LocationCache<CachedType> {
             throw new NullPointerException("World can't be null!");
         cachedValue = (CachedType[]) new Object[6];
         for (Direction d : Direction.values()) {
-            cachedValue[d.ordinal()] = getNewValue(world, pos.offset(d), extraArgs);
+            cachedValue[d.ordinal()] = getNewValue(world, pos.relative(d), extraArgs);
         }
     }
 

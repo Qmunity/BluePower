@@ -61,16 +61,16 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public boolean isSneakingInGui() {
-        return Minecraft.getInstance().gameSettings.keyBindSneak.isKeyDown();
+        return Minecraft.getInstance().options.keyShift.isDown();
     }
 
     public static Screen getOpenedGui() {
-        return Minecraft.getInstance().currentScreen;
+        return Minecraft.getInstance().screen;
     }
 
     @Override
     public String getSavePath() {
 
-        return Minecraft.getInstance().gameDir.getAbsolutePath();
+        return Minecraft.getInstance().gameDirectory.getAbsolutePath();
     }
 }

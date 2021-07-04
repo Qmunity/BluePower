@@ -31,14 +31,14 @@ public class BlockIgniter extends BlockContainerFacingBase {
     
     public BlockIgniter() {
     
-        super(Material.ROCK, TileIgniter.class);
+        super(Material.STONE, TileIgniter.class);
         setRegistryName(Refs.MODID, Refs.BLOCKIGNITER_NAME);
     }
 
     @Override
     public boolean isFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
-        TileIgniter tile = (TileIgniter) world.getTileEntity(pos);
-        boolean orientation = state.getBlock() == this && state.get(FACING) == Direction.UP;
+        TileIgniter tile = (TileIgniter) world.getBlockEntity(pos);
+        boolean orientation = state.getBlock() == this && state.getValue(FACING) == Direction.UP;
         return orientation && tile != null && tile.getIsRedstonePowered();
     }
 

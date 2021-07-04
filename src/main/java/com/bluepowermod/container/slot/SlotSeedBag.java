@@ -33,16 +33,16 @@ public class SlotSeedBag extends SlotItemHandler {
     }
     
     @Override
-    public boolean isItemValid(ItemStack itemstack) {
+    public boolean mayPlace(ItemStack itemstack) {
     
         itemstack = itemstack.copy();
         itemstack.setCount(1);
-        Block block = Block.getBlockFromItem(itemstack.getItem());
+        Block block = Block.byItem(itemstack.getItem());
         if (block instanceof IPlantable) {
             ItemStack seedType = ItemStack.EMPTY;
             
-            for (int i = 0; i < this.inventory.getSizeInventory(); i++) {
-                ItemStack is = this.inventory.getStackInSlot(i);
+            for (int i = 0; i < this.container.getContainerSize(); i++) {
+                ItemStack is = this.container.getItem(i);
                 if (!is.isEmpty()) {
                     seedType = is.copy();
                     seedType.setCount(1);
@@ -53,7 +53,7 @@ public class SlotSeedBag extends SlotItemHandler {
             if (seedType.isEmpty()) {
                 return true;
             } else {
-                return ItemStack.areItemStacksEqual(itemstack, seedType);
+                return ItemStack.isSame(itemstack, seedType);
             }
         }
         

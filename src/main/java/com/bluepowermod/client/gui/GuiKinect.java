@@ -35,6 +35,6 @@ public class GuiKinect extends GuiContainerBaseBP<ContainerKinect> implements IH
     public GuiKinect(ContainerKinect container, PlayerInventory playerInventory, ITextComponent title){
         super(container, playerInventory, title, resLoc);
         this.kinect = container;
-        ySize = 165;
+        imageHeight = 165;
     }
 }

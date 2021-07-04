@@ -11,7 +11,7 @@ import net.minecraft.block.material.Material;
 public class BlockBlulectricFurnace  extends BlockContainerHorizontalFacingBase {
 
     public BlockBlulectricFurnace() {
-        super(Material.ROCK, TileBlulectricFurnace.class);
+        super(Material.STONE, TileBlulectricFurnace.class);
         setRegistryName(Refs.MODID, Refs.BLULECTRICFURNACE_NAME);
     }
 

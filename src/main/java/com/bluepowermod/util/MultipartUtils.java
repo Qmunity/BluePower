@@ -34,9 +34,9 @@ public class MultipartUtils {
      * @param entity
      */
     public static Pair<Vector3d, Vector3d> getRayTraceVectors(Entity entity) {
-        float pitch = entity.rotationPitch;
-        float yaw = entity.rotationYaw;
-        Vector3d start = new Vector3d(entity.getPosX(), entity.getPosY() + entity.getEyeHeight(), entity.getPosZ());
+        float pitch = entity.xRot;
+        float yaw = entity.yRot;
+        Vector3d start = new Vector3d(entity.getX(), entity.getY() + entity.getEyeHeight(), entity.getZ());
         float f1 = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
         float f2 = MathHelper.sin(-yaw * 0.017453292F - (float) Math.PI);
         float f3 = -MathHelper.cos(-pitch * 0.017453292F);
@@ -59,7 +59,7 @@ public class MultipartUtils {
     @Nullable
     public static BlockState getClosestState(Entity entity, BlockPos pos){
         Pair<Vector3d, Vector3d> lookVec = MultipartUtils.getRayTraceVectors(entity);
-        return getClosestState(entity.world, lookVec.getLeft(), lookVec.getRight(), pos);
+        return getClosestState(entity.level, lookVec.getLeft(), lookVec.getRight(), pos);
     }
 
     /**
@@ -71,14 +71,14 @@ public class MultipartUtils {
      */
     @Nullable
     public static BlockState getClosestState(World world, Vector3d start, Vector3d end, BlockPos pos){
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         BlockState state = null;
         double distance = Double.POSITIVE_INFINITY;
         if(te instanceof TileBPMultipart) {
             for (BlockState part : ((TileBPMultipart) te).getStates()) {
-                RayTraceResult res = part.getRaytraceShape(world, pos, ISelectionContext.dummy()).rayTrace(start, end, pos);
+                RayTraceResult res = part.getVisualShape(world, pos, ISelectionContext.empty()).clip(start, end, pos);
                 if (res != null) {
-                    double partDistance = start.squareDistanceTo(res.getHitVec());
+                    double partDistance = start.distanceToSqr(res.getLocation());
                     if(distance > partDistance) {
                         distance = partDistance;
                         state = part;

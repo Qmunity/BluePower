@@ -64,13 +64,13 @@ public class ContainerKinect extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
 
-        return kinect.isUsableByPlayer(player);
+        return kinect.stillValid(player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
     	
     	return ItemStack.EMPTY;
      }

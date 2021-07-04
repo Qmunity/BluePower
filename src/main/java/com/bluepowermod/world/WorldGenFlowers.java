@@ -23,8 +23,8 @@ public class WorldGenFlowers {
         for(Biome biome : ForgeRegistries.BIOMES) {
             int n = getConfigAmount(biome.getRegistryName());
             if(n > 0) {
-                BlockClusterFeatureConfig featureConfig = (new BlockClusterFeatureConfig.Builder((new WeightedBlockStateProvider()).addWeightedBlockstate(BPBlocks.indigo_flower.getDefaultState(), 2), new SimpleBlockPlacer())).tries(64).build();
-                Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "bluepower:" + Refs.INDIGOFLOWER_NAME + n, Feature.FLOWER.withConfiguration(featureConfig).withPlacement(Features.Placements.VEGETATION_PLACEMENT).withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT).chance(n));
+                BlockClusterFeatureConfig featureConfig = (new BlockClusterFeatureConfig.Builder((new WeightedBlockStateProvider()).add(BPBlocks.indigo_flower.defaultBlockState(), 2), new SimpleBlockPlacer())).tries(64).build();
+                Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "bluepower:" + Refs.INDIGOFLOWER_NAME + n, Feature.FLOWER.configured(featureConfig).decorated(Features.Placements.ADD_32).decorated(Features.Placements.HEIGHTMAP).chance(n));
             }
         }
     }
@@ -34,23 +34,23 @@ public class WorldGenFlowers {
         int n = getConfigAmount(event.getName());
         if(n > 0) {
             BiomeGenerationSettingsBuilder generation = event.getGeneration();
-            ConfiguredFeature<?,?> feature = WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(new ResourceLocation("bluepower:" + Refs.INDIGOFLOWER_NAME + n));
+            ConfiguredFeature<?,?> feature = WorldGenRegistries.CONFIGURED_FEATURE.get(new ResourceLocation("bluepower:" + Refs.INDIGOFLOWER_NAME + n));
             if(feature != null)
-                generation.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, feature);
+                generation.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, feature);
         }
     }
 
     static int getConfigAmount(ResourceLocation biome){
         int n = 0;
-        if (biome.equals(Biomes.BIRCH_FOREST.getLocation()))
+        if (biome.equals(Biomes.BIRCH_FOREST.getRegistryName()))
             n = BPConfig.CONFIG.flowerSpawnChance.get();
-        else if (biome.equals(Biomes.BIRCH_FOREST_HILLS.getLocation()))
+        else if (biome.equals(Biomes.BIRCH_FOREST_HILLS.getRegistryName()))
             n = BPConfig.CONFIG.flowerSpawnChance.get();
-        else if (biome.equals(Biomes.PLAINS.getLocation()))
+        else if (biome.equals(Biomes.PLAINS.getRegistryName()))
             n = BPConfig.CONFIG.flowerSpawnChance.get();
-        else if (biome.equals(Biomes.FOREST.getLocation()))
+        else if (biome.equals(Biomes.FOREST.getRegistryName()))
             n = 2 * BPConfig.CONFIG.flowerSpawnChance.get();
-        else if (biome.equals(Biomes.DARK_FOREST.getLocation()))
+        else if (biome.equals(Biomes.DARK_FOREST.getRegistryName()))
             n = 2 * BPConfig.CONFIG.flowerSpawnChance.get();
         return n;
     }

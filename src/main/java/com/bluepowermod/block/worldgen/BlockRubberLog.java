@@ -12,12 +12,12 @@ public class BlockRubberLog extends RotatedPillarBlock {
     public BlockRubberLog(Properties properties){
         super(properties);
         this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERLOG_NAME);
-        this.setDefaultState(this.stateContainer.getBaseState().with(AXIS, Direction.Axis.Y));
+        this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.Y));
         BPBlocks.blockList.add(this);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(AXIS);
     }
 

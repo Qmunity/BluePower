@@ -26,11 +26,11 @@ public class BlockRejecting extends BlockContainerBase {
 
     public BlockRejecting(Material material, Class<? extends TileBase> tileEntityClass) {
         super(material, tileEntityClass);
-        setDefaultState(getDefaultState().with(ACTIVE, false).with(POWERED, false).with(REJECTING, false));
+        registerDefaultState(defaultBlockState().setValue(ACTIVE, false).setValue(POWERED, false).setValue(REJECTING, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
         builder.add(ACTIVE, POWERED, REJECTING);
     }
 }

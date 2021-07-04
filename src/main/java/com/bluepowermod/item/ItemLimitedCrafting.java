@@ -27,14 +27,14 @@ import java.util.Random;
 public class ItemLimitedCrafting extends ItemBase {
     
     public ItemLimitedCrafting(String name, int uses) {
-        super(new Properties().maxDamage(uses - 1));
+        super(new Properties().durability(uses - 1));
         this.setRegistryName(Refs.MODID + ":" + name);
     }
     
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
         ItemStack container = itemStack.copy();
-        return container.attemptDamageItem(1, new Random(), null) ? ItemStack.EMPTY : container;
+        return container.hurt(1, new Random(), null) ? ItemStack.EMPTY : container;
     }
 
     @Override

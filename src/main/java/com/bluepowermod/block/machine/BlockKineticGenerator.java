@@ -22,7 +22,7 @@ public class BlockKineticGenerator extends BlockContainerFacingBase {
     
     public BlockKineticGenerator() {
     
-        super(Material.IRON, TileKinectGenerator.class);
+        super(Material.METAL, TileKinectGenerator.class);
         setRegistryName(Refs.MODID, Refs.KINETICGENERATOR_NAME);
     }
     

@@ -23,7 +23,7 @@ public class WidgetNumber extends WidgetMode {
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float frame) {
 
         super.render(matrixStack, mouseX, mouseY, frame);
-        Minecraft.getInstance().fontRenderer.drawString(matrixStack, "" + value, x + 4, y + 3, 4210752);
+        Minecraft.getInstance().font.draw(matrixStack, "" + value, x + 4, y + 3, 4210752);
     }
 
     @Override

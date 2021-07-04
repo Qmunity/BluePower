@@ -73,7 +73,7 @@ public class JEIPlugin implements IModPlugin {
     }
 
     private static List<IRecipe<?>> getRecipes(IRecipeType<?> recipeType) {
-        return Minecraft.getInstance().world.getRecipeManager().getRecipes().stream()
+        return Minecraft.getInstance().level.getRecipeManager().getRecipes().stream()
                 .filter(recipe -> recipe.getType() == recipeType)
                 .collect(Collectors.toList());
     }
@@ -83,30 +83,30 @@ public class JEIPlugin implements IModPlugin {
         for (Block block : ForgeRegistries.BLOCKS) {
             VoxelShape shape = null;
             try{
-                shape = block.getDefaultState().getShape(null, null);
+                shape = block.defaultBlockState().getShape(null, null);
             }catch (NullPointerException ignored){
                 //Shulker Boxes try to query the Tile Entity
             }
-            if(block.getRegistryName() != null && shape == VoxelShapes.fullCube()) {
+            if(block.getRegistryName() != null && shape == VoxelShapes.block()) {
                 ItemStack output = ItemStack.EMPTY;
                 for (Block mb : BPBlocks.microblocks){
                     NonNullList<Ingredient> input = NonNullList.create();
-                    input.add(Ingredient.fromTag(ItemTags.createOptional(new ResourceLocation("bluepower:saw"))));
+                    input.add(Ingredient.of(ItemTags.createOptional(new ResourceLocation("bluepower:saw"))));
                     if(mb == BPBlocks.half_block){
-                        input.add(Ingredient.fromStacks(new ItemStack(block)));
+                        input.add(Ingredient.of(new ItemStack(block)));
                     }else{
-                        input.add(Ingredient.fromStacks(output));
+                        input.add(Ingredient.of(output));
                     }
 
                     CompoundNBT nbt = new CompoundNBT();
                     nbt.putString("block", block.getRegistryName().toString());
                     ItemStack stack = new ItemStack(mb);
                     stack.setTag(nbt);
-                    stack.setDisplayName(new TranslationTextComponent(block.getTranslationKey())
+                    stack.setHoverName(new TranslationTextComponent(block.getDescriptionId())
                             .append(new StringTextComponent(" "))
-                            .append(new TranslationTextComponent(mb.getTranslationKey())));
+                            .append(new TranslationTextComponent(mb.getDescriptionId())));
                     output = stack;
-                    recipes.add(new ShapelessRecipe(new ResourceLocation("bluepower:" + mb.getTranslationKey() + block.getTranslationKey()), "", output, input));
+                    recipes.add(new ShapelessRecipe(new ResourceLocation("bluepower:" + mb.getDescriptionId() + block.getDescriptionId()), "", output, input));
                 }
             }
         }

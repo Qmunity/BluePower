@@ -21,7 +21,7 @@ public class BlockSortron extends BlockContainerBase {
     
     public BlockSortron() {
     
-        super(Material.ROCK, TileSortron.class);
+        super(Material.STONE, TileSortron.class);
         setRegistryName(Refs.MODID, Refs.BLOCKSORTRON_NAME);
     }
 

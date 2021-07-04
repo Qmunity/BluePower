@@ -26,7 +26,7 @@ public class TileEntityCache extends LocationCache<TileEntity> {
     @Override
     protected TileEntity getNewValue(World world, BlockPos pos, Object... extraArgs) {
 
-        return world.getTileEntity(pos);
+        return world.getBlockEntity(pos);
     }
 
 }

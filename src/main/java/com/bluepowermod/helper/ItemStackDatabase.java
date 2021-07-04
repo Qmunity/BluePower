@@ -35,17 +35,17 @@ public class ItemStackDatabase {
     public void saveItemStack(ItemStack stack) {
 
         new File(saveLocation).mkdirs();
-        File targetLocation = new File(saveLocation + stack.getDisplayName() + FILE_EXTENSION);
+        File targetRegistryName = new File(saveLocation + stack.getDisplayName() + FILE_EXTENSION);
 
         CompoundNBT tag = new CompoundNBT();
-        stack.write(tag);
+        stack.save(tag);
 
         ResourceLocation ui = stack.getItem().getRegistryName();
         tag.putString("owner", ui.getNamespace());
         tag.putString("name", ui.getPath());
 
         try {
-            FileOutputStream fos = new FileOutputStream(targetLocation);
+            FileOutputStream fos = new FileOutputStream(targetRegistryName);
             DataOutputStream dos = new DataOutputStream(fos);
 
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
@@ -64,10 +64,10 @@ public class ItemStackDatabase {
 
     public void deleteStack(ItemStack deletingStack) {
 
-        File targetLocation = new File(saveLocation);
+        File targetRegistryName = new File(saveLocation);
 
-        if (targetLocation.exists()) {
-            File[] files = targetLocation.listFiles();
+        if (targetRegistryName.exists()) {
+            File[] files = targetRegistryName.listFiles();
             for (File file : files) {
                 if (deletingStack.getDisplayName().equals(file.getName().substring(0, file.getName().length() - 4))) {
                     file.delete();
@@ -81,11 +81,11 @@ public class ItemStackDatabase {
     public List<ItemStack> loadItemStacks() {
 
         if (cache == null) {
-            File targetLocation = new File(saveLocation);
+            File targetRegistryName = new File(saveLocation);
 
             List<ItemStack> stacks = new ArrayList<ItemStack>();
-            if (targetLocation.exists()) {
-                File[] files = targetLocation.listFiles();
+            if (targetRegistryName.exists()) {
+                File[] files = targetRegistryName.listFiles();
                 for (File file : files) {
                     try {
                         FileInputStream fos = new FileInputStream(file);
@@ -96,7 +96,7 @@ public class ItemStackDatabase {
                         dos.read(abyte);
                         ByteArrayInputStream byteStream = new ByteArrayInputStream(abyte);
                         CompoundNBT tag = CompressedStreamTools.readCompressed(byteStream);
-                        ItemStack stack = ItemStack.read(tag);
+                        ItemStack stack = ItemStack.of(tag);
                         if (stack.getItem() != Items.AIR) {
                             stacks.add(stack);
                         } else {
@@ -104,7 +104,7 @@ public class ItemStackDatabase {
                             Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tag.getString("owner"), tag.getString("name")));
                             if (item != null && item != Items.AIR) {
                                 ItemStack backupStack = new ItemStack(item, stack.getCount());
-                                backupStack.setDamage(tag.getShort("Damage"));
+                                backupStack.setDamageValue(tag.getShort("Damage"));
                                 if (stack.hasTag()) {
                                     backupStack.setTag(stack.getTag());
                                 }

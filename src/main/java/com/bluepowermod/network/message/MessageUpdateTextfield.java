@@ -22,7 +22,7 @@ public class MessageUpdateTextfield{
 
     public MessageUpdateTextfield(TileEntity te, int textfieldID) {
 
-        //super(te.getPos());
+        //super(te.getBlockPos());
         textFieldID = textfieldID;
         text = ((IGUITextFieldSensitive) te).getText(textfieldID);
     }
@@ -51,7 +51,7 @@ public class MessageUpdateTextfield{
 
     public void handleServerSide(PlayerEntity player) {
 
-        //TileEntity te = player.world.getTileEntity(pos);
+        //TileEntity te = player.world.getBlockEntity(pos);
         //if (te instanceof IGUITextFieldSensitive) {
             //((IGUITextFieldSensitive) te).setText(textFieldID, text);
         //}

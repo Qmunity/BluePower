@@ -45,12 +45,12 @@ public class BPMultipartModel implements IBakedModel {
     @Nonnull
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
-        BlockRendererDispatcher brd = Minecraft.getInstance().getBlockRendererDispatcher();
+        BlockRendererDispatcher brd = Minecraft.getInstance().getBlockRenderer();
         Map<BlockState, IModelData> stateInfo = extraData.getData(TileBPMultipart.STATE_INFO);
 
         if (stateInfo != null) {
             return stateInfo.keySet().stream().flatMap(
-                    i -> brd.getModelForState(i).getQuads(i, side, rand, stateInfo.get(i)).stream().map(
+                    i -> brd.getBlockModel(i).getQuads(i, side, rand, stateInfo.get(i)).stream().map(
                             q -> stateInfo.get(i).hasProperty(TileWire.COLOR_INFO) ? transform(q, stateInfo.get(i).getData(TileWire.COLOR_INFO), stateInfo.get(i).hasProperty(TileWire.LIGHT_INFO) ? stateInfo.get(i).getData(TileWire.LIGHT_INFO) : false): q
                     )
             ).collect(Collectors.toList());
@@ -93,9 +93,8 @@ public class BPMultipartModel implements IBakedModel {
         return finalQuad;
     }
 
-
     @Override
-    public boolean isAmbientOcclusion() {
+    public boolean useAmbientOcclusion() {
         return true;
     }
 
@@ -105,24 +104,24 @@ public class BPMultipartModel implements IBakedModel {
     }
 
     @Override
-    public boolean isSideLit() {
+    public boolean usesBlockLight() {
         return false;
     }
 
     @Override
-    public boolean isBuiltInRenderer() {
+    public boolean isCustomRenderer() {
         return false;
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture() {
-        RayTraceResult rayTraceResult = Minecraft.getInstance().objectMouseOver;
+    public TextureAtlasSprite getParticleIcon() {
+        RayTraceResult rayTraceResult = Minecraft.getInstance().hitResult;
         if(Minecraft.getInstance().player != null && rayTraceResult instanceof BlockRayTraceResult){
-            BlockState state = MultipartUtils.getClosestState(Minecraft.getInstance().player, ((BlockRayTraceResult)rayTraceResult).getPos());
+            BlockState state = MultipartUtils.getClosestState(Minecraft.getInstance().player, ((BlockRayTraceResult)rayTraceResult).getBlockPos());
             if(state != null)
-                return Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state).getParticleTexture();
+                return Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getParticleIcon();
         }
-        return Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation("minecraft:stone", "")).getParticleTexture();
+        return Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation("minecraft:stone", "")).getParticleIcon();
     }
 
     @Override

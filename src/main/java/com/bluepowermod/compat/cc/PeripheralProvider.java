@@ -23,7 +23,7 @@ public class PeripheralProvider implements IPeripheralProvider {
     @Override
     public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
 
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = world.getBlockEntity(x, y, z);
         if(tile instanceof IPeripheral)
             return (IPeripheral) tile;
         return null;

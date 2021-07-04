@@ -51,13 +51,13 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
     @Override
     public void render(TileEngine engine, float f, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
 
-        World world = engine.getWorld();
-        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-        BlockPos pos = engine.getPos();
-        BlockState state = BPBlocks.engine.getDefaultState().with(BlockEngine.FACING, engine.getOrientation());
+        World world = engine.getLevel();
+        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+        BlockPos pos = engine.getBlockPos();
+        BlockState state = BPBlocks.engine.defaultBlockState().setValue(BlockEngine.FACING, engine.getOrientation());
         Direction facing = engine.getOrientation();
 
-        matrixStack.push();
+        matrixStack.pushPose();
 
         float rotationX = 90.0F;
         float rotation = 0.0F;
@@ -80,10 +80,10 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
             rotationX = 0F;
         }
 
-        matrixStack.rotate(Vector3f.XP.rotationDegrees(rotationX));
-        matrixStack.rotate(Vector3f.ZP.rotationDegrees(rotation));
+        matrixStack.mulPose(Vector3f.XP.rotationDegrees(rotationX));
+        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(rotation));
 
-        matrixStack.push();
+        matrixStack.pushPose();
 
         float f2 = 0;
         if(engine.isActive) {
@@ -96,23 +96,23 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
 
         matrixStack.translate(0, f2, 0);
 
-        IBakedModel glider = dispatcher.getModelForState(state.with(BlockEngine.GLIDER, true));
+        IBakedModel glider = dispatcher.getBlockModel(state.setValue(BlockEngine.GLIDER, true));
         //Render the glider
-        IVertexBuilder builder = iRenderTypeBuffer.getBuffer(RenderType.getCutout());
-        dispatcher.getBlockModelRenderer().renderModel(world, glider, state.with(BlockEngine.GLIDER, true), pos, matrixStack, builder, false, new Random(), 0, 0, EmptyModelData.INSTANCE);
+        IVertexBuilder builder = iRenderTypeBuffer.getBuffer(RenderType.cutout());
+        dispatcher.getModelRenderer().renderModel(world, glider, state.setValue(BlockEngine.GLIDER, true), pos, matrixStack, builder, false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
-        matrixStack.pop();
-        matrixStack.push();
+        matrixStack.popPose();
+        matrixStack.pushPose();
         matrixStack.translate(0.5, 0, 0.5);
         long angle = engine.isActive ? (System.currentTimeMillis() / 10) % 360 : 0;
-        matrixStack.rotate(Vector3f.YP.rotationDegrees(angle));
+        matrixStack.mulPose(Vector3f.YP.rotationDegrees(angle));
         matrixStack.translate(-0.5, 0, -0.5);
-        IBakedModel gear = dispatcher.getModelForState(state.with(BlockEngine.GEAR, true));
+        IBakedModel gear = dispatcher.getBlockModel(state.setValue(BlockEngine.GEAR, true));
         // Render the rotating cog
-        dispatcher.getBlockModelRenderer().renderModel(world, gear, state.with(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.getCutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
+        dispatcher.getModelRenderer().renderModel(world, gear, state.setValue(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.cutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
-        matrixStack.pop();
-        matrixStack.pop();
+        matrixStack.popPose();
+        matrixStack.popPose();
     }
 
 }

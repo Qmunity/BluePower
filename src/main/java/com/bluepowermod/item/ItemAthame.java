@@ -44,38 +44,37 @@ import java.util.List;
 public class ItemAthame extends SwordItem {
     
     private float               damageDealt;
-    private static IItemTier athameMaterial = new BPItemTier(100, 6.0F, 2.0F, 0, 10, Ingredient.fromItems(BPItems.silver_ingot));
+    private static IItemTier athameMaterial = new BPItemTier(100, 6.0F, 2.0F, 0, 10, Ingredient.of(BPItems.silver_ingot));
     
     public ItemAthame() {
-        super(athameMaterial, 1, -3, new Properties().group(BPCreativeTabs.tools));
+        super(athameMaterial, 1, -3, new Properties().tab(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + Refs.ATHAME_NAME);
         BPItems.itemList.add(this);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         tooltip.add(new StringTextComponent(MinecraftColor.PURPLE.getChatColor())
                 .append(new TranslationTextComponent("item." + Refs.MODID + "." + Refs.ATHAME_NAME + ".info")) );
     }
 
-
     public float getDamageDealt() {
         return this.damageDealt;
     }
-    
+
     @Override
-    public boolean hitEntity(ItemStack stack, LivingEntity entity, LivingEntity player) {
+    public boolean hurtEnemy(ItemStack stack, LivingEntity entity, LivingEntity player) {
     
-        this.damageDealt = athameMaterial.getAttackDamage();
+        this.damageDealt = athameMaterial.getAttackDamageBonus();
         if ((entity instanceof EndermanEntity) || (entity instanceof EnderDragonEntity)) {
             this.damageDealt += 18.0F;
         }
-        entity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) player), this.damageDealt);
-        return super.hitEntity(stack, entity, player);
+        entity.hurt(DamageSource.playerAttack((PlayerEntity) player), this.damageDealt);
+        return super.hurtEnemy(stack, entity, player);
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack is1, ItemStack is2) {
+    public boolean isValidRepairItem(ItemStack is1, ItemStack is2) {
 
         return ((is1.getItem() == this || is2.getItem() == this) && (is1.getItem() == BPItems.silver_ingot || is2.getItem() == BPItems.silver_ingot));
     }

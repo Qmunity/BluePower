@@ -41,27 +41,27 @@ public class ItemCropSeed extends Item implements IPlantable {
     public static Block field_150925_a;
 
     public ItemCropSeed(Block blockCrop, Block blockSoil) {
-        super(new Properties().group(BPCreativeTabs.items));
+        super(new Properties().tab(BPCreativeTabs.items));
         field_150925_a = blockCrop;
         this.setRegistryName(Refs.MODID + ":" + Refs.FLAXSEED_NAME);
         BPItems.itemList.add(this);
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext itemUseContext) {
+    public ActionResultType useOn(ItemUseContext itemUseContext) {
         PlayerEntity player = itemUseContext.getPlayer();
         Hand hand = itemUseContext.getHand();
-        Direction facing = itemUseContext.getFace();
-        World world = itemUseContext.getWorld();
-        BlockPos pos = itemUseContext.getPos();
-        ItemStack itemStack = player.getHeldItem(hand);
+        Direction facing = itemUseContext.getClickedFace();
+        World world = itemUseContext.getLevel();
+        BlockPos pos = itemUseContext.getClickedPos();
+        ItemStack itemStack = player.getItemInHand(hand);
         if (facing.ordinal() != 1) {
             return ActionResultType.PASS;
-        } else if (player.canPlayerEdit(pos, facing, itemStack) && player.canPlayerEdit(pos.up(), facing, itemStack)) {
-            if (world.getBlockState(pos).getBlock().canSustainPlant(world.getBlockState(pos),  world, pos, Direction.UP, this) && world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock() instanceof FarmlandBlock) {
-                world.setBlockState(pos.up(), field_150925_a.getDefaultState(), 2);
+        } else if (player.mayUseItemAt(pos, facing, itemStack) && player.mayUseItemAt(pos.above(), facing, itemStack)) {
+            if (world.getBlockState(pos).getBlock().canSustainPlant(world.getBlockState(pos),  world, pos, Direction.UP, this) && world.isEmptyBlock(pos.above()) && world.getBlockState(pos).getBlock() instanceof FarmlandBlock) {
+                world.setBlock(pos.above(), field_150925_a.defaultBlockState(), 2);
                 itemStack.setCount(itemStack.getCount() - 1);
-                player.setHeldItem(hand, itemStack);
+                player.setItemInHand(hand, itemStack);
                 return ActionResultType.SUCCESS;
             } else {
                 return ActionResultType.PASS;
@@ -73,7 +73,7 @@ public class ItemCropSeed extends Item implements IPlantable {
 
     @Override
     public BlockState getPlant(IBlockReader world, BlockPos pos) {
-        return field_150925_a.getDefaultState();
+        return field_150925_a.defaultBlockState();
     }
 
 }

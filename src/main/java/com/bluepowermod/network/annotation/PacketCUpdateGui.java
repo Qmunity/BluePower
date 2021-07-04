@@ -96,7 +96,7 @@ public class PacketCUpdateGui{
     }
 
     public void handleClientSide(PlayerEntity player){
-        Container container = player.openContainer;
+        Container container = player.containerMenu;
         //if(container instanceof ContainerBase) {
             //((ContainerBase)container).updateField(syncId, value);
         //}

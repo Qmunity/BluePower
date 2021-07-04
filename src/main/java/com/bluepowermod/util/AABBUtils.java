@@ -17,11 +17,11 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 public class AABBUtils {
 
     public static AxisAlignedBB expand(AxisAlignedBB aabb, double amt) {
-        return aabb.expand(amt, amt, amt);
+        return aabb.inflate(amt, amt, amt);
     }
 
     public static AxisAlignedBB translate(AxisAlignedBB aabb, double x, double y, double z) {
-        return aabb.offset(x,y,z);
+        return aabb.move(x,y,z);
     }
 
     public static AxisAlignedBB rotate (AxisAlignedBB aabb, Direction facing){
@@ -46,15 +46,15 @@ public class AABBUtils {
      * Returns true if the shapes intersect.
      */
     public static Boolean testOcclusion (VoxelShape shape1, VoxelShape shape2){
-        return shape1.toBoundingBoxList().stream().anyMatch(s ->
-                shape2.toBoundingBoxList().stream().anyMatch(s::intersects));
+        return shape1.toAabbs().stream().anyMatch(s ->
+                shape2.toAabbs().stream().anyMatch(s::intersects));
     }
 
     public static VoxelShape rotate (VoxelShape shape, Direction facing){
         VoxelShape out = VoxelShapes.empty();
-        for(AxisAlignedBB aabb : shape.toBoundingBoxList()){
+        for(AxisAlignedBB aabb : shape.toAabbs()){
             aabb = rotate(aabb, facing);
-            out = VoxelShapes.or(out, Block.makeCuboidShape(aabb.minX * 16, aabb.minY * 16, aabb.minZ * 16, aabb.maxX * 16, aabb.maxY * 16, aabb.maxZ * 16));
+            out = VoxelShapes.or(out, Block.box(aabb.minX * 16, aabb.minY * 16, aabb.minZ * 16, aabb.maxX * 16, aabb.maxY * 16, aabb.maxZ * 16));
         }
         return out;
     }

@@ -13,7 +13,7 @@ public class BundledRedstoneProviderCC implements IBundledRedstoneProvider {
     @Override
     public int getBundledRedstoneOutput(World world, BlockPos pos, EnumFacing side) {
 
-        BlockPos v = pos.offset(side);
+        BlockPos v = worldPosition.relative(side);
 
         return CCUtils.packDigital(BundledDeviceCCComputer.getDeviceAt(world, v).getCurPow(
                 side.getOpposite()));

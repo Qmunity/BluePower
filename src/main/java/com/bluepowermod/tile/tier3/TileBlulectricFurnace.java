@@ -64,18 +64,18 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
 
     @Override
     public void tick() {
-        if (world != null && !world.isRemote) {
+        if (level != null && !level.isClientSide) {
             storage.resetCurrent();
             //Balance power of attached blulectric blocks.
             for (Direction facing : Direction.values()) {
-                TileEntity tile = world.getTileEntity(pos.offset(facing));
+                TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
                 if (tile != null)
                     tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
                             exStorage -> EnergyHelper.balancePower(exStorage, storage));
             }
             if (updatingRecipe) {
-                if(this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, this, this.world).isPresent()) {
-                    currentRecipe = this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, this, this.world).get();
+                if(this.level.getRecipeManager().getRecipeFor(IRecipeType.SMELTING, this, this.level).isPresent()) {
+                    currentRecipe = this.level.getRecipeManager().getRecipeFor(IRecipeType.SMELTING, this, this.level).get();
                 }else{
                     currentRecipe = null;
                 }
@@ -86,16 +86,16 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
                     storage.addEnergy(-1, false);
                     this.setIsActive(true);
                     //Check if progress completed, and output slot is empty and less then a stack of the same item.
-                    if (++currentProcessTime >= (100 / (storage.getEnergy() / storage.getMaxEnergy())) && ((outputInventory.getItem() == currentRecipe.getRecipeOutput().getItem()
-                            && (outputInventory.getCount() + currentRecipe.getCraftingResult(this).getCount()) <= 64)
+                    if (++currentProcessTime >= (100 / (storage.getEnergy() / storage.getMaxEnergy())) && ((outputInventory.getItem() == currentRecipe.getResultItem().getItem()
+                            && (outputInventory.getCount() + currentRecipe.assemble(this).getCount()) <= 64)
                             || outputInventory.isEmpty())) {
                         currentProcessTime = 0;
                         if (!outputInventory.isEmpty()) {
-                            outputInventory.setCount(outputInventory.getCount() + currentRecipe.getCraftingResult(this).getCount());
+                            outputInventory.setCount(outputInventory.getCount() + currentRecipe.assemble(this).getCount());
                         } else {
-                            outputInventory = currentRecipe.getCraftingResult(this).copy();
+                            outputInventory = currentRecipe.assemble(this).copy();
                         }
-                        this.decrStackSize(0, 1);
+                        this.removeItem(0, 1);
                         updatingRecipe = true;
                     }
                 }else{
@@ -134,27 +134,27 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void read(BlockState blockState, CompoundNBT tCompound) {
-        super.read(blockState, tCompound);
+    public void load(BlockState blockState, CompoundNBT tCompound) {
+        super.load(blockState, tCompound);
         CompoundNBT tc = tCompound.getCompound("inventory");
-        inventory = ItemStack.read(tc);
-        outputInventory = ItemStack.read(tCompound.getCompound("outputInventory"));
+        inventory = ItemStack.of(tc);
+        outputInventory = ItemStack.of(tCompound.getCompound("outputInventory"));
     }
 
     /**
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT write(CompoundNBT tCompound) {
-        super.write(tCompound);
+    public CompoundNBT save(CompoundNBT tCompound) {
+        super.save(tCompound);
 
         CompoundNBT tc = new CompoundNBT();
-        inventory.write(tc);
+        inventory.save(tc);
         tCompound.put("inventory", tc);
 
         if (outputInventory != null) {
             CompoundNBT outputCompound = new CompoundNBT();
-            outputInventory.write(outputCompound);
+            outputInventory.save(outputCompound);
             tCompound.put("outputInventory", outputCompound);
         }
         return tCompound;
@@ -210,7 +210,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
 
         }
 
-        public int size() {
+        public int getCount() {
             return 3;
         }
     };
@@ -225,9 +225,9 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     }
 
     private void setIsActive(boolean _isActive) {
-        if (world != null && _isActive != isActive && world.getGameTime() % 4 == 0) {
+        if (level != null && _isActive != isActive && level.getGameTime() % 4 == 0) {
             isActive = _isActive;
-            BlockBlulectricFurnace.setState(isActive, world, pos);
+            BlockBlulectricFurnace.setState(isActive, level, worldPosition);
             sendUpdatePacket();
         }
     }
@@ -237,13 +237,13 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
      */
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
 
         return 2; // 1 inventory, 1 output
     }
 
     @Override
-    public ItemStack getStackInSlot(int var1) {
+    public ItemStack getItem(int var1) {
         updatingRecipe = true;
         if (var1 == 0) {
             return inventory;
@@ -254,16 +254,16 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount) {
+    public ItemStack removeItem(int slot, int amount) {
 
-        ItemStack itemStack = getStackInSlot(slot);
+        ItemStack itemStack = getItem(slot);
         if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, ItemStack.EMPTY);
+                setItem(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, ItemStack.EMPTY);
+                    setItem(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -272,12 +272,12 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
-        return getStackInSlot(index);
+    public ItemStack removeItemNoUpdate(int index) {
+        return getItem(index);
     }
 
     @Override
-    public void setInventorySlotContents(int var1, ItemStack itemStack) {
+    public void setItem(int var1, ItemStack itemStack) {
 
         if (var1 == 0) {
             inventory = itemStack;
@@ -288,28 +288,28 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     }
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
 
         return 64;
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        return player.getPosition().withinDistance(pos, 64.0D);
+    public boolean stillValid(PlayerEntity player) {
+        return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
-
-    }
-
-    @Override
-    public void closeInventory(PlayerEntity player) {
+    public void startOpen(PlayerEntity player) {
 
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
+    public void stopOpen(PlayerEntity player) {
+
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack itemStack) {
 
         if (slot == 0) {
             return true;
@@ -335,12 +335,12 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack item, Direction direction) {
-        return isItemValidForSlot(slot, item);
+    public boolean canPlaceItemThroughFace(int slot, ItemStack item, Direction direction) {
+        return canPlaceItem(slot, item);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction direction) {
         return slot == 1;
     }
 
@@ -351,7 +351,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements ISidedInve
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
 
     }
 

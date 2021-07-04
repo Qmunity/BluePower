@@ -35,7 +35,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
     public GuiCircuitDatabaseMain(ContainerCircuitDatabaseMain container, PlayerInventory playerInventory, ITextComponent title){
         super(container, playerInventory, title, copyTabTexture);
         this.circuitDatabase = container;
-        ySize = 224;
+        imageHeight = 224;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
 
         super.init();
 
-        WidgetTab widget = new WidgetTab(1, guiLeft - 32, guiTop + 10, 33, 35, 198, 3, Refs.MODID + ":textures/gui/circuit_database.png") {
+        WidgetTab widget = new WidgetTab(1, leftPos - 32, topPos + 10, 33, 35, 198, 3, Refs.MODID + ":textures/gui/circuit_database.png") {
 
             @Override
             protected void addTooltip(int curHoveredTab, List<String> curTip, boolean shiftPressed) {
@@ -57,17 +57,17 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
                     break;
                 case 2:
                     curTip.add("gui.bluepower:circuitDatabase.tab.server");
-                    if (Minecraft.getInstance().isSingleplayer())
+                    if (Minecraft.getInstance().hasSingleplayerServer())
                         curTip.add("gui.bluepower:circuitDatabase.info.serverOnly");
                     break;
                 }
             }
         };
         widget.value = circuitDatabase.selectedShareOption;
-        widget.enabledTabs[2] = !Minecraft.getInstance().isSingleplayer();
+        widget.enabledTabs[2] = !Minecraft.getInstance().hasSingleplayerServer();
         addWidget(widget);
 
-        shareOptionTab = new WidgetSidewaysTab(2, guiLeft + 44, guiTop + 18, 14, 14, 234, 3, Refs.MODID
+        shareOptionTab = new WidgetSidewaysTab(2, leftPos + 44, topPos + 18, 14, 14, 234, 3, Refs.MODID
                 + ":textures/gui/circuit_database.png") {
 
             @Override
@@ -85,7 +85,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
                     break;
                 case 2:
                     curTip.add("gui.bluepower:circuitDatabase.action.saveServer");
-                    if (Minecraft.getInstance().isSingleplayer()) {
+                    if (Minecraft.getInstance().hasSingleplayerServer()) {
                         curTip.add("gui.bluepower:circuitDatabase.info.serverOnly");
                     } else if (!enabledTabs[curHoveredTab]) {
                         curTip.add("gui.bluepower:circuitDatabase.info.nameTaken");
@@ -97,7 +97,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
         shareOptionTab.value = circuitDatabase.selectedShareOption;
         addWidget(shareOptionTab);
 
-        copyButton = new WidgetMode(3, guiLeft + 80, guiTop + 48, 176, 37, 1, Refs.MODID + ":textures/gui/circuit_database.png") {
+        copyButton = new WidgetMode(3, leftPos + 80, topPos + 48, 176, 37, 1, Refs.MODID + ":textures/gui/circuit_database.png") {
 
             @Override
             public void addTooltip(int x, int y, List<String> curTip, boolean shiftPressed) {
@@ -108,8 +108,8 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
         addWidget(copyButton);
 
         //Keyboard.enableRepeatEvents(true);
-        //nameField = new TextFieldWidget(0, font, guiLeft + 95, guiTop + 35, 70, font.FONT_HEIGHT);
-        nameField.setEnableBackgroundDrawing(true);
+        //nameField = new TextFieldWidget(0, font, leftPos + 95, topPos + 35, 70, font.FONT_HEIGHT);
+        nameField.setBordered(true);
         nameField.setVisible(true);
         nameField.setTextColor(16777215);
         //nameField.setText(circuitDatabase.getText(1));
@@ -121,7 +121,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
         super.mouseClicked(x, y, button);
         nameField.mouseClicked(x, y, button);
         if (nameField.isFocused() && button == 1) {
-            nameField.setText("");
+            nameField.setValue("");
             //circuitDatabase.setText(1, nameField.getText());
             //BPNetworkHandler.INSTANCE.sendToServer(new MessageUpdateTextfield(circuitDatabase, 0));
         }
@@ -145,23 +145,23 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float par1, int par2, int par3) {
+    protected void renderBg(MatrixStack matrixStack, float par1, int par2, int par3) {
 
-        super.drawGuiContainerBackgroundLayer(matrixStack, par1, par2, par3);
+        super.renderBg(matrixStack, par1, par2, par3);
 
-        this.drawString(matrixStack, guiLeft + 95, guiTop + 25, I18n.format("gui.bluepower:circuitDatabase.name"), false);
+        this.drawString(matrixStack, leftPos + 95, topPos + 25, I18n.get("gui.bluepower:circuitDatabase.name"), false);
         //nameField.drawTextBox();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(copyTabTexture);
+        this.minecraft.getTextureManager().bind(copyTabTexture);
 
         int processPercentage = circuitDatabase.curCopyProgress * 22 / TileCircuitDatabase.UPLOAD_AND_COPY_TIME;
         if (processPercentage > 0)
-            blit(matrixStack, guiLeft + 77, guiTop + 64, 176, 0, processPercentage, 15);
+            blit(matrixStack, leftPos + 77, topPos + 64, 176, 0, processPercentage, 15);
 
         processPercentage = circuitDatabase.curUploadProgress * 22 / TileCircuitDatabase.UPLOAD_AND_COPY_TIME;
         if (processPercentage > 0)
-            blit(matrixStack, guiLeft + 57, guiTop + 57 - processPercentage, 176, 37 - processPercentage, 15, processPercentage);
+            blit(matrixStack, leftPos + 57, topPos + 57 - processPercentage, 176, 37 - processPercentage, 15, processPercentage);
 
     }
 
@@ -183,27 +183,27 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
         }
         boolean nameDuplicatePrivate = false;
         boolean nameDuplicateServer = false;
-        if (!circuitDatabase.copyInventory.getStackInSlot(0).isEmpty()) {
+        if (!circuitDatabase.copyInventory.getItem(0).isEmpty()) {
             for (ItemStack stack : circuitDatabase.stackDatabase.loadItemStacks()) {
-                if (stack.getDisplayName().equals(circuitDatabase.copyInventory.getStackInSlot(0).getDisplayName())) {
+                if (stack.getDisplayName().equals(circuitDatabase.copyInventory.getItem(0).getDisplayName())) {
                     nameDuplicatePrivate = true;
                     break;
                 }
             }
             for (ItemStack stack : TileCircuitDatabase.serverDatabaseStacks) {
-                if (stack.getDisplayName().equals(circuitDatabase.copyInventory.getStackInSlot(0).getDisplayName())) {
+                if (stack.getDisplayName().equals(circuitDatabase.copyInventory.getItem(0).getDisplayName())) {
                     nameDuplicateServer = true;
                     break;
                 }
             }
         }
         shareOptionTab.enabledTabs[1] = !nameDuplicatePrivate;
-        shareOptionTab.enabledTabs[2] = !nameDuplicateServer && !Minecraft.getInstance().isSingleplayer();
+        shareOptionTab.enabledTabs[2] = !nameDuplicateServer && !Minecraft.getInstance().hasSingleplayerServer();
 
-        copyButton.enabled = !circuitDatabase.copyInventory.getStackInSlot(0).isEmpty()
-                && !circuitDatabase.copyInventory.getStackInSlot(1).isEmpty()
-                && circuitDatabase.copy(Minecraft.getInstance().player, circuitDatabase.copyInventory.getStackInSlot(0),
-                        circuitDatabase.copyInventory.getStackInSlot(1), true);*/
+        copyButton.enabled = !circuitDatabase.copyInventory.getItem(0).isEmpty()
+                && !circuitDatabase.copyInventory.getItem(1).isEmpty()
+                && circuitDatabase.copy(Minecraft.getInstance().player, circuitDatabase.copyInventory.getItem(0),
+                        circuitDatabase.copyInventory.getItem(1), true);*/
     }
 
     @Override

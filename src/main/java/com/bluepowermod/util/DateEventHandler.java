@@ -68,7 +68,7 @@ public class DateEventHandler {
         ListNBT nbttaglist = new ListNBT();
 
         if (!itemstack1.isEmpty() && itemstack1.getItem() == Items.FIREWORK_STAR && itemstack1.hasTag()
-                && itemstack1.getTag().hasUniqueId("Explosion")) {
+                && itemstack1.getTag().hasUUID("Explosion")) {
             nbttaglist.add(itemstack1.getTag().getCompound("Explosion"));
         }
 
@@ -79,7 +79,7 @@ public class DateEventHandler {
         rocket.setTag(nbttagcompound);
 
         FireworkRocketEntity entity = new FireworkRocketEntity(world, x, y, z, rocket);
-        world.addEntity(entity);
+        world.addFreshEntity(entity);
     }
 
     private static ItemStack getFireworkCharge() {

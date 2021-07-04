@@ -48,9 +48,9 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     public void tick() {
 
         super.tick();
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             if (mode == 0 || mode == 1) {
-                if (world.getGameTime() % 2 == 0) {
+                if (level.getGameTime() % 2 == 0) {
                     if (getOutputtingRedstone() > 0) {
                         this.setOutputtingRedstone(false);
                         sendUpdatePacket();
@@ -101,8 +101,8 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void read(BlockState blockState, CompoundNBT tCompound) {
-        super.read(blockState, tCompound);
+    public void load(BlockState blockState, CompoundNBT tCompound) {
+        super.load(blockState, tCompound);
         for (int i = 0; i < 9; i++) {
             CompoundNBT tc = tCompound.getCompound("inventory" + i);
             inventory.set(i, new ItemStack((IItemProvider) tc));
@@ -117,13 +117,13 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT write(CompoundNBT tCompound) {
+    public CompoundNBT save(CompoundNBT tCompound) {
 
-        super.write(tCompound);
+        super.save(tCompound);
 
         for (int i = 0; i < 9; i++) {
                 CompoundNBT tc = new CompoundNBT();
-                inventory.get(i).write(tc);
+                inventory.get(i).save(tc);
                 tCompound.put("inventory" + i, tc);
         }
 
@@ -135,28 +135,28 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
 
         return inventory.size();
     }
 
     @Override
-    public ItemStack getStackInSlot(int i) {
+    public ItemStack getItem(int i) {
 
         return inventory.get(i);
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount) {
+    public ItemStack removeItem(int slot, int amount) {
 
-        ItemStack itemStack = getStackInSlot(slot);
+        ItemStack itemStack = getItem(slot);
         if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, ItemStack.EMPTY);
+                setItem(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, ItemStack.EMPTY);
+                    setItem(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -165,43 +165,43 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int i) {
-        ItemStack itemStack = getStackInSlot(i);
+    public ItemStack removeItemNoUpdate(int i) {
+        ItemStack itemStack = getItem(i);
         if (!itemStack.isEmpty()) {
-            setInventorySlotContents(i, ItemStack.EMPTY);
+            setItem(i, ItemStack.EMPTY);
         }
         return itemStack;
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemStack) {
+    public void setItem(int i, ItemStack itemStack) {
 
         inventory.set(i, itemStack);
     }
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
 
         return 64;
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        return player.getPosition().withinDistance(pos, 64.0D);
+    public boolean stillValid(PlayerEntity player) {
+        return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
-
-    }
-
-    @Override
-    public void closeInventory(PlayerEntity player) {
+    public void startOpen(PlayerEntity player) {
 
     }
 
     @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemStack) {
+    public void stopOpen(PlayerEntity player) {
+
+    }
+
+    @Override
+    public boolean canPlaceItem(int i, ItemStack itemStack) {
 
         return true;
     }
@@ -227,12 +227,12 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return true;
     }
 
@@ -259,7 +259,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 

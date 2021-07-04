@@ -28,7 +28,7 @@ public class GuiIOExpander extends GuiContainerBaseBP<ContainerIOExpander> imple
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
 
     }
 }

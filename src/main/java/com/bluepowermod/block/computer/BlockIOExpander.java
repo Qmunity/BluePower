@@ -16,7 +16,7 @@ public class BlockIOExpander extends BlockContainerBase {
 
     public BlockIOExpander() {
 
-        super(Material.IRON, TileIOExpander.class);
+        super(Material.METAL, TileIOExpander.class);
         setRegistryName(Refs.BLOCKIOEXPANDER_NAME);
     }
 

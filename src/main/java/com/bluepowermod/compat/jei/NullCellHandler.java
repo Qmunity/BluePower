@@ -294,7 +294,7 @@ public class NullCellHandler extends ShapedRecipeHandler {
 
     private static ItemStack setItemAt(IInventory inv, int x, int y, ItemStack item) {
 
-        inv.setInventorySlotContents(y * 3 + x, item);
+        inv.setItem(y * 3 + x, item);
         return item;
     }
 
@@ -319,7 +319,7 @@ public class NullCellHandler extends ShapedRecipeHandler {
         else if (screwdriverBottom)
             setItemAt(r, 1, 2, inputScrewdriver);
 
-        ItemStack result = RecipeNullCell.instance.getCraftingResult(r);
+        ItemStack result = RecipeNullCell.instance.assemble(r);
         if (result == null)
             return error;
         return result;
@@ -360,7 +360,7 @@ public class NullCellHandler extends ShapedRecipeHandler {
         if (wireB != null)
             setItemAt(r, 1, 2, wireB);
 
-        ItemStack result = RecipeNullCell.instance.getCraftingResult(r);
+        ItemStack result = RecipeNullCell.instance.assemble(r);
         if (result == null)
             return error;
         return result;

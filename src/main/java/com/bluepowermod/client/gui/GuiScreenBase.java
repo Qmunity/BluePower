@@ -45,7 +45,7 @@ public abstract class GuiScreenBase extends Screen {
     public void render(MatrixStack matrixStack, int x, int y, float partialTicks) {
         if (getTexture() != null) {
             renderBackground(matrixStack);
-            this.minecraft.getTextureManager().bindTexture(getTexture());
+            this.minecraft.getTextureManager().bind(getTexture());
             blit(matrixStack, guiLeft, guiTop, 0, 0, xSize, ySize);
         }
         super.render(matrixStack, x, y, partialTicks);

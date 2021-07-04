@@ -38,6 +38,6 @@ public class GuiDeployer extends GuiContainerBaseBP<ContainerDeployer> implement
     public GuiDeployer(ContainerDeployer container, PlayerInventory playerInventory, ITextComponent title){
         super(container, playerInventory, title, resLoc);
         this.deployer = container;
-        ySize = 166;
+        imageHeight = 166;
     }
 }

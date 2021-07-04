@@ -53,15 +53,15 @@ public class TileThermopile extends TileMachineBase  {
 
 	@Override
 	public void tick() {
-		if (!world.isRemote) {
+		if (!level.isClientSide) {
 			storage.resetCurrent();
 
-			if (world.getBlockState(pos.offset(Direction.DOWN)).getBlock() == Blocks.LAVA && storage.getEnergy() < MAX_VOLTAGE)
+			if (level.getBlockState(worldPosition.relative(Direction.DOWN)).getBlock() == Blocks.LAVA && storage.getEnergy() < MAX_VOLTAGE)
 				storage.addEnergy(0.1, false);
 
 			//Balance power of attached blulectric blocks.
 			for (Direction facing : Direction.values()) {
-				TileEntity tile = world.getTileEntity(pos.offset(facing));
+				TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
 				if (tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).isPresent()) {
 					IPowerBase exStorage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).orElse(null);
 					EnergyHelper.balancePower(exStorage, storage);

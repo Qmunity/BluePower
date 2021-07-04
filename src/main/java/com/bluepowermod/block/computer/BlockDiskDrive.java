@@ -16,7 +16,7 @@ public class BlockDiskDrive extends BlockContainerBase {
 
     public BlockDiskDrive() {
 
-        super(Material.IRON, TileDiskDrive.class);
+        super(Material.METAL, TileDiskDrive.class);
         setRegistryName(Refs.BLOCKDISKDRIVE_NAME);
     }
 

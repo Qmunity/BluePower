@@ -32,28 +32,28 @@ public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements 
     public GuiMonitor(ContainerMonitor container, PlayerInventory playerInventory, ITextComponent title){
         super(container, playerInventory, title, resLoc);
         this.monitor = container;
-        xSize = 350;
-        ySize = 230;
+        imageWidth = 350;
+        imageHeight = 230;
         width = 350 / 2;
         // TODO: fix height and width fields as well
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
 
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float f, int i, int j) {
+    protected void renderBg(MatrixStack matrixStack, float f, int i, int j) {
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(resLoc);
-        int k = (width - xSize) / 2;
-        int l = (height - ySize) / 2;
-        drawTexturedModalRect2(k, l, 0, 0, xSize, ySize);
+        this.minecraft.getTextureManager().bind(resLoc);
+        int k = (width - imageWidth) / 2;
+        int l = (height - imageHeight) / 2;
+        drawTexturedModalRect2(k, l, 0, 0, imageWidth, imageHeight);
 
         // screen color
-        this.minecraft.getTextureManager().bindTexture(chracterSetResLoc);
+        this.minecraft.getTextureManager().bind(chracterSetResLoc);
         GL11.glColor4f(TileMonitor.screenColor[0], TileMonitor.screenColor[1], TileMonitor.screenColor[2], 1.0F);
 
         for (int row = 0; row < 50; row++) {
@@ -67,10 +67,12 @@ public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements 
         }
     }
 
+
+
     private void drawCharacter(int row, int col, byte character) {
 
-        int x = (width - xSize) / 2;
-        int y = (height - ySize) / 2;
+        int x = (width - imageWidth) / 2;
+        int y = (height - imageHeight) / 2;
         int tempOffset = 0; // 350;
         if (TileMonitor.mode80x40) {
             // Not implemented yet
@@ -90,13 +92,13 @@ public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements 
         float f = 0.00195313F;
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
+        BufferBuilder buffer = tessellator.getBuilder();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        //buffer.pos(x + 0, z + h, zLevel).tex((u + 0) * f, (v + h) * f1).endVertex();
-        //buffer.pos(x + w, z + h, zLevel).tex((u + w) * f, (v + h) * f1).endVertex();
-        //buffer.pos(x + w, z + 0, zLevel).tex((u + w) * f, (v + 0) * f1).endVertex();
-        //buffer.pos(x + 0, z + 0, zLevel).tex((u + 0) * f, (v + 0) * f1).endVertex();
-        tessellator.draw();
+        //buffer.pos(x + 0, z + h, zLevel).uv((u + 0) * f, (v + h) * f1).endVertex();
+        //buffer.pos(x + w, z + h, zLevel).uv((u + w) * f, (v + h) * f1).endVertex();
+        //buffer.pos(x + w, z + 0, zLevel).uv((u + w) * f, (v + 0) * f1).endVertex();
+        //buffer.pos(x + 0, z + 0, zLevel).uv((u + 0) * f, (v + 0) * f1).endVertex();
+        tessellator.end();
     }
 
     @SuppressWarnings("cast")
@@ -105,12 +107,12 @@ public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements 
         float f = 0.00390625F;
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
+        BufferBuilder buffer = tessellator.getBuilder();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        //buffer.pos(x + 0, z + h, zLevel).tex((u + 0) * f, (v + h) * f1).endVertex();
-        //buffer.pos(x + w, z + h, zLevel).tex((u + w) * f, (v + h) * f1).endVertex();
-        //buffer.pos(x + w, z + 0, zLevel).tex((u + w) * f, (v + 0) * f1).endVertex();
-        //buffer.pos(x + 0, z + 0, zLevel).tex((u + 0) * f, (v + 0) * f1).endVertex();
-        tessellator.draw();
+        //buffer.pos(x + 0, z + h, zLevel).uv((u + 0) * f, (v + h) * f1).endVertex();
+        //buffer.pos(x + w, z + h, zLevel).uv((u + w) * f, (v + h) * f1).endVertex();
+        //buffer.pos(x + w, z + 0, zLevel).uv((u + w) * f, (v + 0) * f1).endVertex();
+        //buffer.pos(x + 0, z + 0, zLevel).uv((u + 0) * f, (v + 0) * f1).endVertex();
+        tessellator.end();
     }
 }

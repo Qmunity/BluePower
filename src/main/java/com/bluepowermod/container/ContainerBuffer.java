@@ -63,29 +63,29 @@ public class ContainerBuffer extends Container {
     }
     
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
     
-        return inventory.isUsableByPlayer(player);
+        return inventory.stillValid(player);
     }
     
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
     
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = (Slot) inventorySlots.get(par2);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = (Slot) slots.get(par2);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (par2 < 20) {
-                if (!mergeItemStack(itemstack1, 20, 56, true)) return ItemStack.EMPTY;
-            } else if (!mergeItemStack(itemstack1, 0, 20, false)) { return ItemStack.EMPTY; }
+                if (!moveItemStackTo(itemstack1, 20, 56, true)) return ItemStack.EMPTY;
+            } else if (!moveItemStackTo(itemstack1, 0, 20, false)) { return ItemStack.EMPTY; }
             if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
             if (itemstack1.getCount() != itemstack.getCount()) {
-                slot.onSlotChange(itemstack, itemstack1);
+                slot.onQuickCraft(itemstack, itemstack1);
             } else {
                 return ItemStack.EMPTY;
             }

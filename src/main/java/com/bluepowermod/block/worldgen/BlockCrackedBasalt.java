@@ -44,19 +44,19 @@ import java.util.Random;
 public class BlockCrackedBasalt extends BlockStoneOre {
 
     public BlockCrackedBasalt(String name) {
-        super(name, Properties.create(Material.ROCK).hardnessAndResistance(25.0F).sound(SoundType.STONE));
+        super(name, Properties.of(Material.STONE).strength(25.0F).sound(SoundType.STONE));
     }
 
     @Override
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         // When the random chance hit, spew lava.
-        if (!world.isRemote && (random.nextInt(100) == 0)) {
+        if (!world.isClientSide && (random.nextInt(100) == 0)) {
                 spawnLava(world, pos, random);
         }
     }
 
     public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-        worldIn.getPendingBlockTicks().scheduleTick(pos, this, 20);
+        worldIn.getBlockTicks().scheduleTick(pos, this, 20);
     }
 
     private void spawnLava(World world, BlockPos pos, Random random) {
@@ -64,19 +64,19 @@ public class BlockCrackedBasalt extends BlockStoneOre {
             DateEventHandler.spawnFirework(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         } else {
             FallingBlockEntity entity = new FallingBlockEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                    DateEventHandler.isEvent(Event.HALLOWEEN) ? Blocks.CARVED_PUMPKIN.getDefaultState() : Blocks.LAVA.getDefaultState());
-            entity.setMotion( 1 + random.nextDouble(), (random.nextDouble() - 0.5) * 0.8D, (random.nextDouble() - 0.5) * 0.8D);
-            entity.fallTime = 1;// make this field that keeps track of the ticks set to 1, so it doesn't kill itself when it searches for a lava
+                    DateEventHandler.isEvent(Event.HALLOWEEN) ? Blocks.CARVED_PUMPKIN.defaultBlockState() : Blocks.LAVA.defaultBlockState());
+            entity.setDeltaMovement( 1 + random.nextDouble(), (random.nextDouble() - 0.5) * 0.8D, (random.nextDouble() - 0.5) * 0.8D);
+            entity.fallDistance = 1;// make this field that keeps track of the ticks set to 1, so it doesn't kill itself when it searches for a lava
             // block.
-            entity.shouldDropItem = false; // disable item drops when the falling block fails to place.
-            world.addEntity(entity);
+            entity.dropItem = false; // disable item drops when the falling block fails to place.
+            world.addFreshEntity(entity);
         }
     }
 
     @Override
     public List<ItemStack> getDrops(BlockState p_220076_1_, LootContext.Builder p_220076_2_) {
         NonNullList<ItemStack> itemStacks = NonNullList.create();
-        itemStacks.add(new ItemStack(Item.getItemFromBlock(BPBlocks.cracked_basalt_lava)));
+        itemStacks.add(new ItemStack(Item.byBlock(BPBlocks.cracked_basalt_lava)));
         return itemStacks;
     }
 

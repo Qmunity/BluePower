@@ -51,7 +51,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
 
     public GuiCircuitTable(ContainerCircuitTable container, PlayerInventory playerInventory, ITextComponent title){
         super(container, playerInventory, title, guiTexture);
-        ySize = 224;
+        imageHeight = 224;
         this.circuitTable = container;
     }
 
@@ -64,9 +64,9 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
         super.init();
         buttons.clear();
         //Keyboard.enableRepeatEvents(true);
-        //searchField = new TextFieldWidget(0, font, guiLeft + 8, guiTop + 20, 89, font.FONT_HEIGHT);
+        //searchField = new TextFieldWidget(0, font, leftPos + 8, topPos + 20, 89, font.FONT_HEIGHT);
         //searchField.setMaxStringLength(15);
-        //searchField.setEnableBackgroundDrawing(true);
+        //searchField.setBordered(true);
         //searchField.setVisible(true);
         //searchField.setTextColor(16777215);
         //searchField.setText(circuitTable.getText(0));
@@ -85,7 +85,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
         if (isTextfieldEnabled()) {
             searchField.mouseClicked(x, y, button);
             if (searchField.isFocused() && button == 1) {
-                searchField.setText("");
+                searchField.setValue("");
                 //circuitTable.setText(0, searchField.getText());
                 //BPNetworkHandler.INSTANCE.sendToServer(new MessageUpdateTextfield(circuitTable, 0));
             }
@@ -122,22 +122,22 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float par1, int par2, int par3) {
+    protected void renderBg(MatrixStack matrixStack, float par1, int par2, int par3) {
 
-        super.drawGuiContainerBackgroundLayer(matrixStack, par1, par2, par3);
+        super.renderBg(matrixStack, par1, par2, par3);
         //if (isTextfieldEnabled())
             //searchField.drawTextBox();
 
-        int i1 = guiLeft + 156;
-        int k = guiTop + 48;
+        int i1 = leftPos + 156;
+        int k = topPos + 48;
         int l = k + 112;
-        this.minecraft.getTextureManager().bindTexture(scrollTexture);
+        this.minecraft.getTextureManager().bind(scrollTexture);
          //blit(i1, k + (int) ((l - k - 17) * currentScroll), 232 + (needsScrollBars() ? 0 : 12), 0, 12, 15);
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
                 if (displayRed[i * 8 + j]) {
-                    fill(matrixStack, guiLeft + 8 + j * 18, guiTop + 33 + i * 18, guiLeft + 24 + j * 18, guiTop + 49 + i * 18, 0x55FF0000);
+                    fill(matrixStack, leftPos + 8 + j * 18, topPos + 33 + i * 18, leftPos + 24 + j * 18, topPos + 49 + i * 18, 0x55FF0000);
                 }
             }
         }
@@ -148,7 +148,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
 
         super.tick();
         for (int i = 0; i < 24; i++) {
-            //displayRed[i] = inventory.getStackInSlot(i).isEmpty() && shouldDisplayRed(inventory.getStackInSlot(i));
+            //displayRed[i] = inventory.getItem(i).isEmpty() && shouldDisplayRed(inventory.getItem(i));
         }
     }
 

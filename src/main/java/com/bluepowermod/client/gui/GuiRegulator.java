@@ -46,18 +46,18 @@ public class GuiRegulator extends GuiContainerBaseBP<ContainerRegulator> impleme
     public GuiRegulator(ContainerRegulator container, PlayerInventory playerInventory, ITextComponent title){
         super(container, playerInventory, title, resLoc);
         this.regulator = container;
-        xSize = 212;
+        imageWidth = 212;
     }
 
     @Override
     public void init() {
 
         super.init();
-        WidgetColor colorWidget = new WidgetColor(0, guiLeft + 135, guiTop + 55);
+        WidgetColor colorWidget = new WidgetColor(0, leftPos + 135, topPos + 55);
         colorWidget.value = regulator.color.ordinal();
         addWidget(colorWidget);
 
-        WidgetMode modeWidget = new WidgetMode(1, guiLeft + 135, guiTop + 20, 216, 2, Refs.MODID + ":textures/gui/regulator.png") {
+        WidgetMode modeWidget = new WidgetMode(1, leftPos + 135, topPos + 20, 216, 2, Refs.MODID + ":textures/gui/regulator.png") {
 
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
@@ -74,7 +74,7 @@ public class GuiRegulator extends GuiContainerBaseBP<ContainerRegulator> impleme
         modeWidget.value = regulator.mode;
         addWidget(modeWidget);
 
-        WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(2, guiLeft + 135, guiTop + 70);
+        WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(2, leftPos + 135, topPos + 70);
         fuzzyWidget.value = regulator.fuzzySetting;
         addWidget(fuzzyWidget);
     }

@@ -40,9 +40,9 @@ public class ItemStackUtils {
     }
 
     public static boolean isSameOreDictStack(ItemStack stack1, ItemStack stack2) {
-        for (ResourceLocation resTag : ItemTags.getCollection().getOwningTags(stack1.getItem())) {
-            if (ItemTags.getCollection().get(resTag) != null) {
-                return ItemTags.getCollection().get(resTag).contains(stack2.getItem());
+        for (ResourceLocation resTag : ItemTags.getAllTags().getMatchingTags(stack1.getItem())) {
+            if (ItemTags.getAllTags().getTag(resTag) != null) {
+                return ItemTags.getAllTags().getTag(resTag).contains(stack2.getItem());
             }
         }
         return false;

@@ -46,7 +46,7 @@ public class BlockProjectTable extends BlockContainerBase implements ISidedInven
     }
 
     @Override
-    public ISidedInventory createInventory(BlockState state, IWorld world, BlockPos pos) {
-        return ((TileProjectTable)world.getTileEntity(pos));
+    public ISidedInventory getContainer(BlockState state, IWorld world, BlockPos pos) {
+        return ((TileProjectTable)world.getBlockEntity(pos));
     }
 }

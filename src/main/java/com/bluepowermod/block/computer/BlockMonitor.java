@@ -23,13 +23,13 @@ public class BlockMonitor extends BlockContainerBase {
 
     public BlockMonitor() {
 
-        super(Material.IRON, TileMonitor.class);
+        super(Material.METAL, TileMonitor.class);
         setRegistryName(Refs.BLOCKMONITOR_NAME);
     }
 
     @Override
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+        TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof TileMonitor) {
             // ((TileCPU)tileEntity).updateEntity();
             // Logs.log(Level.INFO, "[BluePowerControl] CPU TE ticked");

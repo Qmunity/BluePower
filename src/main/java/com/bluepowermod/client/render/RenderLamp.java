@@ -35,44 +35,44 @@ public class RenderLamp extends TileEntityRenderer<TileLamp> {
 
             BlockState stateLamp = te.getBlockState();
             BlockLamp bLamp = (BlockLamp) stateLamp.getBlock();
-            if(te.getWorld() == null) {return;}
-            int power = stateLamp.get(BlockLamp.POWER);
-            int color = bLamp.getColor(stateLamp, te.getWorld(), te.getPos(), 0);
+            if(te.getLevel() == null) {return;}
+            int power = stateLamp.getValue(BlockLamp.POWER);
+            int color = bLamp.getColor(stateLamp, te.getLevel(), te.getBlockPos(), 0);
 
             int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
             int r = (color & redMask) >> 16;
             int g = (color & greenMask) >> 8;
             int b = (color & blueMask);
 
-            AxisAlignedBB box = stateLamp.getShape(te.getWorld(), te.getPos()).getBoundingBox();
+            AxisAlignedBB box = stateLamp.getShape(te.getLevel(), te.getBlockPos()).bounds();
 
             //Define our base Glow
-            box = box.equals(new AxisAlignedBB(0,0,0,1,1,1)) ? box.grow(0.05) : box.grow(0.03125);
+            box = box.equals(new AxisAlignedBB(0,0,0,1,1,1)) ? box.inflate(0.05) : box.inflate(0.03125);
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
             //Remove overlapping Glow
-            if(stateLamp.getShape(te.getWorld(), te.getPos()).getBoundingBox().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
+            if(stateLamp.getShape(te.getLevel(), te.getBlockPos()).bounds().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
                 for (Direction face : Direction.values()) {
-                    BlockState state = te.getWorld().getBlockState(te.getPos().offset(face.getOpposite()));
-                    if (state.getBlock() instanceof BlockLamp && state.getShape(te.getWorld(), te.getPos()).getBoundingBox().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
-                        if (state.get(BlockLamp.POWER) > 0) {
-                            renderFaces[face.getIndex()] = false;
-                            double offsetx = (face.getXOffset() * 0.05) > 0 ? (face.getXOffset() * 0.05) : 0;
-                            double offsety = (face.getYOffset() * 0.05) > 0 ? (face.getYOffset() * 0.05) : 0;
-                            double offsetz = (face.getZOffset() * 0.05) > 0 ? (face.getZOffset() * 0.05) : 0;
-                            double toffsetx = (face.getXOffset() * 0.05) < 0 ? (face.getXOffset() * 0.05) : 0;
-                            double toffsety = (face.getYOffset() * 0.05) < 0 ? (face.getYOffset() * 0.05) : 0;
-                            double toffsetz = (face.getZOffset() * 0.05) < 0 ? (face.getZOffset() * 0.05) : 0;
+                    BlockState state = te.getLevel().getBlockState(te.getBlockPos().relative(face.getOpposite()));
+                    if (state.getBlock() instanceof BlockLamp && state.getShape(te.getLevel(), te.getBlockPos()).bounds().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
+                        if (state.getValue(BlockLamp.POWER) > 0) {
+                            renderFaces[face.get3DDataValue()] = false;
+                            double offsetx = (face.getStepX() * 0.05) > 0 ? (face.getStepX() * 0.05) : 0;
+                            double offsety = (face.getStepY() * 0.05) > 0 ? (face.getStepY() * 0.05) : 0;
+                            double offsetz = (face.getStepZ() * 0.05) > 0 ? (face.getStepZ() * 0.05) : 0;
+                            double toffsetx = (face.getStepX() * 0.05) < 0 ? (face.getStepX() * 0.05) : 0;
+                            double toffsety = (face.getStepY() * 0.05) < 0 ? (face.getStepY() * 0.05) : 0;
+                            double toffsetz = (face.getStepZ() * 0.05) < 0 ? (face.getStepZ() * 0.05) : 0;
                             box = new AxisAlignedBB(box.minX + offsetx, box.minY + offsety, box.minZ + offsetz, box.maxX + toffsetx, box.maxY + toffsety, box.maxZ + toffsetz);
                         }
                     }
                 }
             }
 
-            matrixStack.push();
+            matrixStack.pushPose();
             double powerDivision = power / 18D;
             com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, iRenderTypeBuffer.getBuffer(BPRenderTypes.LAMP_GLOW), matrixStack, r, g, b, (int)(powerDivision * 200), 200,
                     renderFaces);
-            matrixStack.pop();
+            matrixStack.popPose();
     }
 }

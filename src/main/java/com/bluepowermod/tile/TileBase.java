@@ -52,9 +52,9 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void read(BlockState blockState, CompoundNBT tCompound) {
+    public void load(BlockState blockState, CompoundNBT tCompound) {
 
-        super.read(blockState, tCompound);
+        super.load(blockState, tCompound);
         isRedstonePowered = tCompound.getBoolean("isRedstonePowered");
         readFromPacketNBT(tCompound);
     }
@@ -63,9 +63,9 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT write(CompoundNBT tCompound) {
+    public CompoundNBT save(CompoundNBT tCompound) {
 
-        super.write(tCompound);
+        super.save(tCompound);
         tCompound.putBoolean("isRedstonePowered", isRedstonePowered);
 
         writeToPacketNBT(tCompound);
@@ -83,38 +83,38 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
 
     protected void readFromPacketNBT(CompoundNBT tCompound) {
         outputtingRedstone = tCompound.getByte("outputtingRedstone");
-        if (world != null)
+        if (level != null)
             markForRenderUpdate();
     }
 
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
+        return new SUpdateTileEntityPacket(this.worldPosition, 3, this.getUpdateTag());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        readFromPacketNBT(pkt.getNbtCompound());
-        handleUpdateTag(getBlockState(), pkt.getNbtCompound());
+        readFromPacketNBT(pkt.getTag());
+        handleUpdateTag(getBlockState(), pkt.getTag());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+        return this.save(new CompoundNBT());
     }
 
 
     protected void sendUpdatePacket() {
 
-        if (!world.isRemote)
-        world.notifyNeighborsOfStateChange(pos, getBlockState().getBlock());
+        if (!level.isClientSide)
+        level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
     }
 
     protected void markForRenderUpdate() {
 
-        if (world != null)
-            world.markBlockRangeForRenderUpdate(pos, getBlockState(), getBlockState());
+        if (level != null)
+            level.setBlocksDirty(getBlockPos(), getBlockState(), getBlockState());
     }
 
     protected void notifyNeighborBlockUpdate() {
@@ -136,7 +136,7 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
      */
     public void checkRedstonePower() {
 
-        boolean isIndirectlyPowered = (getWorld().getRedstonePowerFromNeighbors(pos) != 0);
+        boolean isIndirectlyPowered = (getLevel().getBestNeighborSignal(worldPosition) != 0);
         if (isIndirectlyPowered && !getIsRedstonePowered()) {
             redstoneChanged(true);
         } else if (getIsRedstonePowered() && !isIndirectlyPowered) {
@@ -208,7 +208,7 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
      */
     protected void onTileLoaded() {
 
-        if (world != null && !world.isRemote)
+        if (level != null && !level.isClientSide)
             onBlockNeighbourChanged();
     }
 
@@ -220,8 +220,8 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
     @Override
     public void setFacingDirection(Direction dir) {
         if(getBlockState().getBlock() instanceof BlockContainerFacingBase) {
-            BlockContainerFacingBase.setState(dir, world, pos);
-            if (world != null) {
+            BlockContainerFacingBase.setState(dir, level, getBlockPos());
+            if (worldPosition != null) {
                 sendUpdatePacket();
                 notifyNeighborBlockUpdate();
             }
@@ -231,7 +231,7 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
     @Override
     public Direction getFacingDirection() {
         if(getBlockState().getBlock() instanceof BlockContainerFacingBase) {
-            return getBlockState().get(BlockContainerFacingBase.FACING);
+            return getBlockState().getValue(BlockContainerFacingBase.FACING);
         }
         return Direction.UP;
     }

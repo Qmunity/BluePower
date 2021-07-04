@@ -35,7 +35,7 @@ public class TileLamp extends TileEntity {
         int b = (color & blueMask);
 
         return Light.builder()
-                .pos(this.pos)
+                .pos(this.worldPosition)
                 .color(r ,g,b, BPConfig.albedoBrightness)
                 .radius(Math.max(value / 2, 1))
                 .build();

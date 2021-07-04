@@ -194,7 +194,7 @@ public class RenderHelper {
             GL11.glRotated(180 + 360 * -angle, 0, 1, 0);
             GL11.glTranslated(-0.5, -0.5, -0.5);
 
-            Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation("minecraft:textures/blocks/stone.png"));
+            Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("minecraft:textures/blocks/stone.png"));
 
             GL11.glBegin(GL11.GL_QUADS);
             {
@@ -397,204 +397,204 @@ public class RenderHelper {
      * @param vector
      */
     public static void drawColoredCube(AxisAlignedBB vector, IVertexBuilder vertexBuilder, MatrixStack matrixStack, int r, int g, int b, int a, int light, boolean... renderFaces) {
-        MatrixStack.Entry entry = matrixStack.getLast();
-        Matrix4f positionMatrix = entry.getMatrix();
-        Matrix3f normalMatrix = entry.getNormal();
+        MatrixStack.Entry entry = matrixStack.last();
+        Matrix4f positionMatrix = entry.pose();
+        Matrix3f normalMatrix = entry.normal();
 
-        TextureAtlasSprite sprite =  Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation("minecraft:white_concrete", "")).getParticleTexture();
-        float minU = sprite.getMinU();
-        float maxU = sprite.getMaxU();
-        float minV = sprite.getMinV();
-        float maxV = sprite.getMaxV();
+        TextureAtlasSprite sprite =  Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation("minecraft:white_concrete", "")).getParticleIcon();
+        float minU = sprite.getU0();
+        float maxU = sprite.getU1();
+        float minV = sprite.getV0();
+        float maxV = sprite.getV1();
 
         // Top side
         if (renderFaces.length < 1 || renderFaces[0]) {
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(minU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(minU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(maxU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(maxU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
                     .endVertex();
         }
 
         // Bottom side
         if (renderFaces.length < 2 || renderFaces[1]) {
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(minU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(minU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(maxU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(maxU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
                     .endVertex();
         }
 
         // Draw west side:
         if (renderFaces.length < 3 || renderFaces[5]) {
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(minU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(minU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(maxU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(maxU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
                     .endVertex();
         }
 
         // Draw east side:
         if (renderFaces.length < 4 || renderFaces[4]) {
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(minU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(minU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(maxU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(maxU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
                     .endVertex();
         }
 
         // Draw north side
         if (renderFaces.length < 5 || renderFaces[3]) {
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(minU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(minU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(maxU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
-                    .tex(maxU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
                     .endVertex();
         }
 
         // Draw south side
         if (renderFaces.length < 6 || renderFaces[2]) {
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(minU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(minU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(minU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(maxU, minV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, minV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();
-            vertexBuilder.pos(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
+            vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
-                    .tex(maxU, maxV)
-                    .overlay(OverlayTexture.NO_OVERLAY)
-                    .lightmap(light)
+                    .uv(maxU, maxV)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(light)
                     .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
                     .endVertex();
         }
@@ -751,7 +751,7 @@ public class RenderHelper {
     public static void drawTesselatedTexturedCube(AxisAlignedBB vector) {
 
         Tessellator t = Tessellator.getInstance();
-        BufferBuilder b = t.getBuffer();
+        BufferBuilder b = t.getBuilder();
         boolean wasTesselating = false;
 
         // Check if we were already tesselating
@@ -768,48 +768,48 @@ public class RenderHelper {
 
         // Top side
         //b.normal(0, 1, 0);
-        b.pos(vector.minX, vector.maxY, vector.maxZ).tex(minU, maxV).endVertex();
-        b.pos(vector.maxX, vector.maxY, vector.maxZ).tex(minU, minV).endVertex();
-        b.pos(vector.maxX, vector.maxY, vector.minZ).tex(maxU, minV).endVertex();
-        b.pos(vector.minX, vector.maxY, vector.minZ).tex(maxU, maxV).endVertex();
+        b.vertex(vector.minX, vector.maxY, vector.maxZ).uv(minU, maxV).endVertex();
+        b.vertex(vector.maxX, vector.maxY, vector.maxZ).uv(minU, minV).endVertex();
+        b.vertex(vector.maxX, vector.maxY, vector.minZ).uv(maxU, minV).endVertex();
+        b.vertex(vector.minX, vector.maxY, vector.minZ).uv(maxU, maxV).endVertex();
 
         // Bottom side
         //b.normal(0, -1, 0);
-        b.pos(vector.maxX, vector.minY, vector.maxZ).tex(minU, maxV).endVertex();
-        b.pos(vector.minX, vector.minY, vector.maxZ).tex(minU, minV).endVertex();
-        b.pos(vector.minX, vector.minY, vector.minZ).tex(maxU, minV).endVertex();
-        b.pos(vector.maxX, vector.minY, vector.minZ).tex(maxU, maxV).endVertex();
+        b.vertex(vector.maxX, vector.minY, vector.maxZ).uv(minU, maxV).endVertex();
+        b.vertex(vector.minX, vector.minY, vector.maxZ).uv(minU, minV).endVertex();
+        b.vertex(vector.minX, vector.minY, vector.minZ).uv(maxU, minV).endVertex();
+        b.vertex(vector.maxX, vector.minY, vector.minZ).uv(maxU, maxV).endVertex();
 
         // Draw west side:
         //b.normal(-1, 0, 0);
-        b.pos(vector.minX, vector.minY, vector.maxZ).tex(minU, maxV).endVertex();
-        b.pos(vector.minX, vector.maxY, vector.maxZ).tex(minU, minV).endVertex();
-        b.pos(vector.minX, vector.maxY, vector.minZ).tex(maxU, minV).endVertex();
-        b.pos(vector.minX, vector.minY, vector.minZ).tex(maxU, maxV).endVertex();
+        b.vertex(vector.minX, vector.minY, vector.maxZ).uv(minU, maxV).endVertex();
+        b.vertex(vector.minX, vector.maxY, vector.maxZ).uv(minU, minV).endVertex();
+        b.vertex(vector.minX, vector.maxY, vector.minZ).uv(maxU, minV).endVertex();
+        b.vertex(vector.minX, vector.minY, vector.minZ).uv(maxU, maxV).endVertex();
 
         // Draw east side:
         //b.normal(1, 0, 0);
-        b.pos(vector.maxX, vector.minY, vector.minZ).tex(minU, maxV).endVertex();
-        b.pos(vector.maxX, vector.maxY, vector.minZ).tex(minU, minV).endVertex();
-        b.pos(vector.maxX, vector.maxY, vector.maxZ).tex(maxU, minV).endVertex();
-        b.pos(vector.maxX, vector.minY, vector.maxZ).tex(maxU, maxV).endVertex();
+        b.vertex(vector.maxX, vector.minY, vector.minZ).uv(minU, maxV).endVertex();
+        b.vertex(vector.maxX, vector.maxY, vector.minZ).uv(minU, minV).endVertex();
+        b.vertex(vector.maxX, vector.maxY, vector.maxZ).uv(maxU, minV).endVertex();
+        b.vertex(vector.maxX, vector.minY, vector.maxZ).uv(maxU, maxV).endVertex();
 
         // Draw north side
         //b.normal(0, 0, -1);
-        b.pos(vector.minX, vector.minY, vector.minZ).tex(minU, maxV).endVertex();
-        b.pos(vector.minX, vector.maxY, vector.minZ).tex(minU, minV).endVertex();
-        b.pos(vector.maxX, vector.maxY, vector.minZ).tex(maxU, minV).endVertex();
-        b.pos(vector.maxX, vector.minY, vector.minZ).tex(maxU, maxV).endVertex();
+        b.vertex(vector.minX, vector.minY, vector.minZ).uv(minU, maxV).endVertex();
+        b.vertex(vector.minX, vector.maxY, vector.minZ).uv(minU, minV).endVertex();
+        b.vertex(vector.maxX, vector.maxY, vector.minZ).uv(maxU, minV).endVertex();
+        b.vertex(vector.maxX, vector.minY, vector.minZ).uv(maxU, maxV).endVertex();
 
         // Draw south side
         //b.normal(0, 0, 1);
-        b.pos(vector.minX, vector.minY, vector.maxZ).tex(minU, maxV).endVertex();
-        b.pos(vector.maxX, vector.minY, vector.maxZ).tex(minU, minV).endVertex();
-        b.pos(vector.maxX, vector.maxY, vector.maxZ).tex(maxU, minV).endVertex();
-        b.pos(vector.minX, vector.maxY, vector.maxZ).tex(maxU, maxV).endVertex();
+        b.vertex(vector.minX, vector.minY, vector.maxZ).uv(minU, maxV).endVertex();
+        b.vertex(vector.maxX, vector.minY, vector.maxZ).uv(minU, minV).endVertex();
+        b.vertex(vector.maxX, vector.maxY, vector.maxZ).uv(maxU, minV).endVertex();
+        b.vertex(vector.minX, vector.maxY, vector.maxZ).uv(maxU, maxV).endVertex();
 
         if (!wasTesselating) {
-            t.draw();
+            t.end();
         }
     }
     /*

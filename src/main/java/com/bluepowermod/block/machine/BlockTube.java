@@ -30,45 +30,45 @@ import javax.annotation.Nullable;
  */
 public class BlockTube extends SixWayBlock implements IBPPartBlock {
     public BlockTube() {
-        super(0.25F, Properties.create(Material.PISTON).notSolid());
-        this.setDefaultState(this.stateContainer.getBaseState()
-                .with(NORTH, false)
-                .with(EAST, false)
-                .with(SOUTH, false)
-                .with(WEST, false)
-                .with(UP, false)
-                .with(DOWN, false));
+        super(0.25F, Properties.of(Material.PISTON).noOcclusion());
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(NORTH, false)
+                .setValue(EAST, false)
+                .setValue(SOUTH, false)
+                .setValue(WEST, false)
+                .setValue(UP, false)
+                .setValue(DOWN, false));
         BPBlocks.blockList.add(this);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> stateBuilder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> stateBuilder) {
         stateBuilder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
     }
 
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.makeConnections(context.getWorld(), context.getPos());
+        return this.makeConnections(context.getLevel(), context.getClickedPos());
     }
 
     public BlockState makeConnections(IBlockReader world, BlockPos pos) {
-        Block blockDown = world.getBlockState(pos.down()).getBlock();
-        Block blockUp = world.getBlockState(pos.up()).getBlock();
+        Block blockDown = world.getBlockState(pos.below()).getBlock();
+        Block blockUp = world.getBlockState(pos.above()).getBlock();
         Block blockNorth = world.getBlockState(pos.north()).getBlock();
         Block blockEast = world.getBlockState(pos.east()).getBlock();
         Block blockSouth = world.getBlockState(pos.south()).getBlock();
         Block blockWest = world.getBlockState(pos.west()).getBlock();
-        return this.getDefaultState()
-                .with(DOWN, blockDown == this)
-                .with(UP, blockUp == this )
-                .with(NORTH, blockNorth == this)
-                .with(EAST, blockEast == this)
-                .with(SOUTH, blockSouth == this )
-                .with(WEST, blockWest == this);
+        return this.defaultBlockState()
+                .setValue(DOWN, blockDown == this)
+                .setValue(UP, blockUp == this )
+                .setValue(NORTH, blockNorth == this)
+                .setValue(EAST, blockEast == this)
+                .setValue(SOUTH, blockSouth == this )
+                .setValue(WEST, blockWest == this);
     }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state) {
-        return VoxelShapes.create(4, 4, 4, 12, 12, 12);
+        return VoxelShapes.box(4, 4, 4, 12, 12, 12);
     }
 
     @Override
