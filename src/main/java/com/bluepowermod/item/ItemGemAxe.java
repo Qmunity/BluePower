@@ -23,6 +23,9 @@ import net.minecraft.item.*;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Item;
+
 public class ItemGemAxe extends AxeItem {
 
     public    Item    customCraftingMaterial = Items.AIR;

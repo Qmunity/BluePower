@@ -17,22 +17,22 @@ import com.bluepowermod.container.ContainerBlulectricAlloyFurnace;
 import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.ContainerData;
+import net.minecraft.core.NonNullList;
+import net.minecraft.util.text.Component;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -44,7 +44,7 @@ import javax.annotation.Nullable;
  * @author MoreThanHidden
  */
 
-public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISidedInventory, INamedContainerProvider {
+public class TileBlulectricAlloyFurnace extends TileMachineBase implements WorldlyContainer, MenuProvider {
     private final BlutricityStorage storage = new BlutricityStorage(1000, 100);
     private LazyOptional<IPowerBase> blutricityCap;
     private boolean isActive;
@@ -56,7 +56,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
     private boolean updatingRecipe = true;
 
     public TileBlulectricAlloyFurnace() {
-        super(BPTileEntityType.BLULECTRIC_ALLOY_FURNACE);
+        super(BPBlockEntityType.BLULECTRIC_ALLOY_FURNACE);
         this.inventory = NonNullList.withSize(9, ItemStack.EMPTY);
         this.outputInventory = ItemStack.EMPTY;
     }
@@ -67,12 +67,12 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundNBT tCompound) {
+    public void load(BlockState blockState, CompoundTag tCompound) {
 
         super.load(blockState, tCompound);
 
         for (int i = 0; i < 9; i++) {
-            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            CompoundTag tc = tCompound.getCompound("inventory" + i);
             inventory.set(i, ItemStack.of(tc));
         }
         outputInventory = ItemStack.of(tCompound.getCompound("outputInventory"));
@@ -83,18 +83,18 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT save(CompoundNBT tCompound) {
+    public CompoundTag save(CompoundTag tCompound) {
 
         super.save(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            CompoundNBT tc = new CompoundNBT();
+            CompoundTag tc = new CompoundTag();
             inventory.get(i).save(tc);
             tCompound.put("inventory" + i, tc);
         }
 
         if (outputInventory != null) {
-            CompoundNBT outputCompound = new CompoundNBT();
+            CompoundTag outputCompound = new CompoundTag();
             outputInventory.save(outputCompound);
             tCompound.put("outputInventory", outputCompound);
         }
@@ -103,7 +103,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
     }
 
     @Override
-    public void readFromPacketNBT(CompoundNBT tag) {
+    public void readFromPacketNBT(CompoundTag tag) {
 
         super.readFromPacketNBT(tag);
         isActive = tag.getBoolean("isActive");
@@ -116,7 +116,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
     }
 
     @Override
-    public void writeToPacketNBT(CompoundNBT tag) {
+    public void writeToPacketNBT(CompoundTag tag) {
 
         super.writeToPacketNBT(tag);
         tag.putInt("currentProcessTime", currentProcessTime);
@@ -137,7 +137,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
             storage.resetCurrent();
             //Balance power of attached blulectric blocks.
             for (Direction facing : Direction.values()) {
-                TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
+                BlockEntity tile = level.getBlockEntity(worldPosition.relative(facing));
                 if (tile != null)
                     tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
                             exStorage -> EnergyHelper.balancePower(exStorage, storage));
@@ -177,7 +177,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
         }
     }
 
-    protected final IIntArray fields = new IIntArray() {
+    protected final ContainerData fields = new ContainerData() {
         public int get(int i) {
             switch (i) {
                 case 0:
@@ -289,17 +289,17 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 
@@ -349,13 +349,13 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
     }
 
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return new StringTextComponent(Refs.BLULECTRICALLOYFURNACE_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player player) {
         return new ContainerBlulectricAlloyFurnace(id, inventory, this, fields);
     }
 

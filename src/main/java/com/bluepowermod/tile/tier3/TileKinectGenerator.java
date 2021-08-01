@@ -7,23 +7,23 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
 
-public class TileKinectGenerator extends TileBase implements ISidedInventory{
+public class TileKinectGenerator extends TileBase implements WorldlyContainer{
 
 	public int windspeed = 10;
 	public int windtick = 0;
 	public static final int SLOTS = 1;
 	public TileKinectGenerator(){
-	    super(BPTileEntityType.KINETIC_GENERATOR);
+	    super(BPBlockEntityType.KINETIC_GENERATOR);
 	}
 
 	@Override
@@ -39,12 +39,12 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundNBT tCompound) {
+    public void load(BlockState blockState, CompoundTag tCompound) {
 
         super.load(blockState, tCompound);
 
         for (int i = 0; i < 1; i++) {
-            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            CompoundTag tc = tCompound.getCompound("inventory" + i);
             allInventories.set(i, ItemStack.of(tc));
         }
     }
@@ -53,13 +53,13 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT save(CompoundNBT tCompound) {
+    public CompoundTag save(CompoundTag tCompound) {
 
         super.save(tCompound);
 
         for (int i = 0; i < 1; i++) {
             if (!allInventories.get(i).isEmpty()) {
-                CompoundNBT tc = new CompoundNBT();
+                CompoundTag tc = new CompoundTag();
                 allInventories.get(i).save(tc);
                 tCompound.put("inventory" + i, tc);
             }
@@ -118,17 +118,17 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return player.blockPosition().closerThan(worldPosition,64.0D);
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 

@@ -14,18 +14,20 @@ import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import PlayerEntity;
+
 public class TileCircuitDatabase extends TileCircuitTable {
 
-    public IInventory copyInventory = new Inventory(2) {
+    public Container copyInventory = new SimpleContainer(2) {
 
         @Override
         public void setItem(int slot, ItemStack itemStack) {
@@ -43,10 +45,10 @@ public class TileCircuitDatabase extends TileCircuitTable {
     public static final int UPLOAD_AND_COPY_TIME = 20;
     public final ItemStackDatabase stackDatabase = new ItemStackDatabase();
     public static List<ItemStack> serverDatabaseStacks = new ArrayList<ItemStack>(); // client side used only, sent from the server database.
-    private PlayerEntity triggeringPlayer;
+    private Player triggeringPlayer;
     public String nameTextField = "";
 
-    public static boolean hasPermissions(PlayerEntity player) {
+    public static boolean hasPermissions(Player player) {
 
         if (BPConfig.CONFIG.serverCircuitSavingOpOnly.get()) {
             //if (!player.can(2, "saveTemplate")) {
@@ -83,7 +85,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
      * @param simulate
      * @return
      */
-    public boolean copy(PlayerEntity player, ItemStack template, ItemStack target, boolean simulate) {
+    public boolean copy(Player player, ItemStack template, ItemStack target, boolean simulate) {
 
         if (!template.isEmpty() && !target.isEmpty()) {
             if (template.sameItem(target)) {
@@ -179,7 +181,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
                         curUploadProgress = -1;
                         if (selectedShareOption == 1 && triggeringPlayer != null)
                             //BPNetworkHandler.INSTANCE.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getItem(0)),
-                                    //(ServerPlayerEntity) triggeringPlayer);
+                                    //(ServerPlayer) triggeringPlayer);
                         if (selectedShareOption == 2) {
                             stackDatabase.saveItemStack(copyInventory.getItem(0));
                             //BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
@@ -201,17 +203,17 @@ public class TileCircuitDatabase extends TileCircuitTable {
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
+    public CompoundTag save(CompoundTag tag) {
 
         super.save(tag);
 
         if (!copyInventory.getItem(0).isEmpty()) {
-            CompoundNBT stackTag = new CompoundNBT();
+            CompoundTag stackTag = new CompoundTag();
             copyInventory.getItem(0).save(stackTag);
             tag.put("copyTemplateStack", stackTag);
         }
         if (!copyInventory.getItem(1).isEmpty()) {
-            CompoundNBT stackTag = new CompoundNBT();
+            CompoundTag stackTag = new CompoundTag();
             copyInventory.getItem(1).save(stackTag);
             tag.put("copyOutputStack", stackTag);
         }
@@ -223,7 +225,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag) {
+    public void load(BlockState state, CompoundTag tag) {
 
         super.load(state, tag);
 

@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.helper;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 
 import com.bluepowermod.util.ItemStackUtils;

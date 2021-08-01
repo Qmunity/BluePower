@@ -8,29 +8,29 @@
 package com.bluepowermod.client.gui;
 
 import com.bluepowermod.container.ContainerAlloyFurnace;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerDiskDrive;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileDiskDrive;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
-public class GuiDiskDrive extends GuiContainerBaseBP<ContainerDiskDrive> implements IHasContainer<ContainerDiskDrive> {
+public class GuiDiskDrive extends GuiContainerBaseBP<ContainerDiskDrive> implements MenuAccess<ContainerDiskDrive> {
 
     private final ContainerDiskDrive diskDrive;
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/diskdrivegui.png");
 
-    public GuiDiskDrive(ContainerDiskDrive container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiDiskDrive(ContainerDiskDrive container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.diskDrive = container;
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
 
     }
 }

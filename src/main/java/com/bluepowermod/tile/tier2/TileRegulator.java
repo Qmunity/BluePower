@@ -12,31 +12,32 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.ContainerRegulator;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.Container;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.core.NonNullList;
+import net.minecraft.util.text.Component;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
 
+import Component;
+
 /**
  * @author MineMaarten
  */
-public class TileRegulator extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, INamedContainerProvider {
+public class TileRegulator extends TileMachineBase implements WorldlyContainer, IGuiButtonSensitive, MenuProvider {
 
     public static final int SLOTS = 27;
     private NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
@@ -45,17 +46,17 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     public int fuzzySetting;
 
     public TileRegulator() {
-        super(BPTileEntityType.REGULATOR);
+        super(BPBlockEntityType.REGULATOR);
     }
 
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return new StringTextComponent(Refs.REGULATOR_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player playerEntity) {
         return new ContainerRegulator(id, inventory, this);
     }
 
@@ -82,11 +83,11 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                 checkIndividualOutputFilterAndEject();
 
             if (mode == 1 && !isEjecting()) {// supply mode
-                IInventory inv = IOHelper.getInventoryForTE(getTileCache(getOutputDirection()));
+                Container inv = IOHelper.getInventoryForTE(getTileCache(getOutputDirection()));
                 if (inv != null) {
                     int[] accessibleSlots;
-                    if (inv instanceof ISidedInventory) {
-                        accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(getFacingDirection());
+                    if (inv instanceof WorldlyContainer) {
+                        accessibleSlots = ((WorldlyContainer) inv).getSlotsForFace(getFacingDirection());
                     } else {
                         accessibleSlots = new int[inv.getContainerSize()];
                         for (int i = 0; i < accessibleSlots.length; i++)
@@ -136,7 +137,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public void onButtonPress(PlayerEntity player, int messageId, int value) {
+    public void onButtonPress(Player player, int messageId, int value) {
 
         if (messageId == 1) {
             mode = value;
@@ -160,11 +161,11 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
      */
     private boolean isSatisfied() {
 
-        IInventory inv = IOHelper.getInventoryForTE(getTileCache(getOutputDirection()));
+        Container inv = IOHelper.getInventoryForTE(getTileCache(getOutputDirection()));
         if (inv != null) {
             int[] accessibleSlots;
-            if (inv instanceof ISidedInventory) {
-                accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(getFacingDirection());
+            if (inv instanceof WorldlyContainer) {
+                accessibleSlots = ((WorldlyContainer) inv).getSlotsForFace(getFacingDirection());
             } else {
                 accessibleSlots = new int[inv.getContainerSize()];
                 for (int i = 0; i < accessibleSlots.length; i++)
@@ -230,7 +231,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
+    public CompoundTag save(CompoundTag tag) {
 
         super.save(tag);
 
@@ -240,7 +241,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
 
         ListNBT tagList = new ListNBT();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
-                CompoundNBT tagCompound = new CompoundNBT();
+                CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
                 inventory.get(currentIndex).save(tagCompound);
                 tagList.add(tagCompound);
@@ -250,7 +251,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag) {
+    public void load(BlockState state, CompoundTag tag) {
 
         super.load(state, tag);
 
@@ -261,7 +262,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
         ListNBT tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(27, ItemStack.EMPTY);
         for (int i = 0; i < tagList.size(); ++i) {
-            CompoundNBT tagCompound = tagList.getCompound(i);
+            CompoundTag tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
                 inventory.set(slot, ItemStack.of(tagCompound));
@@ -321,17 +322,17 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 

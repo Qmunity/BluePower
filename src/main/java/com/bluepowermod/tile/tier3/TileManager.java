@@ -10,25 +10,22 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.IRejectAnimator;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * @author MineMaarten
  */
-public class TileManager extends TileMachineBase implements ISidedInventory,  IRejectAnimator, IFuzzyRetrieving, IGuiButtonSensitive {
+public class TileManager extends TileMachineBase implements WorldlyContainer,  IRejectAnimator, IFuzzyRetrieving, IGuiButtonSensitive {
     public static final int SLOTS = 25;
     protected final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
     public TubeColor filterColor = TubeColor.NONE;
@@ -38,7 +35,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     private int rejectTicker = -1;
 
     public TileManager() {
-        super(BPTileEntityType.MANAGER);
+        super(BPBlockEntityType.MANAGER);
     }
 
     private int acceptedItems(ItemStack item) {
@@ -52,7 +49,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public void onButtonPress(PlayerEntity player, int messageId, int value) {
+    public void onButtonPress(Player player, int messageId, int value) {
 
         if (messageId == 0) {
             filterColor = TubeColor.values()[value];
@@ -99,8 +96,8 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
 
     private void dumpUnwantedItems() {
 
-        TileEntity te = getTileCache(getFacingDirection());
-        IInventory inv = IOHelper.getInventoryForTE(te);
+        BlockEntity te = getTileCache(getFacingDirection());
+        Container inv = IOHelper.getInventoryForTE(te);
         int[] slots = IOHelper.getAccessibleSlotsForInventory(inv, getFacingDirection().getOpposite());
         for (int slot : slots) {
             ItemStack stack = inv.getItem(slot);
@@ -121,12 +118,12 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundNBT tCompound) {
+    public void load(BlockState blockState, CompoundTag tCompound) {
 
         super.load(blockState, tCompound);
 
         for (int i = 0; i < 24; i++) {
-            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            CompoundTag tc = tCompound.getCompound("inventory" + i);
             inventory.set(i, ItemStack.of(tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
@@ -139,12 +136,12 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT save(CompoundNBT tCompound) {
+    public CompoundTag save(CompoundTag tCompound) {
 
         super.save(tCompound);
 
         for (int i = 0; i < 24; i++) {
-                CompoundNBT tc = new CompoundNBT();
+                CompoundTag tc = new CompoundTag();
                 inventory.get(i).save(tc);
                 tCompound.put("inventory" + i, tc);
         }
@@ -157,14 +154,14 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public void writeToPacketNBT(CompoundNBT tag) {
+    public void writeToPacketNBT(CompoundTag tag) {
 
         super.writeToPacketNBT(tag);
         tag.putByte("rejectAnimation", (byte) rejectTicker);
     }
 
     @Override
-    public void readFromPacketNBT(CompoundNBT tag) {
+    public void readFromPacketNBT(CompoundTag tag) {
 
         super.readFromPacketNBT(tag);
         rejectTicker = tag.getByte("rejectAnimation");
@@ -227,17 +224,17 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return worldPosition.closerThan(new Vector3i(player.getX(), player.getY(), player.getZ()), 64.0D);
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 

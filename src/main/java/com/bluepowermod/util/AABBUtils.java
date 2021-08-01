@@ -7,37 +7,36 @@
  */
 package com.bluepowermod.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class AABBUtils {
 
-    public static AxisAlignedBB expand(AxisAlignedBB aabb, double amt) {
+    public static AABB expand(AABB aabb, double amt) {
         return aabb.inflate(amt, amt, amt);
     }
 
-    public static AxisAlignedBB translate(AxisAlignedBB aabb, double x, double y, double z) {
+    public static AABB translate(AABB aabb, double x, double y, double z) {
         return aabb.move(x,y,z);
     }
 
-    public static AxisAlignedBB rotate (AxisAlignedBB aabb, Direction facing){
+    public static AABB rotate (AABB aabb, Direction facing){
         switch (facing){
             case UP:
                 return aabb;
             case DOWN:
-                return new AxisAlignedBB(aabb.minX, 1 - aabb.minY, aabb.minZ, aabb.maxX, 1 - aabb.maxY, aabb.maxZ);
+                return new AABB(aabb.minX, 1 - aabb.minY, aabb.minZ, aabb.maxX, 1 - aabb.maxY, aabb.maxZ);
             case EAST:
-                return new AxisAlignedBB(aabb.minY, 1 - aabb.minZ, 1 - aabb.minX, aabb.maxY, 1 - aabb.maxZ, 1 - aabb.maxX);
+                return new AABB(aabb.minY, 1 - aabb.minZ, 1 - aabb.minX, aabb.maxY, 1 - aabb.maxZ, 1 - aabb.maxX);
             case WEST:
-                return new AxisAlignedBB(1 - aabb.minY, 1 - aabb.minZ, aabb.minX, 1 - aabb.maxY, 1 - aabb.maxZ, aabb.maxX);
+                return new AABB(1 - aabb.minY, 1 - aabb.minZ, aabb.minX, 1 - aabb.maxY, 1 - aabb.maxZ, aabb.maxX);
             case NORTH:
-                return new AxisAlignedBB(1 - aabb.minX, 1 - aabb.minZ, 1 - aabb.minY, 1 - aabb.maxX, 1 - aabb.maxZ, 1 - aabb.maxY);
+                return new AABB(1 - aabb.minX, 1 - aabb.minZ, 1 - aabb.minY, 1 - aabb.maxX, 1 - aabb.maxZ, 1 - aabb.maxY);
             case SOUTH:
-                return new AxisAlignedBB(aabb.minX, 1 - aabb.minZ, aabb.minY, aabb.maxX, 1 - aabb.maxZ, aabb.maxY);
+                return new AABB(aabb.minX, 1 - aabb.minZ, aabb.minY, aabb.maxX, 1 - aabb.maxZ, aabb.maxY);
         }
         return aabb;
     }
@@ -51,10 +50,10 @@ public class AABBUtils {
     }
 
     public static VoxelShape rotate (VoxelShape shape, Direction facing){
-        VoxelShape out = VoxelShapes.empty();
-        for(AxisAlignedBB aabb : shape.toAabbs()){
+        VoxelShape out = Shapes.empty();
+        for(AABB aabb : shape.toAabbs()){
             aabb = rotate(aabb, facing);
-            out = VoxelShapes.or(out, Block.box(aabb.minX * 16, aabb.minY * 16, aabb.minZ * 16, aabb.maxX * 16, aabb.maxY * 16, aabb.maxZ * 16));
+            out = Shapes.or(out, Block.box(aabb.minX * 16, aabb.minY * 16, aabb.minZ * 16, aabb.maxX * 16, aabb.maxY * 16, aabb.maxZ * 16));
         }
         return out;
     }

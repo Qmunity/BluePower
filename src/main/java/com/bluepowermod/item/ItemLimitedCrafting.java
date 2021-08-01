@@ -24,6 +24,10 @@ import net.minecraft.item.ItemStack;
 
 import java.util.Random;
 
+import net.minecraft.world.item.Item.Properties;
+
+import ItemStack;
+
 public class ItemLimitedCrafting extends ItemBase {
     
     public ItemLimitedCrafting(String name, int uses) {

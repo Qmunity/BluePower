@@ -9,27 +9,27 @@ package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.lighting.BlockLamp;
 import com.bluepowermod.tile.tier1.TileLamp;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 @OnlyIn(Dist.CLIENT)
-public class RenderLamp extends TileEntityRenderer<TileLamp> {
+public class RenderLamp extends BlockEntityRenderer<TileLamp> {
 
 
-    RenderLamp(TileEntityRendererDispatcher dispatcher) {
+    RenderLamp(BlockEntityRenderDispatcher dispatcher) {
         super(dispatcher);
     }
 
     @Override
-    public void render(TileLamp te, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int partialTicks, int destroyStage) {
+    public void render(TileLamp te, float v, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int partialTicks, int destroyStage) {
         if (!(te.getBlockState().getBlock() instanceof BlockLamp)) //|| Loader.isModLoaded("albedo"))
             return;
 
@@ -44,17 +44,17 @@ public class RenderLamp extends TileEntityRenderer<TileLamp> {
             int g = (color & greenMask) >> 8;
             int b = (color & blueMask);
 
-            AxisAlignedBB box = stateLamp.getShape(te.getLevel(), te.getBlockPos()).bounds();
+            AABB box = stateLamp.getShape(te.getLevel(), te.getBlockPos()).bounds();
 
             //Define our base Glow
-            box = box.equals(new AxisAlignedBB(0,0,0,1,1,1)) ? box.inflate(0.05) : box.inflate(0.03125);
+            box = box.equals(new AABB(0,0,0,1,1,1)) ? box.inflate(0.05) : box.inflate(0.03125);
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
             //Remove overlapping Glow
-            if(stateLamp.getShape(te.getLevel(), te.getBlockPos()).bounds().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
+            if(stateLamp.getShape(te.getLevel(), te.getBlockPos()).bounds().equals(new AABB(0,0,0,1,1,1))) {
                 for (Direction face : Direction.values()) {
                     BlockState state = te.getLevel().getBlockState(te.getBlockPos().relative(face.getOpposite()));
-                    if (state.getBlock() instanceof BlockLamp && state.getShape(te.getLevel(), te.getBlockPos()).bounds().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
+                    if (state.getBlock() instanceof BlockLamp && state.getShape(te.getLevel(), te.getBlockPos()).bounds().equals(new AABB(0,0,0,1,1,1))) {
                         if (state.getValue(BlockLamp.POWER) > 0) {
                             renderFaces[face.get3DDataValue()] = false;
                             double offsetx = (face.getStepX() * 0.05) > 0 ? (face.getStepX() * 0.05) : 0;
@@ -63,7 +63,7 @@ public class RenderLamp extends TileEntityRenderer<TileLamp> {
                             double toffsetx = (face.getStepX() * 0.05) < 0 ? (face.getStepX() * 0.05) : 0;
                             double toffsety = (face.getStepY() * 0.05) < 0 ? (face.getStepY() * 0.05) : 0;
                             double toffsetz = (face.getStepZ() * 0.05) < 0 ? (face.getStepZ() * 0.05) : 0;
-                            box = new AxisAlignedBB(box.minX + offsetx, box.minY + offsety, box.minZ + offsetz, box.maxX + toffsetx, box.maxY + toffsety, box.maxZ + toffsetz);
+                            box = new AABB(box.minX + offsetx, box.minY + offsety, box.minZ + offsetz, box.maxX + toffsetx, box.maxY + toffsety, box.maxZ + toffsetz);
                         }
                     }
                 }

@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.helper;
 
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 public class DirectionHelper {
 

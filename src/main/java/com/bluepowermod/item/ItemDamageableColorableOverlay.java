@@ -9,9 +9,11 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.NonNullList;
+
+import net.minecraft.world.item.Item.Properties;
 
 /**
  * @author MineMaarten
@@ -27,7 +29,7 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
 
     public static int getUsesUsed(ItemStack stack) {
 
-        CompoundNBT tag = stack.getTag();
+        CompoundTag tag = stack.getTag();
         if (tag != null) {
             return tag.getInt("usesUsed");
         } else {
@@ -37,9 +39,9 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
 
     public static void setUsesUsed(ItemStack stack, int newUses) {
 
-        CompoundNBT tag = stack.getTag();
+        CompoundTag tag = stack.getTag();
         if (tag == null) {
-            tag = new CompoundNBT();
+            tag = new CompoundTag();
             stack.setTag(tag);
         }
         tag.putInt("usesUsed", newUses);

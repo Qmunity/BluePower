@@ -8,7 +8,7 @@
 package com.bluepowermod.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.math.vector.Matrix3f;
@@ -20,7 +20,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -272,7 +272,7 @@ public class RenderHelper {
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
-    public static void drawColoredCube(AxisAlignedBB vector) {
+    public static void drawColoredCube(AABB vector) {
 
         // Top side
         GL11.glColor3f(1.0F, 0.0F, 0.0F);
@@ -329,7 +329,7 @@ public class RenderHelper {
      * @author Koen Beckers (K4Unl) and Amadornes
      * @param vector
      */
-    public static void drawColoredCube(AxisAlignedBB vector, double r, double g, double b, double a, boolean... renderFaces) {
+    public static void drawColoredCube(AABB vector, double r, double g, double b, double a, boolean... renderFaces) {
 
         GL11.glColor4d(r, g, b, a);
 
@@ -396,7 +396,7 @@ public class RenderHelper {
      * @author Koen Beckers (K4Unl) and Amadornes
      * @param vector
      */
-    public static void drawColoredCube(AxisAlignedBB vector, IVertexBuilder vertexBuilder, MatrixStack matrixStack, int r, int g, int b, int a, int light, boolean... renderFaces) {
+    public static void drawColoredCube(AABB vector, VertexConsumer vertexBuilder, MatrixStack matrixStack, int r, int g, int b, int a, int light, boolean... renderFaces) {
         MatrixStack.Entry entry = matrixStack.last();
         Matrix4f positionMatrix = entry.pose();
         Matrix3f normalMatrix = entry.normal();
@@ -608,7 +608,7 @@ public class RenderHelper {
      * @param vector
      * @param color
      *//*
-    public static void drawTesselatedColoredCube(AxisAlignedBB vector, int r, int g, int b, int a) {
+    public static void drawTesselatedColoredCube(AABB vector, int r, int g, int b, int a) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
@@ -677,7 +677,7 @@ public class RenderHelper {
      * @author Koen Beckers (K4Unl)
      * @param vector
      *//*
-    public static void drawTesselatedColoredCube(AxisAlignedBB vector) {
+    public static void drawTesselatedColoredCube(AABB vector) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
@@ -748,7 +748,7 @@ public class RenderHelper {
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
-    public static void drawTesselatedTexturedCube(AxisAlignedBB vector) {
+    public static void drawTesselatedTexturedCube(AABB vector) {
 
         Tessellator t = Tessellator.getInstance();
         BufferBuilder b = t.getBuilder();
@@ -819,7 +819,7 @@ public class RenderHelper {
      * @author Koen Beckers (K4Unl)
      * @param vector
      *//*
-    public static void drawTesselatedCube(AxisAlignedBB vector) {
+    public static void drawTesselatedCube(AABB vector) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
@@ -884,7 +884,7 @@ public class RenderHelper {
      * @author ???
      * @param vector
      *//*
-    public static void drawTesselatedCubeWithoutNormals(AxisAlignedBB vector) {
+    public static void drawTesselatedCubeWithoutNormals(AABB vector) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;

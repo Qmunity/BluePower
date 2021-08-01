@@ -7,16 +7,16 @@
  */
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.tile.BPTileEntityType;
-import net.minecraft.tileentity.TileEntity;
+import com.bluepowermod.tile.BPBlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 /**
  * @author Koen Beckers (K4Unl) and Amadornes.
  */
-public class TileLamp extends TileEntity {
+public class TileLamp extends BlockEntity {
 
     public TileLamp() {
-        super(BPTileEntityType.LAMP);
+        super(BPBlockEntityType.LAMP);
     }
 
 /*

@@ -21,7 +21,7 @@ public class BundledDeviceCCComputer implements IBundledDevice {
 
     private static List<BundledDeviceCCComputer> list = new ArrayList<BundledDeviceCCComputer>();
 
-    public static BundledDeviceCCComputer getDeviceAt(World world, BlockPos pos) {
+    public static BundledDeviceCCComputer getDeviceAt(Level world, BlockPos pos) {
         for (BundledDeviceCCComputer c : list)
             if (c.loc.equals(pos))
                 return c;
@@ -36,7 +36,7 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     private byte[][] curPow = new byte[6][16];
     private BundledConnectionCache connections = RedstoneApi.getInstance().createBundledConnectionCache(this);
 
-    public BundledDeviceCCComputer(World world, BlockPos loc) {
+    public BundledDeviceCCComputer(Level world, BlockPos loc) {
         this.world = world;
         this.loc = loc;
     }

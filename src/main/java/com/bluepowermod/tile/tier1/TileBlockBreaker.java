@@ -17,7 +17,7 @@
 
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -33,7 +33,7 @@ import java.util.List;
 public class TileBlockBreaker extends TileMachineBase {
 
     public TileBlockBreaker() {
-        super(BPTileEntityType.BLOCKBREAKER);
+        super(BPBlockEntityType.BLOCKBREAKER);
     }
 
     @Override

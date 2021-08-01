@@ -7,13 +7,13 @@
  */
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import com.bluepowermod.container.slot.IPhantomSlot;
 
@@ -22,9 +22,9 @@ import javax.annotation.Nullable;
 /**
  * @author MineMaarten
  */
-public abstract class ContainerGhosts extends Container {
+public abstract class ContainerGhosts extends AbstractContainerMenu {
 
-    protected ContainerGhosts(@Nullable ContainerType<?> p_i50105_1_, int p_i50105_2_) {
+    protected ContainerGhosts(@Nullable MenuType<?> p_i50105_1_, int p_i50105_2_) {
         super(p_i50105_1_, p_i50105_2_);
     }
 
@@ -33,7 +33,7 @@ public abstract class ContainerGhosts extends Container {
      * @author CovertJaguar <http://www.railcraft.info>
      */
     @Override
-    public ItemStack clicked(int slotNum, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public ItemStack clicked(int slotNum, int dragType, ClickType clickTypeIn, Player player) {
         Slot slot = slotNum < 0 ? null : (Slot) slots.get(slotNum);
         if (slot instanceof IPhantomSlot) { return clickedPhantom(slot, dragType, clickTypeIn,  player); }
         return super.clicked(slotNum, dragType, clickTypeIn, player);
@@ -43,7 +43,7 @@ public abstract class ContainerGhosts extends Container {
      * This method is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
      * @author CovertJaguar <http://www.railcraft.info>
      */
-    private ItemStack clickedPhantom(Slot slot, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    private ItemStack clickedPhantom(Slot slot, int dragType, ClickType clickTypeIn, Player player) {
     
         ItemStack stack = ItemStack.EMPTY;
         

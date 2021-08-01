@@ -29,12 +29,15 @@ import net.minecraft.entity.projectile.WitherSkullEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Component;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.*;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockStoneOre extends Block {
 
@@ -62,7 +65,7 @@ public class BlockStoneOre extends Block {
     }
     
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (witherproof) {
             tooltip.add(new StringTextComponent(MinecraftColor.RED.getChatColor() + "Witherproof"));
@@ -70,7 +73,7 @@ public class BlockStoneOre extends Block {
     }
 
     @Override
-    public boolean canEntityDestroy(BlockState state, IBlockReader world, BlockPos pos, Entity entity) {
+    public boolean canEntityDestroy(BlockState state, BlockGetter world, BlockPos pos, Entity entity) {
         if (witherproof)
             return !(entity instanceof WitherEntity) && !(entity instanceof WitherSkullEntity) && super.canEntityDestroy(state, world, pos, entity);
 
@@ -78,7 +81,7 @@ public class BlockStoneOre extends Block {
     }
 
     @Override
-    public void wasExploded(World worldIn, BlockPos pos, Explosion explosionIn) {
+    public void wasExploded(Level worldIn, BlockPos pos, Explosion explosionIn) {
         if (!witherproof)
             super.wasExploded(worldIn, pos, explosionIn);
     }

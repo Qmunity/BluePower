@@ -39,7 +39,10 @@ import net.minecraft.world.World;
 
 import java.util.Set;
 
-public class ItemSickle extends ToolItem {
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.Item;
+
+public class ItemSickle extends DiggerItem {
 
     private Item customCraftingMaterial;
 
@@ -68,7 +71,7 @@ public class ItemSickle extends ToolItem {
         boolean used = false;
 
         if (!(entityLiving instanceof PlayerEntity)) return false;
-        PlayerEntity player = (PlayerEntity) entityLiving;
+        Player player = (PlayerEntity) entityLiving;
 
         if (state.getBlock().getTags().contains(new ResourceLocation("minecraft:leaves")) || state.getBlock() instanceof  LeavesBlock) {
             for (int i = -1; i <= 1; i++) {

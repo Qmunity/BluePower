@@ -7,18 +7,18 @@
  */
 package com.bluepowermod.client.gui;
 
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerCPU;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
-public class GuiCPU extends GuiContainerBaseBP<ContainerCPU> implements IHasContainer<ContainerCPU> {
+public class GuiCPU extends GuiContainerBaseBP<ContainerCPU> implements MenuAccess<ContainerCPU> {
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/cpugui.png");
 
-    public GuiCPU(ContainerCPU container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiCPU(ContainerCPU container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
     }
 

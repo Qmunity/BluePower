@@ -19,7 +19,7 @@ package com.bluepowermod.init;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;

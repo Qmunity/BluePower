@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 /**
- * Fields marked with this annotation in a TileEntity class will be automatically synced to any players within 64 blocks of this TileEntity.
+ * Fields marked with this annotation in a BlockEntity class will be automatically synced to any players within 64 blocks of this BlockEntity.
  * Supported field types are int, float, double, boolean, String, int[], float[], double[], boolean[] and String[].
  * 
  * @author MineMaarten

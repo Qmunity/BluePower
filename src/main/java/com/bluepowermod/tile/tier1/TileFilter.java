@@ -17,16 +17,16 @@ import com.bluepowermod.reference.Refs;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.core.NonNullList;
+import net.minecraft.util.text.Component;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * @author MineMaarten
  */
-public class TileFilter extends TileTransposer implements ISidedInventory, IGuiButtonSensitive, INamedContainerProvider {
+public class TileFilter extends TileTransposer implements WorldlyContainer, IGuiButtonSensitive, MenuProvider {
 
     public static final int SLOTS = 9;
     protected final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
@@ -75,7 +75,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     @Override
     protected void pullItem() {
             Direction dir = getOutputDirection().getOpposite();
-            TileEntity tile = getTileCache(dir);
+            BlockEntity tile = getTileCache(dir);
             Direction direction = dir.getOpposite();
             boolean everythingNull = true;
             for (ItemStack filterStack : inventory) {
@@ -100,11 +100,11 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundNBT tCompound) {
+    public void load(BlockState blockState, CompoundTag tCompound) {
         super.load(blockState, tCompound);
 
         for (int i = 0; i < 9; i++) {
-            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            CompoundTag tc = tCompound.getCompound("inventory" + i);
             inventory.set(i, new ItemStack((IItemProvider) tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
@@ -115,12 +115,12 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT save(CompoundNBT tCompound) {
+    public CompoundTag save(CompoundTag tCompound) {
 
         super.save(tCompound);
 
         for (int i = 0; i < 9; i++) {
-                CompoundNBT tc = new CompoundNBT();
+                CompoundTag tc = new CompoundTag();
                 inventory.get(i).save(tc);
                 tCompound.put("inventory" + i, tc);
         }
@@ -181,17 +181,17 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 
@@ -259,7 +259,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public void onButtonPress(PlayerEntity player, int messageId, int value) {
+    public void onButtonPress(Player player, int messageId, int value) {
         if (messageId == 0)
             filterColor = TubeColor.values()[value];
         if (messageId == 1)
@@ -267,13 +267,13 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return new StringTextComponent(Refs.FILTER_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player playerEntity) {
         return new ContainerFilter(id, inventory, this);
     }
 }

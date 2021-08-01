@@ -8,14 +8,15 @@
 
 package com.bluepowermod.tile;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
@@ -28,14 +29,14 @@ import javax.annotation.Nonnull;
 /**
  * @author MoreThanHidden
  */
-public class TileBPMicroblock extends TileEntity {
+public class TileBPMicroblock extends BlockEntity {
 
     public static final ModelProperty<Pair<Block, Integer>> PROPERTY_INFO = new ModelProperty<>();
     private Block block = Blocks.STONE;
     private Integer rotation = 0;
 
-    public TileBPMicroblock(){
-        super(BPTileEntityType.MICROBLOCK);
+    public TileBPMicroblock(BlockPos pos, BlockState state){
+        super(BPBlockEntityType.MICROBLOCK, pos, state);
     }
 
     @Nonnull
@@ -63,7 +64,7 @@ public class TileBPMicroblock extends TileEntity {
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.putString("block", block.getRegistryName().toString());
         compound.putInt("rotation", rotation);
@@ -71,37 +72,38 @@ public class TileBPMicroblock extends TileEntity {
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound) {
-       super.load(state, compound);
+    public void load(CompoundTag compound) {
+       super.load(compound);
        block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("block")));
        rotation = compound.getInt("block");
     }
 
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT updateTag = super.getUpdateTag();
+    public CompoundTag getUpdateTag() {
+        CompoundTag updateTag = super.getUpdateTag();
         save(updateTag);
         return updateTag;
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT nbtTag = new CompoundNBT();
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        CompoundTag nbtTag = new CompoundTag();
         save(nbtTag);
-        return new SUpdateTileEntityPacket(getBlockPos(), 1, nbtTag);
+        return new ClientboundBlockEntityDataPacket(getBlockPos(), 1, nbtTag);
     }
 
+    
     @Override
-    public void onDataPacket(NetworkManager networkManager, SUpdateTileEntityPacket packet) {
+    public void onDataPacket(Connection networkManager, ClientboundBlockEntityDataPacket packet) {
         Block oldblock = getBlock();
-        CompoundNBT tagCompound = packet.getTag();
+        CompoundTag tagCompound = packet.getTag();
         super.onDataPacket(networkManager, packet);
-        load(getBlockState(), tagCompound);
+        load(tagCompound);
         if (level.isClientSide) {
             // Update if needed
             if (!getBlock().equals(oldblock)) {
-                level.blockEntityChanged(getBlockPos(), this.getTileEntity());
+                level.blockEntityChanged(getBlockPos());
             }
         }
     }

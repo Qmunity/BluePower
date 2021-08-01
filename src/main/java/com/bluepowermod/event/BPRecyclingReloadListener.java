@@ -9,19 +9,17 @@ package com.bluepowermod.event;
 
 import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import com.bluepowermod.util.DatapackUtils;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.resources.DataPackRegistries;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.resources.IResourceManagerReloadListener;
+import net.minecraft.server.ServerResources;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.storage.FolderName;
+import net.minecraft.world.item.crafting.RecipeManager;
 
-public class BPRecyclingReloadListener implements IResourceManagerReloadListener {
-    private final DataPackRegistries registries;
+public class BPRecyclingReloadListener implements ResourceManagerReloadListener {
+    private final ServerResources registries;
     public static MinecraftServer server;
 
-    public BPRecyclingReloadListener(DataPackRegistries registries){
+    public BPRecyclingReloadListener(ServerResources registries){
         this.registries = registries;
     }
 
@@ -29,7 +27,7 @@ public class BPRecyclingReloadListener implements IResourceManagerReloadListener
      * Generates the Dynamic Recycling recipes on a reload.
      */
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
+    public void onResourceManagerReload(ResourceManager resourceManager) {
         onResourceManagerReload(registries.getRecipeManager());
     }
 

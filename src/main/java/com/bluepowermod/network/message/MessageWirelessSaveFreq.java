@@ -3,7 +3,7 @@ package com.bluepowermod.network.message;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import com.bluepowermod.api.misc.Accessibility;
 
 public class MessageWirelessSaveFreq{
@@ -23,13 +23,13 @@ public class MessageWirelessSaveFreq{
 
     }
 
-    public void handleClientSide(PlayerEntity player) {
+    public void handleClientSide(Player player) {
 
     }
 
-    public void handleServerSide(PlayerEntity player) {
+    public void handleServerSide(Player player) {
 
-        //BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (ServerPlayerEntity) player);
+        //BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (ServerPlayer) player);
     }
 
     public void write(DataOutput buffer) throws IOException {

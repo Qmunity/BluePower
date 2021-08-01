@@ -11,13 +11,12 @@ import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.helper.EnergyHelper;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -37,7 +36,7 @@ public class TileThermopile extends TileMachineBase  {
 	private LazyOptional<IPowerBase> blutricityCap;
 
 	public TileThermopile() {
-		super(BPTileEntityType.THERMOPILE);
+		super(BPBlockEntityType.THERMOPILE);
 	}
 
 	@Nonnull
@@ -61,7 +60,7 @@ public class TileThermopile extends TileMachineBase  {
 
 			//Balance power of attached blulectric blocks.
 			for (Direction facing : Direction.values()) {
-				TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
+				BlockEntity tile = level.getBlockEntity(worldPosition.relative(facing));
 				if (tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).isPresent()) {
 					IPowerBase exStorage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).orElse(null);
 					EnergyHelper.balancePower(exStorage, storage);
@@ -71,7 +70,7 @@ public class TileThermopile extends TileMachineBase  {
 	}
 
 	@Override
-	protected void readFromPacketNBT(CompoundNBT tCompound) {
+	protected void readFromPacketNBT(CompoundTag tCompound) {
 		super.readFromPacketNBT(tCompound);
 		if(tCompound.contains("energy")) {
 			INBT nbtstorage = tCompound.get("energy");
@@ -80,7 +79,7 @@ public class TileThermopile extends TileMachineBase  {
 	}
 
 	@Override
-	protected void writeToPacketNBT(CompoundNBT tCompound) {
+	protected void writeToPacketNBT(CompoundTag tCompound) {
 		super.writeToPacketNBT(tCompound);
 		INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
 		tCompound.put("energy", nbtstorage);

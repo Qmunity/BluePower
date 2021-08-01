@@ -26,10 +26,10 @@ import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier1.TileFilter;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -39,13 +39,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @author MineMaarten
  */
-public class ContainerFilter extends Container {
+public class ContainerFilter extends AbstractContainerMenu {
 
-    private final IInventory filter;
+    private final Container filter;
     public TubeColor filterColor = TubeColor.BLACK;
     public int fuzzySetting = -1;
 
-    public ContainerFilter(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+    public ContainerFilter(int windowId, Inventory invPlayer, Container inventory) {
         super(BPContainerType.FILTER, windowId);
         this.filter = inventory;
 
@@ -61,7 +61,7 @@ public class ContainerFilter extends Container {
         this( id, player, new Inventory( TileFilter.SLOTS ));
     }
 
-    public ContainerFilter(ContainerType containerType, int id, IInventory inventory){
+    public ContainerFilter(ContainerType containerType, int id, Container inventory){
         super(containerType, id);
         this.filter = inventory;
     }
@@ -96,13 +96,13 @@ public class ContainerFilter extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return filter.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) slots.get(par2);

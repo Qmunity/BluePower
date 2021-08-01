@@ -18,22 +18,22 @@
 package com.bluepowermod.compat.waila;
 
 import mcp.mobius.waila.api.IServerDataProvider;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.entity.player.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.world.World;
 
-public class WailaProviderParts implements IServerDataProvider<TileEntity>{
+public class WailaProviderParts implements IServerDataProvider<BlockEntity>{
 
     @Override
-    public void appendServerData(CompoundNBT compoundNBT, ServerPlayerEntity serverPlayerEntity, World world, TileEntity tileEntity) {
+    public void appendServerData(CompoundTag CompoundTag, ServerPlayer serverPlayerEntity, World world, BlockEntity tileEntity) {
         // ITilePartHolder h = MultipartCompatibility.getPartHolder(data.getLevel(), data.getPosition().blockX, data.getPosition().blockY,
         // data.getPosition().blockZ);
         //
         // if (h == null)
         // return l;
         //
-        // QRayTraceResult mop = h.rayTrace(RayTracer.instance().getStartVector(data.getPlayer()),
+        // QHitResult mop = h.rayTrace(RayTracer.instance().getStartVector(data.getPlayer()),
         // RayTracer.instance().getEndVector(data.getPlayer()));
         // if (mop != null && mop.getPart() != null && mop.getPart() instanceof IPartWAILAProvider) {
         // if (mop.hitVec.distanceTo(data.getPosition().hitVec) < 0.01)

@@ -18,9 +18,9 @@
 package com.bluepowermod.util;
 
 import com.bluepowermod.compat.CompatibilityUtils;
-import net.minecraft.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 
 /**
  *

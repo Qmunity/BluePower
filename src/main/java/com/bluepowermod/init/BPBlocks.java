@@ -51,6 +51,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BushBlock;
+
 @Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BPBlocks {
 

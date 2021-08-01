@@ -17,10 +17,10 @@
 
 package com.bluepowermod.reference;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.util.math.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.Shapes;
 
 public class Refs {
 

@@ -9,22 +9,22 @@ package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.init.BPBlocks;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 
 import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -39,19 +39,19 @@ import java.util.Random;
  *
  */
 @OnlyIn(Dist.CLIENT)
-public class RenderEngine extends TileEntityRenderer<TileEngine> {
+public class RenderEngine extends BlockEntityRenderer<TileEngine> {
 
     float rotateAmount  = 0F;
 
-    RenderEngine(TileEntityRendererDispatcher dispatcher) {
+    RenderEngine(BlockEntityRenderDispatcher dispatcher) {
         super(dispatcher);
     }
 
 
     @Override
-    public void render(TileEngine engine, float f, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
+    public void render(TileEngine engine, float f, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int i, int i1) {
 
-        World world = engine.getLevel();
+        Level world = engine.getLevel();
         BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
         BlockPos pos = engine.getBlockPos();
         BlockState state = BPBlocks.engine.defaultBlockState().setValue(BlockEngine.FACING, engine.getOrientation());
@@ -98,7 +98,7 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
 
         IBakedModel glider = dispatcher.getBlockModel(state.setValue(BlockEngine.GLIDER, true));
         //Render the glider
-        IVertexBuilder builder = iRenderTypeBuffer.getBuffer(RenderType.cutout());
+        VertexConsumer builder = iRenderTypeBuffer.getBuffer(RenderType.cutout());
         dispatcher.getModelRenderer().renderModel(world, glider, state.setValue(BlockEngine.GLIDER, true), pos, matrixStack, builder, false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
         matrixStack.popPose();

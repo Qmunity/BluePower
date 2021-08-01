@@ -24,10 +24,10 @@ import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -38,9 +38,9 @@ import java.util.Arrays;
 /**
  * @author MineMaarten
  */
-public class ContainerSortingMachine extends Container {
+public class ContainerSortingMachine extends AbstractContainerMenu {
 
-    private final IInventory inventory;
+    private final Container inventory;
 
     public TileSortingMachine.PullMode pullMode = TileSortingMachine.PullMode.AUTOMATIC;
     public TileSortingMachine.SortMode sortMode = TileSortingMachine.SortMode.ANY_ITEM;
@@ -48,7 +48,7 @@ public class ContainerSortingMachine extends Container {
     public final TubeColor[] colors = new TubeColor[9];
     public final int[] fuzzySettings = new int[8];
 
-    public ContainerSortingMachine(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+    public ContainerSortingMachine(int windowId, Inventory invPlayer, Container inventory) {
         super(BPContainerType.SORTING_MACHINE, windowId);
         this.inventory = inventory;
         for (int i = 0; i < 5; i++) {
@@ -83,7 +83,7 @@ public class ContainerSortingMachine extends Container {
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity par1EntityPlayer, int par2) {
+    public ItemStack quickMoveStack(Player par1EntityPlayer, int par2) {
         return ItemStack.EMPTY;
     }
 
@@ -117,7 +117,7 @@ public class ContainerSortingMachine extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity entityplayer) {
+    public boolean stillValid(Player entityplayer) {
         return inventory.stillValid(entityplayer);
     }
 

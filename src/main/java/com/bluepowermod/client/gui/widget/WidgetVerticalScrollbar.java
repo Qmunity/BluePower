@@ -4,7 +4,7 @@ import com.bluepowermod.reference.Refs;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import org.lwjgl.opengl.GL11;
 
 public class WidgetVerticalScrollbar extends BaseWidget {
@@ -42,7 +42,7 @@ public class WidgetVerticalScrollbar extends BaseWidget {
     public int getState() {
         float scroll = currentScroll;
         scroll += 0.5F / states;
-        return MathHelper.clamp((int) (scroll * states), 0, states);
+        return Mth.clamp((int) (scroll * states), 0, states);
     }
 
     @Override

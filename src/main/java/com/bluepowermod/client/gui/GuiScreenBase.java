@@ -8,11 +8,13 @@
 package com.bluepowermod.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import ResourceLocation;
 
 /**
  *
@@ -24,7 +26,7 @@ public abstract class GuiScreenBase extends Screen {
 
     protected int guiLeft, guiTop, xSize, ySize;
 
-    public GuiScreenBase(int xSize, int ySize, ITextComponent name) {
+    public GuiScreenBase(int xSize, int ySize, Component name) {
         super(name);
 
         this.xSize = xSize;

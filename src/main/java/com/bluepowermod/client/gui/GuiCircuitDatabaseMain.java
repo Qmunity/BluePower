@@ -13,26 +13,26 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.List;
 
-public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitDatabaseMain> implements IHasContainer<ContainerCircuitDatabaseMain> {
+public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitDatabaseMain> implements MenuAccess<ContainerCircuitDatabaseMain> {
 
     private final ContainerCircuitDatabaseMain circuitDatabase;
     private static final ResourceLocation copyTabTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_database.png");
-    private TextFieldWidget nameField;
+    private EditBox nameField;
     private WidgetSidewaysTab shareOptionTab;
     private WidgetMode copyButton;
 
-    public GuiCircuitDatabaseMain(ContainerCircuitDatabaseMain container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiCircuitDatabaseMain(ContainerCircuitDatabaseMain container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, copyTabTexture);
         this.circuitDatabase = container;
         imageHeight = 224;

@@ -13,14 +13,14 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.helper.EnergyHelper;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.network.Connection;
+import net.minecraft.network.play.server.ClientboundBlockEntityDataPacket;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -38,7 +38,7 @@ public class TileBattery extends TileMachineBase {
     private LazyOptional<IPowerBase> blutricityCap;
 
     public TileBattery() {
-        super(BPTileEntityType.BATTERY);
+        super(BPBlockEntityType.BATTERY);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class TileBattery extends TileMachineBase {
 
             //Balance power of attached blulectric blocks.
             for (Direction facing : Direction.values()) {
-                TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
+                BlockEntity tile = level.getBlockEntity(worldPosition.relative(facing));
                 if (tile != null)
                     tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
                             exStorage -> EnergyHelper.balancePower(exStorage, storage));
@@ -86,7 +86,7 @@ public class TileBattery extends TileMachineBase {
     }
 
     @Override
-    protected void readFromPacketNBT(CompoundNBT tCompound) {
+    protected void readFromPacketNBT(CompoundTag tCompound) {
         super.readFromPacketNBT(tCompound);
         if(tCompound.contains("energy")) {
         INBT nbtstorage = tCompound.get("energy");
@@ -95,19 +95,19 @@ public class TileBattery extends TileMachineBase {
     }
 
     @Override
-    protected void writeToPacketNBT(CompoundNBT tCompound) {
+    protected void writeToPacketNBT(CompoundTag tCompound) {
         super.writeToPacketNBT(tCompound);
             INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
             tCompound.put("energy", nbtstorage);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        return this.save(new CompoundTag());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         super.onDataPacket(net, pkt);
         handleUpdateTag(getBlockState(), pkt.getTag());
     }

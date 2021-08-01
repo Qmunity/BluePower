@@ -24,7 +24,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.BlockGetter;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
@@ -63,7 +63,7 @@ public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
     }
 
     @Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+    public int getLightValue(BlockState state, BlockGetter world, BlockPos pos) {
         return state.getValue(ACTIVE) ? 13 : 0;
     }
 

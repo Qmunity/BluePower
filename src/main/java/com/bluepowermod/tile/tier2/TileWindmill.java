@@ -7,17 +7,16 @@
  */
 package com.bluepowermod.tile.tier2;
 
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.client.renderer.texture.ITickable;
+import net.minecraft.client.renderer.texture.Tickable;
 
-public class TileWindmill extends TileBase implements ITickable {
+public class TileWindmill extends TileBase implements Tickable {
 
 	
 	public int turbineTick;
 	public TileWindmill(){
-		super(BPTileEntityType.WINDMILL);
-
+		super(BPBlockEntityType.WINDMILL);
 		turbineTick = 0;
 	}
 

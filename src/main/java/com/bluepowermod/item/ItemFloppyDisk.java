@@ -20,18 +20,20 @@ package com.bluepowermod.item;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.text.Component;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemFloppyDisk extends ItemBase implements IItemColor{
+import net.minecraft.world.item.Item.Properties;
+
+public class ItemFloppyDisk extends ItemBase implements ItemColor{
 
     public ItemFloppyDisk(String name) {
         super(new Properties());
@@ -40,14 +42,14 @@ public class ItemFloppyDisk extends ItemBase implements IItemColor{
     }
 
     public static void finaliseDisk(ItemStack itemStack, String name, MinecraftColor color){
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         nbt.putInt("color", color.getHex());
         nbt.putString("name", name);
         itemStack.setTag(nbt);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         if(stack.getTag() != null && stack.getTag().contains("name")) {
             tooltip.add(new StringTextComponent(stack.getTag().getString("name")));
         }

@@ -1,23 +1,23 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.tile.BPTileEntityType;
-import net.minecraft.nbt.CompoundNBT;
+import com.bluepowermod.tile.BPBlockEntityType;
+import net.minecraft.nbt.CompoundTag;
 
 public class TileInsulatedWire extends TileWire {
     private MinecraftColor color = MinecraftColor.ANY;
 
     public TileInsulatedWire() {
-        super(BPTileEntityType.INSULATEDWIRE);
+        super(BPBlockEntityType.INSULATEDWIRE);
     }
 
     @Override
-    protected void readFromPacketNBT(CompoundNBT compound) {
+    protected void readFromPacketNBT(CompoundTag compound) {
         super.readFromPacketNBT(compound);
     }
 
     @Override
-    protected void writeToPacketNBT(CompoundNBT tCompound) {
+    protected void writeToPacketNBT(CompoundTag tCompound) {
         super.writeToPacketNBT(tCompound);
     }
 

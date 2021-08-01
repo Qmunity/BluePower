@@ -10,7 +10,7 @@ package com.bluepowermod.helper;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageDebugBlock;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -25,11 +25,11 @@ public class Debugger {
 
     private static Random rand = new Random();
 
-    public static void indicateBlock(TileEntity te) {
+    public static void indicateBlock(BlockEntity te) {
 
         indicateBlock(te.getLevel(), te.getBlockPos());
     }
-    public static void indicateBlock(World world, BlockPos pos) {
+    public static void indicateBlock(Level world, BlockPos pos) {
 
         if (world != null) {
             if (world.isClientSide) {

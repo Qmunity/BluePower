@@ -17,9 +17,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 
 import javax.annotation.Nullable;
 
@@ -40,7 +40,7 @@ public class BlockBattery extends BlockContainerBase {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        TileEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
+        BlockEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
         if(tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()) {
             IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null);
             double voltage = storage.getVoltage();
@@ -51,7 +51,7 @@ public class BlockBattery extends BlockContainerBase {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(LEVEL);
     }
 

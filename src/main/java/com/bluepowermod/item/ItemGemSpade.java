@@ -20,9 +20,11 @@ package com.bluepowermod.item;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import net.minecraft.item.*;
-import net.minecraft.item.ShovelItem;
+import net.minecraft.world.item.ShovelItem;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.item.Items;
+
+import net.minecraft.world.item.Item;
 
 public class ItemGemSpade extends ShovelItem {
 

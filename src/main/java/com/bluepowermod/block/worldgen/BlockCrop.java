@@ -21,26 +21,31 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.*;
-import net.minecraft.block.CropsBlock;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.RenderShape;
 import net.minecraft.loot.LootContext;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.util.math.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.BlockGetter;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import java.util.List;
 import java.util.Random;
 
-public class BlockCrop extends CropsBlock implements IGrowable {
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
+public class BlockCrop extends CropBlock implements BonemealableBlock {
     private static final VoxelShape[] SHAPES = new VoxelShape[]{
             Block.box(0.0D, -1.0D, 0.0D, 16.0D, 2.0D, 16.0D),
             Block.box(0.0D, -1.0D, 0.0D, 16.0D, 4.0D, 16.0D),
@@ -58,7 +63,7 @@ public class BlockCrop extends CropsBlock implements IGrowable {
     }
 
     @Override
-    public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
         if (state.getBlock() instanceof BlockCrop) {
             if (isMaxAge(state) && world.getBlockState(pos.below()).getBlock() == this) {
                 world.setBlock(pos.below(), getStateForAge(4), 2);
@@ -99,8 +104,8 @@ public class BlockCrop extends CropsBlock implements IGrowable {
      * The type of render function that is called for this block
      */
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -112,7 +117,7 @@ public class BlockCrop extends CropsBlock implements IGrowable {
      * boolean canFertilise
      */
     @Override
-    public boolean isBonemealSuccess(World world, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level world, Random rand, BlockPos pos, BlockState state) {
         return !isMaxAge(state);
     }
 
@@ -121,7 +126,7 @@ public class BlockCrop extends CropsBlock implements IGrowable {
      * @param world
      */
     @Override
-    public void growCrops(World world, BlockPos pos, BlockState state) {
+    public void growCrops(Level world, BlockPos pos, BlockState state) {
         int age = this.getAge(state);
         if (world.isEmptyBlock(pos.above()) && (age < 7) && !(world.getBlockState(pos.below()).getBlock() instanceof BlockCrop)) {
             age = age + MathHelper.nextInt(world.random, 2, 5);
@@ -160,7 +165,7 @@ public class BlockCrop extends CropsBlock implements IGrowable {
         return getAge(state) == 7;
     }
 
-    public VoxelShape getShape(BlockState state, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter blockReader, BlockPos pos, CollisionContext context) {
         return SHAPES[state.getValue(this.getAgeProperty())];
     }
 

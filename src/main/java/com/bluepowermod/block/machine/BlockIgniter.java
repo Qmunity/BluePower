@@ -24,7 +24,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.BlockGetter;
 import net.minecraft.world.IWorldReader;
 
 public class BlockIgniter extends BlockContainerFacingBase {
@@ -43,7 +43,7 @@ public class BlockIgniter extends BlockContainerFacingBase {
     }
 
     @Override
-    public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
         return false;
     }
 }

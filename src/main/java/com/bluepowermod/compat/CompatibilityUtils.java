@@ -12,7 +12,7 @@ package com.bluepowermod.compat;
 //import com.bluepowermod.compat.mcmp.CompatModuleMCMP;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
 import com.bluepowermod.util.Dependencies;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModList;

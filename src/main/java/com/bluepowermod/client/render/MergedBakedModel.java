@@ -9,10 +9,10 @@
 package com.bluepowermod.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.SimpleModelTransform;
 
@@ -21,14 +21,19 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+
+import IBakedModel;
+
 /**
  * Combines baked models into one.
  * @author MoreThanHidden
  */
-public class MergedBakedModel implements IBakedModel {
-    private final List<IBakedModel> bakedModels;
+public class MergedBakedModel implements BakedModel {
+    private final List<BakedModel> bakedModels;
 
-    public MergedBakedModel(List<IBakedModel> bakedModels){
+    public MergedBakedModel(List<BakedModel> bakedModels){
         this.bakedModels = bakedModels;
     }
 

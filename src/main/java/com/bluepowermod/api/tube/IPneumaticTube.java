@@ -7,8 +7,8 @@
  */
 package com.bluepowermod.api.tube;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
 
 /**
  * This interface is implemented by the Pneumatic Tube's logic. you can get the tube from a block by doing 

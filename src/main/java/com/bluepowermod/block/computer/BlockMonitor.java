@@ -12,7 +12,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileMonitor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.server.ServerWorld;
@@ -29,7 +29,7 @@ public class BlockMonitor extends BlockContainerBase {
 
     @Override
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof TileMonitor) {
             // ((TileCPU)tileEntity).updateEntity();
             // Logs.log(Level.INFO, "[BluePowerControl] CPU TE ticked");

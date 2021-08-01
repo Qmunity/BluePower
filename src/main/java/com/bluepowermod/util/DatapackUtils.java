@@ -5,8 +5,8 @@ import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

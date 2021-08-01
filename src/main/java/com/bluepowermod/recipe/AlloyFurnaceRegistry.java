@@ -29,22 +29,18 @@ import com.bluepowermod.util.ItemStackUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.*;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.storage.FolderName;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.*;
+
+import net.minecraft.world.item.crafting.RecipeType;
 
 /**
  *
@@ -54,7 +50,7 @@ import java.util.*;
 public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
     private static AlloyFurnaceRegistry INSTANCE = new AlloyFurnaceRegistry();
-    public static final IRecipeType ALLOYFURNACE_RECIPE = IRecipeType.<IAlloyFurnaceRecipe>register("bluepower:alloy_smelting");
+    public static final RecipeType ALLOYFURNACE_RECIPE = RecipeType.<IAlloyFurnaceRecipe>register("bluepower:alloy_smelting");
 
     private List<IAlloyFurnaceRecipe> alloyFurnaceRecipes = new ArrayList<IAlloyFurnaceRecipe>();
     private List<ItemStack> bufferedRecyclingItems = new ArrayList<ItemStack>();
@@ -236,7 +232,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         }
 
         @Override
-        public boolean matches(ISidedInventory inv, World worldIn){
+        public boolean matches(WorldlyContainer inv, World worldIn){
             NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
             if(inv instanceof TileAlloyFurnace) {
                 //Get Input Slots first 2 are Fuel and Output
@@ -253,7 +249,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         }
 
         @Override
-        public ItemStack assemble(ISidedInventory inv) {
+        public ItemStack assemble(WorldlyContainer inv) {
             NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
             if(inv instanceof TileAlloyFurnace) {
                 //Get Input Slots first 2 are Fuel and Output

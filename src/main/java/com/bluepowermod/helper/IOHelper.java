@@ -7,16 +7,16 @@
  */
 package com.bluepowermod.helper;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.Container;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
@@ -27,13 +27,13 @@ import com.bluepowermod.api.tube.ITubeConnection;
  */
 public class IOHelper {
 
-    public static IInventory getInventoryForTE(TileEntity te) {
+    public static Container getInventoryForTE(BlockEntity te) {
 
-        if (te instanceof IInventory) {
-            IInventory inv = (IInventory) te;
+        if (te instanceof Container) {
+            Container inv = (Container) te;
             BlockState block = te.getBlockState();
             if (block.getBlock() instanceof ChestBlock) {
-                inv = (IInventory) ((ChestBlock) block.getBlock()).getMenuProvider(block, te.getLevel(), te.getBlockPos());
+                inv = (Container) ((ChestBlock) block.getBlock()).getMenuProvider(block, te.getLevel(), te.getBlockPos());
             }
             return inv;
         } else {
@@ -41,18 +41,18 @@ public class IOHelper {
         }
     }
 
-    public static ItemStack extract(TileEntity inventory, Direction direction, boolean simulate) {
+    public static ItemStack extract(BlockEntity inventory, Direction direction, boolean simulate) {
 
-        IInventory inv = getInventoryForTE(inventory);
+        Container inv = getInventoryForTE(inventory);
         if (inv != null)
             return extract(inv, direction, simulate);
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack extract(IInventory inventory, Direction direction, boolean simulate) {
+    public static ItemStack extract(Container inventory, Direction direction, boolean simulate) {
 
-        if (inventory instanceof ISidedInventory) {
-            ISidedInventory isidedinventory = (ISidedInventory) inventory;
+        if (inventory instanceof WorldlyContainer) {
+            WorldlyContainer isidedinventory = (WorldlyContainer) inventory;
             int[] accessibleSlotsFromSide = isidedinventory.getSlotsForFace(direction);
 
             for (int anAccessibleSlotsFromSide : accessibleSlotsFromSide) {
@@ -72,7 +72,7 @@ public class IOHelper {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack extract(IInventory inventory, Direction direction, int slot, boolean simulate) {
+    public static ItemStack extract(Container inventory, Direction direction, int slot, boolean simulate) {
 
         ItemStack itemstack = inventory.getItem(slot);
 
@@ -84,17 +84,17 @@ public class IOHelper {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack extract(TileEntity tile, Direction direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
+    public static ItemStack extract(BlockEntity tile, Direction direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
 
         return extract(tile, direction, requestedStack, useItemCount, simulate, 0);
     }
 
-    public static int[] getAccessibleSlotsForInventory(IInventory inv, Direction side) {
+    public static int[] getAccessibleSlotsForInventory(Container inv, Direction side) {
 
         int[] accessibleSlots;
         if (inv != null) {
-            if (inv instanceof ISidedInventory) {
-                accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(side);
+            if (inv instanceof WorldlyContainer) {
+                accessibleSlots = ((WorldlyContainer) inv).getSlotsForFace(side);
             } else {
                 accessibleSlots = new int[inv.getContainerSize()];
                 for (int i = 0; i < accessibleSlots.length; i++)
@@ -106,9 +106,9 @@ public class IOHelper {
         }
     }
 
-    public static int getItemCount(ItemStack type, TileEntity inv, Direction side, int fuzzySetting) {
+    public static int getItemCount(ItemStack type, BlockEntity inv, Direction side, int fuzzySetting) {
 
-        IInventory inventory = getInventoryForTE(inv);
+        Container inventory = getInventoryForTE(inv);
         int[] slots = getAccessibleSlotsForInventory(inventory, side);
         int count = 0;
         for (int slot : slots) {
@@ -136,16 +136,16 @@ public class IOHelper {
      *            ,
      * @return
      */
-    public static ItemStack extract(TileEntity tile, Direction direction, ItemStack requestedStack, boolean useItemCount, boolean simulate,
+    public static ItemStack extract(BlockEntity tile, Direction direction, ItemStack requestedStack, boolean useItemCount, boolean simulate,
                                     int fuzzySetting) {
 
         if (requestedStack.isEmpty())
             return requestedStack;
-        IInventory inv = getInventoryForTE(tile);
+        Container inv = getInventoryForTE(tile);
         if (!inv.isEmpty()) {
             int[] accessibleSlots;
-            if (inv instanceof ISidedInventory) {
-                accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(direction);
+            if (inv instanceof WorldlyContainer) {
+                accessibleSlots = ((WorldlyContainer) inv).getSlotsForFace(direction);
             } else {
                 accessibleSlots = new int[inv.getContainerSize()];
                 for (int i = 0; i < accessibleSlots.length; i++)
@@ -193,13 +193,13 @@ public class IOHelper {
 
     }
 
-    public static ItemStack extractOneItem(TileEntity tile, Direction dir) {
+    public static ItemStack extractOneItem(BlockEntity tile, Direction dir) {
 
-        IInventory inv = getInventoryForTE(tile);
+        Container inv = getInventoryForTE(tile);
         if (inv != null && !inv.isEmpty()) {
             int[] accessibleSlots;
-            if (inv instanceof ISidedInventory) {
-                accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(dir);
+            if (inv instanceof WorldlyContainer) {
+                accessibleSlots = ((WorldlyContainer) inv).getSlotsForFace(dir);
             } else {
                 accessibleSlots = new int[inv.getContainerSize()];
                 for (int i = 0; i < accessibleSlots.length; i++)
@@ -220,12 +220,12 @@ public class IOHelper {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack insert(TileEntity tile, ItemStack itemStack, Direction direction, boolean simulate) {
+    public static ItemStack insert(BlockEntity tile, ItemStack itemStack, Direction direction, boolean simulate) {
 
         return insert(tile, itemStack, direction, TubeColor.NONE, simulate);
     }
 
-    public static ItemStack insert(TileEntity tile, ItemStack itemStack, Direction direction, TubeColor color, boolean simulate) {
+    public static ItemStack insert(BlockEntity tile, ItemStack itemStack, Direction direction, TubeColor color, boolean simulate) {
 
         if (tile == null || itemStack.isEmpty())
             return itemStack;
@@ -237,7 +237,7 @@ public class IOHelper {
                 return ItemStack.EMPTY;
             return tubeStack.stack;
         }
-        IInventory inv = getInventoryForTE(tile);
+        Container inv = getInventoryForTE(tile);
         if (!inv.isEmpty())
             return insert(inv, itemStack, direction.ordinal(), simulate);
         PneumaticTube tube = MultipartCompatibility.getPart(tile.getLevel(), tile.getPos(), PneumaticTube.class);
@@ -248,10 +248,10 @@ public class IOHelper {
         return itemStack;
     }
 
-    public static ItemStack insert(IInventory inventory, ItemStack itemStack, int side, boolean simulate) {
+    public static ItemStack insert(Container inventory, ItemStack itemStack, int side, boolean simulate) {
 
-        if (inventory instanceof ISidedInventory && side > -1) {
-            ISidedInventory isidedinventory = (ISidedInventory) inventory;
+        if (inventory instanceof WorldlyContainer && side > -1) {
+            WorldlyContainer isidedinventory = (WorldlyContainer) inventory;
             int[] aint = isidedinventory.getSlotsForFace(Direction.from3DDataValue(side));
 
             for (int j = 0; j < aint.length && !itemStack.isEmpty() && itemStack.getCount() > 0; ++j) {
@@ -272,7 +272,7 @@ public class IOHelper {
         return itemStack;
     }
 
-    public static ItemStack insert(IInventory inventory, ItemStack itemStack, int slot, int side, boolean simulate) {
+    public static ItemStack insert(Container inventory, ItemStack itemStack, int slot, int side, boolean simulate) {
 
         ItemStack itemstack1 = inventory.getItem(slot);
 
@@ -314,26 +314,26 @@ public class IOHelper {
         return itemStack;
     }
 
-    public static boolean canPlaceItemThroughFaceToInventory(IInventory inventory, ItemStack itemStack, int slot, int side) {
+    public static boolean canPlaceItemThroughFaceToInventory(Container inventory, ItemStack itemStack, int slot, int side) {
 
         return inventory.canPlaceItem(slot, itemStack)
-                && (!(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canPlaceItemThroughFace(slot, itemStack, Direction.from3DDataValue(side)));
+                && (!(inventory instanceof WorldlyContainer) || ((WorldlyContainer) inventory).canPlaceItemThroughFace(slot, itemStack, Direction.from3DDataValue(side)));
     }
 
-    public static boolean canTakeItemThroughFaceFromInventory(IInventory inventory, ItemStack itemStack, int slot, int side) {
+    public static boolean canTakeItemThroughFaceFromInventory(Container inventory, ItemStack itemStack, int slot, int side) {
 
-        return !(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canTakeItemThroughFace(slot, itemStack, Direction.from3DDataValue(side));
+        return !(inventory instanceof WorldlyContainer) || ((WorldlyContainer) inventory).canTakeItemThroughFace(slot, itemStack, Direction.from3DDataValue(side));
     }
 
-    public static void dropInventory(World world, BlockPos pos) {
+    public static void dropInventory(Level world, BlockPos pos) {
 
-        TileEntity tileEntity = world.getBlockEntity(pos);
+        BlockEntity tileEntity = world.getBlockEntity(pos);
 
-        if (!(tileEntity instanceof IInventory)) {
+        if (!(tileEntity instanceof Container)) {
             return;
         }
 
-        IInventory inventory = (IInventory) tileEntity;
+        Container inventory = (Container) tileEntity;
 
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack itemStack = inventory.getItem(i);
@@ -344,12 +344,12 @@ public class IOHelper {
         }
     }
 
-    public static void spawnItemInWorld(World world, ItemStack itemStack, BlockPos pos) {
+    public static void spawnItemInWorld(Level world, ItemStack itemStack, BlockPos pos) {
         spawnItemInWorld(world, itemStack, pos.getX(), pos.getY(), pos.getZ());
     }
 
 
-    public static void spawnItemInWorld(World world, ItemStack itemStack, double x, double y, double z) {
+    public static void spawnItemInWorld(Level world, ItemStack itemStack, double x, double y, double z) {
 
         if (world.isClientSide)
             return;
@@ -368,24 +368,24 @@ public class IOHelper {
         itemStack.setCount(0);
     }
 
-    public static boolean canInterfaceWith(TileEntity tile, Direction direction) {
+    public static boolean canInterfaceWith(BlockEntity tile, Direction direction) {
 
         return canInterfaceWith(tile, direction, true);
     }
 
-   public static boolean canInterfaceWith(TileEntity tile, Direction direction, boolean canInterfaceWithIInventory) {
+   public static boolean canInterfaceWith(BlockEntity tile, Direction direction, boolean canInterfaceWithContainer) {
 
        // PneumaticTube tube = tile != null ? MultipartCompatibility.getPart(tile.getLevel(), tile.getPos(),
                 //PneumaticTube.class) : null;
         //if (tube != null && tube.isConnected(direction, requester))
             //return true;
-        if (!canInterfaceWithIInventory)
+        if (!canInterfaceWithContainer)
             return false;
         if (tile instanceof ITubeConnection) {
             return true;
         }
-        if (tile instanceof IInventory) {
-            return !(tile instanceof ISidedInventory) || ((ISidedInventory) tile).getSlotsForFace(direction).length > 0;
+        if (tile instanceof Container) {
+            return !(tile instanceof WorldlyContainer) || ((WorldlyContainer) tile).getSlotsForFace(direction).length > 0;
         }
         return false;
     }

@@ -14,8 +14,10 @@ import com.bluepowermod.reference.Refs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
+import net.minecraft.world.item.Item.Properties;
 
 /**
  * @author MineMaarten

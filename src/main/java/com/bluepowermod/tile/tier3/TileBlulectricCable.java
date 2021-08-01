@@ -13,16 +13,16 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.power.BlockBlulectricCable;
 import com.bluepowermod.helper.EnergyHelper;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.network.Connection;
+import net.minecraft.network.play.server.ClientboundBlockEntityDataPacket;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -41,7 +41,7 @@ public class TileBlulectricCable extends TileMachineBase {
     private LazyOptional<IPowerBase> blutricityCap;
 
     public TileBlulectricCable() {
-        super(BPTileEntityType.BLULECTRIC_CABLE);
+        super(BPBlockEntityType.BLULECTRIC_CABLE);
     }
 
     @Override
@@ -59,13 +59,13 @@ public class TileBlulectricCable extends TileMachineBase {
                 for (Direction facing : directions) {
                     Block fBlock = level.getBlockState(worldPosition.relative(facing)).getBlock();
                     if (fBlock != Blocks.AIR && fBlock != Blocks.WATER) {
-                        TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
+                        BlockEntity tile = level.getBlockEntity(worldPosition.relative(facing));
                         if (tile != null)
                             tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
                                     exStorage -> EnergyHelper.balancePower(exStorage, storage)
                             );
                     } else {
-                        TileEntity tile = level.getBlockEntity(worldPosition.relative(facing).relative(state.getValue(BlockBlulectricCable.FACING).getOpposite()));
+                        BlockEntity tile = level.getBlockEntity(worldPosition.relative(facing).relative(state.getValue(BlockBlulectricCable.FACING).getOpposite()));
                         if (tile != null)
                             tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, state.getValue(BlockBlulectricCable.FACING)).ifPresent(
                                     exStorage -> EnergyHelper.balancePower(exStorage, storage)
@@ -110,7 +110,7 @@ public class TileBlulectricCable extends TileMachineBase {
     }
 
     @Override
-    protected void readFromPacketNBT(CompoundNBT tCompound) {
+    protected void readFromPacketNBT(CompoundTag tCompound) {
         super.readFromPacketNBT(tCompound);
         if(tCompound.contains("energy")) {
         INBT nbtstorage = tCompound.get("energy");
@@ -119,19 +119,19 @@ public class TileBlulectricCable extends TileMachineBase {
     }
 
     @Override
-    protected void writeToPacketNBT(CompoundNBT tCompound) {
+    protected void writeToPacketNBT(CompoundTag tCompound) {
         super.writeToPacketNBT(tCompound);
             INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
             tCompound.put("energy", nbtstorage);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        return this.save(new CompoundTag());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         super.onDataPacket(net, pkt);
         handleUpdateTag(getBlockState(), pkt.getTag());
     }

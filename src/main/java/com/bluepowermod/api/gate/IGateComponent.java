@@ -1,10 +1,10 @@
 package com.bluepowermod.api.gate;
 
 import com.bluepowermod.client.render.RenderHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Vec3i;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -17,23 +17,23 @@ public interface IGateComponent {
 
     public IGate<?, ?, ?, ?, ?, ?> getGate();
 
-    public void addCollisionBoxes(List<AxisAlignedBB> boxes);
+    public void addCollisionBoxes(List<AABB> boxes);
 
-    public List<AxisAlignedBB> getOcclusionBoxes();
+    public List<AABB> getOcclusionBoxes();
 
     public void tick();
 
     @OnlyIn(Dist.CLIENT)
-    public void renderStatic(Vector3i translation, RenderHelper renderer, int pass);
+    public void renderStatic(Vec3i translation, RenderHelper renderer, int pass);
 
     @OnlyIn(Dist.CLIENT)
-    public void renderDynamic(Vector3d translation, double delta, int pass);
+    public void renderDynamic(Vec3 translation, double delta, int pass);
 
     public void onLayoutRefresh();
 
-    public void writeToNBT(CompoundNBT tag);
+    public void writeToNBT(CompoundTag tag);
 
-    public void readFromNBT(CompoundNBT tag);
+    public void readFromNBT(CompoundTag tag);
 
     public void writeData(DataOutput buffer) throws IOException;
 

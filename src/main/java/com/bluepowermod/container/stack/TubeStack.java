@@ -9,22 +9,26 @@ package com.bluepowermod.container.stack;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.settings.GraphicsFanciness;
-import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.RenderHelper;
+
+import net.minecraft.world.item.ItemStack;
+
+import BlockEntity;
 
 /**
  *
@@ -41,7 +45,7 @@ public class TubeStack {
     public boolean enabled = true; // will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server
     // input. This just serves a visual purpose.
     public int idleCounter; // increased when the stack is standing still. This will cause the client to remove the stack when a timeout occurs.
-    private TileEntity target; // only should have a value when retrieving items. this is the target the item wants to go to.
+    private BlockEntity target; // only should have a value when retrieving items. this is the target the item wants to go to.
     private int targetX, targetY, targetZ;
     public static final double ITEM_SPEED = 0.0625;
     private double speed = ITEM_SPEED;
@@ -83,7 +87,7 @@ public class TubeStack {
      * Updates the movement by the given m/tick.
      * @return true if the stack has gone past the center, meaning logic needs to be triggered.
      */
-    public boolean update(World worldObj) {
+    public boolean update(Level worldObj) {
 
         oldProgress = progress;
         if (enabled) {
@@ -96,7 +100,7 @@ public class TubeStack {
         }
     }
 
-    public TileEntity getTarget(World world) {
+    public BlockEntity getTarget(Level world) {
 
         if (target == null && (targetX != 0 || targetY != 0 || targetZ != 0)) {
             target = world.getBlockEntity(new BlockPos(targetX, targetY, targetZ));
@@ -105,7 +109,7 @@ public class TubeStack {
     }
 
 
-    public void setTarget(TileEntity tileEntity) {
+    public void setTarget(BlockEntity tileEntity) {
         target = tileEntity;
         if (target != null) {
             targetX = target.getBlockPos().getX();
@@ -120,12 +124,12 @@ public class TubeStack {
 
     public TubeStack copy() {
 
-        CompoundNBT tag = new CompoundNBT();
+        CompoundTag tag = new CompoundTag();
         writeToNBT(tag);
         return loadFromNBT(tag);
     }
 
-    public void writeToNBT(CompoundNBT tag) {
+    public void writeToNBT(CompoundTag tag) {
 
         stack.save(tag);
         tag.putByte("color", (byte) color.ordinal());
@@ -137,7 +141,7 @@ public class TubeStack {
         tag.putInt("targetZ", targetZ);
     }
 
-    public static TubeStack loadFromNBT(CompoundNBT tag) {
+    public static TubeStack loadFromNBT(CompoundTag tag) {
 
         TubeStack stack = new TubeStack(ItemStack.of(tag), Direction.from3DDataValue(tag.getByte("heading")),
                 TubeColor.values()[tag.getByte("color")]);
@@ -202,7 +206,7 @@ public class TubeStack {
             float size = 0.02F;
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glBegin(GL11.GL_QUADS);
-            RenderHelper.drawColoredCube(new AxisAlignedBB(-size, -size, -size, size, size, size), 1, 1, 1, 1);
+            RenderHelper.drawColoredCube(new AABB(-size, -size, -size, size, size, size), 1, 1, 1, 1);
             GL11.glEnd();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
@@ -221,7 +225,7 @@ public class TubeStack {
             GL11.glColor3f(red, green, blue);
             //TODO: Find replacement for RenderEngine
             //Minecraft.getInstance().renderEngine.bindTexture(new ResourceLocation(Refs.MODID, "textures/blocks/tubes/inside_color_border.png"));
-            RenderHelper.drawTesselatedTexturedCube(new AxisAlignedBB(-size, -size, -size, size, size, size));
+            RenderHelper.drawTesselatedTexturedCube(new AABB(-size, -size, -size, size, size, size));
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);
         }

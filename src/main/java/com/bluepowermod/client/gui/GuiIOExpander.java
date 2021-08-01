@@ -7,28 +7,28 @@
  */
 package com.bluepowermod.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerIOExpander;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
-public class GuiIOExpander extends GuiContainerBaseBP<ContainerIOExpander> implements IHasContainer<ContainerIOExpander> {
+public class GuiIOExpander extends GuiContainerBaseBP<ContainerIOExpander> implements MenuAccess<ContainerIOExpander> {
 
     private final ContainerIOExpander ioExpander;
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/ioexpandergui.png");
 
-    public GuiIOExpander(ContainerIOExpander container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiIOExpander(ContainerIOExpander container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.ioExpander = container;
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
 
     }
 }

@@ -1,6 +1,6 @@
 package com.bluepowermod.api.wire.redstone;
 
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 public interface IRedstoneDeviceWrapper {
 

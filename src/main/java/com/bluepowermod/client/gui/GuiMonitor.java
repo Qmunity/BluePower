@@ -9,27 +9,27 @@ package com.bluepowermod.client.gui;
 
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.container.ContainerMonitor;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileMonitor;
 
-public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements IHasContainer<ContainerMonitor> {
+public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements MenuAccess<ContainerMonitor> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/monitorgui.png");
     private static final ResourceLocation chracterSetResLoc = new ResourceLocation(Refs.MODID + ":textures/gui/65el02_chars.png");
     private final ContainerMonitor monitor;
 
-    public GuiMonitor(ContainerMonitor container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiMonitor(ContainerMonitor container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.monitor = container;
         imageWidth = 350;

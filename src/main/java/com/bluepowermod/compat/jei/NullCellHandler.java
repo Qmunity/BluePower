@@ -11,7 +11,7 @@ import com.bluepowermod.compat.mcmp.parts.PartManager;
 import com.bluepowermod.compat.mcmp.parts.gate.supported.GateNullCell;
 import com.bluepowermod.recipe.RecipeNullCell;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 
 import java.awt.*;
@@ -292,7 +292,7 @@ public class NullCellHandler extends ShapedRecipeHandler {
         }
     }
 
-    private static ItemStack setItemAt(IInventory inv, int x, int y, ItemStack item) {
+    private static ItemStack setItemAt(Container inv, int x, int y, ItemStack item) {
 
         inv.setItem(y * 3 + x, item);
         return item;

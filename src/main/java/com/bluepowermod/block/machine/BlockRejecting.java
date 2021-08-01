@@ -12,7 +12,7 @@ import com.bluepowermod.tile.TileBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.state.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.state.StateContainer;
 
 
@@ -30,7 +30,7 @@ public class BlockRejecting extends BlockContainerBase {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(ACTIVE, POWERED, REJECTING);
     }
 }

@@ -23,12 +23,12 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
 import com.bluepowermod.container.slot.SlotProjectTableCrafting;
 import com.bluepowermod.tile.tier1.TileProjectTable;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.entity.player.ServerPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
@@ -40,22 +40,26 @@ import net.minecraft.world.World;
 import java.util.Optional;
 
 
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.ResultContainer;
+
 /**
  * @author MineMaarten
  */
 //@ChestContainer
-public class ContainerProjectTable extends Container implements IGuiButtonSensitive {
+public class ContainerProjectTable extends AbstractContainerMenu implements IGuiButtonSensitive {
 
-    private final PlayerEntity player;
-    private final CraftingInventory craftingGrid;
-    private final CraftResultInventory craftResult;
+    private final Player player;
+    private final CraftingContainer craftingGrid;
+    private final ResultContainer craftResult;
 
-    private final IInventory projectTable;
+    private final Container projectTable;
 
-    public ContainerProjectTable(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+    public ContainerProjectTable(int windowId, Inventory invPlayer, Container inventory) {
         super(BPContainerType.PROJECT_TABLE, windowId);
         this.projectTable = inventory;
-        craftResult =  new CraftResultInventory();
+        craftResult =  new ResultContainer();
         craftingGrid = new InventoryProjectTableCrafting(this, projectTable, 3, 3);
         player = invPlayer.player;
 
@@ -101,7 +105,7 @@ public class ContainerProjectTable extends Container implements IGuiButtonSensit
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
 
         boolean clickTypeCrafting = slotId == 0 && slots.get(slotId).hasItem() &&
                 (clickTypeIn.equals(ClickType.PICKUP) || clickTypeIn.equals(ClickType.QUICK_MOVE));
@@ -144,9 +148,9 @@ public class ContainerProjectTable extends Container implements IGuiButtonSensit
         return itemStack;
     }
 
-    protected static void updateCrafting(int id, World world, PlayerEntity playerEntity, CraftingInventory craftingInventory, CraftResultInventory craftResultInventory) {
+    protected static void updateCrafting(int id, World world, Player playerEntity, CraftingInventory craftingInventory, CraftResultInventory craftResultInventory) {
         if (!world.isClientSide) {
-            ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)playerEntity;
+            ServerPlayer serverplayerentity = (ServerPlayer)playerEntity;
             ItemStack itemstack = ItemStack.EMPTY;
             Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, craftingInventory, world);
             if (optional.isPresent()) {
@@ -164,12 +168,12 @@ public class ContainerProjectTable extends Container implements IGuiButtonSensit
     /**
      * Callback for when the crafting matrix is changed.
      */
-    public void slotsChanged(IInventory inventoryIn) {
+    public void slotsChanged(Container inventoryIn) {
             updateCrafting(this.containerId, this.player.getCommandSenderWorld(), this.player, this.craftingGrid, this.craftResult);
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 
@@ -197,7 +201,7 @@ public class ContainerProjectTable extends Container implements IGuiButtonSensit
      * 0 result, 1-9 matrix,  10 - 27 inventory, 28 - 63 player inv.
      */
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = slots.get(par2);
@@ -239,7 +243,7 @@ public class ContainerProjectTable extends Container implements IGuiButtonSensit
     }
 
     @Override
-    public void onButtonPress(PlayerEntity player, int messageId, int value) {
+    public void onButtonPress(Player player, int messageId, int value) {
         this.clearCraftingGrid();
     }
 /*

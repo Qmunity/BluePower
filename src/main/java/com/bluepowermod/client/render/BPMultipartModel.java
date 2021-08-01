@@ -12,18 +12,18 @@ import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.bluepowermod.util.MultipartUtils;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.core.Direction;
+import net.minecraft.util.math.BlockHitResult;
+import net.minecraft.util.math.HitResult;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
@@ -39,13 +39,13 @@ import java.util.stream.Collectors;
  * Uses Multipart IModelData to create a model.
  * @author MoreThanHidden
  */
-public class BPMultipartModel implements IBakedModel {
+public class BPMultipartModel implements BakedModel {
 
 
     @Nonnull
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
-        BlockRendererDispatcher brd = Minecraft.getInstance().getBlockRenderer();
+        BlockRenderDispatcher brd = Minecraft.getInstance().getBlockRenderer();
         Map<BlockState, IModelData> stateInfo = extraData.getData(TileBPMultipart.STATE_INFO);
 
         if (stateInfo != null) {
@@ -115,9 +115,9 @@ public class BPMultipartModel implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleIcon() {
-        RayTraceResult rayTraceResult = Minecraft.getInstance().hitResult;
-        if(Minecraft.getInstance().player != null && rayTraceResult instanceof BlockRayTraceResult){
-            BlockState state = MultipartUtils.getClosestState(Minecraft.getInstance().player, ((BlockRayTraceResult)rayTraceResult).getBlockPos());
+        HitResult rayTraceResult = Minecraft.getInstance().hitResult;
+        if(Minecraft.getInstance().player != null && rayTraceResult instanceof BlockHitResult){
+            BlockState state = MultipartUtils.getClosestState(Minecraft.getInstance().player, ((BlockHitResult)rayTraceResult).getBlockPos());
             if(state != null)
                 return Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getParticleIcon();
         }

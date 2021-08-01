@@ -9,11 +9,11 @@ package com.bluepowermod.container.slot;
 
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.CraftingResultSlot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.ResultSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
@@ -23,12 +23,12 @@ import java.util.List;
 
 ;
 
-public class SlotCircuitTableCrafting extends CraftingResultSlot {
+public class SlotCircuitTableCrafting extends ResultSlot {
 
     private final TileCircuitTable circuitTable;
 
 
-    public SlotCircuitTableCrafting(PlayerEntity p_i1823_1_, IInventory circuitTable, CraftingInventory craftSlot, int p_i1823_4_, int p_i1823_5_,
+    public SlotCircuitTableCrafting(Player p_i1823_1_, Container circuitTable, CraftingContainer craftSlot, int p_i1823_4_, int p_i1823_5_,
                                     int p_i1823_6_) {
 
         super(p_i1823_1_, craftSlot, circuitTable, p_i1823_4_, p_i1823_5_, p_i1823_6_);
@@ -36,7 +36,7 @@ public class SlotCircuitTableCrafting extends CraftingResultSlot {
     }
 
     @Override
-    public boolean mayPickup(PlayerEntity player) {
+    public boolean mayPickup(Player player) {
         ItemStack stack = getItem();
         if (!stack.isEmpty()) {
             return canCraft(stack, circuitTable);

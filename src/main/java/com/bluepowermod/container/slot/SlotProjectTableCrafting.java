@@ -7,23 +7,27 @@
  */
 package com.bluepowermod.container.slot;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.inventory.*;
-import net.minecraft.inventory.container.CraftingResultSlot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.ResultSlot;
+import net.minecraft.world.item.ItemStack;
 
 import com.bluepowermod.tile.tier1.TileProjectTable;
+
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.ResultContainer;
 
 /**
  * @author MineMaarten
  */
-public class SlotProjectTableCrafting extends CraftingResultSlot {
+public class SlotProjectTableCrafting extends ResultSlot {
     
     /** The craft matrix inventory linked to this result slot. */
-    private final CraftingInventory craftMatrix;
-    private final IInventory projectTable;
+    private final CraftingContainer craftMatrix;
+    private final Container projectTable;
 
-    public SlotProjectTableCrafting(IInventory projectTable, PlayerEntity player, CraftingInventory craftMatrix, CraftResultInventory res, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
+    public SlotProjectTableCrafting(Container projectTable, Player player, CraftingContainer craftMatrix, ResultContainer res, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
     
         super(player, craftMatrix, res, p_i1823_4_, p_i1823_5_, p_i1823_6_);
         this.craftMatrix = craftMatrix;
@@ -36,7 +40,7 @@ public class SlotProjectTableCrafting extends CraftingResultSlot {
     }
 
     @Override
-    public ItemStack onTake(PlayerEntity thePlayer, ItemStack stack) {
+    public ItemStack onTake(Player thePlayer, ItemStack stack) {
             extractedFromTable();
             return super.onTake(thePlayer, stack);
     }

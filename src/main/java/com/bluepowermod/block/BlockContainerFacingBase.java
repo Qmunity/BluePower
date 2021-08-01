@@ -10,14 +10,19 @@ package com.bluepowermod.block;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.state.DirectionProperty;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -38,13 +43,13 @@ public class BlockContainerFacingBase extends BlockContainerBase {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(FACING, ACTIVE);
     }
 
     public static void setState(boolean active, World worldIn, BlockPos pos){
         BlockState iblockstate = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getBlockEntity(pos);
+        BlockEntity tileentity = worldIn.getBlockEntity(pos);
 
         worldIn.setBlock(pos, iblockstate.setValue(ACTIVE, active), 3);
         if (tileentity != null){
@@ -52,9 +57,9 @@ public class BlockContainerFacingBase extends BlockContainerBase {
             worldIn.setBlockEntity(pos, tileentity);
         }
     }
-    public static void setState(Direction facing, World worldIn, BlockPos pos){
+    public static void setState(Direction facing, Level worldIn, BlockPos pos){
         BlockState iblockstate = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getBlockEntity(pos);
+        BlockEntity tileentity = worldIn.getBlockEntity(pos);
 
         worldIn.setBlock(pos, iblockstate.setValue(FACING, facing), 3);
         if (tileentity != null){
@@ -64,13 +69,13 @@ public class BlockContainerFacingBase extends BlockContainerBase {
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack iStack) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack iStack) {
         super.setPlacedBy(world, pos, state, placer, iStack);
         world.setBlock(pos, state.setValue(FACING, canRotateVertical() ? Direction.orderedByNearest(placer)[0] : placer.getDirection().getOpposite()), 2);
     }
 
     @Override
-    public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
+    public BlockState rotate(BlockState state, Level world, BlockPos pos, Rotation direction) {
         if(direction == Rotation.CLOCKWISE_90){
             switch (state.getValue(FACING)) {
                 case DOWN:

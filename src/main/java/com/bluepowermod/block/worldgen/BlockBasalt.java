@@ -18,15 +18,17 @@
 package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.loot.*;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import net.minecraft.world.level.storage.loot.LootContext;
 
 /**
  * Created by Quetzi on 03/09/14.

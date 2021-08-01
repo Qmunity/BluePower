@@ -17,7 +17,7 @@
 package com.bluepowermod.api.misc;
 
 
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 public interface IFace {
 

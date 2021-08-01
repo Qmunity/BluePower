@@ -21,24 +21,22 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.BPConfig;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootTables;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.StructureManager;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 
 import java.util.*;
 
@@ -46,14 +44,14 @@ import java.util.*;
  * 
  * @author MineMaarten
  */
-public class WorldGenVolcano extends Feature<NoFeatureConfig> {
+public class WorldGenVolcano extends Feature<NoneFeatureConfiguration> {
 
     private static final int MAX_VOLCANO_RADIUS = 200; // absolute max radius a volcano can have, this should be a
     // magnitude bigger than an average volcano radius.
     private HashMap<Pos, Integer> volcanoMap;
     private final List<Block> alterBlocks = new ArrayList<>();
 
-    public WorldGenVolcano(Codec<NoFeatureConfig> codec) {
+    public WorldGenVolcano(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
         alterBlocks.add( BPBlocks.amethyst_block);
         alterBlocks.add(BPBlocks.ruby_block);
@@ -64,12 +62,17 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
         }
     }
 
+
     @Override
-    public boolean place(ISeedReader world, ChunkGenerator chunkGenerator, Random rand, BlockPos blockPos, NoFeatureConfig noFeatureConfig) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        Level world = context.level().getLevel();
+        Random rand = context.random();
+        BlockPos blockPos = context.origin();
+
         int startChunkX = blockPos.getX() >> 8;
         int startChunkZ = blockPos.getZ() >> 8;
         volcanoMap = new HashMap<>();
-        ((SharedSeedRandom)rand).setLargeFeatureSeed(world.getHeight(), startChunkX, startChunkZ);
+        ((WorldgenRandom)rand).setLargeFeatureSeed(world.getHeight(), startChunkX, startChunkZ);
         int volcanoHeight = 100 + rand.nextInt(40);
 
         List<Pos>[] distMap = calculateDistMap();
@@ -85,7 +88,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
                 if (posHeight > 0) {
                     volcanoMap.put(new Pos(p.x, p.z), posHeight);
                     if (!first && middleX + p.x >> 4 == blockPos.getX() >> 4 && middleZ + p.z >> 4 == blockPos.getZ() >> 4) {
-                        int worldHeight = world.getHeight(Heightmap.Type.WORLD_SURFACE, p.x + middleX, p.z + middleZ);
+                        int worldHeight = world.getHeight(Heightmap.Types.WORLD_SURFACE, p.x + middleX, p.z + middleZ);
                         for (int i = posHeight; i > 0 && (i > worldHeight || canReplace(world, p.x + middleX, i, p.z + middleZ)); i--) {
                             setBlock(world, new BlockPos(p.x + middleX, i, p.z + middleZ), BPBlocks.basalt.defaultBlockState());
                         }
@@ -110,7 +113,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
 
     }
 
-    private boolean canReplace(IWorld world, int x, int y, int z) {
+    private boolean canReplace(Level world, int x, int y, int z) {
 
         if (world.isEmptyBlock(new BlockPos(x, y, z)))
             return true;
@@ -120,7 +123,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
                 || material == Material.REPLACEABLE_PLANT || block == Blocks.WATER;
     }
 
-    private void generateLavaColumn(IWorld world, int x, int topY, int z, Random rand) {
+    private void generateLavaColumn(Level world, int x, int topY, int z, Random rand) {
         // world.setBlock(x, topY, z, Blocks.lava);
         if (rand.nextDouble() < BPConfig.CONFIG.volcanoActiveToInactiveRatio.get()) {
             setBlock(world, new BlockPos(x, topY, z), BPBlocks.cracked_basalt_lava.defaultBlockState());
@@ -207,7 +210,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
         }
     }
 
-    private void generateLootChamber(IWorld world, int middleX, int startY, int middleZ, Random rand) {
+    private void generateLootChamber(Level world, int middleX, int startY, int middleZ, Random rand) {
         int roomSize = 9;
         int roomHeight = 5;
         int startX = middleX - roomSize / 2;
@@ -235,7 +238,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
         }
     }
 
-    private void generateAltar(IWorld world, int startX, int startY, int startZ, Random rand, Direction dir) {
+    private void generateAltar(Level world, int startX, int startY, int startZ, Random rand, Direction dir) {
         generateLootChest(world, new BlockPos(startX, startY + 1, startZ), rand, dir);
         Direction opDir = dir.getOpposite();
         Block altarBlock = alterBlocks.get(new Random().nextInt(alterBlocks.size()));
@@ -252,7 +255,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
 
     }
 
-    private void setAltarBlockAndPossiblyTrap(IWorld world, int x, int y, int z, Random rand, Block altarBlock) {
+    private void setAltarBlockAndPossiblyTrap(Level world, int x, int y, int z, Random rand, Block altarBlock) {
         setBlock(world, new BlockPos(x, y, z), altarBlock.defaultBlockState());
         if (rand.nextInt(6) == 0) {
             setBlock(world, new BlockPos(x, y - 1, z), Blocks.TNT.defaultBlockState());
@@ -260,15 +263,15 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
         }
     }
 
-    private void generateLootChest(IWorld world, BlockPos pos, Random rand, Direction dir) {
+    private void generateLootChest(Level world, BlockPos pos, Random rand, Direction dir) {
         setBlock(world, pos, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, dir.getOpposite()));
-        TileEntity te = world.getBlockEntity(pos);
-        if(te instanceof ChestTileEntity){
+        BlockEntity te = world.getBlockEntity(pos);
+        if(te instanceof ChestBlockEntity){
             if (rand.nextInt(5) == 0 && BPConfig.CONFIG.generateTungstenInVolcano.get()) {
-                ((ChestTileEntity)te).setItem(13, new ItemStack(BPItems.tungsten_ingot,
+                ((ChestBlockEntity)te).setItem(13, new ItemStack(BPItems.tungsten_ingot,
                         5 + rand.nextInt(10)));
             } else {
-                ((ChestTileEntity)te).setLootTable(LootTables.SIMPLE_DUNGEON, rand.nextInt());
+                ((ChestBlockEntity)te).setLootTable(BuiltInLootTables.SIMPLE_DUNGEON, rand.nextInt());
             }
         }
     }

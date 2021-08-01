@@ -5,12 +5,12 @@ import java.util.List;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.container.stack.TubeStack;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 
@@ -53,13 +53,13 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
     }
 
     @Override
-    protected int getMaxWidth(FontRenderer fontRenderer) {
+    protected int getMaxWidth(Font fontRenderer) {
 
         return Math.max(super.getMaxWidth(fontRenderer), Math.min(showingItems.size(), MAX_ITEMS_X) * 18 + 18);
     }
 
     @Override
-    protected int getMaxHeight(FontRenderer fontRenderer) {
+    protected int getMaxHeight(Font fontRenderer) {
 
         if (showingItems.size() == 0)
             return super.getMaxHeight(fontRenderer);
@@ -67,13 +67,13 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, FontRenderer fontRenderer, float zLevel, float partialTicks) {
+    public void render(PoseStack matrixStack, Font fontRenderer, float zLevel, float partialTicks) {
 
         this.setText(showingItems.size() == 0 ? "gui.bluepower:tab.stuffed.noItems" : "");
         super.render(matrixStack, fontRenderer, zLevel, partialTicks);
         if (isDoneExpanding()) {
             if (showingItems.size() > 0) {
-                AbstractGui.fill(matrixStack, getBaseX() + 7, getAffectedY() + 16, getBaseX() + Math.min(MAX_ITEMS_X, showingItems.size()) * 18 + 9,
+                GuiComponent.fill(matrixStack, getBaseX() + 7, getAffectedY() + 16, getBaseX() + Math.min(MAX_ITEMS_X, showingItems.size()) * 18 + 9,
                         getAffectedY() + 36 + (showingItems.size() - 1) / MAX_ITEMS_X * 18, 0xFFAAAAAA);
             }
             for (int i = 0; i < MAX_ITEMS_X; i++) {

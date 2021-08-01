@@ -12,8 +12,8 @@ import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -28,9 +28,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ContainerCircuitDatabaseMain extends ContainerGhosts {
 
     public int curUploadProgress, curCopyProgress, selectedShareOption;
-    private final IInventory circuitDatabase;
+    private final Container circuitDatabase;
 
-    public ContainerCircuitDatabaseMain(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+    public ContainerCircuitDatabaseMain(int windowId, Inventory invPlayer, Container inventory) {
         super(BPContainerType.CIRCUITDATABASE_MAIN, windowId);
         this.circuitDatabase = inventory;
         addSlot(new SlotPhantom(circuitDatabase, 0, 57, 64) {
@@ -85,7 +85,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return true;
     }
@@ -108,7 +108,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) slots.get(par2);

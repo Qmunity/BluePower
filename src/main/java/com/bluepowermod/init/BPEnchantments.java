@@ -8,7 +8,7 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.reference.Refs;
-import net.minecraft.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 import com.bluepowermod.enchant.EnchantmentDisjunction;
 import com.bluepowermod.enchant.EnchantmentVorpal;

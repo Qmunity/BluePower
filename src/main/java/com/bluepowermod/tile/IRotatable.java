@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.tile;
 
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 /**
  * Implemented by BluePower block that can be rotated.

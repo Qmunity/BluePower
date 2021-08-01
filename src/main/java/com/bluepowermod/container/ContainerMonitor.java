@@ -9,29 +9,29 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import com.bluepowermod.tile.tier3.TileMonitor;
 
-public class ContainerMonitor extends Container {
+public class ContainerMonitor extends AbstractContainerMenu {
 
-	private final IInventory inventory;
+	private final Container inventory;
 
-	public ContainerMonitor(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+	public ContainerMonitor(int windowId, Inventory invPlayer, Container inventory) {
 		super(BPContainerType.MONITOR, windowId);
 		this.inventory = inventory;
 	}
 
-	public ContainerMonitor( int id, PlayerInventory player )    {
-		this( id, player, new Inventory( 0 ));
+	public ContainerMonitor( int id, Inventory player )    {
+		this( id, player, new SimpleContainer( 0 ));
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerEntity) {
+	public boolean stillValid(Player playerEntity) {
 		return inventory.stillValid(playerEntity);
 	}
 }

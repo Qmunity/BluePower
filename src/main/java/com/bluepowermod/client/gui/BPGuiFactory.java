@@ -22,7 +22,7 @@
 package com.bluepowermod.client.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 
 
 public class BPGuiFactory { //implements IModGuiFactory

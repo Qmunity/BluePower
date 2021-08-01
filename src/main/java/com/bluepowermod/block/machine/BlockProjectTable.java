@@ -23,13 +23,13 @@ import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.ISidedInventoryProvider;
+import net.minecraft.inventory.WorldlyContainer;
+import net.minecraft.world.WorldlyContainerHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 
 
-public class BlockProjectTable extends BlockContainerBase implements ISidedInventoryProvider {
+public class BlockProjectTable extends BlockContainerBase implements WorldlyContainerHolder {
 
     public BlockProjectTable() {
         super(Material.WOOD, TileProjectTable.class);
@@ -46,7 +46,7 @@ public class BlockProjectTable extends BlockContainerBase implements ISidedInven
     }
 
     @Override
-    public ISidedInventory getContainer(BlockState state, IWorld world, BlockPos pos) {
+    public WorldlyContainer getContainer(BlockState state, Level world, BlockPos pos) {
         return ((TileProjectTable)world.getBlockEntity(pos));
     }
 }

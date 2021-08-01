@@ -22,6 +22,9 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.item.*;
 
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.Item;
+
 public class ItemGemHoe extends HoeItem {
 
     public    Item    customCraftingMaterial = Items.AIR;

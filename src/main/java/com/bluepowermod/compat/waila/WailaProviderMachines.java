@@ -9,9 +9,9 @@ package com.bluepowermod.compat.waila;
 
 import com.bluepowermod.tile.TileMachineBase;
 import mcp.mobius.waila.api.IServerDataProvider;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.entity.player.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -21,18 +21,18 @@ import java.util.List;
  * @author amadornes
  *
  */
-public class WailaProviderMachines implements IServerDataProvider<TileEntity> {
+public class WailaProviderMachines implements IServerDataProvider<BlockEntity> {
 
     private List<String> info = new ArrayList<>();
 
     @Override
-    public void appendServerData(CompoundNBT compoundNBT, ServerPlayerEntity serverPlayerEntity, World world, TileEntity tileEntity) {
+    public void appendServerData(CompoundTag CompoundTag, ServerPlayer serverPlayerEntity, World world, BlockEntity tileEntity) {
         if(tileEntity instanceof TileMachineBase && world.isClientSide) {
             TileMachineBase machine = (TileMachineBase) tileEntity;
 
             machine.addWailaInfo(info);
             //TODO: Check this works and add the engine
-            compoundNBT.getAllKeys().addAll(info);
+            CompoundTag.getAllKeys().addAll(info);
             info.clear();
         }
     }

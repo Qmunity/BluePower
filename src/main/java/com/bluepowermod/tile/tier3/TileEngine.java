@@ -9,26 +9,21 @@ package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.api.power.BlutricityFEStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
-import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.power.BlockEngine;
-import com.bluepowermod.helper.EnergyHelper;
-import com.bluepowermod.tile.BPTileEntityType;
-import net.minecraft.nbt.CompoundNBT;
+import com.bluepowermod.tile.BPBlockEntityType;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.network.Connection;
+import net.minecraft.network.play.server.ClientboundBlockEntityDataPacket;
+import net.minecraft.tileentity.BlockEntity;
+import net.minecraft.core.Direction;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 /**
  * 
@@ -62,7 +57,7 @@ public class TileEngine extends TileMachineBase  {
 
 	
 	public TileEngine(){
-		super(BPTileEntityType.ENGINE);
+		super(BPBlockEntityType.ENGINE);
 
 		pumpTick  = 0;
 		pumpSpeed = 16;
@@ -79,7 +74,7 @@ public class TileEngine extends TileMachineBase  {
 		isActive = false;
 		if(level != null && !level.isClientSide && (storage.getEnergyStored() > 0 && level.hasNeighborSignal(worldPosition))){
 			Direction facing = getBlockState().getValue(BlockEngine.FACING).getOpposite();
-			TileEntity tileEntity = level.getBlockEntity(worldPosition.relative(facing));
+			BlockEntity tileEntity = level.getBlockEntity(worldPosition.relative(facing));
 			if (tileEntity != null) {
 				tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).ifPresent(other -> {
 					int simulated = storage.extractEnergy(320, true);
@@ -127,7 +122,7 @@ public class TileEngine extends TileMachineBase  {
 
 
 	@Override
-	protected void writeToPacketNBT(CompoundNBT compound) {
+	protected void writeToPacketNBT(CompoundTag compound) {
 		super.writeToPacketNBT(compound);
 		int rotation = orientation.get3DDataValue();
 		compound.putInt("rotation", rotation);
@@ -139,7 +134,7 @@ public class TileEngine extends TileMachineBase  {
 	}
 
 	@Override
-	protected void readFromPacketNBT(CompoundNBT compound) {
+	protected void readFromPacketNBT(CompoundTag compound) {
 		super.readFromPacketNBT(compound);
 		orientation = Direction.from3DDataValue(compound.getInt("rotation"));
         pumpSpeed = compound.getByte("pumpspeed");

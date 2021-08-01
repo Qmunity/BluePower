@@ -16,14 +16,14 @@ import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.block.worldgen.BlockBPGlass;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.tile.BPTileEntityType;
-import net.minecraft.block.Block;
+import com.bluepowermod.tile.BPBlockEntityType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.item.Item;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,6 +32,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+
+import net.minecraft.client.resources.model.ModelResourceLocation;
 
 /**
  * @author MoreThanHidden
@@ -80,8 +82,8 @@ public class Renderers {
 
     public static void init() {
 
-        ClientRegistry.bindTileEntityRenderer(BPTileEntityType.LAMP, RenderLamp::new);
-        ClientRegistry.bindTileEntityRenderer(BPTileEntityType.ENGINE, RenderEngine::new);
+        ClientRegistry.bindBlockEntityRenderer(BPBlockEntityType.LAMP, RenderLamp::new);
+        ClientRegistry.bindBlockEntityRenderer(BPBlockEntityType.ENGINE, RenderEngine::new);
 
 
         for (Item item : BPItems.itemList) {

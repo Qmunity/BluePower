@@ -8,7 +8,7 @@
 package com.bluepowermod.api.tube;
 
 
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 /**
  * 

@@ -13,10 +13,10 @@ import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier1.TileItemDetector;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,13 +24,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @author MineMaarten
  */
-public class ContainerItemDetector extends Container {
+public class ContainerItemDetector extends AbstractContainerMenu {
 
     public int mode = -1;
     public int fuzzySetting = -1;
-    private final IInventory itemDetector;
+    private final Container itemDetector;
 
-    public ContainerItemDetector(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+    public ContainerItemDetector(int windowId, Inventory invPlayer, Container inventory) {
         super(BPContainerType.ITEM_DETECTOR, windowId);
         this.itemDetector = inventory;
         for (int i = 0; i < 3; ++i) {
@@ -62,13 +62,13 @@ public class ContainerItemDetector extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return itemDetector.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) slots.get(par2);

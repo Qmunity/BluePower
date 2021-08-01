@@ -8,12 +8,12 @@
 package com.bluepowermod.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,7 +21,7 @@ import com.bluepowermod.container.ContainerCircuitTable;
 import com.bluepowermod.reference.Refs;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> implements IHasContainer<ContainerCircuitTable> {
+public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> implements MenuAccess<ContainerCircuitTable> {
 
     protected static final ResourceLocation guiTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_table.png");
     private static final ResourceLocation scrollTexture = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
@@ -37,7 +37,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
      * True if the left mouse button was held down last time drawScreen was called.
      */
     private boolean wasClicking;
-    private TextFieldWidget searchField;
+    private EditBox searchField;
     private final boolean firstRun = true;
     private int ticksExisted;
 
@@ -49,7 +49,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
 
     private final boolean[] displayRed = new boolean[24];
 
-    public GuiCircuitTable(ContainerCircuitTable container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiCircuitTable(ContainerCircuitTable container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, guiTexture);
         imageHeight = 224;
         this.circuitTable = container;

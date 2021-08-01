@@ -7,14 +7,14 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileInsulatedWire;
 import com.bluepowermod.tile.tier1.TileWire;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.loot.LootParameters;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.BlockGetter;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -29,19 +29,19 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createBlockEntity(BlockState state, BlockGetter world) {
         return new TileInsulatedWire();
     }
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        TileEntity tileentity = builder.getParameter(LootParameters.BLOCK_ENTITY);
+        BlockEntity tileentity = builder.getParameter(LootParameters.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if(tileentity instanceof TileBPMultipart){
             tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
         }
         if (tileentity instanceof TileInsulatedWire) {
-            CompoundNBT nbt = new CompoundNBT();
+            CompoundTag nbt = new CompoundTag();
             nbt.putString("color", ((TileInsulatedWire)tileentity).getColor().name());
             ItemStack stack = new ItemStack(this, 1, nbt);
             itemStacks.add(stack);
@@ -50,14 +50,14 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
     }
 
     @Override
-    public ItemStack getCloneItemStack(IBlockReader world, BlockPos pos, BlockState state) {
-        TileEntity tileentity = world.getBlockEntity(pos);
+    public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
+        BlockEntity tileentity = world.getBlockEntity(pos);
         ItemStack stack = ItemStack.EMPTY;
         if(tileentity instanceof TileBPMultipart){
             tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
         }
         if (tileentity instanceof TileInsulatedWire) {
-            CompoundNBT nbt = new CompoundNBT();
+            CompoundTag nbt = new CompoundTag();
             nbt.putString("color", ((TileInsulatedWire)tileentity).getColor().name());
             stack = new ItemStack(this, 1, nbt);
         }
@@ -66,9 +66,9 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
 
 
     @Override
-    public int getColor(BlockState state, IBlockReader world, BlockPos pos, int tintIndex) {
+    public int getColor(BlockState state, BlockGetter world, BlockPos pos, int tintIndex) {
         //Color for Block
-        TileEntity tile = (world.getBlockEntity(pos));
+        BlockEntity tile = (world.getBlockEntity(pos));
         if(tile instanceof TileBPMultipart){
             tile = ((TileBPMultipart)tile).getTileForState(state);
         }

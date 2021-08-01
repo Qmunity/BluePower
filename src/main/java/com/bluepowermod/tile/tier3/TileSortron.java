@@ -7,9 +7,9 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.tileentity.BlockEntityType;
 
 /**
  * @author Dynious, Amadornes
@@ -19,14 +19,14 @@ import net.minecraft.tileentity.TileEntityType;
 // , @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = Dependencies.OPEN_COMPUTERS)
 public class TileSortron extends TileMachineBase {
     public TileSortron() {
-        super(BPTileEntityType.SORTRON);
+        super(BPBlockEntityType.SORTRON);
     }// implements IPeripheral/* , SimpleComponent */{
     //
     // private static final String NAME = "BluePower.Sortron";
     // private static final int ANIMATION_TIME = 10;
     // private final Set<IComputerAccess> connectedComputers = new HashSet<IComputerAccess>();
     // // private final Set<Context> contexts = new HashSet<Context>();
-    // private IInventory connectedInventory;
+    // private Container connectedInventory;
     // private byte acceptedColor = -1;
     // private ItemStack acceptedStack = null;
     // private int acceptedStackSize = 0;
@@ -37,9 +37,9 @@ public class TileSortron extends TileMachineBase {
     //
     // super.onBlockNeighbourChanged();
     // EnumFacing direction = EnumFacing.byIndex(getBlockMetadata());
-    // TileEntity tile = worldObj.getBlockEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-    // if (tile instanceof IInventory) {
-    // connectedInventory = (IInventory) tile;
+    // BlockEntity tile = worldObj.getBlockEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+    // if (tile instanceof Container) {
+    // connectedInventory = (Container) tile;
     // } else {
     // connectedInventory = null;
     // }

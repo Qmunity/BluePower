@@ -25,15 +25,15 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemTier;
+import net.minecraft.world.item.Tier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.util.DamageSource;
 
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Component;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -41,10 +41,12 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemAthame extends SwordItem {
     
     private float               damageDealt;
-    private static IItemTier athameMaterial = new BPItemTier(100, 6.0F, 2.0F, 0, 10, Ingredient.of(BPItems.silver_ingot));
+    private static Tier athameMaterial = new BPItemTier(100, 6.0F, 2.0F, 0, 10, Ingredient.of(BPItems.silver_ingot));
     
     public ItemAthame() {
         super(athameMaterial, 1, -3, new Properties().tab(BPCreativeTabs.tools));
@@ -53,7 +55,7 @@ public class ItemAthame extends SwordItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         tooltip.add(new StringTextComponent(MinecraftColor.PURPLE.getChatColor())
                 .append(new TranslationTextComponent("item." + Refs.MODID + "." + Refs.ATHAME_NAME + ".info")) );
     }

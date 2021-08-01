@@ -12,11 +12,11 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileBlulectricCable;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -34,13 +34,13 @@ public class BlockBlulectricCable extends BlockBPCableBase {
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
+    public boolean hasBlockEntity(BlockState state) {
         return true;
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createBlockEntity(BlockState state, BlockGetter world) {
         return new TileBlulectricCable();
     }
 

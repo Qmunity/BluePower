@@ -19,11 +19,13 @@ package com.bluepowermod.network;
 
 import com.bluepowermod.network.message.*;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
+
+import SimpleChannel;
 
 public class BPNetworkHandler {
 

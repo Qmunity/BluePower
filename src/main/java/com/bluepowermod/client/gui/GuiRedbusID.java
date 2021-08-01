@@ -11,18 +11,18 @@ import com.bluepowermod.container.ContainerRedbusID;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.IRedBusWindow;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
-public class GuiRedbusID extends GuiContainerBaseBP<ContainerRedbusID> implements IHasContainer<ContainerRedbusID> {
+public class GuiRedbusID extends GuiContainerBaseBP<ContainerRedbusID> implements MenuAccess<ContainerRedbusID> {
 
     private final ContainerRedbusID device;
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/redbusgui.png");
 
-    public GuiRedbusID(ContainerRedbusID container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiRedbusID(ContainerRedbusID container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.device = container;
 

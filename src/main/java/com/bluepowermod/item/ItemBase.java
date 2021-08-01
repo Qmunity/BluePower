@@ -24,12 +24,14 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.reference.Refs;
 import net.minecraftforge.event.RegistryEvent;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemBase extends Item {
 

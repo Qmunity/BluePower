@@ -20,20 +20,20 @@ package com.bluepowermod.container;
 import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tile.tier3.TileKinectGenerator;
 
-public class ContainerKinect extends Container {
+public class ContainerKinect extends AbstractContainerMenu {
 
-    private final IInventory kinect;
+    private final Container kinect;
 
-    public ContainerKinect(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+    public ContainerKinect(int windowId, Inventory invPlayer, Container inventory) {
         super(BPContainerType.KINETIC_GENERATOR, windowId);
         kinect = inventory;
         
@@ -64,13 +64,13 @@ public class ContainerKinect extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return kinect.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
     	
     	return ItemStack.EMPTY;
      }

@@ -3,14 +3,14 @@ package com.bluepowermod.client.gui;
 import com.bluepowermod.client.gui.widget.*;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -20,17 +20,17 @@ import java.util.List;
  * @author MineMaarten
  * @author K-4U
  */
-public class GuiContainerBase<T extends Container> extends ContainerScreen<T> implements IWidgetListener {
+public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements IWidgetListener {
 
     protected static final int COLOR_TEXT = 4210752;
     protected final List<IGuiWidget> widgets = new ArrayList<IGuiWidget>();
-    protected IInventory inventory;
-    protected final Container container;
-    protected final ITextComponent title;
+    protected Container inventory;
+    protected final AbstractContainerMenu container;
+    protected final Component title;
     protected final ResourceLocation resLoc;
     protected IGuiAnimatedStat lastLeftStat, lastRightStat;
 
-    public GuiContainerBase(T container, PlayerInventory playerInventory, ITextComponent title, ResourceLocation resLoc){
+    public GuiContainerBase(T container, Inventory playerInventory, Component title, ResourceLocation resLoc){
         super(container, playerInventory, title);
         this.container = container;
         this.title = title;

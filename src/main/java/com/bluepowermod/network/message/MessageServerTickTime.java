@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 public class MessageServerTickTime{
@@ -20,12 +20,12 @@ public class MessageServerTickTime{
         TubeStack.tickTimeMultiplier = Math.min(1, 50D / Math.max(msg.tickTime - 5, 0.01));//Let the client stack go a _little_ bit faster than the real value (50 / tickTime), as else if the server stacks arrive first, glitches happen.
     }
 
-    public static MessageServerTickTime decode(PacketBuffer buffer){
+    public static MessageServerTickTime decode(FriendlyByteBuf buffer){
        double tickTime = buffer.readDouble();
        return new MessageServerTickTime(tickTime);
     }
 
-    public static void encode(MessageServerTickTime message, PacketBuffer buffer) {
+    public static void encode(MessageServerTickTime message, FriendlyByteBuf buffer) {
         buffer.writeDouble(message.tickTime);
     }
 

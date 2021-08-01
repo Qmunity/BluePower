@@ -17,13 +17,13 @@
 
 package com.bluepowermod.block.machine;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.Level;
 
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
@@ -36,17 +36,17 @@ public class BlockCircuitDatabase extends BlockProjectTable {
     }
 
     @Override
-    public ActionResultType use(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if (super.use(blockState, world, pos, player, hand, rayTraceResult) == ActionResultType.SUCCESS) {
+    public InteractionResult use(BlockState blockState, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
+        if (super.use(blockState, world, pos, player, hand, rayTraceResult) == InteractionResult.SUCCESS) {
             TileCircuitDatabase database = (TileCircuitDatabase) world.getBlockEntity(pos);
             database.clientCurrentTab = 0;
             if (!world.isClientSide) {
                 //BPNetworkHandler.INSTANCE.sendTo(new MessageSendClientServerTemplates(new ItemStackDatabase().loadItemStacks()),
-                        //(ServerPlayerEntity) player);
+                        //(ServerPlayer) player);
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
     }
 

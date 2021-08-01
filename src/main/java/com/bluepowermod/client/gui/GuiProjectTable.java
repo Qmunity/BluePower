@@ -23,25 +23,25 @@ import java.util.List;
 
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * @author MineMaarten
  */
-public class GuiProjectTable extends GuiContainerBaseBP<ContainerProjectTable> implements IHasContainer<ContainerProjectTable> {
+public class GuiProjectTable extends GuiContainerBaseBP<ContainerProjectTable> implements MenuAccess<ContainerProjectTable> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/project_table.png");
     private final ContainerProjectTable projectTable;
 
-    public GuiProjectTable(ContainerProjectTable container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiProjectTable(ContainerProjectTable container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.projectTable = container;
         imageHeight = 208;

@@ -17,18 +17,18 @@
 
 package com.bluepowermod.init;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.shapes.Shapes;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -37,14 +37,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class BPCreativeTabs {
 
-    public static ItemGroup blocks;
-    public static ItemGroup machines;
-    public static ItemGroup items;
-    public static ItemGroup tools;
-    public static ItemGroup circuits;
-    public static ItemGroup wiring;
-    public static ItemGroup lighting;
-    public static ItemGroup microblocks;
+    public static CreativeModeTab blocks;
+    public static CreativeModeTab machines;
+    public static CreativeModeTab items;
+    public static CreativeModeTab tools;
+    public static CreativeModeTab circuits;
+    public static CreativeModeTab wiring;
+    public static CreativeModeTab lighting;
+    public static CreativeModeTab microblocks;
 
     static {
 
@@ -178,9 +178,9 @@ public class BPCreativeTabs {
                     }catch (NullPointerException ignored){
                         //Shulker Boxes try to query the Tile Entity
                     }
-                    if(block.getRegistryName() != null && shape == VoxelShapes.block()) {
+                    if(block.getRegistryName() != null && shape == Shapes.block()) {
                         for (Block mb : BPBlocks.microblocks){
-                            CompoundNBT nbt = new CompoundNBT();
+                            CompoundTag nbt = new CompoundTag();
                             nbt.putString("block", block.getRegistryName().toString());
                             ItemStack stack = new ItemStack(mb);
                             stack.setTag(nbt);

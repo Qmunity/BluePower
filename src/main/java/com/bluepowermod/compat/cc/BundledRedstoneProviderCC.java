@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public class BundledRedstoneProviderCC implements IBundledRedstoneProvider {
 
     @Override
-    public int getBundledRedstoneOutput(World world, BlockPos pos, EnumFacing side) {
+    public int getBundledRedstoneOutput(Level world, BlockPos pos, EnumFacing side) {
 
         BlockPos v = worldPosition.relative(side);
 

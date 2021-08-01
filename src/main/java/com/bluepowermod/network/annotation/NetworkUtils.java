@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bluepowermod.util.BPLog;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import com.bluepowermod.network.annotation.SyncedField.SyncedBoolean;
 import com.bluepowermod.network.annotation.SyncedField.SyncedDouble;
 import com.bluepowermod.network.annotation.SyncedField.SyncedEnum;

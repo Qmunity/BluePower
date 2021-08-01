@@ -1,9 +1,9 @@
 package com.bluepowermod.api.wire.redstone;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -30,8 +30,8 @@ public class CapabilityRedstoneDevice {
 
         @Nullable
         @Override
-        public INBT writeNBT(Capability<T> capability, T instance, Direction direction) {
-            CompoundNBT nbt = new CompoundNBT();
+        public Tag writeNBT(Capability<T> capability, T instance, Direction direction) {
+            CompoundTag nbt = new CompoundTag();
             nbt.putString("color", instance.getInsulationColor(direction).name());
             nbt.putByte("power", instance.getRedstonePower(direction));
             return nbt;
@@ -39,7 +39,7 @@ public class CapabilityRedstoneDevice {
 
         @Override
         public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
-            CompoundNBT tags = (CompoundNBT) nbt;
+            CompoundTag tags = (CompoundTag) nbt;
             byte power = tags.getByte("power");
             instance.setInsulationColor(MinecraftColor.valueOf(tags.getString("color")));
             instance.setRedstonePower(side, power);
@@ -51,14 +51,14 @@ public class CapabilityRedstoneDevice {
         @Nullable
         @Override
         public INBT writeNBT(Capability<T> capability, T instance, Direction direction) {
-            CompoundNBT nbt = new CompoundNBT();
+            CompoundTag nbt = new CompoundTag();
             nbt.putByte("power", instance.getRedstonePower(direction));
             return nbt;
         }
 
         @Override
         public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
-            CompoundNBT tags = (CompoundNBT) nbt;
+            CompoundTag tags = (CompoundTag) nbt;
             byte power = tags.getByte("power");
             instance.setRedstonePower(side, power);
         }

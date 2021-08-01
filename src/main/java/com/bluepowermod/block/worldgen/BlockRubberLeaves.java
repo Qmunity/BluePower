@@ -17,6 +17,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
+import RenderShape;
+
 public class BlockRubberLeaves extends LeavesBlock {
 
     public BlockRubberLeaves(Properties properties){
@@ -27,18 +32,18 @@ public class BlockRubberLeaves extends LeavesBlock {
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
+    public RenderShape getRenderShape(BlockState state) {
         return Blocks.OAK_LEAVES.getRenderShape(state);
     }
 
     @Nonnull
     @Override
-    public List<ItemStack> onSheared(@Nullable PlayerEntity player, @Nonnull ItemStack item, World world, BlockPos pos, int fortune) {
+    public List<ItemStack> onSheared(@Nullable Player player, @Nonnull ItemStack item, World world, BlockPos pos, int fortune) {
         return NonNullList.withSize(1, new ItemStack(this));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(DISTANCE, PERSISTENT);
     }
 

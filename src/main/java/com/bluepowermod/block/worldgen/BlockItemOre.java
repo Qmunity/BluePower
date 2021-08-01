@@ -27,6 +27,8 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.Random;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BlockItemOre extends BlockBase {
 
     protected Random rand = new Random();

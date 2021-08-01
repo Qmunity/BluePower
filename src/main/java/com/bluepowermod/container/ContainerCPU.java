@@ -8,24 +8,24 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.BPContainerType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
-public class ContainerCPU extends Container {
+public class ContainerCPU extends AbstractContainerMenu {
 
-	public ContainerCPU(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+	public ContainerCPU(int windowId, Inventory invPlayer, Container inventory) {
 		super(BPContainerType.CPU, windowId);
 	}
 
-	public ContainerCPU( int id, PlayerInventory player )    {
-		this( id, player, new Inventory( 0 ));
+	public ContainerCPU( int id, Inventory player )    {
+		this( id, player, new SimpleContainer( 0 ));
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity entityplayer) {
+	public boolean stillValid(Player entityplayer) {
 		return true;
 	}
 

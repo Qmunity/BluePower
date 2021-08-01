@@ -1,7 +1,7 @@
 package com.bluepowermod.api.wire.redstone;
 
 import com.bluepowermod.api.connect.IConnection;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 import java.util.Collection;
 import java.util.Map.Entry;

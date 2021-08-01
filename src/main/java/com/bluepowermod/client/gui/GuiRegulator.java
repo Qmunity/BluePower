@@ -24,26 +24,26 @@ import java.util.List;
 import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerRetriever;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerRegulator;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileRegulator;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * @author MineMaarten
  */
-public class GuiRegulator extends GuiContainerBaseBP<ContainerRegulator> implements IHasContainer<ContainerRegulator> {
+public class GuiRegulator extends GuiContainerBaseBP<ContainerRegulator> implements MenuAccess<ContainerRegulator> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/regulator.png");
     protected ContainerRegulator regulator;
 
-    public GuiRegulator(ContainerRegulator container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiRegulator(ContainerRegulator container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.regulator = container;
         imageWidth = 212;

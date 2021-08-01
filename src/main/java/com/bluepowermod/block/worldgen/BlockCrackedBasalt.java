@@ -37,6 +37,8 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 /**
  * @author MineMaarten
  */
@@ -59,7 +61,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
         worldIn.getBlockTicks().scheduleTick(pos, this, 20);
     }
 
-    private void spawnLava(World world, BlockPos pos, Random random) {
+    private void spawnLava(Level world, BlockPos pos, Random random) {
         if (DateEventHandler.isEvent(Event.NEW_YEAR)) {
             DateEventHandler.spawnFirework(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         } else {

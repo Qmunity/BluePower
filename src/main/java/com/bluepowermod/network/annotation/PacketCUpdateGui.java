@@ -1,8 +1,8 @@
 package com.bluepowermod.network.annotation;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.fluids.FluidStack;
 import com.bluepowermod.network.annotation.SyncedField.*;
 
@@ -95,14 +95,14 @@ public class PacketCUpdateGui{
         }
     }
 
-    public void handleClientSide(PlayerEntity player){
-        Container container = player.containerMenu;
+    public void handleClientSide(Player player){
+        AbstractContainerMenu container = player.containerMenu;
         //if(container instanceof ContainerBase) {
             //((ContainerBase)container).updateField(syncId, value);
         //}
     }
 
-    public void handleServerSide(PlayerEntity player){
+    public void handleServerSide(Player player){
 
     }
 

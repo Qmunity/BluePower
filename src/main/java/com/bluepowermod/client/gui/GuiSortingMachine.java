@@ -25,10 +25,10 @@ import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
 import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
@@ -36,12 +36,12 @@ import java.util.List;
  * @author MineMaarten
  */
 
-public class GuiSortingMachine extends GuiContainerBaseBP<ContainerSortingMachine> implements IHasContainer<ContainerSortingMachine> {
+public class GuiSortingMachine extends GuiContainerBaseBP<ContainerSortingMachine> implements MenuAccess<ContainerSortingMachine> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/sorting_machine.png");
     private final ContainerSortingMachine sortingMachine;
 
-    public GuiSortingMachine(ContainerSortingMachine container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiSortingMachine(ContainerSortingMachine container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.sortingMachine = container;
         imageHeight = 239;

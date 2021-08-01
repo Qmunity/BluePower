@@ -2,32 +2,25 @@ buildscript {
     repositories {
         maven { url = 'https://sizableshrimp.me/maven' }
         maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
         mavenCentral()
     }
     dependencies {
-        classpath group: 'me.sizableshrimp.parchmenttest', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'me.sizableshrimp.parchmenttest', name: 'ForgeGradle', version: '5.1.20', changing: true
     }
 }
 
-plugins {
-    id "com.wynprice.cursemaven" version "2.1.5"
-}
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
-apply plugin: 'maven'
-
-
 
 project.ext {
     major = "0"
-    minor = "5"
+    minor = "6"
     if (System.getenv("CI_PIPELINE_IID") != null) {
         build = System.getenv("CI_PIPELINE_IID") + "-alpha"
     } else {
         build = "-custom"
     }
-    mcVersion = "1.16.5"
+    mcVersion = "1.17.1"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -41,10 +34,10 @@ repositories {
     }
 }
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 minecraft {
-    mappings channel: 'parchment', version: '20210608-SNAPSHOT-1.16.5'
+    mappings channel: 'parchment', version: '2021.07.21-1.17'
 
     runs {
         client {
@@ -85,12 +78,12 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.32'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.10'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
-    compileOnly fg.deobf("curse.maven:Hwyla:3033595")
-    compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107")
+    //compileOnly fg.deobf("curse.maven:Hwyla:3033595")
+    //compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107:api")
+    //runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107")
 }
 
 jar {
@@ -119,73 +112,6 @@ apiZip.mustRunAfter deobfJar
 artifacts {
     archives deobfJar
     archives apiZip
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: "file://" + System.getenv("local_maven"))
-            pom {
-                groupId = project.group
-                version = project.version
-                artifactId = project.archivesBaseName
-                project {
-                    name project.archivesBaseName
-                    packaging 'jar'
-                    description 'BluePower'
-                    url 'https://github.com/Qmunity/BluePower'
-                    scm {
-                        url 'https://github.com/Qmunity/BluePower'
-                        connection 'scm:git:git@github.com:Qmunity/BluePower.git'
-                        developerConnection 'scm:git:git@github.com:Qmunity/BluePower.git'
-                    }
-                    issueManagement {
-                        system 'github'
-                        url 'https://github.com/Qmunity/BluePower/issues'
-                    }
-                    licenses {
-                        license {
-                            name 'GPLv3'
-                            url 'https://github.com/Qmunity/BluePower/blob/master/LICENCE.txt'
-                            distribution 'repo'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id 'MineMaarten'
-                            name 'MineMaarten'
-                            roles { role 'developer' }
-                        }
-                        developer {
-                            id 'Amadornes'
-                            name 'Amadornes'
-                            roles { role 'developer' }
-                        }
-                        developer {
-                            id 'Quetzi'
-                            name 'Quetzi'
-                            roles { role 'developer' }
-                        }
-                        developer {
-                            id 'K4Unl'
-                            name 'K4Unl'
-                            roles { role 'developer' }
-                        }
-                        developer {
-                            id 'MoreThanHidden'
-                            name 'MoreThanHidden'
-                            roles { role 'developer' }
-                        }
-                        developer {
-                            id 'Zness'
-                            name 'Zness'
-                            roles { role 'artist' }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 jar {

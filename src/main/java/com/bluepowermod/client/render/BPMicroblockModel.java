@@ -12,8 +12,8 @@ import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMicroblock;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
@@ -24,8 +24,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraftforge.client.model.data.IModelData;
@@ -41,11 +41,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+
 /**
  * Uses Microblock IModelData to create a model.
  * @author MoreThanHidden
  */
-public class BPMicroblockModel implements IBakedModel {
+public class BPMicroblockModel implements BakedModel {
     private Block defBlock = BPBlocks.marble;
     private Block defSize = BPBlocks.half_block;
     BPMicroblockModel(){}
@@ -60,7 +63,7 @@ public class BPMicroblockModel implements IBakedModel {
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
         Pair<Block, Integer> info = extraData.getData(TileBPMicroblock.PROPERTY_INFO);
         if (info != null) {
-            IBakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(info.getKey().defaultBlockState());
+            BakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(info.getKey().defaultBlockState());
             IBakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
 
             List<BakedQuad> bakedQuads = new ArrayList<>();
@@ -216,7 +219,7 @@ public class BPMicroblockModel implements IBakedModel {
         @Nullable
         @Override
         public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity){
-            CompoundNBT nbt = stack.getTag();
+            CompoundTag nbt = stack.getTag();
             if(nbt != null && nbt.contains("block")){
                 Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
                 return new BPMicroblockModel(block, Block.byItem(stack.getItem()));

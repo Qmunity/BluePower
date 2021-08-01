@@ -27,12 +27,12 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.shapes.Shapes;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -87,7 +87,7 @@ public class JEIPlugin implements IModPlugin {
             }catch (NullPointerException ignored){
                 //Shulker Boxes try to query the Tile Entity
             }
-            if(block.getRegistryName() != null && shape == VoxelShapes.block()) {
+            if(block.getRegistryName() != null && shape == Shapes.block()) {
                 ItemStack output = ItemStack.EMPTY;
                 for (Block mb : BPBlocks.microblocks){
                     NonNullList<Ingredient> input = NonNullList.create();
@@ -98,7 +98,7 @@ public class JEIPlugin implements IModPlugin {
                         input.add(Ingredient.of(output));
                     }
 
-                    CompoundNBT nbt = new CompoundNBT();
+                    CompoundTag nbt = new CompoundTag();
                     nbt.putString("block", block.getRegistryName().toString());
                     ItemStack stack = new ItemStack(mb);
                     stack.setTag(nbt);

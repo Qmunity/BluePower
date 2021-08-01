@@ -8,36 +8,31 @@
 package com.bluepowermod.client.gui;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetTab;
-import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerCircuitDatabaseSharing;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
-import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiCircuitDatabaseSharing extends GuiContainerBaseBP<ContainerCircuitDatabaseSharing> implements IHasContainer<ContainerCircuitDatabaseSharing> {
+public class GuiCircuitDatabaseSharing extends GuiContainerBaseBP<ContainerCircuitDatabaseSharing> implements MenuAccess<ContainerCircuitDatabaseSharing> {
 
     private final ContainerCircuitDatabaseSharing circuitDatabase;
     private int curDeletingTemplate = -1;
     private static final ResourceLocation copyTabTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_database.png");
 
-    public GuiCircuitDatabaseSharing(ContainerCircuitDatabaseSharing container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiCircuitDatabaseSharing(ContainerCircuitDatabaseSharing container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, copyTabTexture);
         this.circuitDatabase = container;
         //allowUserInput = true;

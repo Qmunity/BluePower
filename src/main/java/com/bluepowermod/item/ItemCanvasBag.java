@@ -24,42 +24,46 @@ import com.bluepowermod.container.ContainerCanvasBag;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.ServerPlayer;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Component;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class ItemCanvasBag extends ItemColorableOverlay implements INamedContainerProvider{
+import net.minecraft.world.item.Item.Properties;
+
+import ActionResult;
+
+public class ItemCanvasBag extends ItemColorableOverlay implements MenuProvider{
     
     public ItemCanvasBag(MinecraftColor color) {
         super(color, Refs.CANVASBAG_NAME, new Properties().stacksTo(1));
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand handIn) {
+    public ActionResult<ItemStack> use(Level world, Player player, InteractionHand handIn) {
         if (!world.isClientSide) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, this);
+            NetworkHooks.openGui((ServerPlayer) player, this);
         }
-        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getItemInHand(handIn));
+        return new ActionResult<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
     }
 
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return new StringTextComponent(Refs.CANVASBAG_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player player) {
         return new ContainerCanvasBag(id, inventory);
     }
 }

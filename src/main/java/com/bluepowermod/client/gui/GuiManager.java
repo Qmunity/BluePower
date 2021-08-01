@@ -23,26 +23,26 @@ import java.util.List;
 
 import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerAlloyFurnace;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerManager;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileManager;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * @author MineMaarten
  */
-public class GuiManager extends GuiContainerBaseBP<ContainerManager> implements IHasContainer<ContainerManager> {
+public class GuiManager extends GuiContainerBaseBP<ContainerManager> implements MenuAccess<ContainerManager> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/manager.png");
     protected ContainerManager manager;
 
-    public GuiManager(ContainerManager container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiManager(ContainerManager container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.manager = container;
         imageHeight = 187;

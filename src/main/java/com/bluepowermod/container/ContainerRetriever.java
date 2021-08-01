@@ -11,12 +11,12 @@ import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier2.TileRetriever;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
 
 import com.bluepowermod.ClientProxy;
 
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.SimpleContainer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,15 +27,15 @@ public class ContainerRetriever extends ContainerFilter {
 
     public int slotIndex = -1;
     public int mode = -1;
-    private final IInventory retriever;
+    private final Container retriever;
 
-    public ContainerRetriever(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+    public ContainerRetriever(int windowId, Inventory invPlayer, Container inventory) {
         super(BPContainerType.RETRIEVER, windowId, inventory);
         this.retriever = inventory;
     }
 
-    public ContainerRetriever( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( TileRetriever.SLOTS ));
+    public ContainerRetriever( int id, Inventory player )    {
+        this( id, player, new SimpleContainer( TileRetriever.SLOTS ));
     }
 
     @Override

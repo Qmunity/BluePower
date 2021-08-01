@@ -17,16 +17,18 @@
 
 package com.bluepowermod.item;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemIndigoDye extends ItemBase {
 
@@ -36,15 +38,15 @@ public class ItemIndigoDye extends ItemBase {
     }
 
 	@Override
-	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
-		if (entity instanceof SheepEntity) {
-			SheepEntity sheep = (SheepEntity) entity;
+	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity entity, InteractionHand hand) {
+		if (entity instanceof Sheep) {
+			Sheep sheep = (Sheep) entity;
 			if (!sheep.isSheared() && sheep.getColor() != DyeColor.PURPLE) {
 				sheep.setColor(DyeColor.PURPLE);
 				stack.setCount(stack.getCount() - 1);
 			}
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 }

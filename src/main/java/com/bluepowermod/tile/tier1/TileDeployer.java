@@ -12,7 +12,7 @@ import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.container.ContainerDeployer;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.authlib.GameProfile;
@@ -25,22 +25,21 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.Items;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.BlockHitResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Component;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
@@ -53,10 +52,12 @@ import java.util.List;
 import java.util.UUID;
 
 
+import net.minecraft.core.NonNullList;
+
 /**
  * @author MineMaarten
  */
-public class TileDeployer extends TileBase implements ISidedInventory, IEjectAnimator, INamedContainerProvider {
+public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAnimator, MenuProvider {
 
     private static final List<Item>  blacklistedItems    = new ArrayList<Item>();
     private static final GameProfile FAKE_PLAYER_PROFILE = new GameProfile(UUID.randomUUID(), "[BP Deployer]");
@@ -68,7 +69,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     }
 
     public TileDeployer() {
-        super(BPTileEntityType.DEPLOYER);
+        super(BPBlockEntityType.DEPLOYER);
     }
 
     private boolean canDeployItem(ItemStack stack) {
@@ -153,7 +154,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             if (event.isCanceled()) return false;
             
             Block block = level.getBlockState(new BlockPos(x, y, z)).getBlock();
-            List<LivingEntity> detectedEntities = level.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1));
+            List<LivingEntity> detectedEntities = level.getEntitiesOfClass(LivingEntity.class, new AABB(x, y, z, x + 1, y + 1, z + 1));
             
             Entity entity = detectedEntities.isEmpty() ? null : detectedEntities.get(level.random.nextInt(detectedEntities.size()));
             
@@ -169,12 +170,12 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             for (int i = 0; i < useItems; i++) {
                 player.inventory.selected = i;
                 ItemStack stack = player.getMainHandItem();
-                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, new ItemUseContext(player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == ActionResultType.SUCCESS) return true;
+                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, new ItemUseContext(player, Hand.MAIN_HAND, new BlockHitResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == InteractionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.selected = i;
-                if (!level.isEmptyBlock(new BlockPos(x, y, z)) && block.use(level.getBlockState(new BlockPos(x, y, z)), level, new BlockPos(x, y, z), player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == ActionResultType.SUCCESS) return true;
+                if (!level.isEmptyBlock(new BlockPos(x, y, z)) && block.use(level.getBlockState(new BlockPos(x, y, z)), level, new BlockPos(x, y, z), player, Hand.MAIN_HAND, new BlockHitResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == InteractionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
@@ -189,7 +190,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                 int useX = isGoingToShift ? worldPosition.getX() : x;
                 int useY = isGoingToShift ? worldPosition.getY() : y;
                 int useZ = isGoingToShift ? worldPosition.getZ() : z;
-                if (canDeployItem(stack) && stack.getItem().useOn(new ItemUseContext(player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == ActionResultType.SUCCESS) return true;
+                if (canDeployItem(stack) && stack.getItem().useOn(new ItemUseContext(player, Hand.MAIN_HAND, new BlockHitResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == InteractionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
@@ -214,12 +215,12 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundNBT tCompound) {
+    public void load(BlockState blockState, CompoundTag tCompound) {
     
         super.load(blockState, tCompound);
         
         for (int i = 0; i < 9; i++) {
-            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            CompoundTag tc = tCompound.getCompound("inventory" + i);
             inventory.set(i, ItemStack.of(tc));
         }
     }
@@ -228,12 +229,12 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT save(CompoundNBT tCompound) {
+    public CompoundTag save(CompoundTag tCompound) {
     
         super.save(tCompound);
         
         for (int i = 0; i < 9; i++) {
-                CompoundNBT tc = new CompoundNBT();
+                CompoundTag tc = new CompoundTag();
                 inventory.get(i).save(tc);
                 tCompound.put("inventory" + i, tc);
         }
@@ -290,17 +291,17 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     }
     
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 
@@ -367,13 +368,13 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     }
 
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return new StringTextComponent(Refs.BLOCKDEPLOYER_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player playerEntity) {
         return new ContainerDeployer(id, inventory, this);
     }
 }

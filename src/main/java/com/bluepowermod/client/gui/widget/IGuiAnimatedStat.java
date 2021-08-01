@@ -3,8 +3,8 @@ package com.bluepowermod.client.gui.widget;
 import java.awt.Rectangle;
 import java.util.List;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.FontRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.Font;
 
 /**
  * This interface doesn't have to be implemented. In PneumaticCraft there already is one class which implements this interface which is used many
@@ -170,7 +170,7 @@ public interface IGuiAnimatedStat {
      * @param zLevel
      * @param partialTicks
      */
-    public void render(MatrixStack matrixStack, FontRenderer fontRenderer, float zLevel, float partialTicks);
+    public void render(PoseStack matrixStack, Font fontRenderer, float zLevel, float partialTicks);
 
     /**
      * Forces the stat to close.

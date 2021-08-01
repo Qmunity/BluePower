@@ -11,13 +11,13 @@ import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
 public class RedstoneProviderCC implements IRedstoneProvider {
 
     @Override
-    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
+    public IRedstoneDevice getRedstoneDeviceAt(Level world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
         return null;
     }
 
     @Override
-    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
+    public IBundledDevice getBundledDeviceAt(Level world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
         Block b = world.getBlock(x, y, z);
         if (b == null || face == null || side == null)

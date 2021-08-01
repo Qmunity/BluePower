@@ -1,8 +1,8 @@
 package com.bluepowermod.api.power;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -25,15 +25,15 @@ public class CapabilityBlutricity {
 
         @Nullable
         @Override
-        public INBT writeNBT(Capability<T> capability, T instance, Direction direction) {
-            CompoundNBT nbt = new CompoundNBT();
+        public Tag writeNBT(Capability<T> capability, T instance, Direction direction) {
+            CompoundTag nbt = new CompoundTag();
             nbt.putDouble("blutricity", instance.getEnergy());
             return nbt;
         }
 
         @Override
         public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
-            CompoundNBT tags = (CompoundNBT) nbt;
+            CompoundTag tags = (CompoundTag) nbt;
             double energy = tags.getDouble("blutricity");
             instance.addEnergy(-(instance.getEnergy() - energy), false);
         }

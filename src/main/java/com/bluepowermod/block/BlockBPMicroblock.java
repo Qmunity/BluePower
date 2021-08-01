@@ -15,22 +15,22 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.CollisionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.BlockGetter;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -40,7 +40,10 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, IWaterLoggable {
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+
+public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -55,13 +58,13 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        TileEntity tileentity = builder.getParameter(LootParameters.BLOCK_ENTITY);
+        BlockEntity tileentity = builder.getParameter(LootParameters.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if(tileentity instanceof TileBPMultipart){
             tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
         }
         if (tileentity instanceof TileBPMicroblock) {
-            CompoundNBT nbt = new CompoundNBT();
+            CompoundTag nbt = new CompoundTag();
             nbt.putString("block", ((TileBPMicroblock)tileentity).getBlock().getRegistryName().toString());
             ItemStack stack = new ItemStack(this);
             stack.setTag(nbt);
@@ -74,14 +77,14 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
     }
 
     @Override
-    public ItemStack getCloneItemStack(IBlockReader world, BlockPos pos, BlockState state) {
-        TileEntity tileentity = world.getBlockEntity(pos);
+    public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
+        BlockEntity tileentity = world.getBlockEntity(pos);
         ItemStack stack = ItemStack.EMPTY;
         if(tileentity instanceof TileBPMultipart){
             tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
         }
         if (tileentity instanceof TileBPMicroblock) {
-            CompoundNBT nbt = new CompoundNBT();
+            CompoundTag nbt = new CompoundTag();
             nbt.putString("block", ((TileBPMicroblock) tileentity).getBlock().getRegistryName().toString());
             stack = new ItemStack(this);
             stack.setTag(nbt);
@@ -93,17 +96,17 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(FACING, WATERLOGGED);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return AABBUtils.rotate(size, state.getValue(FACING));
     }
 
@@ -118,12 +121,12 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state) {
-        AxisAlignedBB aabb = size.bounds();
+        AABB aabb = size.bounds();
         return AABBUtils.rotate(Block.box(3, aabb.minY * 16, 3, 13, aabb.maxY, 13), state.getValue(FACING));
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, Level worldIn, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
             worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
@@ -139,7 +142,7 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
+        Player player = context.getPlayer();
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         if(player != null && !player.isCrouching()) {
             return this.defaultBlockState().setValue(FACING, context.getClickedFace()).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
@@ -150,14 +153,14 @@ public class BlockBPMicroblock extends ContainerBlock implements IBPPartBlock, I
 
     @Nullable
     @Override
-    public TileEntity newBlockEntity(IBlockReader worldIn) {
+    public BlockEntity newBlockEntity(BlockGetter worldIn) {
         return new TileBPMicroblock();
     }
 
     @Override
-    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(worldIn, pos, state, placer, stack);
-        TileEntity tileentity = worldIn.getBlockEntity(pos);
+        BlockEntity tileentity = worldIn.getBlockEntity(pos);
         if (tileentity instanceof TileBPMicroblock && stack.hasTag() && stack.getTag().contains("block")) {
             //Update Microblock Type based on Stack
             Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(stack.getTag().getString("block")));

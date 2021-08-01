@@ -17,14 +17,14 @@
 
 package com.bluepowermod.helper;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public abstract class LocationCache<CachedType> {
     private final CachedType[] cachedValue;
 
-    public LocationCache(World world, BlockPos pos, Object... extraArgs) {
+    public LocationCache(Level world, BlockPos pos, Object... extraArgs) {
 
         if (world == null)
             throw new NullPointerException("World can't be null!");
@@ -34,7 +34,7 @@ public abstract class LocationCache<CachedType> {
         }
     }
 
-    protected abstract CachedType getNewValue(World world, BlockPos pos, Object... extraArgs);
+    protected abstract CachedType getNewValue(Level world, BlockPos pos, Object... extraArgs);
 
     public CachedType getValue(Direction side) {
         return cachedValue[side.ordinal()];

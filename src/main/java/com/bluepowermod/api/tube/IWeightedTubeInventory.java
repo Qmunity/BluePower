@@ -16,7 +16,7 @@
  */
 package com.bluepowermod.api.tube;
 
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 /**
     This interface is implemented by inventories with a buffer inventory, in which the tube _can_ but doesn't prefer to

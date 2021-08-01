@@ -26,10 +26,10 @@ import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileRegulator;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -38,15 +38,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @author MineMaarten
  */
-public class ContainerRegulator extends Container {
+public class ContainerRegulator extends AbstractContainerMenu {
 
-    private final IInventory regulator;
+    private final Container regulator;
     private int filterColor = -1;
     public TubeColor color = TubeColor.BLACK;
     public int mode = -1;
     public int fuzzySetting = -1;
 
-    public ContainerRegulator(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+    public ContainerRegulator(int windowId, Inventory invPlayer, Container inventory) {
         super(BPContainerType.REGULATOR, windowId);
         this.regulator = inventory;
 
@@ -108,13 +108,13 @@ public class ContainerRegulator extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return regulator.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) slots.get(par2);

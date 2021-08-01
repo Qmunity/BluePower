@@ -22,22 +22,24 @@ import com.bluepowermod.block.machine.BlockAlloyFurnace;
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.FurnaceTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -46,7 +48,7 @@ import javax.annotation.Nullable;
  * @author MineMaarten, Koen Beckers (K4Unl), amadornes
  */
 
-public class TileAlloyFurnace extends TileBase implements ISidedInventory, INamedContainerProvider {
+public class TileAlloyFurnace extends TileBase implements WorldlyContainer, MenuProvider {
 
     private boolean isActive;
     private int currentBurnTime;
@@ -59,8 +61,8 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
     private IAlloyFurnaceRecipe currentRecipe;
     private boolean updatingRecipe = true;
 
-    public TileAlloyFurnace() {
-        super(BPTileEntityType.ALLOY_FURNACE);
+    public TileAlloyFurnace(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.ALLOY_FURNACE, pos, state);
         this.inventory = NonNullList.withSize(9, ItemStack.EMPTY);
         this.fuelInventory = ItemStack.EMPTY;
         this.outputInventory = ItemStack.EMPTY;
@@ -72,12 +74,12 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundNBT tCompound) {
+    public void load(CompoundTag tCompound) {
 
-        super.load(blockState, tCompound);
+        super.load(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            CompoundTag tc = tCompound.getCompound("inventory" + i);
             inventory.set(i, ItemStack.of(tc));
         }
         fuelInventory = ItemStack.of(tCompound.getCompound("fuelInventory"));
@@ -89,23 +91,23 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT save(CompoundNBT tCompound) {
+    public CompoundTag save(CompoundTag tCompound) {
 
         super.save(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            CompoundNBT tc = new CompoundNBT();
+            CompoundTag tc = new CompoundTag();
             inventory.get(i).save(tc);
             tCompound.put("inventory" + i, tc);
         }
         if (fuelInventory != null) {
-            CompoundNBT fuelCompound = new CompoundNBT();
+            CompoundTag fuelCompound = new CompoundTag();
             fuelInventory.save(fuelCompound);
             tCompound.put("fuelInventory", fuelCompound);
         }
 
         if (outputInventory != null) {
-            CompoundNBT outputCompound = new CompoundNBT();
+            CompoundTag outputCompound = new CompoundTag();
             outputInventory.save(outputCompound);
             tCompound.put("outputInventory", outputCompound);
         }
@@ -114,7 +116,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public void readFromPacketNBT(CompoundNBT tag) {
+    public void readFromPacketNBT(CompoundTag tag) {
 
         super.readFromPacketNBT(tag);
         isActive = tag.getBoolean("isActive");
@@ -125,7 +127,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public void writeToPacketNBT(CompoundNBT tag) {
+    public void writeToPacketNBT(CompoundTag tag) {
 
         super.writeToPacketNBT(tag);
         tag.putInt("currentBurnTime", currentBurnTime);
@@ -137,54 +139,51 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
     /**
      * Function gets called every tick. Do not forget to call the super method!
      */
-    @Override
-    public void tick() {
-
-        super.tick();
-
+    public static void tick(Level level, BlockPos pos, BlockState state, TileAlloyFurnace blockEntity) {
+        TileBase.tick(level, pos, state, blockEntity);
         if (!level.isClientSide) {
-            setIsActive(currentBurnTime > 0);
-            if (isActive) {
-                currentBurnTime--;
+            blockEntity.setIsActive(blockEntity.currentBurnTime > 0);
+            if (blockEntity.isActive) {
+                blockEntity.currentBurnTime--;
             }
-            if (updatingRecipe) {
-                if(this.level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, this, this.level).isPresent()) {
-                    currentRecipe = (IAlloyFurnaceRecipe) this.level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, this, this.level).get();
+            if (blockEntity.updatingRecipe) {
+                if(level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, blockEntity, level).isPresent()) {
+                    blockEntity.currentRecipe = (IAlloyFurnaceRecipe) level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, blockEntity, level).get();
                 }else{
-                    currentRecipe = null;
+                    blockEntity.currentRecipe = null;
                 }
-                updatingRecipe = false;
+                blockEntity.updatingRecipe = false;
             }
-            if (currentRecipe != null) {
-                if (currentBurnTime <= 0) {
-                    if (FurnaceTileEntity.getFuel().containsKey(fuelInventory.getItem())) {
+            if (blockEntity.currentRecipe != null) {
+                if (blockEntity.currentBurnTime <= 0) {
+                    if (FurnaceBlockEntity.getFuel().containsKey(blockEntity.fuelInventory.getItem())) {
                         // Put new item in
-                        currentBurnTime = maxBurnTime = FurnaceTileEntity.getFuel().get(fuelInventory.getItem());
-                        if (!fuelInventory.isEmpty()) {
-                            fuelInventory.setCount(fuelInventory.getCount() - 1);
-                            if (fuelInventory.getCount() <= 0) {
-                                fuelInventory = fuelInventory.getItem().getContainerItem(fuelInventory);
+                        blockEntity.currentBurnTime = blockEntity.maxBurnTime = FurnaceBlockEntity.getFuel().get(blockEntity.fuelInventory.getItem());
+                        if (!blockEntity.fuelInventory.isEmpty()) {
+                            blockEntity.fuelInventory.setCount(blockEntity.fuelInventory.getCount() - 1);
+                            if (blockEntity.fuelInventory.getCount() <= 0) {
+                                blockEntity.fuelInventory = blockEntity.fuelInventory.getItem().getContainerItem(blockEntity.fuelInventory);
                             }
                         }
                     } else {
-                        currentProcessTime = 0;
+                        blockEntity.currentProcessTime = 0;
                     }
                 }
 
                 //Check if progress completed, and output slot is empty and less then a stack of the same item.
-                if (++currentProcessTime >= 200 && ((outputInventory.getItem() == currentRecipe.getResultItem().getItem()
-                        && (outputInventory.getCount() + currentRecipe.assemble(inventory).getCount()) <= 64)
-                                        || outputInventory.isEmpty()) && currentRecipe.useItems(inventory)) {
-                    currentProcessTime = 0;
-                    if (!outputInventory.isEmpty()) {
-                        outputInventory.setCount(outputInventory.getCount() + currentRecipe.assemble(inventory).getCount());
+                if (++blockEntity.currentProcessTime >= 200 && ((blockEntity.outputInventory.getItem() == blockEntity.currentRecipe.getResultItem().getItem()
+                        && (blockEntity.outputInventory.getCount() + blockEntity.currentRecipe.assemble(blockEntity.inventory).getCount()) <= 64)
+                                        || blockEntity.outputInventory.isEmpty()) && blockEntity.currentRecipe.useItems(blockEntity.inventory)) {
+                    blockEntity.currentProcessTime = 0;
+                    if (!blockEntity.outputInventory.isEmpty()) {
+                        blockEntity.outputInventory.setCount(blockEntity.outputInventory.getCount() + blockEntity.currentRecipe.assemble(blockEntity.inventory).getCount());
                     } else {
-                        outputInventory = currentRecipe.assemble(inventory).copy();
+                        blockEntity.outputInventory = blockEntity.currentRecipe.assemble(blockEntity.inventory).copy();
                     }
-                    updatingRecipe = true;
+                    blockEntity.updatingRecipe = true;
                 }
             } else {
-                currentProcessTime = 0;
+                blockEntity.currentProcessTime = 0;
             }
         }
     }
@@ -195,7 +194,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
         // setIsActive(newValue);
     }
 
-    protected final IIntArray fields = new IIntArray() {
+    protected final ContainerData fields = new ContainerData() {
         public int get(int i) {
             switch (i) {
                 case 0:
@@ -312,17 +311,17 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 
@@ -330,7 +329,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
     public boolean canPlaceItem(int slot, ItemStack itemStack) {
 
         if (slot == 0) {
-            return FurnaceTileEntity.isFuel(itemStack);
+            return FurnaceBlockEntity.isFuel(itemStack);
         } else if (slot == 1) { // Output slot
             return false;
         } else {
@@ -379,13 +378,13 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.ALLOYFURNACE_NAME);
+    public Component getDisplayName() {
+        return new TranslatableComponent(Refs.ALLOYFURNACE_NAME);
     }
-
+    
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerAlloyFurnace(id, inventory, this, fields);
     }
 }

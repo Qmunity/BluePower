@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 
 /**
@@ -15,7 +15,7 @@ import com.bluepowermod.tile.TileBase;
  */
 public class TileIOExpander extends TileBase implements IRedBusWindow {
     public TileIOExpander() {
-        super(BPTileEntityType.IO_EXPANDER);
+        super(BPBlockEntityType.IO_EXPANDER);
     }
     //TODO: half height block
 }

@@ -24,6 +24,9 @@ import net.minecraft.item.*;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SwordItem;
+
 public class ItemGemSword extends SwordItem {
 
     public    Item    customCraftingMaterial = Items.AIR;

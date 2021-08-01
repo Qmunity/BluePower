@@ -17,18 +17,18 @@
 
 package com.bluepowermod.api.recipe;
 
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
 
 /**
  * This class only should be used for special recipes, like recipes that depend on NBT. For normal recipes use
  * {@link com.bluepowermod.recipe.AlloyFurnaceRegistry#addRecipe(net.minecraft.util.ResourceLocation, ItemStack, Ingredient...)}.
  * @author MineMaarten
  */
-public interface IAlloyFurnaceRecipe extends IRecipe<ISidedInventory> {
+public interface IAlloyFurnaceRecipe extends Recipe<WorldlyContainer> {
     
     /**
      * Return true if this recipe can be smelted using the input stacks. The input stacks are the 9 inventory slots, so an element can be ItemStack.EMPTY.

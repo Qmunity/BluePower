@@ -13,127 +13,127 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.*;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.ObjectHolder;
 
 /**
  * @author MoreThanHidden
  */
-public class BPTileEntityType {
+public class BPBlockEntityType {
 
     @ObjectHolder(ContainerNames.ALLOY_FURNACE)
-    public static TileEntityType<TileAlloyFurnace> ALLOY_FURNACE;
+    public static BlockEntityType<TileAlloyFurnace> ALLOY_FURNACE;
 
     @ObjectHolder(ContainerNames.BUFFER)
-    public static TileEntityType<TileBuffer> BUFFER;
+    public static BlockEntityType<TileBuffer> BUFFER;
 
     @ObjectHolder(ContainerNames.SORTING_MACHINE)
-    public static TileEntityType<TileSortingMachine> SORTING_MACHINE;
+    public static BlockEntityType<TileSortingMachine> SORTING_MACHINE;
 
     @ObjectHolder(ContainerNames.CPU)
-    public static TileEntityType<TileCPU> CPU;
+    public static BlockEntityType<TileCPU> CPU;
 
     @ObjectHolder(ContainerNames.MONITOR)
-    public static TileEntityType<TileMonitor> MONITOR;
+    public static BlockEntityType<TileMonitor> MONITOR;
 
     @ObjectHolder(ContainerNames.DISK_DRIVE)
-    public static TileEntityType<TileDiskDrive> DISK_DRIVE;
+    public static BlockEntityType<TileDiskDrive> DISK_DRIVE;
 
     @ObjectHolder(ContainerNames.IO_EXPANDER)
-    public static TileEntityType<TileIOExpander> IO_EXPANDER;
+    public static BlockEntityType<TileIOExpander> IO_EXPANDER;
 
     @ObjectHolder(ContainerNames.KINETIC_GENERATOR)
-    public static TileEntityType<TileKinectGenerator> KINETIC_GENERATOR;
+    public static BlockEntityType<TileKinectGenerator> KINETIC_GENERATOR;
 
     @ObjectHolder(ContainerNames.DEPLOYER)
-    public static TileEntityType<TileDeployer> DEPLOYER;
+    public static BlockEntityType<TileDeployer> DEPLOYER;
 
     @ObjectHolder(ContainerNames.RELAY)
-    public static TileEntityType<TileRelay> RELAY;
+    public static BlockEntityType<TileRelay> RELAY;
 
     @ObjectHolder(ContainerNames.EJECTOR)
-    public static TileEntityType<TileEjector> EJECTOR;
+    public static BlockEntityType<TileEjector> EJECTOR;
 
     @ObjectHolder(ContainerNames.FILTER)
-    public static TileEntityType<TileFilter> FILTER;
+    public static BlockEntityType<TileFilter> FILTER;
 
     @ObjectHolder(ContainerNames.RETRIEVER)
-    public static TileEntityType<TileRetriever> RETRIEVER;
+    public static BlockEntityType<TileRetriever> RETRIEVER;
 
     @ObjectHolder(ContainerNames.REGULATOR)
-    public static TileEntityType<TileRegulator> REGULATOR;
+    public static BlockEntityType<TileRegulator> REGULATOR;
 
     @ObjectHolder(ContainerNames.ITEM_DETECTOR)
-    public static TileEntityType<TileItemDetector> ITEM_DETECTOR;
+    public static BlockEntityType<TileItemDetector> ITEM_DETECTOR;
 
     @ObjectHolder(ContainerNames.PROJECT_TABLE)
-    public static TileEntityType<TileProjectTable> PROJECT_TABLE;
+    public static BlockEntityType<TileProjectTable> PROJECT_TABLE;
 
     @ObjectHolder(ContainerNames.AUTO_PROJECT_TABLE)
-    public static TileEntityType<TileAutoProjectTable> AUTO_PROJECT_TABLE;
+    public static BlockEntityType<TileAutoProjectTable> AUTO_PROJECT_TABLE;
 
     @ObjectHolder(ContainerNames.CIRCUIT_TABLE)
-    public static TileEntityType<TileCircuitTable> CIRCUIT_TABLE;
+    public static BlockEntityType<TileCircuitTable> CIRCUIT_TABLE;
 
     @ObjectHolder(ContainerNames.MANAGER)
-    public static TileEntityType<TileManager> MANAGER;
+    public static BlockEntityType<TileManager> MANAGER;
 
     @ObjectHolder(ContainerNames.CIRCUITDATABASE_MAIN)
-    public static TileEntityType<TileCircuitDatabase> CIRCUITDATABASE;
+    public static BlockEntityType<TileCircuitDatabase> CIRCUITDATABASE;
 
     @ObjectHolder(ContainerNames.WINDMILL)
-    public static TileEntityType<TileCircuitDatabase> WINDMILL;
+    public static BlockEntityType<TileCircuitDatabase> WINDMILL;
 
     @ObjectHolder(Refs.MODID + ":engine")
-    public static TileEntityType<TileEngine> ENGINE;
+    public static BlockEntityType<TileEngine> ENGINE;
 
     @ObjectHolder(Refs.MODID + ":tube")
-    public static TileEntityType<TileEngine> TUBE;
+    public static BlockEntityType<TileEngine> TUBE;
 
     @ObjectHolder(Refs.MODID + ":sortron")
-    public static TileEntityType<TileSortron> SORTRON;
+    public static BlockEntityType<TileSortron> SORTRON;
 
     @ObjectHolder(Refs.MODID + ":block_breaker")
-    public static TileEntityType<TileBlockBreaker> BLOCKBREAKER;
+    public static BlockEntityType<TileBlockBreaker> BLOCKBREAKER;
 
     @ObjectHolder(Refs.MODID + ":igniter")
-    public static TileEntityType<TileIgniter> IGNITER;
+    public static BlockEntityType<TileIgniter> IGNITER;
 
     @ObjectHolder(Refs.MODID + ":lamp")
-    public static TileEntityType<TileLamp> LAMP;
+    public static BlockEntityType<TileLamp> LAMP;
 
     @ObjectHolder(Refs.MODID + ":multipart")
-    public static TileEntityType<TileBPMultipart> MULTIPART;
+    public static BlockEntityType<TileBPMultipart> MULTIPART;
 
     @ObjectHolder(Refs.MODID + ":transposer")
-    public static TileEntityType<TileTransposer> TRANSPOSER;
+    public static BlockEntityType<TileTransposer> TRANSPOSER;
 
     @ObjectHolder(Refs.MODID + ":wire")
-    public static TileEntityType<TileWire> WIRE;
+    public static BlockEntityType<TileWire> WIRE;
 
     @ObjectHolder(Refs.MODID + ":insulatedwire")
-    public static TileEntityType<TileInsulatedWire> INSULATEDWIRE;
+    public static BlockEntityType<TileInsulatedWire> INSULATEDWIRE;
 
     @ObjectHolder(Refs.MODID + ":battery")
-    public static TileEntityType<TileBattery> BATTERY;
+    public static BlockEntityType<TileBattery> BATTERY;
 
     @ObjectHolder(Refs.MODID + ":" + Refs.BLULECTRICCABLE_NAME)
-    public static TileEntityType<TileBattery> BLULECTRIC_CABLE;
+    public static BlockEntityType<TileBattery> BLULECTRIC_CABLE;
 
     @ObjectHolder(Refs.MODID + ":" + Refs.BLULECTRICFURNACE_NAME)
-    public static TileEntityType<TileBattery> BLULECTRIC_FURNACE;
+    public static BlockEntityType<TileBattery> BLULECTRIC_FURNACE;
 
     @ObjectHolder(Refs.MODID + ":" + Refs.BLULECTRICALLOYFURNACE_NAME)
-    public static TileEntityType<TileBattery> BLULECTRIC_ALLOY_FURNACE;
+    public static BlockEntityType<TileBattery> BLULECTRIC_ALLOY_FURNACE;
 
     @ObjectHolder(Refs.MODID + ":solar_panel")
-    public static TileEntityType<TileSolarPanel> SOLAR_PANEL;
+    public static BlockEntityType<TileSolarPanel> SOLAR_PANEL;
 
     @ObjectHolder(Refs.MODID + ":" + Refs.THERMOPILE_NAME)
-    public static TileEntityType<TileThermopile> THERMOPILE;
+    public static BlockEntityType<TileThermopile> THERMOPILE;
 
     @ObjectHolder(Refs.MODID + ":microblock")
-    public static TileEntityType<TileBPMicroblock> MICROBLOCK;
+    public static BlockEntityType<TileBPMicroblock> MICROBLOCK;
 
 
 }

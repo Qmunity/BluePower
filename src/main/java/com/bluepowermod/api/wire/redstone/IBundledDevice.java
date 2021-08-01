@@ -3,7 +3,7 @@ package com.bluepowermod.api.wire.redstone;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.misc.MinecraftColor;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 public interface IBundledDevice {
 

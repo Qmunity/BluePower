@@ -28,6 +28,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
 
+import net.minecraft.world.item.crafting.RecipeSerializer;
+
 /**
  * @author MoreThanHidden
  */
@@ -35,16 +37,16 @@ import net.minecraftforge.registries.ObjectHolder;
 public class BPRecipeSerializer {
 
     @ObjectHolder("alloy_smelting")
-    public static IRecipeSerializer<IAlloyFurnaceRecipe> ALLOYSMELTING;
+    public static RecipeSerializer<IAlloyFurnaceRecipe> ALLOYSMELTING;
 
     @ObjectHolder("micro_block")
-    public static IRecipeSerializer<MicroblockRecipe> MICROBLOCK;
+    public static RecipeSerializer<MicroblockRecipe> MICROBLOCK;
 
     @Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class Registration {
         @SubscribeEvent
-        public static void onRecipeSerializerRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
-            IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
+        public static void onRecipeSerializerRegistry(final RegistryEvent.Register<RecipeSerializer<?>> event) {
+            IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
             registry.register(new AlloyFurnaceRegistry.Serializer().setRegistryName(Refs.MODID + ":alloy_smelting"));
             registry.register(new MicroblockRecipe.Serializer().setRegistryName(Refs.MODID + ":micro_block"));
         }

@@ -10,13 +10,13 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileWire;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.BlockGetter;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
@@ -27,13 +27,13 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
     final String type;
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
+    public boolean hasBlockEntity(BlockState state) {
         return true;
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createBlockEntity(BlockState state, BlockGetter world) {
         return new TileWire();
     }
 
@@ -57,19 +57,19 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
     }
 
     @Override
-    protected boolean canConnect(World world, BlockPos pos, BlockState state, TileEntity tileEntity, Direction direction) {
+    protected boolean canConnect(Level world, BlockPos pos, BlockState state, BlockEntity tileEntity, Direction direction) {
         if(state.canConnectRedstone(world, pos, direction))
             return true;
         return super.canConnect(world, pos, state, tileEntity, direction);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(FACING, POWERED, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, JOIN_FRONT, JOIN_BACK, JOIN_LEFT, JOIN_RIGHT, WATERLOGGED);
     }
 
     @Override
-    public int getColor(BlockState state, IBlockReader w, BlockPos pos, int tint) {
+    public int getColor(BlockState state, BlockGetter w, BlockPos pos, int tint) {
         return RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
     }
 

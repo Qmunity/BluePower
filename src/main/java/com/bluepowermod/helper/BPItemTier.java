@@ -1,9 +1,9 @@
 package com.bluepowermod.helper;
 
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 
-public class BPItemTier implements IItemTier {
+public class BPItemTier implements Tier {
 
     private Ingredient ingredient;
     private final int maxUses;

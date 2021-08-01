@@ -1,6 +1,6 @@
 package com.bluepowermod.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import org.lwjgl.opengl.GL11;
@@ -34,7 +34,7 @@ public class WidgetSidewaysTab extends BaseWidget {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTick) {
 
         if (textures.length > 0)
             Minecraft.getInstance().getTextureManager().bind(textures[0]);

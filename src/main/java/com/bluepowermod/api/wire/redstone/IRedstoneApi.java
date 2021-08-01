@@ -3,9 +3,9 @@ package com.bluepowermod.api.wire.redstone;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionCache;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 ;
 
@@ -25,7 +25,7 @@ public interface IRedstoneApi {
      *            Face the device must be placed on or {@link null} if not know or not a face device
      * @return The redstone device at the specified coords, side and face.
      */
-    public IRedstoneDevice getRedstoneDevice(World world, BlockPos pos, Direction face, Direction side);
+    public IRedstoneDevice getRedstoneDevice(Level world, BlockPos pos, Direction face, Direction side);
 
     /**
      * Returns the bundled device at the specified coordinates and on the specified side and face. Data gotten from the registered
@@ -41,7 +41,7 @@ public interface IRedstoneApi {
      *            Face the device must be placed on or {@link null} if not know or not a face device
      * @return The redstone device at the specified coords, side and face.
      */
-    public IBundledDevice getBundledDevice(World world, BlockPos pos, Direction face, Direction side);
+    public IBundledDevice getBundledDevice(Level world, BlockPos pos, Direction face, Direction side);
 
     /**
      * Registers a redstone/bundled device provider.

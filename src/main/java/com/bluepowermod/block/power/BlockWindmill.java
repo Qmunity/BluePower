@@ -16,21 +16,23 @@ import com.bluepowermod.tile.tier2.TileWindmill;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.tileentity.BlockEntity;
+import net.minecraft.block.RenderShape;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.BlockGetter;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+
+import net.minecraft.world.level.block.EntityBlock;
 
 /**
  * 
  * @author TheFjong
  * 
  */
-public class BlockWindmill extends BlockContainerBase implements ITileEntityProvider {
+public class BlockWindmill extends BlockContainerBase implements EntityBlock {
     
     public BlockWindmill() {
         super(Material.METAL, TileWindmill.class);
@@ -39,13 +41,13 @@ public class BlockWindmill extends BlockContainerBase implements ITileEntityProv
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Nullable
     @Override
-    public TileEntity newBlockEntity(IBlockReader iBlockReader) {
+    public BlockEntity newBlockEntity(BlockGetter iBlockReader) {
         return new TileWindmill();
     }
 }

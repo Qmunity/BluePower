@@ -1,11 +1,11 @@
 package com.bluepowermod.block.lighting;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
 
 import java.awt.*;
 
@@ -16,7 +16,7 @@ public class BlockLampRGBSurface extends BlockLampSurface {
     }
 
     @Override
-    public int getColor(BlockState state, IBlockReader w, BlockPos pos, int tint) {
+    public int getColor(BlockState state, BlockGetter w, BlockPos pos, int tint) {
         return Color.getHSBColor((System.currentTimeMillis() % 10000) / 10000F, 1, 1).getRGB();
     }
 

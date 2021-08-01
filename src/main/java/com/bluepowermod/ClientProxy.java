@@ -22,8 +22,8 @@ import com.bluepowermod.client.render.RenderDebugScreen;
 import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -54,7 +54,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
 
         return Minecraft.getInstance().player;
     }

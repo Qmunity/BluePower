@@ -23,6 +23,9 @@ import net.minecraft.item.*;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.PickaxeItem;
+
 public class ItemGemPickaxe extends PickaxeItem {
 
     public    Item    customCraftingMaterial = Items.AIR;

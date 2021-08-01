@@ -15,8 +15,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.text.Component;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
@@ -31,7 +31,7 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
 
 
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
+    public CompoundTag save(CompoundTag tag) {
         super.save(tag);
         tag.putByte("slotIndex", (byte) slotIndex);
         tag.putByte("mode", (byte) mode);
@@ -39,7 +39,7 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag) {
+    public void load(BlockState state, CompoundTag tag) {
         super.load(state, tag);
         slotIndex = tag.getByte("slotIndex");
         mode = tag.getByte("mode");
@@ -51,13 +51,13 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     }
 
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return new StringTextComponent(Refs.RETRIEVER_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player playerEntity) {
         return new ContainerRetriever(id, inventory, this);
     }
 

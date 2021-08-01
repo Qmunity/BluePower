@@ -19,18 +19,18 @@
 
 package com.bluepowermod.container.slot;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
 
 public class SlotLocked extends Slot {
     
-    public SlotLocked(IInventory par1iInventory, int par2, int par3, int par4) {
+    public SlotLocked(Container par1iInventory, int par2, int par3, int par4) {
         super(par1iInventory, par2, par3, par4);
     }
     
     @Override
-    public boolean mayPickup(PlayerEntity par1EntityPlayer) {
+    public boolean mayPickup(Player par1EntityPlayer) {
         return false;
     }
 }

@@ -7,11 +7,11 @@
  */
 package com.bluepowermod.api.multipart;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -40,13 +40,13 @@ public interface IBPPartBlock {
     VoxelShape getOcclusionShape (BlockState state);
 
     /**
-     * Separate onRemove for Multipart so that the TileEntity isn't removed.
+     * Separate onRemove for Multipart so that the BlockEntity isn't removed.
      * @param state
      * @param worldIn
      * @param pos
      * @param newState
      */
-    default void onMultipartReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving){
+    default void onMultipartReplaced(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving){
     }
 
 }

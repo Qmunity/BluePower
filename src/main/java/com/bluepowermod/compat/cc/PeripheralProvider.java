@@ -8,7 +8,7 @@
 package com.bluepowermod.compat.cc;
 /*
 
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.world.World;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
@@ -21,9 +21,9 @@ public class PeripheralProvider implements IPeripheralProvider {
 
     }
     @Override
-    public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
+    public IPeripheral getPeripheral(Level world, int x, int y, int z, int side) {
 
-        TileEntity tile = world.getBlockEntity(x, y, z);
+        BlockEntity tile = world.getBlockEntity(x, y, z);
         if(tile instanceof IPeripheral)
             return (IPeripheral) tile;
         return null;

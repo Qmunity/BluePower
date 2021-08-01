@@ -1,6 +1,6 @@
 package com.bluepowermod.client.render;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * @author MoreThanHidden

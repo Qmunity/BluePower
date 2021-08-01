@@ -4,12 +4,12 @@ import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.block.machine.BlockAlloyWire;
 import com.bluepowermod.client.render.IBPColoredBlock;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,10 +34,10 @@ public class TileWire extends TileBase {
     public static final ModelProperty<Boolean> LIGHT_INFO = new ModelProperty<>();
 
     public TileWire() {
-        super(BPTileEntityType.WIRE);
+        super(BPBlockEntityType.WIRE);
     }
 
-    public TileWire(TileEntityType type) {
+    public TileWire(BlockEntityType type) {
         super(type);
     }
 
@@ -55,7 +55,7 @@ public class TileWire extends TileBase {
     }
 
     @Override
-    protected void readFromPacketNBT(CompoundNBT compound) {
+    protected void readFromPacketNBT(CompoundTag compound) {
         super.readFromPacketNBT(compound);
         //if(compound.contains("device")) {
         //    INBT nbtstorage = compound.get("device");
@@ -64,15 +64,15 @@ public class TileWire extends TileBase {
     }
 
     @Override
-    protected void writeToPacketNBT(CompoundNBT tCompound) {
+    protected void writeToPacketNBT(CompoundTag tCompound) {
         super.writeToPacketNBT(tCompound);
         //INBT nbtstorage = CapabilityRedstoneDevice.UNINSULATED_CAPABILITY.getStorage().writeNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null);
         //tCompound.put("device", nbtstorage);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        return this.save(new CompoundTag());
     }
 
     @Nonnull
@@ -94,7 +94,7 @@ public class TileWire extends TileBase {
                 //Make sure the cable is the same color or none
                 //if(device.getInsulationColor(null) != MinecraftColor.NONE)
                     //directions.removeIf(d -> {
-                        //TileEntity tile = world.getBlockEntity(worldPosition.relative(d));
+                        //BlockEntity tile = world.getBlockEntity(worldPosition.relative(d));
                         //return tile instanceof TileWire
                                 //&& !(((TileWire) tile).device.getInsulationColor(d) == device.getInsulationColor(d.getOpposite())
                                 //|| ((TileWire) tile).device.getInsulationColor(d) == MinecraftColor.NONE);

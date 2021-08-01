@@ -19,19 +19,19 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerEjector;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
-public class GuiEjector extends GuiContainerBaseBP<ContainerEjector> implements IHasContainer<ContainerEjector> {
+public class GuiEjector extends GuiContainerBaseBP<ContainerEjector> implements MenuAccess<ContainerEjector> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
 
-    public GuiEjector(ContainerEjector container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiEjector(ContainerEjector container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
     }
 }

@@ -21,11 +21,11 @@ import com.bluepowermod.world.BPWorldGen;
 import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
 import com.google.common.collect.Lists;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.TableLootEntry;
-import net.minecraft.resources.ResourcePackInfo;
-import net.minecraft.resources.ResourcePackList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackRepository;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
@@ -33,12 +33,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.ModLoadingStage;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmlserverevents.FMLServerAboutToStartEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -80,7 +81,7 @@ public class BluePower {
     public static Logger log = LogManager.getLogger(Refs.MODID);
 
     public void setup(FMLCommonSetupEvent event) {
-        DeferredWorkQueue.runLater(BPNetworkHandler::init);
+        event.enqueueWork(BPNetworkHandler::init);
         OreDictionarySetup.init();
         CapabilityBlutricity.register();
         CapabilityRedstoneDevice.register();
@@ -105,7 +106,7 @@ public class BluePower {
     {
         ResourceLocation grass = new ResourceLocation("minecraft", "blocks/tall_grass");
         if (event.getName().equals(grass)){
-                event.getTable().addPool(LootPool.lootPool().add(TableLootEntry.lootTableReference(new ResourceLocation("bluepower", "blocks/tall_grass"))).name("bluepower:tall_grass").build());
+                event.getTable().addPool(LootPool.lootPool().add(LootTableReference.lootTableReference(new ResourceLocation("bluepower", "blocks/tall_grass"))).name("bluepower:tall_grass").build());
         }
     }
 
@@ -118,25 +119,25 @@ public class BluePower {
             BPRecyclingReloadListener.onResourceManagerReload(event.getServer().getRecipeManager());
 
             //Get Datapacks
-            ResourcePackList resourcepacklist = event.getServer().getPackRepository();
+            PackRepository resourcepacklist = event.getServer().getPackRepository();
             resourcepacklist.reload();
-            List<ResourcePackInfo> list = Lists.newArrayList(resourcepacklist.getSelectedPacks());
+            List<Pack> list = Lists.newArrayList(resourcepacklist.getSelectedPacks());
 
             //Enable the Blue Power Dynamic Datapack
-            ResourcePackInfo bluepowerDatapack = resourcepacklist.getPack("file/bluepower");
+            Pack bluepowerDatapack = resourcepacklist.getPack("file/bluepower");
             if(!list.contains(bluepowerDatapack)) {
                 list.add(2, bluepowerDatapack);
             }
 
             //Fix Forge / Vanilla Order (Issue RestrictedPortals#34)
-            ResourcePackInfo vanillaDatapack = resourcepacklist.getPack("vanilla");
+            Pack vanillaDatapack = resourcepacklist.getPack("vanilla");
             if(list.get(0) != vanillaDatapack) {
                 list.remove(vanillaDatapack);
                 list.add(0, vanillaDatapack);
             }
 
             //Reload Datapacks
-            event.getServer().reloadResources(list.stream().map(ResourcePackInfo::getId).collect(Collectors.toList())).exceptionally(ex -> null);
+            event.getServer().reloadResources(list.stream().map(Pack::getId).collect(Collectors.toList())).exceptionally(ex -> null);
         }
 
     }

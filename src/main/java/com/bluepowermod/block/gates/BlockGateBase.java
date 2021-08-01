@@ -19,26 +19,28 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.CollisionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.BlockGetter;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+
 /**
  * @author MoreThanHidden
  */
-public class BlockGateBase extends BlockBase implements IWaterLoggable {
+public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
 
     private final String name;
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -62,12 +64,12 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(FACING, ROTATION, POWERED_BACK, POWERED_FRONT, POWERED_LEFT, POWERED_RIGHT, WATERLOGGED);
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, Level worldIn, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
             worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
@@ -80,12 +82,12 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return AABBUtils.rotate(Refs.GATE_AABB, state.getValue(FACING));
     }
 
     @Override
-    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
+    public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return state.getValue(FACING) != side && (state.getValue(FACING).getOpposite() != side);
     }
 
@@ -98,7 +100,7 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
         super.setPlacedBy(world, pos, state, entity, stack);
         Map<String, Byte> map = getSidePower(world, state, pos);
         world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get("front") > 0)
@@ -113,7 +115,7 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side){
+    public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side){
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
         if(side == dirs[blockState.getValue(ROTATION)]) {
             Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
@@ -123,7 +125,7 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    public int getDirectSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+    public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
         if(side == dirs[blockState.getValue(ROTATION)]) {
             Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
@@ -132,7 +134,7 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
         return 0;
     }
 
-    private Map<String, Byte> getSidePower(IBlockReader worldIn, BlockState state, BlockPos pos){
+    private Map<String, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos){
          Map<String, Byte> map = new HashMap<>();
          Direction[] dirs = DirectionHelper.ArrayFromDirection(state.getValue(FACING));
          Direction side_left = dirs[state.getValue(ROTATION) == 3 ? 0 : state.getValue(ROTATION) + 1];
