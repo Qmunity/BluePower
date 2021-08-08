@@ -19,21 +19,21 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.IFluidBlock;
 
 import java.util.List;
 
 public class TileBlockBreaker extends TileMachineBase {
 
-    public TileBlockBreaker() {
-        super(BPBlockEntityType.BLOCKBREAKER);
+    public TileBlockBreaker(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.BLOCKBREAKER, pos, state);
     }
 
     @Override
@@ -45,13 +45,13 @@ public class TileBlockBreaker extends TileMachineBase {
             Direction direction = getFacingDirection();
             BlockState breakState = level.getBlockState(worldPosition.relative(direction));
             if (!canBreakBlock(breakState.getBlock(), level, breakState, worldPosition.relative(direction))) return;
-            List<ItemStack> breakStacks = breakState.getBlock().getDrops(breakState, (ServerWorld) level, worldPosition.relative(direction),this);
+            List<ItemStack> breakStacks = breakState.getBlock().getDrops(breakState, (ServerLevel) level, worldPosition.relative(direction),this);
             level.destroyBlock(worldPosition.relative(direction), false); // destroyBlock
             addItemsToOutputBuffer(breakStacks);
         }
     }
 
-    private boolean canBreakBlock(Block block, World world, BlockState state, BlockPos pos) {
+    private boolean canBreakBlock(Block block, Level world, BlockState state, BlockPos pos) {
     
         return !world.isEmptyBlock(pos) && !(block instanceof IFluidBlock) && state.getDestroySpeed(level, pos) > -1.0F;
     }

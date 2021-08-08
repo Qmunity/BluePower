@@ -10,7 +10,6 @@ package com.bluepowermod.tile.tier1;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.lighting.BlockLampRGB;
 import com.bluepowermod.helper.MathHelper;
-import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundTag;
 
 
@@ -32,7 +31,7 @@ public class TileLampRGB extends TileLamp {
     }
 
     @Override
-    public void load(BlockState blockState, CompoundTag tCompound) {
+    public void load(CompoundTag tCompound) {
         if (tCompound.contains("red")) {
             byte[] pow = bundledPower;
             pow[MinecraftColor.RED.ordinal()] = tCompound.getByte("red");

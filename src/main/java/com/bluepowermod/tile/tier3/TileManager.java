@@ -10,22 +10,24 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.tile.BPBlockEntityType;
-import com.bluepowermod.tile.IFuzzyRetrieving;
-import com.bluepowermod.tile.IRejectAnimator;
-import com.bluepowermod.tile.TileMachineBase;
+import com.bluepowermod.tile.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * @author MineMaarten
  */
-public class TileManager extends TileMachineBase implements WorldlyContainer,  IRejectAnimator, IFuzzyRetrieving, IGuiButtonSensitive {
+public class TileManager extends TileMachineBase implements WorldlyContainer, IRejectAnimator, IFuzzyRetrieving, IGuiButtonSensitive {
     public static final int SLOTS = 25;
     protected final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
     public TubeColor filterColor = TubeColor.NONE;
@@ -34,8 +36,8 @@ public class TileManager extends TileMachineBase implements WorldlyContainer,  I
     public int fuzzySetting;
     private int rejectTicker = -1;
 
-    public TileManager() {
-        super(BPBlockEntityType.MANAGER);
+    public TileManager(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.MANAGER, pos, state);
     }
 
     private int acceptedItems(ItemStack item) {
@@ -62,21 +64,20 @@ public class TileManager extends TileMachineBase implements WorldlyContainer,  I
         }
     }
 
-    @Override
-    public void tick() {
+    public static void tickManager(Level level, BlockPos pos, BlockState state, TileManager blockEntity) {
 
-        if (!level.isClientSide && getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
-            dumpUnwantedItems();
-            retrieveItemsFromManagers();
-            setOutputtingRedstone(mode == 0 && shouldEmitRedstone());
+        if (!level.isClientSide && blockEntity.getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
+            blockEntity.dumpUnwantedItems();
+            blockEntity.retrieveItemsFromManagers();
+            blockEntity.setOutputtingRedstone(blockEntity.mode == 0 && blockEntity.shouldEmitRedstone());
         }
-        if (rejectTicker >= 0) {
-            if (++rejectTicker > ANIMATION_TIME) {
-                rejectTicker = -1;
-                markForRenderUpdate();
+        if (blockEntity.rejectTicker >= 0) {
+            if (++blockEntity.rejectTicker > ANIMATION_TIME) {
+                blockEntity.rejectTicker = -1;
+                blockEntity.markForRenderUpdate();
             }
         }
-        super.tick();
+        TileBase.tickTileBase(level, pos, state, blockEntity);
     }
 
     private boolean shouldEmitRedstone() {
@@ -118,9 +119,9 @@ public class TileManager extends TileMachineBase implements WorldlyContainer,  I
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundTag tCompound) {
+    public void load(CompoundTag tCompound) {
 
-        super.load(blockState, tCompound);
+        super.load(tCompound);
 
         for (int i = 0; i < 24; i++) {
             CompoundTag tc = tCompound.getCompound("inventory" + i);
@@ -131,6 +132,7 @@ public class TileManager extends TileMachineBase implements WorldlyContainer,  I
         priority = tCompound.getByte("priority");
         fuzzySetting = tCompound.getByte("fuzzySetting");
     }
+
 
     /**
      * This function gets called whenever the world/chunk is saved
@@ -225,7 +227,7 @@ public class TileManager extends TileMachineBase implements WorldlyContainer,  I
 
     @Override
     public boolean stillValid(Player player) {
-        return worldPosition.closerThan(new Vector3i(player.getX(), player.getY(), player.getZ()), 64.0D);
+        return worldPosition.closerThan(new Vec3i(player.getX(), player.getY(), player.getZ()), 64.0D);
     }
 
     @Override

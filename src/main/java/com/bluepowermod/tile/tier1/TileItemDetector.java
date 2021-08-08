@@ -12,20 +12,22 @@ import com.bluepowermod.container.ContainerItemDetector;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.WorldlyContainer;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.core.NonNullList;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -40,24 +42,24 @@ public class TileItemDetector extends TileMachineBase implements WorldlyContaine
     private int savedPulses = 0;
     public int fuzzySetting;
 
-    public TileItemDetector() {
-        super(BPBlockEntityType.ITEM_DETECTOR);
+    public TileItemDetector(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.ITEM_DETECTOR, pos, state);
     }
 
-    @Override
-    public void tick() {
 
-        super.tick();
+    public static void tickItemDetector(Level level, BlockPos pos, BlockState state, TileItemDetector tileItemDetector) {
+
+        TileBase.tickTileBase(level, pos, state, tileItemDetector);
         if (!level.isClientSide) {
-            if (mode == 0 || mode == 1) {
+            if (tileItemDetector.mode == 0 || tileItemDetector.mode == 1) {
                 if (level.getGameTime() % 2 == 0) {
-                    if (getOutputtingRedstone() > 0) {
-                        this.setOutputtingRedstone(false);
-                        sendUpdatePacket();
-                    } else if (savedPulses > 0) {
-                        savedPulses--;
-                        setOutputtingRedstone(true);
-                        sendUpdatePacket();
+                    if (tileItemDetector.getOutputtingRedstone() > 0) {
+                        tileItemDetector.setOutputtingRedstone(false);
+                        tileItemDetector.sendUpdatePacket();
+                    } else if (tileItemDetector.savedPulses > 0) {
+                        tileItemDetector.savedPulses--;
+                        tileItemDetector.setOutputtingRedstone(true);
+                        tileItemDetector.sendUpdatePacket();
                     }
                 }
             } else {
@@ -101,11 +103,11 @@ public class TileItemDetector extends TileMachineBase implements WorldlyContaine
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundTag tCompound) {
-        super.load(blockState, tCompound);
+    public void load(CompoundTag tCompound) {
+        super.load(tCompound);
         for (int i = 0; i < 9; i++) {
             CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, new ItemStack((IItemProvider) tc));
+            inventory.set(i, ItemStack.of(tc));
         }
 
         mode = tCompound.getByte("mode");
@@ -265,12 +267,12 @@ public class TileItemDetector extends TileMachineBase implements WorldlyContaine
 
     @Override
     public Component getDisplayName() {
-        return new StringTextComponent(Refs.ITEMDETECTOR_NAME);
+        return new TextComponent(Refs.ITEMDETECTOR_NAME);
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player playerEntity) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player playerEntity) {
         return new ContainerItemDetector(id, inventory, this);
     }
 }

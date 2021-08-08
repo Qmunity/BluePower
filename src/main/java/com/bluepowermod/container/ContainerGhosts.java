@@ -52,7 +52,7 @@ public abstract class ContainerGhosts extends AbstractContainerMenu {
                 slot.set(ItemStack.EMPTY);
             }
         } else if (clickTypeIn.ordinal() == 0 || clickTypeIn.ordinal() == 1) {
-            PlayerInventory playerInv = player.inventory;
+            PlayerInventory playerInv = player.getInventory();
             slot.setChanged();
             ItemStack stackSlot = slot.getItem();
             ItemStack stackHeld = playerInv.getCarried();

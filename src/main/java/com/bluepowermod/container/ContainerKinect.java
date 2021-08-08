@@ -18,7 +18,6 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
@@ -27,7 +26,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.tile.tier3.TileKinectGenerator;
+import com.bluepowermod.tile.tier3.TileKineticGenerator;
 
 public class ContainerKinect extends AbstractContainerMenu {
 
@@ -44,7 +43,7 @@ public class ContainerKinect extends AbstractContainerMenu {
     }
 
     public ContainerKinect( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( TileKinectGenerator.SLOTS ));
+        this( id, player, new Inventory( TileKineticGenerator.SLOTS ));
     }
 
 

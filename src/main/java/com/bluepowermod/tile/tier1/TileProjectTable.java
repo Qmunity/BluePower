@@ -11,20 +11,21 @@ import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.WorldlyContainer;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.BlockEntityType;
-import net.minecraft.util.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
@@ -38,12 +39,12 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
     private NonNullList<ItemStack> inventory = NonNullList.withSize(18, ItemStack.EMPTY);
     protected NonNullList<ItemStack> craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
 
-    public TileProjectTable() {
-        super(BPBlockEntityType.PROJECT_TABLE);
+    public TileProjectTable(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.PROJECT_TABLE, pos, state);
     }
 
-    public TileProjectTable(BlockEntityType<?> type) {
-        super(type);
+    public TileProjectTable(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
 
         super.save(tag);
 
-        ListNBT tagList = new ListNBT();
+        ListTag tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
                 CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte)currentIndex);
@@ -73,7 +74,7 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
         }
         tag.put("Items", tagList);
 
-        tagList = new ListNBT();
+        tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < craftingGrid.size(); ++currentIndex) {
                 CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
@@ -85,11 +86,11 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
     }
 
     @Override
-    public void load(BlockState blockState, CompoundTag tag) {
+    public void load(CompoundTag tag) {
 
-        super.load(blockState, tag);
+        super.load(tag);
 
-        ListNBT tagList = tag.getList("Items", 10);
+        ListTag tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(19, ItemStack.EMPTY);
         for (int i = 0; i < tagList.size(); ++i) {
             CompoundTag tagCompound = tagList.getCompound(i);
@@ -209,12 +210,12 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
 
     @Override
     public Component getDisplayName() {
-        return new StringTextComponent(Refs.PROJECTTABLE_NAME);
+        return new TextComponent(Refs.PROJECTTABLE_NAME);
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerProjectTable(id, inventory, this);
     }
 

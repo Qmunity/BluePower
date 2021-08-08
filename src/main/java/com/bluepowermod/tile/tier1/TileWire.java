@@ -7,10 +7,11 @@ import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.util.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
@@ -33,12 +34,12 @@ public class TileWire extends TileBase {
     public static final ModelProperty<Pair<Integer, Integer>> COLOR_INFO = new ModelProperty<>();
     public static final ModelProperty<Boolean> LIGHT_INFO = new ModelProperty<>();
 
-    public TileWire() {
-        super(BPBlockEntityType.WIRE);
+    public TileWire(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.WIRE, pos, state);
     }
 
-    public TileWire(BlockEntityType type) {
-        super(type);
+    public TileWire(BlockEntityType type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
 

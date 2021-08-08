@@ -10,9 +10,11 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.BluePower;
 import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,8 +68,8 @@ public class TileCPU extends TileBase implements IRedBusWindow {
     private int effectiveAddress;
     private int BRKaddress;
 
-    public TileCPU() {
-        super(BPBlockEntityType.CPU);
+    public TileCPU(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.CPU, pos, state);
         //TODO: make memory a config option
         this.memory = new byte[8192];
         powerOnReset();
@@ -122,22 +124,21 @@ public class TileCPU extends TileBase implements IRedBusWindow {
     }
     
     //TODO: NBT read/write
-    
-    @Override
-    public void tick() {
+
+    public static void tickCPU(TileCPU tileCPU) {
         // 20 ticks per second = 20khz
-        if (halt) return;
-        this.rtc += 1;
-        
-        this.flag_WAI = false;
-        this.redbus_timeout = false;
-        
-        availableCycles += cpuForTickCycles;
-        if (availableCycles > cpuStoredCycles) {
-            availableCycles = cpuStoredCycles;
+        if (tileCPU.halt) return;
+        tileCPU.rtc += 1;
+
+        tileCPU.flag_WAI = false;
+        tileCPU.redbus_timeout = false;
+
+        tileCPU.availableCycles += tileCPU.cpuForTickCycles;
+        if (tileCPU.availableCycles > tileCPU.cpuStoredCycles) {
+            tileCPU.availableCycles = tileCPU.cpuStoredCycles;
         }
-        while (availableCycles > 0 && !this.flag_WAI && !this.redbus_timeout) {
-            executeInstruction();
+        while (tileCPU.availableCycles > 0 && !tileCPU.flag_WAI && !tileCPU.redbus_timeout) {
+            tileCPU.executeInstruction();
             // dumpMemory();
         }
     }
@@ -996,7 +997,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
         BluePower.log.info("self block=" + this.getType());
         if ( this.level.isEmptyBlock(this.worldPosition)) {
             //set CPU on fire for the lolz
-            this.level.playLocalSound((double)this.worldPosition.getX() + 0.5D, (double)this.worldPosition.getY() + 0.5D, (double)this.worldPosition.getZ() + 0.5D, SoundEvents.FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, this.level.random.nextFloat() * 0.4F + 0.8F, true);
+            this.level.playLocalSound((double)this.worldPosition.getX() + 0.5D, (double)this.worldPosition.getY() + 0.5D, (double)this.worldPosition.getZ() + 0.5D, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, this.level.random.nextFloat() * 0.4F + 0.8F, true);
             this.level.setBlockAndUpdate(this.worldPosition, Blocks.FIRE.defaultBlockState());
         }
     }

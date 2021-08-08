@@ -36,12 +36,10 @@ import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.util.Dependencies;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.trees.OakTree;
-import net.minecraft.item.Item;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -376,7 +374,7 @@ public class BPBlocks {
                         event.getRegistry().register(new BlockItem(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
                     }
                 }else{
-                    ItemGroup group = BPCreativeTabs.blocks;
+                    CreativeModeTab group = BPCreativeTabs.blocks;
                     if(block instanceof BlockContainerBase){group = BPCreativeTabs.machines;}
                     if(block instanceof BlockLamp){group = BPCreativeTabs.lighting;}
                     if(block instanceof BlockAlloyWire){group = BPCreativeTabs.wiring;}

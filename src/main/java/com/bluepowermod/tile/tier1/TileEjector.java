@@ -21,19 +21,18 @@ import com.bluepowermod.container.ContainerEjector;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.BlockEntityType;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.core.NonNullList;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -42,8 +41,8 @@ public class TileEjector extends TileMachineBase implements Container, MenuProvi
     public static final int SLOTS = 10;
     private final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
 
-    public TileEjector() {
-        super(BPBlockEntityType.EJECTOR);
+    public TileEjector(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.EJECTOR, pos, state);
     }
 
     @Override
@@ -70,13 +69,13 @@ public class TileEjector extends TileMachineBase implements Container, MenuProvi
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundTag tCompound) {
+    public void load(CompoundTag tCompound) {
 
-        super.load(blockState, tCompound);
+        super.load(tCompound);
 
         for (int i = 0; i < 9; i++) {
             CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, new ItemStack((IItemProvider) tc));
+            inventory.set(i, ItemStack.of(tc));
         }
     }
 
@@ -234,12 +233,12 @@ public class TileEjector extends TileMachineBase implements Container, MenuProvi
 
     @Override
     public Component getDisplayName() {
-        return new StringTextComponent(Refs.EJECTOR_NAME);
+        return new TextComponent(Refs.EJECTOR_NAME);
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player playerEntity) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player playerEntity) {
         return new ContainerEjector(id, inventory, this);
     }
 }

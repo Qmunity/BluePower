@@ -57,7 +57,7 @@ public class BlockEntityRegistration {
                     BlockEntityType.Builder.of(TileBlulectricAlloyFurnace::new, BPBlocks.blulectric_alloyfurnace).build(null).setRegistryName(new ResourceLocation(Refs.MODID, Refs.BLULECTRICALLOYFURNACE_NAME)),
                     BlockEntityType.Builder.of(TileThermopile::new, BPBlocks.thermopile).build(null).setRegistryName(new ResourceLocation(Refs.MODID, Refs.THERMOPILE_NAME)),
                     //BlockEntityType.Builder.of(TileWindmill::new, BPBlocks.windmill).build(null).setRegistryName(ContainerNames.WINDMILL),
-                    BlockEntityType.Builder.of(TileKinectGenerator::new, BPBlocks.kinetic_generator).build(null).setRegistryName(ContainerNames.KINETIC_GENERATOR),
+                    BlockEntityType.Builder.of(TileKineticGenerator::new, BPBlocks.kinetic_generator).build(null).setRegistryName(ContainerNames.KINETIC_GENERATOR),
                     BlockEntityType.Builder.of(TileSolarPanel::new, BPBlocks.solarpanel).build(null).setRegistryName(new ResourceLocation(Refs.MODID, "solar_panel")),
                     BlockEntityType.Builder.of(TileDeployer::new, BPBlocks.deployer).build(null).setRegistryName(ContainerNames.DEPLOYER),
                     BlockEntityType.Builder.of(TileEjector::new, BPBlocks.ejector).build(null).setRegistryName(ContainerNames.EJECTOR),

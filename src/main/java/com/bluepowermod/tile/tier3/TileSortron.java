@@ -9,7 +9,8 @@ package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.tileentity.BlockEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * @author Dynious, Amadornes
@@ -18,8 +19,8 @@ import net.minecraft.tileentity.BlockEntityType;
 // Dependencies.COMPUTER_CRAFT) })
 // , @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = Dependencies.OPEN_COMPUTERS)
 public class TileSortron extends TileMachineBase {
-    public TileSortron() {
-        super(BPBlockEntityType.SORTRON);
+    public TileSortron(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.SORTRON, pos, state);
     }// implements IPeripheral/* , SimpleComponent */{
     //
     // private static final String NAME = "BluePower.Sortron";
@@ -33,9 +34,9 @@ public class TileSortron extends TileMachineBase {
     // private final byte ticksLeftToShowItemTransport = 0;
     //
     // @Override
-    // public void onBlockNeighbourChanged() {
+    // public void setChanged() {
     //
-    // super.onBlockNeighbourChanged();
+    // super.setChanged();
     // EnumFacing direction = EnumFacing.byIndex(getBlockMetadata());
     // BlockEntity tile = worldObj.getBlockEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
     // if (tile instanceof Container) {

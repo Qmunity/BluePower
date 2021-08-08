@@ -11,19 +11,20 @@ import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackDatabase;
 import com.bluepowermod.init.BPConfig;
+import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import PlayerEntity;
 
 public class TileCircuitDatabase extends TileCircuitTable {
 
@@ -65,7 +66,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
         if (textFieldID == 1) {
             nameTextField = text;
             if (!copyInventory.getItem(0).isEmpty()) {
-                copyInventory.getItem(0).setHoverName(new StringTextComponent(nameTextField));
+                copyInventory.getItem(0).setHoverName(new TextComponent(nameTextField));
             }
         } else {
             super.setText(textFieldID, text);
@@ -161,38 +162,37 @@ public class TileCircuitDatabase extends TileCircuitTable {
         return false;
     }
 
-    @Override
-    public void tick() {
+    public static void tickCircuitDatabase(Level level, BlockPos pos, BlockState state, TileCircuitDatabase tileCircuitDatabase) {
 
-        super.tick();
+        TileBase.tickTileBase(level, pos, state, tileCircuitDatabase);
         if (!level.isClientSide) {
-            if (!copyInventory.getItem(0).isEmpty()) {
-                if (curCopyProgress >= 0) {
-                    if (++curCopyProgress > UPLOAD_AND_COPY_TIME) {
-                        curCopyProgress = -1;
-                        if (copy(triggeringPlayer, copyInventory.getItem(0), copyInventory.getItem(1), true)) {
-                            copy(triggeringPlayer, copyInventory.getItem(0), copyInventory.getItem(1), false);
+            if (!tileCircuitDatabase.copyInventory.getItem(0).isEmpty()) {
+                if (tileCircuitDatabase.curCopyProgress >= 0) {
+                    if (++tileCircuitDatabase.curCopyProgress > UPLOAD_AND_COPY_TIME) {
+                        tileCircuitDatabase.curCopyProgress = -1;
+                        if (tileCircuitDatabase.copy(tileCircuitDatabase.triggeringPlayer, tileCircuitDatabase.copyInventory.getItem(0), tileCircuitDatabase.copyInventory.getItem(1), true)) {
+                            tileCircuitDatabase.copy(tileCircuitDatabase.triggeringPlayer, tileCircuitDatabase.copyInventory.getItem(0), tileCircuitDatabase.copyInventory.getItem(1), false);
                         }
                     }
                 }
 
-                if (curUploadProgress >= 0) {
-                    if (++curUploadProgress > UPLOAD_AND_COPY_TIME) {
-                        curUploadProgress = -1;
-                        if (selectedShareOption == 1 && triggeringPlayer != null)
+                if (tileCircuitDatabase.curUploadProgress >= 0) {
+                    if (++tileCircuitDatabase.curUploadProgress > UPLOAD_AND_COPY_TIME) {
+                        tileCircuitDatabase.curUploadProgress = -1;
+                        if (tileCircuitDatabase.selectedShareOption == 1 && tileCircuitDatabase.triggeringPlayer != null)
                             //BPNetworkHandler.INSTANCE.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getItem(0)),
                                     //(ServerPlayer) triggeringPlayer);
-                        if (selectedShareOption == 2) {
-                            stackDatabase.saveItemStack(copyInventory.getItem(0));
+                        if (tileCircuitDatabase.selectedShareOption == 2) {
+                            tileCircuitDatabase.stackDatabase.saveItemStack(tileCircuitDatabase.copyInventory.getItem(0));
                             //BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
                         }
-                        selectedShareOption = 0;
+                        tileCircuitDatabase.selectedShareOption = 0;
                     }
                 }
             } else {
-                curCopyProgress = -1;
-                curUploadProgress = -1;
-                selectedShareOption = 0;
+                tileCircuitDatabase.curCopyProgress = -1;
+                tileCircuitDatabase.curUploadProgress = -1;
+                tileCircuitDatabase.selectedShareOption = 0;
             }
         }
     }
@@ -225,9 +225,9 @@ public class TileCircuitDatabase extends TileCircuitTable {
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tag) {
+    public void load(CompoundTag tag) {
 
-        super.load(state, tag);
+        super.load(tag);
 
         if (tag.contains("copyTemplateStack")) {
             copyInventory.setItem(0, ItemStack.of(tag.getCompound("copyTemplateStack")));

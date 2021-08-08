@@ -67,7 +67,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
         if (!simulated) {
             if (player instanceof ServerPlayer && stack.hurt(damage, new Random(), (ServerPlayer) player)) {
-                player.broadcastBreakEvent(Hand.MAIN_HAND);
+                player.broadcastBreakEvent(InteractionHand.MAIN_HAND);
                 stack.setCount(stack.getCount() - 1);
                 player.awardStat(Stats.ITEM_BROKEN.get(stack.getItem()), 1);
 

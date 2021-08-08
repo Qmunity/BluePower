@@ -22,6 +22,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -54,15 +55,11 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         super(type, pos, state);
     }
 
-    @Override
-    public void tick() {
-
-        super.tick();
-
+    public static void tickMachineBase(Level level, BlockPos pos, BlockState state, TileMachineBase blockEntity) {
         if (!level.isClientSide) {
-            if (ejectionScheduled || getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
-                ejectItems();
-                ejectionScheduled = false;
+            if (blockEntity.ejectionScheduled || blockEntity.getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
+                blockEntity.ejectItems();
+                blockEntity.ejectionScheduled = false;
             }
         }
     }
@@ -107,9 +104,8 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public void onBlockNeighbourChanged() {
-
-        super.onBlockNeighbourChanged();
+    public void setChanged() {
+        super.setChanged();
         tileCache = null;
     }
 

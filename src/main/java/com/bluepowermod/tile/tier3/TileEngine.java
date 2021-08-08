@@ -11,13 +11,15 @@ import com.bluepowermod.api.power.BlutricityFEStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.tile.TileBase;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.Connection;
-import net.minecraft.network.play.server.ClientboundBlockEntityDataPacket;
-import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.core.Direction;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -56,56 +58,55 @@ public class TileEngine extends TileMachineBase  {
 	}
 
 	
-	public TileEngine(){
-		super(BPBlockEntityType.ENGINE);
+	public TileEngine(BlockPos pos, BlockState state){
+		super(BPBlockEntityType.ENGINE, pos, state);
 
 		pumpTick  = 0;
 		pumpSpeed = 16;
 		
 	}
 
-    @Override
-	public void tick() {
-		super.tick();
+	public static void tickEngine(Level level, BlockPos pos, BlockState state, TileEngine blockEntity) {
+		TileBase.tickTileBase(level, pos, state, blockEntity);
 
-		storage.resetCurrent();
+		blockEntity.storage.resetCurrent();
 
 		//Server side capability check
-		isActive = false;
-		if(level != null && !level.isClientSide && (storage.getEnergyStored() > 0 && level.hasNeighborSignal(worldPosition))){
-			Direction facing = getBlockState().getValue(BlockEngine.FACING).getOpposite();
-			BlockEntity tileEntity = level.getBlockEntity(worldPosition.relative(facing));
+		blockEntity.isActive = false;
+		if(level != null && !level.isClientSide && (blockEntity.storage.getEnergyStored() > 0 && level.hasNeighborSignal(blockEntity.worldPosition))){
+			Direction facing = blockEntity.getBlockState().getValue(BlockEngine.FACING).getOpposite();
+			BlockEntity tileEntity = level.getBlockEntity(pos.relative(facing));
 			if (tileEntity != null) {
 				tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).ifPresent(other -> {
-					int simulated = storage.extractEnergy(320, true);
+					int simulated = blockEntity.storage.extractEnergy(320, true);
 					int sent = other.receiveEnergy(simulated, false);
-					int amount = storage.extractEnergy(sent, false);
+					int amount = blockEntity.storage.extractEnergy(sent, false);
 					if(amount > 0) {
-						isActive = true;
+						blockEntity.isActive = true;
 					}
 				});
 			}
 		}
 
 		//Update BlockState
-		if(level != null && !level.isClientSide && getBlockState().getValue(BlockEngine.ACTIVE) != isActive){
-			level.setBlockAndUpdate(worldPosition, getBlockState().setValue(BlockEngine.ACTIVE, isActive));
-			markForRenderUpdate();
+		if(level != null && !level.isClientSide && blockEntity.getBlockState().getValue(BlockEngine.ACTIVE) != blockEntity.isActive){
+			level.setBlockAndUpdate(pos, blockEntity.getBlockState().setValue(BlockEngine.ACTIVE, blockEntity.isActive));
+			blockEntity.markForRenderUpdate();
 		}
 
 		//Update TESR from BlockState
-		if(level != null && getBlockState().getValue(BlockEngine.ACTIVE)) {
-			isActive = true;
-			pumpTick++;
-			if (pumpTick >= pumpSpeed * 2) {
-				pumpTick = 0;
-				if (pumpSpeed > 4) {
-					pumpSpeed--;
+		if(level != null && blockEntity.getBlockState().getValue(BlockEngine.ACTIVE)) {
+			blockEntity.isActive = true;
+			blockEntity.pumpTick++;
+			if (blockEntity.pumpTick >= blockEntity.pumpSpeed * 2) {
+				blockEntity.pumpTick = 0;
+				if (blockEntity.pumpSpeed > 4) {
+					blockEntity.pumpSpeed--;
 				}
 			}
 		}else{
-			isActive = false;
-			pumpTick = 0;
+			blockEntity.isActive = false;
+			blockEntity.pumpTick = 0;
 		}
 
 	}
@@ -128,7 +129,7 @@ public class TileEngine extends TileMachineBase  {
 		compound.putInt("rotation", rotation);
         compound.putByte("pumpspeed", pumpSpeed);
         compound.putByte("pumptick", pumpTick);
-        INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
+        Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
 		compound.put("energy", nbtstorage);
 
 	}
@@ -140,8 +141,8 @@ public class TileEngine extends TileMachineBase  {
         pumpSpeed = compound.getByte("pumpspeed");
         pumpTick = compound.getByte("pumptick");
         if(compound.contains("energy")) {
-            INBT nbtstorage = compound.get("energy");
-            CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
+            Tag nbtstorage = compound.get("energy");
+            CapabilityBlutricity.readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
         }
 	}
 

@@ -108,8 +108,8 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
 
     @Override
     public InteractionResult use(BlockState blockState, World world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
-        if (!player.inventory.getSelected().isEmpty()) {
-            Item item = player.inventory.getSelected().getItem();
+        if (!player.getInventory().getSelected().isEmpty()) {
+            Item item = player.getInventory().getSelected().getItem();
             if (item == BPItems.screwdriver) {
                 return InteractionResult.SUCCESS;
             }

@@ -25,7 +25,6 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -126,7 +125,7 @@ public class TileBase extends BlockEntity implements IRotatable {
      * ************** ADDED FUNCTIONS ****************
      */
 
-    public static void onBlockNeighbourChanged(Level level, BlockPos pos, BlockState state, TileBase blockEntity) {
+    public static void setChanged(Level level, BlockPos pos, BlockState state, TileBase blockEntity) {
 
         checkRedstonePower(level, pos, state, blockEntity);
     }
@@ -209,7 +208,7 @@ public class TileBase extends BlockEntity implements IRotatable {
     protected static void onTileLoaded(Level level, BlockPos pos, BlockState state, TileBase blockEntity) {
 
         if (level != null && !level.isClientSide)
-            onBlockNeighbourChanged(level, pos, state, blockEntity);
+            setChanged(level, pos, state, blockEntity);
     }
 
     public NonNullList<ItemStack> getDrops() {
@@ -241,7 +240,7 @@ public class TileBase extends BlockEntity implements IRotatable {
         return false;
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, TileBase blockEntity) {
+    public static void tickTileBase(Level level, BlockPos pos, BlockState state, TileBase blockEntity) {
         if (blockEntity.ticker == 0) {
             onTileLoaded(level, pos, state, blockEntity);
         }

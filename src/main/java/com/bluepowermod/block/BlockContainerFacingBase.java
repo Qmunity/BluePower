@@ -8,26 +8,12 @@
 package com.bluepowermod.block;
 
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 
 /**
  * @author MineMaarten
@@ -47,7 +33,7 @@ public class BlockContainerFacingBase extends BlockContainerBase {
         builder.add(FACING, ACTIVE);
     }
 
-    public static void setState(boolean active, World worldIn, BlockPos pos){
+    public static void setState(boolean active, Level worldIn, BlockPos pos){
         BlockState iblockstate = worldIn.getBlockState(pos);
         BlockEntity tileentity = worldIn.getBlockEntity(pos);
 

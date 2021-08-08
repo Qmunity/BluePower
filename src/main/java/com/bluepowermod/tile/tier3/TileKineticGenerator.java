@@ -9,28 +9,28 @@ package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class TileKinectGenerator extends TileBase implements WorldlyContainer{
+public class TileKineticGenerator extends TileBase implements WorldlyContainer{
 
 	public int windspeed = 10;
 	public int windtick = 0;
 	public static final int SLOTS = 1;
-	public TileKinectGenerator(){
-	    super(BPBlockEntityType.KINETIC_GENERATOR);
+	public TileKineticGenerator(BlockPos pos, BlockState state){
+	    super(BPBlockEntityType.KINETIC_GENERATOR, pos, state);
 	}
 
-	@Override
-	public void tick() {
+	public static void tickKinetic(TileKineticGenerator tileKineticGenerator) {
 		
-        if (windspeed < 0){
-			windtick +=windspeed;
+        if (tileKineticGenerator.windspeed < 0){
+            tileKineticGenerator.windtick += tileKineticGenerator.windspeed;
 		}
 	}
     private final NonNullList<ItemStack> allInventories = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
@@ -39,9 +39,9 @@ public class TileKinectGenerator extends TileBase implements WorldlyContainer{
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundTag tCompound) {
+    public void load(CompoundTag tCompound) {
 
-        super.load(blockState, tCompound);
+        super.load(tCompound);
 
         for (int i = 0; i < 1; i++) {
             CompoundTag tc = tCompound.getCompound("inventory" + i);

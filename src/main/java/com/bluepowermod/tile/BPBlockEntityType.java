@@ -43,7 +43,7 @@ public class BPBlockEntityType {
     public static BlockEntityType<TileIOExpander> IO_EXPANDER;
 
     @ObjectHolder(ContainerNames.KINETIC_GENERATOR)
-    public static BlockEntityType<TileKinectGenerator> KINETIC_GENERATOR;
+    public static BlockEntityType<TileKineticGenerator> KINETIC_GENERATOR;
 
     @ObjectHolder(ContainerNames.DEPLOYER)
     public static BlockEntityType<TileDeployer> DEPLOYER;

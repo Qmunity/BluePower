@@ -17,23 +17,25 @@ import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.WorldlyContainer;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ContainerData;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -56,54 +58,53 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
     private boolean updatingRecipe = true;
 
 
-    public TileBlulectricFurnace() {
-        super(BPBlockEntityType.BLULECTRIC_FURNACE);
+    public TileBlulectricFurnace(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.BLULECTRIC_FURNACE, pos, state);
         this.inventory = ItemStack.EMPTY;
         this.outputInventory = ItemStack.EMPTY;
     }
 
-    @Override
-    public void tick() {
+    public static void tickFurnace(Level level, BlockPos pos, BlockState state, TileBlulectricFurnace tileFurnace) {
         if (level != null && !level.isClientSide) {
-            storage.resetCurrent();
+            tileFurnace.storage.resetCurrent();
             //Balance power of attached blulectric blocks.
             for (Direction facing : Direction.values()) {
-                BlockEntity tile = level.getBlockEntity(worldPosition.relative(facing));
+                BlockEntity tile = level.getBlockEntity(pos.relative(facing));
                 if (tile != null)
                     tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
-                            exStorage -> EnergyHelper.balancePower(exStorage, storage));
+                            exStorage -> EnergyHelper.balancePower(exStorage, tileFurnace.storage));
             }
-            if (updatingRecipe) {
-                if(this.level.getRecipeManager().getRecipeFor(IRecipeType.SMELTING, this, this.level).isPresent()) {
-                    currentRecipe = this.level.getRecipeManager().getRecipeFor(IRecipeType.SMELTING, this, this.level).get();
+            if (tileFurnace.updatingRecipe) {
+                if(level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, tileFurnace, level).isPresent()) {
+                    tileFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, tileFurnace, level).get();
                 }else{
-                    currentRecipe = null;
+                    tileFurnace.currentRecipe = null;
                 }
-                updatingRecipe = false;
+                tileFurnace.updatingRecipe = false;
             }
-            if (currentRecipe != null) {
-                if((storage.getEnergy() / storage.getMaxEnergy()) > 0.5) {
-                    storage.addEnergy(-1, false);
-                    this.setIsActive(true);
+            if (tileFurnace.currentRecipe != null) {
+                if((tileFurnace.storage.getEnergy() / tileFurnace.storage.getMaxEnergy()) > 0.5) {
+                    tileFurnace.storage.addEnergy(-1, false);
+                    tileFurnace.setIsActive(true);
                     //Check if progress completed, and output slot is empty and less then a stack of the same item.
-                    if (++currentProcessTime >= (100 / (storage.getEnergy() / storage.getMaxEnergy())) && ((outputInventory.getItem() == currentRecipe.getResultItem().getItem()
-                            && (outputInventory.getCount() + currentRecipe.assemble(this).getCount()) <= 64)
-                            || outputInventory.isEmpty())) {
-                        currentProcessTime = 0;
-                        if (!outputInventory.isEmpty()) {
-                            outputInventory.setCount(outputInventory.getCount() + currentRecipe.assemble(this).getCount());
+                    if (++tileFurnace.currentProcessTime >= (100 / (tileFurnace.storage.getEnergy() / tileFurnace.storage.getMaxEnergy())) && ((tileFurnace.outputInventory.getItem() == tileFurnace.currentRecipe.getResultItem().getItem()
+                            && (tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(tileFurnace).getCount()) <= 64)
+                            || tileFurnace.outputInventory.isEmpty())) {
+                        tileFurnace.currentProcessTime = 0;
+                        if (!tileFurnace.outputInventory.isEmpty()) {
+                            tileFurnace.outputInventory.setCount(tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(tileFurnace).getCount());
                         } else {
-                            outputInventory = currentRecipe.assemble(this).copy();
+                            tileFurnace.outputInventory = tileFurnace.currentRecipe.assemble(tileFurnace).copy();
                         }
-                        this.removeItem(0, 1);
-                        updatingRecipe = true;
+                        tileFurnace.removeItem(0, 1);
+                        tileFurnace.updatingRecipe = true;
                     }
                 }else{
-                    this.setIsActive(false);
+                    tileFurnace.setIsActive(false);
                 }
             } else {
-                currentProcessTime = 0;
-                this.setIsActive(false);
+                tileFurnace.currentProcessTime = 0;
+                tileFurnace.setIsActive(false);
             }
         }
 
@@ -134,8 +135,8 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundTag tCompound) {
-        super.load(blockState, tCompound);
+    public void load(CompoundTag tCompound) {
+        super.load(tCompound);
         CompoundTag tc = tCompound.getCompound("inventory");
         inventory = ItemStack.of(tc);
         outputInventory = ItemStack.of(tCompound.getCompound("outputInventory"));
@@ -168,8 +169,8 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
         currentProcessTime = tag.getInt("currentProcessTime");
         markForRenderUpdate();
         if(tag.contains("energy")) {
-            INBT nbtstorage = tag.get("energy");
-            CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
+            Tag nbtstorage = tag.get("energy");
+            CapabilityBlutricity.readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
         }
     }
 
@@ -179,7 +180,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
         super.writeToPacketNBT(tag);
         tag.putInt("currentProcessTime", currentProcessTime);
         tag.putBoolean("isActive", isActive);
-        INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
+        Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
         tag.put("energy", nbtstorage);
     }
 
@@ -357,12 +358,12 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
 
     @Override
     public Component getDisplayName() {
-        return new StringTextComponent(Refs.BLULECTRICFURNACE_NAME);
+        return new TextComponent(Refs.BLULECTRICFURNACE_NAME);
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerBlulectricFurnace(id, inventory, this, fields);
     }
 

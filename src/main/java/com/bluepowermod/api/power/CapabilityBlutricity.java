@@ -18,25 +18,19 @@ public class CapabilityBlutricity {
     public static Capability<IPowerBase> BLUTRICITY_CAPABILITY = null;
 
     public static void register(){
-        CapabilityManager.INSTANCE.register(IPowerBase.class, new DefaultBlutricityStorage<>(), () -> {throw new UnsupportedOperationException();});
+        CapabilityManager.INSTANCE.register(IPowerBase.class);
     }
 
-    private static class DefaultBlutricityStorage<T extends IPowerBase> implements Capability.IStorage<T> {
+    public static Tag writeNBT(Capability<IPowerBase> capability, IPowerBase instance, Direction direction) {
+        CompoundTag nbt = new CompoundTag();
+        nbt.putDouble("blutricity", instance.getEnergy());
+        return nbt;
+    }
 
-        @Nullable
-        @Override
-        public Tag writeNBT(Capability<T> capability, T instance, Direction direction) {
-            CompoundTag nbt = new CompoundTag();
-            nbt.putDouble("blutricity", instance.getEnergy());
-            return nbt;
-        }
-
-        @Override
-        public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
-            CompoundTag tags = (CompoundTag) nbt;
-            double energy = tags.getDouble("blutricity");
-            instance.addEnergy(-(instance.getEnergy() - energy), false);
-        }
+    public static void readNBT(Capability<IPowerBase> capability, IPowerBase instance, Direction side, Tag nbt) {
+        CompoundTag tags = (CompoundTag) nbt;
+        double energy = tags.getDouble("blutricity");
+        instance.addEnergy(-(instance.getEnergy() - energy), false);
     }
 
 }

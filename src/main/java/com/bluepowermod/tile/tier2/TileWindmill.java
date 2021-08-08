@@ -10,13 +10,15 @@ package com.bluepowermod.tile.tier2;
 import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.client.renderer.texture.Tickable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class TileWindmill extends TileBase implements Tickable {
 
 	
 	public int turbineTick;
-	public TileWindmill(){
-		super(BPBlockEntityType.WINDMILL);
+	public TileWindmill(BlockPos pos, BlockState state){
+		super(BPBlockEntityType.WINDMILL, pos, state);
 		turbineTick = 0;
 	}
 

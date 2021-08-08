@@ -141,7 +141,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, this.blockEntityType(), TileBase::tick);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, this.blockEntityType(), TileBase::tickTileBase);
     }
 
     public BlockEntityType<? extends TileBase> blockEntityType() {
@@ -155,7 +155,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
         if (!world.isClientSide) {
             TileBase tileEntity = get(world, pos);
             if (tileEntity != null) {
-                TileBase.onBlockNeighbourChanged(world, pos, state, tileEntity);
+                TileBase.setChanged(world, pos, state, tileEntity);
             }
         }
     }

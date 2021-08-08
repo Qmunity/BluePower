@@ -11,16 +11,15 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.core.NonNullList;
-
-import Inventory;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * @author MineMaarten
@@ -29,12 +28,11 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
 
     public static final int SLOTS = 24;
     protected NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
-    public final Inventory circuitInventory = new Inventory( SLOTS);
     public int slotsScrolled;
     private String textboxString = "";
 
-    public TileCircuitTable() {
-        super(BPBlockEntityType.CIRCUIT_TABLE);
+    public TileCircuitTable(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.CIRCUIT_TABLE, pos, state);
     }
 
     @Override
@@ -64,7 +62,7 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
 
         super.save(tag);
 
-        ListNBT tagList = new ListNBT();
+        ListTag tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
                 CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
@@ -78,11 +76,11 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tag) {
+    public void load(CompoundTag tag) {
 
-        super.load(state, tag);
+        super.load(tag);
 
-        ListNBT tagList = tag.getList("Items", 10);
+        ListTag tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(24, ItemStack.EMPTY);
         for (int i = 0; i < tagList.size(); ++i) {
             CompoundTag tagCompound = tagList.getCompound(i);

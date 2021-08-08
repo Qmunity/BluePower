@@ -22,27 +22,30 @@ package com.bluepowermod.tile.tier1;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.tileentity.BlockEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
 public class TileTransposer extends TileMachineBase {
 
-    public TileTransposer() {
-        super(BPBlockEntityType.TRANSPOSER);
+    public TileTransposer(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.TRANSPOSER, pos, state);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
+    public static void tickTransposer(Level level, BlockPos pos, BlockState state, TileTransposer tileTransposer) {
+        TileBase.tickTileBase(level, pos, state, tileTransposer);
         if (!level.isClientSide) {
-            suckEntity();
+            tileTransposer.suckEntity();
         }
 
     }
@@ -89,7 +92,7 @@ public class TileTransposer extends TileMachineBase {
             ItemStack stack = entity.getItem();
             if (isItemAccepted(stack) && entity.isAlive()) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
-                entity.remove();
+                entity.remove(Entity.RemovalReason.KILLED);
             }
         }
     }
@@ -103,7 +106,7 @@ public class TileTransposer extends TileMachineBase {
             ItemStack stack = entity.getItem();
             if (isItemAccepted(stack) && entity.isAlive()) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
-                entity.remove();
+                entity.remove(Entity.RemovalReason.KILLED);
             }
         }
     }

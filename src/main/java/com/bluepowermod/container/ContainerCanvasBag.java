@@ -94,7 +94,7 @@ public class ContainerCanvasBag extends AbstractContainerMenu {
     @Override
     public ItemStack clicked(int par1, int par2, ClickType par3, Player player) {
 
-        if (par3.ordinal() != 2 || player.inventory.selected != par2) {
+        if (par3.ordinal() != 2 || player.getInventory().selected != par2) {
             return super.clicked(par1, par2, par3, player);
         } else {
             return ItemStack.EMPTY;

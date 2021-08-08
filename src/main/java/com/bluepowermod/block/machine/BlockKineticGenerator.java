@@ -11,7 +11,7 @@ import com.bluepowermod.block.BlockContainerFacingBase;
 import net.minecraft.block.material.Material;
 
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier3.TileKinectGenerator;
+import com.bluepowermod.tile.tier3.TileKineticGenerator;
 
 /**
  * 
@@ -22,7 +22,7 @@ public class BlockKineticGenerator extends BlockContainerFacingBase {
     
     public BlockKineticGenerator() {
     
-        super(Material.METAL, TileKinectGenerator.class);
+        super(Material.METAL, TileKineticGenerator.class);
         setRegistryName(Refs.MODID, Refs.KINETICGENERATOR_NAME);
     }
     
