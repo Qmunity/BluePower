@@ -8,11 +8,8 @@
 package com.bluepowermod.container.slot;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.inventory.*;
 import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.item.ItemStack;
-
-import com.bluepowermod.tile.tier1.TileProjectTable;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -40,9 +37,9 @@ public class SlotProjectTableCrafting extends ResultSlot {
     }
 
     @Override
-    public ItemStack onTake(Player thePlayer, ItemStack stack) {
+    public void onTake(Player thePlayer, ItemStack stack) {
             extractedFromTable();
-            return super.onTake(thePlayer, stack);
+            super.onTake(thePlayer, stack);
     }
 
     private boolean extractedFromTable(){

@@ -21,16 +21,15 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier3.TileManager;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -46,7 +45,7 @@ public class ContainerManager extends AbstractContainerMenu {
     public int fuzzySetting = -0;
 
     public ContainerManager(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.MANAGER, windowId);
+        super(BPMenuType.MANAGER, windowId);
         manager = inventory;
 
         for (int i = 0; i < 4; ++i) {
@@ -57,11 +56,11 @@ public class ContainerManager extends AbstractContainerMenu {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerManager( int id, PlayerInventory player )    {
+    public ContainerManager( int id, Inventory player )    {
         this( id, player, new Inventory( TileManager.SLOTS ));
     }
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {

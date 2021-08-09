@@ -17,7 +17,7 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
@@ -46,7 +46,7 @@ public class ContainerAlloyFurnace extends AbstractContainerMenu {
     public final Container inventory;
 
     public ContainerAlloyFurnace(int windowId, Inventory invPlayer, Container inventory, ContainerData fields) {
-        super(BPContainerType.ALLOY_FURNACE, windowId);
+        super(BPMenuType.ALLOY_FURNACE, windowId);
         this.inventory = inventory;
         this.fields = fields;
 

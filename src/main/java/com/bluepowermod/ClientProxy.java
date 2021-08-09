@@ -17,7 +17,7 @@
 
 package com.bluepowermod;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.render.RenderDebugScreen;
 import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
@@ -36,7 +36,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void setup(FMLCommonSetupEvent event) {
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> BPContainerType::registerScreenFactories);
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> BPMenuType::registerScreenFactories);
     }
 
     @Override

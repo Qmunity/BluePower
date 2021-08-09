@@ -31,6 +31,7 @@ import com.bluepowermod.block.power.*;
 import com.bluepowermod.block.worldgen.*;
 import com.bluepowermod.item.ItemBPPart;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
@@ -39,6 +40,7 @@ import com.bluepowermod.util.Dependencies;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.grower.OakTreeGrower;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -223,7 +225,7 @@ public class BPBlocks {
 
         rubber_leaves = new BlockRubberLeaves(Block.Properties.of(Material.PLANT).noOcclusion());
         rubber_log = new BlockRubberLog(Block.Properties.of(Material.WOOD));
-        rubber_sapling = new BlockRubberSapling(new OakTree(), Block.Properties.of(Material.PLANT));
+        rubber_sapling = new BlockRubberSapling(new OakTreeGrower(), Block.Properties.of(Material.PLANT));
 
         sapphire_glass = new BlockBPGlass(Refs.SAPPHIREGLASS_NAME);
         reinforced_sapphire_glass = new BlockBPGlass(Refs.REINFORCEDSAPPHIREGLASS_NAME, true);
@@ -232,19 +234,19 @@ public class BPBlocks {
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME, Block.Properties.of(Material.PLANT));
 
         alloyfurnace = new BlockAlloyFurnace();
-        block_breaker = new BlockContainerFacingBase(Material.STONE, TileBlockBreaker.class).setRegistryName(Refs.MODID, Refs.BLOCKBREAKER_NAME);
+        block_breaker = new BlockContainerFacingBase(Material.STONE, TileBlockBreaker.class, BPBlockEntityType.BLOCKBREAKER).setRegistryName(Refs.MODID, Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
 
-        buffer = new BlockContainerHorizontalFacingBase(Material.STONE, TileBuffer.class){
+        buffer = new BlockContainerHorizontalFacingBase(Material.STONE, TileBuffer.class, BPBlockEntityType.BUFFER){
             @Override
             protected boolean canRotateVertical(){return false;}
         }.setRegistryName(Refs.MODID, Refs.BLOCKBUFFER_NAME);
 
-        deployer = new BlockContainerFacingBase(Material.STONE, TileDeployer.class)
+        deployer = new BlockContainerFacingBase(Material.STONE, TileDeployer.class, BPBlockEntityType.DEPLOYER)
                 .setRegistryName(Refs.MODID, Refs.BLOCKDEPLOYER_NAME);
-        transposer = new BlockContainerFacingBase(Material.STONE, TileTransposer.class).setRegistryName(Refs.MODID, Refs.TRANSPOSER_NAME);
+        transposer = new BlockContainerFacingBase(Material.STONE, TileTransposer.class, BPBlockEntityType.TRANSPOSER).setRegistryName(Refs.MODID, Refs.TRANSPOSER_NAME);
         tube = new BlockTube().setRegistryName(Refs.MODID, Refs.TUBE_NAME);
-        sorting_machine = new BlockContainerFacingBase(Material.STONE, TileSortingMachine.class).setWIP(true)
+        sorting_machine = new BlockContainerFacingBase(Material.STONE, TileSortingMachine.class, BPBlockEntityType.SORTING_MACHINE).setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.SORTING_MACHINE_NAME);
         project_table = new BlockProjectTable();
         project_tables[0] = project_table;
@@ -254,15 +256,15 @@ public class BPBlocks {
         circuit_table = new BlockProjectTable(TileCircuitTable.class).setWIP(true).setRegistryName(Refs.MODID, Refs.CIRCUITTABLE_NAME);
         circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.CIRCUITDATABASE_NAME);
-        ejector = new BlockContainerFacingBase(Material.STONE, TileEjector.class).setRegistryName(Refs.MODID, Refs.EJECTOR_NAME);
-        relay = new BlockContainerFacingBase(Material.STONE, TileRelay.class).setWIP(true).setRegistryName(Refs.MODID, Refs.RELAY_NAME);
-        filter = new BlockContainerFacingBase(Material.STONE, TileFilter.class).setWIP(true).setRegistryName(Refs.MODID, Refs.FILTER_NAME);
-        retriever = new BlockContainerFacingBase(Material.STONE, TileRetriever.class).setWIP(true).setRegistryName(Refs.MODID, Refs.RETRIEVER_NAME);
-        regulator = new BlockContainerFacingBase(Material.STONE, TileRegulator.class).emitsRedstone().setWIP(true)
+        ejector = new BlockContainerFacingBase(Material.STONE, TileEjector.class, BPBlockEntityType.EJECTOR).setRegistryName(Refs.MODID, Refs.EJECTOR_NAME);
+        relay = new BlockContainerFacingBase(Material.STONE, TileRelay.class, BPBlockEntityType.RELAY).setWIP(true).setRegistryName(Refs.MODID, Refs.RELAY_NAME);
+        filter = new BlockContainerFacingBase(Material.STONE, TileFilter.class, BPBlockEntityType.FILTER).setWIP(true).setRegistryName(Refs.MODID, Refs.FILTER_NAME);
+        retriever = new BlockContainerFacingBase(Material.STONE, TileRetriever.class, BPBlockEntityType.RETRIEVER).setWIP(true).setRegistryName(Refs.MODID, Refs.RETRIEVER_NAME);
+        regulator = new BlockContainerFacingBase(Material.STONE, TileRegulator.class, BPBlockEntityType.REGULATOR).emitsRedstone().setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.REGULATOR_NAME);
-        item_detector = new BlockContainerFacingBase(Material.STONE, TileItemDetector.class).emitsRedstone().setWIP(true)
+        item_detector = new BlockContainerFacingBase(Material.STONE, TileItemDetector.class, BPBlockEntityType.ITEM_DETECTOR).emitsRedstone().setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.ITEMDETECTOR_NAME);
-        manager = new BlockRejecting(Material.STONE, TileManager.class).emitsRedstone().setWIP(true).setRegistryName(Refs.MODID, Refs.MANAGER_NAME);
+        manager = new BlockRejecting(Material.STONE, TileManager.class, BPBlockEntityType.MANAGER).emitsRedstone().setWIP(true).setRegistryName(Refs.MODID, Refs.MANAGER_NAME);
 
         battery = new BlockBattery();
         blulectric_cable = new BlockBlulectricCable();

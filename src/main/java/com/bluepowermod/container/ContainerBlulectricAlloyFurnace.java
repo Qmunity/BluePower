@@ -17,20 +17,20 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.container.slot.SlotMachineInput;
 import com.bluepowermod.container.slot.SlotMachineOutput;
 import com.bluepowermod.tile.tier3.TileBlulectricAlloyFurnace;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.FurnaceBlockEntity;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -46,7 +46,7 @@ public class ContainerBlulectricAlloyFurnace extends AbstractContainerMenu {
     }
 
     public ContainerBlulectricAlloyFurnace(int windowId, Inventory invPlayer, Container inventory, ContainerData fields) {
-        super(BPContainerType.BLULECTRIC_ALLOY_FURNACE, windowId);
+        super(BPMenuType.BLULECTRIC_ALLOY_FURNACE, windowId);
         this.inventory = inventory;
         this.fields = fields;
 
@@ -60,7 +60,7 @@ public class ContainerBlulectricAlloyFurnace extends AbstractContainerMenu {
         this.addDataSlots(fields);
     }
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {

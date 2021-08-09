@@ -60,13 +60,13 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     private boolean isSilkyRemoving;
     private final BlockEntityType<? extends TileBase> entityType;
 
-    public BlockContainerBase(BlockEntityType<? extends TileBase> entityType, Material material, Class<? extends TileBase> tileEntityClass) {
+    public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
         super(material);
         setBlockEntityClass(tileEntityClass);
         this.entityType = entityType;
     }
 
-    public BlockContainerBase(BlockEntityType<? extends TileBase> entityType, Properties properties, Class<? extends TileBase> tileEntityClass) {
+    public BlockContainerBase(Properties properties, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
         super(properties);
         setBlockEntityClass(tileEntityClass);
         this.entityType = entityType;

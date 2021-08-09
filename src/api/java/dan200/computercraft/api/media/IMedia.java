@@ -55,5 +55,5 @@ public interface IMedia
 	 * @see dan200.computercraft.api.ComputerCraftAPI#createSaveDirMount(World, String, long)
 	 * @see dan200.computercraft.api.ComputerCraftAPI#createResourceMount(Class, String, String)
 	 */
-    public IMount createDataMount( ItemStack stack, World world );
+    public IMount createDataMount( ItemStack stack, Level world );
 }

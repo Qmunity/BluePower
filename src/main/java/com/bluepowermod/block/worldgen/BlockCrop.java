@@ -75,7 +75,7 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
      * Ticks the block if it's been scheduled
      */
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
 
         int age = getAge(state);
         if (world.getLightEmission(pos) >= 9) {

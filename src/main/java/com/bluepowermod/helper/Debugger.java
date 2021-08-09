@@ -7,13 +7,10 @@
  */
 package com.bluepowermod.helper;
 
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageDebugBlock;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import java.util.Random;
 
 /**

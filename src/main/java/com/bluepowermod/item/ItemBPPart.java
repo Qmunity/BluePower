@@ -13,18 +13,16 @@ import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.AABBUtils;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-
-import net.minecraft.world.item.Item.Properties;
 
 /**
  * IBPPartBlock's use this rather then BlockItem for their Items.
@@ -59,7 +57,7 @@ public class ItemBPPart extends BlockItem {
                 //Restore the Tile Entity Data
                 BlockEntity tile = ((TileBPMultipart) tileEntity).getTileForState(state);
                 if (tile != null)
-                    tile.load(state, nbt);
+                    tile.load(nbt);
 
                 //Add the new State
                 ((TileBPMultipart) tileEntity).addState(thisState);
@@ -69,7 +67,7 @@ public class ItemBPPart extends BlockItem {
             state.neighborChanged(context.getLevel(), context.getClickedPos(), state.getBlock(), context.getClickedPos(), false);
             context.getItemInHand().shrink(1);
             //Place Sound
-            context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
             return InteractionResult.SUCCESS;
 
         }else if(state.getBlock() instanceof BlockBPMultipart && thisState != null && !AABBUtils.testOcclusion(((IBPPartBlock)thisState.getBlock()).getOcclusionShape(thisState), state.getShape(context.getLevel(), context.getClickedPos()))) {
@@ -87,7 +85,7 @@ public class ItemBPPart extends BlockItem {
                 state.neighborChanged(context.getLevel(), context.getClickedPos(), state.getBlock(), context.getClickedPos(), false);
                 context.getItemInHand().shrink(1);
                 //Place Sound
-                context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
                 return InteractionResult.SUCCESS;
             }
 
@@ -96,7 +94,7 @@ public class ItemBPPart extends BlockItem {
     }
 
     @Override
-    protected boolean canPlace(BlockItemUseContext context, BlockState state) {
+    protected boolean canPlace(BlockPlaceContext context, BlockState state) {
         return true;
     }
 }

@@ -16,7 +16,7 @@ import com.bluepowermod.tile.tier3.TileBattery;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.BlockPlaceContext;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.BlockEntity;
@@ -39,7 +39,7 @@ public class BlockBattery extends BlockContainerBase {
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
         if(tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()) {
             IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null);

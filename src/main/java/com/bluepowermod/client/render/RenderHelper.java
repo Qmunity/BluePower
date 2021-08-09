@@ -7,20 +7,16 @@
  */
 package com.bluepowermod.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AABB;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -194,7 +190,7 @@ public class RenderHelper {
             GL11.glRotated(180 + 360 * -angle, 0, 1, 0);
             GL11.glTranslated(-0.5, -0.5, -0.5);
 
-            Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("minecraft:textures/blocks/stone.png"));
+            Minecraft.getInstance().getTextureManager().bindForSetup(new ResourceLocation("minecraft:textures/blocks/stone.png"));
 
             GL11.glBegin(GL11.GL_QUADS);
             {

@@ -11,7 +11,8 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+
 import java.util.function.Supplier;
 
 /**

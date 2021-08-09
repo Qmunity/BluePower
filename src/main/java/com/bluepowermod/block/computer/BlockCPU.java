@@ -28,7 +28,7 @@ public class BlockCPU extends BlockContainerBase {
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
         BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof TileCPU) {
         }

@@ -38,7 +38,7 @@ public class BlockRubberLeaves extends LeavesBlock {
 
     @Nonnull
     @Override
-    public List<ItemStack> onSheared(@Nullable Player player, @Nonnull ItemStack item, World world, BlockPos pos, int fortune) {
+    public List<ItemStack> onSheared(@Nullable Player player, @Nonnull ItemStack item, Level world, BlockPos pos, int fortune) {
         return NonNullList.withSize(1, new ItemStack(this));
     }
 

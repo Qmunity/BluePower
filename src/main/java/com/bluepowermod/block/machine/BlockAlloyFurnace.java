@@ -37,7 +37,7 @@ public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
     }
 
     @Override
-    public void tick(BlockState stateIn, ServerWorld world, BlockPos pos, Random rnd) {
+    public void tick(BlockState stateIn, ServerLevel world, BlockPos pos, Random rnd) {
         if (stateIn.getValue(ACTIVE)) {
             int l = stateIn.getValue(FACING).ordinal();
             float f = pos.getX() + 0.5F;

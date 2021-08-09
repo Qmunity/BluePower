@@ -19,11 +19,11 @@
 
 package com.bluepowermod.container.inventory;
 
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListNBT;
 
 public class InventoryItem extends SimpleContainer {
     
@@ -89,7 +89,7 @@ public class InventoryItem extends SimpleContainer {
         if (item.getTag() == null) {
             item.setTag(new CompoundTag());
         }
-        ListNBT itemList = new ListNBT();
+        ListTag itemList = new ListTag();
         for (int i = 0; i < getContainerSize(); i++) {
             if (!getItem(i).isEmpty()) {
                 CompoundTag slotEntry = new CompoundTag();
@@ -133,7 +133,7 @@ public class InventoryItem extends SimpleContainer {
     
         reading = true;
         
-        ListNBT itemList = (ListNBT) ((CompoundTag) item.getTag().get("Inventory")).get("Items");
+        ListTag itemList = (ListTag) ((CompoundTag) item.getTag().get("Inventory")).get("Items");
         for (int i = 0; i < itemList.size(); i++) {
             CompoundTag slotEntry = itemList.getCompound(i);
             int j = slotEntry.getByte("Slot") & 0xff;

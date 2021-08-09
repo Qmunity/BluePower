@@ -9,15 +9,8 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IBPColoredItem;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
-import net.minecraft.world.item.Item.Properties;
 
 /**
  * @author MineMaarten

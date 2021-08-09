@@ -17,17 +17,15 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import net.minecraft.entity.player.PlayerEntity;
+import com.bluepowermod.client.gui.BPMenuType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tile.tier1.TileDeployer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * @author MineMaarten
@@ -37,7 +35,7 @@ public class ContainerDeployer extends AbstractContainerMenu {
     private final Container deployer;
 
     public ContainerDeployer(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.DEPLOYER, windowId);
+        super(BPMenuType.DEPLOYER, windowId);
         this.deployer = inventory;
         
         for (int i = 0; i < 3; ++i) {
@@ -48,12 +46,12 @@ public class ContainerDeployer extends AbstractContainerMenu {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerDeployer( int id, PlayerInventory player )    {
+    public ContainerDeployer( int id, Inventory player )    {
         this( id, player, new Inventory( TileDeployer.SLOTS ));
     }
 
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
     
         // Render inventory
         for (int i = 0; i < 3; i++) {

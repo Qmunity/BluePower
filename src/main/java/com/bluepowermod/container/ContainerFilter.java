@@ -21,18 +21,16 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.gui.GuiContainerBase;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier1.TileFilter;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -46,7 +44,7 @@ public class ContainerFilter extends AbstractContainerMenu {
     public int fuzzySetting = -1;
 
     public ContainerFilter(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.FILTER, windowId);
+        super(BPMenuType.FILTER, windowId);
         this.filter = inventory;
 
         for (int i = 0; i < 3; ++i) {
@@ -57,16 +55,16 @@ public class ContainerFilter extends AbstractContainerMenu {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerFilter( int id, PlayerInventory player )    {
+    public ContainerFilter( int id, Inventory player )    {
         this( id, player, new Inventory( TileFilter.SLOTS ));
     }
 
-    public ContainerFilter(ContainerType containerType, int id, Container inventory){
+    public ContainerFilter(MenuType containerType, int id, Container inventory){
         super(containerType, id);
         this.filter = inventory;
     }
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {

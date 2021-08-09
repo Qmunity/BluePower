@@ -15,7 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.BlockPlaceContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
@@ -48,7 +48,7 @@ public class BlockTube extends PipeBlock implements IBPPartBlock {
         stateBuilder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
     }
 
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.makeConnections(context.getLevel(), context.getClickedPos());
     }
 

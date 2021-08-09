@@ -7,22 +7,19 @@
  */
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
-import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.*;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 
 
 //@ChestContainer
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class ContainerCircuitTable extends AbstractContainerMenu {
 
@@ -33,7 +30,7 @@ public class ContainerCircuitTable extends AbstractContainerMenu {
     private int scrollState = -1;
 
     public ContainerCircuitTable(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.CIRCUIT_TABLE, windowId);
+        super(BPMenuType.CIRCUIT_TABLE, windowId);
         this.circuitTable = inventory;
         craftMatrix = new CraftingContainer(this, 5, 5);
         for (int i = 0; i < 3; ++i) {
@@ -52,11 +49,11 @@ public class ContainerCircuitTable extends AbstractContainerMenu {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerCircuitTable( int id, PlayerInventory player )    {
+    public ContainerCircuitTable( int id, Inventory player )    {
         this( id, player, new Inventory( TileCircuitTable.SLOTS ));
     }
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {

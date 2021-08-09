@@ -8,12 +8,8 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.NonNullList;
-
-import net.minecraft.world.item.Item.Properties;
 
 /**
  * @author MineMaarten

@@ -5,34 +5,34 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMicroblock;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.AABBUtils;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
+import com.mojang.math.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.state.BooleanProperty;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AABB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.shapes.CollisionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.BlockGetter;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -68,9 +68,9 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
             nbt.putString("block", ((TileBPMicroblock)tileentity).getBlock().getRegistryName().toString());
             ItemStack stack = new ItemStack(this);
             stack.setTag(nbt);
-            stack.setHoverName(new TranslationTextComponent(((TileBPMicroblock)tileentity).getBlock().getDescriptionId())
-                    .append(new StringTextComponent(" "))
-                    .append(new TranslationTextComponent(this.getDescriptionId())));
+            stack.setHoverName(new TranslatableComponent(((TileBPMicroblock)tileentity).getBlock().getDescriptionId())
+                    .append(new TextComponent(" "))
+                    .append(new TranslatableComponent(this.getDescriptionId())));
             itemStacks.add(stack);
         }
         return itemStacks;
@@ -88,9 +88,9 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
             nbt.putString("block", ((TileBPMicroblock) tileentity).getBlock().getRegistryName().toString());
             stack = new ItemStack(this);
             stack.setTag(nbt);
-            stack.setHoverName(new TranslationTextComponent(((TileBPMicroblock) tileentity).getBlock().getDescriptionId())
-                    .append(new StringTextComponent(" "))
-                    .append(new TranslationTextComponent(this.getDescriptionId())));
+            stack.setHoverName(new TranslatableComponent(((TileBPMicroblock) tileentity).getBlock().getDescriptionId())
+                    .append(new TextComponent(" "))
+                    .append(new TranslatableComponent(this.getDescriptionId())));
         }
         return stack;
     }
@@ -141,7 +141,7 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         Player player = context.getPlayer();
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         if(player != null && !player.isCrouching()) {

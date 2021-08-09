@@ -22,25 +22,21 @@ package com.bluepowermod.item;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.container.ContainerCanvasBag;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayer;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.InteractionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.world.item.Item.Properties;
-
-import ActionResult;
 
 public class ItemCanvasBag extends ItemColorableOverlay implements MenuProvider{
     
@@ -49,21 +45,21 @@ public class ItemCanvasBag extends ItemColorableOverlay implements MenuProvider{
     }
 
     @Override
-    public ActionResult<ItemStack> use(Level world, Player player, InteractionHand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
         if (!world.isClientSide) {
             NetworkHooks.openGui((ServerPlayer) player, this);
         }
-        return new ActionResult<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
+        return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
     }
 
     @Override
     public Component getDisplayName() {
-        return new StringTextComponent(Refs.CANVASBAG_NAME);
+        return new TextComponent(Refs.CANVASBAG_NAME);
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerCanvasBag(id, inventory);
     }
 }

@@ -19,14 +19,9 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.InteractionResult;
-
-
-import net.minecraft.world.item.Item.Properties;
-
-import InteractionResult;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 
 public class ItemSilkyScrewdriver extends ItemBase {
 
@@ -36,7 +31,7 @@ public class ItemSilkyScrewdriver extends ItemBase {
     }
 
     @Override
-    public InteractionResult onItemUseFirst(ItemStack stack, ItemUseContext context) {
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
         return InteractionResult.PASS;
     }
 }

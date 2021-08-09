@@ -8,12 +8,12 @@
 package com.bluepowermod.helper;
 
 import com.bluepowermod.BluePower;
-import net.minecraft.item.Items;
-import net.minecraft.item.Item;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.*;
@@ -49,7 +49,7 @@ public class ItemStackDatabase {
             DataOutputStream dos = new DataOutputStream(fos);
 
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-            CompressedStreamTools.writeCompressed(tag, byteStream);
+            NbtIo.writeCompressed(tag, byteStream);
             byte[] abyte = byteStream.toByteArray();
             dos.writeShort((short) abyte.length);
             dos.write(abyte);
@@ -95,7 +95,7 @@ public class ItemStackDatabase {
                         byte[] abyte = new byte[short1];
                         dos.read(abyte);
                         ByteArrayInputStream byteStream = new ByteArrayInputStream(abyte);
-                        CompoundTag tag = CompressedStreamTools.readCompressed(byteStream);
+                        CompoundTag tag = NbtIo.readCompressed(byteStream);
                         ItemStack stack = ItemStack.of(tag);
                         if (stack.getItem() != Items.AIR) {
                             stacks.add(stack);

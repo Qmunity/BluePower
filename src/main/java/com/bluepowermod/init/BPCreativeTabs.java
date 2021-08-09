@@ -17,20 +17,20 @@
 
 package com.bluepowermod.init;
 
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.Shapes;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -184,9 +184,9 @@ public class BPCreativeTabs {
                             nbt.putString("block", block.getRegistryName().toString());
                             ItemStack stack = new ItemStack(mb);
                             stack.setTag(nbt);
-                            stack.setHoverName(new TranslationTextComponent(block.getDescriptionId())
-                                    .append(new StringTextComponent(" "))
-                                    .append(new TranslationTextComponent(mb.getDescriptionId())));
+                            stack.setHoverName(new TranslatableComponent(block.getDescriptionId())
+                                    .append(new TextComponent(" "))
+                                    .append(new TranslatableComponent(mb.getDescriptionId())));
                             items.add(stack);
                         }
                     }
@@ -196,7 +196,7 @@ public class BPCreativeTabs {
 
     }
 
-    private static abstract class BPCreativeTab extends ItemGroup {
+    private static abstract class BPCreativeTab extends CreativeModeTab {
 
         private boolean searchbar = false;
 

@@ -33,8 +33,8 @@ public class BlockContainerHorizontalFacingBase extends BlockContainerBase {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
-    public BlockContainerHorizontalFacingBase(BlockEntityType<? extends TileBase> entityType, Material material, Class<? extends TileBase> tileEntityClass) {
-        super(entityType, material, tileEntityClass);
+    public BlockContainerHorizontalFacingBase(Material material, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
+        super(material, tileEntityClass, entityType);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(ACTIVE, false));
     }
 

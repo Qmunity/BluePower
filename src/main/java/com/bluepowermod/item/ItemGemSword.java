@@ -18,21 +18,17 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPItems;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.*;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.*;
 
 public class ItemGemSword extends SwordItem {
 
-    public    Item    customCraftingMaterial = Items.AIR;
-    protected boolean canRepair              = true;
+    public Item customCraftingMaterial;
 
-    public ItemGemSword(IItemTier itemTier, String name, Item repairItem) {
+    public ItemGemSword(Tier itemTier, String name, Item repairItem) {
         super(itemTier, 3,-1.4F, new Properties().tab(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;

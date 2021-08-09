@@ -21,10 +21,26 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
@@ -92,17 +108,17 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
 
 
     @Override
-    public ActionResult<ItemStack> use(Level world, Player player, InteractionHand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
         if (!world.isClientSide && player.isCrouching()) {
             NetworkHooks.openGui((ServerPlayer) player, this);
         }
-        return new ActionResult<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
+        return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
     }
 
     @Override
-    public InteractionResult useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         Player player = context.getPlayer();
-        World worldIn = context.getLevel();
+        Level worldIn = context.getLevel();
         InteractionHand hand = context.getHand();
         BlockPos pos = context.getClickedPos();
 
@@ -113,11 +129,11 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
         ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
 
         //Get Active hand
-        InteractionHand activeHand = Hand.MAIN_HAND;
+        InteractionHand activeHand = InteractionHand.MAIN_HAND;
         ItemStack seedBag = player.getItemInHand(activeHand);
         if(!(seedBag.getItem() instanceof ItemSeedBag)){
             seedBag = player.getOffhandItem();
-            activeHand = Hand.OFF_HAND;
+            activeHand = InteractionHand.OFF_HAND;
         }
 
         //Get Items from the NBT Handler
@@ -154,12 +170,12 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
 
     @Override
     public Component getDisplayName() {
-        return new StringTextComponent(Refs.SEEDBAG_NAME);
+        return new TextComponent(Refs.SEEDBAG_NAME);
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, PlayerInventory inventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerSeedBag(id, inventory);
     }
 

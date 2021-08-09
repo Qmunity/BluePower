@@ -7,7 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.BlockPlaceContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.state.StateContainer;
@@ -48,7 +48,7 @@ public class BlockLampSurface extends BlockLamp implements SimpleWaterloggedBloc
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
         if (!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude()) {
             world.destroyBlock(pos, true);
@@ -75,7 +75,7 @@ public class BlockLampSurface extends BlockLamp implements SimpleWaterloggedBloc
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         return super.getStateForPlacement(context).setValue(FACING, context.getClickedFace()).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER).setValue(FACING, context.getClickedFace());
     }

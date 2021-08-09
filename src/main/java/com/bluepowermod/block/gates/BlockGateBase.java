@@ -16,7 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.BlockPlaceContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
@@ -93,7 +93,7 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         Direction face = context.getClickedFace();
         return this.defaultBlockState().setValue(ROTATION, context.getHorizontalDirection().getOpposite().get2DDataValue()).setValue(FACING, face).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
@@ -168,7 +168,7 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
         if(!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isCollisionShapeFullBlock(world,pos.relative(state.getValue(FACING).getOpposite()))) {
             world.destroyBlock(pos, true);

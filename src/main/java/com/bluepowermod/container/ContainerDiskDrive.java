@@ -7,22 +7,19 @@
  */
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import com.bluepowermod.client.gui.BPMenuType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
-import com.bluepowermod.tile.tier3.TileDiskDrive;
-
 public class ContainerDiskDrive extends AbstractContainerMenu {
 
 	private final Container inventory;
 
 	public ContainerDiskDrive(int windowId, Inventory invPlayer, Container inventory) {
-		super(BPContainerType.DISK_DRIVE, windowId);
+		super(BPMenuType.DISK_DRIVE, windowId);
 		this.inventory = inventory;
 	}
 

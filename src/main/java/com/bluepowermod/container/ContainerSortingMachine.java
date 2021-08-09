@@ -19,17 +19,16 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -49,7 +48,7 @@ public class ContainerSortingMachine extends AbstractContainerMenu {
     public final int[] fuzzySettings = new int[8];
 
     public ContainerSortingMachine(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.SORTING_MACHINE, windowId);
+        super(BPMenuType.SORTING_MACHINE, windowId);
         this.inventory = inventory;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 8; j++) {
@@ -62,11 +61,11 @@ public class ContainerSortingMachine extends AbstractContainerMenu {
 
     }
 
-    public ContainerSortingMachine(int windowId, PlayerInventory invPlayer) {
+    public ContainerSortingMachine(int windowId, Inventory invPlayer) {
         this(windowId, invPlayer, new Inventory(TileSortingMachine.SLOTS));
     }
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         int offset = 157;
         // Render inventory
@@ -83,7 +82,7 @@ public class ContainerSortingMachine extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player par1EntityPlayer, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
         return ItemStack.EMPTY;
     }
 

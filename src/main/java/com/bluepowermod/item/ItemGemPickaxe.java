@@ -18,20 +18,20 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPItems;
-import net.minecraft.item.*;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.Tier;
 
 public class ItemGemPickaxe extends PickaxeItem {
 
-    public    Item    customCraftingMaterial = Items.AIR;
-    protected boolean canRepair              = true;
+    public Item customCraftingMaterial;
 
-    public ItemGemPickaxe(IItemTier itemTier, String name, Item repairItem) {
+    public ItemGemPickaxe(Tier itemTier, String name, Item repairItem) {
         super(itemTier, 3,-1.4F, new Properties().tab(BPCreativeTabs.tools));
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;

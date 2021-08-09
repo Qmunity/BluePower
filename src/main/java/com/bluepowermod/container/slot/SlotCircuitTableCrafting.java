@@ -14,14 +14,9 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
-
-;
 
 public class SlotCircuitTableCrafting extends ResultSlot {
 

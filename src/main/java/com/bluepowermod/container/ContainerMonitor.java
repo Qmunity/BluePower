@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,7 +22,7 @@ public class ContainerMonitor extends AbstractContainerMenu {
 	private final Container inventory;
 
 	public ContainerMonitor(int windowId, Inventory invPlayer, Container inventory) {
-		super(BPContainerType.MONITOR, windowId);
+		super(BPMenuType.MONITOR, windowId);
 		this.inventory = inventory;
 	}
 

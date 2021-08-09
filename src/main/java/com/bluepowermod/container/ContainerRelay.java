@@ -19,24 +19,22 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import net.minecraft.entity.player.PlayerEntity;
+import com.bluepowermod.client.gui.BPMenuType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tile.tier1.TileRelay;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class ContainerRelay extends AbstractContainerMenu {
 
     private final Container relay;
 
     public ContainerRelay(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.RELAY, windowId);
+        super(BPMenuType.RELAY, windowId);
         this.relay = inventory;
 
         for (int i = 0; i < 3; ++i) {
@@ -47,12 +45,12 @@ public class ContainerRelay extends AbstractContainerMenu {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerRelay( int id, PlayerInventory player )    {
+    public ContainerRelay( int id, Inventory player )    {
         this( id, player, new Inventory( TileRelay.SLOTS ));
     }
 
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {

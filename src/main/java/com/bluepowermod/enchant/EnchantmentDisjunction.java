@@ -11,8 +11,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.entity.EquipmentSlot;
 
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
-
 public class EnchantmentDisjunction extends Enchantment {
 
     public EnchantmentDisjunction(Rarity rarity) {

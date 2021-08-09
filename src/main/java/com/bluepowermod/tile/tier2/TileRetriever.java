@@ -11,12 +11,14 @@ import com.bluepowermod.container.ContainerRetriever;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.tier1.TileFilter;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -27,6 +29,10 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
 
     public int slotIndex;
     public int mode;
+
+    public TileRetriever(BlockPos pos, BlockState state) {
+        super(pos, state);
+    }
 
 
     @Override

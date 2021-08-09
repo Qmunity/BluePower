@@ -218,7 +218,7 @@ public class BPMicroblockModel implements BakedModel {
     private static final class BakedMicroblockOverrideHandler extends ItemOverrideList{
         @Nullable
         @Override
-        public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity){
+        public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity){
             CompoundTag nbt = stack.getTag();
             if(nbt != null && nbt.contains("block")){
                 Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));

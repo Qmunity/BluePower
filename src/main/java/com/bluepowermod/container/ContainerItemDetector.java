@@ -8,19 +8,18 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.gui.GuiContainerBase;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier1.TileItemDetector;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 /**
  * @author MineMaarten
  */
@@ -31,7 +30,7 @@ public class ContainerItemDetector extends AbstractContainerMenu {
     private final Container itemDetector;
 
     public ContainerItemDetector(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.ITEM_DETECTOR, windowId);
+        super(BPMenuType.ITEM_DETECTOR, windowId);
         this.itemDetector = inventory;
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -41,12 +40,12 @@ public class ContainerItemDetector extends AbstractContainerMenu {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerItemDetector( int id, PlayerInventory player )    {
+    public ContainerItemDetector( int id, Inventory player )    {
         this( id, player, new Inventory( TileItemDetector.SLOTS ));
     }
 
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {

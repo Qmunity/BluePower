@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
@@ -21,7 +21,7 @@ public class ContainerRedbusID extends AbstractContainerMenu {
 	private final Container inventory;
 
 	public ContainerRedbusID(int windowId, Inventory invPlayer, Container inventory) {
-		super(BPContainerType.REDBUS, windowId);
+		super(BPMenuType.REDBUS, windowId);
 		this.inventory = inventory;
 	}
 

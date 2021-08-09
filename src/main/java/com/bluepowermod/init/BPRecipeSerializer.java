@@ -21,7 +21,6 @@ import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.recipe.MicroblockRecipe;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.item.crafting.*;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

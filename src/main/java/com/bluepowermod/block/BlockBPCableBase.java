@@ -9,7 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.BlockPlaceContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
@@ -61,13 +61,13 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     }
 
     @Override
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         this.onMultipartReplaced(state, worldIn, pos, newState, isMoving);
         super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
     @Override
-    public void onMultipartReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onMultipartReplaced(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         FACING.getPossibleValues().forEach(f ->{
             BlockPos neighborPos = pos.relative(f).relative(state.getValue(FACING).getOpposite());
             worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, isMoving);
@@ -178,7 +178,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         BlockEntity te = world.getBlockEntity(pos);
         //Get new state based on surrounding capabilities
         BlockState newState = getStateForPos(world, pos, defaultBlockState().setValue(FACING, state.getValue(FACING)), state.getValue(FACING));
@@ -471,7 +471,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return getStateForPos(context.getLevel(), context.getClickedPos(), defaultBlockState().setValue(FACING, context.getClickedFace()), context.getClickedFace());
     }
 

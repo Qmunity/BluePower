@@ -24,14 +24,8 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-
-import com.bluepowermod.reference.Refs;
-import net.minecraftforge.event.RegistryEvent;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemBase extends Item {
 
@@ -40,7 +34,7 @@ public class ItemBase extends Item {
         BPItems.itemList.add(this);
     }
 
-    public ItemBase(Properties properties, ItemGroup group) {
+    public ItemBase(Properties properties, CreativeModeTab group) {
         super(properties.tab(group));
         BPItems.itemList.add(this);
     }

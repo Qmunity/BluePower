@@ -11,12 +11,10 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileInsulatedWire;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.InteractionResult;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemPaintBrush extends ItemDamageableColorableOverlay {
     private final MinecraftColor color;

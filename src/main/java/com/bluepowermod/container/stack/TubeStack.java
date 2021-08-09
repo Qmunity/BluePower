@@ -10,16 +10,16 @@ package com.bluepowermod.container.stack;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.settings.GraphicsFanciness;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
-import net.minecraft.util.math.AABB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -27,8 +27,6 @@ import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.RenderHelper;
 
 import net.minecraft.world.item.ItemStack;
-
-import BlockEntity;
 
 /**
  *

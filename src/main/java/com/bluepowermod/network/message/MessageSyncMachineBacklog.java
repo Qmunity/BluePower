@@ -1,11 +1,8 @@
 package com.bluepowermod.network.message;
 
-import com.bluepowermod.ClientProxy;
-import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.container.stack.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.tileentity.BlockEntity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -50,14 +50,14 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
         // When the random chance hit, spew lava.
         if (!world.isClientSide && (random.nextInt(100) == 0)) {
                 spawnLava(world, pos, random);
         }
     }
 
-    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+    public void onBlockAdded(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         worldIn.getBlockTicks().scheduleTick(pos, this, 20);
     }
 
@@ -83,7 +83,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     }
 
     @Override
-    public void animateTick(BlockState stateIn, World world, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level world, BlockPos pos, Random rand) {
             for (int i = 0; i < 10; i++)
                 world.addParticle(ParticleTypes.SMOKE, pos.getX() + rand.nextDouble(), pos.getY() + 1, pos.getZ() + rand.nextDouble(), (rand.nextDouble() - 0.5) * 0.2,
                         rand.nextDouble() * 0.1, (rand.nextDouble() - 0.5) * 0.2);

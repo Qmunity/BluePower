@@ -20,15 +20,12 @@ package com.bluepowermod.item;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.item.DyeColor;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemIndigoDye extends ItemBase {
 

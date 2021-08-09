@@ -2,8 +2,8 @@ package com.bluepowermod.network.message;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -26,11 +26,11 @@ public class MessageCraftingSync{
         contextSupplier.get().setPacketHandled(true);
     }
 
-    public static MessageCraftingSync decode(PacketBuffer buffer){
+    public static MessageCraftingSync decode(FriendlyByteBuf buffer){
         return new MessageCraftingSync();
     }
 
-    public static void encode(MessageCraftingSync message, PacketBuffer buffer) {
+    public static void encode(MessageCraftingSync message, FriendlyByteBuf buffer) {
     }
 
 }

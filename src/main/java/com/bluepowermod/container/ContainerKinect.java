@@ -17,23 +17,21 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import net.minecraft.entity.player.PlayerEntity;
+import com.bluepowermod.client.gui.BPMenuType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-
 import com.bluepowermod.tile.tier3.TileKineticGenerator;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class ContainerKinect extends AbstractContainerMenu {
 
     private final Container kinect;
 
     public ContainerKinect(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.KINETIC_GENERATOR, windowId);
+        super(BPMenuType.KINETIC_GENERATOR, windowId);
         kinect = inventory;
         
         //Inventory for Turbines
@@ -42,12 +40,12 @@ public class ContainerKinect extends AbstractContainerMenu {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerKinect( int id, PlayerInventory player )    {
+    public ContainerKinect( int id, Inventory player )    {
         this( id, player, new Inventory( TileKineticGenerator.SLOTS ));
     }
 
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {

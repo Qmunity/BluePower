@@ -18,31 +18,25 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
 import com.bluepowermod.container.slot.SlotProjectTableCrafting;
 import com.bluepowermod.tile.tier1.TileProjectTable;
+import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.entity.player.ServerPlayer;
-import net.minecraft.inventory.*;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.network.play.server.SSetSlotPacket;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-
-import java.util.Optional;
+import net.minecraft.world.inventory.*;
 
 
 import net.minecraft.world.Container;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+
+import java.util.Optional;
 
 /**
  * @author MineMaarten
@@ -57,7 +51,7 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
     private final Container projectTable;
 
     public ContainerProjectTable(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.PROJECT_TABLE, windowId);
+        super(BPMenuType.PROJECT_TABLE, windowId);
         this.projectTable = inventory;
         craftResult =  new ResultContainer();
         craftingGrid = new InventoryProjectTableCrafting(this, projectTable, 3, 3);
@@ -85,11 +79,11 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
         this.slotsChanged(this.craftingGrid);
     }
 
-    public ContainerProjectTable( int id, PlayerInventory player )    {
+    public ContainerProjectTable( int id, Inventory player )    {
         this( id, player, new Inventory( TileProjectTable.SLOTS ));
     }
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -148,13 +142,13 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
         return itemStack;
     }
 
-    protected static void updateCrafting(int id, World world, Player playerEntity, CraftingInventory craftingInventory, CraftResultInventory craftResultInventory) {
+    protected static void updateCrafting(int id, Level world, Player playerEntity, CraftingContainer craftingInventory, CraftResultInventory craftResultInventory) {
         if (!world.isClientSide) {
             ServerPlayer serverplayerentity = (ServerPlayer)playerEntity;
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, craftingInventory, world);
+            Optional<CraftingRecipe> optional = world.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInventory, world);
             if (optional.isPresent()) {
-                ICraftingRecipe icraftingrecipe = optional.get();
+                CraftingRecipe icraftingrecipe = optional.get();
                 if (craftResultInventory.setRecipeUsed(world, serverplayerentity, icraftingrecipe)) {
                     itemstack = icraftingrecipe.assemble(craftingInventory);
                 }
@@ -193,7 +187,7 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
         return slotIn.container != this.craftResult && super.canTakeItemForPickAll(stack, slotIn);
     }
 
-    public CraftingInventory getCraftingGrid() {
+    public CraftingContainer getCraftingGrid() {
         return craftingGrid;
     }
 

@@ -65,7 +65,7 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         return super.getStateForPlacement(context).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
@@ -107,7 +107,7 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, World world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
+    public InteractionResult use(BlockState blockState, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
         if (!player.getInventory().getSelected().isEmpty()) {
             Item item = player.getInventory().getSelected().getItem();
             if (item == BPItems.screwdriver) {

@@ -21,17 +21,16 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.client.color.item.ItemColor;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.world.item.Item.Properties;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 public class ItemFloppyDisk extends ItemBase implements ItemColor{
 
@@ -49,9 +48,9 @@ public class ItemFloppyDisk extends ItemBase implements ItemColor{
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(stack.getTag() != null && stack.getTag().contains("name")) {
-            tooltip.add(new StringTextComponent(stack.getTag().getString("name")));
+            tooltip.add(new TextComponent(stack.getTag().getString("name")));
         }
     }
 

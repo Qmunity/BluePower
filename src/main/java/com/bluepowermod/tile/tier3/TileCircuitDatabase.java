@@ -49,6 +49,10 @@ public class TileCircuitDatabase extends TileCircuitTable {
     private Player triggeringPlayer;
     public String nameTextField = "";
 
+    public TileCircuitDatabase(BlockPos pos, BlockState state) {
+        super(pos, state);
+    }
+
     public static boolean hasPermissions(Player player) {
 
         if (BPConfig.CONFIG.serverCircuitSavingOpOnly.get()) {

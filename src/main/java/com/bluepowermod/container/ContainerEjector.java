@@ -19,24 +19,22 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import net.minecraft.entity.player.PlayerEntity;
+import com.bluepowermod.client.gui.BPMenuType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tile.tier1.TileEjector;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class ContainerEjector extends AbstractContainerMenu {
 
     private final Container ejector;
 
     public ContainerEjector(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.EJECTOR, windowId);
+        super(BPMenuType.EJECTOR, windowId);
         this.ejector = inventory;
 
         for (int i = 0; i < 3; ++i) {
@@ -47,11 +45,11 @@ public class ContainerEjector extends AbstractContainerMenu {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerEjector( int id, PlayerInventory player )    {
+    public ContainerEjector( int id, Inventory player )    {
         this( id, player, new Inventory( TileEjector.SLOTS ));
     }
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {

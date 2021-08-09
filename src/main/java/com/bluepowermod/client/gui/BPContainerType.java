@@ -29,7 +29,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 
-public class BPContainerType {
+public class BPMenuType {
 
     @ObjectHolder(ContainerNames.ALLOY_FURNACE)
     public static MenuType<ContainerAlloyFurnace> ALLOY_FURNACE;
@@ -110,7 +110,7 @@ public class BPContainerType {
     @Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class Registration{
         @SubscribeEvent
-        public static void onContainerTypeRegistry(final RegistryEvent.Register<MenuType<?>> e){
+        public static void onMenuTypeRegistry(final RegistryEvent.Register<MenuType<?>> e){
             e.getRegistry().registerAll(
                     new MenuType<>(ContainerAlloyFurnace::new).setRegistryName(ContainerNames.ALLOY_FURNACE),
                     new MenuType<>(ContainerBlulectricFurnace::new).setRegistryName(ContainerNames.BLULECTRIC_FURNACE),

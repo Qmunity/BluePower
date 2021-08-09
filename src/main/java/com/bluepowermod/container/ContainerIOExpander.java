@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
@@ -21,7 +21,7 @@ public class ContainerIOExpander extends AbstractContainerMenu {
 	private final Container inventory;
 
 	public ContainerIOExpander(int windowId, Inventory invPlayer, Container inventory) {
-		super(BPContainerType.IO_EXPANDER, windowId);
+		super(BPMenuType.IO_EXPANDER, windowId);
 		this.inventory = inventory;
 	}
 

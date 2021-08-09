@@ -20,28 +20,26 @@ package com.bluepowermod.item;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.helper.BPItemTier;
 import com.bluepowermod.init.BPCreativeTabs;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.util.DamageSource;
 
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemAthame extends SwordItem {
     
@@ -55,9 +53,9 @@ public class ItemAthame extends SwordItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new StringTextComponent(MinecraftColor.PURPLE.getChatColor())
-                .append(new TranslationTextComponent("item." + Refs.MODID + "." + Refs.ATHAME_NAME + ".info")) );
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        tooltip.add(new TextComponent(MinecraftColor.PURPLE.getChatColor())
+                .append(new TranslatableComponent("item." + Refs.MODID + "." + Refs.ATHAME_NAME + ".info")) );
     }
 
     public float getDamageDealt() {
@@ -68,10 +66,10 @@ public class ItemAthame extends SwordItem {
     public boolean hurtEnemy(ItemStack stack, LivingEntity entity, LivingEntity player) {
     
         this.damageDealt = athameMaterial.getAttackDamageBonus();
-        if ((entity instanceof EndermanEntity) || (entity instanceof EnderDragonEntity)) {
+        if ((entity instanceof EnderMan) || (entity instanceof EnderDragon)) {
             this.damageDealt += 18.0F;
         }
-        entity.hurt(DamageSource.playerAttack((PlayerEntity) player), this.damageDealt);
+        entity.hurt(DamageSource.playerAttack((Player) player), this.damageDealt);
         return super.hurtEnemy(stack, entity, player);
     }
 

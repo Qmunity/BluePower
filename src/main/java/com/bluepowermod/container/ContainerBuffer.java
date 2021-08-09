@@ -17,15 +17,14 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.tile.tier1.TileBuffer;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 
 public class ContainerBuffer extends AbstractContainerMenu {
@@ -33,7 +32,7 @@ public class ContainerBuffer extends AbstractContainerMenu {
     private final Container inventory;
     
     public ContainerBuffer(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.BUFFER, windowId);
+        super(BPMenuType.BUFFER, windowId);
         this.inventory = inventory;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
@@ -43,11 +42,11 @@ public class ContainerBuffer extends AbstractContainerMenu {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerBuffer(int windowId, PlayerInventory invPlayer) {
+    public ContainerBuffer(int windowId, Inventory invPlayer) {
         this(windowId, invPlayer, new Inventory(TileBuffer.SLOTS));
     }
     
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
     
         // Render inventory
         for (int i = 0; i < 3; i++) {

@@ -19,16 +19,14 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.container.slot.SlotLocked;
 import com.bluepowermod.item.ItemCanvasBag;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.ClickType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
@@ -42,7 +40,7 @@ public class ContainerCanvasBag extends AbstractContainerMenu {
     private InteractionHand activeHand;
 
     public ContainerCanvasBag(int windowId, Inventory playerInventory) {
-    super(BPContainerType.CANVAS_BAG, windowId);
+    super(BPMenuType.CANVAS_BAG, windowId);
         canvasBagInvHandler = new ItemStackHandler(27);
 
         //Get Active hand
@@ -50,7 +48,7 @@ public class ContainerCanvasBag extends AbstractContainerMenu {
         ItemStack canvasbag = playerInventory.player.getItemInHand(activeHand);
         if(!(canvasbag.getItem() instanceof ItemCanvasBag)){
             canvasbag = playerInventory.player.getOffhandItem();
-            activeHand = Hand.OFF_HAND;
+            activeHand = InteractionHand.OFF_HAND;
         }
 
         //Get Items from the NBT Handler
@@ -92,12 +90,9 @@ public class ContainerCanvasBag extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack clicked(int par1, int par2, ClickType par3, Player player) {
-
+    public void clicked(int par1, int par2, ClickType par3, Player player) {
         if (par3.ordinal() != 2 || player.getInventory().selected != par2) {
-            return super.clicked(par1, par2, par3, player);
-        } else {
-            return ItemStack.EMPTY;
+            super.clicked(par1, par2, par3, player);
         }
     }
 

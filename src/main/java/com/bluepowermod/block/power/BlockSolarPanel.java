@@ -17,7 +17,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.BlockPlaceContext;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -63,7 +63,7 @@ public class BlockSolarPanel extends BlockContainerBase implements SimpleWaterlo
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         return super.getStateForPlacement(context).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }

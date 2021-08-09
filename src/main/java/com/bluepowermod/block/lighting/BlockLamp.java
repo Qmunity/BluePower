@@ -15,7 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.BlockPlaceContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -96,7 +96,7 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     }
 
     @Nullable
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         int redstoneValue = context.getLevel().getBestNeighborSignal(context.getClickedPos());
         if(isInverted){redstoneValue = 15 - redstoneValue;}
         return this.defaultBlockState().setValue(POWER, redstoneValue);
@@ -110,7 +110,7 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
         if(tick <= 1){
             int redstoneValue = world.getBestNeighborSignal(pos);
             if(isInverted){redstoneValue = 15 - redstoneValue;}
@@ -120,7 +120,7 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
         int redstoneValue = world.getBestNeighborSignal(pos);
         if(isInverted){redstoneValue = 15 - redstoneValue;}

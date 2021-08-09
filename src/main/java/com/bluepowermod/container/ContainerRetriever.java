@@ -7,9 +7,8 @@
  */
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.gui.GuiContainerBase;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier2.TileRetriever;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
@@ -30,7 +29,7 @@ public class ContainerRetriever extends ContainerFilter {
     private final Container retriever;
 
     public ContainerRetriever(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPContainerType.RETRIEVER, windowId, inventory);
+        super(BPMenuType.RETRIEVER, windowId, inventory);
         this.retriever = inventory;
     }
 

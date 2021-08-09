@@ -7,8 +7,8 @@
  */
 package com.bluepowermod.container;
 
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -33,10 +33,10 @@ public abstract class ContainerGhosts extends AbstractContainerMenu {
      * @author CovertJaguar <http://www.railcraft.info>
      */
     @Override
-    public ItemStack clicked(int slotNum, int dragType, ClickType clickTypeIn, Player player) {
+    public void clicked(int slotNum, int dragType, ClickType clickTypeIn, Player player) {
         Slot slot = slotNum < 0 ? null : (Slot) slots.get(slotNum);
-        if (slot instanceof IPhantomSlot) { return clickedPhantom(slot, dragType, clickTypeIn,  player); }
-        return super.clicked(slotNum, dragType, clickTypeIn, player);
+        if (slot instanceof IPhantomSlot) { clickedPhantom(slot, dragType, clickTypeIn,  player); return; }
+        super.clicked(slotNum, dragType, clickTypeIn, player);
     }
 
     /**
@@ -52,7 +52,7 @@ public abstract class ContainerGhosts extends AbstractContainerMenu {
                 slot.set(ItemStack.EMPTY);
             }
         } else if (clickTypeIn.ordinal() == 0 || clickTypeIn.ordinal() == 1) {
-            PlayerInventory playerInv = player.getInventory();
+            Inventory playerInv = player.getInventory();
             slot.setChanged();
             ItemStack stackSlot = slot.getItem();
             ItemStack stackHeld = playerInv.getCarried();

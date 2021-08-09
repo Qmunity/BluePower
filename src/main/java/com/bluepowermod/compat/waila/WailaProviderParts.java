@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 public class WailaProviderParts implements IServerDataProvider<BlockEntity>{
 
     @Override
-    public void appendServerData(CompoundTag CompoundTag, ServerPlayer serverPlayerEntity, World world, BlockEntity tileEntity) {
+    public void appendServerData(CompoundTag CompoundTag, ServerPlayer serverPlayerEntity, Level world, BlockEntity tileEntity) {
         // ITilePartHolder h = MultipartCompatibility.getPartHolder(data.getLevel(), data.getPosition().blockX, data.getPosition().blockY,
         // data.getPosition().blockZ);
         //

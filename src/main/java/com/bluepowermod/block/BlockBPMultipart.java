@@ -101,7 +101,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+    public boolean removedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
         BlockState partState = MultipartUtils.getClosestState(player, pos);
         BlockEntity te = world.getBlockEntity(pos);
         if(partState != null && partState.getBlock() instanceof IBPPartBlock && te instanceof TileBPMultipart) {
@@ -110,7 +110,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
             //Call onMultipartReplaced
             ((IBPPartBlock)partState.getBlock()).onMultipartReplaced(partState, world, pos, state, false);
             //Play Break Sound
-            world.playSound(null, pos, SoundEvents.STONE_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.playSound(null, pos, SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
             return false;
         }
         return false;
@@ -136,7 +136,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         BlockEntity te = world.getBlockEntity(pos);
         if(te instanceof TileBPMultipart) {
             ((TileBPMultipart) te).getStates().forEach(s -> s.neighborChanged(world, pos, blockIn, fromPos, bool));

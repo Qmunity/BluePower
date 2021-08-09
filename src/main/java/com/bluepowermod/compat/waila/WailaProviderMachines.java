@@ -26,7 +26,7 @@ public class WailaProviderMachines implements IServerDataProvider<BlockEntity> {
     private List<String> info = new ArrayList<>();
 
     @Override
-    public void appendServerData(CompoundTag CompoundTag, ServerPlayer serverPlayerEntity, World world, BlockEntity tileEntity) {
+    public void appendServerData(CompoundTag CompoundTag, ServerPlayer serverPlayerEntity, Level world, BlockEntity tileEntity) {
         if(tileEntity instanceof TileMachineBase && world.isClientSide) {
             TileMachineBase machine = (TileMachineBase) tileEntity;
 
