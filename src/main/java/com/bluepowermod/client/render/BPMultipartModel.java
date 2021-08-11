@@ -11,19 +11,19 @@ package com.bluepowermod.client.render;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.bluepowermod.util.MultipartUtils;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.core.Direction;
-import net.minecraft.util.math.BlockHitResult;
-import net.minecraft.util.math.HitResult;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
@@ -125,8 +125,8 @@ public class BPMultipartModel implements BakedModel {
     }
 
     @Override
-    public ItemOverrideList getOverrides() {
-        return ItemOverrideList.EMPTY;
+    public ItemOverrides getOverrides() {
+        return ItemOverrides.EMPTY;
     }
 
 }

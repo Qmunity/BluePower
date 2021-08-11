@@ -17,17 +17,14 @@
 
 package com.bluepowermod.client.gui;
 
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.Container;
 import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.opengl.GL11;
 
 /**
  * @author MineMaarten

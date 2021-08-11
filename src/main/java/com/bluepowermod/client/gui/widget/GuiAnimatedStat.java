@@ -1,16 +1,16 @@
 package com.bluepowermod.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.matrix.PoseStack;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.Tesselator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormat;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -267,7 +267,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     }
 
     @Override
-    public void render(MatrixStack matrixStack, FontRenderer fontRenderer, float zLevel, float partialTicks) {
+    public void render(PoseStack matrixStack, FontRenderer fontRenderer, float zLevel, float partialTicks) {
 
         int renderBaseX = (int) (oldBaseX + (baseX - oldBaseX) * partialTicks);
         int renderAffectedY = (int) (oldAffectedY + (affectedY - oldAffectedY) * partialTicks);
@@ -276,14 +276,14 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
         if (leftSided)
             renderWidth *= -1;
-        AbstractGui.fill(matrixStack, renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
+        GuiComponent.fill(matrixStack, renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
                 backGroundColor);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glLineWidth(3.0F);
         GL11.glColor4d(0, 0, 0, 1);
-        Tessellator tess = Tessellator.getInstance();
+        Tesselator tess = Tesselator.getInstance();
         BufferBuilder buff = tess.getBuilder();
-        buff.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION_TEX);
+        buff.begin(GL11.GL_LINE_LOOP, DefaultVertexFormat.POSITION_TEX);
         buff.vertex(renderBaseX, renderAffectedY, zLevel);
         buff.vertex(renderBaseX + renderWidth, renderAffectedY, zLevel);
         buff.vertex(renderBaseX + renderWidth, renderAffectedY + renderHeight, zLevel);
@@ -346,9 +346,9 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     public static void drawTexture(ResourceLocation texture, int x, int y) {
 
         Minecraft.getInstance().getTextureManager().bind(texture);
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buff = tessellator.getBuilder();
-        buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        buff.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX);
         buff.vertex(x, y + 16, 0).uv(0.0F, 1.0F).endVertex();
         buff.vertex(x + 16, y + 16, 0).uv(1.0F, 1.0F).endVertex();
         buff.vertex(x + 16, y, 0).uv(1.0F, 0.0F).endVertex();
@@ -477,7 +477,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTick) {
 
         render(matrixStack, Minecraft.getInstance().font, 0, partialTick);
 

@@ -1,10 +1,10 @@
 package com.bluepowermod.client.render;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
-import net.minecraft.item.ItemStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraftforge.api.distmarker.Dist;

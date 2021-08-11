@@ -17,17 +17,16 @@ import com.bluepowermod.block.worldgen.BlockBPGlass;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tile.BPBlockEntityType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.model.*;
-import net.minecraft.item.Item;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.core.Direction;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -82,8 +81,8 @@ public class Renderers {
 
     public static void init() {
 
-        ClientRegistry.bindBlockEntityRenderer(BPBlockEntityType.LAMP, RenderLamp::new);
-        ClientRegistry.bindBlockEntityRenderer(BPBlockEntityType.ENGINE, RenderEngine::new);
+        BlockEntityRenderers.register(BPBlockEntityType.LAMP, context -> new RenderLamp());
+        BlockEntityRenderers.register(BPBlockEntityType.ENGINE, context -> new RenderEngine(context.getBlockEntityRenderDispatcher()));
 
 
         for (Item item : BPItems.itemList) {
@@ -97,18 +96,18 @@ public class Renderers {
                 Minecraft.getInstance().getItemColors().register(new BPBlockColor(), Item.byBlock(block));
             }
             if(block instanceof BlockLampSurface || block instanceof BlockGateBase || block instanceof BlockBattery)
-                RenderTypeLookup.setRenderLayer(block, RenderType.cutout());
+                ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());
             if(block instanceof BlockBPGlass || block instanceof BlockBPMicroblock || block instanceof BlockBPMultipart)
-                RenderTypeLookup.setRenderLayer(block, RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent());
         }
 
-        RenderTypeLookup.setRenderLayer(BPBlocks.indigo_flower, RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(BPBlocks.flax_crop, RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(BPBlocks.cracked_basalt_lava, RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(BPBlocks.cracked_basalt_decorative, RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(BPBlocks.rubber_leaves, RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(BPBlocks.rubber_sapling, RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(BPBlocks.tube, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.indigo_flower, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.flax_crop, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.cracked_basalt_lava, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.cracked_basalt_decorative, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.rubber_leaves, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.rubber_sapling, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.tube, RenderType.cutout());
 
     }
 

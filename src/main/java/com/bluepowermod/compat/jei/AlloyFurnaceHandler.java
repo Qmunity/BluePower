@@ -10,7 +10,7 @@ package com.bluepowermod.compat.jei;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.reference.Refs;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.matrix.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -65,7 +65,7 @@ public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnace
     }
 
     @Override
-    public void draw(StandardAlloyFurnaceRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(StandardAlloyFurnaceRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
         progress.draw(matrixStack, 95, 22);
     }
 

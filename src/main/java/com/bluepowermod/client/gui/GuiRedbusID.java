@@ -10,7 +10,7 @@ package com.bluepowermod.client.gui;
 import com.bluepowermod.container.ContainerRedbusID;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.IRedBusWindow;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
@@ -31,12 +31,17 @@ public class GuiRedbusID extends GuiContainerBaseBP<ContainerRedbusID> implement
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
 
         drawHorizontalAlignedString(matrixStack, 7, 4, imageWidth - 14,  "gui.redbusgui", true);
 
         drawHorizontalAlignedString(matrixStack, 7, 60, imageWidth - 14, "gui.redbus.id" + ":" + IRedBusWindow.redbus_id,
                 true);
+    }
+
+    @Override
+    protected void renderBg(PoseStack pPoseStack, float pPartialTicks, int pMouseX, int pMouseY) {
+
     }
 
     // TODO: clicking on switches toggles state and updates redbus_id

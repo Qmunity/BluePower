@@ -1,10 +1,10 @@
 package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.*;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.Container;
@@ -83,7 +83,7 @@ public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractC
     }
    */
 
-    public void drawHorizontalAlignedString(MatrixStack matrixStack, int xOffset, int yOffset, int w, String text, boolean useShadow) {
+    public void drawHorizontalAlignedString(PoseStack matrixStack, int xOffset, int yOffset, int w, String text, boolean useShadow) {
 
         int stringWidth = font.width(text);
         int newX = xOffset;
@@ -94,22 +94,22 @@ public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractC
         font.draw(matrixStack, text, newX, yOffset, COLOR_TEXT);
     }
 
-    public void drawString(MatrixStack matrixStack, int xOffset, int yOffset, String text, boolean useShadow) {
+    public void drawString(PoseStack matrixStack, int xOffset, int yOffset, String text, boolean useShadow) {
 
         font.draw(matrixStack, text, xOffset, yOffset, COLOR_TEXT);
     }
 
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
         this.font.draw(matrixStack, I18n.get("block.bluepower." + title.getContents()), (float)(this.imageWidth / 2 - this.font.width(I18n.get("block.bluepower." + title.getContents())) / 2), 6.0F, COLOR_TEXT);
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float f, int i, int j) {
+    protected void renderBg(PoseStack matrixStack, float f, int i, int j) {
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bind(resLoc);
+        this.minecraft.getTextureManager().bindForSetup(resLoc);
 
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
@@ -123,7 +123,7 @@ public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractC
 
 
     @Override
-    public void render(MatrixStack matrixStack, int x, int y, float partialTick) {
+    public void render(PoseStack matrixStack, int x, int y, float partialTick) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, x, y, partialTick);
         this.renderTooltip(matrixStack, x, y);
@@ -152,8 +152,7 @@ public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractC
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void m_181908_() {
         for (IGuiWidget widget : widgets)
             widget.update();
     }
@@ -165,7 +164,8 @@ public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractC
     }
 
     public void redraw() {
-        buttons.clear();
+        //TODO 1.17
+        //buttons.clear();
         widgets.clear();
         init();
     }

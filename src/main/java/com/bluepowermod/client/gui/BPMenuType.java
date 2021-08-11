@@ -144,30 +144,30 @@ public class BPMenuType {
     @OnlyIn(Dist.CLIENT)
     public static void registerScreenFactories(){
         MenuScreens.register(ALLOY_FURNACE, GuiAlloyFurnace::new);
-        ScreenManager.register(BLULECTRIC_FURNACE, GuiBlulectricFurnace::new);
-        ScreenManager.register(BLULECTRIC_ALLOY_FURNACE, GuiBlulectricAlloyFurnace::new);
-        ScreenManager.register(BUFFER, GuiBuffer::new);
-        ScreenManager.register(SORTING_MACHINE, GuiSortingMachine::new);
-        ScreenManager.register(SEEDBAG, GuiSeedBag::new);
-        ScreenManager.register(CANVAS_BAG, GuiCanvasBag::new);
-        ScreenManager.register(CPU, GuiCPU::new);
-        ScreenManager.register(MONITOR, GuiMonitor::new);
-        ScreenManager.register(DISK_DRIVE, GuiDiskDrive::new);
-        ScreenManager.register(IO_EXPANDER, GuiIOExpander::new);
-        ScreenManager.register(REDBUS, GuiRedbusID::new);
-        ScreenManager.register(KINETIC_GENERATOR, GuiKinect::new);
-        ScreenManager.register(DEPLOYER, GuiDeployer::new);
-        ScreenManager.register(RELAY, GuiRelay::new);
-        ScreenManager.register(EJECTOR, GuiEjector::new);
-        ScreenManager.register(FILTER, GuiFilter::new);
-        ScreenManager.register(RETRIEVER, GuiRetriever::new);
-        ScreenManager.register(REGULATOR, GuiRegulator::new);
-        ScreenManager.register(ITEM_DETECTOR, GuiItemDetector::new);
-        ScreenManager.register(PROJECT_TABLE, GuiProjectTable::new);
-        ScreenManager.register(CIRCUIT_TABLE, GuiCircuitTable::new);
-        ScreenManager.register(MANAGER, GuiManager::new);
-        ScreenManager.register(CIRCUITDATABASE_MAIN, GuiCircuitDatabaseMain::new);
-        ScreenManager.register(CIRCUITDATABASE_SHARING, GuiCircuitDatabaseSharing::new);
+        MenuScreens.register(BLULECTRIC_FURNACE, GuiBlulectricFurnace::new);
+        MenuScreens.register(BLULECTRIC_ALLOY_FURNACE, GuiBlulectricAlloyFurnace::new);
+        MenuScreens.register(BUFFER, GuiBuffer::new);
+        MenuScreens.register(SORTING_MACHINE, GuiSortingMachine::new);
+        MenuScreens.register(SEEDBAG, GuiSeedBag::new);
+        MenuScreens.register(CANVAS_BAG, GuiCanvasBag::new);
+        MenuScreens.register(CPU, GuiCPU::new);
+        MenuScreens.register(MONITOR, GuiMonitor::new);
+        MenuScreens.register(DISK_DRIVE, GuiDiskDrive::new);
+        MenuScreens.register(IO_EXPANDER, GuiIOExpander::new);
+        MenuScreens.register(REDBUS, GuiRedbusID::new);
+        MenuScreens.register(KINETIC_GENERATOR, GuiKinect::new);
+        MenuScreens.register(DEPLOYER, GuiDeployer::new);
+        MenuScreens.register(RELAY, GuiRelay::new);
+        MenuScreens.register(EJECTOR, GuiEjector::new);
+        MenuScreens.register(FILTER, GuiFilter::new);
+        MenuScreens.register(RETRIEVER, GuiRetriever::new);
+        MenuScreens.register(REGULATOR, GuiRegulator::new);
+        MenuScreens.register(ITEM_DETECTOR, GuiItemDetector::new);
+        MenuScreens.register(PROJECT_TABLE, GuiProjectTable::new);
+        MenuScreens.register(CIRCUIT_TABLE, GuiCircuitTable::new);
+        MenuScreens.register(MANAGER, GuiManager::new);
+        MenuScreens.register(CIRCUITDATABASE_MAIN, GuiCircuitDatabaseMain::new);
+        MenuScreens.register(CIRCUITDATABASE_SHARING, GuiCircuitDatabaseSharing::new);
     }
 
 }

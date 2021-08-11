@@ -10,23 +10,17 @@ package com.bluepowermod.client.render;
 import com.bluepowermod.block.lighting.BlockLamp;
 import com.bluepowermod.tile.tier1.TileLamp;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AABB;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 @OnlyIn(Dist.CLIENT)
-public class RenderLamp extends BlockEntityRenderer<TileLamp> {
-
-
-    RenderLamp(BlockEntityRenderDispatcher dispatcher) {
-        super(dispatcher);
-    }
+public class RenderLamp implements BlockEntityRenderer<TileLamp> {
 
     @Override
     public void render(TileLamp te, float v, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int partialTicks, int destroyStage) {

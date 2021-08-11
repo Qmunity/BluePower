@@ -11,11 +11,11 @@ import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerCircuitDatabaseMain;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
@@ -145,7 +145,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float par1, int par2, int par3) {
+    protected void renderBg(PoseStack matrixStack, float par1, int par2, int par3) {
 
         super.renderBg(matrixStack, par1, par2, par3);
 
@@ -153,7 +153,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
         //nameField.drawTextBox();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bind(copyTabTexture);
+        this.minecraft.getTextureManager().bindForSetup(copyTabTexture);
 
         int processPercentage = circuitDatabase.curCopyProgress * 22 / TileCircuitDatabase.UPLOAD_AND_COPY_TIME;
         if (processPercentage > 0)
@@ -175,9 +175,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
     }
 
     @Override
-    public void tick() {
-
-        super.tick();
+    public void m_181908_() {
         /*if (!nameField.isFocused()) {
             nameField.setText(circuitDatabase.nameTextField);
         }

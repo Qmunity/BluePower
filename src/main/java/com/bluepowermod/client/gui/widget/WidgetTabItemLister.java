@@ -82,7 +82,7 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
                     int x = getBaseX() + i * 18 + 9;
                     int y = getAffectedY() + j * 18 + 18;
                     if (stack.color != TubeColor.NONE) {
-                        AbstractGui.fill(matrixStack, x, y, x + 16, y + 16, 0xFF000000 + MinecraftColor.values()[stack.color.ordinal()].getHex());
+                        GuiComponent.fill(matrixStack, x, y, x + 16, y + 16, 0xFF000000 + MinecraftColor.values()[stack.color.ordinal()].getHex());
                     }
                     renderItem(fontRenderer, x, y, stack.stack);
                 }

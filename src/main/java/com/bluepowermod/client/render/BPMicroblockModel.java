@@ -11,23 +11,25 @@ package com.bluepowermod.client.render;
 import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMicroblock;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
+import com.mojang.math.Transformation;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.TransformationMatrix;
-import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
@@ -64,7 +66,7 @@ public class BPMicroblockModel implements BakedModel {
         Pair<Block, Integer> info = extraData.getData(TileBPMicroblock.PROPERTY_INFO);
         if (info != null) {
             BakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(info.getKey().defaultBlockState());
-            IBakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
+            BakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
 
             List<BakedQuad> bakedQuads = new ArrayList<>();
 
@@ -96,8 +98,8 @@ public class BPMicroblockModel implements BakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
         List<BakedQuad> outquads = new ArrayList<>();
-        IBakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(this.defBlock.defaultBlockState());
-        IBakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
+        BakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(this.defBlock.defaultBlockState());
+        BakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
 
         if(state != null && state.getBlock() instanceof BlockBPMicroblock) {
             sizeModel = Minecraft.getInstance().getModelManager().getModel(
@@ -127,7 +129,7 @@ public class BPMicroblockModel implements BakedModel {
             public void put(int element, float... data) {
                 VertexFormatElement e = this.getVertexFormat().getElements().get(element);
                 if (e.getUsage() == VertexFormatElement.Usage.UV && e.getIndex() == 0) {
-                    Vector2f vec = new Vector2f(data[0], data[1]);
+                    Vec2 vec = new Vec2(data[0], data[1]);
                     float u = (vec.x - sizeQuad.getSprite().getU0()) / (sizeQuad.getSprite().getU1() - sizeQuad.getSprite().getU0()) * 16;
                     float v = (vec.y - sizeQuad.getSprite().getV0()) / (sizeQuad.getSprite().getV1() - sizeQuad.getSprite().getV0()) * 16;
                     builder.put(element, sprite.getU(u), sprite.getV(v));
@@ -164,9 +166,9 @@ public class BPMicroblockModel implements BakedModel {
     }
 
     @Override
-    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType type, MatrixStack stack) {
-        IBakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
-        TransformationMatrix tr = TransformationHelper.toTransformation(sizeModel.getTransforms().getTransform(type));
+    public BakedModel handlePerspective(ItemTransforms.TransformType type, PoseStack stack) {
+        BakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
+        Transformation tr = TransformationHelper.toTransformation(sizeModel.getTransforms().getTransform(type));
         if(!tr.isIdentity()) {
             tr.push(stack);
         }
@@ -195,30 +197,32 @@ public class BPMicroblockModel implements BakedModel {
 
     @Override
     public TextureAtlasSprite getParticleIcon() {
-        IBakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(this.defBlock.defaultBlockState());
+        BakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(this.defBlock.defaultBlockState());
         return typeModel.getParticleIcon();
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data) {
+    public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data) {
         Pair<Block, Integer> info = data.getData(TileBPMicroblock.PROPERTY_INFO);
         if(info != null)
             return Minecraft.getInstance().getBlockRenderer().getBlockModel(info.getKey().defaultBlockState()).getParticleIcon();
         return getParticleIcon();
     }
-
+    
     @Override
-    public ItemOverrideList getOverrides() {
+    public ItemOverrides getOverrides() {
         return new BakedMicroblockOverrideHandler();
     }
 
     /**
      * Overwrites the model with NBT definition
      */
-    private static final class BakedMicroblockOverrideHandler extends ItemOverrideList{
+    private static final class BakedMicroblockOverrideHandler extends ItemOverrides{
+
+
         @Nullable
         @Override
-        public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity){
+        public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int par1){
             CompoundTag nbt = stack.getTag();
             if(nbt != null && nbt.contains("block")){
                 Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));

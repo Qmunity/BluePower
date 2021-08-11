@@ -19,6 +19,7 @@
 
 package com.bluepowermod.client.gui;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
@@ -33,6 +34,11 @@ public class GuiRelay extends GuiContainerBaseBP<ContainerRelay> implements Menu
 
     public GuiRelay(ContainerRelay container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
+    }
+
+    @Override
+    protected void renderBg(PoseStack pPoseStack, float pPartialTicks, int pMouseX, int pMouseY) {
+
     }
 
 }

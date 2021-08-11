@@ -22,17 +22,13 @@ package com.bluepowermod.client.gui;
 import java.util.List;
 
 import com.bluepowermod.client.gui.widget.*;
-import com.bluepowermod.container.ContainerAlloyFurnace;
-import com.bluepowermod.container.ContainerRetriever;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerRegulator;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier2.TileRegulator;
 import net.minecraft.network.chat.Component;
 
 /**
@@ -77,6 +73,11 @@ public class GuiRegulator extends GuiContainerBaseBP<ContainerRegulator> impleme
         WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(2, leftPos + 135, topPos + 70);
         fuzzyWidget.value = regulator.fuzzySetting;
         addWidget(fuzzyWidget);
+    }
+
+    @Override
+    protected void renderBg(PoseStack pPoseStack, float pPartialTicks, int pMouseX, int pMouseY) {
+
     }
 
     @Override

@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.world.entity.player.Inventory;
@@ -62,7 +62,8 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
     public void init() {
 
         super.init();
-        buttons.clear();
+        //Todo 1.17
+        //buttons.clear();
         //Keyboard.enableRepeatEvents(true);
         //searchField = new TextFieldWidget(0, font, leftPos + 8, topPos + 20, 89, font.FONT_HEIGHT);
         //searchField.setMaxStringLength(15);
@@ -122,7 +123,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
     @Override
-    protected void renderBg(MatrixStack matrixStack, float par1, int par2, int par3) {
+    protected void renderBg(PoseStack matrixStack, float par1, int par2, int par3) {
 
         super.renderBg(matrixStack, par1, par2, par3);
         //if (isTextfieldEnabled())
@@ -131,7 +132,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
         int i1 = leftPos + 156;
         int k = topPos + 48;
         int l = k + 112;
-        this.minecraft.getTextureManager().bind(scrollTexture);
+        this.minecraft.getTextureManager().bindForSetup(scrollTexture);
          //blit(i1, k + (int) ((l - k - 17) * currentScroll), 232 + (needsScrollBars() ? 0 : 12), 0, 12, 15);
 
         for (int i = 0; i < 3; i++) {
@@ -144,9 +145,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
     }
 
     @Override
-    public void tick() {
-
-        super.tick();
+    public void m_181908_() {
         for (int i = 0; i < 24; i++) {
             //displayRed[i] = inventory.getItem(i).isEmpty() && shouldDisplayRed(inventory.getItem(i));
         }

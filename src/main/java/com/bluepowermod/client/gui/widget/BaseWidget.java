@@ -3,7 +3,7 @@ package com.bluepowermod.client.gui.widget;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -70,7 +70,7 @@ public class BaseWidget implements IGuiWidget {
         }
         if (textures.length > 0)
             Minecraft.getInstance().getTextureManager().bind(textures[textureIndex]);
-        AbstractGui.blit(matrixStack, x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
+        GuiComponent.blit(matrixStack, x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
     }
 
     protected int getTextureU() {
