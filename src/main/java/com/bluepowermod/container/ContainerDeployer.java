@@ -18,6 +18,7 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -47,7 +48,7 @@ public class ContainerDeployer extends AbstractContainerMenu {
     }
 
     public ContainerDeployer( int id, Inventory player )    {
-        this( id, player, new Inventory( TileDeployer.SLOTS ));
+        this( id, player, new SimpleContainer( TileDeployer.SLOTS ));
     }
 
 

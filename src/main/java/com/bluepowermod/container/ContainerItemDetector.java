@@ -11,6 +11,7 @@ import com.bluepowermod.ClientProxy;
 import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier1.TileItemDetector;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -41,7 +42,7 @@ public class ContainerItemDetector extends AbstractContainerMenu {
     }
 
     public ContainerItemDetector( int id, Inventory player )    {
-        this( id, player, new Inventory( TileItemDetector.SLOTS ));
+        this( id, player, new SimpleContainer( TileItemDetector.SLOTS ));
     }
 
 

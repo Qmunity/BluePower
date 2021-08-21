@@ -24,7 +24,9 @@ import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
 import com.bluepowermod.container.slot.SlotProjectTableCrafting;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
@@ -80,7 +82,7 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
     }
 
     public ContainerProjectTable( int id, Inventory player )    {
-        this( id, player, new Inventory( TileProjectTable.SLOTS ));
+        this( id, player, new SimpleContainer( TileProjectTable.SLOTS ));
     }
 
     protected void bindPlayerInventory(Inventory invPlayer) {
@@ -99,7 +101,7 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
+    public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
 
         boolean clickTypeCrafting = slotId == 0 && slots.get(slotId).hasItem() &&
                 (clickTypeIn.equals(ClickType.PICKUP) || clickTypeIn.equals(ClickType.QUICK_MOVE));
@@ -113,8 +115,6 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
                 beforeAction.set(i - 1, matrixStack);
             }
         }
-
-        ItemStack itemStack = super.clicked(slotId, dragType, clickTypeIn, player);
 
         //Try to pull from the Project Table Inventory if the last of an item for a recipe.
         if(clickTypeCrafting){
@@ -138,11 +138,9 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
                 }
             }
         }
-
-        return itemStack;
     }
 
-    protected static void updateCrafting(int id, Level world, Player playerEntity, CraftingContainer craftingInventory, CraftResultInventory craftResultInventory) {
+    protected static void updateCrafting(int id, Level world, Player playerEntity, CraftingContainer craftingInventory, ResultContainer craftResultInventory) {
         if (!world.isClientSide) {
             ServerPlayer serverplayerentity = (ServerPlayer)playerEntity;
             ItemStack itemstack = ItemStack.EMPTY;
@@ -155,7 +153,7 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
             }
 
             craftResultInventory.setItem(0, itemstack);
-            serverplayerentity.connection.send(new SSetSlotPacket(id, 0, itemstack));
+            serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(id, 0, 0, itemstack));
         }
     }
 
@@ -224,7 +222,8 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
                 this.slotsChanged(this.craftingGrid);
                 return ItemStack.EMPTY;
             }
-            ItemStack itemstack2 = slot.onTake(player, itemstack1);
+            ItemStack itemstack2 = this.getCarried();
+            slot.onTake(player, itemstack1);
 
             if (par2 == 0)
             {

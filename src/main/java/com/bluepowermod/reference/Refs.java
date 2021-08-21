@@ -18,9 +18,7 @@
 package com.bluepowermod.reference;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.util.math.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.Shapes;
 
 public class Refs {
 

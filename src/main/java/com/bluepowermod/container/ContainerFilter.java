@@ -24,6 +24,7 @@ import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier1.TileFilter;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -56,7 +57,7 @@ public class ContainerFilter extends AbstractContainerMenu {
     }
 
     public ContainerFilter( int id, Inventory player )    {
-        this( id, player, new Inventory( TileFilter.SLOTS ));
+        this( id, player, new SimpleContainer( TileFilter.SLOTS ));
     }
 
     public ContainerFilter(MenuType containerType, int id, Container inventory){

@@ -2,16 +2,12 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.*;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
-import net.minecraft.state.StateContainer;
-
-import java.util.Properties;
-import java.util.Random;
 
 import net.minecraft.world.level.block.SaplingBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 
 public class BlockRubberSapling extends SaplingBlock {
 

@@ -121,7 +121,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
     }
 
     @Override
-    protected void invalidateCaps(){
+    public void invalidateCaps(){
         super.invalidateCaps();
         if( blutricityCap != null )
         {

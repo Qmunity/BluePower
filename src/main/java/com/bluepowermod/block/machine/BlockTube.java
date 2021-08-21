@@ -11,26 +11,26 @@ package com.bluepowermod.block.machine;
 import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.tier2.TileTube;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.PipeBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockPlaceContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.Shapes;
-import net.minecraft.world.BlockGetter;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * @author MoreThanHidden
  */
-public class BlockTube extends PipeBlock implements IBPPartBlock {
+public class BlockTube extends PipeBlock implements IBPPartBlock, EntityBlock {
     public BlockTube() {
         super(0.25F, Properties.of(Material.PISTON).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any()
@@ -73,14 +73,9 @@ public class BlockTube extends PipeBlock implements IBPPartBlock {
         return Shapes.box(4, 4, 4, 12, 12, 12);
     }
 
-    @Override
-    public boolean hasBlockEntity(BlockState state) {
-        return true;
-    }
-
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockState state, BlockGetter world) {
-        return new TileTube();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileTube(pos, state);
     }
 }

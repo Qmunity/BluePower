@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -30,7 +31,9 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.Capability;
@@ -58,7 +61,7 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        BlockEntity tileentity = builder.getParameter(LootParameters.BLOCK_ENTITY);
+        BlockEntity tileentity = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if(tileentity instanceof TileBPMultipart){
             tileentity = ((TileBPMultipart) tileentity).getTileForState(state);
@@ -126,7 +129,7 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, Level worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
             worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
@@ -147,14 +150,14 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
         if(player != null && !player.isCrouching()) {
             return this.defaultBlockState().setValue(FACING, context.getClickedFace()).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
         }
-        Vector3d vec = context.getPlayer().getLookAngle();
+        Vec3 vec = context.getPlayer().getLookAngle();
         return this.defaultBlockState().setValue(FACING, Direction.getNearest(vec.x, vec.y, vec.z)).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockGetter worldIn) {
-        return new TileBPMicroblock();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileBPMicroblock(pos, state);
     }
 
     @Override

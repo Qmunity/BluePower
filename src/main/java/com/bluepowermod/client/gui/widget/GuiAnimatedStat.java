@@ -1,21 +1,16 @@
 package com.bluepowermod.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.PoseStack;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.vertex.*;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.Tesselator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormat;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.item.BlockItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -203,7 +198,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         oldWidth = width;
         oldHeight = height;
 
-        FontRenderer fontRenderer = Minecraft.getInstance().font;
+        Font fontRenderer = Minecraft.getInstance().font;
         doneExpanding = true;
         if (isClicked) {
             // calculate the width and height needed for the box to fit the
@@ -243,7 +238,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         }
     }
 
-    protected int getMaxWidth(FontRenderer fontRenderer) {
+    protected int getMaxWidth(Font fontRenderer) {
 
         int maxWidth = fontRenderer.width(title);
 
@@ -256,7 +251,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         return maxWidth;
     }
 
-    protected int getMaxHeight(FontRenderer fontRenderer) {
+    protected int getMaxHeight(Font fontRenderer) {
 
         int maxHeight = 12;
         if (textList.size() > 0) {
@@ -267,7 +262,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     }
 
     @Override
-    public void render(PoseStack matrixStack, FontRenderer fontRenderer, float zLevel, float partialTicks) {
+    public void render(PoseStack matrixStack, Font fontRenderer, float zLevel, float partialTicks) {
 
         int renderBaseX = (int) (oldBaseX + (baseX - oldBaseX) * partialTicks);
         int renderAffectedY = (int) (oldAffectedY + (affectedY - oldAffectedY) * partialTicks);
@@ -283,7 +278,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         GL11.glColor4d(0, 0, 0, 1);
         Tesselator tess = Tesselator.getInstance();
         BufferBuilder buff = tess.getBuilder();
-        buff.begin(GL11.GL_LINE_LOOP, DefaultVertexFormat.POSITION_TEX);
+        buff.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_TEX);
         buff.vertex(renderBaseX, renderAffectedY, zLevel);
         buff.vertex(renderBaseX + renderWidth, renderAffectedY, zLevel);
         buff.vertex(renderBaseX + renderWidth, renderAffectedY + renderHeight, zLevel);
@@ -301,7 +296,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
             fontRenderer.drawShadow(matrixStack, title, renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + 2, 0xFFFF00);
             for (int i = 0; i < textList.size(); i++) {
 
-                if (textList.get(i).contains("\u00a70") || textList.get(i).contains(TextFormatting.DARK_RED.toString())) {
+                if (textList.get(i).contains("\u00a70") || textList.get(i).contains(ChatFormatting.DARK_RED.toString())) {
                     fontRenderer.draw(matrixStack, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + i * 10
                             + 12, 0xFFFFFF);
                 } else {
@@ -326,10 +321,10 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         }
     }
 
-    protected void renderItem(FontRenderer fontRenderer, int x, int y, ItemStack stack) {
+    protected void renderItem(Font fontRenderer, int x, int y, ItemStack stack) {
 
         if (itemRenderer == null)
-            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelShaper().getModelManager(), Minecraft.getInstance().getItemColors());
+            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelShaper().getModelManager(), Minecraft.getInstance().getItemColors(), null);
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0, -50);
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -338,17 +333,17 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         itemRenderer.renderGuiItemDecorations(fontRenderer, stack, x, y, null);
 
         GL11.glEnable(GL11.GL_ALPHA_TEST);
-        RenderHelper.turnOff();
+        //TODO: RenderHelper.turnOff();
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         GL11.glPopMatrix();
     }
 
     public static void drawTexture(ResourceLocation texture, int x, int y) {
 
-        Minecraft.getInstance().getTextureManager().bind(texture);
+        Minecraft.getInstance().getTextureManager().bindForSetup(texture);
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buff = tessellator.getBuilder();
-        buff.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX);
+        buff.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         buff.vertex(x, y + 16, 0).uv(0.0F, 1.0F).endVertex();
         buff.vertex(x + 16, y + 16, 0).uv(1.0F, 1.0F).endVertex();
         buff.vertex(x + 16, y, 0).uv(1.0F, 0.0F).endVertex();

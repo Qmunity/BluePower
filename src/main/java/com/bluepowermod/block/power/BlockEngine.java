@@ -10,14 +10,35 @@ package com.bluepowermod.block.power;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileEngine;
 import com.bluepowermod.util.AABBUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
@@ -34,7 +55,7 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
 
     public BlockEngine() {
 
-        super(Material.METAL, TileEngine.class);
+        super(Material.METAL, TileEngine.class, BPBlockEntityType.ENGINE);
         registerDefaultState(this.stateDefinition.any()
                 .setValue(ACTIVE, false)
                 .setValue(GEAR, false)
@@ -51,7 +72,7 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
 
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, Level worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
             worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
@@ -87,10 +108,10 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
         if (world.getBlockEntity(pos) instanceof TileEngine) {
             Direction facing;
 
-            if (player.xRot > 45) {
+            if (player.xRotO > 45) {
 
                 facing = Direction.DOWN;
-            } else if (player.xRot < -45) {
+            } else if (player.xRotO < -45) {
 
                 facing = Direction.UP;
             } else {
@@ -117,10 +138,11 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
 
         return super.use(blockState, world, pos, player, hand, rayTraceResult);
     }
-
+    /*
+    TODO 1.17 waiting on MinecraftForge#8014
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return true;
-    }
+    }*/
 
 }

@@ -18,15 +18,15 @@
 package com.bluepowermod.compat.waila;
 
 import mcp.mobius.waila.api.IServerDataProvider;
-import net.minecraft.entity.player.ServerPlayer;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class WailaProviderParts implements IServerDataProvider<BlockEntity>{
+public class WailaProviderParts implements IServerDataProvider<BlockEntity> {
 
     @Override
-    public void appendServerData(CompoundTag CompoundTag, ServerPlayer serverPlayerEntity, Level world, BlockEntity tileEntity) {
+    public void appendServerData(CompoundTag compoundTag, ServerPlayer serverPlayer, Level level, BlockEntity blockEntity, boolean b) {
         // ITilePartHolder h = MultipartCompatibility.getPartHolder(data.getLevel(), data.getPosition().blockX, data.getPosition().blockY,
         // data.getPosition().blockZ);
         //

@@ -4,27 +4,29 @@ import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.AABBUtils;
 
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockPlaceContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.CollisionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.Shapes;
-import net.minecraft.world.BlockGetter;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -75,7 +77,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, Level worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
             worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
@@ -89,8 +91,8 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
 
 
     @Override
-    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity p_180633_4_, ItemStack p_180633_5_) {
-        super.setPlacedBy(worldIn, pos, state, p_180633_4_, p_180633_5_);
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, ItemStack itemStack) {
+        super.setPlacedBy(worldIn, pos, state, livingEntity, itemStack);
         FACING.getPossibleValues().forEach(f -> {
             BlockPos neighborPos = pos.relative(f).relative(state.getValue(FACING).getOpposite());
             worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
@@ -98,7 +100,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     }
 
     @Override
-    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         return world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude();
     }
 
@@ -130,9 +132,9 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                 Shapes.or(voxelshape2, voxelshape5), Shapes.or(voxelshape3, voxelshape5),
                 Shapes.or(voxelshape6, voxelshape5),
                 Block.box(f2,0,-height,f3, height,0),
-                Block.box(f2,0,16 + height,f3, height,16),
+                Block.box(f2,0,16 - height,f3, height,16),
                 Block.box(-height,0,f2,0, height,f3),
-                Block.box(16 + height,0,f2,16, height,f3)
+                Block.box(16 - height,0,f2,16, height,f3)
         };
 
         for(int i = 0; i < 16; ++i) {

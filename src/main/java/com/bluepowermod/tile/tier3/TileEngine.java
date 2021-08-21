@@ -147,7 +147,7 @@ public class TileEngine extends TileMachineBase  {
 	}
 
 	@Override
-	protected void invalidateCaps(){
+	public void invalidateCaps(){
 		super.invalidateCaps();
 		if( blutricityCap != null )
 		{

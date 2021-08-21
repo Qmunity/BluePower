@@ -372,7 +372,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
     }
 
     @Override
-    protected void invalidateCaps(){
+    public void invalidateCaps(){
         super.invalidateCaps();
         if( blutricityCap != null )
         {

@@ -55,7 +55,7 @@ public abstract class ContainerGhosts extends AbstractContainerMenu {
             Inventory playerInv = player.getInventory();
             slot.setChanged();
             ItemStack stackSlot = slot.getItem();
-            ItemStack stackHeld = playerInv.getCarried();
+            ItemStack stackHeld = playerInv.getSelected();
             
             if (stackSlot != ItemStack.EMPTY) {
                 stack = stackSlot.copy();
@@ -67,7 +67,7 @@ public abstract class ContainerGhosts extends AbstractContainerMenu {
                 }
             } else if (stackHeld == ItemStack.EMPTY) {
                 adjustPhantomSlot(slot, clickTypeIn.ordinal(), dragType);
-                slot.onQuickCraft(stack, playerInv.getCarried());
+                slot.onQuickCraft(stack, playerInv.getSelected());
             } else if (slot.mayPlace(stackHeld)) {
                 if (canStacksMerge(stackSlot, stackHeld)) {
                     adjustPhantomSlot(slot, clickTypeIn.ordinal(), dragType);

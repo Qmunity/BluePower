@@ -112,7 +112,7 @@ public class TileWire extends TileBase {
     }
 
     @Override
-    protected void invalidateCaps(){
+    public void invalidateCaps(){
         super.invalidateCaps();
         if( redstoneCap != null )
         {

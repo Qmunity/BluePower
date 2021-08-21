@@ -13,27 +13,22 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.MultipartUtils;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.HitResult;
-import net.minecraft.util.math.shapes.*;
-import net.minecraft.world.BlockGetter;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -41,6 +36,15 @@ import java.util.List;
 
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * @author MoreThanHidden
@@ -57,7 +61,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public boolean placeLiquid(Level worldIn, BlockPos pos, BlockState state, FluidState fluidStateIn) {
+    public boolean placeLiquid(LevelAccessor worldIn, BlockPos pos, BlockState state, FluidState fluidStateIn) {
         if (!state.getValue(BlockStateProperties.WATERLOGGED) && fluidStateIn.getType() == Fluids.WATER && !getShape(state, worldIn, pos, CollisionContext.empty()).equals(Shapes.block())) {
             if (!worldIn.isClientSide()) {
                 worldIn.setBlock(pos, state.setValue(BlockStateProperties.WATERLOGGED, Boolean.TRUE), 3);
@@ -75,7 +79,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, Level worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
             worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
@@ -127,7 +131,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        BlockEntity tileentity = builder.getParameter(LootParameters.BLOCK_ENTITY);
+        BlockEntity tileentity = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if (tileentity instanceof TileBPMultipart) {
             ((TileBPMultipart) tileentity).getStates().forEach(s -> itemStacks.addAll(s.getBlock().getDrops(s, builder)));
@@ -150,12 +154,8 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockGetter worldIn) {
-        return new TileBPMultipart();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileBPMultipart(pos, state);
     }
 
-    @Override
-    public boolean hasBlockEntity(BlockState state) {
-        return true;
-    }
 }

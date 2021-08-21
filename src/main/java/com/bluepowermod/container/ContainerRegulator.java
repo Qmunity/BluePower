@@ -25,14 +25,11 @@ import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileRegulator;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -72,7 +69,7 @@ public class ContainerRegulator extends AbstractContainerMenu {
     }
 
     public ContainerRegulator( int id, Inventory player )    {
-        this( id, player, new Inventory( TileRegulator.SLOTS ));
+        this( id, player, new SimpleContainer( TileRegulator.SLOTS ));
     }
 
     protected void bindPlayerInventory(Inventory invPlayer) {

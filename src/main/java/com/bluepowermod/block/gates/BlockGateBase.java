@@ -11,31 +11,32 @@ import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.util.AABBUtils;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockPlaceContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.CollisionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.BlockGetter;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * @author MoreThanHidden
@@ -69,7 +70,7 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, Level worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
             worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
@@ -86,10 +87,12 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
         return AABBUtils.rotate(Refs.GATE_AABB, state.getValue(FACING));
     }
 
+    /*
+    TODO 1.17 waiting on MinecraftForge#8014
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return state.getValue(FACING) != side && (state.getValue(FACING).getOpposite() != side);
-    }
+    }*/
 
     @Nullable
     @Override
@@ -149,9 +152,9 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
          byte left = (byte) state_left.getSignal(worldIn, pos_left, side_right);
          byte right = (byte) state_right.getSignal(worldIn, pos_right, side_left);
          byte back = (byte) state_back.getSignal(worldIn, pos_back, side_back.getOpposite());
-         if(state_left.getBlock() instanceof RedstoneWireBlock){left = state_left.getValue(RedstoneWireBlock.POWER).byteValue();}
-         if(state_right.getBlock() instanceof RedstoneWireBlock){right = state_right.getValue(RedstoneWireBlock.POWER).byteValue();}
-         if(state_back.getBlock() instanceof RedstoneWireBlock){back = state_back.getValue(RedstoneWireBlock.POWER).byteValue();}
+         if(state_left.getBlock() instanceof RedStoneWireBlock){left = state_left.getValue(RedStoneWireBlock.POWER).byteValue();}
+         if(state_right.getBlock() instanceof RedStoneWireBlock){right = state_right.getValue(RedStoneWireBlock.POWER).byteValue();}
+         if(state_back.getBlock() instanceof RedStoneWireBlock){back = state_back.getValue(RedStoneWireBlock.POWER).byteValue();}
          map.put("left", left);
          map.put("right", right);
          map.put("back", back);

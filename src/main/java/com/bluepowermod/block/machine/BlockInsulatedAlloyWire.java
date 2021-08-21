@@ -7,14 +7,14 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileInsulatedWire;
 import com.bluepowermod.tile.tier1.TileWire;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -27,15 +27,16 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
         setRegistryName(Refs.MODID + ":" + "insulatedwire." + type );
     }
 
+
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockState state, BlockGetter world) {
-        return new TileInsulatedWire();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+       return new TileInsulatedWire(pos, state);
     }
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        BlockEntity tileentity = builder.getParameter(LootParameters.BLOCK_ENTITY);
+        BlockEntity tileentity = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if(tileentity instanceof TileBPMultipart){
             tileentity = ((TileBPMultipart) tileentity).getTileForState(state);

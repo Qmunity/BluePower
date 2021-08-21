@@ -1,9 +1,11 @@
 package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.*;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -107,10 +109,9 @@ public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractC
 
     @Override
     protected void renderBg(PoseStack matrixStack, float f, int i, int j) {
-
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindForSetup(resLoc);
-
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, resLoc);
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
@@ -152,9 +153,10 @@ public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractC
     }
 
     @Override
-    public void m_181908_() {
+    protected void clearWidgets() {
         for (IGuiWidget widget : widgets)
             widget.update();
+        super.clearWidgets();
     }
 
     @Override

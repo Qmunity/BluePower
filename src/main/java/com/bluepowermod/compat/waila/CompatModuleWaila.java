@@ -11,7 +11,8 @@ import com.bluepowermod.tile.TileMachineBase;
 import mcp.mobius.waila.api.IRegistrar;
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.WailaPlugin;
-import net.minecraft.tileentity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+
 /**
  * @author amadornes
  *

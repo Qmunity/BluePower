@@ -20,30 +20,23 @@ package com.bluepowermod.block.worldgen;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.*;
-import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.block.RenderShape;
-import net.minecraft.loot.LootContext;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.CollisionContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.BlockGetter;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+
 import java.util.List;
 import java.util.Random;
-
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BonemealableBlock;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockCrop extends CropBlock implements BonemealableBlock {
     private static final VoxelShape[] SHAPES = new VoxelShape[]{
@@ -88,14 +81,14 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
                 }
             }
         }
-        if ((age == 6) && world.getBlockState(pos.below()).getBlock().isFertile(world.getBlockState(pos.below()), world, pos.below()) && world.getBlockState(pos.above()).getBlock().isAir(world.getBlockState(pos.above()), world, pos.above())) {
+        if ((age == 6) && world.getBlockState(pos.below()).getBlock().isFertile(world.getBlockState(pos.below()), world, pos.below()) && world.getBlockState(pos.above()).getBlock() == Blocks.AIR) {
             world.setBlock(pos, getStateForAge(4), 2);
         }
         // If the bottom somehow becomes fully grown, correct it
         if ((age > 6) && (world.getBlockState(pos.below()).getBlock().isFertile(world.getBlockState(pos.below()), world, pos.below()))) {
             world.setBlock(pos, getStateForAge(4), 2);
         }
-        if ((age == 7) && world.getBlockState(pos.below()).getBlock().isAir(world.getBlockState(pos.below()), world, pos.below())) {
+        if ((age == 7) && world.getBlockState(pos.below()).getBlock() == Blocks.AIR) {
             world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         }
     }
@@ -109,7 +102,7 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
     }
 
     @Override
-    protected IItemProvider getBaseSeedId() {
+    protected ItemLike getBaseSeedId() {
         return BPItems.flax_seeds;
     }
 
@@ -129,7 +122,7 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
     public void growCrops(Level world, BlockPos pos, BlockState state) {
         int age = this.getAge(state);
         if (world.isEmptyBlock(pos.above()) && (age < 7) && !(world.getBlockState(pos.below()).getBlock() instanceof BlockCrop)) {
-            age = age + MathHelper.nextInt(world.random, 2, 5);
+            age = age + UniformInt.of(2, 5).sample(world.random);
             if (age >= 6) {
                 world.setBlock(pos, getStateForAge(6), 2);
                 world.setBlock(pos.above(), getStateForAge(7), 2);

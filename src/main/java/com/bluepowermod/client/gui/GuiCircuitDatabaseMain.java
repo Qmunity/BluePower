@@ -174,8 +174,8 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
         //BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(circuitDatabase, widget.getID(), ((BaseWidget) widget).value));
     }
 
-    @Override
-    public void m_181908_() {
+    //@Override
+   // public void m_181908_() {
         /*if (!nameField.isFocused()) {
             nameField.setText(circuitDatabase.nameTextField);
         }
@@ -202,7 +202,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
                 && !circuitDatabase.copyInventory.getItem(1).isEmpty()
                 && circuitDatabase.copy(Minecraft.getInstance().player, circuitDatabase.copyInventory.getItem(0),
                         circuitDatabase.copyInventory.getItem(1), true);*/
-    }
+    //}
 
     @Override
     protected boolean isInfoStatLeftSided() {

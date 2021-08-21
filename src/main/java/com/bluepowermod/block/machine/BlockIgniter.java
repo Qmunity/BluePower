@@ -19,24 +19,25 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileIgniter;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockGetter;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 public class BlockIgniter extends BlockContainerFacingBase {
     
     public BlockIgniter() {
     
-        super(Material.STONE, TileIgniter.class);
+        super(Material.STONE, TileIgniter.class, BPBlockEntityType.IGNITER);
         setRegistryName(Refs.MODID, Refs.BLOCKIGNITER_NAME);
     }
 
     @Override
-    public boolean isFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
+    public boolean isFireSource(BlockState state, LevelReader world, BlockPos pos, Direction side) {
         TileIgniter tile = (TileIgniter) world.getBlockEntity(pos);
         boolean orientation = state.getBlock() == this && state.getValue(FACING) == Direction.UP;
         return orientation && tile != null && tile.getIsRedstonePowered();

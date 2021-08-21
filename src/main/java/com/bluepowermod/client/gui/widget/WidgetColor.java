@@ -20,7 +20,6 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.reference.Refs;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.item.DyeItem;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;

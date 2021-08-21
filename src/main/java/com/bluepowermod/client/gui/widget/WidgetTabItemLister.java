@@ -9,7 +9,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;

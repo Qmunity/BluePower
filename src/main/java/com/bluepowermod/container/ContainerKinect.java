@@ -18,6 +18,7 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -41,7 +42,7 @@ public class ContainerKinect extends AbstractContainerMenu {
     }
 
     public ContainerKinect( int id, Inventory player )    {
-        this( id, player, new Inventory( TileKineticGenerator.SLOTS ));
+        this( id, player, new SimpleContainer( TileKineticGenerator.SLOTS ));
     }
 
 

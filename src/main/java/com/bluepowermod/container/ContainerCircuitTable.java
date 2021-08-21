@@ -10,6 +10,7 @@ package com.bluepowermod.container;
 import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -50,7 +51,7 @@ public class ContainerCircuitTable extends AbstractContainerMenu {
     }
 
     public ContainerCircuitTable( int id, Inventory player )    {
-        this( id, player, new Inventory( TileCircuitTable.SLOTS ));
+        this( id, player, new SimpleContainer( TileCircuitTable.SLOTS ));
     }
 
     protected void bindPlayerInventory(Inventory invPlayer) {

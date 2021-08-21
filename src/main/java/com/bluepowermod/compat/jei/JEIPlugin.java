@@ -17,35 +17,19 @@ import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
-import mezz.jei.api.*;
-import mezz.jei.api.constants.VanillaRecipeCategoryUid;
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.helpers.IJeiHelpers;
-import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.api.registration.*;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.Shapes;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
  * @author MoreThanHidden
  */
+/*
+TODO: waiting for JEI 1.17
 @JeiPlugin
 public class JEIPlugin implements IModPlugin {
 
@@ -137,3 +121,4 @@ public class JEIPlugin implements IModPlugin {
         registration.addRecipeTransferHandler(ContainerBlulectricFurnace.class, VanillaRecipeCategoryUid.FURNACE, 0, 1, 2, 36);
     }
 }
+*/

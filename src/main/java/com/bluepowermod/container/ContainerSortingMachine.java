@@ -23,6 +23,7 @@ import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -62,7 +63,7 @@ public class ContainerSortingMachine extends AbstractContainerMenu {
     }
 
     public ContainerSortingMachine(int windowId, Inventory invPlayer) {
-        this(windowId, invPlayer, new Inventory(TileSortingMachine.SLOTS));
+        this(windowId, invPlayer, new SimpleContainer(TileSortingMachine.SLOTS));
     }
 
     protected void bindPlayerInventory(Inventory invPlayer) {

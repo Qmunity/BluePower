@@ -10,7 +10,9 @@ package com.bluepowermod.tile.tier1;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.lighting.BlockLampRGB;
 import com.bluepowermod.helper.MathHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.BlockState;
 
 
 /**
@@ -19,6 +21,10 @@ import net.minecraft.nbt.CompoundTag;
 public class TileLampRGB extends TileLamp {
 
     private byte[] bundledPower = new byte[16];
+
+    public TileLampRGB(BlockPos pos, BlockState state) {
+        super(pos, state);
+    }
 
     @Override
     public CompoundTag save(CompoundTag tCompound) {

@@ -21,7 +21,7 @@ public class PlacementVolcano extends FeatureDecorator<NoneDecoratorConfiguratio
 
     @Override
     public Stream<BlockPos> getPositions(DecorationContext decoratingHelper, Random random, NoneDecoratorConfiguration configIn, BlockPos pos) {
-        WorldGenLevel world = ObfuscationReflectionHelper.getPrivateValue(DecorationContext.class, decoratingHelper, "field_242889_a");
+        WorldGenLevel world = decoratingHelper.getLevel();
         int chunkPosX = pos.getX() >> 8;
         int chuckPosZ = pos.getZ() >> 8;
         ((WorldgenRandom) random).setLargeFeatureSeed(world.getHeight(), chunkPosX, chuckPosZ);

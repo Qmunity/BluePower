@@ -2,9 +2,9 @@ package com.bluepowermod.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -69,7 +69,7 @@ public class BaseWidget implements IGuiWidget {
             GL11.glColor4d(0.2, 0.2, 0.2, 1);
         }
         if (textures.length > 0)
-            Minecraft.getInstance().getTextureManager().bind(textures[textureIndex]);
+            Minecraft.getInstance().getTextureManager().bindForSetup(textures[textureIndex]);
         GuiComponent.blit(matrixStack, x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
     }
 
@@ -97,7 +97,7 @@ public class BaseWidget implements IGuiWidget {
     public void onMouseClicked(int mouseX, int mouseY, int button) {
 
         Minecraft.getInstance().getSoundManager()
-                .play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                .play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         gui.actionPerformed(this);
     }
 

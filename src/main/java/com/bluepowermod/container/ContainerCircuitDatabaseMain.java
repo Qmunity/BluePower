@@ -10,6 +10,7 @@ package com.bluepowermod.container;
 import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 
@@ -64,7 +65,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
 
 
     public ContainerCircuitDatabaseMain( int id, Inventory player )    {
-        this( id, player, new Inventory( TileCircuitDatabase.SLOTS ));
+        this( id, player, new SimpleContainer( TileCircuitDatabase.SLOTS ));
     }
 
     protected void bindPlayerInventory(Inventory invPlayer) {

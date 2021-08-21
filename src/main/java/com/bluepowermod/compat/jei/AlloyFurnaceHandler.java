@@ -10,29 +10,19 @@ package com.bluepowermod.compat.jei;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.reference.Refs;
-import com.mojang.blaze3d.matrix.PoseStack;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.drawable.IDrawableAnimated;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.item.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
   @author MoreThanHidden
 */
 
-
-public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnaceRecipe> {
+/*
+TODO: waiting for JEI 1.17
+public class AlloyFurnaceHandler implements RecipeCategory<StandardAlloyFurnaceRecipe> {
 
     private final IDrawable background;
     private final IDrawable icon;
@@ -107,3 +97,4 @@ public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnace
         }
     }
 }
+*/

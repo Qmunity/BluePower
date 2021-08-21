@@ -1,15 +1,17 @@
 buildscript {
     repositories {
-        maven { url = 'https://sizableshrimp.me/maven' }
+        maven { url = 'https://maven.parchmentmc.org' }
         maven { url = 'https://files.minecraftforge.net/maven' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'me.sizableshrimp.parchmenttest', name: 'ForgeGradle', version: '5.1.20', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 
 project.ext {
@@ -29,15 +31,17 @@ archivesBaseName = "bluepower"
 
 repositories {
     maven {
-        name "JEI"
-        url "https://dvs1.progwml6.com/files/maven/"
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
     }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 minecraft {
-    mappings channel: 'parchment', version: '2021.07.21-1.17'
+    mappings channel: 'parchment', version: '2021.08.15-1.17.1'
 
     runs {
         client {
@@ -78,10 +82,10 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.10'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.42'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
-    //compileOnly fg.deobf("curse.maven:Hwyla:3033595")
+    implementation fg.deobf("curse.maven:jade-324717:3425042")
     //compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107:api")
     //runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107")
 }

@@ -18,20 +18,16 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.BPMenuType;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.FurnaceBlockEntity;
 import com.bluepowermod.container.slot.SlotMachineInput;
 import com.bluepowermod.container.slot.SlotMachineOutput;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
@@ -62,7 +58,7 @@ public class ContainerAlloyFurnace extends AbstractContainerMenu {
     }
 
     public ContainerAlloyFurnace( int id, Inventory invPlayer )    {
-        this( id, invPlayer, new Inventory( TileAlloyFurnace.SLOTS ), new IntArray(3));
+        this( id, invPlayer, new SimpleContainer( TileAlloyFurnace.SLOTS ), new SimpleContainerData(3));
     }
 
     protected void bindPlayerInventory(Inventory invPlayer) {

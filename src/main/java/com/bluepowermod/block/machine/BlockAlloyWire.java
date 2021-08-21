@@ -8,35 +8,30 @@ import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileWire;
-import net.minecraft.block.*;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockGetter;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
 
-public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
+public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock, EntityBlock {
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     final String type;
 
-    @Override
-    public boolean hasBlockEntity(BlockState state) {
-        return true;
-    }
-
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockState state, BlockGetter world) {
-        return new TileWire();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileWire(pos, state);
     }
-
 
     @Override
     protected Capability<?> getCapability() {
@@ -58,8 +53,10 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock{
 
     @Override
     protected boolean canConnect(Level world, BlockPos pos, BlockState state, BlockEntity tileEntity, Direction direction) {
+        /*
+        TODO 1.17 waiting on MinecraftForge#8014
         if(state.canConnectRedstone(world, pos, direction))
-            return true;
+            return true;*/
         return super.canConnect(world, pos, state, tileEntity, direction);
     }
 

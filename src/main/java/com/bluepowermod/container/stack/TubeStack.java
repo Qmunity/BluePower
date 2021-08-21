@@ -8,6 +8,7 @@
 package com.bluepowermod.container.stack;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
@@ -174,14 +175,14 @@ public class TubeStack {
     public void render(float partialTick) {
 
         if (renderMode == RenderMode.AUTO) {
-            renderMode = Minecraft.getInstance().options.graphicsMode == GraphicsFanciness.FANCY ? RenderMode.NORMAL : RenderMode.REDUCED;
+            renderMode = Minecraft.getInstance().options.graphicsMode == GraphicsStatus.FANCY ? RenderMode.NORMAL : RenderMode.REDUCED;
         }
         final RenderMode finalRenderMode = renderMode;
 
         if (customRenderItem == null) {
             customRenderItem = Minecraft.getInstance().getItemRenderer();
 
-            renderedItem = new ItemEntity(Minecraft.getInstance().level, 0,0,0);
+            renderedItem = new ItemEntity(Minecraft.getInstance().level, 0,0,0, ItemStack.EMPTY);
         }
 
         double renderProgress = (oldProgress + (progress - oldProgress) * partialTick) * 2 - 1;

@@ -7,25 +7,20 @@
  */
 package com.bluepowermod.block.power;
 
-import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier2.TileWindmill;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.block.RenderShape;
-import net.minecraft.util.math.AABB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockGetter;
-import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 /**
  * 
@@ -35,7 +30,7 @@ import net.minecraft.world.level.block.EntityBlock;
 public class BlockWindmill extends BlockContainerBase implements EntityBlock {
     
     public BlockWindmill() {
-        super(Material.METAL, TileWindmill.class);
+        super(Material.METAL, TileWindmill.class, BPBlockEntityType.WINDMILL);
         setRegistryName(Refs.MODID, Refs.WINDMILL_NAME);
         BPBlocks.blockList.add(this);
     }
@@ -47,7 +42,7 @@ public class BlockWindmill extends BlockContainerBase implements EntityBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockGetter iBlockReader) {
-        return new TileWindmill();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileWindmill(pos, state);
     }
 }

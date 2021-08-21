@@ -19,20 +19,21 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerHorizontalFacingBase;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockGetter;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 import java.util.Random;
 
 public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
 
     public BlockAlloyFurnace() {
-        super(Material.STONE, TileAlloyFurnace.class);
+        super(Material.STONE, TileAlloyFurnace.class, BPBlockEntityType.ALLOY_FURNACE);
         setRegistryName(Refs.MODID, Refs.ALLOYFURNACE_NAME);
     }
 
@@ -63,7 +64,7 @@ public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
     }
 
     @Override
-    public int getLightValue(BlockState state, BlockGetter world, BlockPos pos) {
+    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
         return state.getValue(ACTIVE) ? 13 : 0;
     }
 
