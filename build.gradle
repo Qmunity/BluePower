@@ -1,23 +1,18 @@
 buildscript {
     repositories {
-        maven { url = 'https://sizableshrimp.me/maven' }
         maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'me.sizableshrimp.parchmenttest', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 
-plugins {
-    id "com.wynprice.cursemaven" version "2.1.5"
-}
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
-apply plugin: 'maven'
-
-
 
 project.ext {
     major = "0"
@@ -38,6 +33,12 @@ repositories {
     maven {
         name "JEI"
         url "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
     }
 }
 
@@ -88,7 +89,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.1.32'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
-    compileOnly fg.deobf("curse.maven:Hwyla:3033595")
+    compileOnly fg.deobf("curse.maven:jade-324717:3389762")
     compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107")
 }
@@ -119,73 +120,6 @@ apiZip.mustRunAfter deobfJar
 artifacts {
     archives deobfJar
     archives apiZip
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: "file://" + System.getenv("local_maven"))
-            pom {
-                groupId = project.group
-                version = project.version
-                artifactId = project.archivesBaseName
-                project {
-                    name project.archivesBaseName
-                    packaging 'jar'
-                    description 'BluePower'
-                    url 'https://github.com/Qmunity/BluePower'
-                    scm {
-                        url 'https://github.com/Qmunity/BluePower'
-                        connection 'scm:git:git@github.com:Qmunity/BluePower.git'
-                        developerConnection 'scm:git:git@github.com:Qmunity/BluePower.git'
-                    }
-                    issueManagement {
-                        system 'github'
-                        url 'https://github.com/Qmunity/BluePower/issues'
-                    }
-                    licenses {
-                        license {
-                            name 'GPLv3'
-                            url 'https://github.com/Qmunity/BluePower/blob/master/LICENCE.txt'
-                            distribution 'repo'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id 'MineMaarten'
-                            name 'MineMaarten'
-                            roles { role 'developer' }
-                        }
-                        developer {
-                            id 'Amadornes'
-                            name 'Amadornes'
-                            roles { role 'developer' }
-                        }
-                        developer {
-                            id 'Quetzi'
-                            name 'Quetzi'
-                            roles { role 'developer' }
-                        }
-                        developer {
-                            id 'K4Unl'
-                            name 'K4Unl'
-                            roles { role 'developer' }
-                        }
-                        developer {
-                            id 'MoreThanHidden'
-                            name 'MoreThanHidden'
-                            roles { role 'developer' }
-                        }
-                        developer {
-                            id 'Zness'
-                            name 'Zness'
-                            roles { role 'artist' }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 jar {

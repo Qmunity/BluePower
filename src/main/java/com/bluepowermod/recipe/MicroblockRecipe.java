@@ -1,5 +1,6 @@
 package com.bluepowermod.recipe;
 
+import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.item.ItemSaw;
@@ -34,7 +35,8 @@ public class MicroblockRecipe extends SpecialRecipe {
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
-                if (stack.getItem() instanceof BlockItem && !Block.byItem(stack.getItem()).hasTileEntity(Block.byItem(stack.getItem()).defaultBlockState())){
+                if (stack.getItem() instanceof BlockItem && (Block.byItem(stack.getItem()) instanceof BlockBPMicroblock ||
+                !Block.byItem(stack.getItem()).hasTileEntity(Block.byItem(stack.getItem()).defaultBlockState()))){
                     VoxelShape shape = null;
                     try{
                        shape = Block.byItem(stack.getItem()).defaultBlockState().getShape(null, null);

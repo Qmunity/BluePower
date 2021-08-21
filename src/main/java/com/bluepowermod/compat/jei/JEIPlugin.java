@@ -80,7 +80,7 @@ public class JEIPlugin implements IModPlugin {
 
     private static List<IRecipe<?>> getMicroblockRecipes() {
         List<IRecipe<?>> recipes = new ArrayList<>();
-        for (Block block : ForgeRegistries.BLOCKS) {
+        for (Block block : ForgeRegistries.BLOCKS.getValues().stream().filter(b -> !b.hasTileEntity(b.defaultBlockState())).collect(Collectors.toList())) {
             VoxelShape shape = null;
             try{
                 shape = block.defaultBlockState().getShape(null, null);
