@@ -22,11 +22,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 /**
- * This class only should be used for special recipes, like recipes that depend on NBT. For normal recipes use
- * {@link com.bluepowermod.recipe.AlloyFurnaceRegistry#addRecipe(net.minecraft.util.ResourceLocation, ItemStack, Ingredient...)}.
- * @author MineMaarten
+ *  @author MoreThanHidden
  */
 public interface IAlloyFurnaceRecipe extends Recipe<WorldlyContainer> {
     
@@ -41,9 +40,9 @@ public interface IAlloyFurnaceRecipe extends Recipe<WorldlyContainer> {
     /**
      * The items that are needed in this recipe need to be removed from the input inventory.
      */
-    boolean useItems(NonNullList<ItemStack> input);
+    boolean useItems(NonNullList<ItemStack> input, RecipeManager recipeManager);
 
-    ItemStack assemble(NonNullList<ItemStack> input);
+    ItemStack assemble(NonNullList<ItemStack> input, RecipeManager recipeManager);
 
     NonNullList<Ingredient> getRequiredItems();
 

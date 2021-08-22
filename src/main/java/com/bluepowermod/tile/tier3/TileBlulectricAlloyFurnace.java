@@ -158,15 +158,15 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
                     tileAlloyFurnace.setIsActive(true);
                     //Check if progress completed, and output slot is empty and less then a stack of the same item.
                     if (++tileAlloyFurnace.currentProcessTime >= (100 / (tileAlloyFurnace.storage.getEnergy() / tileAlloyFurnace.storage.getMaxEnergy())) && ((tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem().getItem()
-                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory).getCount()) <= 64)
+                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount()) <= 64)
                             || tileAlloyFurnace.outputInventory.isEmpty())) {
                         tileAlloyFurnace.currentProcessTime = 0;
                         if (!tileAlloyFurnace.outputInventory.isEmpty()) {
-                            tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory).getCount());
+                            tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount());
                         } else {
-                            tileAlloyFurnace.outputInventory = tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory).copy();
+                            tileAlloyFurnace.outputInventory = tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).copy();
                         }
-                        tileAlloyFurnace.currentRecipe.useItems(tileAlloyFurnace.inventory);
+                        tileAlloyFurnace.currentRecipe.useItems(tileAlloyFurnace.inventory, level.getRecipeManager());
                         tileAlloyFurnace.updatingRecipe = true;
                     }
                 }else{

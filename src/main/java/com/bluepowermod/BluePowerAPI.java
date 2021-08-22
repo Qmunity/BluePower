@@ -9,7 +9,6 @@ package com.bluepowermod;
 
 import com.bluepowermod.api.BPApi.IBPApi;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
-import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class BluePowerAPI implements IBPApi {
 
     @Override
-    public IAlloyFurnaceRegistry getAlloyFurnaceRegistry() {
+    public AlloyFurnaceRegistry getAlloyFurnaceRegistry() {
 
         return AlloyFurnaceRegistry.getInstance();
     }

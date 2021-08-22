@@ -42,7 +42,6 @@ public class BPItems {
     public static final Item green_sapphire_gem = new ItemCrafting(Refs.GREENSAPPHIRE_NAME);
     public static final Item ruby_gem = new ItemCrafting(Refs.RUBY_NAME);
     public static final Item teslatite_dust = new ItemCrafting(Refs.TESLATITE_NAME);
-    public static final Item copper_ingot = new ItemCrafting(Refs.COPPERINGOT_NAME);
     public static final Item silver_ingot = new ItemCrafting(Refs.SILVERINGOT_NAME);
     public static final Item zinc_ingot = new ItemCrafting(Refs.ZINCINGOT_NAME);
     public static final Item brass_ingot = new ItemCrafting(Refs.BRASSINGOT_NAME);

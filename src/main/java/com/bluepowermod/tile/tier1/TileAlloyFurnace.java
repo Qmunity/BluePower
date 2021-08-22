@@ -148,7 +148,7 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
             }
             if (blockEntity.updatingRecipe) {
                 if(level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, blockEntity, level).isPresent()) {
-                    blockEntity.currentRecipe = (IAlloyFurnaceRecipe) level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, blockEntity, level).get();
+                    blockEntity.currentRecipe = level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, blockEntity, level).get();
                 }else{
                     blockEntity.currentRecipe = null;
                 }
@@ -172,14 +172,15 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
 
                 //Check if progress completed, and output slot is empty and less then a stack of the same item.
                 if (++blockEntity.currentProcessTime >= 200 && ((blockEntity.outputInventory.getItem() == blockEntity.currentRecipe.getResultItem().getItem()
-                        && (blockEntity.outputInventory.getCount() + blockEntity.currentRecipe.assemble(blockEntity.inventory).getCount()) <= 64)
-                                        || blockEntity.outputInventory.isEmpty()) && blockEntity.currentRecipe.useItems(blockEntity.inventory)) {
+                        && (blockEntity.outputInventory.getCount() + blockEntity.currentRecipe.assemble(blockEntity.inventory, level.getRecipeManager()).getCount()) <= 64)
+                                        || blockEntity.outputInventory.isEmpty())) {
                     blockEntity.currentProcessTime = 0;
                     if (!blockEntity.outputInventory.isEmpty()) {
-                        blockEntity.outputInventory.setCount(blockEntity.outputInventory.getCount() + blockEntity.currentRecipe.assemble(blockEntity.inventory).getCount());
+                        blockEntity.outputInventory.setCount(blockEntity.outputInventory.getCount() + blockEntity.currentRecipe.assemble(blockEntity.inventory, level.getRecipeManager()).getCount());
                     } else {
-                        blockEntity.outputInventory = blockEntity.currentRecipe.assemble(blockEntity.inventory).copy();
+                        blockEntity.outputInventory = blockEntity.currentRecipe.assemble(blockEntity.inventory, level.getRecipeManager()).copy();
                     }
+                    blockEntity.currentRecipe.useItems(blockEntity.inventory, level.getRecipeManager());
                     blockEntity.updatingRecipe = true;
                 }
             } else {

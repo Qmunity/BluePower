@@ -42,9 +42,6 @@ public class WorldGenOres {
         if (BPConfig.CONFIG.generateZinc.get()) {
             registerConfiguredOre(BPConfig.CONFIG.veinCountZinc.get(), BPConfig.CONFIG.veinSizeZinc.get(), BPConfig.CONFIG.minZincY.get(), BPConfig.CONFIG.maxZincY.get(), BPBlocks.zinc_ore);
         }
-        if (BPConfig.CONFIG.generateCopper.get()) {
-            registerConfiguredOre(BPConfig.CONFIG.veinCountCopper.get(), BPConfig.CONFIG.veinSizeCopper.get(), BPConfig.CONFIG.minCopperY.get(), BPConfig.CONFIG.maxCopperY.get(), BPBlocks.copper_ore);
-        }
         if (BPConfig.CONFIG.generateTungsten.get()) {
             registerConfiguredOre(BPConfig.CONFIG.veinCountTungsten.get(), BPConfig.CONFIG.veinSizeTungsten.get(), BPConfig.CONFIG.minTungstenY.get(), BPConfig.CONFIG.maxTungstenY.get(), BPBlocks.tungsten_ore);
         }
@@ -93,11 +90,6 @@ public class WorldGenOres {
                 ConfiguredFeature<?,?> zinc_feature = BuiltinRegistries.CONFIGURED_FEATURE.get(BPBlocks.zinc_ore.getRegistryName());
                 if(zinc_feature != null)
                     generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, zinc_feature);
-            }
-            if (BPConfig.CONFIG.generateCopper.get()) {
-                ConfiguredFeature<?,?> copper_feature = BuiltinRegistries.CONFIGURED_FEATURE.get(BPBlocks.copper_ore.getRegistryName());
-                if(copper_feature != null)
-                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, copper_feature);
             }
             if (BPConfig.CONFIG.generateTungsten.get()) {
                 ConfiguredFeature<?,?> tungsten_feature = BuiltinRegistries.CONFIGURED_FEATURE.get(BPBlocks.tungsten_ore.getRegistryName());

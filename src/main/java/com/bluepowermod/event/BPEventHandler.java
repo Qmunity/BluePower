@@ -11,6 +11,7 @@ import com.bluepowermod.ClientProxy;
 import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
 import com.bluepowermod.container.ContainerSeedBag;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemSeedBag;
@@ -21,6 +22,7 @@ import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.damagesource.EntityDamageSource;
@@ -252,10 +254,9 @@ public class BPEventHandler {
                     for (int z = event.getPos().getZ() - 2; z < event.getPos().getZ() + 3; z++) {
                         if (event.getWorld().isEmptyBlock(new BlockPos(x, event.getPos().getY() + 1, z))) {
                             if (event.getWorld().random.nextInt(50) == 1) {
-                                //TODO: Flower Chance
-                                //if (BPBlocks.indigo_flower.canSustainPlant(event.getLevel().getBlockState(event.getPos().up()), event.getLevel(), event.getPos().up())) {
-                                //    event.getLevel().setBlock(event.getPos().up(), BPBlocks.indigo_flower.defaultBlockState());
-                                //}
+                                if (BPBlocks.indigo_flower.canSustainPlant(event.getWorld().getBlockState(event.getPos().above()), event.getWorld(), event.getPos().above(), Direction.UP, BPBlocks.indigo_flower)) {
+                                    event.getWorld().setBlock(event.getPos().above(), BPBlocks.indigo_flower.defaultBlockState(), 0);
+                                }
                             }
                         }
                     }
@@ -286,10 +287,10 @@ public class BPEventHandler {
                     double d1 = pos.getY() - projectedView.y();
                     double d2 = pos.getZ() - projectedView.z();
                     Matrix4f matrix4f = event.getMatrix().last().pose();
-                    shape.forAllEdges((startX, startY, startZ, endX, endY, endZ) -> {
-                        builder.vertex(matrix4f, (float)(startX + d0), (float)(startY + d1), (float)(startZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
-                        builder.vertex(matrix4f, (float)(endX + d0), (float)(endY + d1), (float)(endZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
-                    });
+                    //shape.forAllEdges((startX, startY, startZ, endX, endY, endZ) -> {
+                    //    builder.vertex(matrix4f, (float)(startX + d0), (float)(startY + d1), (float)(startZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
+                    //    builder.vertex(matrix4f, (float)(endX + d0), (float)(endY + d1), (float)(endZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
+                    //});
                     event.setCanceled(true);
                 }
             }

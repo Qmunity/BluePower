@@ -18,6 +18,7 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
+import com.bluepowermod.recipe.AlloyFurnaceRecyclingRecipe;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.recipe.MicroblockRecipe;
 import com.bluepowermod.reference.Refs;
@@ -38,6 +39,9 @@ public class BPRecipeSerializer {
     @ObjectHolder("alloy_smelting")
     public static RecipeSerializer<IAlloyFurnaceRecipe> ALLOYSMELTING;
 
+    @ObjectHolder("alloy_recycling")
+    public static RecipeSerializer<IAlloyFurnaceRecipe> ALLOY_RECYCLING;
+
     @ObjectHolder("micro_block")
     public static RecipeSerializer<MicroblockRecipe> MICROBLOCK;
 
@@ -47,6 +51,7 @@ public class BPRecipeSerializer {
         public static void onRecipeSerializerRegistry(final RegistryEvent.Register<RecipeSerializer<?>> event) {
             IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
             registry.register(new AlloyFurnaceRegistry.Serializer().setRegistryName(Refs.MODID + ":alloy_smelting"));
+            registry.register(new AlloyFurnaceRecyclingRecipe.Serializer().setRegistryName(Refs.MODID + ":alloy_recycling"));
             registry.register(new MicroblockRecipe.Serializer().setRegistryName(Refs.MODID + ":micro_block"));
         }
     }
