@@ -110,36 +110,4 @@ public class BluePower {
         }
     }
 
-    @SubscribeEvent
-    public void onServerAboutToStart(FMLServerAboutToStartEvent event){
-        BPRecyclingReloadListener.server = event.getServer();
-
-        if (BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()) {
-            //Generate Datapack
-            BPRecyclingReloadListener.onResourceManagerReload(event.getServer().getRecipeManager());
-
-            //Get Datapacks
-            PackRepository resourcepacklist = event.getServer().getPackRepository();
-            resourcepacklist.reload();
-            List<Pack> list = Lists.newArrayList(resourcepacklist.getSelectedPacks());
-
-            //Enable the Blue Power Dynamic Datapack
-            Pack bluepowerDatapack = resourcepacklist.getPack("file/bluepower");
-            if(!list.contains(bluepowerDatapack)) {
-                list.add(2, bluepowerDatapack);
-            }
-
-            //Fix Forge / Vanilla Order (Issue RestrictedPortals#34)
-            Pack vanillaDatapack = resourcepacklist.getPack("vanilla");
-            if(list.get(0) != vanillaDatapack) {
-                list.remove(vanillaDatapack);
-                list.add(0, vanillaDatapack);
-            }
-
-            //Reload Datapacks
-            event.getServer().reloadResources(list.stream().map(Pack::getId).collect(Collectors.toList())).exceptionally(ex -> null);
-        }
-
-    }
-
 }

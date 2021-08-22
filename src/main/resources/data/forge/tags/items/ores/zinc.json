@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "bluepower:zinc_ore"
+    "bluepower:zinc_ore",
+    "bluepower:zinc_deepslate"
   ]
 }

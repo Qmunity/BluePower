@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "bluepower:amethyst_ore"
+    "bluepower:amethyst_ore",
+    "bluepower:amethyst_deepslate"
   ]
 }

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "bluepower:sapphire_ore"
+    "bluepower:sapphire_ore",
+    "bluepower:sapphire_deepslate"
   ]
 }

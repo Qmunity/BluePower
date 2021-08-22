@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "tag": "forge:ores/tungsten"
-  },
-  "result": "bluepower:tungsten_nugget",
-  "experience": 0.1,
-  "cookingtime": 100
-}

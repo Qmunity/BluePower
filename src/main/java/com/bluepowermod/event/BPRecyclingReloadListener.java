@@ -23,7 +23,6 @@ import java.util.List;
 
 public class BPRecyclingReloadListener implements ResourceManagerReloadListener {
     private final ServerResources registries;
-    public static MinecraftServer server;
 
     public BPRecyclingReloadListener(ServerResources registries){
         this.registries = registries;

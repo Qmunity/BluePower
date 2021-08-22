@@ -1,5 +1,6 @@
 {
   "type": "minecraft:blasting",
+  "group": "silver_ingot",
   "ingredient": {
     "tag": "forge:ores/silver"
   },

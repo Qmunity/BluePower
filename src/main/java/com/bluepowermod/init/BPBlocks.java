@@ -91,6 +91,15 @@ public class BPBlocks {
     public static Block tungsten_ore;
     public static Block green_sapphire_ore;
 
+    public static Block teslatite_deepslate;
+    public static Block ruby_deepslate;
+    public static Block sapphire_deepslate;
+    public static Block amethyst_deepslate;
+    public static Block silver_deepslate;
+    public static Block zinc_deepslate;
+    public static Block tungsten_deepslate;
+    public static Block green_sapphire_deepslate;
+
     public static Block ruby_block;
     public static Block sapphire_block;
     public static Block amethyst_block;
@@ -203,10 +212,18 @@ public class BPBlocks {
         sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME);
         amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME);
         green_sapphire_ore = new BlockItemOre(Refs.GREENSAPPHIREORE_NAME);
-
         silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);
         zinc_ore = new BlockStoneOre(Refs.ZINCORE_NAME);
         tungsten_ore = new BlockStoneOre(Refs.TUNGSTENORE_NAME);
+
+        teslatite_deepslate = new BlockItemOre(Refs.TESLATITEDEEPSLATE_NAME);
+        ruby_deepslate = new BlockItemOre(Refs.RUBYDEEPSLATE_NAME);
+        sapphire_deepslate = new BlockItemOre(Refs.SAPPHIREDEEPSLATE_NAME);
+        amethyst_deepslate = new BlockItemOre(Refs.AMETHYSTDEEPSLATE_NAME);
+        green_sapphire_deepslate = new BlockItemOre(Refs.GREENSAPPHIREDEEPSLATE_NAME);
+        silver_deepslate = new BlockStoneOre(Refs.SILVERDEEPSLATE_NAME);
+        zinc_deepslate = new BlockStoneOre(Refs.ZINCDEEPSLATE_NAME);
+        tungsten_deepslate = new BlockStoneOre(Refs.TUNGSTENDEEPSLATE_NAME);
 
         ruby_block = new BlockStoneOre(Refs.RUBYBLOCK_NAME);
         sapphire_block = new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME);
