@@ -148,11 +148,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
                 currentBurnTime--;
             }
             if (updatingRecipe) {
-                if(this.level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, this, this.level).isPresent()) {
-                    currentRecipe = (IAlloyFurnaceRecipe) this.level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, this, this.level).get();
-                }else{
-                    currentRecipe = null;
-                }
+                currentRecipe = this.level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, this, this.level).orElse(null);
                 updatingRecipe = false;
             }
             if (currentRecipe != null) {
@@ -173,14 +169,15 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory, IName
 
                 //Check if progress completed, and output slot is empty and less then a stack of the same item.
                 if (++currentProcessTime >= 200 && ((outputInventory.getItem() == currentRecipe.getResultItem().getItem()
-                        && (outputInventory.getCount() + currentRecipe.assemble(inventory).getCount()) <= 64)
-                                        || outputInventory.isEmpty()) && currentRecipe.useItems(inventory)) {
+                        && (outputInventory.getCount() + currentRecipe.assemble(inventory, this.level.getRecipeManager()).getCount()) <= 64)
+                        || outputInventory.isEmpty())) {
                     currentProcessTime = 0;
                     if (!outputInventory.isEmpty()) {
-                        outputInventory.setCount(outputInventory.getCount() + currentRecipe.assemble(inventory).getCount());
+                        outputInventory.setCount(outputInventory.getCount() + currentRecipe.assemble(inventory, this.level.getRecipeManager()).getCount());
                     } else {
-                        outputInventory = currentRecipe.assemble(inventory).copy();
+                        outputInventory = currentRecipe.assemble(inventory, this.level.getRecipeManager()).copy();
                     }
+                    currentRecipe.useItems(inventory, this.level.getRecipeManager());
                     updatingRecipe = true;
                 }
             } else {

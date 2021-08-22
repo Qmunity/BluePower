@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.api;
 
-import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
+import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -32,7 +32,7 @@ public class BPApi {
 
         // public IPneumaticTube getPneumaticTube(TileEntity te);
 
-        public IAlloyFurnaceRegistry getAlloyFurnaceRegistry();
+        public AlloyFurnaceRegistry getAlloyFurnaceRegistry();
 
         /**
          * Should be called by an Block#onBlockAdded that implements ISilkyRemovable. It will get the TileEntity and load the tag "tileData" stored in

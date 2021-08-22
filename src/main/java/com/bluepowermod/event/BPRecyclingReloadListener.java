@@ -9,13 +9,17 @@ package com.bluepowermod.event;
 
 import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import com.bluepowermod.util.DatapackUtils;
+import net.minecraft.item.Item;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.resources.DataPackRegistries;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.storage.FolderName;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class BPRecyclingReloadListener implements IResourceManagerReloadListener {
     private final DataPackRegistries registries;
@@ -34,10 +38,12 @@ public class BPRecyclingReloadListener implements IResourceManagerReloadListener
     }
 
     public static void onResourceManagerReload(RecipeManager recipeManager){
-        if(server != null) {
-            if (BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()) {
-                AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes(recipeManager);
-                AlloyFurnaceRegistry.getInstance().generateRecipeDatapack(server);
+        AlloyFurnaceRegistry.getInstance().blacklist.clear();
+        List<String> blacklistStr = Arrays.asList(BPConfig.CONFIG.alloyFurnaceBlacklist.get().split(","));
+        for (String configString : blacklistStr) {
+            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(configString));
+            if (item != null) {
+               AlloyFurnaceRegistry.getInstance().blacklist.add(item);
             }
         }
     }

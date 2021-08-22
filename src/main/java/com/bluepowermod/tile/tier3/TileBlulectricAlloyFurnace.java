@@ -156,15 +156,15 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements ISide
                     this.setIsActive(true);
                     //Check if progress completed, and output slot is empty and less then a stack of the same item.
                     if (++currentProcessTime >= (100 / (storage.getEnergy() / storage.getMaxEnergy())) && ((outputInventory.getItem() == currentRecipe.getResultItem().getItem()
-                            && (outputInventory.getCount() + currentRecipe.assemble(inventory).getCount()) <= 64)
+                            && (outputInventory.getCount() + currentRecipe.assemble(inventory, this.level.getRecipeManager()).getCount()) <= 64)
                             || outputInventory.isEmpty())) {
                         currentProcessTime = 0;
                         if (!outputInventory.isEmpty()) {
-                            outputInventory.setCount(outputInventory.getCount() + currentRecipe.assemble(inventory).getCount());
+                            outputInventory.setCount(outputInventory.getCount() + currentRecipe.assemble(inventory, this.level.getRecipeManager()).getCount());
                         } else {
-                            outputInventory = currentRecipe.assemble(inventory).copy();
+                            outputInventory = currentRecipe.assemble(inventory, this.level.getRecipeManager()).copy();
                         }
-                        currentRecipe.useItems(inventory);
+                        currentRecipe.useItems(inventory, this.level.getRecipeManager());
                         updatingRecipe = true;
                     }
                 }else{

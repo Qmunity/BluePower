@@ -17,25 +17,16 @@
 
 package com.bluepowermod.init;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
+import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import net.minecraft.item.ItemStack;
-
-import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
+import net.minecraft.item.Items;
 
 public class Recipes {
 
     public static void init() {
-
-        // Alloy furnace
-        IAlloyFurnaceRegistry af = BPApi.getInstance().getAlloyFurnaceRegistry();
-
-        af.addRecyclingRecipe(new ItemStack(Blocks.IRON_BLOCK), new ItemStack(Items.IRON_INGOT, 9));
-        af.addRecyclingRecipe(new ItemStack(Blocks.GOLD_BLOCK), new ItemStack(Items.GOLD_INGOT, 9));
-        af.addRecyclingRecipe(new ItemStack(Items.IRON_INGOT));
-        af.addRecyclingRecipe(new ItemStack(Items.GOLD_INGOT));
-        af.addRecyclingRecipe(new ItemStack(Items.GOLD_NUGGET));
-
+        AlloyFurnaceRegistry.getInstance().recyclingItems.add(new ItemStack(Items.GOLD_INGOT));
+        AlloyFurnaceRegistry.getInstance().recyclingItems.add(new ItemStack(Items.IRON_INGOT));
+        AlloyFurnaceRegistry.getInstance().recyclingItems.add(new ItemStack(Items.GOLD_NUGGET));
+        AlloyFurnaceRegistry.getInstance().recyclingItems.add(new ItemStack(Items.IRON_NUGGET));
     }
 }

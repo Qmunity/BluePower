@@ -101,44 +101,11 @@ public class BluePower {
     }
 
     @SubscribeEvent
-    public void onLootLoad(LootTableLoadEvent event)
-    {
+    public void onLootLoad(LootTableLoadEvent event) {
         ResourceLocation grass = new ResourceLocation("minecraft", "blocks/tall_grass");
         if (event.getName().equals(grass)){
                 event.getTable().addPool(LootPool.lootPool().add(TableLootEntry.lootTableReference(new ResourceLocation("bluepower", "blocks/tall_grass"))).name("bluepower:tall_grass").build());
         }
-    }
-
-    @SubscribeEvent
-    public void onServerAboutToStart(FMLServerAboutToStartEvent event){
-        BPRecyclingReloadListener.server = event.getServer();
-
-        if (BPConfig.CONFIG.alloyFurnaceDatapackGenerator.get()) {
-            //Generate Datapack
-            BPRecyclingReloadListener.onResourceManagerReload(event.getServer().getRecipeManager());
-
-            //Get Datapacks
-            ResourcePackList resourcepacklist = event.getServer().getPackRepository();
-            resourcepacklist.reload();
-            List<ResourcePackInfo> list = Lists.newArrayList(resourcepacklist.getSelectedPacks());
-
-            //Enable the Blue Power Dynamic Datapack
-            ResourcePackInfo bluepowerDatapack = resourcepacklist.getPack("file/bluepower");
-            if(!list.contains(bluepowerDatapack)) {
-                list.add(2, bluepowerDatapack);
-            }
-
-            //Fix Forge / Vanilla Order (Issue RestrictedPortals#34)
-            ResourcePackInfo vanillaDatapack = resourcepacklist.getPack("vanilla");
-            if(list.get(0) != vanillaDatapack) {
-                list.remove(vanillaDatapack);
-                list.add(0, vanillaDatapack);
-            }
-
-            //Reload Datapacks
-            event.getServer().reloadResources(list.stream().map(ResourcePackInfo::getId).collect(Collectors.toList())).exceptionally(ex -> null);
-        }
-
     }
 
 }
