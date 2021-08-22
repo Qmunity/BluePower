@@ -71,7 +71,7 @@ public class JEIPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registryIn) {
         registryIn.addRecipes(getRecipes(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE).stream().filter(recipe -> recipe instanceof AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe).collect(Collectors.toSet()), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
         registryIn.addRecipes(getMicroblockRecipes(), VanillaRecipeCategoryUid.CRAFTING);
-        registryIn.addRecipes(getRecyclingRecipes(), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
+        //registryIn.addRecipes(getRecyclingRecipes(), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
     }
 
     private static List<IRecipe<?>> getRecipes(IRecipeType<?> recipeType) {
@@ -118,7 +118,6 @@ public class JEIPlugin implements IModPlugin {
     private static List<IRecipe<?>> getRecyclingRecipes() {
         List<IRecipe<?>> recipesList = new ArrayList<>();
 
-        for (Item testItem : ForgeRegistries.ITEMS.getValues()){
             //Build the blacklist based on config
             Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
@@ -131,6 +130,7 @@ public class JEIPlugin implements IModPlugin {
                     )
             ).collect(Collectors.toList());
 
+        for (Item testItem : ForgeRegistries.ITEMS.getValues()){
             for (IRecipe<?> recipe : recipes) {
                 if (recipe.getResultItem().getItem() == testItem) {
                     int recyclingAmount = 0;
