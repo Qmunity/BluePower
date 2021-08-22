@@ -71,7 +71,7 @@ public class JEIPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registryIn) {
         registryIn.addRecipes(getRecipes(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE).stream().filter(recipe -> recipe instanceof AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe).collect(Collectors.toSet()), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
         registryIn.addRecipes(getMicroblockRecipes(), VanillaRecipeCategoryUid.CRAFTING);
-        //registryIn.addRecipes(getRecyclingRecipes(), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
+        registryIn.addRecipes(getRecyclingRecipes(), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
     }
 
     private static List<IRecipe<?>> getRecipes(IRecipeType<?> recipeType) {
@@ -118,21 +118,13 @@ public class JEIPlugin implements IModPlugin {
     private static List<IRecipe<?>> getRecyclingRecipes() {
         List<IRecipe<?>> recipesList = new ArrayList<>();
 
+        for (ItemStack outputItem : AlloyFurnaceRegistry.getInstance().recyclingItems){
+
             //Build the blacklist based on config
             Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
-            //Filter recipes to just those containing recycling items
-            Collection<IRecipe<?>> recipes = getRecipes(IRecipeType.CRAFTING).stream().filter(
-                    recipe -> recipe.getIngredients().stream().anyMatch(
-                            ingredient -> Arrays.stream(ingredient.getItems()).anyMatch(
-                                    item -> AlloyFurnaceRegistry.getInstance().recyclingItems.stream().anyMatch(target -> item.getItem() == target.getItem())
-                            )
-                    )
-            ).collect(Collectors.toList());
-
-        for (Item testItem : ForgeRegistries.ITEMS.getValues()){
-            for (IRecipe<?> recipe : recipes) {
-                if (recipe.getResultItem().getItem() == testItem) {
+            for (IRecipe<?> recipe : getRecipes(IRecipeType.CRAFTING)) {
+                if (recipe.getIngredients().stream().anyMatch(ingredient -> ingredient.test(outputItem))) {
                     int recyclingAmount = 0;
                     ItemStack currentlyRecycledInto = ItemStack.EMPTY;
 
@@ -177,7 +169,7 @@ public class JEIPlugin implements IModPlugin {
 
                         //Divide by the Recipe Output
                         ItemStack output = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount / recipe.getResultItem().getCount()));
-                        recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe(new ResourceLocation("bluepower:" + output.getDescriptionId() + testItem.getDescriptionId()), "", output, NonNullList.of(Ingredient.of(testItem), Ingredient.of(testItem)), NonNullList.of(0, 1)));
+                        recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe(new ResourceLocation("bluepower:" + output.getItem().getRegistryName().toString().replace(":",".") + recipe.getResultItem().getItem().getRegistryName().toString().replace(":",".")), "", output, NonNullList.of(Ingredient.of(recipe.getResultItem()), Ingredient.of(recipe.getResultItem())), NonNullList.of(0, 1)));
                     }
                 }
             }
