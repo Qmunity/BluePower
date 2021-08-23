@@ -50,6 +50,8 @@ public class AlloyFurnaceRegistry {
     private Map<ItemStack, ItemStack> moltenDownMap = new HashMap<ItemStack, ItemStack>();
     public List<Item> blacklist = new ArrayList<>();
     public List<ItemStack> recyclingItems = new ArrayList<>();
+    //Input Item to Output Stack
+    public HashMap<Item, ItemStack> recyclingRecipes = new HashMap<>();
 
     private AlloyFurnaceRegistry() {
 

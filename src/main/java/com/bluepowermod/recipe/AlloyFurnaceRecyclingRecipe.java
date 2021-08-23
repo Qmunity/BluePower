@@ -18,6 +18,9 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author MoreThanHidden
+ */
 public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
 
     private final ResourceLocation id;
@@ -49,25 +52,8 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
             return false;
         }
 
-        //Filter recipes to just those containing recycling items
-        Collection<IRecipe<?>> recipes = world.getRecipeManager().getRecipes().stream().filter(
-                recipe -> recipe.getIngredients().stream().anyMatch(
-                        ingredient -> Arrays.stream(ingredient.getItems()).anyMatch(
-                                item -> AlloyFurnaceRegistry.getInstance().recyclingItems.stream().anyMatch(target -> item.getItem() == target.getItem())
-                        )
-                )
-        ).collect(Collectors.toList());
+        return inv.hasAnyOf(AlloyFurnaceRegistry.getInstance().recyclingRecipes.keySet());
 
-        //Return true if an Furnace Item can be recycled
-        for (int i = 0; i < inv.getContainerSize(); i++) {
-            for (IRecipe<?> recipe : recipes){
-                if(recipe.getResultItem().getItem() == inv.getItem(i).getItem()){
-                    return recipe.getIngredients().stream().filter(ingredient -> AlloyFurnaceRegistry.getInstance().recyclingItems.stream().anyMatch(ingredient::test)).count() / recipe.getResultItem().getCount() >= 1;
-                }
-            }
-        }
-
-        return false;
     }
 
     @Override
@@ -92,30 +78,18 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
 
     @Override
     public boolean useItems(NonNullList<ItemStack> itemStacks, RecipeManager manager) {
-        //Build the blacklist based on config
         Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
-        //item is in blacklist
+        //Check if item is in blacklist
         if(itemStacks.stream().anyMatch(itemStack -> blacklist.contains(itemStack.getItem()))){
             return false;
         }
 
-        //Filter recipes to just those containing recycling items
-        Collection<IRecipe<?>> recipes = manager.getRecipes().stream().filter(
-                recipe -> recipe.getIngredients().stream().anyMatch(
-                        ingredient -> Arrays.stream(ingredient.getItems()).anyMatch(
-                                item -> AlloyFurnaceRegistry.getInstance().recyclingItems.stream().anyMatch(target -> item.getItem() == target.getItem())
-                        )
-                )
-        ).collect(Collectors.toList());
-
         //Return true if an Furnace Item can be recycled
         for (ItemStack itemStack : itemStacks) {
-            for (IRecipe<?> recipe : recipes) {
-                if (recipe.getResultItem().getItem() == itemStack.getItem()) {
-                    itemStack.setCount(itemStack.getCount()-1);
-                    return true;
-                }
+            if (AlloyFurnaceRegistry.getInstance().recyclingRecipes.containsKey(itemStack.getItem())) {
+                itemStack.setCount(itemStack.getCount()-1);
+                return true;
             }
         }
 
@@ -126,71 +100,15 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     public ItemStack assemble(NonNullList<ItemStack> itemStacks, RecipeManager manager) {
         Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
-        //item is in blacklist
+        //Check if item is in blacklist
         if (itemStacks.stream().anyMatch(itemStack -> blacklist.contains(itemStack.getItem()))) {
             return ItemStack.EMPTY;
         }
 
-        //Filter recipes to just those containing recycling items
-        Collection<IRecipe<?>> recipes = manager.getRecipes().stream().filter(
-                recipe -> recipe.getIngredients().stream().anyMatch(
-                        ingredient -> Arrays.stream(ingredient.getItems()).anyMatch(
-                                item -> AlloyFurnaceRegistry.getInstance().recyclingItems.stream().anyMatch(target -> item.getItem() == target.getItem())
-                        )
-                )
-        ).collect(Collectors.toList());
-
-        //Return true if an Furnace Item can be recycled
+        //Return the output stack if possible.
         for (ItemStack itemStack : itemStacks) {
-            for (IRecipe<?> recipe : recipes) {
-                if (recipe.getResultItem().getItem() == itemStack.getItem()) {
-                    int recyclingAmount = 0;
-                    ItemStack currentlyRecycledInto = ItemStack.EMPTY;
-
-                    for (ItemStack recyclingItem : AlloyFurnaceRegistry.getInstance().recyclingItems) {
-                        try {
-                            if (recipe instanceof ICraftingRecipe) {
-                                if (!recipe.getIngredients().isEmpty()) {
-                                    for (Ingredient input : recipe.getIngredients()) {
-                                        if (!input.isEmpty()) {
-                                            //Serialize and Deserialize the Object so the base tag isn't affected.
-                                            Ingredient ingredient = Ingredient.fromJson(input.toJson());
-                                            if (ingredient.test(recyclingItem)) {
-                                                ItemStack moltenDownItem = AlloyFurnaceRegistry.getInstance().getRecyclingStack(recyclingItem);
-                                                if (currentlyRecycledInto.isEmpty()
-                                                        || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
-                                                    currentlyRecycledInto = moltenDownItem;
-                                                    recyclingAmount += moltenDownItem.getCount();
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (Throwable e) {
-                            BluePower.log.error("Error when generating an Alloy Furnace recipe for item " + recyclingItem.getDisplayName().getString()
-                                    + ", recipe output: " + recipe.getResultItem().getDisplayName().getString());
-                            e.printStackTrace();
-                        }
-                    }
-
-
-                    if (recyclingAmount > 0 && recipe.getResultItem().getCount() > 0) {
-                        //Try to avoid Duping
-                        if (!blacklist.contains(recipe.getResultItem().getItem()) && recipe.getResultItem().getCount() > recyclingAmount) {
-                            blacklist.add(recipe.getResultItem().getItem());
-                        }
-
-                        //Skip item if it is on the blacklist
-                        if (blacklist.contains(recipe.getResultItem().getItem())) {
-                            continue;
-                        }
-
-                        //Divide by the Recipe Output
-                        return new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount / recipe.getResultItem().getCount()));
-
-                    }
-                }
+            if (AlloyFurnaceRegistry.getInstance().recyclingRecipes.containsKey(itemStack.getItem())) {
+                return AlloyFurnaceRegistry.getInstance().recyclingRecipes.get(itemStack.getItem());
             }
         }
         return ItemStack.EMPTY;
