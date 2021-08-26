@@ -17,19 +17,42 @@ import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaRecipeCategoryUid;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.helpers.IJeiHelpers;
+import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
  * @author MoreThanHidden
  */
-/*
-TODO: waiting for JEI 1.17
+
 @JeiPlugin
 public class JEIPlugin implements IModPlugin {
 
@@ -57,15 +80,15 @@ public class JEIPlugin implements IModPlugin {
         registryIn.addRecipes(getRecyclingRecipes(), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
     }
 
-    private static List<IRecipe<?>> getRecipes(IRecipeType<?> recipeType) {
+    private static List<Recipe<?>> getRecipes(RecipeType<?> recipeType) {
         return Minecraft.getInstance().level.getRecipeManager().getRecipes().stream()
                 .filter(recipe -> recipe.getType() == recipeType)
                 .collect(Collectors.toList());
     }
 
-    private static List<IRecipe<?>> getMicroblockRecipes() {
-        List<IRecipe<?>> recipes = new ArrayList<>();
-        for (Block block : ForgeRegistries.BLOCKS) {
+    private static List<Recipe<?>> getMicroblockRecipes() {
+        List<Recipe<?>> recipes = new ArrayList<>();
+        for (Block block : ForgeRegistries.BLOCKS.getValues().stream().filter(b -> !(b instanceof EntityBlock)).collect(Collectors.toList())) {
             VoxelShape shape = null;
             try{
                 shape = block.defaultBlockState().getShape(null, null);
@@ -87,9 +110,9 @@ public class JEIPlugin implements IModPlugin {
                     nbt.putString("block", block.getRegistryName().toString());
                     ItemStack stack = new ItemStack(mb);
                     stack.setTag(nbt);
-                    stack.setHoverName(new TranslationTextComponent(block.getDescriptionId())
-                            .append(new StringTextComponent(" "))
-                            .append(new TranslationTextComponent(mb.getDescriptionId())));
+                    stack.setHoverName(new TranslatableComponent(block.getDescriptionId())
+                            .append(new TextComponent(" "))
+                            .append(new TranslatableComponent(mb.getDescriptionId())));
                     output = stack;
                     recipes.add(new ShapelessRecipe(new ResourceLocation("bluepower:" + mb.getDescriptionId() + block.getDescriptionId()), "", output, input));
                 }
@@ -102,66 +125,12 @@ public class JEIPlugin implements IModPlugin {
     private static List<Recipe<?>> getRecyclingRecipes() {
         List<Recipe<?>> recipesList = new ArrayList<>();
 
-        for (ItemStack outputItem : AlloyFurnaceRegistry.getInstance().recyclingItems){
-
-            //Build the blacklist based on config
-            Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
-
-            for (Recipe<?> recipe : getRecipes(RecipeType.CRAFTING)) {
-                if (recipe.getIngredients().stream().anyMatch(ingredient -> ingredient.test(outputItem))) {
-                    int recyclingAmount = 0;
-                    ItemStack currentlyRecycledInto = ItemStack.EMPTY;
-
-                    for (ItemStack recyclingItem : AlloyFurnaceRegistry.getInstance().recyclingItems) {
-                        try {
-                            if (recipe instanceof ICraftingRecipe) {
-                                if (!recipe.getIngredients().isEmpty()) {
-                                    for (Ingredient input : recipe.getIngredients()) {
-                                        if (!input.isEmpty()) {
-                                            //Serialize and Deserialize the Object so the base tag isn't affected.
-                                            Ingredient ingredient = Ingredient.fromJson(input.toJson());
-                                            if (ingredient.test(recyclingItem)) {
-                                                ItemStack moltenDownItem = AlloyFurnaceRegistry.getInstance().getRecyclingStack(recyclingItem);
-                                                if (currentlyRecycledInto.isEmpty()
-                                                        || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
-                                                    currentlyRecycledInto = moltenDownItem;
-                                                    recyclingAmount += moltenDownItem.getCount();
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (Throwable e) {
-                            BluePower.log.error("Error when generating an Alloy Furnace recipe for item " + recyclingItem.getDisplayName().getString()
-                                    + ", recipe output: " + recipe.getResultItem().getDisplayName().getString());
-                            e.printStackTrace();
-                        }
-                    }
-
-
-                    if (recyclingAmount > 0 && recipe.getResultItem().getCount() > 0) {
-                        //Try to avoid Duping
-                        if (!blacklist.contains(recipe.getResultItem().getItem()) && recipe.getResultItem().getCount() > recyclingAmount) {
-                            blacklist.add(recipe.getResultItem().getItem());
-                        }
-
-                        //Skip item if it is on the blacklist
-                        if (blacklist.contains(recipe.getResultItem().getItem())) {
-                            continue;
-                        }
-
-                        //Divide by the Recipe Output
-                        ItemStack output = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount / recipe.getResultItem().getCount()));
-                        recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe(new ResourceLocation("bluepower:" + output.getItem().getRegistryName().toString().replace(":",".") + recipe.getResultItem().getItem().getRegistryName().toString().replace(":",".")), "", output, NonNullList.of(Ingredient.of(recipe.getResultItem()), Ingredient.of(recipe.getResultItem())), NonNullList.of(0, 1)));
-                    }
-                }
-            }
+        for (Map.Entry<Item, ItemStack> recipe : AlloyFurnaceRegistry.getInstance().recyclingRecipes.entrySet()) {
+            recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe(new ResourceLocation("bluepower:" + recipe.getValue().getItem().getRegistryName().toString().replace(":", ".") + recipe.getKey().getRegistryName().toString().replace(":", ".")), "", recipe.getValue(), NonNullList.of(Ingredient.of(recipe.getKey()), Ingredient.of(recipe.getKey())), NonNullList.of(0, 1)));
         }
 
         return recipesList;
     }
-
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
@@ -186,4 +155,3 @@ public class JEIPlugin implements IModPlugin {
         registration.addRecipeTransferHandler(ContainerBlulectricFurnace.class, VanillaRecipeCategoryUid.FURNACE, 0, 1, 2, 36);
     }
 }
-*/

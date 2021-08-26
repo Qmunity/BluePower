@@ -49,6 +49,8 @@ public class AlloyFurnaceRegistry {
     private Map<ItemStack, ItemStack> moltenDownMap = new HashMap<ItemStack, ItemStack>();
     public List<Item> blacklist = new ArrayList<>();
     public List<ItemStack> recyclingItems = new ArrayList<>();
+    //Input Item to Output Stack
+    public HashMap<Item, ItemStack> recyclingRecipes = new HashMap<>();
 
     private AlloyFurnaceRegistry() {
 
@@ -72,7 +74,7 @@ public class AlloyFurnaceRegistry {
         private final ResourceLocation id;
         private final String group;
 
-        private StandardAlloyFurnaceRecipe(ResourceLocation id, String group, ItemStack craftingResult, NonNullList<Ingredient> requiredItems, NonNullList<Integer> requiredCount) {
+        public StandardAlloyFurnaceRecipe(ResourceLocation id, String group, ItemStack craftingResult, NonNullList<Ingredient> requiredItems, NonNullList<Integer> requiredCount) {
 
             if (craftingResult == null || craftingResult.isEmpty())
                 throw new IllegalArgumentException("Alloy Furnace crafting result can't be null!");

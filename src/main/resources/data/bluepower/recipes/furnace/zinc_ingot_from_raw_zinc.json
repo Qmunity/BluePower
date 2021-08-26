@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:blasting",
+  "type": "minecraft:smelting",
   "group": "zinc_ingot",
   "ingredient": {
     "item": "bluepower:zinc_raw"

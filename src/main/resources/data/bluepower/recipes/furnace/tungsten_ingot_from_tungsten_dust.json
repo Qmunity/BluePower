@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:blasting",
+  "type": "minecraft:smelting",
   "group": "tungsten_ingot",
   "ingredient": {
     "item": "bluepower:tungsten_dust"

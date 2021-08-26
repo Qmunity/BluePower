@@ -44,33 +44,35 @@ public class BPItems {
 
     public static final Item teslatite_dust = new ItemCrafting(Refs.TESLATITE_NAME);
     public static final Item silver_dust = new ItemCrafting(Refs.SILVERDUST_NAME);
-    public static final Item brass_dust = new ItemCrafting(Refs.BRASSDUST_NAME);
+    public static final Item zinc_dust = new ItemBase(new Item.Properties()).setRegistryName(Refs.MODID + ":" + Refs.ZINCDUST_NAME);
     public static final Item tungsten_dust = new ItemCrafting(Refs.TUNGSTENDUST_NAME);
+    public static final Item brass_dust = new ItemCrafting(Refs.BRASSDUST_NAME);
 
     public static final Item copper_nugget = new ItemCrafting(Refs.COPPERNUGGET_NAME);
-    public static final Item tungsten_nugget = new ItemCrafting(Refs.TUNGSTENNUGGET_NAME);
     public static final Item silver_nugget = new ItemCrafting(Refs.SILVERNUGGET_NAME);
-    public static final Item brass_nugget = new ItemCrafting(Refs.BRASSNUGGET_NAME);
     public static final Item zinc_nugget = new ItemCrafting(Refs.ZINCNUGGET_NAME);
+    public static final Item tungsten_nugget = new ItemCrafting(Refs.TUNGSTENNUGGET_NAME);
+    public static final Item brass_nugget = new ItemCrafting(Refs.BRASSNUGGET_NAME);
 
-    public static final Item silver_ingot = new ItemCrafting(Refs.SILVERINGOT_NAME);
-    public static final Item zinc_ingot = new ItemCrafting(Refs.ZINCINGOT_NAME);
     public static final Item silver_raw = new ItemCrafting(Refs.SILVERRAW_NAME);
     public static final Item zinc_raw = new ItemCrafting(Refs.ZINCRAW_NAME);
     public static final Item tungsten_raw = new ItemCrafting(Refs.TUNGSTENRAW_NAME);
-    public static final Item brass_ingot = new ItemCrafting(Refs.BRASSINGOT_NAME);
+
+    public static final Item silver_ingot = new ItemCrafting(Refs.SILVERINGOT_NAME);
+    public static final Item zinc_ingot = new ItemCrafting(Refs.ZINCINGOT_NAME);
+    public static final Item tungsten_ingot = new ItemCrafting(Refs.TUNGSTENINGOT_NAME);
     public static final Item tungsten_carbide = new ItemCrafting(Refs.TUNGCARBINGOT_NAME);
+    public static final Item brass_ingot = new ItemCrafting(Refs.BRASSINGOT_NAME);
     public static final Item blue_alloy_ingot = new ItemCrafting(Refs.BLUEALLOYINGOT_NAME);
     public static final Item red_alloy_ingot = new ItemCrafting(Refs.REDALLOYINGOT_NAME);
     public static final Item purple_alloy_ingot = new ItemCrafting(Refs.PURPLEALLOYINGOT_NAME);
-    public static final Item tungsten_ingot = new ItemCrafting(Refs.TUNGSTENINGOT_NAME);
 
     public static final Item zinc_ore_crushed = new ItemBase(new Item.Properties())
                 .setRegistryName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_NAME);
     public static final Item zinc_ore_purified = new ItemBase(new Item.Properties())
                 .setRegistryName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME);
-    public static final Item zinc_dust = new ItemBase(new Item.Properties()).setRegistryName(Refs.MODID + ":" + Refs.ZINCDUST_NAME);
     public static final Item zinc_tiny_dust = new ItemBase(new Item.Properties()).setRegistryName(Refs.MODID + ":" + Refs.ZINCDUST_TINY_NAME);
+
     public static final Item wood_sickle = new ItemSickle(Tiers.WOOD, Refs.WOODSICKLE_NAME, Item.byBlock(Blocks.OAK_PLANKS));
     public static final Item stone_sickle = new ItemSickle(Tiers.STONE, Refs.STONESICKLE_NAME, Item.byBlock(Blocks.COBBLESTONE));
     public static final Item iron_sickle = new ItemSickle(Tiers.IRON, Refs.IRONSICKLE_NAME, Items.IRON_INGOT);

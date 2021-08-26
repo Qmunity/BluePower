@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:blasting",
+  "type": "minecraft:smelting",
   "group": "silver_ingot",
   "ingredient": {
     "item": "bluepower:silver_dust"
