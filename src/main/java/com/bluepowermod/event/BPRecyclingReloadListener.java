@@ -18,6 +18,7 @@ import net.minecraft.resources.DataPackRegistries;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -60,7 +61,13 @@ public class BPRecyclingReloadListener implements IResourceManagerReloadListener
             Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
             for (IRecipe<?> recipe : recipeManager.getAllRecipesFor(IRecipeType.CRAFTING)) {
-                if (recipe.getIngredients().stream().anyMatch(ingredient -> ingredient.test(outputItem))) {
+
+                //Take into account other mods with Dynamic Recipes
+                NonNullList<Ingredient> ingredients = null;
+                try{ingredients = recipe.getIngredients();}catch(IllegalStateException | NullPointerException ignored){}
+
+                //If Recipe Contains a Recyclable Item check the recipe
+                if (ingredients != null && ingredients.stream().anyMatch(ingredient -> ingredient.test(outputItem))){
                     int recyclingAmount = 0;
                     ItemStack currentlyRecycledInto = ItemStack.EMPTY;
 

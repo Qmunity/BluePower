@@ -1,9 +1,7 @@
 package com.bluepowermod.recipe;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPRecipeSerializer;
-import com.bluepowermod.util.ItemStackUtils;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -16,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author MoreThanHidden
