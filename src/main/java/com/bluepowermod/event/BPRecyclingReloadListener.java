@@ -64,10 +64,10 @@ public class BPRecyclingReloadListener implements IResourceManagerReloadListener
 
                 //Take into account other mods with Dynamic Recipes
                 NonNullList<Ingredient> ingredients = null;
-                try{ingredients = recipe.getIngredients();}catch(IllegalStateException | NullPointerException ignored){}
+                try{ingredients = recipe.getIngredients();}catch(IllegalStateException ignored){}
 
                 //If Recipe Contains a Recyclable Item check the recipe
-                if (ingredients != null && ingredients.stream().anyMatch(ingredient -> ingredient.test(outputItem))){
+                if (ingredients != null && !recipe.isSpecial() && ingredients.stream().anyMatch(ingredient -> ingredient.test(outputItem))){
                     int recyclingAmount = 0;
                     ItemStack currentlyRecycledInto = ItemStack.EMPTY;
 
