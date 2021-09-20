@@ -46,7 +46,7 @@ repositories {
 java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 minecraft {
-    mappings channel: 'parchment', version: '2021.08.22-1.17.1'
+    mappings channel: 'parchment', version: '2021.09.05-1.17.1'
 
     runs {
         client {
@@ -87,7 +87,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.44'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.70'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
     implementation fg.deobf("curse.maven:jade-324717:3425042")

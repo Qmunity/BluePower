@@ -1,5 +1,6 @@
 package com.bluepowermod.client.gui.widget;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -13,10 +14,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGuiWidget {
@@ -157,9 +158,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
         textList.clear();
         for (String line : text) {
-            for (String s : WordUtils.wrap(I18n.get(line), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))) {
-                textList.add(s);
-            }
+            textList.addAll(Arrays.asList(WordUtils.wrap(I18n.get(line), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))));
         }
         return this;
     }
@@ -168,9 +167,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     public IGuiAnimatedStat setText(String text) {
 
         textList.clear();
-        for (String s : WordUtils.wrap(I18n.get(text), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))) {
-            textList.add(s);
-        }
+        textList.addAll(Arrays.asList(WordUtils.wrap(I18n.get(text), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))));
         return this;
     }
 
@@ -273,9 +270,10 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
             renderWidth *= -1;
         GuiComponent.fill(matrixStack, renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
                 backGroundColor);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glLineWidth(3.0F);
-        GL11.glColor4d(0, 0, 0, 1);
+
+        RenderSystem.disableTexture();
+        RenderSystem.lineWidth(3.0F);
+        RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
         Tesselator tess = Tesselator.getInstance();
         BufferBuilder buff = tess.getBuilder();
         buff.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_TEX);
@@ -284,15 +282,15 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         buff.vertex(renderBaseX + renderWidth, renderAffectedY + renderHeight, zLevel);
         buff.vertex(renderBaseX, renderAffectedY + renderHeight, zLevel);
         tess.end();
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        RenderSystem.enableTexture();
         if (leftSided)
             renderWidth *= -1;
         // if done expanding, draw the information
         if (doneExpanding) {
-            GL11.glPushMatrix();
-            GL11.glTranslated(renderBaseX + (leftSided ? -renderWidth : 16), renderAffectedY, 0);
-            GL11.glScaled(textSize, textSize, textSize);
-            GL11.glTranslated(-renderBaseX - (leftSided ? -renderWidth : 16), -renderAffectedY, 0);
+            matrixStack.pushPose();
+            matrixStack.translate(renderBaseX + (leftSided ? -renderWidth : 16), renderAffectedY, 0);
+            matrixStack.scale(textSize, textSize, textSize);
+            matrixStack.translate(-renderBaseX - (leftSided ? -renderWidth : 16), -renderAffectedY, 0);
             fontRenderer.drawShadow(matrixStack, title, renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + 2, 0xFFFF00);
             for (int i = 0; i < textList.size(); i++) {
 
@@ -305,37 +303,37 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
                 }
             }
 
-            GL11.glPopMatrix();
+            matrixStack.popPose();
         }
         if (renderHeight > 16 && renderWidth > 16) {
-            GL11.glColor4d(1, 1, 1, 1);
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.enableBlend();
+            RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             if (iStack == null) {
                 if (iconResLoc == null)
                     iconResLoc = new ResourceLocation(texture);
                 drawTexture(iconResLoc, renderBaseX - (leftSided ? 16 : 0), renderAffectedY);
             } else if (gui != null || !(iStack.getItem() instanceof BlockItem)) {
-                renderItem(fontRenderer, renderBaseX - (leftSided ? 16 : 0), renderAffectedY, iStack);
+                renderItem(matrixStack, fontRenderer, renderBaseX - (leftSided ? 16 : 0), renderAffectedY, iStack);
             }
         }
     }
 
-    protected void renderItem(Font fontRenderer, int x, int y, ItemStack stack) {
+    protected void renderItem(PoseStack matrixStack, Font fontRenderer, int x, int y, ItemStack stack) {
 
         if (itemRenderer == null)
             itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelShaper().getModelManager(), Minecraft.getInstance().getItemColors(), null);
-        GL11.glPushMatrix();
-        GL11.glTranslated(0, 0, -50);
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        matrixStack.pushPose();
+        matrixStack.translate(0, 0, -50);
+        //GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         //TODO: RenderHelper.enableGUIStandardItemLighting();
         itemRenderer.renderAndDecorateItem(stack, x, y);
         itemRenderer.renderGuiItemDecorations(fontRenderer, stack, x, y, null);
 
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        //GL11.glEnable(GL11.GL_ALPHA_TEST);
         //TODO: RenderHelper.turnOff();
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        GL11.glPopMatrix();
+        //GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+        matrixStack.popPose();
     }
 
     public static void drawTexture(ResourceLocation texture, int x, int y) {

@@ -240,10 +240,11 @@ public class TileBase extends BlockEntity implements IRotatable {
         return false;
     }
 
-    public static void tickTileBase(Level level, BlockPos pos, BlockState state, TileBase blockEntity) {
-        if (blockEntity.ticker == 0) {
-            onTileLoaded(level, pos, state, blockEntity);
+    public static void tickTileBase(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        TileBase tileBase = (TileBase)blockEntity;
+        if (tileBase.ticker == 0) {
+            onTileLoaded(level, pos, state, tileBase);
         }
-        blockEntity.ticker++;
+        tileBase.ticker++;
     }
 }

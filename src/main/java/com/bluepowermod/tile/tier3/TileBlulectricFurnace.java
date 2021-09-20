@@ -64,7 +64,8 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
         this.outputInventory = ItemStack.EMPTY;
     }
 
-    public static void tickFurnace(Level level, BlockPos pos, BlockState state, TileBlulectricFurnace tileFurnace) {
+    public static void tickFurnace(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        TileBlulectricFurnace tileFurnace = (TileBlulectricFurnace) blockEntity;
         if (level != null && !level.isClientSide) {
             tileFurnace.storage.resetCurrent();
             //Balance power of attached blulectric blocks.

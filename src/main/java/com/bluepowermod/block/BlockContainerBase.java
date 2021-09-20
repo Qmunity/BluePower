@@ -58,18 +58,15 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     private Class<? extends TileBase> tileEntityClass;
     private boolean isRedstoneEmitter;
     private boolean isSilkyRemoving;
-    private final BlockEntityType<? extends TileBase> entityType;
 
     public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
         super(material);
         setBlockEntityClass(tileEntityClass);
-        this.entityType = entityType;
     }
 
     public BlockContainerBase(Properties properties, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
         super(properties);
         setBlockEntityClass(tileEntityClass);
-        this.entityType = entityType;
     }
 
     public BlockContainerBase setBlockEntityClass(Class<? extends TileBase> tileEntityClass) {
@@ -84,10 +81,6 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
         return this;
     }
 
-    @Nullable
-    protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> blockEntityType, BlockEntityType<E> tileBaseType, BlockEntityTicker<? super E> ticker) {
-        return tileBaseType == blockEntityType ? (BlockEntityTicker<A>)ticker : null;
-    }
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
@@ -132,7 +125,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         try {
-            return getBlockEntity().newInstance();
+            return getBlockEntity().getDeclaredConstructor(BlockPos.class, BlockState.class).newInstance(pos, state);
         } catch (Exception e) {
             return null;
         }
@@ -141,11 +134,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, this.blockEntityType(), TileBase::tickTileBase);
-    }
-
-    public BlockEntityType<? extends TileBase> blockEntityType() {
-        return entityType;
+        return level.isClientSide ? null : TileBase::tickTileBase;
     }
 
     @Override

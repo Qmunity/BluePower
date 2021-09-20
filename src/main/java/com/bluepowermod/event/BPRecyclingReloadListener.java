@@ -11,6 +11,7 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.util.ItemStackUtils;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ServerResources;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -56,7 +57,13 @@ public class BPRecyclingReloadListener implements ResourceManagerReloadListener 
             Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
             for (Recipe<?> recipe : recipeManager.getAllRecipesFor(RecipeType.CRAFTING)) {
-                if (recipe.getIngredients().stream().anyMatch(ingredient -> ingredient.test(outputItem))) {
+
+                //Take into account other mods with Dynamic Recipes
+                NonNullList<Ingredient> ingredients = null;
+                try{ingredients = recipe.getIngredients();}catch(IllegalStateException ignored){}
+
+                //If Recipe Contains a Recyclable Item check the recipe
+                if (ingredients != null && !recipe.isSpecial() && ingredients.stream().anyMatch(ingredient -> ingredient.test(outputItem))) {
                     int recyclingAmount = 0;
                     ItemStack currentlyRecycledInto = ItemStack.EMPTY;
 

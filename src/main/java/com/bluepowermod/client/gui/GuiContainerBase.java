@@ -160,6 +160,13 @@ public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractC
     }
 
     @Override
+    public void containerTick() {
+        super.containerTick();
+        for (IGuiWidget widget : widgets)
+            widget.update();
+    }
+
+    @Override
     public void resize(Minecraft minecraft, int x, int y) {
         super.resize(minecraft, x, y);
         redraw();

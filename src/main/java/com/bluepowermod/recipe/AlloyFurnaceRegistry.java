@@ -44,7 +44,7 @@ import java.util.*;
 public class AlloyFurnaceRegistry {
 
     private static AlloyFurnaceRegistry INSTANCE = new AlloyFurnaceRegistry();
-    public static final RecipeType<IAlloyFurnaceRecipe> ALLOYFURNACE_RECIPE = RecipeType.<IAlloyFurnaceRecipe>register("bluepower:alloy_smelting");
+    public static final RecipeType<IAlloyFurnaceRecipe> ALLOYFURNACE_RECIPE = RecipeType.register("bluepower:alloy_smelting");
 
     private Map<ItemStack, ItemStack> moltenDownMap = new HashMap<ItemStack, ItemStack>();
     public List<Item> blacklist = new ArrayList<>();

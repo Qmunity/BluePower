@@ -17,7 +17,6 @@
 
 package com.bluepowermod.client.gui;
 
-import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerBlulectricAlloyFurnace;
 import com.bluepowermod.reference.Refs;
 import com.mojang.blaze3d.vertex.PoseStack;

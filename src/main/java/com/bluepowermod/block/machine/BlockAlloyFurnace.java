@@ -25,9 +25,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
@@ -35,6 +40,13 @@ public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
     public BlockAlloyFurnace() {
         super(Material.STONE, TileAlloyFurnace.class, BPBlockEntityType.ALLOY_FURNACE);
         setRegistryName(Refs.MODID, Refs.ALLOYFURNACE_NAME);
+    }
+
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : TileAlloyFurnace::tick;
     }
 
     @Override

@@ -27,7 +27,7 @@ import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -38,6 +38,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -139,52 +140,53 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
     /**
      * Function gets called every tick. Do not forget to call the super method!
      */
-    public static void tick(Level level, BlockPos pos, BlockState state, TileAlloyFurnace blockEntity) {
-        TileBase.tickTileBase(level, pos, state, blockEntity);
+    public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        TileAlloyFurnace tileAlloyFurnace = (TileAlloyFurnace) blockEntity;
+        TileBase.tickTileBase(level, pos, state, tileAlloyFurnace);
         if (!level.isClientSide) {
-            blockEntity.setIsActive(blockEntity.currentBurnTime > 0);
-            if (blockEntity.isActive) {
-                blockEntity.currentBurnTime--;
+            tileAlloyFurnace.setIsActive(tileAlloyFurnace.currentBurnTime > 0);
+            if (tileAlloyFurnace.isActive) {
+                tileAlloyFurnace.currentBurnTime--;
             }
-            if (blockEntity.updatingRecipe) {
-                if(level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, blockEntity, level).isPresent()) {
-                    blockEntity.currentRecipe = level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, blockEntity, level).get();
+            if (tileAlloyFurnace.updatingRecipe) {
+                if(level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, tileAlloyFurnace, level).isPresent()) {
+                    tileAlloyFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, tileAlloyFurnace, level).get();
                 }else{
-                    blockEntity.currentRecipe = null;
+                    tileAlloyFurnace.currentRecipe = null;
                 }
-                blockEntity.updatingRecipe = false;
+                tileAlloyFurnace.updatingRecipe = false;
             }
-            if (blockEntity.currentRecipe != null) {
-                if (blockEntity.currentBurnTime <= 0) {
-                    if (FurnaceBlockEntity.getFuel().containsKey(blockEntity.fuelInventory.getItem())) {
+            if (tileAlloyFurnace.currentRecipe != null) {
+                if (tileAlloyFurnace.currentBurnTime <= 0) {
+                    if (FurnaceBlockEntity.getFuel().containsKey(tileAlloyFurnace.fuelInventory.getItem())) {
                         // Put new item in
-                        blockEntity.currentBurnTime = blockEntity.maxBurnTime = FurnaceBlockEntity.getFuel().get(blockEntity.fuelInventory.getItem());
-                        if (!blockEntity.fuelInventory.isEmpty()) {
-                            blockEntity.fuelInventory.setCount(blockEntity.fuelInventory.getCount() - 1);
-                            if (blockEntity.fuelInventory.getCount() <= 0) {
-                                blockEntity.fuelInventory = blockEntity.fuelInventory.getItem().getContainerItem(blockEntity.fuelInventory);
+                        tileAlloyFurnace.currentBurnTime = tileAlloyFurnace.maxBurnTime = FurnaceBlockEntity.getFuel().get(tileAlloyFurnace.fuelInventory.getItem());
+                        if (!tileAlloyFurnace.fuelInventory.isEmpty()) {
+                            tileAlloyFurnace.fuelInventory.setCount(tileAlloyFurnace.fuelInventory.getCount() - 1);
+                            if (tileAlloyFurnace.fuelInventory.getCount() <= 0) {
+                                tileAlloyFurnace.fuelInventory = tileAlloyFurnace.fuelInventory.getItem().getContainerItem(tileAlloyFurnace.fuelInventory);
                             }
                         }
                     } else {
-                        blockEntity.currentProcessTime = 0;
+                        tileAlloyFurnace.currentProcessTime = 0;
                     }
                 }
 
                 //Check if progress completed, and output slot is empty and less then a stack of the same item.
-                if (++blockEntity.currentProcessTime >= 200 && ((blockEntity.outputInventory.getItem() == blockEntity.currentRecipe.getResultItem().getItem()
-                        && (blockEntity.outputInventory.getCount() + blockEntity.currentRecipe.assemble(blockEntity.inventory, level.getRecipeManager()).getCount()) <= 64)
-                                        || blockEntity.outputInventory.isEmpty())) {
-                    blockEntity.currentProcessTime = 0;
-                    if (!blockEntity.outputInventory.isEmpty()) {
-                        blockEntity.outputInventory.setCount(blockEntity.outputInventory.getCount() + blockEntity.currentRecipe.assemble(blockEntity.inventory, level.getRecipeManager()).getCount());
+                if (++tileAlloyFurnace.currentProcessTime >= 200 && ((tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem().getItem()
+                        && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount()) <= 64)
+                                        || tileAlloyFurnace.outputInventory.isEmpty())) {
+                    tileAlloyFurnace.currentProcessTime = 0;
+                    if (!tileAlloyFurnace.outputInventory.isEmpty()) {
+                        tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount());
                     } else {
-                        blockEntity.outputInventory = blockEntity.currentRecipe.assemble(blockEntity.inventory, level.getRecipeManager()).copy();
+                        tileAlloyFurnace.outputInventory = tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).copy();
                     }
-                    blockEntity.currentRecipe.useItems(blockEntity.inventory, level.getRecipeManager());
-                    blockEntity.updatingRecipe = true;
+                    tileAlloyFurnace.currentRecipe.useItems(tileAlloyFurnace.inventory, level.getRecipeManager());
+                    tileAlloyFurnace.updatingRecipe = true;
                 }
             } else {
-                blockEntity.currentProcessTime = 0;
+                tileAlloyFurnace.currentProcessTime = 0;
             }
         }
     }
@@ -380,7 +382,7 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent(Refs.ALLOYFURNACE_NAME);
+        return new TextComponent(Refs.ALLOYFURNACE_NAME);
     }
     
     @Nullable
