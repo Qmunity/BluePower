@@ -139,21 +139,18 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onEntityAttack(LivingAttackEvent event) {
 
-        if (!isAttacking && event.getSource() instanceof EntityDamageSource) {// this event will be trigger recursively by EntityLiving#hurt,
+        if (!isAttacking && event.getSource() instanceof EntityDamageSource entitySource) {// this event will be trigger recursively by EntityLiving#hurt,
             // so we need to stop the loop.
-            EntityDamageSource entitySource = (EntityDamageSource) event.getSource();
 
-            if (entitySource.getEntity() instanceof Player) {
-                Player killer = (Player) entitySource.getEntity();
+            if (entitySource.getEntity() instanceof Player killer) {
 
                 if (!killer.getInventory().getSelected().isEmpty()) {
                     if (EnchantmentHelper.getEnchantments(killer.getInventory().getSelected()).containsKey(BPEnchantments.disjunction)) {
                         if (event.getEntityLiving() instanceof EnderMan || event.getEntityLiving() instanceof EnderDragon) {
                             int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.disjunction, killer.getInventory().getSelected());
                             isAttacking = true;
-                            event.getEntityLiving().hurt(event.getSource(), event.getAmount() * (level * 0.5F + 1));
+                            event.getEntityLiving().hurt(entitySource, event.getAmount() * (level * 0.5F + 1));
                             isAttacking = false;
-                            event.setCanceled(true);
                         }
                     }
                 }
