@@ -150,7 +150,6 @@ public class BPEventHandler {
                             isAttacking = true;
                             event.getEntityLiving().hurt(event.getSource(), event.getAmount() * (level * 0.5F + 1));
                             isAttacking = false;
-                            event.setCanceled(true);
                         }
                     }
                 }
