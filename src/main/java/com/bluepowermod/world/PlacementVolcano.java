@@ -21,10 +21,9 @@ public class PlacementVolcano extends Placement<NoPlacementConfig> {
 
     @Override
     public Stream<BlockPos> getPositions(WorldDecoratingHelper decoratingHelper, Random random, NoPlacementConfig configIn, BlockPos pos) {
-        ISeedReader world = ObfuscationReflectionHelper.getPrivateValue(WorldDecoratingHelper.class, decoratingHelper, "field_242889_a");
         int chunkPosX = pos.getX() >> 8;
         int chuckPosZ = pos.getZ() >> 8;
-        ((SharedSeedRandom) random).setLargeFeatureSeed(world.getHeight(), chunkPosX, chuckPosZ);
+        ((SharedSeedRandom) random).setBaseChunkSeed(chunkPosX, chuckPosZ);
         if (random.nextDouble() < (BPConfig.CONFIG.volcanoSpawnChance.get() * 16)) {
             return Stream.of(pos);
         } else {

@@ -69,7 +69,7 @@ public class WorldGenVolcano extends Feature<NoFeatureConfig> {
         int startChunkX = blockPos.getX() >> 8;
         int startChunkZ = blockPos.getZ() >> 8;
         volcanoMap = new HashMap<>();
-        ((SharedSeedRandom)rand).setLargeFeatureSeed(world.getHeight(), startChunkX, startChunkZ);
+        ((SharedSeedRandom)rand).setBaseChunkSeed(startChunkX, startChunkZ);
         int volcanoHeight = 100 + rand.nextInt(40);
 
         List<Pos>[] distMap = calculateDistMap();
