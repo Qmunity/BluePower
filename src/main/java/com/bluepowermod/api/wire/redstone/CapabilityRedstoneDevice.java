@@ -1,23 +1,22 @@
 package com.bluepowermod.api.wire.redstone;
 
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
 /**
  * @author MoreThanHidden
  */
 public class CapabilityRedstoneDevice {
 
-    @CapabilityInject(IInsulatedRedstoneDevice.class)
-    public static Capability<IInsulatedRedstoneDevice> INSULATED_CAPABILITY = null;
+    public static Capability<IInsulatedRedstoneDevice> INSULATED_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
+    public static Capability<IRedstoneDevice> UNINSULATED_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 
-    @CapabilityInject(IRedstoneDevice.class)
-    public static Capability<IRedstoneDevice> UNINSULATED_CAPABILITY = null;
-
-    public static void register() {
-        CapabilityManager.INSTANCE.register(IInsulatedRedstoneDevice.class);
-        CapabilityManager.INSTANCE.register(IRedstoneDevice.class);
+    public static void register(RegisterCapabilitiesEvent event)
+    {
+        event.register(IInsulatedRedstoneDevice.class);
+        event.register(IRedstoneDevice.class);
     }
 
 }

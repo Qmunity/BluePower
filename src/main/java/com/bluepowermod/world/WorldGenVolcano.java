@@ -22,6 +22,7 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.BPConfig;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -65,14 +66,14 @@ public class WorldGenVolcano extends Feature<NoneFeatureConfiguration> {
 
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        Level world = context.level().getLevel();
+        ServerLevel world = context.level().getLevel();
         Random rand = context.random();
         BlockPos blockPos = context.origin();
 
         int startChunkX = blockPos.getX() >> 8;
         int startChunkZ = blockPos.getZ() >> 8;
         volcanoMap = new HashMap<>();
-        ((WorldgenRandom)rand).setLargeFeatureSeed(world.getHeight(), startChunkX, startChunkZ);
+        ((WorldgenRandom)rand).setDecorationSeed(world.getSeed(), startChunkX, startChunkZ);
         int volcanoHeight = 100 + rand.nextInt(40);
 
         List<Pos>[] distMap = calculateDistMap();

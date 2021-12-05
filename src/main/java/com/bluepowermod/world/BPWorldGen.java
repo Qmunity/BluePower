@@ -27,7 +27,7 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
-import net.minecraft.world.level.levelgen.placement.CountDecorator;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,14 +40,14 @@ public class BPWorldGen {
 
     //VOLCANO
     public static Feature<NoneFeatureConfiguration> VOLCANO = new WorldGenVolcano(NoneFeatureConfiguration.CODEC);
-    private static PlacementVolcano VOLCANO_PLACEMENT = new PlacementVolcano(NoneDecoratorConfiguration.CODEC);
-    private static ConfiguredFeature<?, ?> VOLCANO_FEATURE;
+    public static PlacementModifierType<?> VOLCANO_PLACEMENT;
+    public static ConfiguredFeature<?, ?> VOLCANO_FEATURE;
     //MARBLE
     private static ConfiguredFeature<?, ?> MARBLE_FEATURE;
 
     public static void init() {
         ForgeRegistries.FEATURES.register(VOLCANO.setRegistryName("bluepower:volcano"));
-        ForgeRegistries.DECORATORS.register(VOLCANO_PLACEMENT.setRegistryName("bluepower:volcano"));
+        VOLCANO_PLACEMENT = Registry.register(Registry.f_194570_, "bluepower:volcano", () -> PlacementVolcano.CODEC);
         VOLCANO_FEATURE = Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, "bluepower:volcano", VOLCANO.configured(FeatureConfiguration.NONE).decorated(VOLCANO_PLACEMENT.configured(DecoratorConfiguration.NONE)));
         MARBLE_FEATURE = Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, "bluepower:marble", Feature.ORE.configured(new OreConfiguration(OreConfiguration.Predicates.NATURAL_STONE, BPBlocks.marble.defaultBlockState(), BPConfig.CONFIG.veinSizeMarble.get() / 32)).decorated(CountDecorator.RANGE.configured(new RangeDecoratorConfiguration(UniformHeight.of(VerticalAnchor.absolute(0) , VerticalAnchor.absolute(90)))).squared().count(1)));
     }

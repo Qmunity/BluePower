@@ -22,7 +22,7 @@ project.ext {
     } else {
         build = "-custom"
     }
-    mcVersion = "1.17.1"
+    mcVersion = "1.18"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -43,10 +43,10 @@ repositories {
     }
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'parchment', version: '2021.09.05-1.17.1'
+    mappings channel: 'parchment', version: '2021.10.24-1.17.1'
 
     runs {
         client {
@@ -87,12 +87,12 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.70'
+    minecraft 'net.minecraftforge:forge:1.18-38.0.14'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
-    implementation fg.deobf("curse.maven:jade-324717:3425042")
-    compileOnly fg.deobf("mezz.jei:jei-1.17.1:8.0.0.14:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.17.1:8.0.0.14")
+    implementation fg.deobf("curse.maven:jade-324717:3544058")
+    compileOnly fg.deobf("mezz.jei:jei-1.18:9.0.0.40:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18:9.0.0.40")
 }
 
 jar {

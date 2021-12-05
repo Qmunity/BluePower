@@ -20,31 +20,23 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.BPWorldGen;
 import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
-import com.google.common.collect.Lists;
-import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.ModLoadingStage;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmlserverevents.FMLServerAboutToStartEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Mod(Refs.MODID)
@@ -59,6 +51,7 @@ public class BluePower {
         instance = this;
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::complete);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerCapabilities);
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
@@ -83,10 +76,14 @@ public class BluePower {
     public void setup(FMLCommonSetupEvent event) {
         event.enqueueWork(BPNetworkHandler::init);
         OreDictionarySetup.init();
-        CapabilityBlutricity.register();
+
         CapabilityRedstoneDevice.register();
         proxy.setup(event);
         CompatibilityUtils.init(event);
+    }
+
+    public void registerCapabilities(RegisterCapabilitiesEvent event){
+        CapabilityBlutricity.register(event);
     }
 
     public void complete(FMLLoadCompleteEvent event) {
