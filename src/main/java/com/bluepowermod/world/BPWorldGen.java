@@ -21,13 +21,12 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPConfig;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
-import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,20 +35,34 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import net.minecraft.world.level.levelgen.feature.Feature;
 
+import java.util.List;
+
 public class BPWorldGen {
 
     //VOLCANO
     public static Feature<NoneFeatureConfiguration> VOLCANO = new WorldGenVolcano(NoneFeatureConfiguration.CODEC);
     public static PlacementModifierType<?> VOLCANO_PLACEMENT;
-    public static ConfiguredFeature<?, ?> VOLCANO_FEATURE;
+    public static PlacedFeature VOLCANO_FEATURE;
     //MARBLE
-    private static ConfiguredFeature<?, ?> MARBLE_FEATURE;
+    private static PlacedFeature MARBLE_FEATURE;
 
     public static void init() {
         ForgeRegistries.FEATURES.register(VOLCANO.setRegistryName("bluepower:volcano"));
-        VOLCANO_PLACEMENT = Registry.register(Registry.f_194570_, "bluepower:volcano", () -> PlacementVolcano.CODEC);
-        VOLCANO_FEATURE = Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, "bluepower:volcano", VOLCANO.configured(FeatureConfiguration.NONE).decorated(VOLCANO_PLACEMENT.configured(DecoratorConfiguration.NONE)));
-        MARBLE_FEATURE = Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, "bluepower:marble", Feature.ORE.configured(new OreConfiguration(OreConfiguration.Predicates.NATURAL_STONE, BPBlocks.marble.defaultBlockState(), BPConfig.CONFIG.veinSizeMarble.get() / 32)).decorated(CountDecorator.RANGE.configured(new RangeDecoratorConfiguration(UniformHeight.of(VerticalAnchor.absolute(0) , VerticalAnchor.absolute(90)))).squared().count(1)));
+        VOLCANO_PLACEMENT = Registry.register(Registry.PLACEMENT_MODIFIERS, "bluepower:volcano", () -> PlacementVolcano.CODEC);
+        VOLCANO_FEATURE = Registry.register(BuiltinRegistries.PLACED_FEATURE, "bluepower:volcano",
+                                Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, "bluepower:volcano",
+                                    VOLCANO.configured(FeatureConfiguration.NONE)).placed(PlacementVolcano.instance()));
+        MARBLE_FEATURE = Registry.register(BuiltinRegistries.PLACED_FEATURE, "bluepower:marble",
+                                Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, "bluepower:marble",
+                                        Feature.ORE.configured(new OreConfiguration(OreFeatures.NATURAL_STONE, BPBlocks.marble.defaultBlockState(), BPConfig.CONFIG.veinSizeMarble.get() / 32))).placed(rareOrePlacement(6, HeightRangePlacement.uniform(VerticalAnchor.absolute(64), VerticalAnchor.absolute(128)))));
+    }
+
+    private static List<PlacementModifier> orePlacement(PlacementModifier modifier, PlacementModifier modifier1) {
+        return List.of(modifier, InSquarePlacement.spread(), modifier1, BiomeFilter.biome());
+    }
+
+    private static List<PlacementModifier> rareOrePlacement(int i, PlacementModifier modifier) {
+        return orePlacement(RarityFilter.onAverageOnceEvery(i), modifier);
     }
 
     @SubscribeEvent

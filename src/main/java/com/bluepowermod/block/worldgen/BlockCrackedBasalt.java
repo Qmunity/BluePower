@@ -56,7 +56,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     }
 
     public void onBlockAdded(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-        worldIn.getBlockTicks().scheduleTick(pos, this, 20);
+        worldIn.scheduleTick(pos, this, 20);
     }
 
     private void spawnLava(Level world, BlockPos pos, Random random) {

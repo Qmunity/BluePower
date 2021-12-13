@@ -42,10 +42,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
-
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 

@@ -72,7 +72,7 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
      * @return True if it should render the 'durability' bar.
      */
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
 
         return getUsesUsed(stack) != 0;
     }
@@ -85,8 +85,7 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
      * @return 1.0 for 100% 0 for 0%
      */
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-
-        return (double) getUsesUsed(stack) / (double) getMaxUses();
+    public int getBarWidth(ItemStack stack) {
+        return getUsesUsed(stack) / getMaxUses();
     }
 }

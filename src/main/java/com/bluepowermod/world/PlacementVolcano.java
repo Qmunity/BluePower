@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
@@ -19,8 +20,8 @@ public class PlacementVolcano extends PlacementModifier {
     public static final Codec<PlacementModifier> CODEC = Codec.unit(() -> INSTANCE);
 
     @Override
-    public Stream<BlockPos> m_183381_(PlacementContext placementContext, Random random, BlockPos pos) {
-        WorldGenLevel world = placementContext.m_191831_();
+    public Stream<BlockPos> getPositions(PlacementContext placementContext, Random random, BlockPos pos) {
+        WorldGenLevel world = placementContext.getLevel();
         int chunkPosX = pos.getX() >> 8;
         int chuckPosZ = pos.getZ() >> 8;
         ((WorldgenRandom) random).setDecorationSeed(world.getSeed(), chunkPosX, chuckPosZ);
@@ -31,8 +32,12 @@ public class PlacementVolcano extends PlacementModifier {
         }
     }
 
+    public static PlacementVolcano instance() {
+        return INSTANCE;
+    }
+
     @Override
-    public PlacementModifierType<?> m_183327_() {
+    public PlacementModifierType<?> type() {
         return VOLCANO_PLACEMENT;
     }
 }

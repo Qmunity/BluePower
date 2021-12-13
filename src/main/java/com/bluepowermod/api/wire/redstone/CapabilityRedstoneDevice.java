@@ -13,8 +13,7 @@ public class CapabilityRedstoneDevice {
     public static Capability<IInsulatedRedstoneDevice> INSULATED_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
     public static Capability<IRedstoneDevice> UNINSULATED_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 
-    public static void register(RegisterCapabilitiesEvent event)
-    {
+    public static void register(RegisterCapabilitiesEvent event){
         event.register(IInsulatedRedstoneDevice.class);
         event.register(IRedstoneDevice.class);
     }

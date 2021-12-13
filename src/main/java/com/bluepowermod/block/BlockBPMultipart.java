@@ -65,7 +65,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         if (!state.getValue(BlockStateProperties.WATERLOGGED) && fluidStateIn.getType() == Fluids.WATER && !getShape(state, worldIn, pos, CollisionContext.empty()).equals(Shapes.block())) {
             if (!worldIn.isClientSide()) {
                 worldIn.setBlock(pos, state.setValue(BlockStateProperties.WATERLOGGED, Boolean.TRUE), 3);
-                worldIn.getLiquidTicks().scheduleTick(pos, fluidStateIn.getType(), fluidStateIn.getType().getTickDelay(worldIn));
+                worldIn.scheduleTick(pos, fluidStateIn.getType(), fluidStateIn.getType().getTickDelay(worldIn));
             }
             return true;
         } else {
@@ -81,7 +81,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     @Override
     public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
-            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
+            worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
         return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
@@ -105,7 +105,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public boolean removedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+    public boolean onDestroyedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
         BlockState partState = MultipartUtils.getClosestState(player, pos);
         BlockEntity te = world.getBlockEntity(pos);
         if(partState != null && partState.getBlock() instanceof IBPPartBlock && te instanceof TileBPMultipart) {
@@ -121,11 +121,11 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
         ItemStack itemStack = ItemStack.EMPTY;
         BlockState partState = MultipartUtils.getClosestState(player, pos);
         if(partState != null)
-            itemStack = partState.getPickBlock(target, world, pos, player);
+            itemStack = partState.getCloneItemStack(target, world, pos, player);
         return itemStack;
     }
 

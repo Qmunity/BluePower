@@ -276,14 +276,14 @@ public class BPEventHandler {
             BlockState state = world.getBlockState(pos);
             if(state.getBlock() instanceof BlockBPMultipart){
                 BlockState partstate = MultipartUtils.getClosestState(player, pos);
-                VertexConsumer builder = event.getBuffers().getBuffer(RenderType.lines());
+                VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
                 if(partstate != null) {
                     VoxelShape shape = partstate.getShape(world, pos, CollisionContext.of(player));
-                    Vec3 projectedView = event.getInfo().getPosition();
+                    Vec3 projectedView = event.getCamera().getPosition();
                     double d0 = pos.getX() - projectedView.x();
                     double d1 = pos.getY() - projectedView.y();
                     double d2 = pos.getZ() - projectedView.z();
-                    Matrix4f matrix4f = event.getMatrix().last().pose();
+                    Matrix4f matrix4f = event.getPoseStack().last().pose();
                     //shape.forAllEdges((startX, startY, startZ, endX, endY, endZ) -> {
                     //    builder.vertex(matrix4f, (float)(startX + d0), (float)(startY + d1), (float)(startZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
                     //    builder.vertex(matrix4f, (float)(endX + d0), (float)(endY + d1), (float)(endZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();

@@ -88,9 +88,7 @@ public class TileBPMicroblock extends BlockEntity {
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        CompoundTag nbtTag = new CompoundTag();
-        save(nbtTag);
-        return new ClientboundBlockEntityDataPacket(getBlockPos(), 1, nbtTag);
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     

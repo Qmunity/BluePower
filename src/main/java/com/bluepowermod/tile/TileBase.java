@@ -22,6 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -89,7 +90,7 @@ public class TileBase extends BlockEntity implements IRotatable {
     @Nullable
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(this.worldPosition, 3, this.getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override

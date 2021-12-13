@@ -76,14 +76,13 @@ public class BluePower {
     public void setup(FMLCommonSetupEvent event) {
         event.enqueueWork(BPNetworkHandler::init);
         OreDictionarySetup.init();
-
-        CapabilityRedstoneDevice.register();
         proxy.setup(event);
         CompatibilityUtils.init(event);
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event){
         CapabilityBlutricity.register(event);
+        CapabilityRedstoneDevice.register(event);
     }
 
     public void complete(FMLLoadCompleteEvent event) {

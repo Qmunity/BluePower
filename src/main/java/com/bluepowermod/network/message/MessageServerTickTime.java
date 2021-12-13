@@ -2,7 +2,7 @@ package com.bluepowermod.network.message;
 
 import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 

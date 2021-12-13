@@ -130,7 +130,7 @@ public class WorldGenVolcano extends Feature<NoneFeatureConfiguration> {
             setBlock(world, new BlockPos(x, topY, z), BPBlocks.cracked_basalt_lava.defaultBlockState());
         } else {
             setBlock(world, new BlockPos(x, topY, z), Blocks.LAVA.defaultBlockState());
-            world.getLiquidTicks().scheduleTick(new BlockPos(x, topY, z), Blocks.LAVA.defaultBlockState().getFluidState().getType(), 10);
+            world.scheduleTick(new BlockPos(x, topY, z), Blocks.LAVA.defaultBlockState().getFluidState().getType(), 10);
         }
         for (int y = topY - 1; y >= 10; y--) {
             if (world.getBlockState(new BlockPos(x, y, z)) != Blocks.BEDROCK.defaultBlockState()) {

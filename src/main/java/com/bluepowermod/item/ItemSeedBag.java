@@ -40,7 +40,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
@@ -71,13 +71,13 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
 
-        return 1D - (double) getItemDamageForDisplay(stack) / (double) 576;
+        return 1 - getItemDamageForDisplay(stack) / 576;
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
 
         return stack.getTag() != null;
     }
