@@ -52,7 +52,7 @@ public class WorldGenOres {
     private static void registerConfiguredOre(int veinCount, int veinSize, int minY, int maxY, Block ore, Block deepSlate){
         List<OreConfiguration.TargetBlockState> oreTarget = List.of(OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, ore.defaultBlockState()), OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, deepSlate.defaultBlockState()));
         ConfiguredFeature<OreConfiguration, ?> configuredFeature = Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, Objects.requireNonNull(ore.getRegistryName()), Feature.ORE.configured(new OreConfiguration(oreTarget, veinSize)));
-        Registry.register(BuiltinRegistries.PLACED_FEATURE, ore.getRegistryName(), configuredFeature.placed(commonOrePlacement(veinCount, HeightRangePlacement.triangle(VerticalAnchor.aboveBottom(minY), VerticalAnchor.aboveBottom(maxY)))));
+        Registry.register(BuiltinRegistries.PLACED_FEATURE, ore.getRegistryName(), configuredFeature.placed(commonOrePlacement(veinCount, HeightRangePlacement.triangle(VerticalAnchor.aboveBottom(minY), VerticalAnchor.aboveBottom(maxY + 64)))));
     }
 
     private static List<PlacementModifier> orePlacement(PlacementModifier modifier, PlacementModifier modifier1) {
