@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
-import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
@@ -25,7 +24,7 @@ public class PlacementVolcano extends PlacementModifier {
         int chunkPosX = pos.getX() >> 8;
         int chuckPosZ = pos.getZ() >> 8;
         ((WorldgenRandom) random).setDecorationSeed(world.getSeed(), chunkPosX, chuckPosZ);
-        if (random.nextDouble() < (BPConfig.CONFIG.volcanoSpawnChance.get() * 16)) {
+        if (random.nextDouble() < (BPConfig.CONFIG.volcanoSpawnChance.get() * 8)) {
             return Stream.of(pos);
         } else {
             return Stream.empty();
