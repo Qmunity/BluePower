@@ -11,6 +11,7 @@ import com.bluepowermod.block.lighting.BlockLamp;
 import com.bluepowermod.tile.tier1.TileLamp;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;

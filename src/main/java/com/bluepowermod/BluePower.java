@@ -44,7 +44,7 @@ public class BluePower {
 
 
     public static BluePower instance;
-    public static CommonProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new,() -> CommonProxy::new);
+    public static CommonProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
     public BluePower(){
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BPConfig.spec);
