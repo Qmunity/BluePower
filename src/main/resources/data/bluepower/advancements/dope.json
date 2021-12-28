@@ -13,7 +13,7 @@
       "conditions": {
         "items": [
           {
-            "items": ["bluepower:blue_doped_wafer"]
+            "items": ["bluepower:blue_doped_wafer","bluepower:red_doped_wafer"]
           }
         ]
       }
