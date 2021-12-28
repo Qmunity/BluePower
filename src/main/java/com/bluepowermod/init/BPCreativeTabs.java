@@ -29,6 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import com.bluepowermod.api.misc.MinecraftColor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
@@ -171,7 +172,7 @@ public class BPCreativeTabs {
 
             @Override
             public void fillItemList(NonNullList<ItemStack> items) {
-                for (Block block : ForgeRegistries.BLOCKS) {
+                for (Block block : ForgeRegistries.BLOCKS.getValues().stream().filter(b -> !(b instanceof EntityBlock)).toList()) {
                     VoxelShape shape = null;
                     try{
                         shape = block.defaultBlockState().getShape(null, null);
