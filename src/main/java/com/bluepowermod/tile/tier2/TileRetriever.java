@@ -36,11 +36,10 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
 
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
-        super.save(tag);
+    protected void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
         tag.putByte("slotIndex", (byte) slotIndex);
         tag.putByte("mode", (byte) mode);
-        return tag;
     }
 
     @Override

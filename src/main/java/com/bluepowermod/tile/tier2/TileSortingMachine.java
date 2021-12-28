@@ -351,9 +351,9 @@ public class TileSortingMachine extends TileMachineBase implements WorldlyContai
 
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag) {
 
-        super.save(tag);
+        super.saveAdditional(tag);
 
         tag.putByte("pullMode", (byte) pullMode.ordinal());
         tag.putByte("sortMode", (byte) sortMode.ordinal());
@@ -377,7 +377,6 @@ public class TileSortingMachine extends TileMachineBase implements WorldlyContai
             }
         }
         tag.put("Items", tagList);
-        return tag;
     }
 
     @Override

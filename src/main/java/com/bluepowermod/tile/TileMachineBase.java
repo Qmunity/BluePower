@@ -180,9 +180,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
+    protected void saveAdditional(CompoundTag compound) {
 
-        super.save(compound);
+        super.saveAdditional(compound);
         ListTag nbttaglist = new ListTag();
 
         for (TubeStack tubeStack : internalItemStackBuffer) {
@@ -193,7 +193,6 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
             }
         }
         compound.put("ItemBuffer", nbttaglist);
-        return compound;
     }
 
     public void ejectItemInWorld(ItemStack stack, Direction oppDirection) {

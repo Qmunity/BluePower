@@ -63,13 +63,12 @@ public class TileBase extends BlockEntity implements IRotatable {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundTag save(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
 
-        super.save(tCompound);
+        super.saveAdditional(tCompound);
         tCompound.putBoolean("isRedstonePowered", isRedstonePowered);
 
         writeToPacketNBT(tCompound);
-        return  tCompound;
     }
 
     /**

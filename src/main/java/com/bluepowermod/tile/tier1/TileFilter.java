@@ -117,9 +117,9 @@ public class TileFilter extends TileTransposer implements WorldlyContainer, IGui
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundTag save(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
 
-        super.save(tCompound);
+        super.saveAdditional(tCompound);
 
         for (int i = 0; i < 9; i++) {
                 CompoundTag tc = new CompoundTag();
@@ -129,8 +129,6 @@ public class TileFilter extends TileTransposer implements WorldlyContainer, IGui
 
         tCompound.putByte("filterColor", (byte) filterColor.ordinal());
         tCompound.putByte("fuzzySetting", (byte) fuzzySetting);
-
-        return tCompound;
     }
 
     @Override

@@ -231,9 +231,9 @@ public class TileRegulator extends TileMachineBase implements WorldlyContainer, 
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag) {
 
-        super.save(tag);
+        super.saveAdditional(tag);
 
         tag.putByte("filterColor", (byte) color.ordinal());
         tag.putByte("mode", (byte) mode);
@@ -247,7 +247,6 @@ public class TileRegulator extends TileMachineBase implements WorldlyContainer, 
                 tagList.add(tagCompound);
         }
         tag.put("Items", tagList);
-        return tag;
     }
 
     @Override

@@ -1,12 +1,15 @@
 package com.bluepowermod.client.gui.widget;
 
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.item.BlockItem;
@@ -69,12 +72,12 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         texture = "";
         this.leftSided = leftSided;
         if (gui != null) {
-            //TODO: MainWindow sr = Minecraft.getInstance().mainWindow;
-            //if (sr.getScaledWidth() < 520) {
-            //textSize = (sr.getScaledWidth() - 220) * 0.0033F;
-            //} else {
+            Window sr = Minecraft.getInstance().getWindow();
+            if (sr.getGuiScaledWidth() < 520) {
+            textSize = (sr.getGuiScaledWidth() - 220) * 0.0033F;
+            } else {
                 textSize = 1F;
-            //}
+            }
         } else {
             textSize = 1;
         }
@@ -312,7 +315,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
             if (iStack == null) {
                 if (iconResLoc == null)
                     iconResLoc = new ResourceLocation(texture);
-                drawTexture(iconResLoc, renderBaseX - (leftSided ? 16 : 0), renderAffectedY);
+                drawTexture(matrixStack.last().pose(), iconResLoc, renderBaseX - (leftSided ? 16 : 0), renderAffectedY);
             } else if (gui != null || !(iStack.getItem() instanceof BlockItem)) {
                 renderItem(matrixStack, fontRenderer, renderBaseX - (leftSided ? 16 : 0), renderAffectedY, iStack);
             }
@@ -336,17 +339,17 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         matrixStack.popPose();
     }
 
-    public static void drawTexture(ResourceLocation texture, int x, int y) {
-
-        Minecraft.getInstance().getTextureManager().bindForSetup(texture);
-        Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder buff = tessellator.getBuilder();
-        buff.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        buff.vertex(x, y + 16, 0).uv(0.0F, 1.0F).endVertex();
-        buff.vertex(x + 16, y + 16, 0).uv(1.0F, 1.0F).endVertex();
-        buff.vertex(x + 16, y, 0).uv(1.0F, 0.0F).endVertex();
-        buff.vertex(x, y, 0).uv(0.0F, 0.0F).endVertex();
-        tessellator.end();
+    public static void drawTexture(Matrix4f matrixStack, ResourceLocation texture, int x, int y) {
+        RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.vertex(matrixStack, x, y + 16, 0).uv(0.0F, 1.0F).endVertex();
+        bufferbuilder.vertex(matrixStack,x + 16, y + 16, 0).uv(1.0F, 1.0F).endVertex();
+        bufferbuilder.vertex(matrixStack,x + 16, y, 0).uv(1.0F, 0.0F).endVertex();
+        bufferbuilder.vertex(matrixStack, x, y, 0).uv(0.0F, 0.0F).endVertex();
+        bufferbuilder.end();
+        BufferUploader.end(bufferbuilder);
     }
 
     /*

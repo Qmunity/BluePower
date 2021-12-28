@@ -64,25 +64,26 @@ public class TileBPMicroblock extends BlockEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    protected void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putString("block", block.getRegistryName().toString());
         compound.putInt("rotation", rotation);
-        return compound;
     }
 
     @Override
     public void load(CompoundTag compound) {
        super.load(compound);
-       block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("block")));
-       rotation = compound.getInt("block");
+       if (compound.contains("block")) {
+           block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("block")));
+           rotation = compound.getInt("rotation");
+       }
     }
 
 
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag updateTag = super.getUpdateTag();
-        save(updateTag);
+        saveAdditional(updateTag);
         return updateTag;
     }
 

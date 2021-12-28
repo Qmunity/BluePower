@@ -147,8 +147,8 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundTag save(CompoundTag tCompound) {
-        super.save(tCompound);
+    protected void saveAdditional(CompoundTag tCompound) {
+        super.saveAdditional(tCompound);
 
         CompoundTag tc = new CompoundTag();
         inventory.save(tc);
@@ -159,7 +159,6 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
             outputInventory.save(outputCompound);
             tCompound.put("outputInventory", outputCompound);
         }
-        return tCompound;
     }
 
     @Override

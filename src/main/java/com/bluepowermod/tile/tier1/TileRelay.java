@@ -81,16 +81,15 @@ public class TileRelay extends TileMachineBase implements Container, MenuProvide
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundTag save(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
 
-        super.save(tCompound);
+        super.saveAdditional(tCompound);
 
         for (int i = 0; i < 9; i++) {
                 CompoundTag tc = new CompoundTag();
                 inventory.get(i).save(tc);
                 tCompound.put("inventory" + i, tc);
         }
-        return tCompound;
     }
 
     /**

@@ -119,9 +119,9 @@ public class TileItemDetector extends TileMachineBase implements WorldlyContaine
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundTag save(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
 
-        super.save(tCompound);
+        super.saveAdditional(tCompound);
 
         for (int i = 0; i < 9; i++) {
                 CompoundTag tc = new CompoundTag();
@@ -132,8 +132,6 @@ public class TileItemDetector extends TileMachineBase implements WorldlyContaine
         tCompound.putByte("mode", (byte) mode);
         tCompound.putByte("fuzzySetting", (byte) fuzzySetting);
         tCompound.putInt("savedPulses", savedPulses);
-
-        return tCompound;
     }
 
     @Override

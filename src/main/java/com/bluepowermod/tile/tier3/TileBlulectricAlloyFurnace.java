@@ -86,9 +86,9 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundTag save(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
 
-        super.save(tCompound);
+        super.saveAdditional(tCompound);
 
         for (int i = 0; i < 9; i++) {
             CompoundTag tc = new CompoundTag();
@@ -101,7 +101,6 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
             outputInventory.save(outputCompound);
             tCompound.put("outputInventory", outputCompound);
         }
-        return tCompound;
 
     }
 

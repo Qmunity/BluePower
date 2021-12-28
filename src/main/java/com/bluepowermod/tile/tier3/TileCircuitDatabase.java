@@ -207,9 +207,9 @@ public class TileCircuitDatabase extends TileCircuitTable {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag) {
 
-        super.save(tag);
+        super.saveAdditional(tag);
 
         if (!copyInventory.getItem(0).isEmpty()) {
             CompoundTag stackTag = new CompoundTag();
@@ -225,7 +225,6 @@ public class TileCircuitDatabase extends TileCircuitTable {
         tag.putInt("curUploadProgress", curUploadProgress);
         tag.putInt("curCopyProgress", curCopyProgress);
         tag.putByte("selectedShareOption", (byte) selectedShareOption);
-        return tag;
     }
 
     @Override

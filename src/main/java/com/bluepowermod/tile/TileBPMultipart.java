@@ -102,7 +102,7 @@ public class TileBPMultipart extends BlockEntity {
             //Convert back to Standalone Block
             BlockEntity te = (BlockEntity)stateMap.values().toArray()[0];
             if (level != null) {
-                CompoundTag nbt = te != null ? te.save(new CompoundTag()) : null;
+                CompoundTag nbt = te != null ? te.saveWithoutMetadata() : null;
                 level.setBlockAndUpdate(worldPosition, ((BlockState)stateMap.keySet().toArray()[0]));
                 BlockEntity tile = level.getBlockEntity(worldPosition);
                 if (tile != null && nbt != null)
@@ -160,8 +160,8 @@ public class TileBPMultipart extends BlockEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    protected void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putInt("size", getStates().size());
         for (int i = 0; i < getStates().size(); i++) {
             //write state data
@@ -169,9 +169,8 @@ public class TileBPMultipart extends BlockEntity {
             BlockState.CODEC.encodeStart(NbtOps.INSTANCE,  getStates().get(i)).result().ifPresent(nbt -> compound.put(stateSave, nbt));
             //write tile NBT data
             if(stateMap.get(getStates().get(i)) != null)
-                compound.put("tile" + i, stateMap.get(getStates().get(i)).save(new CompoundTag()));
+                compound.put("tile" + i, stateMap.get(getStates().get(i)).saveWithoutMetadata());
         }
-        return compound;
     }
 
     @Override
@@ -197,7 +196,7 @@ public class TileBPMultipart extends BlockEntity {
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag updateTag = super.getUpdateTag();
-        save(updateTag);
+        saveAdditional(updateTag);
         return updateTag;
     }
 

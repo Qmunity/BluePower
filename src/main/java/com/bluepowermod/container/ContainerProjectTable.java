@@ -116,6 +116,8 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
             }
         }
 
+        super.clicked(slotId, dragType, clickTypeIn, player);
+
         //Try to pull from the Project Table Inventory if the last of an item for a recipe.
         if(clickTypeCrafting){
             for (int i = 1; i < 10; ++i) {
@@ -138,6 +140,7 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
                 }
             }
         }
+
     }
 
     protected static void updateCrafting(int id, Level world, Player playerEntity, CraftingContainer craftingInventory, ResultContainer craftResultInventory) {

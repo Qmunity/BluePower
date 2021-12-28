@@ -61,9 +61,9 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag) {
 
-        super.save(tag);
+        super.saveAdditional(tag);
 
         ListTag tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
@@ -82,7 +82,6 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
                 tagList.add(tagCompound);
         }
         tag.put("CraftingGrid", tagList);
-        return tag;
     }
 
     @Override

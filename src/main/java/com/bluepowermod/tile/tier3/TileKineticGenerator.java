@@ -53,9 +53,9 @@ public class TileKineticGenerator extends TileBase implements WorldlyContainer{
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundTag save(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
 
-        super.save(tCompound);
+        super.saveAdditional(tCompound);
 
         for (int i = 0; i < 1; i++) {
             if (!allInventories.get(i).isEmpty()) {
@@ -64,7 +64,6 @@ public class TileKineticGenerator extends TileBase implements WorldlyContainer{
                 tCompound.put("inventory" + i, tc);
             }
         }
-        return tCompound;
     }
 
     @Override

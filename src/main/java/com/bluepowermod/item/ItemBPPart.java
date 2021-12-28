@@ -44,7 +44,7 @@ public class ItemBPPart extends BlockItem {
             CompoundTag nbt = new CompoundTag();
             BlockEntity tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
             if(tileEntity != null){
-                nbt = tileEntity.save(nbt);
+                nbt = tileEntity.saveWithoutMetadata();
             }
 
             //Replace with Multipart

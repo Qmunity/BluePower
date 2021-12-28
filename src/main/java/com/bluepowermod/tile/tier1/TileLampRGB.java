@@ -27,13 +27,12 @@ public class TileLampRGB extends TileLamp {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
         if (getBlockState().getBlock() instanceof BlockLampRGB) {
             tCompound.putByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
             tCompound.putByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
             tCompound.putByte("blue", bundledPower[MinecraftColor.BLUE.ordinal()]);
         }
-        return tCompound;
     }
 
     @Override

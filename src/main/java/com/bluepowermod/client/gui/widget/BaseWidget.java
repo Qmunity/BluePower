@@ -69,8 +69,8 @@ public class BaseWidget implements IGuiWidget {
             RenderSystem.setShaderColor(0.2F, 0.2F, 0.2F, 1);
         }
         if (textures.length > 0)
-            Minecraft.getInstance().getTextureManager().bindForSetup(textures[textureIndex]);
-        GuiComponent.blit(matrixStack, x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
+            RenderSystem.setShaderTexture(0, textures[textureIndex]);
+            GuiComponent.blit(matrixStack, x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
     }
 
     protected int getTextureU() {
@@ -106,6 +106,7 @@ public class BaseWidget implements IGuiWidget {
 
         return new Rectangle(x, y, width, height);
     }
+
 
     @Override
     public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {

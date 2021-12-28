@@ -64,16 +64,15 @@ public class TileBuffer extends TileBase implements WorldlyContainer, MenuProvid
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundTag save(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
     
-        super.save(tCompound);
+        super.saveAdditional(tCompound);
         
         for (int i = 0; i < 20; i++) {
                 CompoundTag tc = new CompoundTag();
                 allInventories.get(i).save(tc);
                 tCompound.put("inventory" + i, tc);
         }
-        return  tCompound;
     }
 
     @Override

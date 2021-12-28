@@ -58,9 +58,9 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag) {
 
-        super.save(tag);
+        super.saveAdditional(tag);
 
         ListTag tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
@@ -72,7 +72,6 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
         tag.put("Items", tagList);
 
         tag.putString("textboxString", textboxString);
-        return tag;
     }
 
     @Override

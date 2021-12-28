@@ -55,7 +55,7 @@ public class MessageWirelessNewFreq{
 
     public void write(DataOutput buffer) throws IOException {
 
-        //super.save(buffer);
+        //super.saveAdditional(buffer);
 
         buffer.writeInt(acc.ordinal());
         buffer.writeUTF(name);
