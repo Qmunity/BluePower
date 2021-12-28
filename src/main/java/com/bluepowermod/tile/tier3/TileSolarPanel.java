@@ -52,8 +52,9 @@ public class TileSolarPanel extends TileMachineBase  {
 		return LazyOptional.empty();
 	}
 
-	public static void tickSolarPanel(Level level, BlockPos pos, BlockState state, TileSolarPanel tileSolarPanel) {
-		if (!level.isClientSide) {
+	public static void tickSolarPanel(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+		if (!level.isClientSide && blockEntity instanceof TileSolarPanel) {
+			TileSolarPanel tileSolarPanel = (TileSolarPanel) blockEntity;
 			tileSolarPanel.storage.resetCurrent();
 
 			if (level.isDay() && level.canSeeSky(pos) && tileSolarPanel.storage.getEnergy() < tileSolarPanel.MAX_VOLTAGE && !level.isRaining())

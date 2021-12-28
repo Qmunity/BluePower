@@ -55,11 +55,13 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         super(type, pos, state);
     }
 
-    public static void tickMachineBase(Level level, BlockPos pos, BlockState state, TileMachineBase blockEntity) {
-        if (!level.isClientSide) {
-            if (blockEntity.ejectionScheduled || blockEntity.getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
-                blockEntity.ejectItems();
-                blockEntity.ejectionScheduled = false;
+    public static void tickMachineBase(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        tickTileBase(level, pos, state, blockEntity);
+        if (!level.isClientSide && blockEntity instanceof TileMachineBase) {
+            TileMachineBase machineBase = (TileMachineBase) blockEntity;
+            if (machineBase.ejectionScheduled || machineBase.getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
+                machineBase.ejectItems();
+                machineBase.ejectionScheduled = false;
             }
         }
     }

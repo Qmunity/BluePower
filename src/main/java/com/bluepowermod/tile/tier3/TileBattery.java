@@ -43,8 +43,9 @@ public class TileBattery extends TileMachineBase {
         super(BPBlockEntityType.BATTERY, pos, state);
     }
 
-    public static void tickBattery(Level level, BlockPos pos, BlockState state, TileBattery tileBattery) {
-        if (!level.isClientSide) {
+    public static void tickBattery(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        if (!level.isClientSide && blockEntity instanceof TileBattery) {
+            TileBattery tileBattery = (TileBattery) blockEntity;
             tileBattery.storage.resetCurrent();
 
             //Balance power of attached blulectric blocks.

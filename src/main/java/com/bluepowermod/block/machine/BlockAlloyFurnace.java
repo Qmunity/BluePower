@@ -46,7 +46,7 @@ public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : TileAlloyFurnace::tick;
+        return level.isClientSide ? null : TileAlloyFurnace::tickAlloyFurnace;
     }
 
     @Override

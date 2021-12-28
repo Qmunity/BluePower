@@ -66,47 +66,46 @@ public class TileEngine extends TileMachineBase  {
 		
 	}
 
-	public static void tickEngine(Level level, BlockPos pos, BlockState state, TileEngine blockEntity) {
-		TileBase.tickTileBase(level, pos, state, blockEntity);
-
-		blockEntity.storage.resetCurrent();
+	public static void tickEngine(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+		TileEngine engine = (TileEngine) blockEntity;
+		engine.storage.resetCurrent();
 
 		//Server side capability check
-		blockEntity.isActive = false;
-		if(level != null && !level.isClientSide && (blockEntity.storage.getEnergyStored() > 0 && level.hasNeighborSignal(blockEntity.worldPosition))){
-			Direction facing = blockEntity.getBlockState().getValue(BlockEngine.FACING).getOpposite();
+		engine.isActive = false;
+		if(level != null && !level.isClientSide && (engine.storage.getEnergyStored() > 0 && level.hasNeighborSignal(engine.worldPosition))){
+			Direction facing = engine.getBlockState().getValue(BlockEngine.FACING).getOpposite();
 			BlockEntity tileEntity = level.getBlockEntity(pos.relative(facing));
 			if (tileEntity != null) {
 				tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).ifPresent(other -> {
-					int simulated = blockEntity.storage.extractEnergy(320, true);
+					int simulated = engine.storage.extractEnergy(320, true);
 					int sent = other.receiveEnergy(simulated, false);
-					int amount = blockEntity.storage.extractEnergy(sent, false);
+					int amount = engine.storage.extractEnergy(sent, false);
 					if(amount > 0) {
-						blockEntity.isActive = true;
+						engine.isActive = true;
 					}
 				});
 			}
 		}
 
 		//Update BlockState
-		if(level != null && !level.isClientSide && blockEntity.getBlockState().getValue(BlockEngine.ACTIVE) != blockEntity.isActive){
-			level.setBlockAndUpdate(pos, blockEntity.getBlockState().setValue(BlockEngine.ACTIVE, blockEntity.isActive));
-			blockEntity.markForRenderUpdate();
+		if(level != null && !level.isClientSide && engine.getBlockState().getValue(BlockEngine.ACTIVE) != engine.isActive){
+			level.setBlockAndUpdate(pos, engine.getBlockState().setValue(BlockEngine.ACTIVE, engine.isActive));
+			engine.markForRenderUpdate();
 		}
 
 		//Update TESR from BlockState
-		if(level != null && blockEntity.getBlockState().getValue(BlockEngine.ACTIVE)) {
-			blockEntity.isActive = true;
-			blockEntity.pumpTick++;
-			if (blockEntity.pumpTick >= blockEntity.pumpSpeed * 2) {
-				blockEntity.pumpTick = 0;
-				if (blockEntity.pumpSpeed > 4) {
-					blockEntity.pumpSpeed--;
+		if(level != null && engine.getBlockState().getValue(BlockEngine.ACTIVE)) {
+			engine.isActive = true;
+			engine.pumpTick++;
+			if (engine.pumpTick >= engine.pumpSpeed * 2) {
+				engine.pumpTick = 0;
+				if (engine.pumpSpeed > 4) {
+					engine.pumpSpeed--;
 				}
 			}
 		}else{
-			blockEntity.isActive = false;
-			blockEntity.pumpTick = 0;
+			engine.isActive = false;
+			engine.pumpTick = 0;
 		}
 
 	}

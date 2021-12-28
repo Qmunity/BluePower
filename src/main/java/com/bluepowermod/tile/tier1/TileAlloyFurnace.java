@@ -139,7 +139,7 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
     /**
      * Function gets called every tick. Do not forget to call the super method!
      */
-    public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+    public static void tickAlloyFurnace(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
         TileAlloyFurnace tileAlloyFurnace = (TileAlloyFurnace) blockEntity;
         TileBase.tickTileBase(level, pos, state, tileAlloyFurnace);
         if (!level.isClientSide) {

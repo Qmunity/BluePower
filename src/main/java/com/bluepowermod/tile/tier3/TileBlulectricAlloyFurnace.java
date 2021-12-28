@@ -131,7 +131,8 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
     /**
      * Function gets called every tick. Do not forget to call the super method!
      */
-    public static void tickAlloyFurnace(Level level, BlockPos pos, BlockState state, TileBlulectricAlloyFurnace tileAlloyFurnace) {
+    public static void tickAlloyFurnace(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        TileBlulectricAlloyFurnace tileAlloyFurnace = (TileBlulectricAlloyFurnace) blockEntity;
         TileBase.tickTileBase(level, pos, state, tileAlloyFurnace);
 
         if (level != null && !level.isClientSide) {

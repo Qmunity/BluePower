@@ -13,7 +13,10 @@ import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileBlulectricCable;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -43,6 +46,12 @@ public class BlockBlulectricCable extends BlockBPCableBase implements EntityBloc
     @Override
     protected Capability<?> getCapability() {
         return CapabilityBlutricity.BLUTRICITY_CAPABILITY;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : TileBlulectricCable::tickCable;
     }
 
     @Override

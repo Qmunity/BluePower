@@ -20,6 +20,7 @@ package com.bluepowermod.block;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tile.TileBase;
+import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -133,7 +134,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : TileBase::tickTileBase;
+        return level.isClientSide ? null : TileMachineBase::tickMachineBase;
     }
 
     @Override

@@ -226,9 +226,10 @@ public class TileBPMultipart extends BlockEntity {
         markDirtyClient();
     }
 
-    public static void tickMultipart(Level level, BlockPos pos, BlockState state, TileBPMultipart blockEntity) {
-      //Tick the Tickable Multiparts
-        blockEntity.stateMap.values().stream().filter(t -> t instanceof TickingBlockEntity)
+    public static void tickMultipart(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        TileBPMultipart multipart = (TileBPMultipart) blockEntity;
+        //Tick the Tickable Multiparts
+        multipart.stateMap.values().stream().filter(t -> t instanceof TickingBlockEntity)
               .forEach(t-> ((TickingBlockEntity)t).tick());
     }
 }

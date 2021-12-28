@@ -15,8 +15,11 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileBattery;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -36,6 +39,12 @@ public class BlockBattery extends BlockContainerBase {
         setRegistryName(Refs.MODID, Refs.BATTERYBLOCK_NAME);
         this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0));
 
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : TileBattery::tickBattery;
     }
 
     @Nullable

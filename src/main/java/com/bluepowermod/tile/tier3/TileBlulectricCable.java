@@ -46,30 +46,33 @@ public class TileBlulectricCable extends TileMachineBase {
         super(BPBlockEntityType.BLULECTRIC_CABLE, pos, state);
     }
 
-    public static void tickCable(Level level, BlockPos pos, BlockState state, TileBlulectricCable tileCable) {
-        tileCable.storage.resetCurrent();
-        if (level != null && !level.isClientSide) {
-            if (state.getBlock() instanceof BlockBlulectricCable) {
-                List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getPossibleValues());
+    public static void tickCable(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        if (blockEntity instanceof TileBlulectricCable) {
+            TileBlulectricCable tileCable = (TileBlulectricCable) blockEntity;
+            tileCable.storage.resetCurrent();
+            if (level != null && !level.isClientSide) {
+                if (state.getBlock() instanceof BlockBlulectricCable) {
+                    List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getPossibleValues());
 
-                //Check the side has capability
-                directions.removeIf(d -> !tileCable.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d).isPresent());
+                    //Check the side has capability
+                    directions.removeIf(d -> !tileCable.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d).isPresent());
 
-                //Balance power of attached blulectric blocks.
-                for (Direction facing : directions) {
-                    Block fBlock = level.getBlockState(pos.relative(facing)).getBlock();
-                    if (fBlock != Blocks.AIR && fBlock != Blocks.WATER) {
-                        BlockEntity tile = level.getBlockEntity(pos.relative(facing));
-                        if (tile != null)
-                            tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
-                                    exStorage -> EnergyHelper.balancePower(exStorage, tileCable.storage)
-                            );
-                    } else {
-                        BlockEntity tile = level.getBlockEntity(pos.relative(facing).relative(state.getValue(BlockBlulectricCable.FACING).getOpposite()));
-                        if (tile != null)
-                            tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, state.getValue(BlockBlulectricCable.FACING)).ifPresent(
-                                    exStorage -> EnergyHelper.balancePower(exStorage, tileCable.storage)
-                            );
+                    //Balance power of attached blulectric blocks.
+                    for (Direction facing : directions) {
+                        Block fBlock = level.getBlockState(pos.relative(facing)).getBlock();
+                        if (fBlock != Blocks.AIR && fBlock != Blocks.WATER) {
+                            BlockEntity tile = level.getBlockEntity(pos.relative(facing));
+                            if (tile != null)
+                                tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
+                                        exStorage -> EnergyHelper.balancePower(exStorage, tileCable.storage)
+                                );
+                        } else {
+                            BlockEntity tile = level.getBlockEntity(pos.relative(facing).relative(state.getValue(BlockBlulectricCable.FACING).getOpposite()));
+                            if (tile != null)
+                                tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, state.getValue(BlockBlulectricCable.FACING)).ifPresent(
+                                        exStorage -> EnergyHelper.balancePower(exStorage, tileCable.storage)
+                                );
+                        }
                     }
                 }
             }
