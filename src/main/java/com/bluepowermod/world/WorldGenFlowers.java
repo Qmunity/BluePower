@@ -38,7 +38,7 @@ public class WorldGenFlowers {
         if(event.getName() != null && event.getName().toString().contains("forest")){
             BiomeGenerationSettingsBuilder generation = event.getGeneration();
             PlacedFeature feature = BuiltinRegistries.PLACED_FEATURE.get(new ResourceLocation("bluepower:" + Refs.INDIGOFLOWER_NAME));
-            if(feature != null)
+            if(feature != null && BPConfig.CONFIG.flowerSpawnChance.get() > 0)
                 generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, feature);
         }
     }
