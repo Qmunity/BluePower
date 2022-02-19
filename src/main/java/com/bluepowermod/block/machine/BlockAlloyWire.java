@@ -53,11 +53,17 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
 
     @Override
     protected boolean canConnect(Level world, BlockPos pos, BlockState state, BlockEntity tileEntity, Direction direction) {
-        /*
-        TODO 1.17 waiting on MinecraftForge#8014
-        if(state.canConnectRedstone(world, pos, direction))
-            return true;*/
+        if(state.getBlock().canConnectRedstone(state, world, pos, direction))
+            return true;
         return super.canConnect(world, pos, state, tileEntity, direction);
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+        super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
+        int redstoneValue = world.getBestNeighborSignal(pos);
+        world.getBlockEntity(pos).getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY).orElse(null).setRedstonePower(null, (byte)redstoneValue);
+        world.setBlock(pos, state.setValue(POWERED, redstoneValue > 0), 2);
     }
 
     @Override

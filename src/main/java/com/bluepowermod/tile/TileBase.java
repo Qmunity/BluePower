@@ -94,15 +94,11 @@ public class TileBase extends BlockEntity implements IRotatable {
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        readFromPacketNBT(pkt.getTag());
-        handleUpdateTag(pkt.getTag());
+        if(pkt.getTag() != null) {
+            readFromPacketNBT(pkt.getTag());
+            handleUpdateTag(pkt.getTag());
+        }
     }
-
-    @Override
-    public CompoundTag getUpdateTag() {
-        return this.save(new CompoundTag());
-    }
-
 
     protected void sendUpdatePacket() {
 

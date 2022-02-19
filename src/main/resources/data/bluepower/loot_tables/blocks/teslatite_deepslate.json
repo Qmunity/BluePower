@@ -25,21 +25,32 @@
                   }
                 }
               ],
-              "name": "bluepower:green_sapphire_ore"
+              "name": "bluepower:teslatite_deepslate"
             },
             {
               "type": "minecraft:item",
               "functions": [
                 {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 2.0,
+                    "max": 5.0,
+                    "type": "minecraft:uniform"
+                  }
+                },
+                {
                   "function": "minecraft:apply_bonus",
                   "enchantment": "minecraft:fortune",
-                  "formula": "minecraft:ore_drops"
+                  "formula": "minecraft:uniform_bonus_count",
+                  "parameters": {
+                    "bonusMultiplier": 1
+                  }
                 },
                 {
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "bluepower:green_sapphire_gem"
+              "name": "bluepower:teslatite_dust"
             }
           ]
         }

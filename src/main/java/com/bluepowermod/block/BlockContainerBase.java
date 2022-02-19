@@ -212,7 +212,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     @Override
     public boolean writeSilkyData(Level world, BlockPos pos, CompoundTag tag) {
 
-        world.getBlockEntity(pos).save(tag);
+        world.getBlockEntity(pos).saveWithFullMetadata();
         return false;
     }
 

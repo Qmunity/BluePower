@@ -103,11 +103,6 @@ public class TileBattery extends TileMachineBase {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        return this.save(new CompoundTag());
-    }
-
-    @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         super.onDataPacket(net, pkt);
         handleUpdateTag(pkt.getTag());

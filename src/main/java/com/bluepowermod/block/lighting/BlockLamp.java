@@ -79,12 +79,10 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock, EntityBlock
         return isInverted;
     }
 
-    /*
-    TODO 1.17 waiting on MinecraftForge#8014
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return !(world.getBlockState(pos).getBlock() instanceof BlockLampRGB) && super.canConnectRedstone(state, world, pos, side);
-    }*/
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){

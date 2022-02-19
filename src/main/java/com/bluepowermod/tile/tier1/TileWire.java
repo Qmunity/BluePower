@@ -9,6 +9,7 @@ import com.bluepowermod.tile.TileBase;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TileWire extends TileBase {
-    private IRedstoneDevice device;
+    private final IRedstoneDevice device = new RedstoneStorage();
     @Nullable
     private BlockState cachedBlockState;
     private LazyOptional<IRedstoneDevice> redstoneCap;
@@ -58,22 +59,17 @@ public class TileWire extends TileBase {
     @Override
     protected void readFromPacketNBT(CompoundTag compound) {
         super.readFromPacketNBT(compound);
-        //if(compound.contains("device")) {
-        //    INBT nbtstorage = compound.get("device");
-        //    CapabilityRedstoneDevice.UNINSULATED_CAPABILITY.getStorage().readNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null, nbtstorage);
-        //}
+        if(compound.contains("device")) {
+            Tag nbtstorage = compound.get("device");
+            IRedstoneDevice.readNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null, nbtstorage);
+        }
     }
 
     @Override
     protected void writeToPacketNBT(CompoundTag tCompound) {
         super.writeToPacketNBT(tCompound);
-        //INBT nbtstorage = CapabilityRedstoneDevice.UNINSULATED_CAPABILITY.getStorage().writeNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null);
-        //tCompound.put("device", nbtstorage);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag() {
-        return this.save(new CompoundTag());
+        Tag nbtstorage = IRedstoneDevice.writeNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null);
+        tCompound.put("device", nbtstorage);
     }
 
     @Nonnull

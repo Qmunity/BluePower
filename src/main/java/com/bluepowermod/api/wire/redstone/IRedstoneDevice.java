@@ -45,14 +45,13 @@ public interface IRedstoneDevice {
     public boolean isNormalFace(Direction side);
 
 
-    @Nullable
-    default Tag writeNBT(Capability<IRedstoneDevice> capability, IRedstoneDevice instance, Direction direction) {
+    static Tag writeNBT(Capability<IRedstoneDevice> capability, IRedstoneDevice instance, Direction direction) {
         CompoundTag nbt = new CompoundTag();
         nbt.putByte("power", instance.getRedstonePower(direction));
         return nbt;
     }
 
-    default void readNBT(Capability<IRedstoneDevice> capability, IRedstoneDevice instance, Direction side, Tag nbt) {
+    static void readNBT(Capability<IRedstoneDevice> capability, IRedstoneDevice instance, Direction side, Tag nbt) {
         CompoundTag tags = (CompoundTag) nbt;
         byte power = tags.getByte("power");
         instance.setRedstonePower(side, power);
