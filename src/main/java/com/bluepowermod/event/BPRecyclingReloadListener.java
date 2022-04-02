@@ -11,9 +11,10 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.util.ItemStackUtils;
+import com.bluepowermod.world.WorldGenVolcano;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.ServerResources;
+import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.Item;
@@ -25,10 +26,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BPRecyclingReloadListener implements ResourceManagerReloadListener {
-    private final ServerResources registries;
+    private final ReloadableServerResources serverResources;
 
-    public BPRecyclingReloadListener(ServerResources registries){
-        this.registries = registries;
+    public BPRecyclingReloadListener(ReloadableServerResources serverResources){
+        this.serverResources = serverResources;
     }
 
     /**
@@ -36,7 +37,8 @@ public class BPRecyclingReloadListener implements ResourceManagerReloadListener 
      */
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
-        onResourceManagerReload(registries.getRecipeManager());
+        onResourceManagerReload(serverResources.getRecipeManager());
+        WorldGenVolcano.updateAlterBlocks();
     }
 
     public static void onResourceManagerReload(RecipeManager recipeManager) {

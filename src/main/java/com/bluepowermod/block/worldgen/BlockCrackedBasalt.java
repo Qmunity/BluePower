@@ -63,7 +63,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
         if (DateEventHandler.isEvent(Event.NEW_YEAR)) {
             DateEventHandler.spawnFirework(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         } else {
-            FallingBlockEntity entity = new FallingBlockEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+            FallingBlockEntity entity = FallingBlockEntity.fall(world, pos.offset(0.5,0.5,0.5),
                     DateEventHandler.isEvent(Event.HALLOWEEN) ? Blocks.CARVED_PUMPKIN.defaultBlockState() : Blocks.LAVA.defaultBlockState());
             entity.setDeltaMovement( 1 + random.nextDouble(), (random.nextDouble() - 0.5) * 0.8D, (random.nextDouble() - 0.5) * 0.8D);
             entity.fallDistance = 1;// make this field that keeps track of the ticks set to 1, so it doesn't kill itself when it searches for a lava

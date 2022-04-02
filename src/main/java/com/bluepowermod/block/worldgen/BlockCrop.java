@@ -103,7 +103,7 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
 
     @Override
     protected ItemLike getBaseSeedId() {
-        return BPItems.flax_seeds;
+        return BPItems.flax_seeds.get();
     }
 
     /**

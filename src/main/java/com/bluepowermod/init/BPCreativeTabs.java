@@ -84,9 +84,9 @@ public class BPCreativeTabs {
             @OnlyIn(Dist.CLIENT)
             public ItemStack makeIcon() {
 
-                Item iconItem = BPItems.ruby_gem;
+                Item iconItem = BPItems.ruby_gem.get();
                 if (iconItem != null) {
-                    return new ItemStack(BPItems.ruby_gem);
+                    return new ItemStack(BPItems.ruby_gem.get());
                 } else {
                     return new ItemStack(Items.DIAMOND);
                 }
@@ -99,9 +99,9 @@ public class BPCreativeTabs {
             @OnlyIn(Dist.CLIENT)
             public ItemStack makeIcon() {
 
-                Item iconItem = BPItems.screwdriver;
+                Item iconItem = BPItems.screwdriver.get();
                 if (iconItem != null) {
-                    return new ItemStack(BPItems.screwdriver);
+                    return new ItemStack(BPItems.screwdriver.get());
                 } else {
                     return new ItemStack(Items.DIAMOND_PICKAXE);
                 }
@@ -114,7 +114,7 @@ public class BPCreativeTabs {
             @OnlyIn(Dist.CLIENT)
             public ItemStack makeIcon() {
 
-                ItemStack iconItem = new ItemStack(BPItems.redstone_pointer_tile);
+                ItemStack iconItem = new ItemStack(BPItems.redstone_pointer_tile.get());
                 if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {

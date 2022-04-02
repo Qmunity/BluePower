@@ -20,6 +20,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.BPWorldGen;
 import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
@@ -53,6 +54,8 @@ public class BluePower {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::complete);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerCapabilities);
 
+        BPItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
 
@@ -60,14 +63,14 @@ public class BluePower {
         MinecraftForge.EVENT_BUS.register(eventHandler);
 
         BPApi.init(new BluePowerAPI());
-        BPEnchantments.init();
-        BPBlocks.init();
         proxy.preInitRenderers();
-        BPWorldGen.init();
+
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, BPWorldGen::registerFeatures);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, WorldGenOres::registerOres);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, WorldGenFlowers::registerFlowers);
+
         MinecraftForge.EVENT_BUS.register(new BPWorldGen());
-        WorldGenOres.initOres();
         MinecraftForge.EVENT_BUS.register(new WorldGenOres());
-        WorldGenFlowers.initFlowers();
         MinecraftForge.EVENT_BUS.register(new WorldGenFlowers());
     }
 
@@ -75,7 +78,6 @@ public class BluePower {
 
     public void setup(FMLCommonSetupEvent event) {
         event.enqueueWork(BPNetworkHandler::init);
-        OreDictionarySetup.init();
         proxy.setup(event);
         CompatibilityUtils.init(event);
     }
@@ -94,12 +96,11 @@ public class BluePower {
     @SubscribeEvent
     public void onResourceReload(AddReloadListenerEvent event) {
         //Add Reload Listener for the Alloy Furnace Recipe Generator
-        event.addListener(new BPRecyclingReloadListener(event.getDataPackRegistries()));
+        event.addListener(new BPRecyclingReloadListener(event.getServerResources()));
     }
 
     @SubscribeEvent
-    public void onLootLoad(LootTableLoadEvent event)
-    {
+    public void onLootLoad(LootTableLoadEvent event){
         ResourceLocation grass = new ResourceLocation("minecraft", "blocks/tall_grass");
         if (event.getName().equals(grass)){
                 event.getTable().addPool(LootPool.lootPool().add(LootTableReference.lootTableReference(new ResourceLocation("bluepower", "blocks/tall_grass"))).name("bluepower:tall_grass").build());

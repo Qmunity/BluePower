@@ -49,10 +49,14 @@ public class WorldGenVolcano extends Feature<NoneFeatureConfiguration> {
     private static final int MAX_VOLCANO_RADIUS = 200; // absolute max radius a volcano can have, this should be a
     // magnitude bigger than an average volcano radius.
     private HashMap<Pos, Integer> volcanoMap;
-    private final List<Block> alterBlocks = new ArrayList<>();
+    private static List<Block> alterBlocks = new ArrayList<>();
 
-    public WorldGenVolcano(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public WorldGenVolcano(Codec<NoneFeatureConfiguration> pCodec) {
+        super(pCodec);
+    }
+
+    public static void updateAlterBlocks() {
+        alterBlocks = new ArrayList<>();
         alterBlocks.add( BPBlocks.amethyst_block);
         alterBlocks.add(BPBlocks.ruby_block);
         alterBlocks.add(BPBlocks.sapphire_block);
@@ -270,7 +274,7 @@ public class WorldGenVolcano extends Feature<NoneFeatureConfiguration> {
         BlockEntity te = world.getBlockEntity(pos);
         if(te instanceof ChestBlockEntity){
             if (rand.nextInt(5) == 0 && BPConfig.CONFIG.generateTungstenInVolcano.get()) {
-                ((ChestBlockEntity)te).setItem(13, new ItemStack(BPItems.tungsten_ingot,
+                ((ChestBlockEntity)te).setItem(13, new ItemStack(BPItems.tungsten_ingot.get(),
                         5 + rand.nextInt(10)));
             } else {
                 ((ChestBlockEntity)te).setLootTable(BuiltInLootTables.SIMPLE_DUNGEON, rand.nextInt());

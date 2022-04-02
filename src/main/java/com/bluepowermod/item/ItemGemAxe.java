@@ -28,11 +28,9 @@ public class ItemGemAxe extends AxeItem {
 
     public Item customCraftingMaterial = Items.AIR;
 
-    public ItemGemAxe(Tier itemTier, String name, Item repairItem) {
+    public ItemGemAxe(Tier itemTier, Item repairItem) {
         super(itemTier, 2, -1.4F, new Properties().tab(BPCreativeTabs.tools));
-        this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
-        BPItems.itemList.add(this);
     }
 
     @Override

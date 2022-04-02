@@ -48,11 +48,9 @@ public class ItemSickle extends DiggerItem {
             Blocks.NETHER_WART, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.SUGAR_CANE, Blocks.TALL_GRASS, Blocks.VINE, Blocks.LILY_PAD,
             BlockTags.SMALL_FLOWERS);
 
-    public ItemSickle(Tier itemTier, String name, Item repairItem) {
+    public ItemSickle(Tier itemTier, Item repairItem) {
         super(2,-1.4F, itemTier, BlockTags.MINEABLE_WITH_HOE, new Properties().tab(BPCreativeTabs.tools));
-        this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
-        BPItems.itemList.add(this);
     }
 
     @Override
@@ -70,12 +68,12 @@ public class ItemSickle extends DiggerItem {
 
         if (!(entityLiving instanceof Player player)) return false;
 
-        if (state.getBlock().getTags().contains(new ResourceLocation("minecraft:leaves")) || state.getBlock() instanceof LeavesBlock) {
+        if ( state.is(BlockTags.LEAVES) || state.getBlock() instanceof LeavesBlock) {
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     for (int k = -1; k <= 1; k++) {
                         BlockState blockToCheck = world.getBlockState(pos.offset(i,j,k));
-                        if (blockToCheck.getBlock().getTags().contains(new ResourceLocation("minecraft:leaves")) || blockToCheck.getBlock() instanceof LeavesBlock) {
+                        if (blockToCheck.is(BlockTags.LEAVES) || blockToCheck.getBlock() instanceof LeavesBlock) {
                             if (blockToCheck.canHarvestBlock(world, pos.offset(i,j,k), player)) {
                                 world.destroyBlock(pos.offset(i,j,k), true);
                             }

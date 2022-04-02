@@ -18,7 +18,6 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.Refs;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -27,7 +26,6 @@ public class ItemSilkyScrewdriver extends ItemBase {
 
     public ItemSilkyScrewdriver() {
         super(new Properties().durability(250), BPCreativeTabs.tools);
-        setRegistryName(Refs.MODID + ":" + Refs.SILKYSCREWDRIVER_NAME);
     }
 
     @Override

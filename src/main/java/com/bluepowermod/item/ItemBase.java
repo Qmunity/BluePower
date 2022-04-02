@@ -31,12 +31,10 @@ public class ItemBase extends Item {
 
     public ItemBase(Properties properties) {
         super(properties.tab(BPCreativeTabs.items));
-        BPItems.itemList.add(this);
     }
 
     public ItemBase(Properties properties, CreativeModeTab group) {
         super(properties.tab(group));
-        BPItems.itemList.add(this);
     }
 
 }

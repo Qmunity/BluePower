@@ -20,12 +20,12 @@ public class ItemPaintBrush extends ItemDamageableColorableOverlay {
     private final MinecraftColor color;
 
     public ItemPaintBrush() {
-        super(Refs.PAINTBRUSH_NAME + "_blank", new Properties());
+        super(new Properties());
         color = MinecraftColor.ANY;
     }
 
     public ItemPaintBrush(MinecraftColor color) {
-        super(color, Refs.PAINTBRUSH_NAME, new Properties());
+        super(color, new Properties());
         this.color = color;
     }
 
@@ -41,7 +41,7 @@ public class ItemPaintBrush extends ItemDamageableColorableOverlay {
         if(tile instanceof TileInsulatedWire){
            changed = ((TileInsulatedWire) tile).setColor(color);
         if(changed && context.getPlayer() != null)
-            context.getPlayer().setItemInHand(context.getHand(), new ItemStack(BPItems.paint_brush.get(0)));
+            context.getPlayer().setItemInHand(context.getHand(), new ItemStack(BPItems.paint_brush.get(0).get()));
         }
         return super.useOn(context);
     }

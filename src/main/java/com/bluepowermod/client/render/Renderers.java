@@ -33,6 +33,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * @author MoreThanHidden
@@ -85,9 +86,9 @@ public class Renderers {
         BlockEntityRenderers.register(BPBlockEntityType.ENGINE, context -> new RenderEngine());
 
 
-        for (Item item : BPItems.itemList) {
-            if (item instanceof IBPColoredItem) {
-                Minecraft.getInstance().getItemColors().register(new BPItemColor(), item);
+        for (RegistryObject<Item> item : BPItems.ITEMS.getEntries()) {
+            if (item.get() instanceof IBPColoredItem) {
+                Minecraft.getInstance().getItemColors().register(new BPItemColor(), item.get());
             }
         }
         for (Block block : BPBlocks.blockList) {

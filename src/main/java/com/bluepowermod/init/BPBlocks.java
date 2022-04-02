@@ -181,11 +181,6 @@ public class BPBlocks {
 
     public static Block sortron;
 
-    public static void init() {
-        instantiateBlocks();
-        initModDependantBlocks();
-    }
-
     private static void instantiateBlocks() {
 
         basalt = new BlockBasalt(Refs.BASALT_NAME);
@@ -372,6 +367,10 @@ public class BPBlocks {
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
+
+        instantiateBlocks();
+        initModDependantBlocks();
+
         for(Block block : blockList) {
             event.getRegistry().register(block);
 

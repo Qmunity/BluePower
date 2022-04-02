@@ -31,7 +31,6 @@ public class ItemLumar extends ItemBase implements IBPColoredItem{
     public ItemLumar(MinecraftColor color) {
         super(new Properties());
         this.color = color;
-        this.setRegistryName(Refs.MODID + ":" + Refs.LUMAR_NAME + "_" + color.name().toLowerCase());
     }
 
     @Override

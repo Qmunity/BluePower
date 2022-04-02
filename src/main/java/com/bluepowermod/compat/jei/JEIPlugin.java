@@ -99,7 +99,7 @@ public class JEIPlugin implements IModPlugin {
                 ItemStack output = ItemStack.EMPTY;
                 for (Block mb : BPBlocks.microblocks){
                     NonNullList<Ingredient> input = NonNullList.create();
-                    input.add(Ingredient.of(ItemTags.createOptional(new ResourceLocation("bluepower:saw"))));
+                    input.add(Ingredient.of(ItemTags.create(new ResourceLocation("bluepower:saw"))));
                     if(mb == BPBlocks.half_block){
                         input.add(Ingredient.of(new ItemStack(block)));
                     }else{

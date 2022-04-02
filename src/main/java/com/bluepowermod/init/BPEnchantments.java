@@ -21,14 +21,12 @@ public class BPEnchantments {
 
 	public static Enchantment vorpal;
 	public static Enchantment disjunction;
-	
-	public static void init() {
-		vorpal = new EnchantmentVorpal(Enchantment.Rarity.COMMON);
-		disjunction = new EnchantmentDisjunction(Enchantment.Rarity.COMMON);
-	}
 
 	@SubscribeEvent
 	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
+		vorpal = new EnchantmentVorpal(Enchantment.Rarity.COMMON);
+		disjunction = new EnchantmentDisjunction(Enchantment.Rarity.COMMON);
+
 		event.getRegistry().register(vorpal.setRegistryName("bluepower:vorpal"));
 		event.getRegistry().register(disjunction.setRegistryName("bluepower:disjunction"));
 	}

@@ -7,10 +7,16 @@
  */
 package com.bluepowermod.helper;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.Registry;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.TagManager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 
 import com.bluepowermod.util.ItemStackUtils;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemStackHelper {
 
@@ -42,12 +48,12 @@ public class ItemStackHelper {
             return true;
 
         if (mode == 0) {
-            //TODO: Make sure this is right
-            return ItemTags.getAllTags().getMatchingTags(stack1.getItem()).stream().anyMatch(item->ItemTags.getAllTags().getMatchingTags(stack2.getItem()) == item);
+            //TODO: Make sure this is right)
+            return ForgeRegistries.ITEMS.tags().stream().anyMatch(tag -> tag.contains(stack1.getItem()) && tag.contains(stack2.getItem()));
         } else if (mode == 1) {
             return ItemStackUtils.isItemFuzzyEqual(stack1, stack2);
         } else {
-            return ItemTags.getAllTags().getMatchingTags(stack1.getItem()).stream().anyMatch(item->ItemTags.getAllTags().getMatchingTags(stack2.getItem()) == item) && ItemStack.tagMatches(stack1, stack2);
+            return ForgeRegistries.ITEMS.tags().stream().anyMatch(tag -> tag.contains(stack1.getItem()) && tag.contains(stack2.getItem())) && ItemStack.tagMatches(stack1, stack2);
         }
     }
 

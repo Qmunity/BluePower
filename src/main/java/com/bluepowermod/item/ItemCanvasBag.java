@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 public class ItemCanvasBag extends ItemColorableOverlay implements MenuProvider{
     
     public ItemCanvasBag(MinecraftColor color) {
-        super(color, Refs.CANVASBAG_NAME, new Properties().stacksTo(1));
+        super(color, new Properties().stacksTo(1));
     }
 
     @Override

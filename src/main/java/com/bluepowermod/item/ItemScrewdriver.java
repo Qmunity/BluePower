@@ -38,7 +38,6 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
     public ItemScrewdriver() {
         super(new Properties().durability(250));
-        setRegistryName(Refs.MODID + ":" + Refs.SCREWDRIVER_NAME);
     }
 
     @Override

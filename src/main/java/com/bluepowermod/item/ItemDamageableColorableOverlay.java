@@ -16,11 +16,11 @@ import net.minecraft.nbt.CompoundTag;
  */
 public abstract class ItemDamageableColorableOverlay extends ItemColorableOverlay {
 
-    public ItemDamageableColorableOverlay(MinecraftColor color, String name, Properties properties) {
-        super(color, name, properties);
+    public ItemDamageableColorableOverlay(MinecraftColor color, Properties properties) {
+        super(color, properties);
     }
-    public ItemDamageableColorableOverlay(String name, Properties properties) {
-        super(name, properties);
+    public ItemDamageableColorableOverlay(Properties properties) {
+        super(properties);
     }
 
     public static int getUsesUsed(ItemStack stack) {
