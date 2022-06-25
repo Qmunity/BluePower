@@ -52,7 +52,7 @@ public class BPRecyclingReloadListener extends SimplePreparableReloadListener<Vo
                 AlloyFurnaceRegistry.getInstance().blacklist.add(item);
             }
         }
-      
+
         AlloyFurnaceRegistry.getInstance().recyclingRecipes.clear();
         List<ItemStack> recyclingItems = AlloyFurnaceRegistry.getInstance().recyclingItems;
         for (ItemStack outputItem : recyclingItems) {
@@ -111,6 +111,7 @@ public class BPRecyclingReloadListener extends SimplePreparableReloadListener<Vo
                 }
             }
         }
+    }
 
     @Override
     protected Void prepare(ResourceManager pResourceManager, ProfilerFiller pProfiler) {
