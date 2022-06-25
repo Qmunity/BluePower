@@ -49,11 +49,11 @@ public class ItemStackHelper {
 
         if (mode == 0) {
             //TODO: Make sure this is right)
-            return ForgeRegistries.ITEMS.tags().stream().anyMatch(tag -> tag.contains(stack1.getItem()) && tag.contains(stack2.getItem()));
+            return stack1.getTags().anyMatch(s1 -> stack2.getTags().anyMatch(s2 -> s2 == s1));
         } else if (mode == 1) {
             return ItemStackUtils.isItemFuzzyEqual(stack1, stack2);
         } else {
-            return ForgeRegistries.ITEMS.tags().stream().anyMatch(tag -> tag.contains(stack1.getItem()) && tag.contains(stack2.getItem())) && ItemStack.tagMatches(stack1, stack2);
+            return stack1.getTags().anyMatch(s1 -> stack2.getTags().anyMatch(s2 -> s2 == s1)) && ItemStack.tagMatches(stack1, stack2);
         }
     }
 

@@ -41,7 +41,7 @@ public class ItemStackUtils {
     }
 
     public static boolean isSameOreDictStack(ItemStack stack1, ItemStack stack2) {
-        return ForgeRegistries.ITEMS.tags().stream().anyMatch(tag -> tag.contains(stack1.getItem()) && tag.contains(stack2.getItem()));
+            return stack1.getTags().anyMatch(s1 -> stack2.getTags().anyMatch(s2 -> s2 == s1));
     }
 
     public static boolean isScrewdriver(ItemStack item) {

@@ -20,6 +20,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.BPWorldGen;
 import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.resources.ResourceLocation;
@@ -28,6 +29,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -93,10 +96,16 @@ public class BluePower {
         Recipes.init();
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onResourceReload(AddReloadListenerEvent event) {
         //Add Reload Listener for the Alloy Furnace Recipe Generator
         event.addListener(new BPRecyclingReloadListener(event.getServerResources()));
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onServerStart(ServerStartedEvent event) {
+        //Check Alloy furnace recipes again after tags are populated
+        BPRecyclingReloadListener.onResourceManagerReload(event.getServer().getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING));
     }
 
     @SubscribeEvent
