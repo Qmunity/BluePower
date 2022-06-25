@@ -7,6 +7,8 @@
  */
 package com.bluepowermod.compat.jei;
 
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.client.gui.GuiAlloyFurnace;
 import com.bluepowermod.client.gui.GuiBlulectricAlloyFurnace;
 import com.bluepowermod.client.gui.GuiBlulectricFurnace;
@@ -41,10 +43,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -119,6 +118,15 @@ public class JEIPlugin implements IModPlugin {
         return recipes;
     }
 
+    private static List<IRecipe<?>> getRecyclingRecipes() {
+        List<IRecipe<?>> recipesList = new ArrayList<>();
+
+        for (Map.Entry<Item, ItemStack> recipe : AlloyFurnaceRegistry.getInstance().recyclingRecipes.entrySet()) {
+            recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe(new ResourceLocation("bluepower:" + recipe.getValue().getItem().getRegistryName().toString().replace(":", ".") + recipe.getKey().getRegistryName().toString().replace(":", ".")), "", recipe.getValue(), NonNullList.of(Ingredient.of(recipe.getKey()), Ingredient.of(recipe.getKey())), NonNullList.of(0, 1)));
+        }
+
+        return recipesList;
+    }
 
     private static List<Recipe<?>> getRecyclingRecipes() {
         List<Recipe<?>> recipesList = new ArrayList<>();

@@ -42,6 +42,9 @@ public class BPRecipeSerializer {
     @ObjectHolder("alloy_recycling")
     public static RecipeSerializer<IAlloyFurnaceRecipe> ALLOY_RECYCLING;
 
+    @ObjectHolder("alloy_recycling")
+    public static IRecipeSerializer<IAlloyFurnaceRecipe> ALLOY_RECYCLING;
+
     @ObjectHolder("micro_block")
     public static RecipeSerializer<MicroblockRecipe> MICROBLOCK;
 

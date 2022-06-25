@@ -109,6 +109,7 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
             }
         }
         return ItemStack.EMPTY;
+      
     }
 
     @Override

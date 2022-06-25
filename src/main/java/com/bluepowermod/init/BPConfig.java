@@ -73,7 +73,6 @@ public class BPConfig {
         public final ForgeConfigSpec.ConfigValue<String> volcanoBiomeCategoryWhitelist;
         public final ForgeConfigSpec.BooleanValue generateTungstenInVolcano;
         public final ForgeConfigSpec.ConfigValue<String> alloyFurnaceBlacklist;
-        public final ForgeConfigSpec.ConfigValue<Boolean> alloyFurnaceDatapackGenerator;
         public final ForgeConfigSpec.ConfigValue<Float> albedoBrightness;
         //public final ForgeConfigSpec.BooleanValue enableTubeCaching;
         public final ForgeConfigSpec.BooleanValue enableGateSounds;
@@ -156,7 +155,6 @@ public class BPConfig {
             builder.pop();
             builder.push("Recipes").comment("Toggle recipes to be enabled or not");
                 alloyFurnaceBlacklist = builder.comment( "Any item name (minecraft:bucket,minecraft:minecart) added here will be blacklisted from being able to melt down into its raw materials.").translation("bluepower.config.alloy_furnace.blacklist").define("alloyFurnaceBlacklist", "minecraft:iron_nugget,minecraft:gold_nugget,minecraft:gold_ingot,minecraft:iron_ingot");
-                alloyFurnaceDatapackGenerator = builder.comment( "Generate Json Datapack for Alloy Furnace (Only used to generate recycling recipes)").translation("bluepower.config.alloy_furnace.datapack").define("alloyFurnaceDatapackGenerator", true);
             builder.pop();
 
             /*
