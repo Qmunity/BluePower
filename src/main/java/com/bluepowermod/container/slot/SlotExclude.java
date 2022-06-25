@@ -19,16 +19,16 @@
 
 package com.bluepowermod.container.slot;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class SlotExclude extends Slot {
     
     Item filter;
     
-    public SlotExclude(IInventory par1iInventory, int par2, int par3, int par4, Item filter) {
+    public SlotExclude(Container par1iInventory, int par2, int par3, int par4, Item filter) {
         super(par1iInventory, par2, par3, par4);
         
         this.filter = filter;

@@ -7,45 +7,42 @@
  */
 package com.bluepowermod.block.power;
 
-import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier2.TileWindmill;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 /**
  * 
  * @author TheFjong
  * 
  */
-public class BlockWindmill extends BlockContainerBase implements ITileEntityProvider {
+public class BlockWindmill extends BlockContainerBase implements EntityBlock {
     
     public BlockWindmill() {
-        super(Material.METAL, TileWindmill.class);
+        super(Material.METAL, TileWindmill.class, BPBlockEntityType.WINDMILL);
         setRegistryName(Refs.MODID, Refs.WINDMILL_NAME);
         BPBlocks.blockList.add(this);
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Nullable
     @Override
-    public TileEntity newBlockEntity(IBlockReader iBlockReader) {
-        return new TileWindmill();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileWindmill(pos, state);
     }
 }

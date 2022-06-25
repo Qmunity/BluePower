@@ -17,17 +17,17 @@
 
 package com.bluepowermod.api.recipe;
 
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 /**
- * @author MoreThanHidden
+ *  @author MoreThanHidden
  */
-public interface IAlloyFurnaceRecipe extends IRecipe<ISidedInventory> {
+public interface IAlloyFurnaceRecipe extends Recipe<WorldlyContainer> {
     
     /**
      * Return true if this recipe can be smelted using the input stacks. The input stacks are the 9 inventory slots, so an element can be ItemStack.EMPTY.
@@ -40,7 +40,7 @@ public interface IAlloyFurnaceRecipe extends IRecipe<ISidedInventory> {
     /**
      * The items that are needed in this recipe need to be removed from the input inventory.
      */
-    boolean useItems(NonNullList<ItemStack> input, RecipeManager manager);
+    boolean useItems(NonNullList<ItemStack> input, RecipeManager recipeManager);
 
     ItemStack assemble(NonNullList<ItemStack> input, RecipeManager recipeManager);
 

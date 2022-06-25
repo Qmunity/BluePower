@@ -19,20 +19,20 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerKinect;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
-public class GuiKinect extends GuiContainerBaseBP<ContainerKinect> implements IHasContainer<ContainerKinect> {
+public class GuiKinect extends GuiContainerBaseBP<ContainerKinect> implements MenuAccess<ContainerKinect> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/kinect.png");
     private final ContainerKinect kinect;
 
-    public GuiKinect(ContainerKinect container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiKinect(ContainerKinect container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.kinect = container;
         imageHeight = 165;

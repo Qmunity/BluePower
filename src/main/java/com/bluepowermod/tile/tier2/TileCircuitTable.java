@@ -8,31 +8,31 @@
 package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * @author MineMaarten
  */
-public class TileCircuitTable extends TileBase implements IInventory, IGUITextFieldSensitive, IGuiButtonSensitive {
+public class TileCircuitTable extends TileBase implements Container, IGUITextFieldSensitive, IGuiButtonSensitive {
 
     public static final int SLOTS = 24;
     protected NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
-    public final Inventory circuitInventory = new Inventory( SLOTS);
     public int slotsScrolled;
     private String textboxString = "";
 
-    public TileCircuitTable() {
-        super(BPTileEntityType.CIRCUIT_TABLE);
+    public TileCircuitTable(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.CIRCUIT_TABLE, pos, state);
     }
 
     @Override
@@ -58,13 +58,13 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
+    protected void saveAdditional(CompoundTag tag) {
 
-        super.save(tag);
+        super.saveAdditional(tag);
 
-        ListNBT tagList = new ListNBT();
+        ListTag tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
-                CompoundNBT tagCompound = new CompoundNBT();
+                CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
                 inventory.get(currentIndex).save(tagCompound);
                 tagList.add(tagCompound);
@@ -72,18 +72,17 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
         tag.put("Items", tagList);
 
         tag.putString("textboxString", textboxString);
-        return tag;
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag) {
+    public void load(CompoundTag tag) {
 
-        super.load(state, tag);
+        super.load(tag);
 
-        ListNBT tagList = tag.getList("Items", 10);
+        ListTag tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(24, ItemStack.EMPTY);
         for (int i = 0; i < tagList.size(); ++i) {
-            CompoundNBT tagCompound = tagList.getCompound(i);
+            CompoundTag tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
                 inventory.set(slot, ItemStack.of(tagCompound));
@@ -143,18 +142,18 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return player.blockPosition().closerThan(worldPosition,64.0D);
     }
 
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 
@@ -175,7 +174,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
     }
 
     @Override
-    public void onButtonPress(PlayerEntity player, int messageId, int value) {
+    public void onButtonPress(Player player, int messageId, int value) {
         if (messageId == 0) {
             slotsScrolled = value;
         }

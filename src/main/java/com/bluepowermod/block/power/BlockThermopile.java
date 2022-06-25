@@ -8,18 +8,11 @@
 
 package com.bluepowermod.block.power;
 
-import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.block.BlockContainerHorizontalFacingBase;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier3.TileSolarPanel;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileThermopile;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.material.Material;
 
 /**
  * @author MoreThanHidden
@@ -28,7 +21,7 @@ import net.minecraft.world.IBlockReader;
 public class BlockThermopile extends BlockContainerHorizontalFacingBase {
 
     public BlockThermopile() {
-        super(Material.METAL, TileThermopile.class);
+        super(Material.METAL, TileThermopile.class, BPBlockEntityType.THERMOPILE);
         setRegistryName(Refs.MODID, Refs.THERMOPILE_NAME);
     }
 

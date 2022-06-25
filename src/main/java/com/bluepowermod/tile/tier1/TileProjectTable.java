@@ -9,22 +9,23 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
@@ -32,18 +33,18 @@ import java.util.stream.IntStream;
 /**
  * @author MineMaarten
  */
-public class TileProjectTable extends TileBase implements ISidedInventory, INamedContainerProvider {
+public class TileProjectTable extends TileBase implements WorldlyContainer, MenuProvider {
 
     public final static int SLOTS = 28;
     private NonNullList<ItemStack> inventory = NonNullList.withSize(18, ItemStack.EMPTY);
     protected NonNullList<ItemStack> craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
 
-    public TileProjectTable() {
-        super(BPTileEntityType.PROJECT_TABLE);
+    public TileProjectTable(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.PROJECT_TABLE, pos, state);
     }
 
-    public TileProjectTable(TileEntityType<?> type) {
-        super(type);
+    public TileProjectTable(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     @Override
@@ -60,39 +61,38 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
+    protected void saveAdditional(CompoundTag tag) {
 
-        super.save(tag);
+        super.saveAdditional(tag);
 
-        ListNBT tagList = new ListNBT();
+        ListTag tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
-                CompoundNBT tagCompound = new CompoundNBT();
+                CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte)currentIndex);
                 inventory.get(currentIndex).save(tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("Items", tagList);
 
-        tagList = new ListNBT();
+        tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < craftingGrid.size(); ++currentIndex) {
-                CompoundNBT tagCompound = new CompoundNBT();
+                CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
                 craftingGrid.get(currentIndex).save(tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("CraftingGrid", tagList);
-        return tag;
     }
 
     @Override
-    public void load(BlockState blockState, CompoundNBT tag) {
+    public void load(CompoundTag tag) {
 
-        super.load(blockState, tag);
+        super.load(tag);
 
-        ListNBT tagList = tag.getList("Items", 10);
+        ListTag tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(19, ItemStack.EMPTY);
         for (int i = 0; i < tagList.size(); ++i) {
-            CompoundNBT tagCompound = tagList.getCompound(i);
+            CompoundTag tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
                 inventory.set(slot, ItemStack.of(tagCompound));
@@ -102,7 +102,7 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
         tagList = tag.getList("CraftingGrid", 10);
         craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
         for (int i = 0; i < tagList.size(); ++i) {
-            CompoundNBT tagCompound = tagList.getCompound(i);
+            CompoundTag tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < craftingGrid.size()) {
                 craftingGrid.set(slot, ItemStack.of(tagCompound));
@@ -173,16 +173,16 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 
@@ -208,13 +208,13 @@ public class TileProjectTable extends TileBase implements ISidedInventory, IName
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.PROJECTTABLE_NAME);
+    public Component getDisplayName() {
+        return new TextComponent(Refs.PROJECTTABLE_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerProjectTable(id, inventory, this);
     }
 

@@ -19,27 +19,32 @@
 
 package com.bluepowermod.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
-public class GuiSeedBag extends GuiContainerBaseBP<ContainerSeedBag> implements IHasContainer<ContainerSeedBag> {
+public class GuiSeedBag extends GuiContainerBaseBP<ContainerSeedBag> implements MenuAccess<ContainerSeedBag> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
 
-    public GuiSeedBag(ContainerSeedBag container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiSeedBag(ContainerSeedBag container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
     }
     
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
         this.font.draw(matrixStack, I18n.get("item.bluepower." + title.getContents()), 8.0F, 6.0F, COLOR_TEXT);
+    }
+
+    @Override
+    protected void renderBg(PoseStack pPoseStack, float pPartialTicks, int pMouseX, int pMouseY) {
+
     }
 
 }

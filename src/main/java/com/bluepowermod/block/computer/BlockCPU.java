@@ -9,12 +9,13 @@ package com.bluepowermod.block.computer;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileCPU;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 import java.util.Random;
 
@@ -23,13 +24,13 @@ public class BlockCPU extends BlockContainerBase {
 
     public BlockCPU() {
 
-        super(Material.METAL, TileCPU.class);
+        super(Material.METAL, TileCPU.class, BPBlockEntityType.CPU);
         setRegistryName(Refs.BLOCKCPU_NAME);
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof TileCPU) {
         }
     }

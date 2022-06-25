@@ -2,14 +2,16 @@ package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileProjectTable;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -17,8 +19,8 @@ import java.util.stream.IntStream;
 
 public class TileAutoProjectTable extends TileProjectTable {
 
-    public TileAutoProjectTable() {
-        super(BPTileEntityType.AUTO_PROJECT_TABLE);
+    public TileAutoProjectTable(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.AUTO_PROJECT_TABLE, pos, state);
     }
     private final int OUTPUT_SLOT = 100;
 
@@ -27,9 +29,9 @@ public class TileAutoProjectTable extends TileProjectTable {
         if(slot == OUTPUT_SLOT) {
             InventoryProjectTableCrafting craftingInv = new InventoryProjectTableCrafting(null, this, 3, 3);
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<ICraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, craftingInv, level);
+            Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, level);
             if (optional.isPresent()) {
-                ICraftingRecipe icraftingrecipe = optional.get();
+                CraftingRecipe icraftingrecipe = optional.get();
                 itemstack = icraftingrecipe.assemble(craftingInv);
             }
 
@@ -70,9 +72,9 @@ public class TileAutoProjectTable extends TileProjectTable {
         if(i == OUTPUT_SLOT){
             InventoryProjectTableCrafting craftingInv = new InventoryProjectTableCrafting(null, this, 3, 3);
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<ICraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, craftingInv, level);
+            Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, level);
             if (optional.isPresent()) {
-                ICraftingRecipe icraftingrecipe = optional.get();
+                CraftingRecipe icraftingrecipe = optional.get();
                 itemstack = icraftingrecipe.assemble(craftingInv);
             }
             return itemstack;
@@ -89,8 +91,8 @@ public class TileAutoProjectTable extends TileProjectTable {
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.AUTOPROJECTTABLE_NAME);
+    public Component getDisplayName() {
+        return new TextComponent(Refs.AUTOPROJECTTABLE_NAME);
     }
 
 

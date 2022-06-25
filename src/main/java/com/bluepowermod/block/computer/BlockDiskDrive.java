@@ -9,14 +9,15 @@ package com.bluepowermod.block.computer;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileDiskDrive;
-import net.minecraft.block.material.Material;
+import net.minecraft.world.level.material.Material;
 
 public class BlockDiskDrive extends BlockContainerBase {
 
     public BlockDiskDrive() {
 
-        super(Material.METAL, TileDiskDrive.class);
+        super(Material.METAL, TileDiskDrive.class, BPBlockEntityType.DISK_DRIVE);
         setRegistryName(Refs.BLOCKDISKDRIVE_NAME);
     }
 

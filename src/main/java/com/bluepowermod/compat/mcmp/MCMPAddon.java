@@ -12,7 +12,7 @@ import mcmultipart.api.multipart.IMultipartTile;
 import mcmultipart.api.ref.MCMPCapabilities;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -39,7 +39,7 @@ public class MCMPAddon implements IMCMPAddon{
     }
 
     @SubscribeEvent
-    public void onAttachTileCaps(AttachCapabilitiesEvent<TileEntity> te) {
+    public void onAttachTileCaps(AttachCapabilitiesEvent<BlockEntity> te) {
         if (te.getObject() instanceof TileLamp) {
             te.addCapability(new ResourceLocation(Refs.MODID, "multipart"), new ICapabilityProvider() {
                 IMultipartTile multipartTileLamp = IMultipartTile.wrap(te.getObject());

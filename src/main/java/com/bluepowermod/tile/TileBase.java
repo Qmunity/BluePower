@@ -18,32 +18,32 @@
 package com.bluepowermod.tile;
 
 import com.bluepowermod.block.BlockContainerFacingBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author MineMaarten
  */
-public class TileBase extends TileEntity implements IRotatable, ITickableTileEntity {
+public class TileBase extends BlockEntity implements IRotatable {
 
     private boolean isRedstonePowered;
     private int outputtingRedstone;
     private int ticker = 0;
 
-    public TileBase(TileEntityType<?> type) {
-        super(type);
+    public TileBase(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     /*************** BASIC TE FUNCTIONS **************/
@@ -52,9 +52,9 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundNBT tCompound) {
+    public void load(CompoundTag tCompound) {
 
-        super.load(blockState, tCompound);
+        super.load(tCompound);
         isRedstonePowered = tCompound.getBoolean("isRedstonePowered");
         readFromPacketNBT(tCompound);
     }
@@ -63,13 +63,12 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT save(CompoundNBT tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
 
-        super.save(tCompound);
+        super.saveAdditional(tCompound);
         tCompound.putBoolean("isRedstonePowered", isRedstonePowered);
 
         writeToPacketNBT(tCompound);
-        return  tCompound;
     }
 
     /**
@@ -77,11 +76,11 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
      * 
      * @param tCompound
      */
-    protected void writeToPacketNBT(CompoundNBT tCompound) {
+    protected void writeToPacketNBT(CompoundTag tCompound) {
         tCompound.putByte("outputtingRedstone", (byte) outputtingRedstone);
     }
 
-    protected void readFromPacketNBT(CompoundNBT tCompound) {
+    protected void readFromPacketNBT(CompoundTag tCompound) {
         outputtingRedstone = tCompound.getByte("outputtingRedstone");
         if (level != null)
             markForRenderUpdate();
@@ -89,21 +88,17 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.worldPosition, 3, this.getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        readFromPacketNBT(pkt.getTag());
-        handleUpdateTag(getBlockState(), pkt.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        if(pkt.getTag() != null) {
+            readFromPacketNBT(pkt.getTag());
+            handleUpdateTag(pkt.getTag());
+        }
     }
-
-    @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
-    }
-
 
     protected void sendUpdatePacket() {
 
@@ -126,21 +121,21 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
      * ************** ADDED FUNCTIONS ****************
      */
 
-    public void onBlockNeighbourChanged() {
+    public static void setChanged(Level level, BlockPos pos, BlockState state, TileBase blockEntity) {
 
-        checkRedstonePower();
+        checkRedstonePower(level, pos, state, blockEntity);
     }
 
     /**
      * Checks if redstone has changed.
      */
-    public void checkRedstonePower() {
+    public static void checkRedstonePower(Level level, BlockPos pos, BlockState state, TileBase blockEntity) {
 
-        boolean isIndirectlyPowered = (getLevel().getBestNeighborSignal(worldPosition) != 0);
-        if (isIndirectlyPowered && !getIsRedstonePowered()) {
-            redstoneChanged(true);
-        } else if (getIsRedstonePowered() && !isIndirectlyPowered) {
-            redstoneChanged(false);
+        boolean isIndirectlyPowered = (level.getBestNeighborSignal(pos) != 0);
+        if (isIndirectlyPowered && !blockEntity.getIsRedstonePowered()) {
+            blockEntity.redstoneChanged(true);
+        } else if (blockEntity.getIsRedstonePowered() && !isIndirectlyPowered) {
+            blockEntity.redstoneChanged(false);
         }
     }
 
@@ -204,12 +199,12 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
     }
 
     /**
-     * Gets called when the TileEntity ticks for the first time, the world is accessible and updateEntity() has not been ran yet
+     * Gets called when the BlockEntity ticks for the first time, the world is accessible and updateEntity() has not been ran yet
      */
-    protected void onTileLoaded() {
+    protected static void onTileLoaded(Level level, BlockPos pos, BlockState state, TileBase blockEntity) {
 
         if (level != null && !level.isClientSide)
-            onBlockNeighbourChanged();
+            setChanged(level, pos, state, blockEntity);
     }
 
     public NonNullList<ItemStack> getDrops() {
@@ -241,11 +236,11 @@ public class TileBase extends TileEntity implements IRotatable, ITickableTileEnt
         return false;
     }
 
-    @Override
-    public void tick() {
-        if (ticker == 0) {
-            onTileLoaded();
+    public static void tickTileBase(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        TileBase tileBase = (TileBase)blockEntity;
+        if (tileBase.ticker == 0) {
+            onTileLoaded(level, pos, state, tileBase);
         }
-        ticker++;
+        tileBase.ticker++;
     }
 }

@@ -2,11 +2,11 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 
 public class BlockRubberLog extends RotatedPillarBlock {
     public BlockRubberLog(Properties properties){
@@ -17,7 +17,7 @@ public class BlockRubberLog extends RotatedPillarBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(AXIS);
     }
 

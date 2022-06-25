@@ -9,7 +9,7 @@ package dan200.computercraft.api.turtle;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -36,7 +36,7 @@ public interface ITurtleAccess
     /**
      * TODO: Document me
      */
-    public boolean teleportTo( World world, int x, int y, int z );
+    public boolean teleportTo( Level world, int x, int y, int z );
 
 	/**
 	 * Returns a vector containing the floating point co-ordinates at which the turtle is rendered.
@@ -75,7 +75,7 @@ public interface ITurtleAccess
     /**
      * TODO: Document me
      */
-    public IInventory getInventory();
+    public Container getInventory();
 
     /**
      * TODO: Document me

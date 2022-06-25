@@ -19,25 +19,28 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier1.TileProjectTable;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.ISidedInventoryProvider;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.WorldlyContainerHolder;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 
-public class BlockProjectTable extends BlockContainerBase implements ISidedInventoryProvider {
+public class BlockProjectTable extends BlockContainerBase implements WorldlyContainerHolder {
 
     public BlockProjectTable() {
-        super(Material.WOOD, TileProjectTable.class);
+        super(Material.WOOD, TileProjectTable.class, BPBlockEntityType.PROJECT_TABLE);
         setRegistryName(Refs.MODID, Refs.PROJECTTABLE_NAME);
     }
 
-    public BlockProjectTable(Class<? extends TileBase> tileClass) {
-        super(Material.WOOD, tileClass);
+    public BlockProjectTable(Class<? extends TileBase> tileClass, BlockEntityType<? extends TileBase> type) {
+        super(Material.WOOD, tileClass, type);
     }
 
     @Override
@@ -46,7 +49,7 @@ public class BlockProjectTable extends BlockContainerBase implements ISidedInven
     }
 
     @Override
-    public ISidedInventory getContainer(BlockState state, IWorld world, BlockPos pos) {
+    public WorldlyContainer getContainer(BlockState state, LevelAccessor world, BlockPos pos) {
         return ((TileProjectTable)world.getBlockEntity(pos));
     }
 }

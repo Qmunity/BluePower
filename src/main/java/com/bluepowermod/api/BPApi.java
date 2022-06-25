@@ -8,9 +8,9 @@
 package com.bluepowermod.api;
 
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
 
 /**
@@ -30,19 +30,19 @@ public class BPApi {
 
     public static interface IBPApi {
 
-        // public IPneumaticTube getPneumaticTube(TileEntity te);
+        // public IPneumaticTube getPneumaticTube(BlockEntity te);
 
         public AlloyFurnaceRegistry getAlloyFurnaceRegistry();
 
         /**
-         * Should be called by an Block#onBlockAdded that implements ISilkyRemovable. It will get the TileEntity and load the tag "tileData" stored in
+         * Should be called by an Block#onBlockAdded that implements ISilkyRemovable. It will get the BlockEntity and load the tag "tileData" stored in
          * the supplied itemstack.
          *
          * @param world
          * @param pos
          * @param stack
          */
-        public void loadSilkySettings(World world, BlockPos pos, ItemStack stack);
+        public void loadSilkySettings(Level world, BlockPos pos, ItemStack stack);
 
     }
 

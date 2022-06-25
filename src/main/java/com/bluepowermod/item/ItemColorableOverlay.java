@@ -9,13 +9,8 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IBPColoredItem;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * @author MineMaarten
@@ -24,15 +19,13 @@ public class ItemColorableOverlay extends ItemBase implements IBPColoredItem {
 
     private final MinecraftColor color;
 
-    public ItemColorableOverlay(String name, Properties properties) {
+    public ItemColorableOverlay(Properties properties) {
         super(properties);
         this.color = MinecraftColor.NONE;
-        setRegistryName(Refs.MODID + ":" + name);
     }
-    public ItemColorableOverlay(MinecraftColor color, String name, Properties properties) {
+    public ItemColorableOverlay(MinecraftColor color, Properties properties) {
         super(properties);
         this.color = color;
-        setRegistryName(Refs.MODID + ":" + name + "_" + color.name().toLowerCase());
     }
 
     @Override

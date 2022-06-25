@@ -11,21 +11,22 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.tile.tier1.TileLamp;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.Random;
  * @author Koen Beckers (K4Unl)
  *
  */
-public class BlockLamp extends BlockBase implements IBPColoredBlock{
+public class BlockLamp extends BlockBase implements IBPColoredBlock, EntityBlock {
 
     public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 15);
 
@@ -53,24 +54,19 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
         setRegistryName(name + (isInverted ? "inverted" : "") + "_"+ (color == MinecraftColor.NONE ? "rgb" : color.name().toLowerCase()));
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileLamp();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileLamp(pos, state);
     }
 
     @Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
         return state.getValue(POWER);
     }
 
     @Override
-    public int getColor(BlockState state, IBlockReader w, BlockPos pos, int tint) {
+    public int getColor(BlockState state, BlockGetter w, BlockPos pos, int tint) {
         return color.getHex();
     }
 
@@ -84,17 +80,17 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     }
 
     @Override
-    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
+    public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return !(world.getBlockState(pos).getBlock() instanceof BlockLampRGB) && super.canConnectRedstone(state, world, pos, side);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(POWER);
     }
 
     @Nullable
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         int redstoneValue = context.getLevel().getBestNeighborSignal(context.getClickedPos());
         if(isInverted){redstoneValue = 15 - redstoneValue;}
         return this.defaultBlockState().setValue(POWER, redstoneValue);
@@ -108,7 +104,7 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
         if(tick <= 1){
             int redstoneValue = world.getBestNeighborSignal(pos);
             if(isInverted){redstoneValue = 15 - redstoneValue;}
@@ -118,7 +114,7 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock{
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
         int redstoneValue = world.getBestNeighborSignal(pos);
         if(isInverted){redstoneValue = 15 - redstoneValue;}

@@ -17,27 +17,26 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import com.bluepowermod.tile.tier1.TileDeployer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * @author MineMaarten
  */
-public class ContainerDeployer extends Container {
+public class ContainerDeployer extends AbstractContainerMenu {
     
-    private final IInventory deployer;
+    private final Container deployer;
 
-    public ContainerDeployer(int windowId, PlayerInventory invPlayer, IInventory inventory) {
-        super(BPContainerType.DEPLOYER, windowId);
+    public ContainerDeployer(int windowId, Inventory invPlayer, Container inventory) {
+        super(BPMenuType.DEPLOYER, windowId);
         this.deployer = inventory;
         
         for (int i = 0; i < 3; ++i) {
@@ -48,12 +47,12 @@ public class ContainerDeployer extends Container {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerDeployer( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( TileDeployer.SLOTS ));
+    public ContainerDeployer( int id, Inventory player )    {
+        this( id, player, new SimpleContainer( TileDeployer.SLOTS ));
     }
 
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
     
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -70,13 +69,13 @@ public class ContainerDeployer extends Container {
     }
     
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
     
         return deployer.stillValid(player);
     }
     
     @Override
-    public ItemStack quickMoveStack(PlayerEntity par1EntityPlayer, int par2) {
+    public ItemStack quickMoveStack(Player par1EntityPlayer, int par2) {
     
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) slots.get(par2);

@@ -19,19 +19,19 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerBuffer;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
-public class GuiBuffer extends GuiContainerBaseBP<ContainerBuffer> implements IHasContainer<ContainerBuffer> {
+public class GuiBuffer extends GuiContainerBaseBP<ContainerBuffer> implements MenuAccess<ContainerBuffer> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/buffer.png");
 
-    public GuiBuffer(ContainerBuffer container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiBuffer(ContainerBuffer container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         imageHeight = 186;
     }

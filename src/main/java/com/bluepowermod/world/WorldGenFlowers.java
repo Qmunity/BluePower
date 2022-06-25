@@ -3,56 +3,44 @@ package com.bluepowermod.world;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
-import net.minecraft.world.gen.blockstateprovider.WeightedBlockStateProvider;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 
 public class WorldGenFlowers {
 
-    public static void initFlowers(){
-        for(Biome biome : ForgeRegistries.BIOMES) {
-            int n = getConfigAmount(biome.getRegistryName());
-            if(n > 0) {
-                BlockClusterFeatureConfig featureConfig = (new BlockClusterFeatureConfig.Builder((new WeightedBlockStateProvider()).add(BPBlocks.indigo_flower.defaultBlockState(), 2), new SimpleBlockPlacer())).tries(64).build();
-                Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "bluepower:" + Refs.INDIGOFLOWER_NAME + n, Feature.FLOWER.configured(featureConfig).decorated(Features.Placements.ADD_32).decorated(Features.Placements.HEIGHTMAP).chance(n));
-            }
-        }
+    public static void registerFlowers(RegistryEvent.Register<Feature<?>> event) {
+        ConfiguredFeature<?, ?> feature = Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, "bluepower:" + Refs.INDIGOFLOWER_NAME,
+                new ConfiguredFeature<>(Feature.FLOWER, new RandomPatchConfiguration(2, 2, 2,PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BPBlocks.indigo_flower)))))
+        );
+        PlacementUtils.register("bluepower:" + Refs.INDIGOFLOWER_NAME, Holder.direct(feature), RarityFilter.onAverageOnceEvery(BPConfig.CONFIG.flowerSpawnChance.get()/2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome());
     }
 
     @SubscribeEvent
     public void onBiomeLoad(BiomeLoadingEvent event){
-        int n = getConfigAmount(event.getName());
-        if(n > 0) {
+        if(event.getName() != null && event.getName().toString().contains("forest")){
             BiomeGenerationSettingsBuilder generation = event.getGeneration();
-            ConfiguredFeature<?,?> feature = WorldGenRegistries.CONFIGURED_FEATURE.get(new ResourceLocation("bluepower:" + Refs.INDIGOFLOWER_NAME + n));
-            if(feature != null)
-                generation.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, feature);
+            PlacedFeature feature = BuiltinRegistries.PLACED_FEATURE.get(new ResourceLocation("bluepower:" + Refs.INDIGOFLOWER_NAME));
+            if(feature != null && BPConfig.CONFIG.flowerSpawnChance.get() > 0)
+                generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, Holder.direct(feature));
         }
-    }
-
-    static int getConfigAmount(ResourceLocation biome){
-        int n = 0;
-        if (biome.equals(Biomes.BIRCH_FOREST.getRegistryName()))
-            n = BPConfig.CONFIG.flowerSpawnChance.get();
-        else if (biome.equals(Biomes.BIRCH_FOREST_HILLS.getRegistryName()))
-            n = BPConfig.CONFIG.flowerSpawnChance.get();
-        else if (biome.equals(Biomes.PLAINS.getRegistryName()))
-            n = BPConfig.CONFIG.flowerSpawnChance.get();
-        else if (biome.equals(Biomes.FOREST.getRegistryName()))
-            n = 2 * BPConfig.CONFIG.flowerSpawnChance.get();
-        else if (biome.equals(Biomes.DARK_FOREST.getRegistryName()))
-            n = 2 * BPConfig.CONFIG.flowerSpawnChance.get();
-        return n;
     }
 
 }

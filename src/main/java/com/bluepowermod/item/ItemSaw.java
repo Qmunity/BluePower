@@ -20,28 +20,25 @@ package com.bluepowermod.item;
 import java.util.Random;
 
 import com.bluepowermod.reference.Refs;
-import net.minecraft.item.ItemStack;
-
 import com.bluepowermod.init.BPCreativeTabs;
+
+import net.minecraft.world.item.ItemStack;
 
 public class ItemSaw extends ItemBase{
 
     private final int sawLevel;
 
-    public ItemSaw(int sawLevel, String name) {
+    public ItemSaw(int sawLevel) {
         super(new Properties().stacksTo(1).durability(1 << sawLevel + 8), BPCreativeTabs.tools);
-        setRegistryName(Refs.MODID + ":" + name);
         this.sawLevel = sawLevel;
     }
 
     public int getSawLevel() {
-
         return sawLevel;
     }
 
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
-
         ItemStack container = itemStack.copy();
         container.hurt(1, new Random(), null);
         return container;
@@ -49,7 +46,6 @@ public class ItemSaw extends ItemBase{
 
     @Override
     public boolean hasContainerItem(ItemStack stack) {
-
         return true;
     }
 }

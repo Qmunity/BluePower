@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "bluepower:tungsten_ore"
+    "bluepower:tungsten_ore",
+    "bluepower:tungsten_deepslate"
   ]
 }

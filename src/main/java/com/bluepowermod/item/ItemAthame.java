@@ -18,44 +18,43 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.helper.BPItemTier;
+import com.bluepowermod.helper.GemItemTier;
+import com.bluepowermod.helper.SilverItemTier;
 import com.bluepowermod.init.BPCreativeTabs;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.DamageSource;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemAthame extends SwordItem {
     
-    private float               damageDealt;
-    private static IItemTier athameMaterial = new BPItemTier(100, 6.0F, 2.0F, 0, 10, Ingredient.of(BPItems.silver_ingot));
+    private float damageDealt;
+    private static Tier athameMaterial = new SilverItemTier(100, 6.0F, 2.0F, 0, 10);
     
     public ItemAthame() {
         super(athameMaterial, 1, -3, new Properties().tab(BPCreativeTabs.tools));
-        this.setRegistryName(Refs.MODID + ":" + Refs.ATHAME_NAME);
-        BPItems.itemList.add(this);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new StringTextComponent(MinecraftColor.PURPLE.getChatColor())
-                .append(new TranslationTextComponent("item." + Refs.MODID + "." + Refs.ATHAME_NAME + ".info")) );
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        tooltip.add(new TextComponent(MinecraftColor.PURPLE.getChatColor())
+                .append(new TranslatableComponent("item." + Refs.MODID + "." + Refs.ATHAME_NAME + ".info")) );
     }
 
     public float getDamageDealt() {
@@ -66,16 +65,16 @@ public class ItemAthame extends SwordItem {
     public boolean hurtEnemy(ItemStack stack, LivingEntity entity, LivingEntity player) {
     
         this.damageDealt = athameMaterial.getAttackDamageBonus();
-        if ((entity instanceof EndermanEntity) || (entity instanceof EnderDragonEntity)) {
+        if ((entity instanceof EnderMan) || (entity instanceof EnderDragon)) {
             this.damageDealt += 18.0F;
         }
-        entity.hurt(DamageSource.playerAttack((PlayerEntity) player), this.damageDealt);
+        entity.hurt(DamageSource.playerAttack((Player) player), this.damageDealt);
         return super.hurtEnemy(stack, entity, player);
     }
 
     @Override
     public boolean isValidRepairItem(ItemStack is1, ItemStack is2) {
 
-        return ((is1.getItem() == this || is2.getItem() == this) && (is1.getItem() == BPItems.silver_ingot || is2.getItem() == BPItems.silver_ingot));
+        return ((is1.getItem() == this || is2.getItem() == this) && (is1.getItem() == BPItems.silver_ingot.get() || is2.getItem() == BPItems.silver_ingot.get()));
     }
 }

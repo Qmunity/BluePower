@@ -13,23 +13,26 @@ import com.bluepowermod.container.ContainerSortingMachine;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -40,7 +43,7 @@ import java.util.List;
  * @author MineMaarten
  */
 
-public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, INamedContainerProvider {
+public class TileSortingMachine extends TileMachineBase implements WorldlyContainer, IGuiButtonSensitive, MenuProvider {
 
     public int curColumn = 0;
     public PullMode pullMode = PullMode.SINGLE_STEP;
@@ -55,20 +58,20 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     // tick.
 
-    public TileSortingMachine() {
-        super(BPTileEntityType.SORTING_MACHINE);
+    public TileSortingMachine(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.SORTING_MACHINE, pos, state);
         for (int i = 0; i < colors.length; i++)
             colors[i] = TubeColor.NONE;
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.SORTING_MACHINE_NAME);
+    public Component getDisplayName() {
+        return new TextComponent(Refs.SORTING_MACHINE_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player playerEntity) {
         return new ContainerSortingMachine(id, inventory, this);
     }
 
@@ -107,18 +110,17 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         }
     }
 
-    @Override
-    public void tick() {
+    public static void tickSorting(Level level, BlockPos pos, BlockState state, TileSortingMachine tileSortingMachine) {
 
-        nonAcceptedStack = ItemStack.EMPTY;
-        super.tick();
-        if (!sweepTriggered && savedPulses > 0) {
-            savedPulses--;
-            sweepTriggered = true;
+        tileSortingMachine.nonAcceptedStack = ItemStack.EMPTY;
+        TileBase.tickTileBase(level, pos, state, tileSortingMachine);
+        if (!tileSortingMachine.sweepTriggered && tileSortingMachine.savedPulses > 0) {
+            tileSortingMachine.savedPulses--;
+            tileSortingMachine.sweepTriggered = true;
         }
         if (!level.isClientSide && level.getGameTime() % TileMachineBase.BUFFER_EMPTY_INTERVAL == 0
-                && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
-            triggerSorting();
+                && (tileSortingMachine.pullMode == PullMode.SINGLE_SWEEP && tileSortingMachine.sweepTriggered || tileSortingMachine.pullMode == PullMode.AUTOMATIC)) {
+            tileSortingMachine.triggerSorting();
         }
 
     }
@@ -139,13 +141,13 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     private void triggerSorting() {
 
             Direction dir = getOutputDirection().getOpposite();
-            TileEntity inputTE = getTileCache(dir);// might need opposite
+            BlockEntity inputTE = getTileCache(dir);// might need opposite
 
-            if (inputTE instanceof IInventory) {
-                IInventory inputInv = (IInventory) inputTE;
+            if (inputTE instanceof Container) {
+                Container inputInv = (Container) inputTE;
                 int[] accessibleSlots;
-                if (inputInv instanceof ISidedInventory) {
-                    accessibleSlots = ((ISidedInventory) inputInv).getSlotsForFace(dir.getOpposite());
+                if (inputInv instanceof WorldlyContainer) {
+                    accessibleSlots = ((WorldlyContainer) inputInv).getSlotsForFace(dir.getOpposite());
                 } else {
                     accessibleSlots = new int[inputInv.getContainerSize()];
                     for (int i = 0; i < accessibleSlots.length; i++)
@@ -188,7 +190,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public void onButtonPress(PlayerEntity player, int messageId, int value) {
+    public void onButtonPress(Player player, int messageId, int value) {
 
         if (messageId < 0)
             return;
@@ -204,7 +206,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         }
     }
 
-    private boolean matchAndProcessColumn(IInventory inputInventory, int[] accessibleSlots, int column) {
+    private boolean matchAndProcessColumn(Container inputInventory, int[] accessibleSlots, int column) {
 
         List<ItemStack> requirements = new ArrayList<ItemStack>();
         for (int i = 0; i < 5; i++) {
@@ -349,9 +351,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
 
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
+    protected void saveAdditional(CompoundTag tag) {
 
-        super.save(tag);
+        super.saveAdditional(tag);
 
         tag.putByte("pullMode", (byte) pullMode.ordinal());
         tag.putByte("sortMode", (byte) sortMode.ordinal());
@@ -365,23 +367,22 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
         tag.putIntArray("fuzzySettings", fuzzySettings);
 
-        ListNBT tagList = new ListNBT();
+        ListTag tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
             if (!inventory.get(currentIndex).isEmpty()) {
-                CompoundNBT tagCompound = new CompoundNBT();
+                CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
                 inventory.get(currentIndex).save(tagCompound);
                 tagList.add(tagCompound);
             }
         }
         tag.put("Items", tagList);
-        return tag;
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag) {
+    public void load(CompoundTag tag) {
 
-        super.load(state, tag);
+        super.load(tag);
 
         pullMode = PullMode.values()[tag.getByte("pullMode")];
         sortMode = SortMode.values()[tag.getByte("sortMode")];
@@ -395,10 +396,10 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         if (tag.contains("fuzzySettings"))
             fuzzySettings = tag.getIntArray("fuzzySettings");
 
-        ListNBT tagList = tag.getList("Items", 10);
+        ListTag tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(40, ItemStack.EMPTY);
         for (int i = 0; i < tagList.size(); ++i) {
-            CompoundNBT tagCompound = tagList.getCompound(i);
+            CompoundTag tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
                 inventory.set(slot, ItemStack.of(tagCompound));
@@ -475,16 +476,16 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 

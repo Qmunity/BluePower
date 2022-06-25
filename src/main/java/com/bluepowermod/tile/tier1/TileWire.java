@@ -4,13 +4,15 @@ import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.block.machine.BlockAlloyWire;
 import com.bluepowermod.client.render.IBPColoredBlock;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
@@ -25,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TileWire extends TileBase {
-    private IRedstoneDevice device;
+    private final IRedstoneDevice device = new RedstoneStorage();
     @Nullable
     private BlockState cachedBlockState;
     private LazyOptional<IRedstoneDevice> redstoneCap;
@@ -33,12 +35,12 @@ public class TileWire extends TileBase {
     public static final ModelProperty<Pair<Integer, Integer>> COLOR_INFO = new ModelProperty<>();
     public static final ModelProperty<Boolean> LIGHT_INFO = new ModelProperty<>();
 
-    public TileWire() {
-        super(BPTileEntityType.WIRE);
+    public TileWire(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.WIRE, pos, state);
     }
 
-    public TileWire(TileEntityType type) {
-        super(type);
+    public TileWire(BlockEntityType type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
 
@@ -55,24 +57,19 @@ public class TileWire extends TileBase {
     }
 
     @Override
-    protected void readFromPacketNBT(CompoundNBT compound) {
+    protected void readFromPacketNBT(CompoundTag compound) {
         super.readFromPacketNBT(compound);
-        //if(compound.contains("device")) {
-        //    INBT nbtstorage = compound.get("device");
-        //    CapabilityRedstoneDevice.UNINSULATED_CAPABILITY.getStorage().readNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null, nbtstorage);
-        //}
+        if(compound.contains("device")) {
+            Tag nbtstorage = compound.get("device");
+            IRedstoneDevice.readNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null, nbtstorage);
+        }
     }
 
     @Override
-    protected void writeToPacketNBT(CompoundNBT tCompound) {
+    protected void writeToPacketNBT(CompoundTag tCompound) {
         super.writeToPacketNBT(tCompound);
-        //INBT nbtstorage = CapabilityRedstoneDevice.UNINSULATED_CAPABILITY.getStorage().writeNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null);
-        //tCompound.put("device", nbtstorage);
-    }
-
-    @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
+        Tag nbtstorage = IRedstoneDevice.writeNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null);
+        tCompound.put("device", nbtstorage);
     }
 
     @Nonnull
@@ -94,7 +91,7 @@ public class TileWire extends TileBase {
                 //Make sure the cable is the same color or none
                 //if(device.getInsulationColor(null) != MinecraftColor.NONE)
                     //directions.removeIf(d -> {
-                        //TileEntity tile = world.getBlockEntity(worldPosition.relative(d));
+                        //BlockEntity tile = world.getBlockEntity(worldPosition.relative(d));
                         //return tile instanceof TileWire
                                 //&& !(((TileWire) tile).device.getInsulationColor(d) == device.getInsulationColor(d.getOpposite())
                                 //|| ((TileWire) tile).device.getInsulationColor(d) == MinecraftColor.NONE);
@@ -111,7 +108,7 @@ public class TileWire extends TileBase {
     }
 
     @Override
-    protected void invalidateCaps(){
+    public void invalidateCaps(){
         super.invalidateCaps();
         if( redstoneCap != null )
         {

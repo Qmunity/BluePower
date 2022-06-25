@@ -2,10 +2,10 @@ package com.bluepowermod.container.inventory;
 
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageCraftingSync;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
@@ -14,13 +14,13 @@ import javax.annotation.Nonnull;
 /**
  *@author MoreThanHidden
  **/
-public class InventoryProjectTableCrafting extends CraftingInventory {
+public class InventoryProjectTableCrafting extends CraftingContainer {
 
     private final int length;
-    private final IInventory projectTable;
-    private final Container eventHandler;
+    private final Container projectTable;
+    private final AbstractContainerMenu eventHandler;
 
-    public InventoryProjectTableCrafting(Container eventHandlerIn, IInventory projectTable, int width, int height) {
+    public InventoryProjectTableCrafting(AbstractContainerMenu eventHandlerIn, Container projectTable, int width, int height) {
         super(eventHandlerIn, width, height);
         this.length = width * height;
         this.projectTable = projectTable;

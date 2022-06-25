@@ -21,25 +21,26 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import com.google.common.collect.Sets;
-import net.minecraft.block.*;
-import net.minecraft.block.BushBlock;
-import net.minecraft.block.LilyPadBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.util.Set;
 
-public class ItemSickle extends ToolItem {
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+
+public class ItemSickle extends DiggerItem {
 
     private Item customCraftingMaterial;
 
@@ -47,11 +48,9 @@ public class ItemSickle extends ToolItem {
             Blocks.NETHER_WART, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.SUGAR_CANE, Blocks.TALL_GRASS, Blocks.VINE, Blocks.LILY_PAD,
             BlockTags.SMALL_FLOWERS);
 
-    public ItemSickle(IItemTier itemTier, String name, Item repairItem) {
-        super(2,-1.4F, itemTier, toolBlocks, new Properties().tab(BPCreativeTabs.tools));
-        this.setRegistryName(Refs.MODID + ":" + name);
+    public ItemSickle(Tier itemTier, Item repairItem) {
+        super(2,-1.4F, itemTier, BlockTags.MINEABLE_WITH_HOE, new Properties().tab(BPCreativeTabs.tools));
         this.customCraftingMaterial = repairItem;
-        BPItems.itemList.add(this);
     }
 
     @Override
@@ -63,19 +62,18 @@ public class ItemSickle extends ToolItem {
     }
 
     @Override
-    public boolean mineBlock(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
 
         boolean used = false;
 
-        if (!(entityLiving instanceof PlayerEntity)) return false;
-        PlayerEntity player = (PlayerEntity) entityLiving;
+        if (!(entityLiving instanceof Player player)) return false;
 
-        if (state.getBlock().getTags().contains(new ResourceLocation("minecraft:leaves")) || state.getBlock() instanceof  LeavesBlock) {
+        if ( state.is(BlockTags.LEAVES) || state.getBlock() instanceof LeavesBlock) {
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     for (int k = -1; k <= 1; k++) {
                         BlockState blockToCheck = world.getBlockState(pos.offset(i,j,k));
-                        if (blockToCheck.getBlock().getTags().contains(new ResourceLocation("minecraft:leaves")) || blockToCheck.getBlock() instanceof LeavesBlock) {
+                        if (blockToCheck.is(BlockTags.LEAVES) || blockToCheck.getBlock() instanceof LeavesBlock) {
                             if (blockToCheck.canHarvestBlock(world, pos.offset(i,j,k), player)) {
                                 world.destroyBlock(pos.offset(i,j,k), true);
                             }
@@ -86,17 +84,17 @@ public class ItemSickle extends ToolItem {
             }
             if (used) {
                 stack.hurtAndBreak(1, player, (playerEntity) ->
-                        playerEntity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+                        playerEntity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
             }
             return used;
         }
 
-        if ((state.getBlock() instanceof LilyPadBlock)) {
+        if ((state.getBlock() instanceof WaterlilyBlock)) {
             for (int i = -2; i <= 2; i++) {
                 for (int j = -2; j <= 2; j++) {
                     Block blockToCheck = world.getBlockState(pos.offset(i,0,j)).getBlock();
                     BlockState meta = world.getBlockState(pos.offset(i,0,j));
-                    if (blockToCheck instanceof LilyPadBlock) {
+                    if (blockToCheck instanceof WaterlilyBlock) {
                         if (blockToCheck.canHarvestBlock(meta, world, pos.offset(i,0,j), player)) {
                             world.destroyBlock(pos.offset(i,0,j), true);
                         }
@@ -106,11 +104,11 @@ public class ItemSickle extends ToolItem {
             }
         }
 
-        if (!(state.getBlock() instanceof LilyPadBlock)) {
+        if (!(state.getBlock() instanceof WaterlilyBlock)) {
             for (int i = -2; i <= 2; i++) {
                 for (int j = -2; j <= 2; j++) {
                     Block blockToCheck = world.getBlockState(pos.offset(i,0,j)).getBlock();
-                    if (blockToCheck instanceof BushBlock && !(blockToCheck instanceof LilyPadBlock)) {
+                    if (blockToCheck instanceof BushBlock && !(blockToCheck instanceof WaterlilyBlock)) {
                         if (blockToCheck.canHarvestBlock(world.getBlockState(pos.offset(i,0,j)), world,  pos.offset(i,0,j), player)) {
                             world.destroyBlock(pos.offset(i,0,j), true);
                         }
@@ -122,7 +120,7 @@ public class ItemSickle extends ToolItem {
 
         if (used) {
             stack.hurtAndBreak(1, player, (playerEntity) ->
-                    playerEntity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+                    playerEntity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         }
         return used;
     }

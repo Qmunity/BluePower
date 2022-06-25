@@ -11,34 +11,37 @@ import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.util.AABBUtils;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
 /**
  * @author MoreThanHidden
  */
-public class BlockGateBase extends BlockBase implements IWaterLoggable {
+public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
 
     private final String name;
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -62,14 +65,14 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(FACING, ROTATION, POWERED_BACK, POWERED_FRONT, POWERED_LEFT, POWERED_RIGHT, WATERLOGGED);
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
-            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
+            worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
         return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
@@ -80,25 +83,25 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return AABBUtils.rotate(Refs.GATE_AABB, state.getValue(FACING));
     }
 
     @Override
-    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
+    public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return state.getValue(FACING) != side && (state.getValue(FACING).getOpposite() != side);
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         Direction face = context.getClickedFace();
         return this.defaultBlockState().setValue(ROTATION, context.getHorizontalDirection().getOpposite().get2DDataValue()).setValue(FACING, face).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
         super.setPlacedBy(world, pos, state, entity, stack);
         Map<String, Byte> map = getSidePower(world, state, pos);
         world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get("front") > 0)
@@ -113,7 +116,7 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side){
+    public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side){
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
         if(side == dirs[blockState.getValue(ROTATION)]) {
             Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
@@ -123,7 +126,7 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    public int getDirectSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+    public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
         if(side == dirs[blockState.getValue(ROTATION)]) {
             Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
@@ -132,7 +135,7 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
         return 0;
     }
 
-    private Map<String, Byte> getSidePower(IBlockReader worldIn, BlockState state, BlockPos pos){
+    private Map<String, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos){
          Map<String, Byte> map = new HashMap<>();
          Direction[] dirs = DirectionHelper.ArrayFromDirection(state.getValue(FACING));
          Direction side_left = dirs[state.getValue(ROTATION) == 3 ? 0 : state.getValue(ROTATION) + 1];
@@ -147,9 +150,9 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
          byte left = (byte) state_left.getSignal(worldIn, pos_left, side_right);
          byte right = (byte) state_right.getSignal(worldIn, pos_right, side_left);
          byte back = (byte) state_back.getSignal(worldIn, pos_back, side_back.getOpposite());
-         if(state_left.getBlock() instanceof RedstoneWireBlock){left = state_left.getValue(RedstoneWireBlock.POWER).byteValue();}
-         if(state_right.getBlock() instanceof RedstoneWireBlock){right = state_right.getValue(RedstoneWireBlock.POWER).byteValue();}
-         if(state_back.getBlock() instanceof RedstoneWireBlock){back = state_back.getValue(RedstoneWireBlock.POWER).byteValue();}
+         if(state_left.getBlock() instanceof RedStoneWireBlock){left = state_left.getValue(RedStoneWireBlock.POWER).byteValue();}
+         if(state_right.getBlock() instanceof RedStoneWireBlock){right = state_right.getValue(RedStoneWireBlock.POWER).byteValue();}
+         if(state_back.getBlock() instanceof RedStoneWireBlock){back = state_back.getValue(RedStoneWireBlock.POWER).byteValue();}
          map.put("left", left);
          map.put("right", right);
          map.put("back", back);
@@ -166,7 +169,7 @@ public class BlockGateBase extends BlockBase implements IWaterLoggable {
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
         if(!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isCollisionShapeFullBlock(world,pos.relative(state.getValue(FACING).getOpposite()))) {
             world.destroyBlock(pos, true);

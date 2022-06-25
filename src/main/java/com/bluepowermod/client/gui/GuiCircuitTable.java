@@ -7,13 +7,13 @@
  */
 package com.bluepowermod.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,7 +21,7 @@ import com.bluepowermod.container.ContainerCircuitTable;
 import com.bluepowermod.reference.Refs;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> implements IHasContainer<ContainerCircuitTable> {
+public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> implements MenuAccess<ContainerCircuitTable> {
 
     protected static final ResourceLocation guiTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_table.png");
     private static final ResourceLocation scrollTexture = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
@@ -37,7 +37,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
      * True if the left mouse button was held down last time drawScreen was called.
      */
     private boolean wasClicking;
-    private TextFieldWidget searchField;
+    private EditBox searchField;
     private final boolean firstRun = true;
     private int ticksExisted;
 
@@ -49,7 +49,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
 
     private final boolean[] displayRed = new boolean[24];
 
-    public GuiCircuitTable(ContainerCircuitTable container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiCircuitTable(ContainerCircuitTable container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, guiTexture);
         imageHeight = 224;
         this.circuitTable = container;
@@ -62,7 +62,8 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
     public void init() {
 
         super.init();
-        buttons.clear();
+        //Todo 1.17
+        //buttons.clear();
         //Keyboard.enableRepeatEvents(true);
         //searchField = new TextFieldWidget(0, font, leftPos + 8, topPos + 20, 89, font.FONT_HEIGHT);
         //searchField.setMaxStringLength(15);
@@ -122,7 +123,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
     @Override
-    protected void renderBg(MatrixStack matrixStack, float par1, int par2, int par3) {
+    protected void renderBg(PoseStack matrixStack, float par1, int par2, int par3) {
 
         super.renderBg(matrixStack, par1, par2, par3);
         //if (isTextfieldEnabled())
@@ -131,7 +132,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
         int i1 = leftPos + 156;
         int k = topPos + 48;
         int l = k + 112;
-        this.minecraft.getTextureManager().bind(scrollTexture);
+        this.minecraft.getTextureManager().bindForSetup(scrollTexture);
          //blit(i1, k + (int) ((l - k - 17) * currentScroll), 232 + (needsScrollBars() ? 0 : 12), 0, 12, 15);
 
         for (int i = 0; i < 3; i++) {
@@ -143,14 +144,12 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
         }
     }
 
-    @Override
-    public void tick() {
-
-        super.tick();
-        for (int i = 0; i < 24; i++) {
+    //@Override
+    //public void m_181908_() {
+        //for (int i = 0; i < 24; i++) {
             //displayRed[i] = inventory.getItem(i).isEmpty() && shouldDisplayRed(inventory.getItem(i));
-        }
-    }
+        //}
+    //}
 
     //protected boolean shouldDisplayRed(ItemStack stack) {
 

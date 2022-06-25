@@ -8,10 +8,11 @@
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
+
 import java.util.function.Supplier;
 
 /**
@@ -29,13 +30,13 @@ public class MessageGuiUpdate{
         this.value = value;
     }
 
-    public static MessageGuiUpdate decode(PacketBuffer buffer){
+    public static MessageGuiUpdate decode(FriendlyByteBuf buffer){
         int id = buffer.readByte();
         int value = buffer.readByte();
         return new MessageGuiUpdate(id, value);
     }
 
-    public static void encode(MessageGuiUpdate message, PacketBuffer buffer) {
+    public static void encode(MessageGuiUpdate message, FriendlyByteBuf buffer) {
         buffer.writeByte(message.messageId);
         buffer.writeByte(message.value);
     }
@@ -43,12 +44,12 @@ public class MessageGuiUpdate{
     public static void handle(MessageGuiUpdate msg, Supplier<NetworkEvent.Context> contextSupplier) {
        NetworkEvent.Context context = contextSupplier.get();
         context.enqueueWork(() -> {
-            ServerPlayerEntity player = context.getSender();
+            ServerPlayer player = context.getSender();
             if (player == null) {
                 return;
             }
 
-            Container container = player.containerMenu;
+            AbstractContainerMenu container = player.containerMenu;
             if (container instanceof IGuiButtonSensitive) {
                 ((IGuiButtonSensitive) container).onButtonPress(player, msg.messageId, msg.value);
             }

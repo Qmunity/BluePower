@@ -17,33 +17,30 @@
 
 package com.bluepowermod.client.gui;
 
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.ITextComponent;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.network.chat.Component;
 
 /**
  * @author MineMaarten
  */
-public class GuiAlloyFurnace extends GuiContainerBaseBP<ContainerAlloyFurnace> implements IHasContainer<ContainerAlloyFurnace> {
+public class GuiAlloyFurnace extends GuiContainerBaseBP<ContainerAlloyFurnace> implements MenuAccess<ContainerAlloyFurnace> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/alloy_furnace.png");
     private final ContainerAlloyFurnace furnace;
 
-    public GuiAlloyFurnace(ContainerAlloyFurnace container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiAlloyFurnace(ContainerAlloyFurnace container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.furnace = container;
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY){
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY){
 
         super.renderBg(matrixStack, partialTicks, mouseX, mouseY);
 

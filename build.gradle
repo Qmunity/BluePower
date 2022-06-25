@@ -1,7 +1,7 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
         maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://files.minecraftforge.net/maven' }
         mavenCentral()
     }
     dependencies {
@@ -16,13 +16,13 @@ apply plugin: 'eclipse'
 
 project.ext {
     major = "0"
-    minor = "5"
+    minor = "6"
     if (System.getenv("CI_PIPELINE_IID") != null) {
         build = System.getenv("CI_PIPELINE_IID") + "-alpha"
     } else {
         build = "-custom"
     }
-    mcVersion = "1.16.5"
+    mcVersion = "1.18.2"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -31,21 +31,22 @@ archivesBaseName = "bluepower"
 
 repositories {
     maven {
-        name "JEI"
-        url "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
         url "https://www.cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
 }
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'parchment', version: '20210608-SNAPSHOT-1.16.5'
+    mappings channel: 'parchment', version: '2022.06.05-1.18.2'
 
     runs {
         client {
@@ -86,12 +87,12 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.2'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.51'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
-    compileOnly fg.deobf("curse.maven:jade-324717:3389762")
-    compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.107")
+    implementation fg.deobf("curse.maven:jade-324717:3681459")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.196:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.196")
 }
 
 jar {

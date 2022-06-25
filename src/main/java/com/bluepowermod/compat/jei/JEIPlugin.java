@@ -7,8 +7,6 @@
  */
 package com.bluepowermod.compat.jei;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.client.gui.GuiAlloyFurnace;
 import com.bluepowermod.client.gui.GuiBlulectricAlloyFurnace;
 import com.bluepowermod.client.gui.GuiBlulectricFurnace;
@@ -19,34 +17,40 @@ import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.util.ItemStackUtils;
-import mezz.jei.api.*;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.*;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
  * @author MoreThanHidden
  */
+
 @JeiPlugin
 public class JEIPlugin implements IModPlugin {
 
@@ -70,43 +74,43 @@ public class JEIPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registryIn) {
         registryIn.addRecipes(getRecipes(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE).stream().filter(recipe -> recipe instanceof AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe).collect(Collectors.toSet()), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
-        registryIn.addRecipes(getMicroblockRecipes(), VanillaRecipeCategoryUid.CRAFTING);
+        registryIn.addRecipes(RecipeTypes.CRAFTING, getMicroblockRecipes());
         registryIn.addRecipes(getRecyclingRecipes(), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
     }
 
-    private static List<IRecipe<?>> getRecipes(IRecipeType<?> recipeType) {
+    private static List<Recipe<?>> getRecipes(RecipeType<?> recipeType) {
         return Minecraft.getInstance().level.getRecipeManager().getRecipes().stream()
                 .filter(recipe -> recipe.getType() == recipeType)
                 .collect(Collectors.toList());
     }
 
-    private static List<IRecipe<?>> getMicroblockRecipes() {
-        List<IRecipe<?>> recipes = new ArrayList<>();
-        for (Block block : ForgeRegistries.BLOCKS.getValues().stream().filter(b -> !b.hasTileEntity(b.defaultBlockState())).collect(Collectors.toList())) {
+    private static List<CraftingRecipe> getMicroblockRecipes() {
+        List<CraftingRecipe> recipes = new ArrayList<>();
+        for (Block block : ForgeRegistries.BLOCKS.getValues().stream().filter(b -> !(b instanceof EntityBlock)).collect(Collectors.toList())) {
             VoxelShape shape = null;
             try{
                 shape = block.defaultBlockState().getShape(null, null);
             }catch (NullPointerException ignored){
                 //Shulker Boxes try to query the Tile Entity
             }
-            if(block.getRegistryName() != null && shape == VoxelShapes.block()) {
+            if(block.getRegistryName() != null && shape == Shapes.block()) {
                 ItemStack output = ItemStack.EMPTY;
                 for (Block mb : BPBlocks.microblocks){
                     NonNullList<Ingredient> input = NonNullList.create();
-                    input.add(Ingredient.of(ItemTags.createOptional(new ResourceLocation("bluepower:saw"))));
+                    input.add(Ingredient.of(ItemTags.create(new ResourceLocation("bluepower:saw"))));
                     if(mb == BPBlocks.half_block){
                         input.add(Ingredient.of(new ItemStack(block)));
                     }else{
                         input.add(Ingredient.of(output));
                     }
 
-                    CompoundNBT nbt = new CompoundNBT();
+                    CompoundTag nbt = new CompoundTag();
                     nbt.putString("block", block.getRegistryName().toString());
                     ItemStack stack = new ItemStack(mb);
                     stack.setTag(nbt);
-                    stack.setHoverName(new TranslationTextComponent(block.getDescriptionId())
-                            .append(new StringTextComponent(" "))
-                            .append(new TranslationTextComponent(mb.getDescriptionId())));
+                    stack.setHoverName(new TranslatableComponent(block.getDescriptionId())
+                            .append(new TextComponent(" "))
+                            .append(new TranslatableComponent(mb.getDescriptionId())));
                     output = stack;
                     recipes.add(new ShapelessRecipe(new ResourceLocation("bluepower:" + mb.getDescriptionId() + block.getDescriptionId()), "", output, input));
                 }
@@ -115,8 +119,9 @@ public class JEIPlugin implements IModPlugin {
         return recipes;
     }
 
-    private static List<IRecipe<?>> getRecyclingRecipes() {
-        List<IRecipe<?>> recipesList = new ArrayList<>();
+
+    private static List<Recipe<?>> getRecyclingRecipes() {
+        List<Recipe<?>> recipesList = new ArrayList<>();
 
         for (Map.Entry<Item, ItemStack> recipe : AlloyFurnaceRegistry.getInstance().recyclingRecipes.entrySet()) {
             recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe(new ResourceLocation("bluepower:" + recipe.getValue().getItem().getRegistryName().toString().replace(":", ".") + recipe.getKey().getRegistryName().toString().replace(":", ".")), "", recipe.getValue(), NonNullList.of(Ingredient.of(recipe.getKey()), Ingredient.of(recipe.getKey())), NonNullList.of(0, 1)));

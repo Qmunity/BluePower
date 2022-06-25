@@ -17,15 +17,15 @@
 
 package com.bluepowermod.container.slot;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class SlotMachineInput extends Slot {
 
-    IInventory inv;
+    Container inv;
 
-    public SlotMachineInput(IInventory _inv, int slotNum, int x, int y) {
+    public SlotMachineInput(Container _inv, int slotNum, int x, int y) {
         super(_inv, slotNum, x, y);
         inv = _inv;
     }

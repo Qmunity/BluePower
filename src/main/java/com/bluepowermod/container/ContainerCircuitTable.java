@@ -7,32 +7,33 @@
  */
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
-import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.*;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 
 //@ChestContainer
-public class ContainerCircuitTable extends Container {
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-    private final IInventory circuitTable;
-    public CraftingInventory craftMatrix;
+public class ContainerCircuitTable extends AbstractContainerMenu {
+
+    private final Container circuitTable;
+    public CraftingContainer craftMatrix;
     private int itemsCrafted;
     private boolean isRetrying = false;
     private int scrollState = -1;
 
-    public ContainerCircuitTable(int windowId, PlayerInventory invPlayer, IInventory inventory) {
-        super(BPContainerType.CIRCUIT_TABLE, windowId);
+    public ContainerCircuitTable(int windowId, Inventory invPlayer, Container inventory) {
+        super(BPMenuType.CIRCUIT_TABLE, windowId);
         this.circuitTable = inventory;
-        craftMatrix = new CraftingInventory(this, 5, 5);
+        craftMatrix = new CraftingContainer(this, 5, 5);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 8; ++j) {
                 addSlot(new SlotCircuitTableCrafting(invPlayer.player, circuitTable, craftMatrix, j + i * 8, 8 + j * 18,
@@ -49,11 +50,11 @@ public class ContainerCircuitTable extends Container {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerCircuitTable( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( TileCircuitTable.SLOTS ));
+    public ContainerCircuitTable( int id, Inventory player )    {
+        this( id, player, new SimpleContainer( TileCircuitTable.SLOTS ));
     }
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -69,13 +70,13 @@ public class ContainerCircuitTable extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return true;
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
 
         if (!isRetrying)
             itemsCrafted = 0;

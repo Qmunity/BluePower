@@ -17,32 +17,32 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.FurnaceTileEntity;
+import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import com.bluepowermod.container.slot.SlotMachineInput;
 import com.bluepowermod.container.slot.SlotMachineOutput;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author MineMaarten
  */
-public class ContainerAlloyFurnace extends Container {
-    private IIntArray fields;
-    public final IInventory inventory;
+public class ContainerAlloyFurnace extends AbstractContainerMenu {
+    private ContainerData fields;
+    public final Container inventory;
 
-    public ContainerAlloyFurnace(int windowId, PlayerInventory invPlayer, IInventory inventory, IIntArray fields) {
-        super(BPContainerType.ALLOY_FURNACE, windowId);
+    public ContainerAlloyFurnace(int windowId, Inventory invPlayer, Container inventory, ContainerData fields) {
+        super(BPMenuType.ALLOY_FURNACE, windowId);
         this.inventory = inventory;
         this.fields = fields;
 
@@ -57,11 +57,11 @@ public class ContainerAlloyFurnace extends Container {
         this.addDataSlots(fields);
     }
 
-    public ContainerAlloyFurnace( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( TileAlloyFurnace.SLOTS ), new IntArray(3));
+    public ContainerAlloyFurnace( int id, Inventory invPlayer )    {
+        this( id, invPlayer, new SimpleContainer( TileAlloyFurnace.SLOTS ), new SimpleContainerData(3));
     }
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
     
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -77,41 +77,41 @@ public class ContainerAlloyFurnace extends Container {
     }
     
     @Override
-    public ItemStack quickMoveStack(PlayerEntity par1EntityPlayer, int par2) {
+    public ItemStack quickMoveStack(Player player, int slotIndex) {
     
-        ItemStack var3 = ItemStack.EMPTY;
-        Slot var4 = slots.get(par2);
+        ItemStack itemStack = ItemStack.EMPTY;
+        Slot slot = slots.get(slotIndex);
         
-        if (var4 != null && var4.hasItem()) {
-            ItemStack var5 = var4.getItem();
-            var3 = var5.copy();
+        if (slot != null && slot.hasItem()) {
+            ItemStack slotItem = slot.getItem();
+            itemStack = slotItem.copy();
             
-            if (par2 < 11) {
-                if (!moveItemStackTo(var5, 12, 47, false)) return ItemStack.EMPTY;
-                var4.onQuickCraft(var5, var3);
+            if (slotIndex < 11) {
+                if (!moveItemStackTo(slotItem, 12, 47, false)) return ItemStack.EMPTY;
+                slot.onQuickCraft(slotItem, itemStack);
             } else {
-                if (FurnaceTileEntity.isFuel(var5) && moveItemStackTo(var5, 0, 1, false)) {
+                if (FurnaceBlockEntity.isFuel(slotItem) && moveItemStackTo(slotItem, 0, 1, false)) {
                     
-                } else if (!moveItemStackTo(var5, 2, 11, false)) return ItemStack.EMPTY;
-                var4.onQuickCraft(var5, var3);
+                } else if (!moveItemStackTo(slotItem, 2, 11, false)) return ItemStack.EMPTY;
+                slot.onQuickCraft(slotItem, itemStack);
             }
             
-            if (var5.getCount() == 0) {
-                var4.set(ItemStack.EMPTY);
+            if (slotItem.getCount() == 0) {
+                slot.set(ItemStack.EMPTY);
             } else {
-                var4.setChanged();
+                slot.setChanged();
             }
             
-            if (var5.getCount() == var3.getCount()) return ItemStack.EMPTY;
+            if (slotItem.getCount() == itemStack.getCount()) return ItemStack.EMPTY;
             
-            var4.onQuickCraft(var3, var5);
+            slot.onQuickCraft(itemStack, slotItem);
         }
         
-        return var3;
+        return itemStack;
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerEntity) {
+    public boolean stillValid(Player playerEntity) {
         return inventory.stillValid( playerEntity );
     }
 

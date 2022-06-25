@@ -19,24 +19,23 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import com.bluepowermod.tile.tier1.TileRelay;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class ContainerRelay extends Container {
+public class ContainerRelay extends AbstractContainerMenu {
 
-    private final IInventory relay;
+    private final Container relay;
 
-    public ContainerRelay(int windowId, PlayerInventory invPlayer, IInventory inventory) {
-        super(BPContainerType.RELAY, windowId);
+    public ContainerRelay(int windowId, Inventory invPlayer, Container inventory) {
+        super(BPMenuType.RELAY, windowId);
         this.relay = inventory;
 
         for (int i = 0; i < 3; ++i) {
@@ -47,12 +46,12 @@ public class ContainerRelay extends Container {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerRelay( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( TileRelay.SLOTS ));
+    public ContainerRelay( int id, Inventory player )    {
+        this( id, player, new SimpleContainer( TileRelay.SLOTS ));
     }
 
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -68,13 +67,13 @@ public class ContainerRelay extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return relay.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) slots.get(par2);

@@ -11,28 +11,30 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.ContainerItemDetector;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
 /**
  * @author MineMaarten
  */
-public class TileItemDetector extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, INamedContainerProvider {
+public class TileItemDetector extends TileMachineBase implements WorldlyContainer, IGuiButtonSensitive, MenuProvider {
 
     public int mode;
     public final static int SLOTS = 10;
@@ -40,24 +42,24 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     private int savedPulses = 0;
     public int fuzzySetting;
 
-    public TileItemDetector() {
-        super(BPTileEntityType.ITEM_DETECTOR);
+    public TileItemDetector(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.ITEM_DETECTOR, pos, state);
     }
 
-    @Override
-    public void tick() {
 
-        super.tick();
+    public static void tickItemDetector(Level level, BlockPos pos, BlockState state, TileItemDetector tileItemDetector) {
+
+        TileBase.tickTileBase(level, pos, state, tileItemDetector);
         if (!level.isClientSide) {
-            if (mode == 0 || mode == 1) {
+            if (tileItemDetector.mode == 0 || tileItemDetector.mode == 1) {
                 if (level.getGameTime() % 2 == 0) {
-                    if (getOutputtingRedstone() > 0) {
-                        this.setOutputtingRedstone(false);
-                        sendUpdatePacket();
-                    } else if (savedPulses > 0) {
-                        savedPulses--;
-                        setOutputtingRedstone(true);
-                        sendUpdatePacket();
+                    if (tileItemDetector.getOutputtingRedstone() > 0) {
+                        tileItemDetector.setOutputtingRedstone(false);
+                        tileItemDetector.sendUpdatePacket();
+                    } else if (tileItemDetector.savedPulses > 0) {
+                        tileItemDetector.savedPulses--;
+                        tileItemDetector.setOutputtingRedstone(true);
+                        tileItemDetector.sendUpdatePacket();
                     }
                 }
             } else {
@@ -101,11 +103,11 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundNBT tCompound) {
-        super.load(blockState, tCompound);
+    public void load(CompoundTag tCompound) {
+        super.load(tCompound);
         for (int i = 0; i < 9; i++) {
-            CompoundNBT tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, new ItemStack((IItemProvider) tc));
+            CompoundTag tc = tCompound.getCompound("inventory" + i);
+            inventory.set(i, ItemStack.of(tc));
         }
 
         mode = tCompound.getByte("mode");
@@ -117,12 +119,12 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT save(CompoundNBT tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
 
-        super.save(tCompound);
+        super.saveAdditional(tCompound);
 
         for (int i = 0; i < 9; i++) {
-                CompoundNBT tc = new CompoundNBT();
+                CompoundTag tc = new CompoundTag();
                 inventory.get(i).save(tc);
                 tCompound.put("inventory" + i, tc);
         }
@@ -130,8 +132,6 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         tCompound.putByte("mode", (byte) mode);
         tCompound.putByte("fuzzySetting", (byte) fuzzySetting);
         tCompound.putInt("savedPulses", savedPulses);
-
-        return tCompound;
     }
 
     @Override
@@ -186,17 +186,17 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 
@@ -238,7 +238,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
 
     @Override
-    public void onButtonPress(PlayerEntity player, int messageId, int value) {
+    public void onButtonPress(Player player, int messageId, int value) {
 
         if (messageId == 0)
             mode = value;
@@ -264,13 +264,13 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.ITEMDETECTOR_NAME);
+    public Component getDisplayName() {
+        return new TextComponent(Refs.ITEMDETECTOR_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player playerEntity) {
         return new ContainerItemDetector(id, inventory, this);
     }
 }

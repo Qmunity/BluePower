@@ -11,13 +11,16 @@ import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.helper.EnergyHelper;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -36,8 +39,8 @@ public class TileThermopile extends TileMachineBase  {
 	private final BlutricityStorage storage = new BlutricityStorage(MAX_VOLTAGE, MAX_VOLTAGE);
 	private LazyOptional<IPowerBase> blutricityCap;
 
-	public TileThermopile() {
-		super(BPTileEntityType.THERMOPILE);
+	public TileThermopile(BlockPos pos, BlockState state) {
+		super(BPBlockEntityType.THERMOPILE, pos, state);
 	}
 
 	@Nonnull
@@ -51,43 +54,42 @@ public class TileThermopile extends TileMachineBase  {
 	}
 
 
-	@Override
-	public void tick() {
+	public static void tickThermopile(Level level, BlockPos pos, BlockState state, TileThermopile tileThermopile) {
 		if (!level.isClientSide) {
-			storage.resetCurrent();
+			tileThermopile.storage.resetCurrent();
 
-			if (level.getBlockState(worldPosition.relative(Direction.DOWN)).getBlock() == Blocks.LAVA && storage.getEnergy() < MAX_VOLTAGE)
-				storage.addEnergy(0.1, false);
+			if (level.getBlockState(pos.relative(Direction.DOWN)).getBlock() == Blocks.LAVA && tileThermopile.storage.getEnergy() < tileThermopile.MAX_VOLTAGE)
+				tileThermopile.storage.addEnergy(0.1, false);
 
 			//Balance power of attached blulectric blocks.
 			for (Direction facing : Direction.values()) {
-				TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
+				BlockEntity tile = level.getBlockEntity(pos.relative(facing));
 				if (tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).isPresent()) {
 					IPowerBase exStorage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).orElse(null);
-					EnergyHelper.balancePower(exStorage, storage);
+					EnergyHelper.balancePower(exStorage, tileThermopile.storage);
 				}
 			}
 		}
 	}
 
 	@Override
-	protected void readFromPacketNBT(CompoundNBT tCompound) {
+	protected void readFromPacketNBT(CompoundTag tCompound) {
 		super.readFromPacketNBT(tCompound);
 		if(tCompound.contains("energy")) {
-			INBT nbtstorage = tCompound.get("energy");
-			CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
+			Tag nbtstorage = tCompound.get("energy");
+			CapabilityBlutricity.readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
 		}
 	}
 
 	@Override
-	protected void writeToPacketNBT(CompoundNBT tCompound) {
+	protected void writeToPacketNBT(CompoundTag tCompound) {
 		super.writeToPacketNBT(tCompound);
-		INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
+		Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
 		tCompound.put("energy", nbtstorage);
 	}
 
 	@Override
-	protected void invalidateCaps(){
+	public void invalidateCaps(){
 		super.invalidateCaps();
 		if( blutricityCap != null )
 		{

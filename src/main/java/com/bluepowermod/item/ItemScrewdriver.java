@@ -19,30 +19,29 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
 
 import java.util.Random;
 
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 
 public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
     public ItemScrewdriver() {
         super(new Properties().durability(250));
-        setRegistryName(Refs.MODID + ":" + Refs.SCREWDRIVER_NAME);
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
         Block block = context.getLevel().getBlockState(context.getClickedPos()).getBlock();
         if (context.getPlayer() != null && context.getPlayer().isCrouching()){
             block.rotate(context.getLevel().getBlockState(context.getClickedPos()), context.getLevel(), context.getClickedPos(), Rotation.CLOCKWISE_180);
@@ -50,11 +49,11 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
             block.rotate(context.getLevel().getBlockState(context.getClickedPos()), context.getLevel(), context.getClickedPos(), Rotation.CLOCKWISE_90);
         }
         damage(context.getPlayer().getItemInHand(context.getHand()), 1, context.getPlayer(), false);
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public boolean damage(ItemStack stack, int damage, PlayerEntity player, boolean simulated) {
+    public boolean damage(ItemStack stack, int damage, Player player, boolean simulated) {
 
         if (player != null && player.isCreative())
             return true;
@@ -62,8 +61,8 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
             return false;
 
         if (!simulated) {
-            if (player instanceof ServerPlayerEntity && stack.hurt(damage, new Random(), (ServerPlayerEntity) player)) {
-                player.broadcastBreakEvent(Hand.MAIN_HAND);
+            if (player instanceof ServerPlayer && stack.hurt(damage, new Random(), (ServerPlayer) player)) {
+                player.broadcastBreakEvent(InteractionHand.MAIN_HAND);
                 stack.setCount(stack.getCount() - 1);
                 player.awardStat(Stats.ITEM_BROKEN.get(stack.getItem()), 1);
 
@@ -78,7 +77,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader world, BlockPos pos, Player player) {
         return true;
     }
 

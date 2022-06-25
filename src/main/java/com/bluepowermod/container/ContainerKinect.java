@@ -17,24 +17,22 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import com.bluepowermod.tile.tier3.TileKineticGenerator;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-import com.bluepowermod.tile.tier3.TileKinectGenerator;
+public class ContainerKinect extends AbstractContainerMenu {
 
-public class ContainerKinect extends Container {
+    private final Container kinect;
 
-    private final IInventory kinect;
-
-    public ContainerKinect(int windowId, PlayerInventory invPlayer, IInventory inventory) {
-        super(BPContainerType.KINETIC_GENERATOR, windowId);
+    public ContainerKinect(int windowId, Inventory invPlayer, Container inventory) {
+        super(BPMenuType.KINETIC_GENERATOR, windowId);
         kinect = inventory;
         
         //Inventory for Turbines
@@ -43,12 +41,12 @@ public class ContainerKinect extends Container {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerKinect( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( TileKinectGenerator.SLOTS ));
+    public ContainerKinect( int id, Inventory player )    {
+        this( id, player, new SimpleContainer( TileKineticGenerator.SLOTS ));
     }
 
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -64,13 +62,13 @@ public class ContainerKinect extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return kinect.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
     	
     	return ItemStack.EMPTY;
      }

@@ -7,31 +7,28 @@
  */
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
+import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
-import com.bluepowermod.tile.tier3.TileDiskDrive;
+public class ContainerDiskDrive extends AbstractContainerMenu {
 
-public class ContainerDiskDrive extends Container {
+	private final Container inventory;
 
-	private final IInventory inventory;
-
-	public ContainerDiskDrive(int windowId, PlayerInventory invPlayer, IInventory inventory) {
-		super(BPContainerType.DISK_DRIVE, windowId);
+	public ContainerDiskDrive(int windowId, Inventory invPlayer, Container inventory) {
+		super(BPMenuType.DISK_DRIVE, windowId);
 		this.inventory = inventory;
 	}
 
-	public ContainerDiskDrive( int id, PlayerInventory player )    {
-		this( id, player, new Inventory( 1));
+	public ContainerDiskDrive( int id, Inventory player )    {
+		this( id, player, new SimpleContainer( 1));
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerEntity) {
+	public boolean stillValid(Player playerEntity) {
 		return inventory.stillValid(playerEntity);
 	}
 

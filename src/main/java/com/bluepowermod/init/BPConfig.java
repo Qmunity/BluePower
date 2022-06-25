@@ -31,11 +31,6 @@ public class BPConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> maxTungstenY;
         public final ForgeConfigSpec.ConfigValue<Integer> veinCountTungsten;
         public final ForgeConfigSpec.ConfigValue<Integer> veinSizeTungsten;
-        public final ForgeConfigSpec.BooleanValue generateCopper;
-        public final ForgeConfigSpec.ConfigValue<Integer> minCopperY;
-        public final ForgeConfigSpec.ConfigValue<Integer> maxCopperY;
-        public final ForgeConfigSpec.ConfigValue<Integer> veinCountCopper;
-        public final ForgeConfigSpec.ConfigValue<Integer> veinSizeCopper;
         public final ForgeConfigSpec.BooleanValue generateSilver;
         public final ForgeConfigSpec.ConfigValue<Integer> minSilverY;
         public final ForgeConfigSpec.ConfigValue<Integer> maxSilverY;
@@ -78,6 +73,7 @@ public class BPConfig {
         public final ForgeConfigSpec.ConfigValue<String> volcanoBiomeCategoryWhitelist;
         public final ForgeConfigSpec.BooleanValue generateTungstenInVolcano;
         public final ForgeConfigSpec.ConfigValue<String> alloyFurnaceBlacklist;
+        public final ForgeConfigSpec.ConfigValue<Boolean> alloyFurnaceDatapackGenerator;
         public final ForgeConfigSpec.ConfigValue<Float> albedoBrightness;
         //public final ForgeConfigSpec.BooleanValue enableTubeCaching;
         public final ForgeConfigSpec.BooleanValue enableGateSounds;
@@ -93,13 +89,6 @@ public class BPConfig {
                     maxTungstenY = builder.comment("Tungsten Max Y").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".max_y").define("maxTungstenY", 10);
                     veinCountTungsten = builder.comment("Vein Count Tungsten").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".vein_count").define("veinCountTungsten", 2);
                     veinSizeTungsten = builder.comment("Vein Size Tungsten").translation("bluepower.config." + Refs.CONFIG_TUNGSTEN + ".vein_size").define("veinSizeTungsten", 3);
-                builder.pop();
-                builder.push("Copper").comment("Copper related configs");
-                    generateCopper = builder.comment("Generate Copper").translation("bluepower.config." + Refs.CONFIG_COPPER + ".generate").define("generateCopper", true);
-                    minCopperY = builder.comment("Copper Min Y").translation("bluepower.config." + Refs.CONFIG_COPPER + ".min_y").define("minCopperY", 35);
-                    maxCopperY = builder.comment("Copper Max Y").translation("bluepower.config." + Refs.CONFIG_COPPER + ".max_y").define("maxCopperY", 90);
-                    veinCountCopper = builder.comment("Vein Count Copper").translation("bluepower.config." + Refs.CONFIG_COPPER + ".vein_count").define("veinCountCopper", 8);
-                    veinSizeCopper = builder.comment("Vein Size Copper").translation("bluepower.config." + Refs.CONFIG_COPPER + ".vein_size").define("veinSizeCopper", 7);
                 builder.pop();
                 builder.push("Zinc").comment("Zinc related configs");
                     generateZinc = builder.comment("Generate Zinc").translation("bluepower.config." + Refs.CONFIG_ZINC + ".generate").define("generateZinc", true);
@@ -167,6 +156,7 @@ public class BPConfig {
             builder.pop();
             builder.push("Recipes").comment("Toggle recipes to be enabled or not");
                 alloyFurnaceBlacklist = builder.comment( "Any item name (minecraft:bucket,minecraft:minecart) added here will be blacklisted from being able to melt down into its raw materials.").translation("bluepower.config.alloy_furnace.blacklist").define("alloyFurnaceBlacklist", "minecraft:iron_nugget,minecraft:gold_nugget,minecraft:gold_ingot,minecraft:iron_ingot");
+                alloyFurnaceDatapackGenerator = builder.comment( "Generate Json Datapack for Alloy Furnace (Only used to generate recycling recipes)").translation("bluepower.config.alloy_furnace.datapack").define("alloyFurnaceDatapackGenerator", true);
             builder.pop();
 
             /*

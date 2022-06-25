@@ -8,27 +8,25 @@
 package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.WidgetMode;
-import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerRetriever;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier2.TileRetriever;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
 /**
  * @author MineMaarten
  */
-public class GuiRetriever extends GuiContainerBaseBP<ContainerRetriever> implements IHasContainer<ContainerRetriever> {
+public class GuiRetriever extends GuiContainerBaseBP<ContainerRetriever> implements MenuAccess<ContainerRetriever> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/retriever.png");
     private final ContainerRetriever filter;
-    public GuiRetriever(ContainerRetriever container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiRetriever(ContainerRetriever container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.filter = container;
     }
@@ -56,13 +54,10 @@ public class GuiRetriever extends GuiContainerBaseBP<ContainerRetriever> impleme
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float f, int i, int j) {
-
-        super.renderBg(matrixStack, f, i, j);
-
+    protected void renderBg(PoseStack matrixStack, float f, int i, int j) {
         if (filter.mode == 0) {
             int curSlot = filter.slotIndex;
-            AbstractGui.blit(matrixStack, leftPos + 60 + curSlot % 3 * 18, topPos + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
+            GuiComponent.blit(matrixStack, leftPos + 60 + curSlot % 3 * 18, topPos + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
         }
     }
 

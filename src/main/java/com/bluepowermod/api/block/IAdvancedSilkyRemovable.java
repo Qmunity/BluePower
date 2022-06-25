@@ -7,9 +7,9 @@
  */
 package com.bluepowermod.api.block;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 /**
  * Implemented by blocks/parts which need more control over the Silky removing. Like setting a flag so inventory contents don't get dropped.
@@ -24,9 +24,9 @@ public interface IAdvancedSilkyRemovable extends ISilkyRemovable {
      * @param pos
      * @return return false to prevent silky removing.
      */
-    public boolean preSilkyRemoval(World world, BlockPos pos);
+    public boolean preSilkyRemoval(Level world, BlockPos pos);
 
-    public void postSilkyRemoval(World world, BlockPos pos);
+    public void postSilkyRemoval(Level world, BlockPos pos);
 
     /**
      *
@@ -35,7 +35,7 @@ public interface IAdvancedSilkyRemovable extends ISilkyRemovable {
      * @param tag
      * @return Return true if you want the "Has silky data" tooltip to be hidden
      */
-    public boolean writeSilkyData(World world, BlockPos pos, CompoundNBT tag);
+    public boolean writeSilkyData(Level world, BlockPos pos, CompoundTag tag);
 
-    public void readSilkyData(World world, BlockPos pos, CompoundNBT tag);
+    public void readSilkyData(Level world, BlockPos pos, CompoundTag tag);
 }

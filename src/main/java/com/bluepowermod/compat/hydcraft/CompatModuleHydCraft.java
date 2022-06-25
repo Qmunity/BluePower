@@ -10,8 +10,7 @@ package com.bluepowermod.compat.hydcraft;
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 /*
@@ -20,11 +19,11 @@ public class CompatModuleHydCraft extends CompatModule {
     @Override
     public void preInit(FMLPreInitializationEvent ev) {
 
-        CompoundNBT toRegister = new CompoundNBT();
+        CompoundTag toRegister = new CompoundTag();
         ItemStack beginStack = new ItemStack(BPBlocks.zinc_ore, 1);
         ItemStack endStack = new ItemStack(BPItems.zinc_ore_crushed, 2);
-        CompoundNBT itemFrom = new CompoundNBT();
-        CompoundNBT itemTo = new CompoundNBT();
+        CompoundTag itemFrom = new CompoundTag();
+        CompoundTag itemTo = new CompoundTag();
 
         beginStack.writeToNBT(itemFrom);
         endStack.writeToNBT(itemTo);
@@ -34,11 +33,11 @@ public class CompatModuleHydCraft extends CompatModule {
         toRegister.setFloat("pressureRatio", 1.0F);
         FMLInterModComms.sendMessage("HydCraft", "registerCrushingRecipe", toRegister);
 
-        toRegister = new CompoundNBT();
+        toRegister = new CompoundTag();
         beginStack = new ItemStack(BPItems.zinc_ingot, 1);
         endStack = new ItemStack(BPItems.zinc_dust, 1);
-        itemFrom = new CompoundNBT();
-        itemTo = new CompoundNBT();
+        itemFrom = new CompoundTag();
+        itemTo = new CompoundTag();
 
         beginStack.writeToNBT(itemFrom);
         endStack.writeToNBT(itemTo);
@@ -48,11 +47,11 @@ public class CompatModuleHydCraft extends CompatModule {
         toRegister.setFloat("pressureRatio", 1.0F);
         FMLInterModComms.sendMessage("HydCraft", "registerCrushingRecipe", toRegister);
 
-        toRegister = new CompoundNBT();
+        toRegister = new CompoundTag();
         beginStack = new ItemStack(BPItems.zinc_ore_crushed, 1);
         endStack = new ItemStack(BPItems.zinc_dust, 1);
-        itemFrom = new CompoundNBT();
-        itemTo = new CompoundNBT();
+        itemFrom = new CompoundTag();
+        itemTo = new CompoundTag();
 
         beginStack.writeToNBT(itemFrom);
         endStack.writeToNBT(itemTo);

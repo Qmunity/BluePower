@@ -19,12 +19,16 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BushBlock;
 
 public class BlockCustomFlower extends BushBlock {
     protected static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 14.0D, 13.0D);
@@ -35,8 +39,8 @@ public class BlockCustomFlower extends BushBlock {
         BPBlocks.blockList.add(this);
     }
 
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        Vector3d vec3d = state.getOffset(worldIn, pos);
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        Vec3 vec3d = state.getOffset(worldIn, pos);
         return SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
     }
 

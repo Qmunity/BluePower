@@ -8,8 +8,8 @@
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -57,12 +57,12 @@ public class MessageSendClientServerTemplates{
 
     }
 
-    public void handleClientSide(PlayerEntity player) {
+    public void handleClientSide(Player player) {
 
         TileCircuitDatabase.serverDatabaseStacks = stacks;
     }
 
-    public void handleServerSide(PlayerEntity player) {
+    public void handleServerSide(Player player) {
 
     }
 

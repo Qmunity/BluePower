@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "group": "zinc_ingot",
+  "ingredient": {
+    "item": "bluepower:zinc_raw"
+  },
+  "result": "bluepower:zinc_ingot",
+  "experience": 1.0,
+  "cookingtime": 100
+}

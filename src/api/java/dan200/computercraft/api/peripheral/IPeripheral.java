@@ -11,7 +11,7 @@ import dan200.computercraft.api.lua.LuaException;
 
 /**
  * The interface that defines a peripheral. This should be implemented by the
- * TileEntity of any common that you wish to be interacted with by
+ * BlockEntity of any common that you wish to be interacted with by
  * computercraft or turtle.
  */
 public interface IPeripheral

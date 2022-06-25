@@ -31,17 +31,17 @@ import com.bluepowermod.block.power.*;
 import com.bluepowermod.block.worldgen.*;
 import com.bluepowermod.item.ItemBPPart;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.util.Dependencies;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.trees.OakTree;
-import net.minecraft.item.Item;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.grower.OakTreeGrower;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -50,6 +50,9 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BushBlock;
 
 @Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BPBlocks {
@@ -83,17 +86,24 @@ public class BPBlocks {
     public static Block ruby_ore;
     public static Block sapphire_ore;
     public static Block amethyst_ore;
-    public static Block copper_ore;
     public static Block silver_ore;
     public static Block zinc_ore;
     public static Block tungsten_ore;
     public static Block green_sapphire_ore;
 
+    public static Block teslatite_deepslate;
+    public static Block ruby_deepslate;
+    public static Block sapphire_deepslate;
+    public static Block amethyst_deepslate;
+    public static Block silver_deepslate;
+    public static Block zinc_deepslate;
+    public static Block tungsten_deepslate;
+    public static Block green_sapphire_deepslate;
+
     public static Block ruby_block;
     public static Block sapphire_block;
     public static Block amethyst_block;
     public static Block teslatite_block;
-    public static Block copper_block;
     public static Block silver_block;
     public static Block zinc_block;
     public static Block tungsten_block;
@@ -171,11 +181,6 @@ public class BPBlocks {
 
     public static Block sortron;
 
-    public static void init() {
-        instantiateBlocks();
-        initModDependantBlocks();
-    }
-
     private static void instantiateBlocks() {
 
         basalt = new BlockBasalt(Refs.BASALT_NAME);
@@ -202,18 +207,24 @@ public class BPBlocks {
         sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME);
         amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME);
         green_sapphire_ore = new BlockItemOre(Refs.GREENSAPPHIREORE_NAME);
-
-        copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
         silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);
         zinc_ore = new BlockStoneOre(Refs.ZINCORE_NAME);
         tungsten_ore = new BlockStoneOre(Refs.TUNGSTENORE_NAME);
+
+        teslatite_deepslate = new BlockItemOre(Refs.TESLATITEDEEPSLATE_NAME);
+        ruby_deepslate = new BlockItemOre(Refs.RUBYDEEPSLATE_NAME);
+        sapphire_deepslate = new BlockItemOre(Refs.SAPPHIREDEEPSLATE_NAME);
+        amethyst_deepslate = new BlockItemOre(Refs.AMETHYSTDEEPSLATE_NAME);
+        green_sapphire_deepslate = new BlockItemOre(Refs.GREENSAPPHIREDEEPSLATE_NAME);
+        silver_deepslate = new BlockStoneOre(Refs.SILVERDEEPSLATE_NAME);
+        zinc_deepslate = new BlockStoneOre(Refs.ZINCDEEPSLATE_NAME);
+        tungsten_deepslate = new BlockStoneOre(Refs.TUNGSTENDEEPSLATE_NAME);
 
         ruby_block = new BlockStoneOre(Refs.RUBYBLOCK_NAME);
         sapphire_block = new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME);
         amethyst_block = new BlockStoneOre(Refs.AMETHYSTBLOCK_NAME);
         teslatite_block = new BlockStoneOre(Refs.TESLATITEBLOCK_NAME);
         green_sapphire_block = new BlockStoneOre(Refs.GREENSAPPHIREBLOCK_NAME);
-        copper_block = new BlockStoneOre(Refs.COPPERBLOCK_NAME);
         silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME);
         zinc_block = new BlockStoneOre(Refs.ZINCBLOCK_NAME);
         tungsten_block = new BlockStoneOre(Refs.TUNGSTENBLOCK_NAME);
@@ -222,7 +233,7 @@ public class BPBlocks {
 
         rubber_leaves = new BlockRubberLeaves(Block.Properties.of(Material.PLANT).noOcclusion());
         rubber_log = new BlockRubberLog(Block.Properties.of(Material.WOOD));
-        rubber_sapling = new BlockRubberSapling(new OakTree(), Block.Properties.of(Material.PLANT));
+        rubber_sapling = new BlockRubberSapling(new OakTreeGrower(), Block.Properties.of(Material.PLANT));
 
         sapphire_glass = new BlockBPGlass(Refs.SAPPHIREGLASS_NAME);
         reinforced_sapphire_glass = new BlockBPGlass(Refs.REINFORCEDSAPPHIREGLASS_NAME, true);
@@ -231,37 +242,37 @@ public class BPBlocks {
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME, Block.Properties.of(Material.PLANT));
 
         alloyfurnace = new BlockAlloyFurnace();
-        block_breaker = new BlockContainerFacingBase(Material.STONE, TileBlockBreaker.class).setRegistryName(Refs.MODID, Refs.BLOCKBREAKER_NAME);
+        block_breaker = new BlockContainerFacingBase(Material.STONE, TileBlockBreaker.class, BPBlockEntityType.BLOCKBREAKER).setRegistryName(Refs.MODID, Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
 
-        buffer = new BlockContainerHorizontalFacingBase(Material.STONE, TileBuffer.class){
+        buffer = new BlockContainerHorizontalFacingBase(Material.STONE, TileBuffer.class, BPBlockEntityType.BUFFER){
             @Override
             protected boolean canRotateVertical(){return false;}
         }.setRegistryName(Refs.MODID, Refs.BLOCKBUFFER_NAME);
 
-        deployer = new BlockContainerFacingBase(Material.STONE, TileDeployer.class)
+        deployer = new BlockContainerFacingBase(Material.STONE, TileDeployer.class, BPBlockEntityType.DEPLOYER)
                 .setRegistryName(Refs.MODID, Refs.BLOCKDEPLOYER_NAME);
-        transposer = new BlockContainerFacingBase(Material.STONE, TileTransposer.class).setRegistryName(Refs.MODID, Refs.TRANSPOSER_NAME);
+        transposer = new BlockContainerFacingBase(Material.STONE, TileTransposer.class, BPBlockEntityType.TRANSPOSER).setRegistryName(Refs.MODID, Refs.TRANSPOSER_NAME);
         tube = new BlockTube().setRegistryName(Refs.MODID, Refs.TUBE_NAME);
-        sorting_machine = new BlockContainerFacingBase(Material.STONE, TileSortingMachine.class).setWIP(true)
+        sorting_machine = new BlockContainerFacingBase(Material.STONE, TileSortingMachine.class, BPBlockEntityType.SORTING_MACHINE).setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.SORTING_MACHINE_NAME);
         project_table = new BlockProjectTable();
         project_tables[0] = project_table;
-        auto_project_table = new BlockProjectTable(TileAutoProjectTable.class).setRegistryName(Refs.MODID, Refs.AUTOPROJECTTABLE_NAME);
+        auto_project_table = new BlockProjectTable(TileAutoProjectTable.class, BPBlockEntityType.AUTO_PROJECT_TABLE).setRegistryName(Refs.MODID, Refs.AUTOPROJECTTABLE_NAME);
         project_tables[1] = auto_project_table;
 
-        circuit_table = new BlockProjectTable(TileCircuitTable.class).setWIP(true).setRegistryName(Refs.MODID, Refs.CIRCUITTABLE_NAME);
+        circuit_table = new BlockProjectTable(TileCircuitTable.class, BPBlockEntityType.PROJECT_TABLE).setWIP(true).setRegistryName(Refs.MODID, Refs.CIRCUITTABLE_NAME);
         circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.CIRCUITDATABASE_NAME);
-        ejector = new BlockContainerFacingBase(Material.STONE, TileEjector.class).setRegistryName(Refs.MODID, Refs.EJECTOR_NAME);
-        relay = new BlockContainerFacingBase(Material.STONE, TileRelay.class).setWIP(true).setRegistryName(Refs.MODID, Refs.RELAY_NAME);
-        filter = new BlockContainerFacingBase(Material.STONE, TileFilter.class).setWIP(true).setRegistryName(Refs.MODID, Refs.FILTER_NAME);
-        retriever = new BlockContainerFacingBase(Material.STONE, TileRetriever.class).setWIP(true).setRegistryName(Refs.MODID, Refs.RETRIEVER_NAME);
-        regulator = new BlockContainerFacingBase(Material.STONE, TileRegulator.class).emitsRedstone().setWIP(true)
+        ejector = new BlockContainerFacingBase(Material.STONE, TileEjector.class, BPBlockEntityType.EJECTOR).setRegistryName(Refs.MODID, Refs.EJECTOR_NAME);
+        relay = new BlockContainerFacingBase(Material.STONE, TileRelay.class, BPBlockEntityType.RELAY).setWIP(true).setRegistryName(Refs.MODID, Refs.RELAY_NAME);
+        filter = new BlockContainerFacingBase(Material.STONE, TileFilter.class, BPBlockEntityType.FILTER).setWIP(true).setRegistryName(Refs.MODID, Refs.FILTER_NAME);
+        retriever = new BlockContainerFacingBase(Material.STONE, TileRetriever.class, BPBlockEntityType.RETRIEVER).setWIP(true).setRegistryName(Refs.MODID, Refs.RETRIEVER_NAME);
+        regulator = new BlockContainerFacingBase(Material.STONE, TileRegulator.class, BPBlockEntityType.REGULATOR).emitsRedstone().setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.REGULATOR_NAME);
-        item_detector = new BlockContainerFacingBase(Material.STONE, TileItemDetector.class).emitsRedstone().setWIP(true)
+        item_detector = new BlockContainerFacingBase(Material.STONE, TileItemDetector.class, BPBlockEntityType.ITEM_DETECTOR).emitsRedstone().setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.ITEMDETECTOR_NAME);
-        manager = new BlockRejecting(Material.STONE, TileManager.class).emitsRedstone().setWIP(true).setRegistryName(Refs.MODID, Refs.MANAGER_NAME);
+        manager = new BlockRejecting(Material.STONE, TileManager.class, BPBlockEntityType.MANAGER).emitsRedstone().setWIP(true).setRegistryName(Refs.MODID, Refs.MANAGER_NAME);
 
         battery = new BlockBattery();
         blulectric_cable = new BlockBlulectricCable();
@@ -356,6 +367,10 @@ public class BPBlocks {
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
+
+        instantiateBlocks();
+        initModDependantBlocks();
+
         for(Block block : blockList) {
             event.getRegistry().register(block);
 
@@ -373,7 +388,7 @@ public class BPBlocks {
                         event.getRegistry().register(new BlockItem(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
                     }
                 }else{
-                    ItemGroup group = BPCreativeTabs.blocks;
+                    CreativeModeTab group = BPCreativeTabs.blocks;
                     if(block instanceof BlockContainerBase){group = BPCreativeTabs.machines;}
                     if(block instanceof BlockLamp){group = BPCreativeTabs.lighting;}
                     if(block instanceof BlockAlloyWire){group = BPCreativeTabs.wiring;}

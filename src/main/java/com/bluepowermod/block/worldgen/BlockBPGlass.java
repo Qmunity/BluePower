@@ -20,24 +20,28 @@ package com.bluepowermod.block.worldgen;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.projectile.WitherSkullEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.projectile.WitherSkull;
+import net.minecraft.world.item.DyeColor;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.StainedGlassBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
 
 /**
  * @author MoreThanHidden
@@ -61,23 +65,23 @@ public class BlockBPGlass extends StainedGlassBlock {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (witherproof) {
-            tooltip.add(new StringTextComponent(MinecraftColor.RED.getChatColor() + "Witherproof"));
+            tooltip.add(new TextComponent(MinecraftColor.RED.getChatColor() + "Witherproof"));
         }
     }
 
     @Override
-    public boolean canEntityDestroy(BlockState state, IBlockReader world, BlockPos pos, Entity entity) {
+    public boolean canEntityDestroy(BlockState state, BlockGetter world, BlockPos pos, Entity entity) {
         if (witherproof)
-            return !(entity instanceof WitherEntity) && !(entity instanceof WitherSkullEntity) && super.canEntityDestroy(state, world, pos, entity);
+            return !(entity instanceof WitherBoss) && !(entity instanceof WitherSkull) && super.canEntityDestroy(state, world, pos, entity);
 
         return super.canEntityDestroy(state, world, pos, entity);
     }
 
     @Override
-    public void wasExploded(World worldIn, BlockPos pos, Explosion explosionIn) {
+    public void wasExploded(Level worldIn, BlockPos pos, Explosion explosionIn) {
         if (!witherproof)
             super.wasExploded(worldIn, pos, explosionIn);
     }

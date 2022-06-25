@@ -32,7 +32,7 @@ public final class ComputerCraftAPI
 	 * eg: if createUniqueNumberedSaveDir( world, "computer/disk" ) was called returns 42, then "computer/disk/42" is now available for writing.
 	 * @see #createSaveDirMount(World, String, long)
 	 */
-	public static int createUniqueNumberedSaveDir( World world, String parentSubPath )
+	public static int createUniqueNumberedSaveDir( Level world, String parentSubPath )
 	{
 		findCC();
 		if( computerCraft_createUniqueNumberedSaveDir != null )
@@ -62,7 +62,7 @@ public final class ComputerCraftAPI
 	 * @see dan200.computercraft.api.filesystem.IMount
 	 * @see IWritableMount
 	 */
-	public static IWritableMount createSaveDirMount( World world, String subPath, long capacity )
+	public static IWritableMount createSaveDirMount( Level world, String subPath, long capacity )
 	{
 		findCC();
 		if( computerCraft_createSaveDirMount != null )
@@ -166,7 +166,7 @@ public final class ComputerCraftAPI
      * @return If there is a block capable of emitting bundled redstone at the location, it's signal (0-65535) will be returned.
      * If there is no block capable of emitting bundled redstone at the location, -1 will be returned.
      */
-    public static int getBundledRedstoneOutput( World world, int x, int y, int z, int side )
+    public static int getBundledRedstoneOutput( Level world, int x, int y, int z, int side )
     {
         findCC();
         if( computerCraft_getDefaultBundledRedstoneOutput != null )

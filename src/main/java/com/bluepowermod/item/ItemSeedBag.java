@@ -21,34 +21,34 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class ItemSeedBag extends ItemBase implements INamedContainerProvider {
+public class ItemSeedBag extends ItemBase implements MenuProvider {
 
-    public ItemSeedBag(String name) {
+    public ItemSeedBag() {
         super(new Properties().stacksTo(1));
-        this.setRegistryName(Refs.MODID + ":" + name);
     }
 
     public static ItemStack getSeedType(ItemStack seedBag) {
@@ -70,13 +70,13 @@ public class ItemSeedBag extends ItemBase implements INamedContainerProvider {
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
 
-        return 1D - (double) getItemDamageForDisplay(stack) / (double) 576;
+        return 1 - getItemDamageForDisplay(stack) / 576;
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
 
         return stack.getTag() != null;
     }
@@ -107,32 +107,32 @@ public class ItemSeedBag extends ItemBase implements INamedContainerProvider {
 
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
         if (!world.isClientSide && player.isCrouching()) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, this);
+            NetworkHooks.openGui((ServerPlayer) player, this);
         }
-        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getItemInHand(handIn));
+        return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
-        World worldIn = context.getLevel();
-        Hand hand = context.getHand();
+    public InteractionResult useOn(UseOnContext context) {
+        Player player = context.getPlayer();
+        Level worldIn = context.getLevel();
+        InteractionHand hand = context.getHand();
         BlockPos pos = context.getClickedPos();
 
         if (player.isCrouching()) {
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         }
 
         ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
 
         //Get Active hand
-        Hand activeHand = Hand.MAIN_HAND;
+        InteractionHand activeHand = InteractionHand.MAIN_HAND;
         ItemStack seedBag = player.getItemInHand(activeHand);
         if(!(seedBag.getItem() instanceof ItemSeedBag)){
             seedBag = player.getOffhandItem();
-            activeHand = Hand.OFF_HAND;
+            activeHand = InteractionHand.OFF_HAND;
         }
 
         //Get Items from the NBT Handler
@@ -156,25 +156,25 @@ public class ItemSeedBag extends ItemBase implements INamedContainerProvider {
 
                 //Update items in the NBT
                 if (!seedBag.hasTag())
-                    seedBag.setTag(new CompoundNBT());
+                    seedBag.setTag(new CompoundTag());
                 if (seedBag.getTag() != null) {
                     seedBag.getTag().put("inv", seedBagInvHandler.serializeNBT());
                 }
 
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.SEEDBAG_NAME);
+    public Component getDisplayName() {
+        return new TextComponent(Refs.SEEDBAG_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerSeedBag(id, inventory);
     }
 

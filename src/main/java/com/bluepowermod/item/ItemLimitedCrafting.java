@@ -19,16 +19,14 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.reference.Refs;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Random;
 
 public class ItemLimitedCrafting extends ItemBase {
     
-    public ItemLimitedCrafting(String name, int uses) {
+    public ItemLimitedCrafting(int uses) {
         super(new Properties().durability(uses - 1));
-        this.setRegistryName(Refs.MODID + ":" + name);
     }
     
     @Override

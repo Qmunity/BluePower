@@ -11,12 +11,15 @@ import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.helper.EnergyHelper;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -35,8 +38,8 @@ public class TileSolarPanel extends TileMachineBase  {
 	private final BlutricityStorage storage = new BlutricityStorage(MAX_VOLTAGE, MAX_VOLTAGE);
 	private LazyOptional<IPowerBase> blutricityCap;
 
-	public TileSolarPanel() {
-		super(BPTileEntityType.SOLAR_PANEL);
+	public TileSolarPanel(BlockPos pos, BlockState state) {
+		super(BPBlockEntityType.SOLAR_PANEL, pos, state);
 	}
 
 	@Nonnull
@@ -49,43 +52,42 @@ public class TileSolarPanel extends TileMachineBase  {
 		return LazyOptional.empty();
 	}
 
+	public static void tickSolarPanel(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+		if (!level.isClientSide && blockEntity instanceof TileSolarPanel) {
+			TileSolarPanel tileSolarPanel = (TileSolarPanel) blockEntity;
+			tileSolarPanel.storage.resetCurrent();
 
-	@Override
-	public void tick() {
-		if (!level.isClientSide) {
-			storage.resetCurrent();
-
-			if (level.isDay() && level.canSeeSky(worldPosition) && storage.getEnergy() < MAX_VOLTAGE && !level.isRaining())
-				storage.addEnergy(0.2, false);
+			if (level.isDay() && level.canSeeSky(pos) && tileSolarPanel.storage.getEnergy() < tileSolarPanel.MAX_VOLTAGE && !level.isRaining())
+				tileSolarPanel.storage.addEnergy(0.2, false);
 
 			//Balance power of attached blulectric blocks.
 			for (Direction facing : Direction.values()) {
-				TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
+				BlockEntity tile = level.getBlockEntity(pos.relative(facing));
 				if (tile != null)
 					tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
-							exStorage -> EnergyHelper.balancePower(exStorage, storage));
+							exStorage -> EnergyHelper.balancePower(exStorage, tileSolarPanel.storage));
 			}
 		}
 	}
 
 	@Override
-	protected void readFromPacketNBT(CompoundNBT tCompound) {
+	protected void readFromPacketNBT(CompoundTag tCompound) {
 		super.readFromPacketNBT(tCompound);
 		if(tCompound.contains("energy")) {
-			INBT nbtstorage = tCompound.get("energy");
-			CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
+			Tag nbtstorage = tCompound.get("energy");
+			CapabilityBlutricity.readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
 		}
 	}
 
 	@Override
-	protected void writeToPacketNBT(CompoundNBT tCompound) {
+	protected void writeToPacketNBT(CompoundTag tCompound) {
 		super.writeToPacketNBT(tCompound);
-		INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
+		Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
 		tCompound.put("energy", nbtstorage);
 	}
 
 	@Override
-	protected void invalidateCaps(){
+	public void invalidateCaps(){
 		super.invalidateCaps();
 		if( blutricityCap != null )
 		{

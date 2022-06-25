@@ -17,39 +17,35 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.container.slot.SlotMachineInput;
 import com.bluepowermod.container.slot.SlotMachineOutput;
-import com.bluepowermod.tile.tier2.TileRegulator;
-import com.bluepowermod.tile.tier3.TileBlulectricAlloyFurnace;
 import com.bluepowermod.tile.tier3.TileBlulectricFurnace;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.FurnaceContainer;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.FurnaceTileEntity;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author MoreThanHidden
  */
-public class ContainerBlulectricFurnace extends Container {
-    private IIntArray fields;
-    public final IInventory inventory;
+public class ContainerBlulectricFurnace extends AbstractContainerMenu {
+    private ContainerData fields;
+    public final Container inventory;
 
-    public ContainerBlulectricFurnace( int id, PlayerInventory player ){
-        this( id, player, new Inventory(TileBlulectricFurnace.SLOTS), new IntArray(3));
+    public ContainerBlulectricFurnace( int id, Inventory player ){
+        this( id, player, new SimpleContainer(TileBlulectricFurnace.SLOTS), new SimpleContainerData(3));
     }
 
-    public ContainerBlulectricFurnace(int windowId, PlayerInventory invPlayer, IInventory inventory, IIntArray fields) {
-        super(BPContainerType.BLULECTRIC_FURNACE, windowId);
+    public ContainerBlulectricFurnace(int windowId, Inventory invPlayer, Container inventory, ContainerData fields) {
+        super(BPMenuType.BLULECTRIC_FURNACE, windowId);
         this.inventory = inventory;
         this.fields = fields;
 
@@ -61,7 +57,7 @@ public class ContainerBlulectricFurnace extends Container {
     }
 
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -78,7 +74,7 @@ public class ContainerBlulectricFurnace extends Container {
 
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
 
         ItemStack stack1 = ItemStack.EMPTY;
         Slot slot = slots.get(index);
@@ -113,7 +109,7 @@ public class ContainerBlulectricFurnace extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerEntity) {
+    public boolean stillValid(Player playerEntity) {
         return inventory.stillValid( playerEntity );
     }
 

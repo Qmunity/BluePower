@@ -17,23 +17,23 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.tile.tier1.TileBuffer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 
-public class ContainerBuffer extends Container {
+public class ContainerBuffer extends AbstractContainerMenu {
     
-    private final IInventory inventory;
+    private final Container inventory;
     
-    public ContainerBuffer(int windowId, PlayerInventory invPlayer, IInventory inventory) {
-        super(BPContainerType.BUFFER, windowId);
+    public ContainerBuffer(int windowId, Inventory invPlayer, Container inventory) {
+        super(BPMenuType.BUFFER, windowId);
         this.inventory = inventory;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
@@ -43,11 +43,11 @@ public class ContainerBuffer extends Container {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerBuffer(int windowId, PlayerInventory invPlayer) {
-        this(windowId, invPlayer, new Inventory(TileBuffer.SLOTS));
+    public ContainerBuffer(int windowId, Inventory invPlayer) {
+        this(windowId, invPlayer, new SimpleContainer(TileBuffer.SLOTS));
     }
     
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
     
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -63,13 +63,13 @@ public class ContainerBuffer extends Container {
     }
     
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
     
         return inventory.stillValid(player);
     }
     
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
     
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) slots.get(par2);

@@ -5,45 +5,47 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.item.ItemSaw;
 import com.google.gson.JsonObject;
-import net.minecraft.block.Block;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public class MicroblockRecipe extends SpecialRecipe {
+import javax.annotation.Nullable;
+
+public class MicroblockRecipe extends CustomRecipe {
 
     public MicroblockRecipe(ResourceLocation idIn) {
         super(idIn);
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         int blockCount = 0;
         int saw = 0;
 
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
-                if (stack.getItem() instanceof BlockItem && (Block.byItem(stack.getItem()) instanceof BlockBPMicroblock ||
-                !Block.byItem(stack.getItem()).hasTileEntity(Block.byItem(stack.getItem()).defaultBlockState()))){
+                if (stack.getItem() instanceof BlockItem && (Block.byItem(stack.getItem()) instanceof BlockBPMicroblock || !(Block.byItem(stack.getItem()) instanceof EntityBlock))){
                     VoxelShape shape = null;
                     try{
                        shape = Block.byItem(stack.getItem()).defaultBlockState().getShape(null, null);
                     }catch (NullPointerException ignored){
                         //Shulker Boxes try to query the Tile Entity
                     }
-                    if (shape == VoxelShapes.block() || Block.byItem(stack.getItem()) == BPBlocks.half_block || Block.byItem(stack.getItem()) == BPBlocks.panel) {
+                    if (shape == Shapes.block() || Block.byItem(stack.getItem()) == BPBlocks.half_block || Block.byItem(stack.getItem()) == BPBlocks.panel) {
                         blockCount++;
                     }
                 } else if (stack.getItem() instanceof ItemSaw) {
@@ -55,41 +57,40 @@ public class MicroblockRecipe extends SpecialRecipe {
         }
         return blockCount == 1 && saw == 1;
     }
-
-
+    
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem) {
-                if (Block.byItem(stack.getItem()).defaultBlockState().getShape(null, null) == VoxelShapes.block()){
-                    CompoundNBT nbt = new CompoundNBT();
+                if (Block.byItem(stack.getItem()).defaultBlockState().getShape(null, null) == Shapes.block()){
+                    CompoundTag nbt = new CompoundTag();
                     nbt.putString("block", stack.getItem().getRegistryName().toString());
                     ItemStack outStack = new ItemStack(BPBlocks.half_block, 2);
                     outStack.setTag(nbt);
-                    outStack.setHoverName(new TranslationTextComponent(stack.getItem().getDescriptionId())
+                    outStack.setHoverName(new TranslatableComponent(stack.getItem().getDescriptionId())
                             .append(" ")
-                            .append(new TranslationTextComponent(BPBlocks.half_block.getDescriptionId())));
+                            .append(new TranslatableComponent(BPBlocks.half_block.getDescriptionId())));
                     return outStack;
                 }else if (Block.byItem(stack.getItem()) == BPBlocks.half_block){
-                    CompoundNBT nbt = new CompoundNBT();
+                    CompoundTag nbt = new CompoundTag();
                     nbt.putString("block", stack.getTag().getString("block"));
                     ItemStack outStack = new ItemStack(BPBlocks.panel, 2);
                     outStack.setTag(nbt);
                     Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
-                    outStack.setHoverName(new TranslationTextComponent(block.getDescriptionId())
+                    outStack.setHoverName(new TranslatableComponent(block.getDescriptionId())
                             .append(" ")
-                            .append(new TranslationTextComponent(BPBlocks.panel.getDescriptionId())));
+                            .append(new TranslatableComponent(BPBlocks.panel.getDescriptionId())));
                     return outStack;
                 }else if (Block.byItem(stack.getItem()) == BPBlocks.panel){
-                    CompoundNBT nbt = new CompoundNBT();
+                    CompoundTag nbt = new CompoundTag();
                     nbt.putString("block", stack.getTag().getString("block"));
                     ItemStack outStack = new ItemStack(BPBlocks.cover, 2);
                     outStack.setTag(nbt);
                     Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
-                    outStack.setHoverName(new TranslationTextComponent(block.getDescriptionId())
+                    outStack.setHoverName(new TranslatableComponent(block.getDescriptionId())
                             .append(" ")
-                            .append(new TranslationTextComponent(BPBlocks.cover.getDescriptionId())));
+                            .append(new TranslatableComponent(BPBlocks.cover.getDescriptionId())));
                     return outStack;
                 }
             }
@@ -103,23 +104,23 @@ public class MicroblockRecipe extends SpecialRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return BPRecipeSerializer.MICROBLOCK;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MicroblockRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<MicroblockRecipe> {
         @Override
         public MicroblockRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new MicroblockRecipe(recipeId);
         }
 
         @Override
-        public MicroblockRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public MicroblockRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             return new MicroblockRecipe(recipeId);
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, MicroblockRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, MicroblockRecipe recipe) {
         }
     }
 }

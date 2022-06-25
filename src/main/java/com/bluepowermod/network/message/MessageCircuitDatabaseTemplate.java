@@ -9,8 +9,8 @@ package com.bluepowermod.network.message;
 
 import com.bluepowermod.helper.ItemStackDatabase;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Used from client to server to select a template from the private library of the client. Used from server to client to message the client to save
@@ -40,14 +40,14 @@ public class MessageCircuitDatabaseTemplate{
         this.deleting = deleting;
     }
 
-    public void handleClientSide(PlayerEntity player) {
-        //TileEntity te = player.world.getBlockEntity(pos);
+    public void handleClientSide(Player player) {
+        //BlockEntity te = player.world.getBlockEntity(pos);
         //if (te instanceof TileCircuitDatabase) {
             //((TileCircuitDatabase) te).saveToPrivateLibrary(stack);
         //}
     }
 
-    public void handleServerSide(PlayerEntity player) {
+    public void handleServerSide(Player player) {
 
         if (deleting) {
             if (TileCircuitDatabase.hasPermissions(player)) {
@@ -56,7 +56,7 @@ public class MessageCircuitDatabaseTemplate{
                 //BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
             }
         } else {
-            //TileEntity te = player.world.getBlockEntity(pos);
+            //BlockEntity te = player.world.getBlockEntity(pos);
             //if (te instanceof TileCircuitDatabase) {
                 //((TileCircuitDatabase) te).copyInventory.setItem(0, stack);
                 //TODO: Open GUI

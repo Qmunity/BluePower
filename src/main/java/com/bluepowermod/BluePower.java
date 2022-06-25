@@ -20,30 +20,27 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.BPWorldGen;
 import com.bluepowermod.world.WorldGenFlowers;
 import com.bluepowermod.world.WorldGenOres;
-import com.google.common.collect.Lists;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.TableLootEntry;
-import net.minecraft.resources.ResourcePackInfo;
-import net.minecraft.resources.ResourcePackList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Mod(Refs.MODID)
@@ -51,13 +48,16 @@ public class BluePower {
 
 
     public static BluePower instance;
-    public static CommonProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new,() -> CommonProxy::new);
+    public static CommonProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
     public BluePower(){
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BPConfig.spec);
         instance = this;
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::complete);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerCapabilities);
+
+        BPItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
@@ -66,26 +66,28 @@ public class BluePower {
         MinecraftForge.EVENT_BUS.register(eventHandler);
 
         BPApi.init(new BluePowerAPI());
-        BPEnchantments.init();
-        BPBlocks.init();
         proxy.preInitRenderers();
-        BPWorldGen.init();
+
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, BPWorldGen::registerFeatures);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, WorldGenOres::registerOres);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, WorldGenFlowers::registerFlowers);
+
         MinecraftForge.EVENT_BUS.register(new BPWorldGen());
-        WorldGenOres.initOres();
         MinecraftForge.EVENT_BUS.register(new WorldGenOres());
-        WorldGenFlowers.initFlowers();
         MinecraftForge.EVENT_BUS.register(new WorldGenFlowers());
     }
 
     public static Logger log = LogManager.getLogger(Refs.MODID);
 
     public void setup(FMLCommonSetupEvent event) {
-        DeferredWorkQueue.runLater(BPNetworkHandler::init);
-        OreDictionarySetup.init();
-        CapabilityBlutricity.register();
-        CapabilityRedstoneDevice.register();
+        event.enqueueWork(BPNetworkHandler::init);
         proxy.setup(event);
         CompatibilityUtils.init(event);
+    }
+
+    public void registerCapabilities(RegisterCapabilitiesEvent event){
+        CapabilityBlutricity.register(event);
+        CapabilityRedstoneDevice.register(event);
     }
 
     public void complete(FMLLoadCompleteEvent event) {
@@ -94,17 +96,23 @@ public class BluePower {
         Recipes.init();
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onResourceReload(AddReloadListenerEvent event) {
         //Add Reload Listener for the Alloy Furnace Recipe Generator
-        event.addListener(new BPRecyclingReloadListener(event.getDataPackRegistries()));
+        event.addListener(new BPRecyclingReloadListener(event.getServerResources()));
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onServerStart(ServerStartedEvent event) {
+        //Check Alloy furnace recipes again after tags are populated
+        BPRecyclingReloadListener.onResourceManagerReload(event.getServer().getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING));
     }
 
     @SubscribeEvent
-    public void onLootLoad(LootTableLoadEvent event) {
+    public void onLootLoad(LootTableLoadEvent event){
         ResourceLocation grass = new ResourceLocation("minecraft", "blocks/tall_grass");
         if (event.getName().equals(grass)){
-                event.getTable().addPool(LootPool.lootPool().add(TableLootEntry.lootTableReference(new ResourceLocation("bluepower", "blocks/tall_grass"))).name("bluepower:tall_grass").build());
+                event.getTable().addPool(LootPool.lootPool().add(LootTableReference.lootTableReference(new ResourceLocation("bluepower", "blocks/tall_grass"))).name("bluepower:tall_grass").build());
         }
     }
 

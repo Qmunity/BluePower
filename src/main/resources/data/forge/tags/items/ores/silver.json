@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "bluepower:silver_ore"
+    "bluepower:silver_ore",
+    "bluepower:silver_deepslate"
   ]
 }

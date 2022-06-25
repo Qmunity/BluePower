@@ -13,17 +13,19 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.power.BlockBlulectricCable;
 import com.bluepowermod.helper.EnergyHelper;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -40,36 +42,37 @@ public class TileBlulectricCable extends TileMachineBase {
     private final BlutricityStorage storage = new BlutricityStorage(100, 100);
     private LazyOptional<IPowerBase> blutricityCap;
 
-    public TileBlulectricCable() {
-        super(BPTileEntityType.BLULECTRIC_CABLE);
+    public TileBlulectricCable(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.BLULECTRIC_CABLE, pos, state);
     }
 
-    @Override
-    public void tick() {
-        storage.resetCurrent();
-        if (level != null && !level.isClientSide) {
-            BlockState state = getBlockState();
-            if (state.getBlock() instanceof BlockBlulectricCable) {
-                List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getPossibleValues());
+    public static void tickCable(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        if (blockEntity instanceof TileBlulectricCable) {
+            TileBlulectricCable tileCable = (TileBlulectricCable) blockEntity;
+            tileCable.storage.resetCurrent();
+            if (level != null && !level.isClientSide) {
+                if (state.getBlock() instanceof BlockBlulectricCable) {
+                    List<Direction> directions = new ArrayList<>(BlockBlulectricCable.FACING.getPossibleValues());
 
-                //Check the side has capability
-                directions.removeIf(d -> !getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d).isPresent());
+                    //Check the side has capability
+                    directions.removeIf(d -> !tileCable.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, d).isPresent());
 
-                //Balance power of attached blulectric blocks.
-                for (Direction facing : directions) {
-                    Block fBlock = level.getBlockState(worldPosition.relative(facing)).getBlock();
-                    if (fBlock != Blocks.AIR && fBlock != Blocks.WATER) {
-                        TileEntity tile = level.getBlockEntity(worldPosition.relative(facing));
-                        if (tile != null)
-                            tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
-                                    exStorage -> EnergyHelper.balancePower(exStorage, storage)
-                            );
-                    } else {
-                        TileEntity tile = level.getBlockEntity(worldPosition.relative(facing).relative(state.getValue(BlockBlulectricCable.FACING).getOpposite()));
-                        if (tile != null)
-                            tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, state.getValue(BlockBlulectricCable.FACING)).ifPresent(
-                                    exStorage -> EnergyHelper.balancePower(exStorage, storage)
-                            );
+                    //Balance power of attached blulectric blocks.
+                    for (Direction facing : directions) {
+                        Block fBlock = level.getBlockState(pos.relative(facing)).getBlock();
+                        if (fBlock != Blocks.AIR && fBlock != Blocks.WATER) {
+                            BlockEntity tile = level.getBlockEntity(pos.relative(facing));
+                            if (tile != null)
+                                tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
+                                        exStorage -> EnergyHelper.balancePower(exStorage, tileCable.storage)
+                                );
+                        } else {
+                            BlockEntity tile = level.getBlockEntity(pos.relative(facing).relative(state.getValue(BlockBlulectricCable.FACING).getOpposite()));
+                            if (tile != null)
+                                tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, state.getValue(BlockBlulectricCable.FACING)).ifPresent(
+                                        exStorage -> EnergyHelper.balancePower(exStorage, tileCable.storage)
+                                );
+                        }
                     }
                 }
             }
@@ -101,7 +104,7 @@ public class TileBlulectricCable extends TileMachineBase {
     }
 
     @Override
-    protected void invalidateCaps(){
+    public void invalidateCaps(){
         super.invalidateCaps();
         if( blutricityCap != null ){
             blutricityCap.invalidate();
@@ -110,30 +113,25 @@ public class TileBlulectricCable extends TileMachineBase {
     }
 
     @Override
-    protected void readFromPacketNBT(CompoundNBT tCompound) {
+    protected void readFromPacketNBT(CompoundTag tCompound) {
         super.readFromPacketNBT(tCompound);
         if(tCompound.contains("energy")) {
-        INBT nbtstorage = tCompound.get("energy");
-        CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
+        Tag nbtstorage = tCompound.get("energy");
+        CapabilityBlutricity.readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
         }
     }
 
     @Override
-    protected void writeToPacketNBT(CompoundNBT tCompound) {
+    protected void writeToPacketNBT(CompoundTag tCompound) {
         super.writeToPacketNBT(tCompound);
-            INBT nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
+            Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
             tCompound.put("energy", nbtstorage);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         super.onDataPacket(net, pkt);
-        handleUpdateTag(getBlockState(), pkt.getTag());
+        handleUpdateTag(pkt.getTag());
     }
 
 }

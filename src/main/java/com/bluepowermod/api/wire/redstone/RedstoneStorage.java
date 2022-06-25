@@ -2,7 +2,7 @@ package com.bluepowermod.api.wire.redstone;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 public class RedstoneStorage implements IRedstoneDevice {
 

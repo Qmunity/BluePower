@@ -19,5 +19,5 @@ public interface IPeripheralProvider
      * @see dan200.computercraft.api.ComputerCraftAPI#registerPeripheralProvider(IPeripheralProvider)
      * @return a peripheral, or null if there is not a peripheral here you'd like to handle.
      */
-	public IPeripheral getPeripheral( World world, int x, int y, int z, int side );
+	public IPeripheral getPeripheral( Level world, int x, int y, int z, int side );
 }

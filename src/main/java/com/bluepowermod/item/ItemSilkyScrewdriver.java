@@ -18,21 +18,18 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.Refs;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 
 public class ItemSilkyScrewdriver extends ItemBase {
 
     public ItemSilkyScrewdriver() {
         super(new Properties().durability(250), BPCreativeTabs.tools);
-        setRegistryName(Refs.MODID + ":" + Refs.SILKYSCREWDRIVER_NAME);
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        return ActionResultType.PASS;
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        return InteractionResult.PASS;
     }
 }

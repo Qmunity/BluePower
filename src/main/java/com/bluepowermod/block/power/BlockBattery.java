@@ -12,14 +12,18 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileBattery;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nullable;
 
@@ -31,7 +35,7 @@ public class BlockBattery extends BlockContainerBase {
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 6);
 
     public BlockBattery() {
-        super(Material.METAL, TileBattery.class);
+        super(Material.METAL, TileBattery.class, BPBlockEntityType.BATTERY);
         setRegistryName(Refs.MODID, Refs.BATTERYBLOCK_NAME);
         this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0));
 
@@ -39,8 +43,14 @@ public class BlockBattery extends BlockContainerBase {
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        TileEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : TileBattery::tickBattery;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        BlockEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
         if(tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()) {
             IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null);
             double voltage = storage.getVoltage();
@@ -51,7 +61,7 @@ public class BlockBattery extends BlockContainerBase {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(LEVEL);
     }
 

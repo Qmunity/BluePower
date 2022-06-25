@@ -1,10 +1,10 @@
 package com.bluepowermod.client.gui.widget;
 
 import com.bluepowermod.reference.Refs;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.util.Mth;
 import org.lwjgl.opengl.GL11;
 
 public class WidgetVerticalScrollbar extends BaseWidget {
@@ -42,24 +42,24 @@ public class WidgetVerticalScrollbar extends BaseWidget {
     public int getState() {
         float scroll = currentScroll;
         scroll += 0.5F / states;
-        return MathHelper.clamp((int) (scroll * states), 0, states);
+        return Mth.clamp((int) (scroll * states), 0, states);
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTick) {
         GL11.glColor4d(1, 1, 1, 1);
         if (dragging)
             currentScroll = (float) (mouseY - 7 - getBounds().y) / (getBounds().height - 17);
-        currentScroll = MathHelper.clamp(currentScroll, 0, 1);
-        Minecraft.getInstance().getTextureManager().bind(textures[0]);
-        AbstractGui.blit(matrixStack, x, y, 12, 0, getBounds().width, 1, 26, 15);
+        currentScroll = Mth.clamp(currentScroll, 0, 1);
+        Minecraft.getInstance().getTextureManager().bindForSetup(textures[0]);
+        GuiComponent.blit(matrixStack, x, y, 12, 0, getBounds().width, 1, 26, 15);
         for (int i = 0; i < getBounds().height - 2; i++)
-            AbstractGui.blit(matrixStack, x, y + 1 + i, 12, 1, getBounds().width, 1, 26, 15);
-        AbstractGui.blit(matrixStack, x, y + getBounds().height - 1, 12, 14, getBounds().width, 1, 26, 15);
+            GuiComponent.blit(matrixStack, x, y + 1 + i, 12, 1, getBounds().width, 1, 26, 15);
+        GuiComponent.blit(matrixStack, x, y + getBounds().height - 1, 12, 14, getBounds().width, 1, 26, 15);
 
         if (!enabled)
             GL11.glColor4d(0.8, 0.8, 0.8, 1);
-        AbstractGui.blit(matrixStack, x + 1, y + 1 + (int) ((getBounds().height - 17) * currentScroll), 0, 0, 12, 15, 26, 15);
+        GuiComponent.blit(matrixStack, x + 1, y + 1 + (int) ((getBounds().height - 17) * currentScroll), 0, 0, 12, 15, 26, 15);
         GL11.glColor4d(1, 1, 1, 1);
     }
 

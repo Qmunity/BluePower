@@ -20,19 +20,19 @@ package com.bluepowermod.block.worldgen;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.util.DateEventHandler;
 import com.bluepowermod.util.DateEventHandler.Event;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.item.FallingBlockEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
 
 import java.util.List;
 import java.util.Random;
@@ -48,22 +48,22 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
         // When the random chance hit, spew lava.
         if (!world.isClientSide && (random.nextInt(100) == 0)) {
                 spawnLava(world, pos, random);
         }
     }
 
-    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-        worldIn.getBlockTicks().scheduleTick(pos, this, 20);
+    public void onBlockAdded(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+        worldIn.scheduleTick(pos, this, 20);
     }
 
-    private void spawnLava(World world, BlockPos pos, Random random) {
+    private void spawnLava(Level world, BlockPos pos, Random random) {
         if (DateEventHandler.isEvent(Event.NEW_YEAR)) {
             DateEventHandler.spawnFirework(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         } else {
-            FallingBlockEntity entity = new FallingBlockEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+            FallingBlockEntity entity = FallingBlockEntity.fall(world, pos.offset(0.5,0.5,0.5),
                     DateEventHandler.isEvent(Event.HALLOWEEN) ? Blocks.CARVED_PUMPKIN.defaultBlockState() : Blocks.LAVA.defaultBlockState());
             entity.setDeltaMovement( 1 + random.nextDouble(), (random.nextDouble() - 0.5) * 0.8D, (random.nextDouble() - 0.5) * 0.8D);
             entity.fallDistance = 1;// make this field that keeps track of the ticks set to 1, so it doesn't kill itself when it searches for a lava
@@ -81,7 +81,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     }
 
     @Override
-    public void animateTick(BlockState stateIn, World world, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level world, BlockPos pos, Random rand) {
             for (int i = 0; i < 10; i++)
                 world.addParticle(ParticleTypes.SMOKE, pos.getX() + rand.nextDouble(), pos.getY() + 1, pos.getZ() + rand.nextDouble(), (rand.nextDouble() - 0.5) * 0.2,
                         rand.nextDouble() * 0.1, (rand.nextDouble() - 0.5) * 0.2);

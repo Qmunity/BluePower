@@ -12,37 +12,37 @@ import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.container.ContainerDeployer;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.Items;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.server.ServerWorld;
+import com.mojang.math.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -53,10 +53,12 @@ import java.util.List;
 import java.util.UUID;
 
 
+import net.minecraft.core.NonNullList;
+
 /**
  * @author MineMaarten
  */
-public class TileDeployer extends TileBase implements ISidedInventory, IEjectAnimator, INamedContainerProvider {
+public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAnimator, MenuProvider {
 
     private static final List<Item>  blacklistedItems    = new ArrayList<Item>();
     private static final GameProfile FAKE_PLAYER_PROFILE = new GameProfile(UUID.randomUUID(), "[BP Deployer]");
@@ -67,8 +69,8 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         blacklistedItems.add(Items.ENDER_PEARL);
     }
 
-    public TileDeployer() {
-        super(BPTileEntityType.DEPLOYER);
+    public TileDeployer(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.DEPLOYER, pos, state);
     }
 
     private boolean canDeployItem(ItemStack stack) {
@@ -83,31 +85,31 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         if (!level.isClientSide && newValue) {
             sendUpdatePacket();
             
-            FakePlayer player = FakePlayerFactory.get((ServerWorld) level, FAKE_PLAYER_PROFILE);
+            FakePlayer player = FakePlayerFactory.get((ServerLevel) level, FAKE_PLAYER_PROFILE);
             for (int i = 0; i < inventory.size(); i++) {
                 ItemStack stack = inventory.get(i);
-                player.inventory.setItem(i, stack);
+                player.getInventory().setItem(i, stack);
             }
             
             rightClick(player, 9);
             
             for (int i = 0; i < inventory.size(); i++) {
-                ItemStack stack = player.inventory.getItem(i);
+                ItemStack stack = player.getInventory().getItem(i);
                 if (stack.isEmpty() || stack.getCount() <= 0) {
                     inventory.set(i, ItemStack.EMPTY);
                 } else {
                     inventory.set(i, stack);
                 }
-                player.inventory.setItem(i, ItemStack.EMPTY);
+                player.getInventory().setItem(i, ItemStack.EMPTY);
             }
-            for (int i = 0; i < player.inventory.getContainerSize(); i++) {
-                ItemStack stack = player.inventory.getItem(i);
+            for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                ItemStack stack = player.getInventory().getItem(i);
                 if (!stack.isEmpty() && stack.getCount() > 0) {
                     ItemStack remainder = IOHelper.insert(this, stack, getFacingDirection().getOpposite(), false);
                     if (!remainder.isEmpty()) {
                         level.addFreshEntity(new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, remainder));
                     }
-                    player.inventory.setItem(i, ItemStack.EMPTY);
+                    player.getInventory().setItem(i, ItemStack.EMPTY);
                 }
             }
         }
@@ -133,52 +135,52 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         int z = worldPosition.getZ() + dz;
         
         player.setPos(x + 0.5, y + 0.5 - player.getEyeHeight(), z + 0.5);
-        player.xRot = faceDir.getStepY() * -90;
+        player.setXRot(faceDir.getStepY() * -90);
         switch (faceDir) {
             case NORTH:
-                player.yRot = 180;
+                player.setYRot(180);
                 break;
             case SOUTH:
-                player.yRot = 0;
+                player.setYRot(0);
                 break;
             case WEST:
-                player.yRot = 90;
+                player.setYRot(90);
                 break;
             case EAST:
-                player.yRot = -90;
+                player.setYRot(-90);
         }
         
         try {
-            PlayerInteractEvent event =  new PlayerInteractEvent.RightClickEmpty(player, Hand.MAIN_HAND);
+            PlayerInteractEvent event =  new PlayerInteractEvent.RightClickEmpty(player, InteractionHand.MAIN_HAND);
             if (event.isCanceled()) return false;
             
             Block block = level.getBlockState(new BlockPos(x, y, z)).getBlock();
-            List<LivingEntity> detectedEntities = level.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1));
+            List<LivingEntity> detectedEntities = level.getEntitiesOfClass(LivingEntity.class, new AABB(x, y, z, x + 1, y + 1, z + 1));
             
             Entity entity = detectedEntities.isEmpty() ? null : detectedEntities.get(level.random.nextInt(detectedEntities.size()));
             
             if (entity != null) {
                 for (int i = 0; i < useItems; i++) {
-                    player.inventory.selected = i;
+                    player.getInventory().selected = i;
                     ItemStack stack = player.getMainHandItem();
-                    if (canDeployItem(stack) && stack.getItem().interactLivingEntity(stack, player, (LivingEntity) entity, Hand.MAIN_HAND).shouldSwing()) return true;
-                    if (entity instanceof AnimalEntity && ((AnimalEntity) entity).mobInteract(player, Hand.MAIN_HAND).shouldSwing()) return true;
+                    if (canDeployItem(stack) && stack.getItem().interactLivingEntity(stack, player, (LivingEntity) entity, InteractionHand.MAIN_HAND).shouldSwing()) return true;
+                    if (entity instanceof Animal && ((Animal) entity).mobInteract(player, InteractionHand.MAIN_HAND).shouldSwing()) return true;
                 }
             }
             
             for (int i = 0; i < useItems; i++) {
-                player.inventory.selected = i;
+                player.getInventory().selected = i;
                 ItemStack stack = player.getMainHandItem();
-                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, new ItemUseContext(player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == ActionResultType.SUCCESS) return true;
+                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == InteractionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
-                player.inventory.selected = i;
-                if (!level.isEmptyBlock(new BlockPos(x, y, z)) && block.use(level.getBlockState(new BlockPos(x, y, z)), level, new BlockPos(x, y, z), player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == ActionResultType.SUCCESS) return true;
+                player.getInventory().selected = i;
+                if (!level.isEmptyBlock(new BlockPos(x, y, z)) && block.use(level.getBlockState(new BlockPos(x, y, z)), level, new BlockPos(x, y, z), player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == InteractionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
-                player.inventory.selected = i;
+                player.getInventory().selected = i;
                 ItemStack stack = player.getMainHandItem();
                 boolean isGoingToShift = false;              
                 if(!stack.isEmpty()){
@@ -189,16 +191,16 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                 int useX = isGoingToShift ? worldPosition.getX() : x;
                 int useY = isGoingToShift ? worldPosition.getY() : y;
                 int useZ = isGoingToShift ? worldPosition.getZ() : z;
-                if (canDeployItem(stack) && stack.getItem().useOn(new ItemUseContext(player, Hand.MAIN_HAND, new BlockRayTraceResult(new Vector3d(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == ActionResultType.SUCCESS) return true;
+                if (canDeployItem(stack) && stack.getItem().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == InteractionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
-                player.inventory.selected = i;
+                player.getInventory().selected = i;
                 ItemStack stack = player.getMainHandItem();
                 if (canDeployItem(stack)) {
                     ItemStack copy = stack.copy();
                     //TODO Check this
-                    player.setItemInHand(Hand.MAIN_HAND, stack.getItem().use(level, player, Hand.MAIN_HAND).getObject());
+                    player.setItemInHand(InteractionHand.MAIN_HAND, stack.getItem().use(level, player, InteractionHand.MAIN_HAND).getObject());
                     if (!copy.sameItem(stack)) return true;
                 }
             }
@@ -214,12 +216,12 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundNBT tCompound) {
+    public void load(CompoundTag tCompound) {
     
-        super.load(blockState, tCompound);
+        super.load(tCompound);
         
         for (int i = 0; i < 9; i++) {
-            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            CompoundTag tc = tCompound.getCompound("inventory" + i);
             inventory.set(i, ItemStack.of(tc));
         }
     }
@@ -228,16 +230,15 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT save(CompoundNBT tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
     
-        super.save(tCompound);
+        super.saveAdditional(tCompound);
         
         for (int i = 0; i < 9; i++) {
-                CompoundNBT tc = new CompoundNBT();
+                CompoundTag tc = new CompoundTag();
                 inventory.get(i).save(tc);
                 tCompound.put("inventory" + i, tc);
         }
-        return tCompound;
     }
 
     @Override
@@ -290,17 +291,17 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     }
     
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 
@@ -367,13 +368,13 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.BLOCKDEPLOYER_NAME);
+    public Component getDisplayName() {
+        return new TextComponent(Refs.BLOCKDEPLOYER_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player playerEntity) {
         return new ContainerDeployer(id, inventory, this);
     }
 }

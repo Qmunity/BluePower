@@ -3,17 +3,18 @@ package com.bluepowermod.recipe;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPRecipeSerializer;
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author MoreThanHidden
@@ -35,12 +36,12 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE;
     }
 
     @Override
-    public boolean matches(ISidedInventory inv, World world) {
+    public boolean matches(WorldlyContainer inv, Level world) {
         //Build the blacklist based on config
         Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
@@ -50,11 +51,10 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
         }
 
         return inv.hasAnyOf(AlloyFurnaceRegistry.getInstance().recyclingRecipes.keySet());
-
     }
 
     @Override
-    public ItemStack assemble(ISidedInventory inv) {
+    public ItemStack assemble(WorldlyContainer inv) {
         return ItemStack.EMPTY;
     }
 
@@ -64,7 +64,7 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return BPRecipeSerializer.ALLOY_RECYCLING;
     }
 
@@ -109,7 +109,7 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
             }
         }
         return ItemStack.EMPTY;
-
+      
     }
 
     @Override
@@ -122,19 +122,19 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
         return null;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<AlloyFurnaceRecyclingRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AlloyFurnaceRecyclingRecipe> {
         @Override
         public AlloyFurnaceRecyclingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new AlloyFurnaceRecyclingRecipe(recipeId);
         }
 
         @Override
-        public AlloyFurnaceRecyclingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public AlloyFurnaceRecyclingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             return new AlloyFurnaceRecyclingRecipe(recipeId);
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, AlloyFurnaceRecyclingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, AlloyFurnaceRecyclingRecipe recipe) {
         }
     }
 }

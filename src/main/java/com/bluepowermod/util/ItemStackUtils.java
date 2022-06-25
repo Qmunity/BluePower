@@ -18,9 +18,10 @@
 package com.bluepowermod.util;
 
 import com.bluepowermod.compat.CompatibilityUtils;
-import net.minecraft.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  *
@@ -40,12 +41,7 @@ public class ItemStackUtils {
     }
 
     public static boolean isSameOreDictStack(ItemStack stack1, ItemStack stack2) {
-        for (ResourceLocation resTag : ItemTags.getAllTags().getMatchingTags(stack1.getItem())) {
-            if (ItemTags.getAllTags().getTag(resTag) != null) {
-                return ItemTags.getAllTags().getTag(resTag).contains(stack2.getItem());
-            }
-        }
-        return false;
+            return stack1.getTags().anyMatch(s1 -> stack2.getTags().anyMatch(s2 -> s2 == s1));
     }
 
     public static boolean isScrewdriver(ItemStack item) {

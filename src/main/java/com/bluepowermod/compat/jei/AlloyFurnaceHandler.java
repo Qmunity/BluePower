@@ -10,7 +10,7 @@ package com.bluepowermod.compat.jei;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.reference.Refs;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -19,9 +19,11 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.item.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +32,6 @@ import java.util.stream.Collectors;
 /**
   @author MoreThanHidden
 */
-
 
 public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnaceRecipe> {
 
@@ -55,8 +56,8 @@ public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnace
     }
 
     @Override
-    public String getTitle() {
-        return "Alloy Furnace";
+    public Component getTitle() {
+        return new TranslatableComponent("block.bluepower." + Refs.ALLOYFURNACE_NAME);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnace
     }
 
     @Override
-    public void draw(StandardAlloyFurnaceRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(StandardAlloyFurnaceRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
         progress.draw(matrixStack, 95, 22);
     }
 

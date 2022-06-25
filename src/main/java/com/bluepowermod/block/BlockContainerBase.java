@@ -20,46 +20,51 @@ package com.bluepowermod.block;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
+
+import java.util.List;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * @author MineMaarten
  */
 
-public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemovable {
+public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemovable, EntityBlock {
 
     private Class<? extends TileBase> tileEntityClass;
     private boolean isRedstoneEmitter;
     private boolean isSilkyRemoving;
 
-    public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass) {
+    public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
         super(material);
         setBlockEntityClass(tileEntityClass);
     }
 
-    public BlockContainerBase(Properties properties, Class<? extends TileBase> tileEntityClass) {
+    public BlockContainerBase(Properties properties, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
         super(properties);
         setBlockEntityClass(tileEntityClass);
     }
@@ -76,6 +81,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
         return this;
     }
 
+
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> drops =  super.getDrops(state, builder);
@@ -84,60 +90,61 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
-            TileEntity tileentity = worldIn.getBlockEntity(pos);
+            BlockEntity tileentity = worldIn.getBlockEntity(pos);
             if (tileentity instanceof TileBase) {
-                InventoryHelper.dropContents(worldIn, pos, ((TileBase)tileentity).getDrops());
+                Containers.dropContents(worldIn, pos, ((TileBase)tileentity).getDrops());
                 worldIn.updateNeighbourForOutputSignal(pos, this);
             }
             super.onRemove(state, worldIn, pos, newState, isMoving);
         }
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        try {
-            return getTileEntity().newInstance();
-        } catch (Exception e) {
-            return super.createTileEntity(state, world);
-        }
-    }
-
     /**
-     * Fetches the TileEntity Class that goes with the block
+     * Fetches the BlockEntity Class that goes with the block
      *
      * @return a .class
      */
-    protected Class<? extends TileEntity> getTileEntity() {
+    protected Class<? extends BlockEntity> getBlockEntity() {
 
         return tileEntityClass;
     }
 
-    protected TileBase get(IBlockReader w, BlockPos pos) {
+    protected TileBase get(BlockGetter w, BlockPos pos) {
 
-        TileEntity te = w.getBlockEntity(pos);
+        BlockEntity te = w.getBlockEntity(pos);
 
-        if (te == null || !(te instanceof TileBase))
+        if (!(te instanceof TileBase))
             return null;
 
         return (TileBase) te;
     }
 
+    @Nullable
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        try {
+            return getBlockEntity().getDeclaredConstructor(BlockPos.class, BlockState.class).newInstance(pos, state);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : TileMachineBase::tickMachineBase;
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
         // Only do this on the server side.
         if (!world.isClientSide) {
             TileBase tileEntity = get(world, pos);
             if (tileEntity != null) {
-                tileEntity.onBlockNeighbourChanged();
+                TileBase.setChanged(world, pos, state, tileEntity);
             }
         }
     }
@@ -148,35 +155,34 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public int getSignal(BlockState blockState, IBlockReader par1IBlockReader, BlockPos pos, Direction side) {
-        TileEntity te = get(par1IBlockReader, pos);
-        if (te instanceof TileBase) {
-            TileBase tileBase = (TileBase) te;
-            return tileBase.getOutputtingRedstone();
+    public int getSignal(BlockState blockState, BlockGetter par1BlockGetter, BlockPos pos, Direction side) {
+        TileBase te = get(par1BlockGetter, pos);
+        if (te != null) {
+            return te.getOutputtingRedstone();
         }
         return 0;
     }
 
     @Override
-    public ActionResultType use(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+    public InteractionResult use(BlockState blockState, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
         if (world.isClientSide) {
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         if (player.isCrouching()) {
             if (!player.getItemInHand(hand).isEmpty()) {
-                if (player.getItemInHand(hand).getItem() == BPItems.screwdriver) {
-                    return ActionResultType.FAIL;
+                if (player.getItemInHand(hand).getItem() == BPItems.screwdriver.get()) {
+                    return InteractionResult.FAIL;
                 }
             }
         }
         if (player.isCrouching()) {
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
-        if (!world.isClientSide && world.getBlockEntity(pos) instanceof INamedContainerProvider) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider)world.getBlockEntity(pos));
-            return ActionResultType.SUCCESS;
+        if (world.getBlockEntity(pos) instanceof MenuProvider) {
+            NetworkHooks.openGui((ServerPlayer) player, (MenuProvider)world.getBlockEntity(pos));
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
     protected boolean canRotateVertical() {
@@ -186,34 +192,33 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
 
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    public boolean preSilkyRemoval(World world, BlockPos pos) {
+    public boolean preSilkyRemoval(Level world, BlockPos pos) {
 
         isSilkyRemoving = true;
         return true;
     }
 
     @Override
-    public void postSilkyRemoval(World world, BlockPos pos) {
+    public void postSilkyRemoval(Level world, BlockPos pos) {
 
         isSilkyRemoving = false;
     }
 
     @Override
-    public boolean writeSilkyData(World world, BlockPos pos, CompoundNBT tag) {
+    public boolean writeSilkyData(Level world, BlockPos pos, CompoundTag tag) {
 
-        world.getBlockEntity(pos).save(tag);
+        world.getBlockEntity(pos).saveWithFullMetadata();
         return false;
     }
 
     @Override
-    public void readSilkyData(World world, BlockPos pos, CompoundNBT tag) {
-
-        world.getBlockEntity(pos).load(world.getBlockState(pos), tag);
+    public void readSilkyData(Level world, BlockPos pos, CompoundTag tag) {
+        world.getBlockEntity(pos).load(tag);
     }
 
 }

@@ -17,10 +17,8 @@
 
 package com.bluepowermod.reference;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class Refs {
 
@@ -53,6 +51,14 @@ public class Refs {
     public static final String RUBYORE_NAME = "ruby_ore";
     public static final String SAPPHIREORE_NAME = "sapphire_ore";
     public static final String TESLATITEORE_NAME = "teslatite_ore";
+    public static final String AMETHYSTDEEPSLATE_NAME = "amethyst_deepslate";
+    public static final String GREENSAPPHIREDEEPSLATE_NAME = "green_sapphire_deepslate";
+    public static final String RUBYDEEPSLATE_NAME = "ruby_deepslate";
+    public static final String SAPPHIREDEEPSLATE_NAME = "sapphire_deepslate";
+    public static final String TESLATITEDEEPSLATE_NAME = "teslatite_deepslate";
+    public static final String SILVERDEEPSLATE_NAME = "silver_deepslate";
+    public static final String ZINCDEEPSLATE_NAME = "zinc_deepslate";
+    public static final String TUNGSTENDEEPSLATE_NAME = "tungsten_deepslate";
     public static final String AMETHYSTBLOCK_NAME = "amethyst_block";
     public static final String SAPPHIREBLOCK_NAME = "sapphire_block";
     public static final String GREENSAPPHIREBLOCK_NAME = "green_sapphire_block";
@@ -63,27 +69,36 @@ public class Refs {
     public static final String GREENSAPPHIRE_NAME = "green_sapphire_gem";
     public static final String RUBY_NAME = "ruby_gem";
     public static final String TESLATITE_NAME = "teslatite_dust";
-    public static final String COPPERORE_NAME = "copper_ore";
     public static final String SILVERORE_NAME = "silver_ore";
     public static final String ZINCORE_NAME = "zinc_ore";
     public static final String TUNGSTENORE_NAME = "tungsten_ore";
-    public static final String COPPERBLOCK_NAME = "copper_block";
     public static final String SILVERBLOCK_NAME = "silver_block";
     public static final String ZINCBLOCK_NAME = "zinc_block";
     public static final String TUNGSTENBLOCK_NAME = "tungsten_block";
     public static final String RUBBERLOG_NAME = "rubber_log";
     public static final String RUBBERLEAVES_NAME = "rubber_leaves";
     public static final String RUBBERSAPLING_NAME = "rubber_sapling";
-    public static final String COPPERINGOT_NAME = "copper_ingot";
     public static final String SILVERINGOT_NAME = "silver_ingot";
     public static final String ZINCINGOT_NAME = "zinc_ingot";
     public static final String TUNGSTENINGOT_NAME = "tungsten_ingot";
+    public static final String SILVERRAW_NAME = "silver_raw";
+    public static final String ZINCRAW_NAME = "zinc_raw";
+    public static final String TUNGSTENRAW_NAME = "tungsten_raw";
+
     public static final String TUNGSTENNUGGET_NAME = "tungsten_nugget";
+    public static final String COPPERNUGGET_NAME = "copper_nugget";
+    public static final String BRASSNUGGET_NAME = "brass_nugget";
+    public static final String ZINCNUGGET_NAME = "zinc_nugget";
+    public static final String SILVERNUGGET_NAME = "silver_nugget";
 
     public static final String SAPPHIREGLASS_NAME = "sapphire_glass";
     public static final String REINFORCEDSAPPHIREGLASS_NAME = "reinforced_sapphire_glass";
 
     public static final String ZINCDUST_NAME = "zinc_dust";
+    public static final String BRASSDUST_NAME = "brass_dust";
+    public static final String SILVERDUST_NAME = "silver_dust";
+    public static final String TUNGSTENDUST_NAME = "tungsten_dust";
+
     public static final String ZINC_ORE_CRUSHED_NAME = "zinc_ore_crushed";
     public static final String ZINC_ORE_CRUSHED_PURIFIED_NAME = "zinc_ore_purified";
     public static final String ZINCDUST_TINY_NAME = "zinc_tiny_dust";

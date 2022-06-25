@@ -19,20 +19,26 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerRelay;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
-public class GuiRelay extends GuiContainerBaseBP<ContainerRelay> implements IHasContainer<ContainerRelay> {
+public class GuiRelay extends GuiContainerBaseBP<ContainerRelay> implements MenuAccess<ContainerRelay> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
 
-    public GuiRelay(ContainerRelay container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiRelay(ContainerRelay container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
+    }
+
+    @Override
+    protected void renderBg(PoseStack pPoseStack, float pPartialTicks, int pMouseX, int pMouseY) {
+
     }
 
 }

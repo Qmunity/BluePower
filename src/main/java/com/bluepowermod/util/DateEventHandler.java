@@ -18,12 +18,12 @@
 package com.bluepowermod.util;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.item.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.world.World;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,15 +57,15 @@ public class DateEventHandler {
         return event.isEvent(calendar);
     }
 
-    public static void spawnFirework(World world, double x, double y, double z) {
+    public static void spawnFirework(Level world, double x, double y, double z) {
 
         ItemStack rocket = new ItemStack(Items.FIREWORK_ROCKET);
 
         ItemStack itemstack1 = getFireworkCharge();
 
-        CompoundNBT nbttagcompound = new CompoundNBT();
-        CompoundNBT nbttagcompound1 = new CompoundNBT();
-        ListNBT nbttaglist = new ListNBT();
+        CompoundTag nbttagcompound = new CompoundTag();
+        CompoundTag nbttagcompound1 = new CompoundTag();
+        ListTag nbttaglist = new ListTag();
 
         if (!itemstack1.isEmpty() && itemstack1.getItem() == Items.FIREWORK_STAR && itemstack1.hasTag()
                 && itemstack1.getTag().hasUUID("Explosion")) {
@@ -85,8 +85,8 @@ public class DateEventHandler {
     private static ItemStack getFireworkCharge() {
 
         ItemStack charge = new ItemStack(Items.FIREWORK_STAR);
-        CompoundNBT nbttagcompound = new CompoundNBT();
-        CompoundNBT nbttagcompound1 = new CompoundNBT();
+        CompoundTag nbttagcompound = new CompoundTag();
+        CompoundTag nbttagcompound1 = new CompoundTag();
         byte b0 = 0;
         ArrayList<Integer> arraylist = new ArrayList<Integer>();
         arraylist.add( MinecraftColor.values()[rand.nextInt(16)].getHex());

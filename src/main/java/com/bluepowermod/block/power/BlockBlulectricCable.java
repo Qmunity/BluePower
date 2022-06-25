@@ -12,11 +12,15 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileBlulectricCable;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -25,7 +29,7 @@ import java.util.List;
 /**
  * @author MoreThanHidden
  */
-public class BlockBlulectricCable extends BlockBPCableBase {
+public class BlockBlulectricCable extends BlockBPCableBase implements EntityBlock {
 
 
     public BlockBlulectricCable() {
@@ -33,20 +37,21 @@ public class BlockBlulectricCable extends BlockBPCableBase {
         setRegistryName(Refs.MODID + ":" + Refs.BLULECTRICCABLE_NAME);
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileBlulectricCable();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileBlulectricCable(pos, state);
     }
 
     @Override
     protected Capability<?> getCapability() {
         return CapabilityBlutricity.BLUTRICITY_CAPABILITY;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : TileBlulectricCable::tickCable;
     }
 
     @Override

@@ -19,19 +19,19 @@
 
 package com.bluepowermod.container.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
-public class InventoryItem extends Inventory {
+public class InventoryItem extends SimpleContainer {
     
     private ItemStack    item;
-    private PlayerEntity player;
+    private Player player;
     private boolean      reading = false;
     
-    public InventoryItem(PlayerEntity player, ItemStack item, String name, boolean customName, int size) {
+    public InventoryItem(Player player, ItemStack item, String name, boolean customName, int size) {
         super(item);
         this.player = player;
         this.item = item;
@@ -48,7 +48,7 @@ public class InventoryItem extends Inventory {
         return getItemInventory(null, is, name, size);
     }
     
-    public static InventoryItem getItemInventory(PlayerEntity player, ItemStack is, String name, int size) {
+    public static InventoryItem getItemInventory(Player player, ItemStack is, String name, int size) {
     
         return new InventoryItem(player, is, name, false, size);
     }
@@ -59,12 +59,12 @@ public class InventoryItem extends Inventory {
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
         loadInventory();
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
         super.stopOpen(player);
     }
 
@@ -87,18 +87,18 @@ public class InventoryItem extends Inventory {
     protected void writeToNBT() {
     
         if (item.getTag() == null) {
-            item.setTag(new CompoundNBT());
+            item.setTag(new CompoundTag());
         }
-        ListNBT itemList = new ListNBT();
+        ListTag itemList = new ListTag();
         for (int i = 0; i < getContainerSize(); i++) {
             if (!getItem(i).isEmpty()) {
-                CompoundNBT slotEntry = new CompoundNBT();
+                CompoundTag slotEntry = new CompoundTag();
                 slotEntry.putByte("Slot", (byte) i);
                 getItem(i).save(slotEntry);
                 itemList.add(slotEntry);
             }
         }
-        CompoundNBT inventory = new CompoundNBT();
+        CompoundTag inventory = new CompoundTag();
         inventory.put("Items", itemList);
         item.getTag().put("Inventory", inventory);
     }
@@ -133,9 +133,9 @@ public class InventoryItem extends Inventory {
     
         reading = true;
         
-        ListNBT itemList = (ListNBT) ((CompoundNBT) item.getTag().get("Inventory")).get("Items");
+        ListTag itemList = (ListTag) ((CompoundTag) item.getTag().get("Inventory")).get("Items");
         for (int i = 0; i < itemList.size(); i++) {
-            CompoundNBT slotEntry = itemList.getCompound(i);
+            CompoundTag slotEntry = itemList.getCompound(i);
             int j = slotEntry.getByte("Slot") & 0xff;
             
             if (j >= 0 && j < getContainerSize()) {

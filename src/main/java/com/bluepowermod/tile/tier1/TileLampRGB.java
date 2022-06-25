@@ -10,8 +10,9 @@ package com.bluepowermod.tile.tier1;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.lighting.BlockLampRGB;
 import com.bluepowermod.helper.MathHelper;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.BlockState;
 
 
 /**
@@ -21,18 +22,21 @@ public class TileLampRGB extends TileLamp {
 
     private byte[] bundledPower = new byte[16];
 
+    public TileLampRGB(BlockPos pos, BlockState state) {
+        super(pos, state);
+    }
+
     @Override
-    public CompoundNBT save(CompoundNBT tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
         if (getBlockState().getBlock() instanceof BlockLampRGB) {
             tCompound.putByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
             tCompound.putByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
             tCompound.putByte("blue", bundledPower[MinecraftColor.BLUE.ordinal()]);
         }
-        return tCompound;
     }
 
     @Override
-    public void load(BlockState blockState, CompoundNBT tCompound) {
+    public void load(CompoundTag tCompound) {
         if (tCompound.contains("red")) {
             byte[] pow = bundledPower;
             pow[MinecraftColor.RED.ordinal()] = tCompound.getByte("red");

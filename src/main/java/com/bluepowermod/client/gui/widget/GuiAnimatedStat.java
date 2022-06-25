@@ -1,27 +1,26 @@
 package com.bluepowermod.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGuiWidget {
@@ -73,12 +72,12 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         texture = "";
         this.leftSided = leftSided;
         if (gui != null) {
-            //TODO: MainWindow sr = Minecraft.getInstance().mainWindow;
-            //if (sr.getScaledWidth() < 520) {
-            //textSize = (sr.getScaledWidth() - 220) * 0.0033F;
-            //} else {
+            Window sr = Minecraft.getInstance().getWindow();
+            if (sr.getGuiScaledWidth() < 520) {
+            textSize = (sr.getGuiScaledWidth() - 220) * 0.0033F;
+            } else {
                 textSize = 1F;
-            //}
+            }
         } else {
             textSize = 1;
         }
@@ -162,9 +161,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
         textList.clear();
         for (String line : text) {
-            for (String s : WordUtils.wrap(I18n.get(line), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))) {
-                textList.add(s);
-            }
+            textList.addAll(Arrays.asList(WordUtils.wrap(I18n.get(line), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))));
         }
         return this;
     }
@@ -173,9 +170,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     public IGuiAnimatedStat setText(String text) {
 
         textList.clear();
-        for (String s : WordUtils.wrap(I18n.get(text), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))) {
-            textList.add(s);
-        }
+        textList.addAll(Arrays.asList(WordUtils.wrap(I18n.get(text), (int) (MAX_CHAR / textScale)).split(System.getProperty("line.separator"))));
         return this;
     }
 
@@ -203,7 +198,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         oldWidth = width;
         oldHeight = height;
 
-        FontRenderer fontRenderer = Minecraft.getInstance().font;
+        Font fontRenderer = Minecraft.getInstance().font;
         doneExpanding = true;
         if (isClicked) {
             // calculate the width and height needed for the box to fit the
@@ -243,7 +238,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         }
     }
 
-    protected int getMaxWidth(FontRenderer fontRenderer) {
+    protected int getMaxWidth(Font fontRenderer) {
 
         int maxWidth = fontRenderer.width(title);
 
@@ -256,7 +251,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         return maxWidth;
     }
 
-    protected int getMaxHeight(FontRenderer fontRenderer) {
+    protected int getMaxHeight(Font fontRenderer) {
 
         int maxHeight = 12;
         if (textList.size() > 0) {
@@ -267,7 +262,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     }
 
     @Override
-    public void render(MatrixStack matrixStack, FontRenderer fontRenderer, float zLevel, float partialTicks) {
+    public void render(PoseStack matrixStack, Font fontRenderer, float zLevel, float partialTicks) {
 
         int renderBaseX = (int) (oldBaseX + (baseX - oldBaseX) * partialTicks);
         int renderAffectedY = (int) (oldAffectedY + (affectedY - oldAffectedY) * partialTicks);
@@ -276,32 +271,33 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
         if (leftSided)
             renderWidth *= -1;
-        AbstractGui.fill(matrixStack, renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
+        GuiComponent.fill(matrixStack, renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
                 backGroundColor);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glLineWidth(3.0F);
-        GL11.glColor4d(0, 0, 0, 1);
-        Tessellator tess = Tessellator.getInstance();
+
+        RenderSystem.disableTexture();
+        RenderSystem.lineWidth(3.0F);
+        RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
+        Tesselator tess = Tesselator.getInstance();
         BufferBuilder buff = tess.getBuilder();
-        buff.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION_TEX);
+        buff.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_TEX);
         buff.vertex(renderBaseX, renderAffectedY, zLevel);
         buff.vertex(renderBaseX + renderWidth, renderAffectedY, zLevel);
         buff.vertex(renderBaseX + renderWidth, renderAffectedY + renderHeight, zLevel);
         buff.vertex(renderBaseX, renderAffectedY + renderHeight, zLevel);
         tess.end();
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        RenderSystem.enableTexture();
         if (leftSided)
             renderWidth *= -1;
         // if done expanding, draw the information
         if (doneExpanding) {
-            GL11.glPushMatrix();
-            GL11.glTranslated(renderBaseX + (leftSided ? -renderWidth : 16), renderAffectedY, 0);
-            GL11.glScaled(textSize, textSize, textSize);
-            GL11.glTranslated(-renderBaseX - (leftSided ? -renderWidth : 16), -renderAffectedY, 0);
+            matrixStack.pushPose();
+            matrixStack.translate(renderBaseX + (leftSided ? -renderWidth : 16), renderAffectedY, 0);
+            matrixStack.scale(textSize, textSize, textSize);
+            matrixStack.translate(-renderBaseX - (leftSided ? -renderWidth : 16), -renderAffectedY, 0);
             fontRenderer.drawShadow(matrixStack, title, renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + 2, 0xFFFF00);
             for (int i = 0; i < textList.size(); i++) {
 
-                if (textList.get(i).contains("\u00a70") || textList.get(i).contains(TextFormatting.DARK_RED.toString())) {
+                if (textList.get(i).contains("\u00a70") || textList.get(i).contains(ChatFormatting.DARK_RED.toString())) {
                     fontRenderer.draw(matrixStack, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + i * 10
                             + 12, 0xFFFFFF);
                 } else {
@@ -310,50 +306,50 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
                 }
             }
 
-            GL11.glPopMatrix();
+            matrixStack.popPose();
         }
         if (renderHeight > 16 && renderWidth > 16) {
-            GL11.glColor4d(1, 1, 1, 1);
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.enableBlend();
+            RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             if (iStack == null) {
                 if (iconResLoc == null)
                     iconResLoc = new ResourceLocation(texture);
-                drawTexture(iconResLoc, renderBaseX - (leftSided ? 16 : 0), renderAffectedY);
+                drawTexture(matrixStack.last().pose(), iconResLoc, renderBaseX - (leftSided ? 16 : 0), renderAffectedY);
             } else if (gui != null || !(iStack.getItem() instanceof BlockItem)) {
-                renderItem(fontRenderer, renderBaseX - (leftSided ? 16 : 0), renderAffectedY, iStack);
+                renderItem(matrixStack, fontRenderer, renderBaseX - (leftSided ? 16 : 0), renderAffectedY, iStack);
             }
         }
     }
 
-    protected void renderItem(FontRenderer fontRenderer, int x, int y, ItemStack stack) {
+    protected void renderItem(PoseStack matrixStack, Font fontRenderer, int x, int y, ItemStack stack) {
 
         if (itemRenderer == null)
-            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelShaper().getModelManager(), Minecraft.getInstance().getItemColors());
-        GL11.glPushMatrix();
-        GL11.glTranslated(0, 0, -50);
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelShaper().getModelManager(), Minecraft.getInstance().getItemColors(), null);
+        matrixStack.pushPose();
+        matrixStack.translate(0, 0, -50);
+        //GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         //TODO: RenderHelper.enableGUIStandardItemLighting();
         itemRenderer.renderAndDecorateItem(stack, x, y);
         itemRenderer.renderGuiItemDecorations(fontRenderer, stack, x, y, null);
 
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        RenderHelper.turnOff();
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        GL11.glPopMatrix();
+        //GL11.glEnable(GL11.GL_ALPHA_TEST);
+        //TODO: RenderHelper.turnOff();
+        //GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+        matrixStack.popPose();
     }
 
-    public static void drawTexture(ResourceLocation texture, int x, int y) {
-
-        Minecraft.getInstance().getTextureManager().bind(texture);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buff = tessellator.getBuilder();
-        buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buff.vertex(x, y + 16, 0).uv(0.0F, 1.0F).endVertex();
-        buff.vertex(x + 16, y + 16, 0).uv(1.0F, 1.0F).endVertex();
-        buff.vertex(x + 16, y, 0).uv(1.0F, 0.0F).endVertex();
-        buff.vertex(x, y, 0).uv(0.0F, 0.0F).endVertex();
-        tessellator.end();
+    public static void drawTexture(Matrix4f matrixStack, ResourceLocation texture, int x, int y) {
+        RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.vertex(matrixStack, x, y + 16, 0).uv(0.0F, 1.0F).endVertex();
+        bufferbuilder.vertex(matrixStack,x + 16, y + 16, 0).uv(1.0F, 1.0F).endVertex();
+        bufferbuilder.vertex(matrixStack,x + 16, y, 0).uv(1.0F, 0.0F).endVertex();
+        bufferbuilder.vertex(matrixStack, x, y, 0).uv(0.0F, 0.0F).endVertex();
+        bufferbuilder.end();
+        BufferUploader.end(bufferbuilder);
     }
 
     /*
@@ -477,7 +473,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTick) {
 
         render(matrixStack, Minecraft.getInstance().font, 0, partialTick);
 

@@ -18,15 +18,18 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class Recipes {
 
     public static void init() {
+
+        // Alloy furnace
         AlloyFurnaceRegistry.getInstance().recyclingItems.add(new ItemStack(Items.GOLD_INGOT));
         AlloyFurnaceRegistry.getInstance().recyclingItems.add(new ItemStack(Items.IRON_INGOT));
         AlloyFurnaceRegistry.getInstance().recyclingItems.add(new ItemStack(Items.GOLD_NUGGET));
         AlloyFurnaceRegistry.getInstance().recyclingItems.add(new ItemStack(Items.IRON_NUGGET));
+
     }
 }

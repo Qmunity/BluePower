@@ -1,8 +1,8 @@
 package com.bluepowermod.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.GuiComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
@@ -34,10 +34,10 @@ public class WidgetSidewaysTab extends BaseWidget {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTick) {
 
         if (textures.length > 0)
-            Minecraft.getInstance().getTextureManager().bind(textures[0]);
+            Minecraft.getInstance().getTextureManager().bindForSetup(textures[0]);
 
         for (int i = 0; i < tabAmount; i++) {
             if (i == value) {
@@ -49,7 +49,7 @@ public class WidgetSidewaysTab extends BaseWidget {
                     GL11.glColor4d(0.2, 0.2, 0.2, 1);
                 }
             }
-            AbstractGui.blit(matrixStack, x + singleTabWidth * i, y, getTextureU(), getTextureV() + singleTabWidth * i, singleTabWidth, height, 256,
+            GuiComponent.blit(matrixStack, x + singleTabWidth * i, y, getTextureU(), getTextureV() + singleTabWidth * i, singleTabWidth, height, 256,
                     256);
         }
     }

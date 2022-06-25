@@ -11,28 +11,28 @@ import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerCircuitDatabaseMain;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.List;
 
-public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitDatabaseMain> implements IHasContainer<ContainerCircuitDatabaseMain> {
+public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitDatabaseMain> implements MenuAccess<ContainerCircuitDatabaseMain> {
 
     private final ContainerCircuitDatabaseMain circuitDatabase;
     private static final ResourceLocation copyTabTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_database.png");
-    private TextFieldWidget nameField;
+    private EditBox nameField;
     private WidgetSidewaysTab shareOptionTab;
     private WidgetMode copyButton;
 
-    public GuiCircuitDatabaseMain(ContainerCircuitDatabaseMain container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiCircuitDatabaseMain(ContainerCircuitDatabaseMain container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, copyTabTexture);
         this.circuitDatabase = container;
         imageHeight = 224;
@@ -145,7 +145,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float par1, int par2, int par3) {
+    protected void renderBg(PoseStack matrixStack, float par1, int par2, int par3) {
 
         super.renderBg(matrixStack, par1, par2, par3);
 
@@ -153,7 +153,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
         //nameField.drawTextBox();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bind(copyTabTexture);
+        this.minecraft.getTextureManager().bindForSetup(copyTabTexture);
 
         int processPercentage = circuitDatabase.curCopyProgress * 22 / TileCircuitDatabase.UPLOAD_AND_COPY_TIME;
         if (processPercentage > 0)
@@ -174,10 +174,8 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
         //BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(circuitDatabase, widget.getID(), ((BaseWidget) widget).value));
     }
 
-    @Override
-    public void tick() {
-
-        super.tick();
+    //@Override
+   // public void m_181908_() {
         /*if (!nameField.isFocused()) {
             nameField.setText(circuitDatabase.nameTextField);
         }
@@ -204,7 +202,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitD
                 && !circuitDatabase.copyInventory.getItem(1).isEmpty()
                 && circuitDatabase.copy(Minecraft.getInstance().player, circuitDatabase.copyInventory.getItem(0),
                         circuitDatabase.copyInventory.getItem(1), true);*/
-    }
+    //}
 
     @Override
     protected boolean isInfoStatLeftSided() {

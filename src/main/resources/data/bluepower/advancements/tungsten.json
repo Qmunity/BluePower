@@ -13,7 +13,7 @@
       "conditions": {
         "items": [
           {
-            "item": "bluepower:tungsten_ore"
+            "items": ["bluepower:tungsten_ore","bluepower:tungsten_raw"]
           }
         ]
       }

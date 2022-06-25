@@ -11,24 +11,26 @@ package com.bluepowermod.block.machine;
 import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.tier2.TileTube;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SixWayBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.PipeBlock;
 
 import javax.annotation.Nullable;
+
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * @author MoreThanHidden
  */
-public class BlockTube extends SixWayBlock implements IBPPartBlock {
+public class BlockTube extends PipeBlock implements IBPPartBlock, EntityBlock {
     public BlockTube() {
         super(0.25F, Properties.of(Material.PISTON).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any()
@@ -42,15 +44,15 @@ public class BlockTube extends SixWayBlock implements IBPPartBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> stateBuilder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder) {
         stateBuilder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
     }
 
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.makeConnections(context.getLevel(), context.getClickedPos());
     }
 
-    public BlockState makeConnections(IBlockReader world, BlockPos pos) {
+    public BlockState makeConnections(BlockGetter world, BlockPos pos) {
         Block blockDown = world.getBlockState(pos.below()).getBlock();
         Block blockUp = world.getBlockState(pos.above()).getBlock();
         Block blockNorth = world.getBlockState(pos.north()).getBlock();
@@ -68,17 +70,12 @@ public class BlockTube extends SixWayBlock implements IBPPartBlock {
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state) {
-        return VoxelShapes.box(4, 4, 4, 12, 12, 12);
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
+        return Shapes.box(4, 4, 4, 12, 12, 12);
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileTube();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileTube(pos, state);
     }
 }

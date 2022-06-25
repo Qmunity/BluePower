@@ -8,26 +8,24 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 /**
  * @author MineMaarten
  */
 public abstract class ItemDamageableColorableOverlay extends ItemColorableOverlay {
 
-    public ItemDamageableColorableOverlay(MinecraftColor color, String name, Properties properties) {
-        super(color, name, properties);
+    public ItemDamageableColorableOverlay(MinecraftColor color, Properties properties) {
+        super(color, properties);
     }
-    public ItemDamageableColorableOverlay(String name, Properties properties) {
-        super(name, properties);
+    public ItemDamageableColorableOverlay(Properties properties) {
+        super(properties);
     }
 
     public static int getUsesUsed(ItemStack stack) {
 
-        CompoundNBT tag = stack.getTag();
+        CompoundTag tag = stack.getTag();
         if (tag != null) {
             return tag.getInt("usesUsed");
         } else {
@@ -37,9 +35,9 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
 
     public static void setUsesUsed(ItemStack stack, int newUses) {
 
-        CompoundNBT tag = stack.getTag();
+        CompoundTag tag = stack.getTag();
         if (tag == null) {
-            tag = new CompoundNBT();
+            tag = new CompoundTag();
             stack.setTag(tag);
         }
         tag.putInt("usesUsed", newUses);
@@ -74,7 +72,7 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
      * @return True if it should render the 'durability' bar.
      */
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
 
         return getUsesUsed(stack) != 0;
     }
@@ -87,8 +85,7 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
      * @return 1.0 for 100% 0 for 0%
      */
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-
-        return (double) getUsesUsed(stack) / (double) getMaxUses();
+    public int getBarWidth(ItemStack stack) {
+        return getUsesUsed(stack) / getMaxUses();
     }
 }

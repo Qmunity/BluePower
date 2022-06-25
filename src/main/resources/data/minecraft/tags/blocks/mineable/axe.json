@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "bluepower:project_table",
+    "bluepower:auto_project_table",
+    "bluepower:rubber_log"
+  ]
+}

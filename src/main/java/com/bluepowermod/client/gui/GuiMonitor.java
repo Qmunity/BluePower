@@ -7,29 +7,25 @@
  */
 package com.bluepowermod.client.gui;
 
-import com.bluepowermod.container.ContainerAlloyFurnace;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.container.ContainerMonitor;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileMonitor;
 
-public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements IHasContainer<ContainerMonitor> {
+public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements MenuAccess<ContainerMonitor> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/monitorgui.png");
     private static final ResourceLocation chracterSetResLoc = new ResourceLocation(Refs.MODID + ":textures/gui/65el02_chars.png");
     private final ContainerMonitor monitor;
 
-    public GuiMonitor(ContainerMonitor container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiMonitor(ContainerMonitor container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.monitor = container;
         imageWidth = 350;
@@ -39,21 +35,21 @@ public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements 
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
 
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float f, int i, int j) {
+    protected void renderBg(PoseStack matrixStack, float f, int i, int j) {
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bind(resLoc);
+        this.minecraft.getTextureManager().bindForSetup(resLoc);
         int k = (width - imageWidth) / 2;
         int l = (height - imageHeight) / 2;
         drawTexturedModalRect2(k, l, 0, 0, imageWidth, imageHeight);
 
         // screen color
-        this.minecraft.getTextureManager().bind(chracterSetResLoc);
+        this.minecraft.getTextureManager().bindForSetup(chracterSetResLoc);
         GL11.glColor4f(TileMonitor.screenColor[0], TileMonitor.screenColor[1], TileMonitor.screenColor[2], 1.0F);
 
         for (int row = 0; row < 50; row++) {
@@ -91,9 +87,9 @@ public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements 
 
         float f = 0.00195313F;
         float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buffer = tessellator.getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         //buffer.pos(x + 0, z + h, zLevel).uv((u + 0) * f, (v + h) * f1).endVertex();
         //buffer.pos(x + w, z + h, zLevel).uv((u + w) * f, (v + h) * f1).endVertex();
         //buffer.pos(x + w, z + 0, zLevel).uv((u + w) * f, (v + 0) * f1).endVertex();
@@ -106,9 +102,9 @@ public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements 
 
         float f = 0.00390625F;
         float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buffer = tessellator.getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         //buffer.pos(x + 0, z + h, zLevel).uv((u + 0) * f, (v + h) * f1).endVertex();
         //buffer.pos(x + w, z + h, zLevel).uv((u + w) * f, (v + h) * f1).endVertex();
         //buffer.pos(x + w, z + 0, zLevel).uv((u + w) * f, (v + 0) * f1).endVertex();

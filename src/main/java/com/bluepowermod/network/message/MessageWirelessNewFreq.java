@@ -1,8 +1,8 @@
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.api.misc.Accessibility;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.Direction;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -30,11 +30,11 @@ public class MessageWirelessNewFreq{
 
     }
 
-    public void handleClientSide(PlayerEntity player) {
+    public void handleClientSide(Player player) {
 
     }
 
-    public void handleServerSide(PlayerEntity player) {
+    public void handleServerSide(Player player) {
 
         //Frequency freq = (Frequency) WirelessManager.COMMON_INSTANCE.registerFrequency(player, name, acc, bundled);
        // ITilePartHolder h = MultipartCompatibility.getPartHolder(player.world, pos);
@@ -55,7 +55,7 @@ public class MessageWirelessNewFreq{
 
     public void write(DataOutput buffer) throws IOException {
 
-        //super.save(buffer);
+        //super.saveAdditional(buffer);
 
         buffer.writeInt(acc.ordinal());
         buffer.writeUTF(name);

@@ -18,23 +18,23 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.block.machine.BlockIgniter;
-import com.bluepowermod.tile.BPTileEntityType;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-
+import com.bluepowermod.tile.BPBlockEntityType;
+import net.minecraft.core.BlockPos;
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 import static com.bluepowermod.block.machine.BlockIgniter.ACTIVE;
 import static com.bluepowermod.block.machine.BlockIgniter.FACING;
 
 public class TileIgniter extends TileBase implements IEjectAnimator {
 
-    public TileIgniter() {
-        super(BPTileEntityType.IGNITER);
+    public TileIgniter(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.IGNITER, pos, state);
     }
 
     @Override
@@ -64,13 +64,13 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
         }
     }
 
-    @Override
-    public void tick() {
 
-        if (getTicker() % 5 == 0) {
-            ignite();
+    public static void tickIgniter(Level level, BlockPos pos, BlockState state, TileIgniter tileIgniter) {
+
+        if (tileIgniter.getTicker() % 5 == 0) {
+            tileIgniter.ignite();
         }
-        super.tick();
+        tileIgniter.tickTileBase(level, pos, state, tileIgniter);
     }
 
     @Override

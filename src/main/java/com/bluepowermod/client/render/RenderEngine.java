@@ -9,22 +9,18 @@ package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.init.BPBlocks;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.BlockState;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-
-import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -39,20 +35,16 @@ import java.util.Random;
  *
  */
 @OnlyIn(Dist.CLIENT)
-public class RenderEngine extends TileEntityRenderer<TileEngine> {
+public class RenderEngine implements BlockEntityRenderer<TileEngine> {
 
     float rotateAmount  = 0F;
 
-    RenderEngine(TileEntityRendererDispatcher dispatcher) {
-        super(dispatcher);
-    }
-
 
     @Override
-    public void render(TileEngine engine, float f, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
+    public void render(TileEngine engine, float f, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int i, int i1) {
 
-        World world = engine.getLevel();
-        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+        Level world = engine.getLevel();
+        BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
         BlockPos pos = engine.getBlockPos();
         BlockState state = BPBlocks.engine.defaultBlockState().setValue(BlockEngine.FACING, engine.getOrientation());
         Direction facing = engine.getOrientation();
@@ -96,10 +88,10 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
 
         matrixStack.translate(0, f2, 0);
 
-        IBakedModel glider = dispatcher.getBlockModel(state.setValue(BlockEngine.GLIDER, true));
+        BakedModel glider = dispatcher.getBlockModel(state.setValue(BlockEngine.GLIDER, true));
         //Render the glider
-        IVertexBuilder builder = iRenderTypeBuffer.getBuffer(RenderType.cutout());
-        dispatcher.getModelRenderer().renderModel(world, glider, state.setValue(BlockEngine.GLIDER, true), pos, matrixStack, builder, false, new Random(), 0, 0, EmptyModelData.INSTANCE);
+        VertexConsumer builder = iRenderTypeBuffer.getBuffer(RenderType.cutout());
+        dispatcher.getModelRenderer().tesselateBlock(world, glider, state.setValue(BlockEngine.GLIDER, true), pos, matrixStack, builder, false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
         matrixStack.popPose();
         matrixStack.pushPose();
@@ -107,9 +99,9 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
         long angle = engine.isActive ? (System.currentTimeMillis() / 10) % 360 : 0;
         matrixStack.mulPose(Vector3f.YP.rotationDegrees(angle));
         matrixStack.translate(-0.5, 0, -0.5);
-        IBakedModel gear = dispatcher.getBlockModel(state.setValue(BlockEngine.GEAR, true));
+        BakedModel gear = dispatcher.getBlockModel(state.setValue(BlockEngine.GEAR, true));
         // Render the rotating cog
-        dispatcher.getModelRenderer().renderModel(world, gear, state.setValue(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.cutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
+        dispatcher.getModelRenderer().tesselateBlock(world, gear, state.setValue(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.cutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
 
         matrixStack.popPose();
         matrixStack.popPose();

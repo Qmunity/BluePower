@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "group": "silver_ingot",
+  "ingredient": {
+    "item": "bluepower:silver_dust"
+  },
+  "result": "bluepower:silver_ingot",
+  "experience": 1.0,
+  "cookingtime": 100
+}

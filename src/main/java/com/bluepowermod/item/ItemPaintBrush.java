@@ -11,21 +11,21 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileInsulatedWire;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
 
 public class ItemPaintBrush extends ItemDamageableColorableOverlay {
     private final MinecraftColor color;
 
     public ItemPaintBrush() {
-        super(Refs.PAINTBRUSH_NAME + "_blank", new Properties());
+        super(new Properties());
         color = MinecraftColor.ANY;
     }
 
     public ItemPaintBrush(MinecraftColor color) {
-        super(color, Refs.PAINTBRUSH_NAME, new Properties());
+        super(color, new Properties());
         this.color = color;
     }
 
@@ -35,13 +35,13 @@ public class ItemPaintBrush extends ItemDamageableColorableOverlay {
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
-        TileEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
+    public InteractionResult useOn(UseOnContext context) {
+        BlockEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
         boolean changed = false;
         if(tile instanceof TileInsulatedWire){
            changed = ((TileInsulatedWire) tile).setColor(color);
         if(changed && context.getPlayer() != null)
-            context.getPlayer().setItemInHand(context.getHand(), new ItemStack(BPItems.paint_brush.get(0)));
+            context.getPlayer().setItemInHand(context.getHand(), new ItemStack(BPItems.paint_brush.get(0).get()));
         }
         return super.useOn(context);
     }

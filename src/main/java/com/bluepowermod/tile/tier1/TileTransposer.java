@@ -21,28 +21,31 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
 public class TileTransposer extends TileMachineBase {
 
-    public TileTransposer() {
-        super(BPTileEntityType.TRANSPOSER);
+    public TileTransposer(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.TRANSPOSER, pos, state);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
+    public static void tickTransposer(Level level, BlockPos pos, BlockState state, TileTransposer tileTransposer) {
+        TileBase.tickTileBase(level, pos, state, tileTransposer);
         if (!level.isClientSide) {
-            suckEntity();
+            tileTransposer.suckEntity();
         }
 
     }
@@ -66,21 +69,21 @@ public class TileTransposer extends TileMachineBase {
     protected void pullItem() {
 
         Direction dir = getOutputDirection().getOpposite();
-        TileEntity inputTE = getTileCache(dir);
+        BlockEntity inputTE = getTileCache(dir);
         ItemStack extractedStack = IOHelper.extractOneItem(inputTE, dir.getOpposite());
         if (!extractedStack.isEmpty())
             addItemToOutputBuffer(extractedStack);
     }
 
-    private static AxisAlignedBB[] ITEM_SUCK_AABBS;
+    private static AABB[] ITEM_SUCK_AABBS;
     static {
-        ITEM_SUCK_AABBS = new AxisAlignedBB[6];
-        ITEM_SUCK_AABBS[0] = new AxisAlignedBB(-1, -1, -1, 2, 0, 2);
-        ITEM_SUCK_AABBS[1] = new AxisAlignedBB(-1, 1, -1, 2, 2, 2);
-        ITEM_SUCK_AABBS[2] = new AxisAlignedBB(-1, -1, -1, 2, 2, 0);
-        ITEM_SUCK_AABBS[3] = new AxisAlignedBB(-1, -1, 1, 2, 2, 2);
-        ITEM_SUCK_AABBS[4] = new AxisAlignedBB(-1, -1, -1, 0, 2, 2);
-        ITEM_SUCK_AABBS[5] = new AxisAlignedBB(1, -1, -1, 2, 2, 2);
+        ITEM_SUCK_AABBS = new AABB[6];
+        ITEM_SUCK_AABBS[0] = new AABB(-1, -1, -1, 2, 0, 2);
+        ITEM_SUCK_AABBS[1] = new AABB(-1, 1, -1, 2, 2, 2);
+        ITEM_SUCK_AABBS[2] = new AABB(-1, -1, -1, 2, 2, 0);
+        ITEM_SUCK_AABBS[3] = new AABB(-1, -1, 1, 2, 2, 2);
+        ITEM_SUCK_AABBS[4] = new AABB(-1, -1, -1, 0, 2, 2);
+        ITEM_SUCK_AABBS[5] = new AABB(1, -1, -1, 2, 2, 2);
     }
 
     private void suckItems() {
@@ -89,7 +92,7 @@ public class TileTransposer extends TileMachineBase {
             ItemStack stack = entity.getItem();
             if (isItemAccepted(stack) && entity.isAlive()) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
-                entity.remove();
+                entity.remove(Entity.RemovalReason.KILLED);
             }
         }
     }
@@ -97,13 +100,13 @@ public class TileTransposer extends TileMachineBase {
     private void suckEntity() {
 
         Direction direction = getFacingDirection();
-        AxisAlignedBB box = new AxisAlignedBB(worldPosition.getX() + direction.getStepX(), worldPosition.getY() + direction.getStepY(), worldPosition.getZ() + direction.getStepZ(), worldPosition.getX()
+        AABB box = new AABB(worldPosition.getX() + direction.getStepX(), worldPosition.getY() + direction.getStepY(), worldPosition.getZ() + direction.getStepZ(), worldPosition.getX()
                 + direction.getStepX() + 1, worldPosition.getY() + direction.getStepY() + 1, worldPosition.getZ() + direction.getStepZ() + 1);
         for (ItemEntity entity : (List<ItemEntity>) level.getEntitiesOfClass(ItemEntity.class, box)) {
             ItemStack stack = entity.getItem();
             if (isItemAccepted(stack) && entity.isAlive()) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
-                entity.remove();
+                entity.remove(Entity.RemovalReason.KILLED);
             }
         }
     }

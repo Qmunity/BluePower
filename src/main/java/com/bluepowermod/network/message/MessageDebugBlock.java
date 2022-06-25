@@ -7,8 +7,8 @@
  */
 package com.bluepowermod.network.message;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
 
 /**
  *
@@ -26,12 +26,12 @@ public class MessageDebugBlock{
         //super(pos);
     }
 
-    public void handleClientSide(PlayerEntity player) {
+    public void handleClientSide(Player player) {
 
         //Debugger.indicateBlock(player.world, pos);
     }
 
-    public void handleServerSide(PlayerEntity player) {
+    public void handleServerSide(Player player) {
 
     }
 

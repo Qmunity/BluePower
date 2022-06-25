@@ -2,7 +2,13 @@ package com.bluepowermod.api.wire.redstone;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
-import net.minecraft.util.Direction;
+import com.bluepowermod.api.misc.MinecraftColor;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraftforge.common.capabilities.Capability;
+
+import javax.annotation.Nullable;
 
 public interface IRedstoneDevice {
 
@@ -37,5 +43,18 @@ public interface IRedstoneDevice {
      * Returns whether or not this is a full face (if face devices should be able to connect to it)
      */
     public boolean isNormalFace(Direction side);
+
+
+    static Tag writeNBT(Capability<IRedstoneDevice> capability, IRedstoneDevice instance, Direction direction) {
+        CompoundTag nbt = new CompoundTag();
+        nbt.putByte("power", instance.getRedstonePower(direction));
+        return nbt;
+    }
+
+    static void readNBT(Capability<IRedstoneDevice> capability, IRedstoneDevice instance, Direction side, Tag nbt) {
+        CompoundTag tags = (CompoundTag) nbt;
+        byte power = tags.getByte("power");
+        instance.setRedstonePower(side, power);
+    }
 
 }

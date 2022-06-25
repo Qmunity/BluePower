@@ -8,8 +8,8 @@
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.tile.IGUITextFieldSensitive;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class MessageUpdateTextfield{
 
@@ -20,7 +20,7 @@ public class MessageUpdateTextfield{
 
     }
 
-    public MessageUpdateTextfield(TileEntity te, int textfieldID) {
+    public MessageUpdateTextfield(BlockEntity te, int textfieldID) {
 
         //super(te.getBlockPos());
         textFieldID = textfieldID;
@@ -45,13 +45,13 @@ public class MessageUpdateTextfield{
     }
 */
 
-    public void handleClientSide(PlayerEntity player) {
+    public void handleClientSide(Player player) {
 
     }
 
-    public void handleServerSide(PlayerEntity player) {
+    public void handleServerSide(Player player) {
 
-        //TileEntity te = player.world.getBlockEntity(pos);
+        //BlockEntity te = player.world.getBlockEntity(pos);
         //if (te instanceof IGUITextFieldSensitive) {
             //((IGUITextFieldSensitive) te).setText(textFieldID, text);
         //}

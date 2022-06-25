@@ -1,11 +1,8 @@
 package com.bluepowermod.network.message;
 
-import com.bluepowermod.ClientProxy;
-import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.container.stack.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +28,7 @@ public class MessageSyncMachineBacklog{
         super.toBytes(buf);
         buf.writeInt(stacks.size());
         for (TubeStack stack : stacks) {
-            CompoundNBT tag = new CompoundNBT();
+            CompoundTag tag = new CompoundTag();
             stack.writeToNBT(tag);
             //ByteBufUtils.writeTag(buf, tag);
         }
@@ -48,9 +45,9 @@ public class MessageSyncMachineBacklog{
     }
 */
 
-    public void handleClientSide(PlayerEntity player) {
+    public void handleClientSide(Player player) {
 
-        //TileEntity te = player.world.getBlockEntity(pos);
+        //BlockEntity te = player.world.getBlockEntity(pos);
         //if (te instanceof TileMachineBase) {
             //((TileMachineBase) te).setBacklog(stacks);
             // GuiContainerBase gui = (GuiContainerBase) ClientProxy.getOpenedGui();
@@ -59,7 +56,7 @@ public class MessageSyncMachineBacklog{
         //}
     }
 
-    public void handleServerSide(PlayerEntity player) {
+    public void handleServerSide(Player player) {
 
     }
 

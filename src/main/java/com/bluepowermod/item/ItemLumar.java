@@ -21,14 +21,8 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IBPColoredItem;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemLumar extends ItemBase implements IBPColoredItem{
 
@@ -37,7 +31,6 @@ public class ItemLumar extends ItemBase implements IBPColoredItem{
     public ItemLumar(MinecraftColor color) {
         super(new Properties());
         this.color = color;
-        this.setRegistryName(Refs.MODID + ":" + Refs.LUMAR_NAME + "_" + color.name().toLowerCase());
     }
 
     @Override

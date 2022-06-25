@@ -19,40 +19,35 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.item.ItemCanvasBag;
-import com.bluepowermod.tile.tier1.TileBuffer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-import com.bluepowermod.container.inventory.InventoryItem;
 import com.bluepowermod.container.slot.SlotLocked;
 import com.bluepowermod.container.slot.SlotSeedBag;
 import com.bluepowermod.item.ItemSeedBag;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Hand;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class ContainerSeedBag extends Container {
+public class ContainerSeedBag extends AbstractContainerMenu {
 
     private final ItemStackHandler seedBagInvHandler;
-    private Hand activeHand;
+    private InteractionHand activeHand;
 
-    public ContainerSeedBag(int windowId, PlayerInventory playerInventory) {
-        super(BPContainerType.SEEDBAG, windowId);
+    public ContainerSeedBag(int windowId, Inventory playerInventory) {
+        super(BPMenuType.SEEDBAG, windowId);
         seedBagInvHandler = new ItemStackHandler(9);
         
         //Get Active hand
-        activeHand = Hand.MAIN_HAND;
+        activeHand = InteractionHand.MAIN_HAND;
         ItemStack seedBag = playerInventory.player.getItemInHand(activeHand);
         if(!(seedBag.getItem() instanceof ItemSeedBag)){
             seedBag = playerInventory.player.getOffhandItem();
-            activeHand = Hand.OFF_HAND;
+            activeHand = InteractionHand.OFF_HAND;
         }
 
         //Get Items from the NBT Handler
@@ -81,17 +76,17 @@ public class ContainerSeedBag extends Container {
     }
     
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
     
         return !player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() instanceof ItemSeedBag;
     }
 
     @Override
-    public void removed(PlayerEntity playerIn) {
+    public void removed(Player playerIn) {
         //Update items in the NBT
         ItemStack seedBag = playerIn.getItemInHand(activeHand);
         if (!seedBag.hasTag())
-            seedBag.setTag(new CompoundNBT());
+            seedBag.setTag(new CompoundTag());
         if (seedBag.getTag() != null) {
             seedBag.getTag().put("inv", seedBagInvHandler.serializeNBT());
         }
@@ -99,7 +94,7 @@ public class ContainerSeedBag extends Container {
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity par1EntityPlayer, int par2) {
+    public ItemStack quickMoveStack(Player par1EntityPlayer, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.slots.get(par2);

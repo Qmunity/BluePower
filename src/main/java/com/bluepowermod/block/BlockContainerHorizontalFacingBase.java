@@ -8,21 +8,22 @@
 package com.bluepowermod.block;
 
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
 
 /**
  * @author MoreThanHidden
@@ -32,45 +33,45 @@ public class BlockContainerHorizontalFacingBase extends BlockContainerBase {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
-    public BlockContainerHorizontalFacingBase(Material material, Class<? extends TileBase> tileEntityClass) {
-        super(material, tileEntityClass);
+    public BlockContainerHorizontalFacingBase(Material material, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
+        super(material, tileEntityClass, entityType);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(ACTIVE, false));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(FACING, ACTIVE);
     }
 
-    public static void setState(boolean active, World worldIn, BlockPos pos){
+    public static void setState(boolean active, Level worldIn, BlockPos pos){
         BlockState iblockstate = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getBlockEntity(pos);
+        BlockEntity tileentity = worldIn.getBlockEntity(pos);
 
         worldIn.setBlock(pos, iblockstate.setValue(ACTIVE, active), 3);
         if (tileentity != null){
             tileentity.clearRemoved();
-            worldIn.setBlockEntity(pos, tileentity);
+            worldIn.setBlockEntity(tileentity);
         }
     }
-    public static void setState(Direction facing, World worldIn, BlockPos pos){
+    public static void setState(Direction facing, Level worldIn, BlockPos pos){
         BlockState iblockstate = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getBlockEntity(pos);
+        BlockEntity tileentity = worldIn.getBlockEntity(pos);
 
         worldIn.setBlock(pos, iblockstate.setValue(FACING, facing), 3);
         if (tileentity != null){
             tileentity.clearRemoved();
-            worldIn.setBlockEntity(pos, tileentity);
+            worldIn.setBlockEntity(tileentity);
         }
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack iStack) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack iStack) {
         super.setPlacedBy(world, pos, state, placer, iStack);
         world.setBlock(pos, state.setValue(FACING, canRotateVertical() ? Direction.orderedByNearest(placer)[0] : placer.getDirection().getOpposite()), 2);
     }
 
     @Override
-    public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
+    public BlockState rotate(BlockState state, LevelAccessor world, BlockPos pos, Rotation direction) {
         if(direction == Rotation.CLOCKWISE_90) {
             switch (state.getValue(FACING)) {
                 case NORTH:

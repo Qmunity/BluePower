@@ -1,12 +1,12 @@
 package com.bluepowermod.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.resources.ResourceLocation;
 
 import java.awt.*;
 import java.util.List;
@@ -61,16 +61,16 @@ public class BaseWidget implements IGuiWidget {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTick) {
 
         if (enabled) {
-            GL11.glColor4d(1, 1, 1, 1);
+            RenderSystem.setShaderColor(1, 1, 1, 1);
         } else {
-            GL11.glColor4d(0.2, 0.2, 0.2, 1);
+            RenderSystem.setShaderColor(0.2F, 0.2F, 0.2F, 1);
         }
         if (textures.length > 0)
-            Minecraft.getInstance().getTextureManager().bind(textures[textureIndex]);
-        AbstractGui.blit(matrixStack, x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
+            RenderSystem.setShaderTexture(0, textures[textureIndex]);
+            GuiComponent.blit(matrixStack, x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
     }
 
     protected int getTextureU() {
@@ -97,7 +97,7 @@ public class BaseWidget implements IGuiWidget {
     public void onMouseClicked(int mouseX, int mouseY, int button) {
 
         Minecraft.getInstance().getSoundManager()
-                .play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                .play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         gui.actionPerformed(this);
     }
 
@@ -106,6 +106,7 @@ public class BaseWidget implements IGuiWidget {
 
         return new Rectangle(x, y, width, height);
     }
+
 
     @Override
     public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {

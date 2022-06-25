@@ -9,11 +9,12 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.Material;
 
 
 /**
@@ -24,13 +25,13 @@ public class BlockRejecting extends BlockContainerBase {
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public static final BooleanProperty REJECTING = BooleanProperty.create("rejecting");
 
-    public BlockRejecting(Material material, Class<? extends TileBase> tileEntityClass) {
-        super(material, tileEntityClass);
+    public BlockRejecting(Material material, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
+        super(material, tileEntityClass, entityType);
         registerDefaultState(defaultBlockState().setValue(ACTIVE, false).setValue(POWERED, false).setValue(REJECTING, false));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(ACTIVE, POWERED, REJECTING);
     }
 }

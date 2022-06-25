@@ -18,7 +18,7 @@
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.container.stack.TubeStack;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class MessageRedirectTubeStack{
 
@@ -48,7 +48,7 @@ public class MessageRedirectTubeStack{
         stack = TubeStack.loadFromPacket(buf);
     }*/
 
-    public void handleClientSide(PlayerEntity player) {
+    public void handleClientSide(Player player) {
 
         //PneumaticTube tube = MultipartCompatibility.getPart(player.world, pos, PneumaticTube.class);
         //if (tube == null)
@@ -59,7 +59,7 @@ public class MessageRedirectTubeStack{
         //logic.onClientTubeRedirectPacket(stack);
     }
 
-    public void handleServerSide(PlayerEntity player) {
+    public void handleServerSide(Player player) {
 
     }
 

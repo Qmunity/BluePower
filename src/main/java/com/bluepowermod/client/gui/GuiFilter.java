@@ -22,9 +22,9 @@ package com.bluepowermod.client.gui;
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.container.ContainerAlloyFurnace;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
@@ -33,17 +33,17 @@ import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileFilter;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * @author MineMaarten
  */
-public class GuiFilter extends GuiContainerBaseBP<ContainerFilter> implements IHasContainer<ContainerFilter> {
+public class GuiFilter extends GuiContainerBaseBP<ContainerFilter> implements MenuAccess<ContainerFilter> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
     protected ContainerFilter filter;
 
-    public GuiFilter(ContainerFilter container, PlayerInventory playerInventory, ITextComponent title){
+    public GuiFilter(ContainerFilter container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);
         this.filter = container;
     }

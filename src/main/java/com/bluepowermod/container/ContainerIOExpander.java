@@ -7,30 +7,30 @@
  */
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
+import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import com.bluepowermod.tile.tier3.TileIOExpander;
 
-public class ContainerIOExpander extends Container {
+public class ContainerIOExpander extends AbstractContainerMenu {
 
-	private final IInventory inventory;
+	private final Container inventory;
 
-	public ContainerIOExpander(int windowId, PlayerInventory invPlayer, IInventory inventory) {
-		super(BPContainerType.IO_EXPANDER, windowId);
+	public ContainerIOExpander(int windowId, Inventory invPlayer, Container inventory) {
+		super(BPMenuType.IO_EXPANDER, windowId);
 		this.inventory = inventory;
 	}
 
-	public ContainerIOExpander( int id, PlayerInventory player )    {
-		this( id, player, new Inventory( 1));
+	public ContainerIOExpander( int id, Inventory player )    {
+		this( id, player, new SimpleContainer( 1));
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerEntity) {
+	public boolean stillValid(Player playerEntity) {
 		return inventory.stillValid(playerEntity);
 	}
 

@@ -9,7 +9,7 @@ package com.bluepowermod.api.item;
 
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Implemented by items/blocks that can be copied and shared in a Circuit Database.

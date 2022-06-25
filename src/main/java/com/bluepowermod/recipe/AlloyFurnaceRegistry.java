@@ -25,15 +25,15 @@ import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -41,11 +41,10 @@ import java.util.*;
 /**
  * @author MoreThanHidden
  */
-
 public class AlloyFurnaceRegistry {
 
     private static AlloyFurnaceRegistry INSTANCE = new AlloyFurnaceRegistry();
-    public static final IRecipeType<IAlloyFurnaceRecipe> ALLOYFURNACE_RECIPE = IRecipeType.register("bluepower:alloy_smelting");
+    public static final RecipeType<IAlloyFurnaceRecipe> ALLOYFURNACE_RECIPE = RecipeType.register("bluepower:alloy_smelting");
 
     private Map<ItemStack, ItemStack> moltenDownMap = new HashMap<ItemStack, ItemStack>();
     public List<Item> blacklist = new ArrayList<>();
@@ -56,7 +55,6 @@ public class AlloyFurnaceRegistry {
     private AlloyFurnaceRegistry() {
 
     }
-
     public static AlloyFurnaceRegistry getInstance() {
 
         return INSTANCE;
@@ -95,7 +93,7 @@ public class AlloyFurnaceRegistry {
         }
 
         @Override
-        public boolean matches(ISidedInventory inv, World worldIn){
+        public boolean matches(WorldlyContainer inv, Level worldIn){
             NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
             if(inv instanceof TileAlloyFurnace) {
                 //Get Input Slots first 2 are Fuel and Output
@@ -112,7 +110,7 @@ public class AlloyFurnaceRegistry {
         }
 
         @Override
-        public ItemStack assemble(ISidedInventory inv) {
+        public ItemStack assemble(WorldlyContainer inv) {
             NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
             if(inv instanceof TileAlloyFurnace) {
                 //Get Input Slots first 2 are Fuel and Output
@@ -155,12 +153,12 @@ public class AlloyFurnaceRegistry {
         }
 
         @Override
-        public IRecipeSerializer<?> getSerializer() {
+        public RecipeSerializer<?> getSerializer() {
             return BPRecipeSerializer.ALLOYSMELTING;
         }
 
         @Override
-        public IRecipeType<?> getType() {
+        public RecipeType<?> getType() {
             return ALLOYFURNACE_RECIPE;
         }
 
@@ -183,7 +181,7 @@ public class AlloyFurnaceRegistry {
         }
 
         @Override
-        public boolean useItems(NonNullList<ItemStack> input, RecipeManager manager) {
+        public boolean useItems(NonNullList<ItemStack> input, RecipeManager recipeManager) {
             for (int j = 0; j < requiredItems.size(); j++) {
                 int itemsNeeded = requiredCount.get(j);
                 for (int i = 0; i < input.size(); i++) {
@@ -225,19 +223,19 @@ public class AlloyFurnaceRegistry {
         }
     }
 
-    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<IAlloyFurnaceRecipe> {
+    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<IAlloyFurnaceRecipe> {
 
         @Override
         public IAlloyFurnaceRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            String s = JSONUtils.getAsString(json, "group", "");
-            NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getAsJsonArray(json, "ingredients"));
-            NonNullList<Integer> countlist = readCount(JSONUtils.getAsJsonArray(json, "ingredients"));
+            String s = GsonHelper.getAsString(json, "group", "");
+            NonNullList<Ingredient> nonnulllist = readIngredients(GsonHelper.getAsJsonArray(json, "ingredients"));
+            NonNullList<Integer> countlist = readCount(GsonHelper.getAsJsonArray(json, "ingredients"));
             if (nonnulllist.isEmpty()) {
                 throw new JsonParseException("No ingredients for alloy furnace recipe");
             } else if (nonnulllist.size() > 9) {
                 throw new JsonParseException("Too many ingredients for shapeless recipe the max is 9");
             } else {
-                ItemStack itemstack = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "result"));
+                ItemStack itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
                 return new StandardAlloyFurnaceRecipe(recipeId, s, itemstack, nonnulllist, countlist);
             }
         }
@@ -272,7 +270,7 @@ public class AlloyFurnaceRegistry {
 
         @Nullable
         @Override
-        public IAlloyFurnaceRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public IAlloyFurnaceRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             String s = buffer.readUtf(32767);
             int i = buffer.readVarInt();
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
@@ -291,7 +289,7 @@ public class AlloyFurnaceRegistry {
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, IAlloyFurnaceRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, IAlloyFurnaceRecipe recipe) {
             if(recipe instanceof StandardAlloyFurnaceRecipe) {
                 buffer.writeUtf(((StandardAlloyFurnaceRecipe)recipe).group);
                 buffer.writeVarInt(((StandardAlloyFurnaceRecipe)recipe).requiredItems.size());

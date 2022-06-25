@@ -10,41 +10,45 @@ package com.bluepowermod.block.power;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileEngine;
 import com.bluepowermod.util.AABBUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IWaterLoggable;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
 /**
  * @author TheFjong, MoreThanHidden
  */
-public class BlockEngine extends BlockContainerBase implements IWaterLoggable {
+public class BlockEngine extends BlockContainerBase implements SimpleWaterloggedBlock {
 
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
     public static final BooleanProperty GEAR = BooleanProperty.create("gear");
@@ -54,7 +58,7 @@ public class BlockEngine extends BlockContainerBase implements IWaterLoggable {
 
     public BlockEngine() {
 
-        super(Material.METAL, TileEngine.class);
+        super(Material.METAL, TileEngine.class, BPBlockEntityType.ENGINE);
         registerDefaultState(this.stateDefinition.any()
                 .setValue(ACTIVE, false)
                 .setValue(GEAR, false)
@@ -65,15 +69,20 @@ public class BlockEngine extends BlockContainerBase implements IWaterLoggable {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
         builder.add(ACTIVE, GEAR, GLIDER, FACING, WATERLOGGED);
     }
 
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : TileEngine::tickEngine;
+    }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
-            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
+            worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
         return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
@@ -85,32 +94,32 @@ public class BlockEngine extends BlockContainerBase implements IWaterLoggable {
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         return super.getStateForPlacement(context).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
 
     @Override
-    public VoxelShape getShape(BlockState blockState, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState blockState, BlockGetter reader, BlockPos pos, CollisionContext context) {
         return AABBUtils.rotate(Block.box(0.01,0,0.01,15.99F,10,15.99F), blockState.getValue(FACING).getOpposite());
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @SuppressWarnings("cast")
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity player, ItemStack iStack) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity player, ItemStack iStack) {
         if (world.getBlockEntity(pos) instanceof TileEngine) {
             Direction facing;
 
-            if (player.xRot > 45) {
+            if (player.xRotO > 45) {
 
                 facing = Direction.DOWN;
-            } else if (player.xRot < -45) {
+            } else if (player.xRotO < -45) {
 
                 facing = Direction.UP;
             } else {
@@ -127,20 +136,21 @@ public class BlockEngine extends BlockContainerBase implements IWaterLoggable {
     }
 
     @Override
-    public ActionResultType use(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if (!player.inventory.getSelected().isEmpty()) {
-            Item item = player.inventory.getSelected().getItem();
-            if (item == BPItems.screwdriver) {
-                return ActionResultType.SUCCESS;
+    public InteractionResult use(BlockState blockState, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
+        if (!player.getInventory().getSelected().isEmpty()) {
+            Item item = player.getInventory().getSelected().getItem();
+            if (item == BPItems.screwdriver.get()) {
+                return InteractionResult.SUCCESS;
             }
         }
 
         return super.use(blockState, world, pos, player, hand, rayTraceResult);
     }
-
+    /*
+    TODO 1.17 waiting on MinecraftForge#8014
     @Override
-    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
+    public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return true;
-    }
+    }*/
 
 }

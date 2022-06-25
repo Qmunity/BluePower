@@ -12,31 +12,33 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.ContainerRegulator;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
 /**
  * @author MineMaarten
  */
-public class TileRegulator extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, INamedContainerProvider {
+public class TileRegulator extends TileMachineBase implements WorldlyContainer, IGuiButtonSensitive, MenuProvider {
 
     public static final int SLOTS = 27;
     private NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
@@ -44,18 +46,18 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     public int mode;
     public int fuzzySetting;
 
-    public TileRegulator() {
-        super(BPTileEntityType.REGULATOR);
+    public TileRegulator(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.REGULATOR, pos, state);
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.REGULATOR_NAME);
+    public Component getDisplayName() {
+        return new TextComponent(Refs.REGULATOR_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player playerEntity) {
         return new ContainerRegulator(id, inventory, this);
     }
 
@@ -63,50 +65,49 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
         INPUT_FILTER, BUFFER, OUTPUT_FILTER
     }
 
-    @Override
-    public void tick() {
-        super.tick();
+    public static void tickRegulator(Level level, BlockPos pos, BlockState state, TileRegulator tileRegulator) {
+        TileBase.tickTileBase(level, pos, state, tileRegulator);
         if (!level.isClientSide) {
             boolean ratiosMatch = true;
             for (int i = 0; i < 9; i++) {
-                if (!inventory.get(i).isEmpty()) {
-                    int inputFilterItems = getItemsInSection(inventory.get(i), EnumSection.INPUT_FILTER);
-                    int bufferItems = getItemsInSection(inventory.get(i), EnumSection.BUFFER);
+                if (!tileRegulator.inventory.get(i).isEmpty()) {
+                    int inputFilterItems = tileRegulator.getItemsInSection(tileRegulator.inventory.get(i), EnumSection.INPUT_FILTER);
+                    int bufferItems = tileRegulator.getItemsInSection(tileRegulator.inventory.get(i), EnumSection.BUFFER);
                     if (bufferItems < inputFilterItems) {
                         ratiosMatch = false;
                         break;
                     }
                 }
             }
-            if (ratiosMatch && !isEjecting())
-                checkIndividualOutputFilterAndEject();
+            if (ratiosMatch && !tileRegulator.isEjecting())
+                tileRegulator.checkIndividualOutputFilterAndEject();
 
-            if (mode == 1 && !isEjecting()) {// supply mode
-                IInventory inv = IOHelper.getInventoryForTE(getTileCache(getOutputDirection()));
+            if (tileRegulator.mode == 1 && !tileRegulator.isEjecting()) {// supply mode
+                Container inv = IOHelper.getInventoryForTE(tileRegulator.getTileCache(tileRegulator.getOutputDirection()));
                 if (inv != null) {
                     int[] accessibleSlots;
-                    if (inv instanceof ISidedInventory) {
-                        accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(getFacingDirection());
+                    if (inv instanceof WorldlyContainer) {
+                        accessibleSlots = ((WorldlyContainer) inv).getSlotsForFace(tileRegulator.getFacingDirection());
                     } else {
                         accessibleSlots = new int[inv.getContainerSize()];
                         for (int i = 0; i < accessibleSlots.length; i++)
                             accessibleSlots[i] = i;
                     }
                     for (int i = 18; i < 27; i++) {
-                        if (!inventory.get(i).isEmpty()) {
-                            int outputFilterItems = getItemsInSection(inventory.get(i), EnumSection.OUTPUT_FILTER);
+                        if (!tileRegulator.inventory.get(i).isEmpty()) {
+                            int outputFilterItems = tileRegulator.getItemsInSection(tileRegulator.inventory.get(i), EnumSection.OUTPUT_FILTER);
                             int supplyingInvCount = 0;
                             for (int slot : accessibleSlots) {
                                 ItemStack stackInSlot = inv.getItem(slot);
-                                if (!stackInSlot.isEmpty() && ItemStackHelper.areStacksEqual(stackInSlot, inventory.get(i), fuzzySetting)
-                                        && IOHelper.canPlaceItemThroughFaceToInventory(inv, inventory.get(i), slot, getFacingDirection().ordinal())) {
+                                if (!stackInSlot.isEmpty() && ItemStackHelper.areStacksEqual(stackInSlot, tileRegulator.inventory.get(i), tileRegulator.fuzzySetting)
+                                        && IOHelper.canPlaceItemThroughFaceToInventory(inv, tileRegulator.inventory.get(i), slot, tileRegulator.getFacingDirection().ordinal())) {
                                     supplyingInvCount += stackInSlot.getCount();
                                 }
                             }
                             if (supplyingInvCount < outputFilterItems) {
-                                ItemStack requestedStack = inventory.get(i).copy();
+                                ItemStack requestedStack = tileRegulator.inventory.get(i).copy();
                                 requestedStack.setCount(outputFilterItems - supplyingInvCount);
-                                ItemStack bufferItems = IOHelper.extract(this, null, requestedStack, true, false, fuzzySetting);// try
+                                ItemStack bufferItems = IOHelper.extract(tileRegulator, null, requestedStack, true, false, tileRegulator.fuzzySetting);// try
                                                                                                                                                   // to
                                                                                                                                                   // extract
                                 // the items
@@ -115,10 +116,10 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                                 // inventory from
                                 // the buffer.
                                 if (!bufferItems.isEmpty()) {
-                                    ItemStack remainder = IOHelper.insert(inv, bufferItems, getFacingDirection().ordinal(), false);// insert into
+                                    ItemStack remainder = IOHelper.insert(inv, bufferItems, tileRegulator.getFacingDirection().ordinal(), false);// insert into
                                                                                                                                    // supplying inv.
                                     if (!remainder.isEmpty()) {
-                                        IOHelper.insert(this, remainder, null, false);// when not every item can be supplied, return
+                                        IOHelper.insert(tileRegulator, remainder, null, false);// when not every item can be supplied, return
                                                                                                         // those to the buffer.
                                     }
                                 }
@@ -127,16 +128,16 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                     }
                 }
             }
-            boolean shouldEmitRedstone = isSatisfied() || animationTicker >= 0;
-            if (isEjecting() != shouldEmitRedstone) {
-                setOutputtingRedstone(shouldEmitRedstone);
-                sendUpdatePacket();
+            boolean shouldEmitRedstone = tileRegulator.isSatisfied() || tileRegulator.animationTicker >= 0;
+            if (tileRegulator.isEjecting() != shouldEmitRedstone) {
+                tileRegulator.setOutputtingRedstone(shouldEmitRedstone);
+                tileRegulator.sendUpdatePacket();
             }
         }
     }
 
     @Override
-    public void onButtonPress(PlayerEntity player, int messageId, int value) {
+    public void onButtonPress(Player player, int messageId, int value) {
 
         if (messageId == 1) {
             mode = value;
@@ -160,11 +161,11 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
      */
     private boolean isSatisfied() {
 
-        IInventory inv = IOHelper.getInventoryForTE(getTileCache(getOutputDirection()));
+        Container inv = IOHelper.getInventoryForTE(getTileCache(getOutputDirection()));
         if (inv != null) {
             int[] accessibleSlots;
-            if (inv instanceof ISidedInventory) {
-                accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(getFacingDirection());
+            if (inv instanceof WorldlyContainer) {
+                accessibleSlots = ((WorldlyContainer) inv).getSlotsForFace(getFacingDirection());
             } else {
                 accessibleSlots = new int[inv.getContainerSize()];
                 for (int i = 0; i < accessibleSlots.length; i++)
@@ -230,38 +231,37 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
+    protected void saveAdditional(CompoundTag tag) {
 
-        super.save(tag);
+        super.saveAdditional(tag);
 
         tag.putByte("filterColor", (byte) color.ordinal());
         tag.putByte("mode", (byte) mode);
         tag.putByte("fuzzySetting", (byte) fuzzySetting);
 
-        ListNBT tagList = new ListNBT();
+        ListTag tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
-                CompoundNBT tagCompound = new CompoundNBT();
+                CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
                 inventory.get(currentIndex).save(tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("Items", tagList);
-        return tag;
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag) {
+    public void load(CompoundTag tag) {
 
-        super.load(state, tag);
+        super.load(tag);
 
         color = TubeColor.values()[tag.getByte("filterColor")];
         mode = tag.getByte("mode");
         fuzzySetting = tag.getByte("fuzzySetting");
 
-        ListNBT tagList = tag.getList("Items", 10);
+        ListTag tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(27, ItemStack.EMPTY);
         for (int i = 0; i < tagList.size(); ++i) {
-            CompoundNBT tagCompound = tagList.getCompound(i);
+            CompoundTag tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
                 inventory.set(slot, ItemStack.of(tagCompound));
@@ -321,17 +321,17 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 

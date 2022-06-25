@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "bluepower:ruby_ore"
+    "bluepower:ruby_ore",
+    "bluepower:ruby_deepslate"
   ]
 }

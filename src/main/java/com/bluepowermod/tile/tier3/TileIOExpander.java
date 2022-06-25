@@ -7,15 +7,17 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * @author fabricator77
  */
 public class TileIOExpander extends TileBase implements IRedBusWindow {
-    public TileIOExpander() {
-        super(BPTileEntityType.IO_EXPANDER);
+    public TileIOExpander(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.IO_EXPANDER, pos, state);
     }
     //TODO: half height block
 }

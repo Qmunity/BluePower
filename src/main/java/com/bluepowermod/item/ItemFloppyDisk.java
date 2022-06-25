@@ -20,36 +20,35 @@ package com.bluepowermod.item;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemFloppyDisk extends ItemBase implements IItemColor{
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
-    public ItemFloppyDisk(String name) {
+public class ItemFloppyDisk extends ItemBase implements ItemColor{
+
+    public ItemFloppyDisk() {
         super(new Properties());
-        this.setRegistryName(Refs.MODID + ":" + name);
-        BPItems.itemList.add(this);
     }
 
     public static void finaliseDisk(ItemStack itemStack, String name, MinecraftColor color){
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         nbt.putInt("color", color.getHex());
         nbt.putString("name", name);
         itemStack.setTag(nbt);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(stack.getTag() != null && stack.getTag().contains("name")) {
-            tooltip.add(new StringTextComponent(stack.getTag().getString("name")));
+            tooltip.add(new TextComponent(stack.getTag().getString("name")));
         }
     }
 

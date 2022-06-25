@@ -11,13 +11,14 @@ import com.bluepowermod.container.ContainerRetriever;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.tier1.TileFilter;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -29,18 +30,21 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     public int slotIndex;
     public int mode;
 
+    public TileRetriever(BlockPos pos, BlockState state) {
+        super(pos, state);
+    }
+
 
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
-        super.save(tag);
+    protected void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
         tag.putByte("slotIndex", (byte) slotIndex);
         tag.putByte("mode", (byte) mode);
-        return tag;
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag) {
-        super.load(state, tag);
+    public void load(CompoundTag tag) {
+        super.load(tag);
         slotIndex = tag.getByte("slotIndex");
         mode = tag.getByte("mode");
     }
@@ -51,13 +55,13 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.RETRIEVER_NAME);
+    public Component getDisplayName() {
+        return new TextComponent(Refs.RETRIEVER_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player playerEntity) {
         return new ContainerRetriever(id, inventory, this);
     }
 

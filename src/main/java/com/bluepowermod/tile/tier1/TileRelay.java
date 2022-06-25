@@ -21,42 +21,43 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.container.ContainerRelay;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class TileRelay extends TileMachineBase implements IInventory, INamedContainerProvider {
+public class TileRelay extends TileMachineBase implements Container, MenuProvider {
 
     public static final int SLOTS = 10;
     private final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
 
-    public TileRelay() {
-        super(BPTileEntityType.RELAY);
+    public TileRelay(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.RELAY, pos, state);
     }
 
-    @Override
-    public void tick() {
+    public static void tickRelay(Level level, BlockPos pos, BlockState state, TileRelay tileRelay ) {
 
-        super.tick();
+        TileBase.tickTileBase(level, pos, state, tileRelay);
 
         if (!level.isClientSide) {
-            for (int i = 0; i < inventory.size(); i++) {
-                if (!inventory.get(i).isEmpty() && inventory.get(i).getCount() > 0) {
-                    addItemToOutputBuffer(inventory.get(i));
-                    inventory.set(i, ItemStack.EMPTY);
+            for (int i = 0; i < tileRelay.inventory.size(); i++) {
+                if (!tileRelay.inventory.get(i).isEmpty() && tileRelay.inventory.get(i).getCount() > 0) {
+                    tileRelay.addItemToOutputBuffer(tileRelay.inventory.get(i));
+                    tileRelay.inventory.set(i, ItemStack.EMPTY);
                     break;
                 }
             }
@@ -67,12 +68,12 @@ public class TileRelay extends TileMachineBase implements IInventory, INamedCont
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(BlockState blockState, CompoundNBT tCompound) {
-        super.load(blockState, tCompound);
+    public void load(CompoundTag tCompound) {
+        super.load(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            CompoundNBT tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, new ItemStack((IItemProvider) tc));
+            CompoundTag tc = tCompound.getCompound("inventory" + i);
+            inventory.set(i, ItemStack.of(tc));
         }
     }
 
@@ -80,16 +81,15 @@ public class TileRelay extends TileMachineBase implements IInventory, INamedCont
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT save(CompoundNBT tCompound) {
+    protected void saveAdditional(CompoundTag tCompound) {
 
-        super.save(tCompound);
+        super.saveAdditional(tCompound);
 
         for (int i = 0; i < 9; i++) {
-                CompoundNBT tc = new CompoundNBT();
+                CompoundTag tc = new CompoundTag();
                 inventory.get(i).save(tc);
                 tCompound.put("inventory" + i, tc);
         }
-        return tCompound;
     }
 
     /**
@@ -174,17 +174,17 @@ public class TileRelay extends TileMachineBase implements IInventory, INamedCont
      * @param player
      */
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return player.blockPosition().closerThan(worldPosition, 64.0D);
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 
@@ -212,7 +212,6 @@ public class TileRelay extends TileMachineBase implements IInventory, INamedCont
 
     @Override
     public boolean canConnectRedstone() {
-
         return true;
     }
 
@@ -228,13 +227,13 @@ public class TileRelay extends TileMachineBase implements IInventory, INamedCont
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(Refs.RELAY_NAME);
+    public Component getDisplayName() {
+        return new TextComponent(Refs.RELAY_NAME);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player playerEntity) {
         return new ContainerRelay(id, inventory, this);
     }
 }

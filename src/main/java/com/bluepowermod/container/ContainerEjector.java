@@ -19,24 +19,23 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import com.bluepowermod.tile.tier1.TileEjector;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class ContainerEjector extends Container {
+public class ContainerEjector extends AbstractContainerMenu {
 
-    private final IInventory ejector;
+    private final Container ejector;
 
-    public ContainerEjector(int windowId, PlayerInventory invPlayer, IInventory inventory) {
-        super(BPContainerType.EJECTOR, windowId);
+    public ContainerEjector(int windowId, Inventory invPlayer, Container inventory) {
+        super(BPMenuType.EJECTOR, windowId);
         this.ejector = inventory;
 
         for (int i = 0; i < 3; ++i) {
@@ -47,11 +46,11 @@ public class ContainerEjector extends Container {
         bindPlayerInventory(invPlayer);
     }
 
-    public ContainerEjector( int id, PlayerInventory player )    {
-        this( id, player, new Inventory( TileEjector.SLOTS ));
+    public ContainerEjector( int id, Inventory player )    {
+        this( id, player, new SimpleContainer( TileEjector.SLOTS ));
     }
 
-    protected void bindPlayerInventory(PlayerInventory invPlayer) {
+    protected void bindPlayerInventory(Inventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -67,13 +66,13 @@ public class ContainerEjector extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return ejector.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int par2) {
+    public ItemStack quickMoveStack(Player player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) slots.get(par2);

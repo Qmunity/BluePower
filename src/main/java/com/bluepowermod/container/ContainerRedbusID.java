@@ -7,30 +7,30 @@
  */
 package com.bluepowermod.container;
 
-import com.bluepowermod.client.gui.BPContainerType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
+import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import com.bluepowermod.tile.tier3.IRedBusWindow;
 
-public class ContainerRedbusID extends Container {
+public class ContainerRedbusID extends AbstractContainerMenu {
 
-	private final IInventory inventory;
+	private final Container inventory;
 
-	public ContainerRedbusID(int windowId, PlayerInventory invPlayer, IInventory inventory) {
-		super(BPContainerType.REDBUS, windowId);
+	public ContainerRedbusID(int windowId, Inventory invPlayer, Container inventory) {
+		super(BPMenuType.REDBUS, windowId);
 		this.inventory = inventory;
 	}
 
-	public ContainerRedbusID( int id, PlayerInventory player )    {
-		this( id, player, new Inventory( 1));
+	public ContainerRedbusID( int id, Inventory player )    {
+		this( id, player, new SimpleContainer( 1));
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerEntity) {
+	public boolean stillValid(Player playerEntity) {
 		return inventory.stillValid(playerEntity);
 	}
 

@@ -12,28 +12,28 @@ import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.NBTDynamicOps;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.TickingBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.extensions.IForgeBlockState;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -44,31 +44,31 @@ import java.util.stream.Collectors;
 /**
  * @author MoreThanHidden
  */
-public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
+public class TileBPMultipart extends BlockEntity {
 
     public static final ModelProperty<Map<BlockState, IModelData>> STATE_INFO = new ModelProperty<>();
-    private Map<BlockState, TileEntity> stateMap = new HashMap<>();
+    private Map<BlockState, BlockEntity> stateMap = new HashMap<>();
 
-    public TileBPMultipart() {
-        super(BPTileEntityType.MULTIPART);
+    public TileBPMultipart(BlockPos pos, BlockState state) {
+        super(BPBlockEntityType.MULTIPART, pos, state);
     }
 
     @Nonnull
     @Override
     public IModelData getModelData() {
         //Get Model Data for States with Tile Entities in the Multipart
-        Map<BlockState, IModelData> modelDataMap = stateMap.keySet().stream().filter(IForgeBlockState::hasTileEntity)
+        Map<BlockState, IModelData> modelDataMap = stateMap.keySet().stream().filter(BlockState::hasBlockEntity)
                 .collect(Collectors.toMap(s -> s, this::getModelData));
 
         //Add States without Tile Entities
-        stateMap.keySet().stream().filter(s -> !s.hasTileEntity()).forEach(s -> modelDataMap.put(s, null));
+        stateMap.keySet().stream().filter(s -> !s.hasBlockEntity()).forEach(s -> modelDataMap.put(s, null));
 
         return new ModelDataMap.Builder().withInitial(STATE_INFO, modelDataMap).build();
     }
 
     private IModelData getModelData(BlockState state) {
         //Get Model Data for specific state
-        TileEntity tileEntity = stateMap.get(state);
+        BlockEntity tileEntity = stateMap.get(state);
         if(tileEntity != null) {
             if (tileEntity instanceof TileWire)
                 return ((TileWire) tileEntity).getModelData(state);
@@ -78,10 +78,7 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
     }
 
     public void addState(BlockState state) {
-        TileEntity tile = state.getBlock().createTileEntity(state, level);
-        if (tile != null) {
-            tile.setPosition(worldPosition);
-        }
+        BlockEntity tile = ((EntityBlock)state.getBlock()).newBlockEntity(worldPosition, state);
         this.stateMap.put(state, tile);
         state.getBlock().setPlacedBy(level, worldPosition, state,  null, new ItemStack(state.getBlock()));
         markDirtyClient();
@@ -89,10 +86,10 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
 
     public void removeState(BlockState state) {
         //Drop Items
-        if (level instanceof ServerWorld) {
+        if (level instanceof ServerLevel) {
             NonNullList<ItemStack> drops = NonNullList.create();
-            drops.addAll(Block.getDrops(state, (ServerWorld) level, worldPosition, this));
-            InventoryHelper.dropContents(level,worldPosition, drops);
+            drops.addAll(Block.getDrops(state, (ServerLevel) level, worldPosition, this));
+            Containers.dropContents(level,worldPosition, drops);
         }
         //Remove Tile Entity
         if(stateMap.get(state) != null) {
@@ -103,13 +100,13 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
         markDirtyClient();
         if(stateMap.size() == 1) {
             //Convert back to Standalone Block
-            TileEntity te = (TileEntity)stateMap.values().toArray()[0];
+            BlockEntity te = (BlockEntity)stateMap.values().toArray()[0];
             if (level != null) {
-                CompoundNBT nbt = te != null ? te.save(new CompoundNBT()) : null;
+                CompoundTag nbt = te != null ? te.saveWithoutMetadata() : null;
                 level.setBlockAndUpdate(worldPosition, ((BlockState)stateMap.keySet().toArray()[0]));
-                TileEntity tile = level.getBlockEntity(worldPosition);
+                BlockEntity tile = level.getBlockEntity(worldPosition);
                 if (tile != null && nbt != null)
-                    tile.load(getBlockState(), nbt);
+                    tile.load(nbt);
             }
         }else if(stateMap.size() == 0){
             //Remove if this is empty
@@ -121,14 +118,14 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
             level.getBlockState(worldPosition).neighborChanged(level, worldPosition, getBlockState().getBlock(), worldPosition, false);
     }
 
-    public TileEntity getTileForState(BlockState state){
+    public BlockEntity getTileForState(BlockState state){
         return stateMap.get(state);
     }
 
     @Override
-    public void setLevelAndPosition(World levelIn, BlockPos posIn) {
-        super.setLevelAndPosition(levelIn, posIn);
-        stateMap.values().forEach(t -> t.setLevelAndPosition(levelIn, posIn));
+    public void setLevel(Level levelIn) {
+        super.setLevel(levelIn);
+        stateMap.values().forEach(t -> t.setLevel(levelIn));
     }
 
     @Nonnull
@@ -163,33 +160,31 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
-        super.save(compound);
+    protected void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putInt("size", getStates().size());
         for (int i = 0; i < getStates().size(); i++) {
             //write state data
             String stateSave = "state" + i;
-            BlockState.CODEC.encodeStart(NBTDynamicOps.INSTANCE,  getStates().get(i)).result().ifPresent(nbt -> compound.put(stateSave, nbt));
+            BlockState.CODEC.encodeStart(NbtOps.INSTANCE,  getStates().get(i)).result().ifPresent(nbt -> compound.put(stateSave, nbt));
             //write tile NBT data
             if(stateMap.get(getStates().get(i)) != null)
-                compound.put("tile" + i, stateMap.get(getStates().get(i)).save(new CompoundNBT()));
+                compound.put("tile" + i, stateMap.get(getStates().get(i)).saveWithoutMetadata());
         }
-        return compound;
     }
 
     @Override
-    public void load(BlockState blockState, CompoundNBT compound) {
-        super.load(blockState, compound);
-        Map<BlockState, TileEntity> states = new HashMap<>();
+    public void load(CompoundTag compound) {
+        super.load(compound);
+        Map<BlockState, BlockEntity> states = new HashMap<>();
         int size = compound.getInt("size");
         for (int i = 0; i < size; i++) {
-            Optional<Pair<BlockState, INBT>> result = BlockState.CODEC.decode(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("state" + i))).result();
+            Optional<Pair<BlockState, Tag>> result = BlockState.CODEC.decode(new Dynamic<>(NbtOps.INSTANCE, compound.get("state" + i))).result();
             if(result.isPresent()){
                 BlockState state = result.get().getFirst();
-                TileEntity tile = state.getBlock().createTileEntity(state, getLevel());
+                BlockEntity tile = ((EntityBlock)state.getBlock()).newBlockEntity(worldPosition, state);
                 if (tile != null) {
-                    tile.load(state, compound.getCompound("tile" + i));
-                    tile.setPosition(worldPosition);
+                    tile.load(compound.getCompound("tile" + i));
                 }
                 states.put(state, tile);
             }
@@ -199,44 +194,42 @@ public class TileBPMultipart extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT updateTag = super.getUpdateTag();
-        save(updateTag);
+    public CompoundTag getUpdateTag() {
+        CompoundTag updateTag = super.getUpdateTag();
+        saveAdditional(updateTag);
         return updateTag;
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT nbtTag = new CompoundNBT();
-        save(nbtTag);
-        return new SUpdateTileEntityPacket(getBlockPos(), 1, nbtTag);
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public void onDataPacket(NetworkManager networkManager, SUpdateTileEntityPacket packet) {
+    public void onDataPacket(Connection networkManager, ClientboundBlockEntityDataPacket packet) {
         List<BlockState> states = getStates();
-        CompoundNBT tagCompound = packet.getTag();
+        CompoundTag tagCompound = packet.getTag();
         super.onDataPacket(networkManager, packet);
-        load(getBlockState(), tagCompound);
+        load(tagCompound);
         if (level.isClientSide) {
             // Update if needed
             if (!getStates().equals(states)) {
-                level.blockEntityChanged(getBlockPos(), this.getTileEntity());
+                level.blockEntityChanged(getBlockPos());
             }
         }
     }
 
     public void changeState(BlockState state, BlockState newState) {
-        TileEntity te = stateMap.get(state);
+        BlockEntity te = stateMap.get(state);
         stateMap.remove(state);
         stateMap.put(newState, te);
         markDirtyClient();
     }
 
-    @Override
-    public void tick() {
-      //Tick the Tickable Multiparts
-      stateMap.values().stream().filter(t -> t instanceof ITickableTileEntity)
-              .forEach(t-> ((ITickableTileEntity)t).tick());
+    public static void tickMultipart(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+        TileBPMultipart multipart = (TileBPMultipart) blockEntity;
+        //Tick the Tickable Multiparts
+        multipart.stateMap.values().stream().filter(t -> t instanceof TickingBlockEntity)
+              .forEach(t-> ((TickingBlockEntity)t).tick());
     }
 }
