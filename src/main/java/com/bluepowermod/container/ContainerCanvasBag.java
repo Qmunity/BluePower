@@ -40,7 +40,7 @@ public class ContainerCanvasBag extends AbstractContainerMenu {
     private InteractionHand activeHand;
 
     public ContainerCanvasBag(int windowId, Inventory playerInventory) {
-    super(BPMenuType.CANVAS_BAG, windowId);
+    super(BPMenuType.CANVAS_BAG.get(), windowId);
         canvasBagInvHandler = new ItemStackHandler(27);
 
         //Get Active hand

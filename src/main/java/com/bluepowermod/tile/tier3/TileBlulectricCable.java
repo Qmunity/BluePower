@@ -13,7 +13,7 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.power.BlockBlulectricCable;
 import com.bluepowermod.helper.EnergyHelper;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -43,7 +43,7 @@ public class TileBlulectricCable extends TileMachineBase {
     private LazyOptional<IPowerBase> blutricityCap;
 
     public TileBlulectricCable(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.BLULECTRIC_CABLE, pos, state);
+        super(BPBlockEntityType.BLULECTRIC_CABLE.get(), pos, state);
     }
 
     public static void tickCable(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {

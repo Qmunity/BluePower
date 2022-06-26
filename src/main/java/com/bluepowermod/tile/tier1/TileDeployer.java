@@ -12,15 +12,13 @@ import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.container.ContainerDeployer;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.authlib.GameProfile;
-import com.mojang.math.Vector3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -70,7 +68,7 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
     }
 
     public TileDeployer(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.DEPLOYER, pos, state);
+        super(BPBlockEntityType.DEPLOYER.get(), pos, state);
     }
 
     private boolean canDeployItem(ItemStack stack) {
@@ -369,7 +367,7 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.BLOCKDEPLOYER_NAME);
+        return Component.literal(Refs.BLOCKDEPLOYER_NAME);
     }
 
     @Nullable

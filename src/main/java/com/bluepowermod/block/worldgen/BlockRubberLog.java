@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 public class BlockRubberLog extends RotatedPillarBlock {
     public BlockRubberLog(Properties properties){
         super(properties);
-        this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERLOG_NAME);
         this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.Y));
         BPBlocks.blockList.add(this);
     }

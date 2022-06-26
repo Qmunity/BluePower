@@ -14,6 +14,7 @@ import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -42,16 +43,13 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock, EntityBlock
 
     private final boolean isInverted;
     private final MinecraftColor color;
-    private final String name;
     private int tick = 0;
 
-    public BlockLamp(String name, boolean isInverted, MinecraftColor color) {
+    public BlockLamp(boolean isInverted, MinecraftColor color) {
         super(Properties.of(Material.DECORATION).sound(SoundType.STONE).strength(1.0F));
         this.isInverted = isInverted;
         this.color = color;
-        this.name = name;
         registerDefaultState(this.defaultBlockState().setValue(POWER, isInverted ? 15 : 0));
-        setRegistryName(name + (isInverted ? "inverted" : "") + "_"+ (color == MinecraftColor.NONE ? "rgb" : color.name().toLowerCase()));
     }
 
     @Nullable
@@ -104,7 +102,7 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock, EntityBlock
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if(tick <= 1){
             int redstoneValue = world.getBestNeighborSignal(pos);
             if(isInverted){redstoneValue = 15 - redstoneValue;}

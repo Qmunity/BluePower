@@ -19,12 +19,11 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.container.ContainerBuffer;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -43,7 +42,7 @@ public class TileBuffer extends TileBase implements WorldlyContainer, MenuProvid
     private final NonNullList<ItemStack> allInventories = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
 
     public TileBuffer(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.BUFFER, pos, state);
+        super(BPBlockEntityType.BUFFER.get(), pos, state);
     }
 
     /**
@@ -194,7 +193,7 @@ public class TileBuffer extends TileBase implements WorldlyContainer, MenuProvid
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.BLOCKBUFFER_NAME);
+        return Component.literal(Refs.BLOCKBUFFER_NAME);
     }
 
     @Nullable

@@ -25,6 +25,7 @@ import net.minecraft.stats.Stats;
 
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -61,7 +62,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
             return false;
 
         if (!simulated) {
-            if (player instanceof ServerPlayer && stack.hurt(damage, new Random(), (ServerPlayer) player)) {
+            if (player instanceof ServerPlayer && stack.hurt(damage, RandomSource.create(), (ServerPlayer) player)) {
                 player.broadcastBreakEvent(InteractionHand.MAIN_HAND);
                 stack.setCount(stack.getCount() - 1);
                 player.awardStat(Stats.ITEM_BROKEN.get(stack.getItem()), 1);

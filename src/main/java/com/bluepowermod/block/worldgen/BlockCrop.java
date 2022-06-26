@@ -19,9 +19,9 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.Refs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -51,7 +51,6 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
 
     public BlockCrop(Properties properties) {
         super(properties.strength(0.0F).sound(SoundType.CROP).randomTicks().noCollission());
-        this.setRegistryName(Refs.MODID + ":" + Refs.FLAXCROP_NAME);
         BPBlocks.blockList.add(this);
     }
 
@@ -68,7 +67,7 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
      * Ticks the block if it's been scheduled
      */
     @Override
-    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
 
         int age = getAge(state);
         if (world.getLightEmission(pos) >= 9) {
@@ -110,7 +109,7 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
      * boolean canFertilise
      */
     @Override
-    public boolean isBonemealSuccess(Level world, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level world, RandomSource rand, BlockPos pos, BlockState state) {
         return !isMaxAge(state);
     }
 
@@ -136,17 +135,18 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
 
         List<ItemStack> drops = super.getDrops(state, builder);
+        Random random = new Random();
         if (isMaxAge(state)) {
             for (int i = 0; i < 3; ++i) {
-                if (RANDOM.nextInt(15) <= getAge(state)) {
+                if (random.nextInt(15) <= getAge(state)) {
                     drops.add(new ItemStack(Items.STRING, 1));
                 }
             }
-            if (RANDOM.nextBoolean()) {
+            if (random.nextBoolean()) {
                 drops.add(new ItemStack(this.getBaseSeedId(), 1));
             }
         } else if (getAge(state) == 6) {
-            drops.add(new ItemStack(this.getBaseSeedId(), 1 + RANDOM.nextInt(2)));
+            drops.add(new ItemStack(this.getBaseSeedId(), 1 + random.nextInt(2)));
         } else {
             drops.add(new ItemStack(this.getBaseSeedId(), 1));
         }

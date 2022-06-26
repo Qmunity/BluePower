@@ -14,7 +14,6 @@ import com.bluepowermod.tile.tier1.TileFilter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -56,7 +55,7 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.RETRIEVER_NAME);
+        return Component.literal(Refs.RETRIEVER_NAME);
     }
 
     @Nullable

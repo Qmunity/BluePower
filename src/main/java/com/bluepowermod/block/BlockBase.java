@@ -20,7 +20,6 @@ package com.bluepowermod.block;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPBlocks;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -59,7 +58,7 @@ public abstract class BlockBase extends Block {
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag advanced) {
         super.appendHoverText(stack, world, tooltip, advanced);
         if(wip){
-            tooltip.add(new TextComponent(MinecraftColor.RED.getChatColor() + "WIP") );
+            tooltip.add(Component.literal(MinecraftColor.RED.getChatColor() + "WIP") );
         }
     }
     

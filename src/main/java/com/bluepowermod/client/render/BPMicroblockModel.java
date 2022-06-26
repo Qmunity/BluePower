@@ -20,7 +20,9 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -37,6 +39,7 @@ import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
 import net.minecraftforge.common.model.TransformationHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -51,28 +54,28 @@ import net.minecraft.client.resources.model.BakedModel;
  * @author MoreThanHidden
  */
 public class BPMicroblockModel implements BakedModel {
-    private Block defBlock = BPBlocks.marble;
-    private Block defSize = BPBlocks.half_block;
+    private RegistryObject<Block> defBlock = BPBlocks.marble;
+    private RegistryObject<Block> defSize = BPBlocks.half_block;
     BPMicroblockModel(){}
 
-    private BPMicroblockModel(Block defBlock, Block defSize){
+    private BPMicroblockModel(RegistryObject<Block> defBlock, RegistryObject<Block> defSize){
         this.defBlock = defBlock;
         this.defSize = defSize;
     }
 
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull IModelData extraData) {
         Pair<Block, Integer> info = extraData.getData(TileBPMicroblock.PROPERTY_INFO);
         if (info != null) {
             BakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(info.getKey().defaultBlockState());
-            BakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
+            BakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getId(), "face=" + Direction.WEST));
 
             List<BakedQuad> bakedQuads = new ArrayList<>();
 
             if(state != null && state.getBlock() instanceof BlockBPMicroblock) {
                 sizeModel = Minecraft.getInstance().getModelManager().getModel(
-                        new ModelResourceLocation(state.getBlock().getRegistryName(), "face=" + state.getValue(BlockBPMicroblock.FACING))
+                        new ModelResourceLocation(ForgeRegistries.BLOCKS.getKey(state.getBlock()), "face=" + state.getValue(BlockBPMicroblock.FACING))
                 );
             }
 
@@ -86,7 +89,7 @@ public class BPMicroblockModel implements BakedModel {
                         sprite = typeModelQuads.get(0).getSprite();
                     }
 
-                    bakedQuads.add(transform(quad, sprite, state.getValue(BlockBPMicroblock.FACING), defBlock));
+                    bakedQuads.add(transform(quad, sprite, state.getValue(BlockBPMicroblock.FACING), defBlock.get()));
                 }
                 return bakedQuads;
             }
@@ -96,14 +99,14 @@ public class BPMicroblockModel implements BakedModel {
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
         List<BakedQuad> outquads = new ArrayList<>();
-        BakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(this.defBlock.defaultBlockState());
-        BakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
+        BakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(this.defBlock.get().defaultBlockState());
+        BakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getId(), "face=" + Direction.WEST));
 
         if(state != null && state.getBlock() instanceof BlockBPMicroblock) {
             sizeModel = Minecraft.getInstance().getModelManager().getModel(
-                    new ModelResourceLocation(state.getBlock().getRegistryName(), "face=" + state.getValue(BlockBPMicroblock.FACING))
+                    new ModelResourceLocation(ForgeRegistries.BLOCKS.getKey(state.getBlock()), "face=" + state.getValue(BlockBPMicroblock.FACING))
             );
         }
 
@@ -111,12 +114,12 @@ public class BPMicroblockModel implements BakedModel {
 
         TextureAtlasSprite sprite = typeModel.getParticleIcon();
         for (BakedQuad quad: sizeModelQuads) {
-            List<BakedQuad> typeModelQuads = typeModel.getQuads(this.defBlock.defaultBlockState(), quad.getDirection(), rand);
+            List<BakedQuad> typeModelQuads = typeModel.getQuads(this.defBlock.get().defaultBlockState(), quad.getDirection(), rand);
             if(typeModelQuads.size() > 0){
                 sprite = typeModelQuads.get(0).getSprite();
             }
 
-            outquads.add(transform(quad, sprite, Direction.EAST , defBlock));
+            outquads.add(transform(quad, sprite, Direction.EAST , defBlock.get()));
         }
 
         return outquads;
@@ -167,7 +170,7 @@ public class BPMicroblockModel implements BakedModel {
 
     @Override
     public BakedModel handlePerspective(ItemTransforms.TransformType type, PoseStack stack) {
-        BakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getRegistryName(), "face=" + Direction.WEST));
+        BakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getId(), "face=" + Direction.WEST));
         Transformation tr = TransformationHelper.toTransformation(sizeModel.getTransforms().getTransform(type));
         if(!tr.isIdentity()) {
             tr.push(stack);
@@ -197,7 +200,7 @@ public class BPMicroblockModel implements BakedModel {
 
     @Override
     public TextureAtlasSprite getParticleIcon() {
-        BakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(this.defBlock.defaultBlockState());
+        BakedModel typeModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(this.defBlock.get().defaultBlockState());
         return typeModel.getParticleIcon();
     }
 
@@ -225,10 +228,10 @@ public class BPMicroblockModel implements BakedModel {
         public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int par1){
             CompoundTag nbt = stack.getTag();
             if(nbt != null && nbt.contains("block")){
-                Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
-                return new BPMicroblockModel(block, Block.byItem(stack.getItem()));
+                RegistryObject<Block> block = RegistryObject.create(new ResourceLocation(nbt.getString("block")),ForgeRegistries.BLOCKS);
+                return new BPMicroblockModel(block, RegistryObject.create(ForgeRegistries.BLOCKS.getKey(Block.byItem(stack.getItem())), ForgeRegistries.BLOCKS));
             }
-            return new BPMicroblockModel(Blocks.STONE, Block.byItem(stack.getItem()));
+            return new BPMicroblockModel(RegistryObject.create(new ResourceLocation("minecraft:stone"), ForgeRegistries.BLOCKS), RegistryObject.create(ForgeRegistries.BLOCKS.getKey(Block.byItem(stack.getItem())), ForgeRegistries.BLOCKS));
         }
     }
 

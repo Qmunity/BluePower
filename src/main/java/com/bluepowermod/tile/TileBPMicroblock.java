@@ -8,6 +8,7 @@
 
 package com.bluepowermod.tile;
 
+import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -36,7 +37,7 @@ public class TileBPMicroblock extends BlockEntity {
     private Integer rotation = 0;
 
     public TileBPMicroblock(BlockPos pos, BlockState state){
-        super(BPBlockEntityType.MICROBLOCK, pos, state);
+        super(BPBlockEntityType.MICROBLOCK.get(), pos, state);
     }
 
     @Nonnull
@@ -66,7 +67,7 @@ public class TileBPMicroblock extends BlockEntity {
     @Override
     protected void saveAdditional(CompoundTag compound) {
         super.saveAdditional(compound);
-        compound.putString("block", block.getRegistryName().toString());
+        compound.putString("block", ForgeRegistries.BLOCKS.getKey(block).toString());
         compound.putInt("rotation", rotation);
     }
 

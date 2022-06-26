@@ -19,6 +19,7 @@
 
 package com.bluepowermod.item;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Random;
@@ -32,7 +33,7 @@ public class ItemLimitedCrafting extends ItemBase {
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
         ItemStack container = itemStack.copy();
-        return container.hurt(1, new Random(), null) ? ItemStack.EMPTY : container;
+        return container.hurt(1, RandomSource.create(), null) ? ItemStack.EMPTY : container;
     }
 
     @Override

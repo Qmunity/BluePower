@@ -31,7 +31,6 @@ import com.bluepowermod.block.power.*;
 import com.bluepowermod.block.worldgen.*;
 import com.bluepowermod.item.ItemBPPart;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
@@ -40,253 +39,157 @@ import com.bluepowermod.util.Dependencies;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.grower.OakTreeGrower;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BPBlocks {
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Refs.MODID);
 
     public static List<Block> blockList = new ArrayList<>();
-    public static List<Block> microblocks = new ArrayList<>();
-    public static Block basalt;
-    public static Block marble;
-    public static Block basalt_cobble;
-    public static Block basalt_brick;
-    public static Block marble_brick;
-    public static Block cracked_basalt_lava;
-    public static Block cracked_basalt_decorative;
+    public static List<RegistryObject<Block>> microblocks = new ArrayList<>();
+    public static final RegistryObject<Block> basalt = BLOCKS.register(Refs.BASALT_NAME, BlockBasalt::new);
+    public static final RegistryObject<Block> marble = BLOCKS.register(Refs.MARBLE_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> basalt_cobble = BLOCKS.register(Refs.BASALTCOBBLE_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> basalt_brick = BLOCKS.register(Refs.BASALTBRICK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> marble_brick = BLOCKS.register(Refs.MARBLEBRICK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> cracked_basalt_lava = BLOCKS.register(Refs.CRACKED_BASALT_NAME, BlockCrackedBasalt::new);
+    public static final RegistryObject<Block> cracked_basalt_decorative = BLOCKS.register(Refs.CRACKED_BASALT_DECOR_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> basaltbrick_cracked = BLOCKS.register(Refs.CRACKEDBASALTBRICK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> basalt_brick_small = BLOCKS.register(Refs.SMALLBASALTBRICK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> marble_brick_small = BLOCKS.register(Refs.SMALLMARBLEBRICK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> fancy_basalt = BLOCKS.register(Refs.CHISELEDBASALTBRICK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> fancy_marble = BLOCKS.register(Refs.CHISELEDMARBLEBRICK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> marble_paver = BLOCKS.register(Refs.MARBLEPAVER_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> basalt_paver = BLOCKS.register(Refs.BASALTPAVER_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> tiles = BLOCKS.register(Refs.TILES_NAME, BlockStoneOre::new);
 
-    public static Block half_block;
-    public static Block panel;
-    public static Block cover;
+    public static final RegistryObject<Block> marble_tile = BLOCKS.register(Refs.MARBLETILE_NAME, BlockStoneOreConnected::new);
+    public static final RegistryObject<Block> basalt_tile = BLOCKS.register(Refs.BASALTTILE_NAME, BlockStoneOreConnected::new);
 
-    public static Block basaltbrick_cracked;
-    public static Block basalt_brick_small;
-    public static Block marble_brick_small;
-    public static Block fancy_basalt;
-    public static Block fancy_marble;
-    public static Block marble_tile;
-    public static Block basalt_tile;
-    public static Block marble_paver;
-    public static Block basalt_paver;
-    public static Block tiles;
+    public static final RegistryObject<Block> teslatite_ore = BLOCKS.register(Refs.TESLATITEORE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> ruby_ore = BLOCKS.register(Refs.RUBYORE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> sapphire_ore = BLOCKS.register(Refs.SAPPHIREORE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> amethyst_ore = BLOCKS.register(Refs.AMETHYSTORE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> green_sapphire_ore = BLOCKS.register(Refs.GREENSAPPHIREORE_NAME, BlockItemOre::new);
 
-    public static Block teslatite_ore;
-    public static Block ruby_ore;
-    public static Block sapphire_ore;
-    public static Block amethyst_ore;
-    public static Block silver_ore;
-    public static Block zinc_ore;
-    public static Block tungsten_ore;
-    public static Block green_sapphire_ore;
+    public static final RegistryObject<Block> silver_ore = BLOCKS.register(Refs.SILVERORE_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> zinc_ore = BLOCKS.register(Refs.ZINCORE_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> tungsten_ore = BLOCKS.register(Refs.TUNGSTENORE_NAME, BlockStoneOre::new);
 
-    public static Block teslatite_deepslate;
-    public static Block ruby_deepslate;
-    public static Block sapphire_deepslate;
-    public static Block amethyst_deepslate;
-    public static Block silver_deepslate;
-    public static Block zinc_deepslate;
-    public static Block tungsten_deepslate;
-    public static Block green_sapphire_deepslate;
+    public static final RegistryObject<Block> teslatite_deepslate = BLOCKS.register(Refs.TESLATITEDEEPSLATE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> ruby_deepslate = BLOCKS.register(Refs.RUBYDEEPSLATE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> sapphire_deepslate = BLOCKS.register(Refs.SAPPHIREDEEPSLATE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> amethyst_deepslate = BLOCKS.register(Refs.AMETHYSTDEEPSLATE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> green_sapphire_deepslate = BLOCKS.register(Refs.GREENSAPPHIREDEEPSLATE_NAME, BlockItemOre::new);
 
-    public static Block ruby_block;
-    public static Block sapphire_block;
-    public static Block amethyst_block;
-    public static Block teslatite_block;
-    public static Block silver_block;
-    public static Block zinc_block;
-    public static Block tungsten_block;
-    public static Block green_sapphire_block;
+    public static final RegistryObject<Block> silver_deepslate = BLOCKS.register(Refs.SILVERDEEPSLATE_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> zinc_deepslate = BLOCKS.register(Refs.ZINCDEEPSLATE_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> tungsten_deepslate = BLOCKS.register(Refs.TUNGSTENDEEPSLATE_NAME, BlockStoneOre::new);
 
-    public static Block rubber_log;
-    public static Block rubber_leaves;
-    public static Block rubber_sapling;
+    public static final RegistryObject<Block> ruby_block = BLOCKS.register(Refs.RUBYBLOCK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> sapphire_block = BLOCKS.register(Refs.SAPPHIREBLOCK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> amethyst_block = BLOCKS.register(Refs.AMETHYSTBLOCK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> teslatite_block = BLOCKS.register(Refs.TESLATITEBLOCK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> silver_block = BLOCKS.register(Refs.SILVERBLOCK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> zinc_block = BLOCKS.register(Refs.ZINCBLOCK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> tungsten_block = BLOCKS.register(Refs.TUNGSTENBLOCK_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> green_sapphire_block = BLOCKS.register(Refs.GREENSAPPHIREBLOCK_NAME, BlockStoneOre::new);
 
-    public static Block sapphire_glass;
-    public static Block reinforced_sapphire_glass;
+    //public static final RegistryObject<Block> rubber_log = BLOCKS.register(Refs.RUBBERLOG_NAME, () -> new BlockRubberLog(Block.Properties.of(Material.WOOD)));
+    //public static final RegistryObject<Block> rubber_leaves = BLOCKS.register(Refs.RUBBERLEAVES_NAME, () -> new BlockRubberLeaves(Block.Properties.of(Material.PLANT).noOcclusion()));
+    //public static final RegistryObject<Block> rubber_sapling = BLOCKS.register(Refs.RUBBERSAPLING_NAME, () -> new BlockRubberSapling(new OakTreeGrower(), Block.Properties.of(Material.PLANT)));
 
-    public static Block flax_crop;
-    public static BushBlock indigo_flower;
+    public static final RegistryObject<Block> sapphire_glass = BLOCKS.register(Refs.SAPPHIREGLASS_NAME, BlockBPGlass::new);
+    public static final RegistryObject<Block> reinforced_sapphire_glass = BLOCKS.register(Refs.REINFORCEDSAPPHIREGLASS_NAME, () -> new BlockBPGlass(true));
 
-    public static Block alloyfurnace;
-    public static Block block_breaker;
-    public static Block igniter;
-    public static Block buffer;
-    public static Block deployer;
-    public static Block transposer;
-    public static Block tube;
-    public static Block sorting_machine;
-    public static Block project_table;
-    public static Block auto_project_table;
-    public static Block[] project_tables = new Block[2];
-    public static Block circuit_table;
-    public static Block circuit_database;
-    public static Block ejector;
-    public static Block relay;
-    public static Block filter;
-    public static Block retriever;
-    public static Block regulator;
-    public static Block item_detector;
-    public static Block manager;
-    public static Block battery;
-    public static Block blulectric_cable;
-    public static Block blulectric_alloyfurnace;
-    public static Block blulectric_furnace;
-    public static Block engine;
-    public static Block kinetic_generator;
-    public static Block windmill;
-    public static Block solarpanel;
-    public static Block thermopile;
-    public static Block multipart;
+    public static final RegistryObject<Block> flax_crop = BLOCKS.register(Refs.FLAXCROP_NAME, () -> new BlockCrop(Block.Properties.of(Material.PLANT)));
+    public static final RegistryObject<BushBlock> indigo_flower = BLOCKS.register(Refs.INDIGOFLOWER_NAME, () -> new BlockCustomFlower(Block.Properties.of(Material.PLANT)));
 
-    // public static Block cpu;
-    // public static Block monitor;
-    // public static Block disk_drive;
-    // public static Block io_expander;
+    public static final RegistryObject<Block> alloyfurnace = BLOCKS.register(Refs.ALLOYFURNACE_NAME, BlockAlloyFurnace::new);
+    public static final RegistryObject<Block> block_breaker = BLOCKS.register(Refs.BLOCKBREAKER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileBlockBreaker.class));
+    public static final RegistryObject<Block> igniter = BLOCKS.register(Refs.BLOCKIGNITER_NAME, BlockIgniter::new);
+    public static final RegistryObject<Block> buffer = BLOCKS.register(Refs.BLOCKBUFFER_NAME, () -> new BlockContainerHorizontalFacingBase(Material.STONE, TileBuffer.class){
+        @Override
+        protected boolean canRotateVertical(){return false;}
+    });
+    public static final RegistryObject<Block> deployer = BLOCKS.register(Refs.BLOCKDEPLOYER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileDeployer.class));
+    public static final RegistryObject<Block> transposer = BLOCKS.register(Refs.TRANSPOSER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileTransposer.class));
+    public static final RegistryObject<Block> tube = BLOCKS.register(Refs.TUBE_NAME, BlockTube::new);
+    public static final RegistryObject<Block> sorting_machine = BLOCKS.register(Refs.SORTING_MACHINE_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileSortingMachine.class).setWIP(true));
+    public static final RegistryObject<Block> project_table = BLOCKS.register(Refs.PROJECTTABLE_NAME, BlockProjectTable::new);
+    public static final RegistryObject<Block> auto_project_table = BLOCKS.register(Refs.AUTOPROJECTTABLE_NAME, () -> new BlockProjectTable(TileAutoProjectTable.class));
+    public static final RegistryObject<Block> circuit_table = BLOCKS.register(Refs.CIRCUITTABLE_NAME, () -> new BlockProjectTable(TileCircuitTable.class).setWIP(true));
+    public static final RegistryObject<Block> circuit_database = BLOCKS.register(Refs.CIRCUITDATABASE_NAME, () -> new BlockCircuitDatabase(TileCircuitDatabase.class).setWIP(true));
+    public static final RegistryObject<Block> ejector = BLOCKS.register(Refs.EJECTOR_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileEjector.class));
+    public static final RegistryObject<Block> relay = BLOCKS.register(Refs.RELAY_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileRelay.class).setWIP(true));
+    public static final RegistryObject<Block> filter = BLOCKS.register(Refs.FILTER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileFilter.class).setWIP(true));
+    public static final RegistryObject<Block> retriever = BLOCKS.register(Refs.RETRIEVER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileRetriever.class).setWIP(true));
+    public static final RegistryObject<Block> regulator = BLOCKS.register(Refs.REGULATOR_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileRegulator.class).emitsRedstone().setWIP(true));
+    public static final RegistryObject<Block> item_detector = BLOCKS.register(Refs.ITEMDETECTOR_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileItemDetector.class).emitsRedstone().setWIP(true));
+    public static final RegistryObject<Block> manager = BLOCKS.register(Refs.MANAGER_NAME,() -> new BlockRejecting(Material.STONE, TileManager.class).emitsRedstone().setWIP(true));
+    public static final RegistryObject<Block> battery = BLOCKS.register(Refs.BATTERY_NAME, BlockBattery::new);
+    public static final RegistryObject<Block> blulectric_cable = BLOCKS.register(Refs.BLULECTRICCABLE_NAME, BlockBlulectricCable::new);
+    public static final RegistryObject<Block> blulectric_alloyfurnace = BLOCKS.register(Refs.BLULECTRICALLOYFURNACE_NAME, BlockBlulectricAlloyFurnace::new);
+    public static final RegistryObject<Block> blulectric_furnace = BLOCKS.register(Refs.BLULECTRICFURNACE_NAME, BlockBlulectricFurnace::new);
+    public static final RegistryObject<Block> engine = BLOCKS.register(Refs.ENGINE_NAME, BlockEngine::new);
+    public static final RegistryObject<Block> kinetic_generator = BLOCKS.register(Refs.KINETICGENERATOR_NAME, () -> new BlockKineticGenerator().setWIP(true));
+    public static final RegistryObject<Block> windmill = BLOCKS.register(Refs.WINDMILL_NAME, () -> new BlockWindmill().setWIP(true));
+    public static final RegistryObject<Block> solarpanel = BLOCKS.register(Refs.SOLARPANEL_NAME, BlockSolarPanel::new);
+    public static final RegistryObject<Block> thermopile = BLOCKS.register(Refs.THERMOPILE_NAME, () -> new BlockThermopile().setWIP(true));
 
-    public static List<Block> allLamps;
+    public static final RegistryObject<Block> multipart = BLOCKS.register(Refs.MULTIPART_NAME, BlockBPMultipart::new);
 
-    public static Block[] blockLamp;
-    public static Block[] blockLampInverted;
-    public static Block[] cagedLamp;
-    public static Block[] cagedLampInverted;
-    public static Block[] fixedLamp;
-    public static Block[] fixedLampInverted;
+    public static final RegistryObject<Block> half_block = BLOCKS.register("half_block", () -> new BlockBPMicroblock(Block.box(0,0,0,16,8,16)));
+    public static final RegistryObject<Block> panel = BLOCKS.register("panel", () -> new BlockBPMicroblock(Block.box(0,0,0,16,4,16)));
+    public static final RegistryObject<Block> cover = BLOCKS.register("cover", () -> new BlockBPMicroblock(Block.box(0,0,0,16,2,16)));
 
-    public static Block blockLampRGB;
-    public static Block blockLampRGBInverted;
-    public static Block cagedLampRGB;
-    public static Block cagedLampRGBInverted;
-    public static Block fixedLampRGB;
-    public static Block fixedLampRGBInverted;
+    //  public static final RegistryObject<Block> cpu;
+    //  public static final RegistryObject<Block> monitor;
+    //  public static final RegistryObject<Block> disk_drive;
+    //  public static final RegistryObject<Block> io_expander;
+
+    public static List<RegistryObject<Block>> allLamps = new ArrayList<>();
+
+    public static List<RegistryObject<Block>> blockLamp = new ArrayList<>();
+    public static List<RegistryObject<Block>> blockLampInverted = new ArrayList<>();
+    public static List<RegistryObject<Block>> cagedLamp = new ArrayList<>();
+    public static List<RegistryObject<Block>> cagedLampInverted = new ArrayList<>();
+    public static List<RegistryObject<Block>> fixedLamp = new ArrayList<>();
+    public static List<RegistryObject<Block>> fixedLampInverted = new ArrayList<>();
+
+     public static final RegistryObject<Block> blockLampRGB = BLOCKS.register(Refs.LAMP_NAME + "_rgb", () -> new BlockLampRGB(false).setWIP(true));
+     public static final RegistryObject<Block> blockLampRGBInverted = BLOCKS.register(Refs.LAMP_NAME + "inverted_rgb", () -> new BlockLampRGB(true).setWIP(true));
+     public static final RegistryObject<Block> cagedLampRGB = BLOCKS.register(Refs.CAGELAMP_NAME + "_rgb", () -> new BlockLampRGBSurface(false, Refs.CAGELAMP_AABB).setWIP(true));
+     public static final RegistryObject<Block> cagedLampRGBInverted = BLOCKS.register(Refs.CAGELAMP_NAME + "inverted_rgb", () -> new BlockLampRGBSurface(true, Refs.CAGELAMP_AABB).setWIP(true));
+     public static final RegistryObject<Block> fixedLampRGB = BLOCKS.register(Refs.FIXTURELAMP_NAME + "_rgb", () -> new BlockLampRGBSurface(false, Refs.FIXTURELAMP_AABB).setWIP(true));
+     public static final RegistryObject<Block> fixedLampRGBInverted = BLOCKS.register(Refs.FIXTURELAMP_NAME + "inverted_rgb", () -> new BlockLampRGBSurface(true, Refs.FIXTURELAMP_AABB).setWIP(true));
 
 
 
-    public static Block blockGateAND;
-    public static Block blockGateNAND;
+     public static final RegistryObject<Block> blockGateAND = BLOCKS.register("gate_and", BlockGateBase::new);
+     public static final RegistryObject<Block> blockGateNAND = BLOCKS.register("gate_nand",() -> new BlockGateBase(){
+         @Override
+         public byte computeRedstone(byte back, byte left, byte right){
+             return (byte)((left == 0 || right == 0 || back == 0 ) ?  16 : 0);
+         }
+     });
 
-    public static Block blockRedAlloyWire;
-    public static Block blockBlueAlloyWire;
+     public static final RegistryObject<Block> blockRedAlloyWire = BLOCKS.register(RedwireType.RED_ALLOY.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true));
+     public static final RegistryObject<Block> blockBlueAlloyWire = BLOCKS.register( RedwireType.BLUESTONE.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.BLUESTONE.getName()).setWIP(true));
 
-    public static Block sortron;
+     public static RegistryObject<Block> sortron;
 
-    private static void instantiateBlocks() {
+    static {
 
-        basalt = new BlockBasalt(Refs.BASALT_NAME);
-        marble = new BlockStoneOre(Refs.MARBLE_NAME);
-        basalt_cobble = new BlockStoneOre(Refs.BASALTCOBBLE_NAME);
-        basalt_brick = new BlockStoneOre(Refs.BASALTBRICK_NAME);
-        marble_brick = new BlockStoneOre(Refs.MARBLEBRICK_NAME);
-        cracked_basalt_lava = new BlockCrackedBasalt(Refs.CRACKED_BASALT_NAME);
-        cracked_basalt_decorative = new BlockStoneOre(Refs.CRACKED_BASALT_DECOR_NAME);
-
-        basaltbrick_cracked = new BlockStoneOre(Refs.CRACKEDBASALTBRICK_NAME);
-        basalt_brick_small = new BlockStoneOre(Refs.SMALLBASALTBRICK_NAME);
-        marble_brick_small = new BlockStoneOre(Refs.SMALLMARBLEBRICK_NAME);
-        fancy_basalt = new BlockStoneOre(Refs.CHISELEDBASALTBRICK_NAME);
-        fancy_marble = new BlockStoneOre(Refs.CHISELEDMARBLEBRICK_NAME);
-        marble_tile = new BlockStoneOreConnected(Refs.MARBLETILE_NAME);
-        basalt_tile = new BlockStoneOreConnected(Refs.BASALTTILE_NAME);
-        marble_paver = new BlockStoneOre(Refs.MARBLEPAVER_NAME);
-        basalt_paver = new BlockStoneOre(Refs.BASALTPAVER_NAME);
-        tiles = new BlockStoneOre(Refs.TILES);
-
-        teslatite_ore = new BlockItemOre(Refs.TESLATITEORE_NAME);
-        ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME);
-        sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME);
-        amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME);
-        green_sapphire_ore = new BlockItemOre(Refs.GREENSAPPHIREORE_NAME);
-        silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);
-        zinc_ore = new BlockStoneOre(Refs.ZINCORE_NAME);
-        tungsten_ore = new BlockStoneOre(Refs.TUNGSTENORE_NAME);
-
-        teslatite_deepslate = new BlockItemOre(Refs.TESLATITEDEEPSLATE_NAME);
-        ruby_deepslate = new BlockItemOre(Refs.RUBYDEEPSLATE_NAME);
-        sapphire_deepslate = new BlockItemOre(Refs.SAPPHIREDEEPSLATE_NAME);
-        amethyst_deepslate = new BlockItemOre(Refs.AMETHYSTDEEPSLATE_NAME);
-        green_sapphire_deepslate = new BlockItemOre(Refs.GREENSAPPHIREDEEPSLATE_NAME);
-        silver_deepslate = new BlockStoneOre(Refs.SILVERDEEPSLATE_NAME);
-        zinc_deepslate = new BlockStoneOre(Refs.ZINCDEEPSLATE_NAME);
-        tungsten_deepslate = new BlockStoneOre(Refs.TUNGSTENDEEPSLATE_NAME);
-
-        ruby_block = new BlockStoneOre(Refs.RUBYBLOCK_NAME);
-        sapphire_block = new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME);
-        amethyst_block = new BlockStoneOre(Refs.AMETHYSTBLOCK_NAME);
-        teslatite_block = new BlockStoneOre(Refs.TESLATITEBLOCK_NAME);
-        green_sapphire_block = new BlockStoneOre(Refs.GREENSAPPHIREBLOCK_NAME);
-        silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME);
-        zinc_block = new BlockStoneOre(Refs.ZINCBLOCK_NAME);
-        tungsten_block = new BlockStoneOre(Refs.TUNGSTENBLOCK_NAME);
-
-        multipart = new BlockBPMultipart();
-
-        rubber_leaves = new BlockRubberLeaves(Block.Properties.of(Material.PLANT).noOcclusion());
-        rubber_log = new BlockRubberLog(Block.Properties.of(Material.WOOD));
-        rubber_sapling = new BlockRubberSapling(new OakTreeGrower(), Block.Properties.of(Material.PLANT));
-
-        sapphire_glass = new BlockBPGlass(Refs.SAPPHIREGLASS_NAME);
-        reinforced_sapphire_glass = new BlockBPGlass(Refs.REINFORCEDSAPPHIREGLASS_NAME, true);
-
-        flax_crop = new BlockCrop(Block.Properties.of(Material.PLANT));
-        indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME, Block.Properties.of(Material.PLANT));
-
-        alloyfurnace = new BlockAlloyFurnace();
-        block_breaker = new BlockContainerFacingBase(Material.STONE, TileBlockBreaker.class, BPBlockEntityType.BLOCKBREAKER).setRegistryName(Refs.MODID, Refs.BLOCKBREAKER_NAME);
-        igniter = new BlockIgniter();
-
-        buffer = new BlockContainerHorizontalFacingBase(Material.STONE, TileBuffer.class, BPBlockEntityType.BUFFER){
-            @Override
-            protected boolean canRotateVertical(){return false;}
-        }.setRegistryName(Refs.MODID, Refs.BLOCKBUFFER_NAME);
-
-        deployer = new BlockContainerFacingBase(Material.STONE, TileDeployer.class, BPBlockEntityType.DEPLOYER)
-                .setRegistryName(Refs.MODID, Refs.BLOCKDEPLOYER_NAME);
-        transposer = new BlockContainerFacingBase(Material.STONE, TileTransposer.class, BPBlockEntityType.TRANSPOSER).setRegistryName(Refs.MODID, Refs.TRANSPOSER_NAME);
-        tube = new BlockTube().setRegistryName(Refs.MODID, Refs.TUBE_NAME);
-        sorting_machine = new BlockContainerFacingBase(Material.STONE, TileSortingMachine.class, BPBlockEntityType.SORTING_MACHINE).setWIP(true)
-                .setRegistryName(Refs.MODID, Refs.SORTING_MACHINE_NAME);
-        project_table = new BlockProjectTable();
-        project_tables[0] = project_table;
-        auto_project_table = new BlockProjectTable(TileAutoProjectTable.class, BPBlockEntityType.AUTO_PROJECT_TABLE).setRegistryName(Refs.MODID, Refs.AUTOPROJECTTABLE_NAME);
-        project_tables[1] = auto_project_table;
-
-        circuit_table = new BlockProjectTable(TileCircuitTable.class, BPBlockEntityType.PROJECT_TABLE).setWIP(true).setRegistryName(Refs.MODID, Refs.CIRCUITTABLE_NAME);
-        circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setWIP(true)
-                .setRegistryName(Refs.MODID, Refs.CIRCUITDATABASE_NAME);
-        ejector = new BlockContainerFacingBase(Material.STONE, TileEjector.class, BPBlockEntityType.EJECTOR).setRegistryName(Refs.MODID, Refs.EJECTOR_NAME);
-        relay = new BlockContainerFacingBase(Material.STONE, TileRelay.class, BPBlockEntityType.RELAY).setWIP(true).setRegistryName(Refs.MODID, Refs.RELAY_NAME);
-        filter = new BlockContainerFacingBase(Material.STONE, TileFilter.class, BPBlockEntityType.FILTER).setWIP(true).setRegistryName(Refs.MODID, Refs.FILTER_NAME);
-        retriever = new BlockContainerFacingBase(Material.STONE, TileRetriever.class, BPBlockEntityType.RETRIEVER).setWIP(true).setRegistryName(Refs.MODID, Refs.RETRIEVER_NAME);
-        regulator = new BlockContainerFacingBase(Material.STONE, TileRegulator.class, BPBlockEntityType.REGULATOR).emitsRedstone().setWIP(true)
-                .setRegistryName(Refs.MODID, Refs.REGULATOR_NAME);
-        item_detector = new BlockContainerFacingBase(Material.STONE, TileItemDetector.class, BPBlockEntityType.ITEM_DETECTOR).emitsRedstone().setWIP(true)
-                .setRegistryName(Refs.MODID, Refs.ITEMDETECTOR_NAME);
-        manager = new BlockRejecting(Material.STONE, TileManager.class, BPBlockEntityType.MANAGER).emitsRedstone().setWIP(true).setRegistryName(Refs.MODID, Refs.MANAGER_NAME);
-
-        battery = new BlockBattery();
-        blulectric_cable = new BlockBlulectricCable();
-        blulectric_furnace = new BlockBlulectricFurnace();
-        blulectric_alloyfurnace = new BlockBlulectricAlloyFurnace();
-        engine = new BlockEngine();
-        kinetic_generator = new BlockKineticGenerator().setWIP(true);
-        //windmill = new BlockWindmill();
-        solarpanel = new BlockSolarPanel();
-        thermopile = new BlockThermopile().setWIP(true);
-
-        half_block = new BlockBPMicroblock(Block.box(0,0,0,16,8,16)).setRegistryName(Refs.MODID + ":half_block");
-        panel = new BlockBPMicroblock(Block.box(0,0,0,16,4,16)).setRegistryName(Refs.MODID + ":panel");
-        cover = new BlockBPMicroblock(Block.box(0,0,0,16,2,16)).setRegistryName(Refs.MODID + ":cover");
         microblocks.add(half_block);
         microblocks.add(panel);
         microblocks.add(cover);
@@ -296,96 +199,70 @@ public class BPBlocks {
         // disk_drive = new BlockDiskDrive();
         // io_expander = new BlockIOExpander();
 
-        blockLamp = new Block[MinecraftColor.VALID_COLORS.length];
-        blockLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
-        cagedLamp = new Block[MinecraftColor.VALID_COLORS.length];
-        cagedLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
-        fixedLamp = new Block[MinecraftColor.VALID_COLORS.length];
-        fixedLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
-
         //Regular Lamp
-        blockLampRGB = new BlockLampRGB(Refs.LAMP_NAME,false).setWIP(true);
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            blockLamp[i] = new BlockLamp(Refs.LAMP_NAME, false, MinecraftColor.VALID_COLORS[i]);
-        blockLampRGBInverted = new BlockLampRGB(Refs.LAMP_NAME,true).setWIP(true);
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            blockLampInverted[i] = new BlockLamp(Refs.LAMP_NAME, true, MinecraftColor.VALID_COLORS[i]);
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
+            int color = i;
+            blockLamp.add(BLOCKS.register(Refs.LAMP_NAME + "_" + MinecraftColor.VALID_COLORS[i].name().toLowerCase(), () -> new BlockLamp( false, MinecraftColor.VALID_COLORS[color])));
+        }
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++){
+            int color = i;
+            blockLampInverted.add(BLOCKS.register(Refs.LAMP_NAME + "inverted_" + MinecraftColor.VALID_COLORS[i].name().toLowerCase(), () -> new BlockLamp( true, MinecraftColor.VALID_COLORS[color])));
+        }
 
-        allLamps = new ArrayList<>();
-        allLamps.addAll(Arrays.asList(blockLamp));
-        allLamps.addAll(Arrays.asList(blockLampInverted));
+        allLamps.addAll(blockLamp);
+        allLamps.addAll(blockLampInverted);
         allLamps.add(blockLampRGB);
         allLamps.add(blockLampRGBInverted);
 
         //Cage Lamp
-        cagedLampRGB = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,false, Refs.CAGELAMP_AABB).setWIP(true);
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            cagedLamp[i] = new BlockLampSurface(Refs.CAGELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
-        cagedLampRGBInverted = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,true, Refs.CAGELAMP_AABB).setWIP(true);
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            cagedLampInverted[i] = new BlockLampSurface(Refs.CAGELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++){
+            int color = i;
+            cagedLamp.add(BLOCKS.register(Refs.CAGELAMP_NAME + "_" + MinecraftColor.VALID_COLORS[i].name().toLowerCase(), () -> new BlockLampSurface(false, MinecraftColor.VALID_COLORS[color], Refs.CAGELAMP_AABB)));
+        }
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++){
+            int color = i;
+            cagedLampInverted.add(BLOCKS.register(Refs.CAGELAMP_NAME + "inverted_" + MinecraftColor.VALID_COLORS[i].name().toLowerCase(), () -> new BlockLampSurface(true, MinecraftColor.VALID_COLORS[color], Refs.CAGELAMP_AABB)));
+        }
 
-        allLamps.addAll(Arrays.asList(cagedLamp));
-        allLamps.addAll(Arrays.asList(cagedLampInverted));
+        allLamps.addAll(cagedLamp);
+        allLamps.addAll(cagedLampInverted);
         allLamps.add(cagedLampRGB);
         allLamps.add(cagedLampRGBInverted);
 
         //Fixture Lamp
-        fixedLampRGB = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,false, Refs.FIXTURELAMP_AABB).setWIP(true);
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            fixedLamp[i] = new BlockLampSurface(Refs.FIXTURELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
-        fixedLampRGBInverted = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,true, Refs.FIXTURELAMP_AABB).setWIP(true);
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            fixedLampInverted[i] = new BlockLampSurface(Refs.FIXTURELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++){
+            int color = i;
+            fixedLamp.add(BLOCKS.register(Refs.FIXTURELAMP_NAME + "_" + MinecraftColor.VALID_COLORS[i].name().toLowerCase(), () -> new BlockLampSurface(false, MinecraftColor.VALID_COLORS[color], Refs.FIXTURELAMP_AABB)));
+        }
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++){
+            int color = i;
+            fixedLampInverted.add(BLOCKS.register(Refs.FIXTURELAMP_NAME + "inverted_" + MinecraftColor.VALID_COLORS[i].name().toLowerCase(), () -> new BlockLampSurface(true, MinecraftColor.VALID_COLORS[color], Refs.FIXTURELAMP_AABB)));
+        }
 
-        allLamps.addAll(Arrays.asList(fixedLamp));
-        allLamps.addAll(Arrays.asList(fixedLampInverted));
+        allLamps.addAll(fixedLamp);
+        allLamps.addAll(fixedLampInverted);
         allLamps.add(fixedLampRGB);
         allLamps.add(fixedLampRGBInverted);
 
-        //Gates
-        blockGateAND = new BlockGateBase("gate_and").setRegistryName("bluepower:gate_and");
-        blockGateNAND = new BlockGateBase("gate_nand"){
-            @Override
-            public byte computeRedstone(byte back, byte left, byte right){
-                return (byte)((left == 0 || right == 0 || back == 0 ) ?  16 : 0);
-            }
-        }.setRegistryName("bluepower:gate_nand");
-
         //Wires
-        blockBlueAlloyWire = new BlockAlloyWire(RedwireType.BLUESTONE.getName()).setWIP(true);
-        blockRedAlloyWire =  new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true);
         //blockInsulatedBlueAlloyWire = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName());
         //blockInsulatedRedAlloyWire = new BlockInsulatedAlloyWire(RedwireType.RED_ALLOY.getName());
-    }
 
-    private static void initModDependantBlocks() {
+        //Init Mod Dependant Blocks
         if (ModList.get().isLoaded(Dependencies.COMPUTER_CRAFT) || ModList.get().isLoaded(Dependencies.OPEN_COMPUTERS)) {
-            sortron = new BlockSortron();
+            sortron = BLOCKS.register(Refs.BLOCKSORTRON_NAME, BlockSortron::new);
         }
+
     }
 
-    @SubscribeEvent
-    public static void registerBlocks(RegistryEvent.Register<Block> event) {
-
-        instantiateBlocks();
-        initModDependantBlocks();
-
-        for(Block block : blockList) {
-            event.getRegistry().register(block);
-
-        }
-    }
-
-    @SubscribeEvent
-    public static void registerBlockItems(RegistryEvent.Register<Item> event) {
+    public static void registerBlockItems() {
         for (Block block : blockList) {
-            if (block.getRegistryName() != null && !(block instanceof BlockCrop)) { // Crops have seeds rather than blocks
+            if (ForgeRegistries.BLOCKS.getKey(block) != null && !(block instanceof BlockCrop)) { // Crops have seeds rather than blocks
                 if((block instanceof BlockBase && ((BlockBase)block).getWIP()) || block instanceof BlockBPMultipart || block instanceof BlockBPMicroblock || block instanceof BlockTube ){
                     if(block instanceof IBPPartBlock) {
-                        event.getRegistry().register(new ItemBPPart(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
+                        BPItems.ITEMS.register(ForgeRegistries.BLOCKS.getKey(block).getPath(), () -> new ItemBPPart(block, new Item.Properties()));
                     }else{
-                        event.getRegistry().register(new BlockItem(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
+                        BPItems.ITEMS.register(ForgeRegistries.BLOCKS.getKey(block).getPath(), () -> new BlockItem(block, new Item.Properties()));
                     }
                 }else{
                     CreativeModeTab group = BPCreativeTabs.blocks;
@@ -395,9 +272,11 @@ public class BPBlocks {
                     if(block instanceof BlockBlulectricCable){group = BPCreativeTabs.wiring;}
                     if(block instanceof BlockGateBase){group = BPCreativeTabs.circuits;}
                     if(block instanceof IBPPartBlock){
-                        event.getRegistry().register(new ItemBPPart(block, new Item.Properties().tab(group)).setRegistryName(block.getRegistryName()));
+                        CreativeModeTab finalGroup = group;
+                        BPItems.ITEMS.register(ForgeRegistries.BLOCKS.getKey(block).getPath(), () -> new ItemBPPart(block, new Item.Properties().tab(finalGroup)));
                     }else {
-                        event.getRegistry().register(new BlockItem(block, new Item.Properties().tab(group)).setRegistryName(block.getRegistryName()));
+                        CreativeModeTab finalGroup2 = group;
+                        BPItems.ITEMS.register(ForgeRegistries.BLOCKS.getKey(block).getPath(), () -> new BlockItem(block, new Item.Properties().tab(finalGroup2)));
                     }
                 }
             }

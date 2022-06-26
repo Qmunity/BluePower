@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,7 +24,7 @@ public class TileKineticGenerator extends TileBase implements WorldlyContainer{
 	public int windtick = 0;
 	public static final int SLOTS = 1;
 	public TileKineticGenerator(BlockPos pos, BlockState state){
-	    super(BPBlockEntityType.KINETIC_GENERATOR, pos, state);
+	    super(BPBlockEntityType.KINETIC_GENERATOR.get(), pos, state);
 	}
 
 	public static void tickKinetic(TileKineticGenerator tileKineticGenerator) {

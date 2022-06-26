@@ -40,7 +40,7 @@ public class ItemStackDatabase {
         CompoundTag tag = new CompoundTag();
         stack.save(tag);
 
-        ResourceLocation ui = stack.getItem().getRegistryName();
+        ResourceLocation ui = ForgeRegistries.ITEMS.getKey(stack.getItem());
         tag.putString("owner", ui.getNamespace());
         tag.putString("name", ui.getPath());
 

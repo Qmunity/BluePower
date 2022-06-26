@@ -45,7 +45,7 @@ public class ContainerBlulectricFurnace extends AbstractContainerMenu {
     }
 
     public ContainerBlulectricFurnace(int windowId, Inventory invPlayer, Container inventory, ContainerData fields) {
-        super(BPMenuType.BLULECTRIC_FURNACE, windowId);
+        super(BPMenuType.BLULECTRIC_FURNACE.get(), windowId);
         this.inventory = inventory;
         this.fields = fields;
 

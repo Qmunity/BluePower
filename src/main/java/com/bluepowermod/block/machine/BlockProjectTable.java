@@ -19,13 +19,12 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.WorldlyContainerHolder;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,12 +34,11 @@ import net.minecraft.world.level.material.Material;
 public class BlockProjectTable extends BlockContainerBase implements WorldlyContainerHolder {
 
     public BlockProjectTable() {
-        super(Material.WOOD, TileProjectTable.class, BPBlockEntityType.PROJECT_TABLE);
-        setRegistryName(Refs.MODID, Refs.PROJECTTABLE_NAME);
+        super(Material.WOOD, TileProjectTable.class);
     }
 
-    public BlockProjectTable(Class<? extends TileBase> tileClass, BlockEntityType<? extends TileBase> type) {
-        super(Material.WOOD, tileClass, type);
+    public BlockProjectTable(Class<? extends TileBase> tileClass) {
+        super(Material.WOOD, tileClass);
     }
 
     @Override

@@ -9,16 +9,14 @@ package com.bluepowermod.block.computer;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileIOExpander;
 import net.minecraft.world.level.material.Material;
 
 public class BlockIOExpander extends BlockContainerBase {
 
     public BlockIOExpander() {
-
-        super(Material.METAL, TileIOExpander.class, BPBlockEntityType.IO_EXPANDER);
-        setRegistryName(Refs.BLOCKIOEXPANDER_NAME);
+        super(Material.METAL, TileIOExpander.class);
     }
 
 }

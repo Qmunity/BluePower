@@ -47,7 +47,7 @@ public class ContainerRegulator extends AbstractContainerMenu {
     public int fuzzySetting = -1;
 
     public ContainerRegulator(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.REGULATOR, windowId);
+        super(BPMenuType.REGULATOR.get(), windowId);
         this.regulator = inventory;
 
         for (int i = 0; i < 3; ++i) {

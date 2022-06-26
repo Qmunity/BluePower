@@ -4,7 +4,7 @@ import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.block.machine.BlockAlloyWire;
 import com.bluepowermod.client.render.IBPColoredBlock;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
@@ -36,7 +36,7 @@ public class TileWire extends TileBase {
     public static final ModelProperty<Boolean> LIGHT_INFO = new ModelProperty<>();
 
     public TileWire(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.WIRE, pos, state);
+        super(BPBlockEntityType.WIRE.get(), pos, state);
     }
 
     public TileWire(BlockEntityType type, BlockPos pos, BlockState state) {

@@ -13,14 +13,13 @@ import com.bluepowermod.container.ContainerRegulator;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
@@ -47,12 +46,12 @@ public class TileRegulator extends TileMachineBase implements WorldlyContainer, 
     public int fuzzySetting;
 
     public TileRegulator(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.REGULATOR, pos, state);
+        super(BPBlockEntityType.REGULATOR.get(), pos, state);
     }
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.REGULATOR_NAME);
+        return Component.literal(Refs.REGULATOR_NAME);
     }
 
     @Nullable

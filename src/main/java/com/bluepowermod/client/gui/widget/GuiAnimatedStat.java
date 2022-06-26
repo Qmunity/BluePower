@@ -349,7 +349,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         bufferbuilder.vertex(matrixStack,x + 16, y, 0).uv(1.0F, 0.0F).endVertex();
         bufferbuilder.vertex(matrixStack, x, y, 0).uv(0.0F, 0.0F).endVertex();
         bufferbuilder.end();
-        BufferUploader.end(bufferbuilder);
+        //TODO: CheckThis -- BufferUploader.end(bufferbuilder);
     }
 
     /*

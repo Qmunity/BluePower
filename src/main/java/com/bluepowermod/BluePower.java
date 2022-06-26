@@ -11,6 +11,7 @@ package com.bluepowermod;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
+import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.event.BPRecyclingReloadListener;
@@ -36,6 +37,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -58,6 +60,12 @@ public class BluePower {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerCapabilities);
 
         BPItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BPBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BPBlockEntityType.BLOCK_ENTITY_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BPEnchantments.ENCHANTMENT.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BPRecipeSerializer.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BPWorldGen.FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BPRecipeTypes.RECIPE_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
@@ -68,11 +76,7 @@ public class BluePower {
         BPApi.init(new BluePowerAPI());
         proxy.preInitRenderers();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, BPWorldGen::registerFeatures);
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, WorldGenOres::registerOres);
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, WorldGenFlowers::registerFlowers);
-
-        MinecraftForge.EVENT_BUS.register(new BPWorldGen());
+        //MinecraftForge.EVENT_BUS.register(new BPWorldGen());
         MinecraftForge.EVENT_BUS.register(new WorldGenOres());
         MinecraftForge.EVENT_BUS.register(new WorldGenFlowers());
     }
@@ -80,9 +84,17 @@ public class BluePower {
     public static Logger log = LogManager.getLogger(Refs.MODID);
 
     public void setup(FMLCommonSetupEvent event) {
+        event.enqueueWork(BPBlocks::registerBlockItems);
         event.enqueueWork(BPNetworkHandler::init);
+        event.enqueueWork(BPWorldGen::registerFeatures);
+        event.enqueueWork(WorldGenOres::registerOres);
+        event.enqueueWork(WorldGenFlowers::registerFlowers);
         proxy.setup(event);
         CompatibilityUtils.init(event);
+    }
+
+    public void clientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(BPMenuType::registerScreenFactories);
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event){
@@ -91,7 +103,7 @@ public class BluePower {
     }
 
     public void complete(FMLLoadCompleteEvent event) {
-        proxy.initRenderers();
+        event.enqueueWork(proxy::initRenderers);
         CompatibilityUtils.postInit(event);
         Recipes.init();
     }

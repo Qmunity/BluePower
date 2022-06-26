@@ -17,11 +17,12 @@
 
 package com.bluepowermod.compat.waila;
 
-import mcp.mobius.waila.api.IServerDataProvider;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import snownee.jade.api.IServerDataProvider;
 
 public class WailaProviderParts implements IServerDataProvider<BlockEntity> {
 
@@ -41,4 +42,8 @@ public class WailaProviderParts implements IServerDataProvider<BlockEntity> {
         // }
     }
 
+    @Override
+    public ResourceLocation getUid() {
+        return new ResourceLocation("bluepower:parts");
+    }
 }

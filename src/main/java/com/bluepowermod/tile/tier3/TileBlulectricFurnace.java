@@ -15,14 +15,13 @@ import com.bluepowermod.block.power.BlockBlulectricFurnace;
 import com.bluepowermod.container.ContainerBlulectricFurnace;
 import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -59,7 +58,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
 
 
     public TileBlulectricFurnace(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.BLULECTRIC_FURNACE, pos, state);
+        super(BPBlockEntityType.BLULECTRIC_FURNACE.get(), pos, state);
         this.inventory = ItemStack.EMPTY;
         this.outputInventory = ItemStack.EMPTY;
     }
@@ -358,7 +357,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.BLULECTRICFURNACE_NAME);
+        return Component.literal(Refs.BLULECTRICFURNACE_NAME);
     }
 
     @Nullable

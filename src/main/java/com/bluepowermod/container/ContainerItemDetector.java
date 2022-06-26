@@ -31,7 +31,7 @@ public class ContainerItemDetector extends AbstractContainerMenu {
     private final Container itemDetector;
 
     public ContainerItemDetector(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.ITEM_DETECTOR, windowId);
+        super(BPMenuType.ITEM_DETECTOR.get(), windowId);
         this.itemDetector = inventory;
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {

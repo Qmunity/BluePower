@@ -29,7 +29,7 @@ public class ContainerRetriever extends ContainerFilter {
     private final Container retriever;
 
     public ContainerRetriever(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.RETRIEVER, windowId, inventory);
+        super(BPMenuType.RETRIEVER.get(), windowId, inventory);
         this.retriever = inventory;
     }
 

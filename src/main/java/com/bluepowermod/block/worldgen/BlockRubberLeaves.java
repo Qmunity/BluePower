@@ -26,7 +26,6 @@ public class BlockRubberLeaves extends LeavesBlock {
 
     public BlockRubberLeaves(Properties properties){
         super(properties);
-        this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERLEAVES_NAME);
         this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, 7).setValue(PERSISTENT, true));
         BPBlocks.blockList.add(this);
     }
@@ -50,7 +49,7 @@ public class BlockRubberLeaves extends LeavesBlock {
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> drops = super.getDrops(state, builder);
-        drops.add(new ItemStack(Item.byBlock(BPBlocks.rubber_sapling)));
+        //drops.add(new ItemStack(Item.byBlock(BPBlocks.rubber_sapling.get())));
         return drops;
     }
 

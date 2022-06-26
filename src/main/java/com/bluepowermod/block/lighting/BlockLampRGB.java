@@ -10,8 +10,8 @@ import java.awt.*;
 
 public class BlockLampRGB extends BlockLamp {
 
-    public BlockLampRGB(String name, boolean isInverted) {
-        super(name, isInverted, MinecraftColor.NONE);
+    public BlockLampRGB(boolean isInverted) {
+        super(isInverted, MinecraftColor.NONE);
     }
 
     @Override

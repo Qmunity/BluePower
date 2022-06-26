@@ -10,7 +10,7 @@ package com.bluepowermod.block.power;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier2.TileWindmill;
 
 import javax.annotation.Nullable;
@@ -30,8 +30,7 @@ import net.minecraft.world.level.material.Material;
 public class BlockWindmill extends BlockContainerBase implements EntityBlock {
     
     public BlockWindmill() {
-        super(Material.METAL, TileWindmill.class, BPBlockEntityType.WINDMILL);
-        setRegistryName(Refs.MODID, Refs.WINDMILL_NAME);
+        super(Material.METAL, TileWindmill.class);
         BPBlocks.blockList.add(this);
     }
 

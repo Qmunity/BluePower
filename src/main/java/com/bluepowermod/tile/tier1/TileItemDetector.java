@@ -11,13 +11,12 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.ContainerItemDetector;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -43,7 +42,7 @@ public class TileItemDetector extends TileMachineBase implements WorldlyContaine
     public int fuzzySetting;
 
     public TileItemDetector(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.ITEM_DETECTOR, pos, state);
+        super(BPBlockEntityType.ITEM_DETECTOR.get(), pos, state);
     }
 
 
@@ -265,7 +264,7 @@ public class TileItemDetector extends TileMachineBase implements WorldlyContaine
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.ITEMDETECTOR_NAME);
+        return Component.literal(Refs.ITEMDETECTOR_NAME);
     }
 
     @Nullable

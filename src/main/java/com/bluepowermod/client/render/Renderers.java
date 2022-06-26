@@ -16,7 +16,7 @@ import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.block.worldgen.BlockBPGlass;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -82,9 +82,8 @@ public class Renderers {
 
     public static void init() {
 
-        BlockEntityRenderers.register(BPBlockEntityType.LAMP, context -> new RenderLamp());
-        BlockEntityRenderers.register(BPBlockEntityType.ENGINE, context -> new RenderEngine());
-
+        BlockEntityRenderers.register(BPBlockEntityType.LAMP.get(), context -> new RenderLamp());
+        BlockEntityRenderers.register(BPBlockEntityType.ENGINE.get(), context -> new RenderEngine());
 
         for (RegistryObject<Item> item : BPItems.ITEMS.getEntries()) {
             if (item.get() instanceof IBPColoredItem) {
@@ -102,13 +101,13 @@ public class Renderers {
                 ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent());
         }
 
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.indigo_flower, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.flax_crop, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.cracked_basalt_lava, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.cracked_basalt_decorative, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.rubber_leaves, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.rubber_sapling, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.tube, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.indigo_flower.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.flax_crop.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.cracked_basalt_lava.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.cracked_basalt_decorative.get(), RenderType.cutout());
+        //ItemBlockRenderTypes.setRenderLayer(BPBlocks.rubber_leaves.get(), RenderType.cutout());
+        //ItemBlockRenderTypes.setRenderLayer(BPBlocks.rubber_sapling.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.tube.get(), RenderType.cutout());
 
     }
 

@@ -2,12 +2,11 @@ package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -20,7 +19,7 @@ import java.util.stream.IntStream;
 public class TileAutoProjectTable extends TileProjectTable {
 
     public TileAutoProjectTable(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.AUTO_PROJECT_TABLE, pos, state);
+        super(BPBlockEntityType.AUTO_PROJECT_TABLE.get(), pos, state);
     }
     private final int OUTPUT_SLOT = 100;
 
@@ -92,7 +91,7 @@ public class TileAutoProjectTable extends TileProjectTable {
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.AUTOPROJECTTABLE_NAME);
+        return Component.literal(Refs.AUTOPROJECTTABLE_NAME);
     }
 
 

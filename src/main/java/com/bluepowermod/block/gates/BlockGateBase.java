@@ -42,8 +42,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * @author MoreThanHidden
  */
 public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
-
-    private final String name;
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 3);
     public static final BooleanProperty POWERED_FRONT = BooleanProperty.create("powered_front");
@@ -52,9 +50,8 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     public static final BooleanProperty POWERED_RIGHT = BooleanProperty.create("powered_right");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public BlockGateBase(String name) {
+    public BlockGateBase() {
         super(Material.CLAY);
-        this.name = name;
         this.registerDefaultState(stateDefinition.any()
                 .setValue(FACING, Direction.UP)
                 .setValue(POWERED_BACK, false)

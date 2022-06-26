@@ -30,7 +30,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     private final Container circuitDatabase;
 
     public ContainerCircuitDatabaseMain(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.CIRCUITDATABASE_MAIN, windowId);
+        super(BPMenuType.CIRCUITDATABASE_MAIN.get(), windowId);
         this.circuitDatabase = inventory;
         addSlot(new SlotPhantom(circuitDatabase, 0, 57, 64) {
 

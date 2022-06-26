@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,7 +47,7 @@ public class RenderEngine implements BlockEntityRenderer<TileEngine> {
         Level world = engine.getLevel();
         BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
         BlockPos pos = engine.getBlockPos();
-        BlockState state = BPBlocks.engine.defaultBlockState().setValue(BlockEngine.FACING, engine.getOrientation());
+        BlockState state = BPBlocks.engine.get().defaultBlockState().setValue(BlockEngine.FACING, engine.getOrientation());
         Direction facing = engine.getOrientation();
 
         matrixStack.pushPose();
@@ -91,7 +92,7 @@ public class RenderEngine implements BlockEntityRenderer<TileEngine> {
         BakedModel glider = dispatcher.getBlockModel(state.setValue(BlockEngine.GLIDER, true));
         //Render the glider
         VertexConsumer builder = iRenderTypeBuffer.getBuffer(RenderType.cutout());
-        dispatcher.getModelRenderer().tesselateBlock(world, glider, state.setValue(BlockEngine.GLIDER, true), pos, matrixStack, builder, false, new Random(), 0, 0, EmptyModelData.INSTANCE);
+        dispatcher.getModelRenderer().tesselateBlock(world, glider, state.setValue(BlockEngine.GLIDER, true), pos, matrixStack, builder, false, RandomSource.create(), 0, 0, EmptyModelData.INSTANCE);
 
         matrixStack.popPose();
         matrixStack.pushPose();
@@ -101,7 +102,7 @@ public class RenderEngine implements BlockEntityRenderer<TileEngine> {
         matrixStack.translate(-0.5, 0, -0.5);
         BakedModel gear = dispatcher.getBlockModel(state.setValue(BlockEngine.GEAR, true));
         // Render the rotating cog
-        dispatcher.getModelRenderer().tesselateBlock(world, gear, state.setValue(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.cutout()), false, new Random(), 0, 0, EmptyModelData.INSTANCE);
+        dispatcher.getModelRenderer().tesselateBlock(world, gear, state.setValue(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.cutout()), false, RandomSource.create(), 0, 0, EmptyModelData.INSTANCE);
 
         matrixStack.popPose();
         matrixStack.popPose();

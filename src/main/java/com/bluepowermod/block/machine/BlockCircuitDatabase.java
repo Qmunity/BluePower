@@ -17,7 +17,7 @@
 
 package com.bluepowermod.block.machine;
 
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionResult;
@@ -32,8 +32,7 @@ import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 public class BlockCircuitDatabase extends BlockProjectTable {
 
     public BlockCircuitDatabase(Class<? extends TileBase> tileClass) {
-
-        super(tileClass, BPBlockEntityType.CIRCUIT_TABLE);
+        super(tileClass);
     }
 
     @Override

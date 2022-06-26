@@ -53,7 +53,7 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
     private final Container projectTable;
 
     public ContainerProjectTable(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.PROJECT_TABLE, windowId);
+        super(BPMenuType.PROJECT_TABLE.get(), windowId);
         this.projectTable = inventory;
         craftResult =  new ResultContainer();
         craftingGrid = new InventoryProjectTableCrafting(this, projectTable, 3, 3);

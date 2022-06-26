@@ -21,7 +21,7 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
@@ -39,7 +39,7 @@ import java.util.List;
 public class TileTransposer extends TileMachineBase {
 
     public TileTransposer(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.TRANSPOSER, pos, state);
+        super(BPBlockEntityType.TRANSPOSER.get(), pos, state);
     }
 
     public static void tickTransposer(Level level, BlockPos pos, BlockState state, TileTransposer tileTransposer) {

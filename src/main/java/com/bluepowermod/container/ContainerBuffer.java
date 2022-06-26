@@ -33,7 +33,7 @@ public class ContainerBuffer extends AbstractContainerMenu {
     private final Container inventory;
     
     public ContainerBuffer(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.BUFFER, windowId);
+        super(BPMenuType.BUFFER.get(), windowId);
         this.inventory = inventory;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {

@@ -8,11 +8,12 @@
 package com.bluepowermod.compat.waila;
 
 import com.bluepowermod.tile.TileMachineBase;
-import mcp.mobius.waila.api.IServerDataProvider;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import snownee.jade.api.IServerDataProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,5 +36,10 @@ public class WailaProviderMachines implements IServerDataProvider<BlockEntity> {
             CompoundTag.getAllKeys().addAll(info);
             info.clear();
         }
+    }
+
+    @Override
+    public ResourceLocation getUid() {
+        return new ResourceLocation("bluepower:machines");
     }
 }

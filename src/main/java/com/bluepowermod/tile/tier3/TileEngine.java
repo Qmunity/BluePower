@@ -10,8 +10,7 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.power.BlutricityFEStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.power.BlockEngine;
-import com.bluepowermod.tile.BPBlockEntityType;
-import com.bluepowermod.tile.TileBase;
+import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
@@ -59,7 +58,7 @@ public class TileEngine extends TileMachineBase  {
 
 	
 	public TileEngine(BlockPos pos, BlockState state){
-		super(BPBlockEntityType.ENGINE, pos, state);
+		super(BPBlockEntityType.ENGINE.get(), pos, state);
 
 		pumpTick  = 0;
 		pumpSpeed = 16;

@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public class TileDiskDrive extends TileBase implements IRedBusWindow {
 	public TileDiskDrive(BlockPos pos, BlockState state) {
-		super(BPBlockEntityType.DISK_DRIVE, pos, state);
+		super(BPBlockEntityType.DISK_DRIVE.get(), pos, state);
 	}
 	/** redbus memory block
 	 * addr size function

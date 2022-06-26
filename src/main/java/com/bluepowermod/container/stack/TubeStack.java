@@ -175,7 +175,7 @@ public class TubeStack {
     public void render(float partialTick) {
 
         if (renderMode == RenderMode.AUTO) {
-            renderMode = Minecraft.getInstance().options.graphicsMode == GraphicsStatus.FANCY ? RenderMode.NORMAL : RenderMode.REDUCED;
+            renderMode = Minecraft.getInstance().options.graphicsMode().get() == GraphicsStatus.FANCY ? RenderMode.NORMAL : RenderMode.REDUCED;
         }
         final RenderMode finalRenderMode = renderMode;
 

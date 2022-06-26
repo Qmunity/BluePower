@@ -12,7 +12,7 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileBattery;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -35,8 +35,7 @@ public class BlockBattery extends BlockContainerBase {
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 6);
 
     public BlockBattery() {
-        super(Material.METAL, TileBattery.class, BPBlockEntityType.BATTERY);
-        setRegistryName(Refs.MODID, Refs.BATTERYBLOCK_NAME);
+        super(Material.METAL, TileBattery.class);
         this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0));
 
     }

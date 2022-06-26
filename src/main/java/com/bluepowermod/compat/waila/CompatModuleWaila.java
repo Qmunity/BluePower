@@ -8,10 +8,10 @@
 package com.bluepowermod.compat.waila;
 
 import com.bluepowermod.tile.TileMachineBase;
-import mcp.mobius.waila.api.IRegistrar;
-import mcp.mobius.waila.api.IWailaPlugin;
-import mcp.mobius.waila.api.WailaPlugin;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import snownee.jade.api.IWailaCommonRegistration;
+import snownee.jade.api.IWailaPlugin;
+import snownee.jade.api.WailaPlugin;
 
 /**
  * @author amadornes
@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 public class CompatModuleWaila implements IWailaPlugin {
 
     @Override
-    public void register(IRegistrar registrar) {
+    public void register(IWailaCommonRegistration registrar) {
         registrar.registerBlockDataProvider(new WailaProviderMachines(), TileMachineBase.class);
         registrar.registerBlockDataProvider(new WailaProviderParts(), BlockEntity.class);
     }

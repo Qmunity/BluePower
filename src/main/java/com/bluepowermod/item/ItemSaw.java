@@ -22,6 +22,7 @@ import java.util.Random;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.init.BPCreativeTabs;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemSaw extends ItemBase{
@@ -40,7 +41,7 @@ public class ItemSaw extends ItemBase{
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
         ItemStack container = itemStack.copy();
-        container.hurt(1, new Random(), null);
+        container.hurt(1, RandomSource.create(), null);
         return container;
     }
 

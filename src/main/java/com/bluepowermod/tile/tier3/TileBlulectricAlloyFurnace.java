@@ -15,16 +15,15 @@ import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.block.power.BlockBlulectricAlloyFurnace;
 import com.bluepowermod.container.ContainerBlulectricAlloyFurnace;
 import com.bluepowermod.helper.EnergyHelper;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import com.bluepowermod.init.BPRecipeTypes;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -59,7 +58,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
     private boolean updatingRecipe = true;
 
     public TileBlulectricAlloyFurnace(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.BLULECTRIC_ALLOY_FURNACE, pos, state);
+        super(BPBlockEntityType.BLULECTRIC_ALLOY_FURNACE.get(), pos, state);
         this.inventory = NonNullList.withSize(9, ItemStack.EMPTY);
         this.outputInventory = ItemStack.EMPTY;
     }
@@ -145,8 +144,8 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
                             exStorage -> EnergyHelper.balancePower(exStorage, tileAlloyFurnace.storage));
             }
             if (tileAlloyFurnace.updatingRecipe) {
-                if(level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, tileAlloyFurnace, level).isPresent()) {
-                    tileAlloyFurnace.currentRecipe = (IAlloyFurnaceRecipe) level.getRecipeManager().getRecipeFor(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE, tileAlloyFurnace, level).get();
+                if(level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).isPresent()) {
+                    tileAlloyFurnace.currentRecipe = (IAlloyFurnaceRecipe) level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).get();
                 }else{
                     tileAlloyFurnace.currentRecipe = null;
                 }
@@ -352,7 +351,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.BLULECTRICALLOYFURNACE_NAME);
+        return Component.literal(Refs.BLULECTRICALLOYFURNACE_NAME);
     }
 
     @Nullable

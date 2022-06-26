@@ -30,8 +30,8 @@ public class BlockLampSurface extends BlockLamp implements SimpleWaterloggedBloc
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public BlockLampSurface(String name, boolean isInverted, MinecraftColor color, VoxelShape size) {
-        super(name, isInverted, color);
+    public BlockLampSurface( boolean isInverted, MinecraftColor color, VoxelShape size) {
+        super(isInverted, color);
         this.size = size;
         this.registerDefaultState(stateDefinition.any().setValue(POWER, isInverted ? 15 : 0).setValue(FACING, Direction.UP).setValue(WATERLOGGED, false));
     }

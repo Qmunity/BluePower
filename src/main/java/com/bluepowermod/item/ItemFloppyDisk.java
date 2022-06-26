@@ -22,7 +22,6 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 
@@ -48,7 +47,7 @@ public class ItemFloppyDisk extends ItemBase implements ItemColor{
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(stack.getTag() != null && stack.getTag().contains("name")) {
-            tooltip.add(new TextComponent(stack.getTag().getString("name")));
+            tooltip.add(Component.literal(stack.getTag().getString("name")));
         }
     }
 

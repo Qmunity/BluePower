@@ -34,7 +34,6 @@ public class BlockBlulectricCable extends BlockBPCableBase implements EntityBloc
 
     public BlockBlulectricCable() {
         super(2, 2);
-        setRegistryName(Refs.MODID + ":" + Refs.BLULECTRICCABLE_NAME);
     }
 
     @Nullable

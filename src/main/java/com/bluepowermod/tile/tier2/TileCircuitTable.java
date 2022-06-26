@@ -8,13 +8,12 @@
 package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -32,7 +31,7 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
     private String textboxString = "";
 
     public TileCircuitTable(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.CIRCUIT_TABLE, pos, state);
+        super(BPBlockEntityType.CIRCUIT_TABLE.get(), pos, state);
     }
 
     @Override

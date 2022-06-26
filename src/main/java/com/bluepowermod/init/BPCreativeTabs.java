@@ -18,8 +18,7 @@
 package com.bluepowermod.init;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -35,6 +34,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class BPCreativeTabs {
 
@@ -54,7 +54,7 @@ public class BPCreativeTabs {
             @Override
             @OnlyIn(Dist.CLIENT)
             public ItemStack makeIcon() {
-                Block iconBlock = BPBlocks.amethyst_ore;
+                Block iconBlock = BPBlocks.amethyst_ore.get();
                 if (iconBlock != null) {
                     return new ItemStack(iconBlock);
                 } else {
@@ -69,7 +69,7 @@ public class BPCreativeTabs {
             @OnlyIn(Dist.CLIENT)
             public ItemStack makeIcon() {
 
-                Block iconBlock = BPBlocks.alloyfurnace;
+                Block iconBlock = BPBlocks.alloyfurnace.get();
                 if (iconBlock != null) {
                     return new ItemStack(iconBlock);
                 } else {
@@ -128,7 +128,7 @@ public class BPCreativeTabs {
             @Override
             @OnlyIn(Dist.CLIENT)
             public ItemStack makeIcon() {
-                ItemStack iconItem = new ItemStack(BPBlocks.blulectric_cable);
+                ItemStack iconItem = new ItemStack(BPBlocks.blulectric_cable.get());
                 if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
@@ -148,7 +148,7 @@ public class BPCreativeTabs {
                 boolean b = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 2)) >= MinecraftColor.VALID_COLORS.length;
                 boolean b2 = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 4)) >= MinecraftColor.VALID_COLORS.length;
 
-                ItemStack iconItem = new ItemStack(BPBlocks.blockLampRGB);
+                ItemStack iconItem = new ItemStack(BPBlocks.blockLampRGB.get());
                 if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
@@ -162,7 +162,7 @@ public class BPCreativeTabs {
             @Override
             @OnlyIn(Dist.CLIENT)
             public ItemStack makeIcon() {
-                ItemStack iconItem = new ItemStack(BPBlocks.microblocks.get(0));
+                ItemStack iconItem = new ItemStack(BPBlocks.microblocks.get(0).get());
                 if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
@@ -179,15 +179,15 @@ public class BPCreativeTabs {
                     }catch (NullPointerException ignored){
                         //Shulker Boxes try to query the Tile Entity
                     }
-                    if(block.getRegistryName() != null && shape == Shapes.block()) {
-                        for (Block mb : BPBlocks.microblocks){
+                    if(ForgeRegistries.BLOCKS.getKey(block) != null && shape == Shapes.block()) {
+                        for (RegistryObject<Block> mb : BPBlocks.microblocks){
                             CompoundTag nbt = new CompoundTag();
-                            nbt.putString("block", block.getRegistryName().toString());
-                            ItemStack stack = new ItemStack(mb);
+                            nbt.putString("block", ForgeRegistries.BLOCKS.getKey(block).toString());
+                            ItemStack stack = new ItemStack(mb.get());
                             stack.setTag(nbt);
-                            stack.setHoverName(new TranslatableComponent(block.getDescriptionId())
-                                    .append(new TextComponent(" "))
-                                    .append(new TranslatableComponent(mb.getDescriptionId())));
+                            stack.setHoverName(Component.translatable(block.getDescriptionId())
+                                    .append(Component.literal(" "))
+                                    .append(Component.translatable(mb.get().getDescriptionId())));
                             items.add(stack);
                         }
                     }

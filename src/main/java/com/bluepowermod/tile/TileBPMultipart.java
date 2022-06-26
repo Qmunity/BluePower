@@ -9,6 +9,7 @@
 package com.bluepowermod.tile;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
@@ -50,7 +51,7 @@ public class TileBPMultipart extends BlockEntity {
     private Map<BlockState, BlockEntity> stateMap = new HashMap<>();
 
     public TileBPMultipart(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.MULTIPART, pos, state);
+        super(BPBlockEntityType.MULTIPART.get(), pos, state);
     }
 
     @Nonnull

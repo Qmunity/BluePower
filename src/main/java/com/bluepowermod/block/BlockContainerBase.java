@@ -59,12 +59,12 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     private boolean isRedstoneEmitter;
     private boolean isSilkyRemoving;
 
-    public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
+    public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass) {
         super(material);
         setBlockEntityClass(tileEntityClass);
     }
 
-    public BlockContainerBase(Properties properties, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
+    public BlockContainerBase(Properties properties, Class<? extends TileBase> tileEntityClass) {
         super(properties);
         setBlockEntityClass(tileEntityClass);
     }

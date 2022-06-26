@@ -24,7 +24,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -147,7 +147,7 @@ public class BPEventHandler {
                 if (!killer.getInventory().getSelected().isEmpty()) {
                     if (EnchantmentHelper.getEnchantments(killer.getInventory().getSelected()).containsKey(BPEnchantments.disjunction)) {
                         if (event.getEntityLiving() instanceof EnderMan || event.getEntityLiving() instanceof EnderDragon) {
-                            int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.disjunction, killer.getInventory().getSelected());
+                            int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.disjunction.get(), killer.getInventory().getSelected());
                             isAttacking = true;
                             event.getEntityLiving().hurt(entitySource, event.getAmount() * (level * 0.5F + 1));
                             isAttacking = false;
@@ -170,7 +170,7 @@ public class BPEventHandler {
 
                 if (!killer.getInventory().getSelected().isEmpty()) {
                     if (EnchantmentHelper.getEnchantments(killer.getInventory().getSelected()).containsKey(BPEnchantments.vorpal)) {
-                        int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.vorpal, killer.getInventory().getSelected());
+                        int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.vorpal.get(), killer.getInventory().getSelected());
 
                         if (level == 1) {
                             if (killer.level.random.nextInt(6) == 1) {
@@ -221,15 +221,15 @@ public class BPEventHandler {
 
         if (event.getItemStack().hasTag() && event.getItemStack().getTag().contains("tileData")
                 && !event.getItemStack().getTag().getBoolean("hideSilkyTooltip")) {
-            event.getToolTip().add(new TextComponent("gui.tooltip.hasSilkyData"));
+            event.getToolTip().add(Component.literal("gui.tooltip.hasSilkyData"));
         }
 
         if (ClientProxy.getOpenedGui() instanceof GuiCircuitDatabaseSharing) {
             ItemStack deletingStack = ((GuiCircuitDatabaseSharing) ClientProxy.getOpenedGui()).getCurrentDeletingTemplate();
             if (!deletingStack.isEmpty() && deletingStack == event.getItemStack()) {
-                event.getToolTip().add(new TextComponent("gui.circuitDatabase.info.sneakClickToConfirmDeleting"));
+                event.getToolTip().add(Component.literal("gui.circuitDatabase.info.sneakClickToConfirmDeleting"));
             } else {
-                event.getToolTip().add(new TextComponent("gui.circuitDatabase.info.sneakClickToDelete"));
+                event.getToolTip().add(Component.literal("gui.circuitDatabase.info.sneakClickToDelete"));
             }
         }
     }
@@ -251,8 +251,8 @@ public class BPEventHandler {
                     for (int z = event.getPos().getZ() - 2; z < event.getPos().getZ() + 3; z++) {
                         if (event.getWorld().isEmptyBlock(new BlockPos(x, event.getPos().getY() + 1, z))) {
                             if (event.getWorld().random.nextInt(50) == 1) {
-                                if (BPBlocks.indigo_flower.canSustainPlant(event.getWorld().getBlockState(event.getPos().above()), event.getWorld(), event.getPos().above(), Direction.UP, BPBlocks.indigo_flower)) {
-                                    event.getWorld().setBlock(event.getPos().above(), BPBlocks.indigo_flower.defaultBlockState(), 0);
+                                if (BPBlocks.indigo_flower.get().canSustainPlant(event.getWorld().getBlockState(event.getPos().above()), event.getWorld(), event.getPos().above(), Direction.UP, BPBlocks.indigo_flower.get())) {
+                                    event.getWorld().setBlock(event.getPos().above(), BPBlocks.indigo_flower.get().defaultBlockState(), 0);
                                 }
                             }
                         }

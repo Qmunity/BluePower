@@ -33,9 +33,8 @@ import net.minecraft.world.level.block.BushBlock;
 public class BlockCustomFlower extends BushBlock {
     protected static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 14.0D, 13.0D);
 
-    public BlockCustomFlower(String name, Properties properties) {
+    public BlockCustomFlower(Properties properties) {
         super(properties.strength(0.0F).sound(SoundType.CROP).noCollission());
-        this.setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
     }
 

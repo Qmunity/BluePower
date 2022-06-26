@@ -12,24 +12,15 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 import com.bluepowermod.enchant.EnchantmentDisjunction;
 import com.bluepowermod.enchant.EnchantmentVorpal;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BPEnchantments {
+	public static final DeferredRegister<Enchantment> ENCHANTMENT = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, Refs.MODID);
 
-	public static Enchantment vorpal;
-	public static Enchantment disjunction;
-
-	@SubscribeEvent
-	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
-		vorpal = new EnchantmentVorpal(Enchantment.Rarity.COMMON);
-		disjunction = new EnchantmentDisjunction(Enchantment.Rarity.COMMON);
-
-		event.getRegistry().register(vorpal.setRegistryName("bluepower:vorpal"));
-		event.getRegistry().register(disjunction.setRegistryName("bluepower:disjunction"));
-	}
-
+	public static RegistryObject<Enchantment> vorpal = ENCHANTMENT.register("vorpal", () -> new EnchantmentVorpal(Enchantment.Rarity.COMMON));
+	public static RegistryObject<Enchantment> disjunction = ENCHANTMENT.register("disjunction", () -> new EnchantmentDisjunction(Enchantment.Rarity.COMMON));
 	
 }

@@ -22,7 +22,6 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.projectile.WitherSkull;
@@ -50,16 +49,14 @@ import net.minecraft.world.level.storage.loot.LootContext;
 public class BlockBPGlass extends StainedGlassBlock {
     private final boolean witherproof;
 
-    public BlockBPGlass(String name, boolean witherproof) {
+    public BlockBPGlass(boolean witherproof) {
         super(DyeColor.PURPLE, Properties.of(Material.GLASS).strength(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.GLASS).noOcclusion());
-        setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         this.witherproof = witherproof;
     }
 
-    public BlockBPGlass(String name) {
+    public BlockBPGlass() {
         super(DyeColor.LIGHT_GRAY, Properties.of(Material.STONE).strength(5.0F).sound(SoundType.STONE).noOcclusion());
-        setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         witherproof = false;
     }
@@ -68,7 +65,7 @@ public class BlockBPGlass extends StainedGlassBlock {
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (witherproof) {
-            tooltip.add(new TextComponent(MinecraftColor.RED.getChatColor() + "Witherproof"));
+            tooltip.add(Component.literal(MinecraftColor.RED.getChatColor() + "Witherproof"));
         }
     }
 

@@ -36,7 +36,7 @@ public class ContainerDeployer extends AbstractContainerMenu {
     private final Container deployer;
 
     public ContainerDeployer(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.DEPLOYER, windowId);
+        super(BPMenuType.DEPLOYER.get(), windowId);
         this.deployer = inventory;
         
         for (int i = 0; i < 3; ++i) {
