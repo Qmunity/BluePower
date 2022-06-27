@@ -120,7 +120,7 @@ public class JEIPlugin implements IModPlugin {
         List<IAlloyFurnaceRecipe> recipesList = new ArrayList<>();
 
         for (Map.Entry<Item, ItemStack> recipe : AlloyFurnaceRegistry.getInstance().recyclingRecipes.entrySet()) {
-            recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe(new ResourceLocation("bluepower:" + ForgeRegistries.ITEMS.getResourceKey(recipe.getValue().getItem()).toString().replace(":", ".") + ForgeRegistries.ITEMS.getResourceKey(recipe.getKey()).toString().replace(":", ".")), "", recipe.getValue(), NonNullList.of(Ingredient.of(recipe.getKey()), Ingredient.of(recipe.getKey())), NonNullList.of(0, 1)));
+            recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe(new ResourceLocation("bluepower:" + ForgeRegistries.ITEMS.getKey(recipe.getValue().getItem()).toString().replace(":", ".") + ForgeRegistries.ITEMS.getKey(recipe.getKey()).toString().replace(":", ".")), "", recipe.getValue(), NonNullList.of(Ingredient.of(recipe.getKey()), Ingredient.of(recipe.getKey())), NonNullList.of(0, 1)));
         }
 
         return recipesList;

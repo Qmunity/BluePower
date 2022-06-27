@@ -14,6 +14,7 @@ import com.bluepowermod.reference.Refs;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -72,12 +73,16 @@ public class AlloyFurnaceHandler implements IRecipeCategory<IAlloyFurnaceRecipe>
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, IAlloyFurnaceRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 12, 21).addIngredients(Ingredient.of(Items.COAL));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 125, 21).addItemStack(recipe.getResultItem());
+        builder.addSlot(RecipeIngredientRole.INPUT, 13, 22).addIngredients(Ingredient.of(Items.COAL));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 126, 22).addItemStack(recipe.getResultItem());
+        int count = 0;
         for(int i = 0; i < 3; i++ ) {
             for(int j = 0; j < 3; j++ ) {
-                if((i + j) < recipe.getIngredients().size())
-                    builder.addSlot(RecipeIngredientRole.INPUT, 38 + j * 18, 3 + i * 18).addIngredients(recipe.getIngredients().get(i + j));
+                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, 39 + j * 18, 4 + i * 18);
+                if(count < recipe.getRequiredItems().size()) {
+                    slot.addIngredients(recipe.getRequiredItems().get(count));
+                    count++;
+                }
             }
         }
     }

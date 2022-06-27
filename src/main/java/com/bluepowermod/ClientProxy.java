@@ -36,7 +36,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void setup(FMLCommonSetupEvent event) {
-        //DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> BPMenuType::registerScreenFactories);
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> BPMenuType::registerScreenFactories);
     }
 
     @Override

@@ -26,6 +26,8 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -59,13 +61,14 @@ public class BluePower {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::complete);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerCapabilities);
 
-        BPItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BPBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BPItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BPBlockEntityType.BLOCK_ENTITY_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
         BPEnchantments.ENCHANTMENT.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BPRecipeTypes.RECIPE_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
         BPRecipeSerializer.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BPWorldGen.FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BPRecipeTypes.RECIPE_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BPMenuType.CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
@@ -84,17 +87,12 @@ public class BluePower {
     public static Logger log = LogManager.getLogger(Refs.MODID);
 
     public void setup(FMLCommonSetupEvent event) {
-        event.enqueueWork(BPBlocks::registerBlockItems);
         event.enqueueWork(BPNetworkHandler::init);
         event.enqueueWork(BPWorldGen::registerFeatures);
         event.enqueueWork(WorldGenOres::registerOres);
         event.enqueueWork(WorldGenFlowers::registerFlowers);
         proxy.setup(event);
         CompatibilityUtils.init(event);
-    }
-
-    public void clientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(BPMenuType::registerScreenFactories);
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event){

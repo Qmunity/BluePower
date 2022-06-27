@@ -39,6 +39,6 @@ public class GuiCanvasBag extends GuiContainerBaseBP<ContainerCanvasBag> impleme
 
     @Override
     protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
-        this.font.draw(matrixStack, I18n.get("item.bluepower." + title.getContents()), 8.0F, 6.0F, COLOR_TEXT);
+        this.font.draw(matrixStack, I18n.get("item.bluepower." + title.getString()), 8.0F, 6.0F, COLOR_TEXT);
     }
 }

@@ -18,7 +18,6 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.*;
 import com.bluepowermod.block.gates.BlockGateBase;
@@ -37,7 +36,6 @@ import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.util.Dependencies;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fml.ModList;
@@ -55,7 +53,11 @@ public class BPBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Refs.MODID);
 
     public static List<Block> blockList = new ArrayList<>();
-    public static List<RegistryObject<Block>> microblocks = new ArrayList<>();
+
+
+    public static List<RegistryObject<Block>> regularBlocks = new ArrayList<>();
+
+    //Register Regular Blocks
     public static final RegistryObject<Block> basalt = BLOCKS.register(Refs.BASALT_NAME, BlockBasalt::new);
     public static final RegistryObject<Block> marble = BLOCKS.register(Refs.MARBLE_NAME, BlockStoneOre::new);
     public static final RegistryObject<Block> basalt_cobble = BLOCKS.register(Refs.BASALTCOBBLE_NAME, BlockStoneOre::new);
@@ -111,8 +113,67 @@ public class BPBlocks {
     public static final RegistryObject<Block> sapphire_glass = BLOCKS.register(Refs.SAPPHIREGLASS_NAME, BlockBPGlass::new);
     public static final RegistryObject<Block> reinforced_sapphire_glass = BLOCKS.register(Refs.REINFORCEDSAPPHIREGLASS_NAME, () -> new BlockBPGlass(true));
 
+    //Register Items for Regular Blocks
+    static {
+        regularBlocks.add(basalt);
+        regularBlocks.add(marble);
+        regularBlocks.add(basalt_cobble);
+        regularBlocks.add(basalt_brick);
+        regularBlocks.add(marble_brick);
+        regularBlocks.add(cracked_basalt_lava);
+        regularBlocks.add(cracked_basalt_decorative);
+        regularBlocks.add(basaltbrick_cracked);
+        regularBlocks.add(basalt_brick_small);
+        regularBlocks.add(fancy_basalt);
+        regularBlocks.add(fancy_marble);
+        regularBlocks.add(marble_paver);
+        regularBlocks.add(basalt_paver);
+        regularBlocks.add(tiles);
+        regularBlocks.add(marble_tile);
+        regularBlocks.add(basalt_tile);
+
+        regularBlocks.add(teslatite_ore);
+        regularBlocks.add(ruby_ore);
+        regularBlocks.add(sapphire_ore);
+        regularBlocks.add(amethyst_ore);
+        regularBlocks.add(green_sapphire_ore);
+        regularBlocks.add(silver_ore);
+        regularBlocks.add(zinc_ore);
+        regularBlocks.add(tungsten_ore);
+
+        regularBlocks.add(teslatite_deepslate);
+        regularBlocks.add(ruby_deepslate);
+        regularBlocks.add(sapphire_deepslate);
+        regularBlocks.add(amethyst_deepslate);
+        regularBlocks.add(green_sapphire_deepslate);
+        regularBlocks.add(silver_deepslate);
+        regularBlocks.add(zinc_deepslate);
+        regularBlocks.add(tungsten_deepslate);
+
+        regularBlocks.add(ruby_block);
+        regularBlocks.add(sapphire_block);
+        regularBlocks.add(amethyst_block);
+        regularBlocks.add(teslatite_block);
+        regularBlocks.add(silver_block);
+        regularBlocks.add(zinc_block);
+        regularBlocks.add(tungsten_block);
+        regularBlocks.add(green_sapphire_block);
+
+        regularBlocks.add(sapphire_glass);
+        regularBlocks.add(reinforced_sapphire_glass);
+
+        for(RegistryObject<Block> block : regularBlocks){
+            BPItems.ITEMS.register(block.getKey().location().getPath(), () -> new BlockItem(block.get(), new Item.Properties().tab(BPCreativeTabs.blocks)));
+        }
+
+    }
+
     public static final RegistryObject<Block> flax_crop = BLOCKS.register(Refs.FLAXCROP_NAME, () -> new BlockCrop(Block.Properties.of(Material.PLANT)));
     public static final RegistryObject<BushBlock> indigo_flower = BLOCKS.register(Refs.INDIGOFLOWER_NAME, () -> new BlockCustomFlower(Block.Properties.of(Material.PLANT)));
+    static {BPItems.ITEMS.register(indigo_flower.getKey().location().getPath(), () -> new BlockItem(indigo_flower.get(), new Item.Properties().tab(BPCreativeTabs.items)));}
+
+
+    public static List<RegistryObject<Block>> machines = new ArrayList<>();
 
     public static final RegistryObject<Block> alloyfurnace = BLOCKS.register(Refs.ALLOYFURNACE_NAME, BlockAlloyFurnace::new);
     public static final RegistryObject<Block> block_breaker = BLOCKS.register(Refs.BLOCKBREAKER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileBlockBreaker.class));
@@ -121,6 +182,7 @@ public class BPBlocks {
         @Override
         protected boolean canRotateVertical(){return false;}
     });
+
     public static final RegistryObject<Block> deployer = BLOCKS.register(Refs.BLOCKDEPLOYER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileDeployer.class));
     public static final RegistryObject<Block> transposer = BLOCKS.register(Refs.TRANSPOSER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileTransposer.class));
     public static final RegistryObject<Block> tube = BLOCKS.register(Refs.TUBE_NAME, BlockTube::new);
@@ -136,8 +198,7 @@ public class BPBlocks {
     public static final RegistryObject<Block> regulator = BLOCKS.register(Refs.REGULATOR_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileRegulator.class).emitsRedstone().setWIP(true));
     public static final RegistryObject<Block> item_detector = BLOCKS.register(Refs.ITEMDETECTOR_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileItemDetector.class).emitsRedstone().setWIP(true));
     public static final RegistryObject<Block> manager = BLOCKS.register(Refs.MANAGER_NAME,() -> new BlockRejecting(Material.STONE, TileManager.class).emitsRedstone().setWIP(true));
-    public static final RegistryObject<Block> battery = BLOCKS.register(Refs.BATTERY_NAME, BlockBattery::new);
-    public static final RegistryObject<Block> blulectric_cable = BLOCKS.register(Refs.BLULECTRICCABLE_NAME, BlockBlulectricCable::new);
+    public static final RegistryObject<Block> battery = BLOCKS.register(Refs.BATTERYBLOCK_NAME, BlockBattery::new);
     public static final RegistryObject<Block> blulectric_alloyfurnace = BLOCKS.register(Refs.BLULECTRICALLOYFURNACE_NAME, BlockBlulectricAlloyFurnace::new);
     public static final RegistryObject<Block> blulectric_furnace = BLOCKS.register(Refs.BLULECTRICFURNACE_NAME, BlockBlulectricFurnace::new);
     public static final RegistryObject<Block> engine = BLOCKS.register(Refs.ENGINE_NAME, BlockEngine::new);
@@ -146,7 +207,36 @@ public class BPBlocks {
     public static final RegistryObject<Block> solarpanel = BLOCKS.register(Refs.SOLARPANEL_NAME, BlockSolarPanel::new);
     public static final RegistryObject<Block> thermopile = BLOCKS.register(Refs.THERMOPILE_NAME, () -> new BlockThermopile().setWIP(true));
 
+    //Register Machine Items
+    static {
+        machines.add(project_table);
+        machines.add(auto_project_table);
+        machines.add(alloyfurnace);
+        machines.add(block_breaker);
+        machines.add(igniter);
+        machines.add(buffer);
+        machines.add(deployer);
+        machines.add(transposer);
+        machines.add(ejector);
+        machines.add(manager);
+        machines.add(battery);
+        machines.add(blulectric_alloyfurnace);
+        machines.add(blulectric_furnace);
+        machines.add(engine);
+        machines.add(solarpanel);
+
+        for(RegistryObject<Block> block : machines){
+            BPItems.ITEMS.register(block.getKey().location().getPath(), () -> new BlockItem(block.get(), new Item.Properties().tab(BPCreativeTabs.machines)));
+        }
+
+    }
+
+    public static final RegistryObject<Block> blulectric_cable = BLOCKS.register(Refs.BLULECTRICCABLE_NAME, BlockBlulectricCable::new);
+    static{BPItems.ITEMS.register(blulectric_cable.getKey().location().getPath(), () -> new ItemBPPart(blulectric_cable.get(), new Item.Properties().tab(BPCreativeTabs.wiring)));}
+
     public static final RegistryObject<Block> multipart = BLOCKS.register(Refs.MULTIPART_NAME, BlockBPMultipart::new);
+
+    public static List<RegistryObject<Block>> microblocks = new ArrayList<>();
 
     public static final RegistryObject<Block> half_block = BLOCKS.register("half_block", () -> new BlockBPMicroblock(Block.box(0,0,0,16,8,16)));
     public static final RegistryObject<Block> panel = BLOCKS.register("panel", () -> new BlockBPMicroblock(Block.box(0,0,0,16,4,16)));
@@ -183,6 +273,11 @@ public class BPBlocks {
          }
      });
 
+    static{
+        BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties().tab(BPCreativeTabs.circuits)));
+        BPItems.ITEMS.register(blockGateNAND.getKey().location().getPath(), () -> new BlockItem(blockGateNAND.get(), new Item.Properties().tab(BPCreativeTabs.circuits)));
+    }
+
      public static final RegistryObject<Block> blockRedAlloyWire = BLOCKS.register(RedwireType.RED_ALLOY.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true));
      public static final RegistryObject<Block> blockBlueAlloyWire = BLOCKS.register( RedwireType.BLUESTONE.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.BLUESTONE.getName()).setWIP(true));
 
@@ -193,6 +288,12 @@ public class BPBlocks {
         microblocks.add(half_block);
         microblocks.add(panel);
         microblocks.add(cover);
+
+        //Register Microblock Items
+        for(RegistryObject<Block> block : microblocks){
+            BPItems.ITEMS.register(block.getKey().location().getPath(), () -> new ItemBPPart(block.get(), new Item.Properties()));
+        }
+
 
         // cpu = new BlockCPU();
         // monitor = new BlockMonitor();
@@ -244,6 +345,11 @@ public class BPBlocks {
         allLamps.add(fixedLampRGB);
         allLamps.add(fixedLampRGBInverted);
 
+        //Register Lamp Items
+        for(RegistryObject<Block> block : allLamps){
+            BPItems.ITEMS.register(block.getKey().location().getPath(), () -> new BlockItem(block.get(), new Item.Properties().tab(BPCreativeTabs.lighting)));
+        }
+
         //Wires
         //blockInsulatedBlueAlloyWire = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName());
         //blockInsulatedRedAlloyWire = new BlockInsulatedAlloyWire(RedwireType.RED_ALLOY.getName());
@@ -252,35 +358,5 @@ public class BPBlocks {
         if (ModList.get().isLoaded(Dependencies.COMPUTER_CRAFT) || ModList.get().isLoaded(Dependencies.OPEN_COMPUTERS)) {
             sortron = BLOCKS.register(Refs.BLOCKSORTRON_NAME, BlockSortron::new);
         }
-
     }
-
-    public static void registerBlockItems() {
-        for (Block block : blockList) {
-            if (ForgeRegistries.BLOCKS.getKey(block) != null && !(block instanceof BlockCrop)) { // Crops have seeds rather than blocks
-                if((block instanceof BlockBase && ((BlockBase)block).getWIP()) || block instanceof BlockBPMultipart || block instanceof BlockBPMicroblock || block instanceof BlockTube ){
-                    if(block instanceof IBPPartBlock) {
-                        BPItems.ITEMS.register(ForgeRegistries.BLOCKS.getKey(block).getPath(), () -> new ItemBPPart(block, new Item.Properties()));
-                    }else{
-                        BPItems.ITEMS.register(ForgeRegistries.BLOCKS.getKey(block).getPath(), () -> new BlockItem(block, new Item.Properties()));
-                    }
-                }else{
-                    CreativeModeTab group = BPCreativeTabs.blocks;
-                    if(block instanceof BlockContainerBase){group = BPCreativeTabs.machines;}
-                    if(block instanceof BlockLamp){group = BPCreativeTabs.lighting;}
-                    if(block instanceof BlockAlloyWire){group = BPCreativeTabs.wiring;}
-                    if(block instanceof BlockBlulectricCable){group = BPCreativeTabs.wiring;}
-                    if(block instanceof BlockGateBase){group = BPCreativeTabs.circuits;}
-                    if(block instanceof IBPPartBlock){
-                        CreativeModeTab finalGroup = group;
-                        BPItems.ITEMS.register(ForgeRegistries.BLOCKS.getKey(block).getPath(), () -> new ItemBPPart(block, new Item.Properties().tab(finalGroup)));
-                    }else {
-                        CreativeModeTab finalGroup2 = group;
-                        BPItems.ITEMS.register(ForgeRegistries.BLOCKS.getKey(block).getPath(), () -> new BlockItem(block, new Item.Properties().tab(finalGroup2)));
-                    }
-                }
-            }
-        }
-    }
-
 }
