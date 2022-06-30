@@ -12,6 +12,7 @@ import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.util.ItemStackUtils;
 import com.bluepowermod.world.WorldGenVolcano;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ReloadableServerResources;
@@ -44,6 +45,11 @@ public class BPRecyclingReloadListener extends SimplePreparableReloadListener<Vo
      * Generates the Dynamic Recycling recipes on a reload.
      */
     public static void onResourceManagerReload(List<CraftingRecipe> recipeList) {
+        //Check if the server is running
+        if(Minecraft.getInstance().level == null) {
+            return;
+        }
+
         AlloyFurnaceRegistry.getInstance().blacklist.clear();
         String[] blacklistStr = BPConfig.CONFIG.alloyFurnaceBlacklist.get().split(",");
         for (String configString : blacklistStr) {

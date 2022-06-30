@@ -37,6 +37,7 @@ import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.util.Dependencies;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.grower.OakTreeGrower;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fml.ModList;
 
@@ -106,9 +107,9 @@ public class BPBlocks {
     public static final RegistryObject<Block> tungsten_block = BLOCKS.register(Refs.TUNGSTENBLOCK_NAME, BlockStoneOre::new);
     public static final RegistryObject<Block> green_sapphire_block = BLOCKS.register(Refs.GREENSAPPHIREBLOCK_NAME, BlockStoneOre::new);
 
-    //public static final RegistryObject<Block> rubber_log = BLOCKS.register(Refs.RUBBERLOG_NAME, () -> new BlockRubberLog(Block.Properties.of(Material.WOOD)));
-    //public static final RegistryObject<Block> rubber_leaves = BLOCKS.register(Refs.RUBBERLEAVES_NAME, () -> new BlockRubberLeaves(Block.Properties.of(Material.PLANT).noOcclusion()));
-    //public static final RegistryObject<Block> rubber_sapling = BLOCKS.register(Refs.RUBBERSAPLING_NAME, () -> new BlockRubberSapling(new OakTreeGrower(), Block.Properties.of(Material.PLANT)));
+    public static final RegistryObject<Block> rubber_log = BLOCKS.register(Refs.RUBBERLOG_NAME, () -> new BlockRubberLog(Block.Properties.of(Material.WOOD)));
+    public static final RegistryObject<Block> rubber_leaves = BLOCKS.register(Refs.RUBBERLEAVES_NAME, () -> new BlockRubberLeaves(Block.Properties.of(Material.PLANT).noOcclusion()));
+    public static final RegistryObject<Block> rubber_sapling = BLOCKS.register(Refs.RUBBERSAPLING_NAME, () -> new BlockRubberSapling(new OakTreeGrower(), Block.Properties.of(Material.PLANT)));
 
     public static final RegistryObject<Block> sapphire_glass = BLOCKS.register(Refs.SAPPHIREGLASS_NAME, BlockBPGlass::new);
     public static final RegistryObject<Block> reinforced_sapphire_glass = BLOCKS.register(Refs.REINFORCEDSAPPHIREGLASS_NAME, () -> new BlockBPGlass(true));
@@ -124,6 +125,7 @@ public class BPBlocks {
         regularBlocks.add(cracked_basalt_decorative);
         regularBlocks.add(basaltbrick_cracked);
         regularBlocks.add(basalt_brick_small);
+        regularBlocks.add(marble_brick_small);
         regularBlocks.add(fancy_basalt);
         regularBlocks.add(fancy_marble);
         regularBlocks.add(marble_paver);
@@ -158,6 +160,10 @@ public class BPBlocks {
         regularBlocks.add(zinc_block);
         regularBlocks.add(tungsten_block);
         regularBlocks.add(green_sapphire_block);
+
+        regularBlocks.add(rubber_sapling);
+        regularBlocks.add(rubber_leaves);
+        regularBlocks.add(rubber_log);
 
         regularBlocks.add(sapphire_glass);
         regularBlocks.add(reinforced_sapphire_glass);
@@ -218,7 +224,6 @@ public class BPBlocks {
         machines.add(deployer);
         machines.add(transposer);
         machines.add(ejector);
-        machines.add(manager);
         machines.add(battery);
         machines.add(blulectric_alloyfurnace);
         machines.add(blulectric_furnace);

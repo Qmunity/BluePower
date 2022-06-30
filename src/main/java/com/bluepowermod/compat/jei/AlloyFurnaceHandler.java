@@ -79,7 +79,7 @@ public class AlloyFurnaceHandler implements IRecipeCategory<IAlloyFurnaceRecipe>
         for(int i = 0; i < 3; i++ ) {
             for(int j = 0; j < 3; j++ ) {
                 IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, 39 + j * 18, 4 + i * 18);
-                if(count < recipe.getRequiredItems().size()) {
+                if(recipe.getRequiredItems() != null && count < recipe.getRequiredItems().size()) {
                     slot.addIngredients(recipe.getRequiredItems().get(count));
                     count++;
                 }

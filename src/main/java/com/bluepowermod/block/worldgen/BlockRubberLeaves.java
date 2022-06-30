@@ -26,7 +26,7 @@ public class BlockRubberLeaves extends LeavesBlock {
 
     public BlockRubberLeaves(Properties properties){
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, 7).setValue(PERSISTENT, true));
+        this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, 7).setValue(PERSISTENT, true).setValue(WATERLOGGED, false));
         BPBlocks.blockList.add(this);
     }
 
@@ -43,7 +43,7 @@ public class BlockRubberLeaves extends LeavesBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
-        builder.add(DISTANCE, PERSISTENT);
+        builder.add(DISTANCE, PERSISTENT, WATERLOGGED);
     }
 
     @Override
