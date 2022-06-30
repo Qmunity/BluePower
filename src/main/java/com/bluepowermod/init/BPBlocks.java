@@ -83,9 +83,9 @@ public class BPBlocks {
     public static final RegistryObject<Block> amethyst_ore = BLOCKS.register(Refs.AMETHYSTORE_NAME, BlockItemOre::new);
     public static final RegistryObject<Block> green_sapphire_ore = BLOCKS.register(Refs.GREENSAPPHIREORE_NAME, BlockItemOre::new);
 
-    public static final RegistryObject<Block> silver_ore = BLOCKS.register(Refs.SILVERORE_NAME, BlockStoneOre::new);
-    public static final RegistryObject<Block> zinc_ore = BLOCKS.register(Refs.ZINCORE_NAME, BlockStoneOre::new);
-    public static final RegistryObject<Block> tungsten_ore = BLOCKS.register(Refs.TUNGSTENORE_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> silver_ore = BLOCKS.register(Refs.SILVERORE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> zinc_ore = BLOCKS.register(Refs.ZINCORE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> tungsten_ore = BLOCKS.register(Refs.TUNGSTENORE_NAME, BlockItemOre::new);
 
     public static final RegistryObject<Block> teslatite_deepslate = BLOCKS.register(Refs.TESLATITEDEEPSLATE_NAME, BlockItemOre::new);
     public static final RegistryObject<Block> ruby_deepslate = BLOCKS.register(Refs.RUBYDEEPSLATE_NAME, BlockItemOre::new);
@@ -93,9 +93,9 @@ public class BPBlocks {
     public static final RegistryObject<Block> amethyst_deepslate = BLOCKS.register(Refs.AMETHYSTDEEPSLATE_NAME, BlockItemOre::new);
     public static final RegistryObject<Block> green_sapphire_deepslate = BLOCKS.register(Refs.GREENSAPPHIREDEEPSLATE_NAME, BlockItemOre::new);
 
-    public static final RegistryObject<Block> silver_deepslate = BLOCKS.register(Refs.SILVERDEEPSLATE_NAME, BlockStoneOre::new);
-    public static final RegistryObject<Block> zinc_deepslate = BLOCKS.register(Refs.ZINCDEEPSLATE_NAME, BlockStoneOre::new);
-    public static final RegistryObject<Block> tungsten_deepslate = BLOCKS.register(Refs.TUNGSTENDEEPSLATE_NAME, BlockStoneOre::new);
+    public static final RegistryObject<Block> silver_deepslate = BLOCKS.register(Refs.SILVERDEEPSLATE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> zinc_deepslate = BLOCKS.register(Refs.ZINCDEEPSLATE_NAME, BlockItemOre::new);
+    public static final RegistryObject<Block> tungsten_deepslate = BLOCKS.register(Refs.TUNGSTENDEEPSLATE_NAME, BlockItemOre::new);
 
     public static final RegistryObject<Block> ruby_block = BLOCKS.register(Refs.RUBYBLOCK_NAME, BlockStoneOre::new);
     public static final RegistryObject<Block> sapphire_block = BLOCKS.register(Refs.SAPPHIREBLOCK_NAME, BlockStoneOre::new);
