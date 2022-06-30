@@ -171,7 +171,7 @@ public class BPItems {
         }
 
         //Paint Can
-        paint_can.add(ITEMS.register(Refs.PAINTCAN_NAME, ItemPaintCan::new));
+        paint_can.add(ITEMS.register(Refs.PAINTCAN_NAME + "_blank", ItemPaintCan::new));
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++){
             MinecraftColor color = MinecraftColor.values()[i];
             paint_can.add(ITEMS.register(Refs.PAINTCAN_NAME + "_" + color.name().toLowerCase(), () -> new ItemPaintCan(color)));
