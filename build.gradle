@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 
 project.ext {
     major = "0"
-    minor = "6"
+    minor = "7"
     if (System.getenv("CI_PIPELINE_IID") != null) {
         build = System.getenv("CI_PIPELINE_IID") + "-alpha"
     } else {
