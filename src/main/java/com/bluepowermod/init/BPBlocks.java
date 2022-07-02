@@ -176,7 +176,7 @@ public class BPBlocks {
 
     public static final RegistryObject<Block> flax_crop = BLOCKS.register(Refs.FLAXCROP_NAME, () -> new BlockCrop(Block.Properties.of(Material.PLANT)));
     public static final RegistryObject<BushBlock> indigo_flower = BLOCKS.register(Refs.INDIGOFLOWER_NAME, () -> new BlockCustomFlower(Block.Properties.of(Material.PLANT)));
-    static {BPItems.ITEMS.register(indigo_flower.getKey().location().getPath(), () -> new BlockItem(indigo_flower.get(), new Item.Properties().tab(BPCreativeTabs.items)));}
+    static {BPItems.ITEMS.register(Refs.INDIGOFLOWER_NAME, () -> new BlockItem(indigo_flower.get(), new Item.Properties().tab(BPCreativeTabs.items)));}
 
 
     public static List<RegistryObject<Block>> machines = new ArrayList<>();
