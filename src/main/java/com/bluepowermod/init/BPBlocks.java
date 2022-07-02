@@ -209,7 +209,7 @@ public class BPBlocks {
     public static final RegistryObject<Block> blulectric_furnace = BLOCKS.register(Refs.BLULECTRICFURNACE_NAME, BlockBlulectricFurnace::new);
     public static final RegistryObject<Block> engine = BLOCKS.register(Refs.ENGINE_NAME, BlockEngine::new);
     public static final RegistryObject<Block> kinetic_generator = BLOCKS.register(Refs.KINETICGENERATOR_NAME, () -> new BlockKineticGenerator().setWIP(true));
-    public static final RegistryObject<Block> windmill = BLOCKS.register(Refs.WINDMILL_NAME, () -> new BlockWindmill().setWIP(true));
+    //public static final RegistryObject<Block> windmill = BLOCKS.register(Refs.WINDMILL_NAME, () -> new BlockWindmill().setWIP(true));
     public static final RegistryObject<Block> solarpanel = BLOCKS.register(Refs.SOLARPANEL_NAME, BlockSolarPanel::new);
     public static final RegistryObject<Block> thermopile = BLOCKS.register(Refs.THERMOPILE_NAME, () -> new BlockThermopile().setWIP(true));
 

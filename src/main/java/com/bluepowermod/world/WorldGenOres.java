@@ -52,8 +52,8 @@ public class WorldGenOres {
 
     private static void registerConfiguredOre(int veinCount, int veinSize, int minY, int maxY, Block ore, Block deepSlate){
         List<OreConfiguration.TargetBlockState> oreTarget = List.of(OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, ore.defaultBlockState()), OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, deepSlate.defaultBlockState()));
-        Holder<ConfiguredFeature<OreConfiguration, ?>> configuredFeature = FeatureUtils.register(ForgeRegistries.BLOCKS.getResourceKey(ore).toString(), Feature.ORE, new OreConfiguration(oreTarget, veinSize));
-        PlacementUtils.register(ForgeRegistries.BLOCKS.getResourceKey(ore).toString(), configuredFeature, commonOrePlacement(veinCount, HeightRangePlacement.triangle(VerticalAnchor.aboveBottom(minY), VerticalAnchor.aboveBottom(maxY + 64))));
+        Holder<ConfiguredFeature<OreConfiguration, ?>> configuredFeature = FeatureUtils.register(ForgeRegistries.BLOCKS.getResourceKey(ore).get().location().toString(), Feature.ORE, new OreConfiguration(oreTarget, veinSize));
+        PlacementUtils.register(ForgeRegistries.BLOCKS.getResourceKey(ore).get().location().toString(), configuredFeature, commonOrePlacement(veinCount, HeightRangePlacement.triangle(VerticalAnchor.aboveBottom(minY), VerticalAnchor.aboveBottom(maxY + 64))));
     }
 
     private static List<PlacementModifier> orePlacement(PlacementModifier modifier, PlacementModifier modifier1) {
@@ -64,49 +64,4 @@ public class WorldGenOres {
         return orePlacement(CountPlacement.of(i), modifier);
     }
 
-    public void onBiomeLoad(){
-        //if(!event.getCategory().equals(Biome.BiomeCategory.NETHER) && !event.getCategory().equals(Biome.BiomeCategory.THEEND)) {
-            //BiomeGenerationSettingsBuilder generation = event.getGeneration();
-            if (BPConfig.CONFIG.generateAmethyst.get()) {
-                //PlacedFeature amethyst_feature = BuiltinRegistries.PLACED_FEATURE.get(ForgeRegistries.BLOCKS.getResourceKey(BPBlocks.amethyst_ore));
-                //if(amethyst_feature != null)
-                    //generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(amethyst_feature));
-            }
-            if (BPConfig.CONFIG.generateRuby.get()) {
-                //PlacedFeature ruby_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.ruby_ore.getRegistryName());
-                //if(ruby_feature != null)
-                    //generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(ruby_feature));
-            }
-            if (BPConfig.CONFIG.generateSapphire.get()) {
-                //PlacedFeature sapphire_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.sapphire_ore.getRegistryName());
-                //if(sapphire_feature != null)
-                    //generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(sapphire_feature));
-            }
-            if (BPConfig.CONFIG.generateGreenSapphire.get()) {
-                //PlacedFeature green_sapphire_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.green_sapphire_ore.getRegistryName());
-                //if(green_sapphire_feature != null)
-                    //generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(green_sapphire_feature));
-            }
-            if (BPConfig.CONFIG.generateSilver.get()) {
-                //PlacedFeature silver_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.silver_ore.getRegistryName());
-                //if(silver_feature != null)
-                    //generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(silver_feature));
-            }
-            if (BPConfig.CONFIG.generateTeslatite.get()) {
-                //PlacedFeature teslatite_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.teslatite_ore.getRegistryName());
-                //if(teslatite_feature != null)
-                    //generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(teslatite_feature));
-            }
-            if (BPConfig.CONFIG.generateZinc.get()) {
-                //PlacedFeature zinc_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.zinc_ore.getRegistryName());
-                //if(zinc_feature != null)
-                    //generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(zinc_feature));
-            }
-            if (BPConfig.CONFIG.generateTungsten.get()) {
-                //PlacedFeature tungsten_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.tungsten_ore.getRegistryName());
-                //if(tungsten_feature != null)
-                    //generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(tungsten_feature));
-            }
-        }
-    //}
 }

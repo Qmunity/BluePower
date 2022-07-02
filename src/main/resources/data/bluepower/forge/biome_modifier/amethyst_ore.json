@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#forge:is_overworld",
+  "features": "bluepower:amethyst_ore",
+  "step": "underground_ores"
+}

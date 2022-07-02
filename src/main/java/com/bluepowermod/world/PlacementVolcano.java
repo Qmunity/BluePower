@@ -25,7 +25,7 @@ public class PlacementVolcano extends PlacementModifier {
         int chunkPosX = pos.getX() >> 8;
         int chuckPosZ = pos.getZ() >> 8;
         ((WorldgenRandom) random).setDecorationSeed(world.getSeed(), chunkPosX, chuckPosZ);
-        if (random.nextDouble() < (BPConfig.CONFIG.volcanoSpawnChance.get() * 8)) {
+        if (random.nextDouble() < (BPConfig.CONFIG.volcanoSpawnChance.get() * 6) && BPConfig.CONFIG.generateVolcano.get()) {
             return Stream.of(pos);
         } else {
             return Stream.empty();

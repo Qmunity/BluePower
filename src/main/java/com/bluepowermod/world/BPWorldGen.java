@@ -67,20 +67,4 @@ public class BPWorldGen {
     private static List<PlacementModifier> rareOrePlacement(int i, PlacementModifier modifier) {
         return orePlacement(RarityFilter.onAverageOnceEvery(i), modifier);
     }
-
-    @SubscribeEvent
-    public void onBiomeLoad(){
-        //BiomeGenerationSettingsBuilder generation = event.getGeneration();
-        //Volcano
-        //if(BPConfig.CONFIG.volcanoBiomeCategoryWhitelist.get().contains(event.getCategory().getName())) {
-            //if(BPConfig.CONFIG.generateVolcano.get()) {
-                //generation.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, VOLCANO_FEATURE);
-            //}
-        // }
-        //Marble
-        //if(BPConfig.CONFIG.generateMarble.get() && !event.getCategory().equals(Biome.BiomeCategory.NETHER) && !event.getCategory().equals(Biome.BiomeCategory.THEEND)) {
-            //generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MARBLE_FEATURE);
-        //}
-    }
-
 }
