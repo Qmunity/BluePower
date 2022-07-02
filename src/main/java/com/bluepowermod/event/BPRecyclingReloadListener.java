@@ -12,7 +12,6 @@ import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.util.ItemStackUtils;
 import com.bluepowermod.world.WorldGenVolcano;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ReloadableServerResources;
@@ -22,6 +21,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
@@ -45,8 +45,8 @@ public class BPRecyclingReloadListener extends SimplePreparableReloadListener<Vo
      * Generates the Dynamic Recycling recipes on a reload.
      */
     public static void onResourceManagerReload(List<CraftingRecipe> recipeList) {
-        //Check if the server is running
-        if(Minecraft.getInstance().level == null) {
+        //Make sure this is running on the logical server
+        if(Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER) {
             return;
         }
 
