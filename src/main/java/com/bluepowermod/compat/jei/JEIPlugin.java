@@ -52,7 +52,6 @@ import java.util.stream.Collectors;
 /**
  * @author MoreThanHidden
  */
-
 @JeiPlugin
 public class JEIPlugin implements IModPlugin {
 

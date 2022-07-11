@@ -18,8 +18,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -42,8 +41,8 @@ public class TileBPMicroblock extends BlockEntity {
 
     @Nonnull
     @Override
-    public IModelData getModelData() {
-        return new ModelDataMap.Builder().withInitial(PROPERTY_INFO, new ImmutablePair<>(block, rotation)).build();
+    public ModelData getModelData() {
+        return ModelData.builder().with(PROPERTY_INFO, new ImmutablePair<>(block, rotation)).build();
     }
 
     public void setBlock(Block block) {

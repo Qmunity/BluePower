@@ -15,8 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -46,13 +45,13 @@ public class TileWire extends TileBase {
 
     @Nonnull
     @OnlyIn(Dist.CLIENT)
-    public IModelData getModelData(BlockState state) {
+    public ModelData getModelData(BlockState state) {
 
             //Add Color and Light Data
             Pair<Integer, Integer> colorData = Pair.of(((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, -1), ((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, 2));
             Boolean lightData = state.getValue(BlockAlloyWire.POWERED);
 
-            return new ModelDataMap.Builder().withInitial(COLOR_INFO, colorData).withInitial(LIGHT_INFO, lightData).build();
+            return ModelData.builder().with(COLOR_INFO, colorData).with(LIGHT_INFO, lightData).build();
 
     }
 

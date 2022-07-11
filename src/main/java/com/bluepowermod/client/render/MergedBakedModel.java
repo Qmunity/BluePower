@@ -8,14 +8,11 @@
 
 package com.bluepowermod.client.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -23,7 +20,6 @@ import java.util.stream.Collectors;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraftforge.client.model.SimpleModelState;
 
 /**
  * Combines baked models into one.
@@ -64,11 +60,6 @@ public class MergedBakedModel implements BakedModel {
     @Override
     public TextureAtlasSprite getParticleIcon() {
         return bakedModels.get(0).getParticleIcon();
-    }
-
-    @Override
-    public BakedModel handlePerspective(ItemTransforms.TransformType cameraTransformType, PoseStack mat) {
-        return PerspectiveMapWrapper.handlePerspective(this, PerspectiveMapWrapper.getTransforms(SimpleModelState.IDENTITY), cameraTransformType, mat);
     }
 
     @Override

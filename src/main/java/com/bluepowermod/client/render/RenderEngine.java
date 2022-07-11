@@ -24,11 +24,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.EmptyModelData;
 
 import com.bluepowermod.tile.tier3.TileEngine;
-
-import java.util.Random;
+import net.minecraftforge.client.model.data.ModelData;
 
 /**
  *
@@ -92,7 +90,7 @@ public class RenderEngine implements BlockEntityRenderer<TileEngine> {
         BakedModel glider = dispatcher.getBlockModel(state.setValue(BlockEngine.GLIDER, true));
         //Render the glider
         VertexConsumer builder = iRenderTypeBuffer.getBuffer(RenderType.cutout());
-        dispatcher.getModelRenderer().tesselateBlock(world, glider, state.setValue(BlockEngine.GLIDER, true), pos, matrixStack, builder, false, RandomSource.create(), 0, 0, EmptyModelData.INSTANCE);
+        dispatcher.getModelRenderer().tesselateBlock(world, glider, state.setValue(BlockEngine.GLIDER, true), pos, matrixStack, builder, false, RandomSource.create(), 0, 0, ModelData.EMPTY, RenderType.cutout());
 
         matrixStack.popPose();
         matrixStack.pushPose();
@@ -102,7 +100,7 @@ public class RenderEngine implements BlockEntityRenderer<TileEngine> {
         matrixStack.translate(-0.5, 0, -0.5);
         BakedModel gear = dispatcher.getBlockModel(state.setValue(BlockEngine.GEAR, true));
         // Render the rotating cog
-        dispatcher.getModelRenderer().tesselateBlock(world, gear, state.setValue(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.cutout()), false, RandomSource.create(), 0, 0, EmptyModelData.INSTANCE);
+        dispatcher.getModelRenderer().tesselateBlock(world, gear, state.setValue(BlockEngine.GEAR, true), pos, matrixStack, iRenderTypeBuffer.getBuffer(RenderType.cutout()), false, RandomSource.create(), 0, 0, ModelData.EMPTY, RenderType.cutout());
 
         matrixStack.popPose();
         matrixStack.popPose();
