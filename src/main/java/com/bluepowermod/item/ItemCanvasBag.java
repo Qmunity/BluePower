@@ -46,7 +46,7 @@ public class ItemCanvasBag extends ItemColorableOverlay implements MenuProvider{
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
         if (!world.isClientSide) {
-            NetworkHooks.openGui((ServerPlayer) player, this);
+            NetworkHooks.openScreen((ServerPlayer) player, this);
         }
         return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
     }

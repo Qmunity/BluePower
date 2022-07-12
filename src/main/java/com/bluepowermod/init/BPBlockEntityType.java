@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  */
 public class BPBlockEntityType {
 
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPE = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Refs.MODID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPE = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Refs.MODID);
 
     public static RegistryObject<BlockEntityType<TileAlloyFurnace>> ALLOY_FURNACE = BLOCK_ENTITY_TYPE.register(Refs.ALLOYFURNACE_NAME, () -> BlockEntityType.Builder.of(TileAlloyFurnace::new, BPBlocks.alloyfurnace.get()).build(null));
     public static RegistryObject<BlockEntityType<TileBuffer>> BUFFER = BLOCK_ENTITY_TYPE.register(Refs.BLOCKBUFFER_NAME, () -> BlockEntityType.Builder.of(TileBuffer::new, BPBlocks.buffer.get()).build(null));

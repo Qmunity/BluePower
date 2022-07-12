@@ -30,16 +30,9 @@ public class ItemPaintCan extends ItemDamageableColorableOverlay {
         return MAX_USES;
     }
 
-    /**
-     * ItemStack sensitive version of getContainerItem. Returns a full ItemStack instance of the result.
-     *
-     * @param itemStack
-     *            The current ItemStack
-     * @return The resulting ItemStack
-     */
-    @Override
-    public ItemStack getContainerItem(ItemStack itemStack) {
 
+    @Override
+    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
         if (itemStack.getDamageValue() >= 16)
             return ItemStack.EMPTY;
         ItemStack stack = itemStack.copy();
@@ -54,16 +47,8 @@ public class ItemPaintCan extends ItemDamageableColorableOverlay {
         return stack;
     }
 
-    /**
-     * ItemStack sensitive version of hasContainerItem
-     *
-     * @param stack
-     *            The current item stack
-     * @return True if this item has a 'container'
-     */
     @Override
-    public boolean hasContainerItem(ItemStack stack) {
-
-        return !getContainerItem(stack).isEmpty();
+    public boolean hasCraftingRemainingItem(ItemStack stack) {
+        return !getCraftingRemainingItem(stack).isEmpty();
     }
 }

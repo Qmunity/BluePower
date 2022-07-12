@@ -108,7 +108,7 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
         if (!world.isClientSide && player.isCrouching()) {
-            NetworkHooks.openGui((ServerPlayer) player, this);
+            NetworkHooks.openScreen((ServerPlayer) player, this);
         }
         return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
     }

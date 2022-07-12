@@ -59,9 +59,9 @@ import net.minecraftforge.items.ItemStackHandler;
 public class BPEventHandler {
 
     @SubscribeEvent
-    public void tick(TickEvent.WorldTickEvent event) {
+    public void tick(TickEvent.LevelTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
-            if (event.world.getGameTime() % 200 == 0) {
+            if (event.level.getGameTime() % 200 == 0) {
                 //double tickTime = MathHelper.mean(event.world.getServer().tickTimeArray) * 1.0E-6D;
                 //In case world are going to get their own thread: MinecraftServer.getServer().worldTickTimes.get(event.world.provider.dimensionId)
                 //BPNetworkHandler.wrapper.send(PacketDistributor.DIMENSION.setValue(event.world.getDimension().getType()), new MessageServerTickTime(tickTime));
@@ -85,10 +85,10 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent.LeftClickBlock event) {
 
-        if (event.getPlayer().isCreative()) {
-            ItemStack heldItem = event.getPlayer().getItemInHand(event.getHand());
+        if (event.getEntity().isCreative()) {
+            ItemStack heldItem = event.getEntity().getItemInHand(event.getHand());
             if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemSickle) {
-                heldItem.getItem().mineBlock(heldItem, event.getWorld(), event.getWorld().getBlockState(event.getPos()), event.getPos(), event.getPlayer());
+                heldItem.getItem().mineBlock(heldItem, event.getLevel(), event.getLevel().getBlockState(event.getPos()), event.getPos(), event.getEntity());
             }
         }
     }
@@ -96,7 +96,7 @@ public class BPEventHandler {
     @SubscribeEvent
     public void itemPickUp(EntityItemPickupEvent event) {
 
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         ItemStack pickUp = event.getItem().getItem();
         if (!(player.containerMenu instanceof ContainerSeedBag)) {
             for (ItemStack is : player.getInventory().items) {
@@ -146,10 +146,10 @@ public class BPEventHandler {
 
                 if (!killer.getInventory().getSelected().isEmpty()) {
                     if (EnchantmentHelper.getEnchantments(killer.getInventory().getSelected()).containsKey(BPEnchantments.disjunction)) {
-                        if (event.getEntityLiving() instanceof EnderMan || event.getEntityLiving() instanceof EnderDragon) {
+                        if (event.getEntity() instanceof EnderMan || event.getEntity() instanceof EnderDragon) {
                             int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.disjunction.get(), killer.getInventory().getSelected());
                             isAttacking = true;
-                            event.getEntityLiving().hurt(entitySource, event.getAmount() * (level * 0.5F + 1));
+                            event.getEntity().hurt(entitySource, event.getAmount() * (level * 0.5F + 1));
                             isAttacking = false;
                         }
                     }
@@ -189,29 +189,29 @@ public class BPEventHandler {
 
     private void dropHeads(LivingDeathEvent event) {
 
-        if (event.getEntityLiving() instanceof Creeper) {
-            event.getEntityLiving().spawnAtLocation(new ItemStack(Items.CREEPER_HEAD, 1), 0.0F);
+        if (event.getEntity() instanceof Creeper) {
+            event.getEntity().spawnAtLocation(new ItemStack(Items.CREEPER_HEAD, 1), 0.0F);
         }
 
-        if (event.getEntityLiving() instanceof Player) {
+        if (event.getEntity() instanceof Player) {
             ItemStack drop = new ItemStack(Items.PLAYER_HEAD, 1);
             drop.setTag(new CompoundTag());
-            drop.getTag().putString("SkullOwner", event.getEntityLiving().getDisplayName().getString());
-            event.getEntityLiving().spawnAtLocation(drop, 0.0F);
+            drop.getTag().putString("SkullOwner", event.getEntity().getDisplayName().getString());
+            event.getEntity().spawnAtLocation(drop, 0.0F);
         }
 
-        if (event.getEntityLiving() instanceof AbstractSkeleton) {
-            AbstractSkeleton sk = (AbstractSkeleton) event.getEntityLiving();
+        if (event.getEntity() instanceof AbstractSkeleton) {
+            AbstractSkeleton sk = (AbstractSkeleton) event.getEntity();
 
             if (sk instanceof Skeleton) {
-                event.getEntityLiving().spawnAtLocation(new ItemStack(Items.SKELETON_SKULL, 1), 0.0F);
+                event.getEntity().spawnAtLocation(new ItemStack(Items.SKELETON_SKULL, 1), 0.0F);
             } else {
-                event.getEntityLiving().spawnAtLocation(new ItemStack(Items.WITHER_SKELETON_SKULL, 1), 0.0F);
+                event.getEntity().spawnAtLocation(new ItemStack(Items.WITHER_SKELETON_SKULL, 1), 0.0F);
             }
         }
 
-        if (event.getEntityLiving() instanceof Zombie) {
-            event.getEntityLiving().spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD, 1), 0.0F);
+        if (event.getEntity() instanceof Zombie) {
+            event.getEntity().spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD, 1), 0.0F);
         }
     }
 
@@ -245,14 +245,14 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onBonemealEvent(BonemealEvent event) {
 
-        if (!event.getWorld().isClientSide) {
+        if (!event.getLevel().isClientSide) {
             if (event.getBlock().getBlock() instanceof GrassBlock) {
                 for (int x = event.getPos().getX() - 2; x < event.getPos().getX() + 3; x++) {
                     for (int z = event.getPos().getZ() - 2; z < event.getPos().getZ() + 3; z++) {
-                        if (event.getWorld().isEmptyBlock(new BlockPos(x, event.getPos().getY() + 1, z))) {
-                            if (event.getWorld().random.nextInt(50) == 1) {
-                                if (BPBlocks.indigo_flower.get().canSustainPlant(event.getWorld().getBlockState(event.getPos().above()), event.getWorld(), event.getPos().above(), Direction.UP, BPBlocks.indigo_flower.get())) {
-                                    event.getWorld().setBlock(event.getPos().above(), BPBlocks.indigo_flower.get().defaultBlockState(), 0);
+                        if (event.getLevel().isEmptyBlock(new BlockPos(x, event.getPos().getY() + 1, z))) {
+                            if (event.getLevel().random.nextInt(50) == 1) {
+                                if (BPBlocks.indigo_flower.get().canSustainPlant(event.getLevel().getBlockState(event.getPos().above()), event.getLevel(), event.getPos().above(), Direction.UP, BPBlocks.indigo_flower.get())) {
+                                    event.getLevel().setBlock(event.getPos().above(), BPBlocks.indigo_flower.get().defaultBlockState(), 0);
                                 }
                             }
                         }

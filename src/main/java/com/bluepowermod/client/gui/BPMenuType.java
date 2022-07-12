@@ -29,33 +29,33 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class BPMenuType {
-    public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Refs.MODID);
+    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Refs.MODID);
 
-    public static final RegistryObject<MenuType<ContainerAlloyFurnace>> ALLOY_FURNACE = CONTAINERS.register(ContainerNames.ALLOY_FURNACE, () -> new MenuType<>(ContainerAlloyFurnace::new));
-    public static final RegistryObject<MenuType<ContainerBuffer>> BUFFER = CONTAINERS.register(ContainerNames.BUFFER,() -> new MenuType<>(ContainerBuffer::new));
-    public static final RegistryObject<MenuType<ContainerSortingMachine>> SORTING_MACHINE = CONTAINERS.register(ContainerNames.SORTING_MACHINE,() -> new MenuType<>(ContainerSortingMachine::new));
-    public static final RegistryObject<MenuType<ContainerSeedBag>> SEEDBAG = CONTAINERS.register(ContainerNames.SEEDBAG,() -> new MenuType<>(ContainerSeedBag::new));
-    public static final RegistryObject<MenuType<ContainerCanvasBag>> CANVAS_BAG = CONTAINERS.register(ContainerNames.CANVAS_BAG,() -> new MenuType<>(ContainerCanvasBag::new));
-    public static final RegistryObject<MenuType<ContainerCPU>> CPU = CONTAINERS.register(ContainerNames.CPU,() -> new MenuType<>(ContainerCPU::new));
-    public static final RegistryObject<MenuType<ContainerMonitor>> MONITOR = CONTAINERS.register(ContainerNames.MONITOR,() -> new MenuType<>(ContainerMonitor::new));
-    public static final RegistryObject<MenuType<ContainerDiskDrive>> DISK_DRIVE = CONTAINERS.register(ContainerNames.DISK_DRIVE,() -> new MenuType<>(ContainerDiskDrive::new));
-    public static final RegistryObject<MenuType<ContainerIOExpander>> IO_EXPANDER = CONTAINERS.register(ContainerNames.IO_EXPANDER,() -> new MenuType<>(ContainerIOExpander::new));
-    public static final RegistryObject<MenuType<ContainerRedbusID>> REDBUS = CONTAINERS.register(ContainerNames.REDBUS,() -> new MenuType<>(ContainerRedbusID::new));
-    public static final RegistryObject<MenuType<ContainerKinect>> KINETIC_GENERATOR = CONTAINERS.register(ContainerNames.KINETIC_GENERATOR,() -> new MenuType<>(ContainerKinect::new));
-    public static final RegistryObject<MenuType<ContainerDeployer>> DEPLOYER = CONTAINERS.register(ContainerNames.DEPLOYER,() -> new MenuType<>(ContainerDeployer::new));
-    public static final RegistryObject<MenuType<ContainerRelay>> RELAY = CONTAINERS.register(ContainerNames.RELAY,() -> new MenuType<>(ContainerRelay::new));
-    public static final RegistryObject<MenuType<ContainerEjector>> EJECTOR = CONTAINERS.register(ContainerNames.EJECTOR,() -> new MenuType<>(ContainerEjector::new));
-    public static final RegistryObject<MenuType<ContainerFilter>> FILTER = CONTAINERS.register(ContainerNames.FILTER,() -> new MenuType<>(ContainerFilter::new));
-    public static final RegistryObject<MenuType<ContainerRetriever>> RETRIEVER = CONTAINERS.register(ContainerNames.RETRIEVER,() -> new MenuType<>(ContainerRetriever::new));
-    public static final RegistryObject<MenuType<ContainerRegulator>> REGULATOR = CONTAINERS.register(ContainerNames.REGULATOR,() -> new MenuType<>(ContainerRegulator::new));
-    public static final RegistryObject<MenuType<ContainerItemDetector>> ITEM_DETECTOR = CONTAINERS.register(ContainerNames.ITEM_DETECTOR,() -> new MenuType<>(ContainerItemDetector::new));
-    public static final RegistryObject<MenuType<ContainerProjectTable>> PROJECT_TABLE = CONTAINERS.register(ContainerNames.PROJECT_TABLE,() -> new MenuType<>(ContainerProjectTable::new));
-    public static final RegistryObject<MenuType<ContainerCircuitTable>> CIRCUIT_TABLE = CONTAINERS.register(ContainerNames.CIRCUIT_TABLE,() -> new MenuType<>(ContainerCircuitTable::new));
-    public static final RegistryObject<MenuType<ContainerManager>> MANAGER = CONTAINERS.register(ContainerNames.MANAGER,() -> new MenuType<>(ContainerManager::new));
-    public static final RegistryObject<MenuType<ContainerCircuitDatabaseMain>> CIRCUITDATABASE_MAIN = CONTAINERS.register(ContainerNames.CIRCUITDATABASE_MAIN,() -> new MenuType<>(ContainerCircuitDatabaseMain::new));
-    public static final RegistryObject<MenuType<ContainerCircuitDatabaseSharing>> CIRCUITDATABASE_SHARING = CONTAINERS.register(ContainerNames.CIRCUITDATABASE_SHARING,() -> new MenuType<>(ContainerCircuitDatabaseSharing::new));
-    public static final RegistryObject<MenuType<ContainerBlulectricAlloyFurnace>> BLULECTRIC_ALLOY_FURNACE = CONTAINERS.register(ContainerNames.BLULECTRIC_ALLOY_FURNACE,() -> new MenuType<>(ContainerBlulectricAlloyFurnace::new));
-    public static final RegistryObject<MenuType<ContainerBlulectricFurnace>> BLULECTRIC_FURNACE = CONTAINERS.register(ContainerNames.BLULECTRIC_FURNACE,() -> new MenuType<>(ContainerBlulectricFurnace::new));
+    public static final RegistryObject<MenuType<ContainerAlloyFurnace>> ALLOY_FURNACE = MENU_TYPES.register(ContainerNames.ALLOY_FURNACE, () -> new MenuType<>(ContainerAlloyFurnace::new));
+    public static final RegistryObject<MenuType<ContainerBuffer>> BUFFER = MENU_TYPES.register(ContainerNames.BUFFER,() -> new MenuType<>(ContainerBuffer::new));
+    public static final RegistryObject<MenuType<ContainerSortingMachine>> SORTING_MACHINE = MENU_TYPES.register(ContainerNames.SORTING_MACHINE,() -> new MenuType<>(ContainerSortingMachine::new));
+    public static final RegistryObject<MenuType<ContainerSeedBag>> SEEDBAG = MENU_TYPES.register(ContainerNames.SEEDBAG,() -> new MenuType<>(ContainerSeedBag::new));
+    public static final RegistryObject<MenuType<ContainerCanvasBag>> CANVAS_BAG = MENU_TYPES.register(ContainerNames.CANVAS_BAG,() -> new MenuType<>(ContainerCanvasBag::new));
+    public static final RegistryObject<MenuType<ContainerCPU>> CPU = MENU_TYPES.register(ContainerNames.CPU,() -> new MenuType<>(ContainerCPU::new));
+    public static final RegistryObject<MenuType<ContainerMonitor>> MONITOR = MENU_TYPES.register(ContainerNames.MONITOR,() -> new MenuType<>(ContainerMonitor::new));
+    public static final RegistryObject<MenuType<ContainerDiskDrive>> DISK_DRIVE = MENU_TYPES.register(ContainerNames.DISK_DRIVE,() -> new MenuType<>(ContainerDiskDrive::new));
+    public static final RegistryObject<MenuType<ContainerIOExpander>> IO_EXPANDER = MENU_TYPES.register(ContainerNames.IO_EXPANDER,() -> new MenuType<>(ContainerIOExpander::new));
+    public static final RegistryObject<MenuType<ContainerRedbusID>> REDBUS = MENU_TYPES.register(ContainerNames.REDBUS,() -> new MenuType<>(ContainerRedbusID::new));
+    public static final RegistryObject<MenuType<ContainerKinect>> KINETIC_GENERATOR = MENU_TYPES.register(ContainerNames.KINETIC_GENERATOR,() -> new MenuType<>(ContainerKinect::new));
+    public static final RegistryObject<MenuType<ContainerDeployer>> DEPLOYER = MENU_TYPES.register(ContainerNames.DEPLOYER,() -> new MenuType<>(ContainerDeployer::new));
+    public static final RegistryObject<MenuType<ContainerRelay>> RELAY = MENU_TYPES.register(ContainerNames.RELAY,() -> new MenuType<>(ContainerRelay::new));
+    public static final RegistryObject<MenuType<ContainerEjector>> EJECTOR = MENU_TYPES.register(ContainerNames.EJECTOR,() -> new MenuType<>(ContainerEjector::new));
+    public static final RegistryObject<MenuType<ContainerFilter>> FILTER = MENU_TYPES.register(ContainerNames.FILTER,() -> new MenuType<>(ContainerFilter::new));
+    public static final RegistryObject<MenuType<ContainerRetriever>> RETRIEVER = MENU_TYPES.register(ContainerNames.RETRIEVER,() -> new MenuType<>(ContainerRetriever::new));
+    public static final RegistryObject<MenuType<ContainerRegulator>> REGULATOR = MENU_TYPES.register(ContainerNames.REGULATOR,() -> new MenuType<>(ContainerRegulator::new));
+    public static final RegistryObject<MenuType<ContainerItemDetector>> ITEM_DETECTOR = MENU_TYPES.register(ContainerNames.ITEM_DETECTOR,() -> new MenuType<>(ContainerItemDetector::new));
+    public static final RegistryObject<MenuType<ContainerProjectTable>> PROJECT_TABLE = MENU_TYPES.register(ContainerNames.PROJECT_TABLE,() -> new MenuType<>(ContainerProjectTable::new));
+    public static final RegistryObject<MenuType<ContainerCircuitTable>> CIRCUIT_TABLE = MENU_TYPES.register(ContainerNames.CIRCUIT_TABLE,() -> new MenuType<>(ContainerCircuitTable::new));
+    public static final RegistryObject<MenuType<ContainerManager>> MANAGER = MENU_TYPES.register(ContainerNames.MANAGER,() -> new MenuType<>(ContainerManager::new));
+    public static final RegistryObject<MenuType<ContainerCircuitDatabaseMain>> CIRCUITDATABASE_MAIN = MENU_TYPES.register(ContainerNames.CIRCUITDATABASE_MAIN,() -> new MenuType<>(ContainerCircuitDatabaseMain::new));
+    public static final RegistryObject<MenuType<ContainerCircuitDatabaseSharing>> CIRCUITDATABASE_SHARING = MENU_TYPES.register(ContainerNames.CIRCUITDATABASE_SHARING,() -> new MenuType<>(ContainerCircuitDatabaseSharing::new));
+    public static final RegistryObject<MenuType<ContainerBlulectricAlloyFurnace>> BLULECTRIC_ALLOY_FURNACE = MENU_TYPES.register(ContainerNames.BLULECTRIC_ALLOY_FURNACE,() -> new MenuType<>(ContainerBlulectricAlloyFurnace::new));
+    public static final RegistryObject<MenuType<ContainerBlulectricFurnace>> BLULECTRIC_FURNACE = MENU_TYPES.register(ContainerNames.BLULECTRIC_FURNACE,() -> new MenuType<>(ContainerBlulectricFurnace::new));
 
     @OnlyIn(Dist.CLIENT)
     public static void registerScreenFactories(){

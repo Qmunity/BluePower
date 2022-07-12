@@ -162,7 +162,7 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
                         if (!tileAlloyFurnace.fuelInventory.isEmpty()) {
                             tileAlloyFurnace.fuelInventory.setCount(tileAlloyFurnace.fuelInventory.getCount() - 1);
                             if (tileAlloyFurnace.fuelInventory.getCount() <= 0) {
-                                tileAlloyFurnace.fuelInventory = tileAlloyFurnace.fuelInventory.getItem().getContainerItem(tileAlloyFurnace.fuelInventory);
+                                tileAlloyFurnace.fuelInventory = tileAlloyFurnace.fuelInventory.getItem().getCraftingRemainingItem(tileAlloyFurnace.fuelInventory);
                             }
                         }
                     } else {

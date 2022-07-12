@@ -29,15 +29,15 @@ public class ItemLimitedCrafting extends ItemBase {
     public ItemLimitedCrafting(int uses) {
         super(new Properties().durability(uses - 1));
     }
-    
+
     @Override
-    public ItemStack getContainerItem(ItemStack itemStack) {
+    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
         ItemStack container = itemStack.copy();
         return container.hurt(1, RandomSource.create(), null) ? ItemStack.EMPTY : container;
     }
 
     @Override
-    public boolean hasContainerItem(ItemStack stack) {
+    public boolean hasCraftingRemainingItem(ItemStack stack) {
         return true;
     }
 }
