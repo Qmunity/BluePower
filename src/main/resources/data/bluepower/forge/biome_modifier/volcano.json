@@ -1,6 +1,6 @@
 {
   "type": "forge:add_features",
-  "biomes": "#forge:is_overworld",
+  "biomes": "#minecraft:is_overworld",
   "features": "bluepower:volcano",
   "step": "local_modifications"
 }
