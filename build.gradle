@@ -16,13 +16,13 @@ apply plugin: 'eclipse'
 
 project.ext {
     major = "0"
-    minor = "7"
+    minor = "8"
     if (System.getenv("CI_PIPELINE_IID") != null) {
         build = System.getenv("CI_PIPELINE_IID") + "-alpha"
     } else {
         build = "-custom"
     }
-    mcVersion = "1.19"
+    mcVersion = "1.19.2"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -46,7 +46,7 @@ repositories {
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'parchment', version: '1.18.2-2022.06.19-1.19'
+    mappings channel: 'parchment', version: '2022.09.04-1.19.2'
 
     runs {
         client {
@@ -87,12 +87,12 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19-41.0.94'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.1.25'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
-    compileOnly fg.deobf("curse.maven:jade-324717:3834998")
-    compileOnly fg.deobf("mezz.jei:jei-1.19-forge:11.0.0.206")
-    //runtimeOnly fg.deobf("mezz.jei:jei-1.19-forge:11.0.0.206")
+    compileOnly fg.deobf("curse.maven:jade-324717:3960381")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.3.0.262")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.3.0.262")
     //runtimeOnly fg.deobf("curse.maven:jade-324717:3834997")
 }
 

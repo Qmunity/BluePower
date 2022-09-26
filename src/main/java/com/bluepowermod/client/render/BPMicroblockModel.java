@@ -167,11 +167,7 @@ public class BPMicroblockModel implements BakedModel {
     @Override
     public BakedModel applyTransform(ItemTransforms.TransformType type, PoseStack stack, boolean applyLeftHandTransform) {
         BakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getId(), "face=" + Direction.WEST));
-        ItemTransform itemTransform = sizeModel.getTransforms().getTransform(type);
-        Transformation tr = itemTransform.equals(ItemTransform.NO_TRANSFORM) ? Transformation.identity() : new Transformation(itemTransform.translation, quatFromXYZ(itemTransform.rotation, true), itemTransform.scale, null);
-        if(!tr.isIdentity()) {
-            tr.push(stack);
-        }
+        sizeModel.getTransforms().getTransform(type).apply(applyLeftHandTransform, stack);
         return this;
     }
 
