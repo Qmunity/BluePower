@@ -102,10 +102,4 @@ public class TileBattery extends TileMachineBase {
             tCompound.put("energy", nbtstorage);
     }
 
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        super.onDataPacket(net, pkt);
-        handleUpdateTag(pkt.getTag());
-    }
-
 }

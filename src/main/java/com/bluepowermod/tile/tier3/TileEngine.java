@@ -33,7 +33,6 @@ import javax.annotation.Nullable;
  */
 public class TileEngine extends TileMachineBase  {
 
-	private Direction orientation = Direction.DOWN;
 	public boolean isActive = false;
     public byte pumpTick;
     public byte pumpSpeed;
@@ -109,22 +108,9 @@ public class TileEngine extends TileMachineBase  {
 
 	}
 
-    public void setOrientation(Direction orientation){
-        this.orientation = orientation;
-        setChanged();
-    }
-
-    public Direction getOrientation()
-    {
-        return orientation;
-    }
-
-
 	@Override
 	protected void writeToPacketNBT(CompoundTag compound) {
 		super.writeToPacketNBT(compound);
-		int rotation = orientation.get3DDataValue();
-		compound.putInt("rotation", rotation);
         compound.putByte("pumpspeed", pumpSpeed);
         compound.putByte("pumptick", pumpTick);
         Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
@@ -135,7 +121,6 @@ public class TileEngine extends TileMachineBase  {
 	@Override
 	protected void readFromPacketNBT(CompoundTag compound) {
 		super.readFromPacketNBT(compound);
-		orientation = Direction.from3DDataValue(compound.getInt("rotation"));
         pumpSpeed = compound.getByte("pumpspeed");
         pumpTick = compound.getByte("pumptick");
         if(compound.contains("energy")) {

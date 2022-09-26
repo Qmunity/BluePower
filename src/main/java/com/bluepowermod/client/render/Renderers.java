@@ -100,6 +100,8 @@ public class Renderers {
                 ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent());
         }
 
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.blulectric_cable.get(), RenderType.translucent());
+
         ItemBlockRenderTypes.setRenderLayer(BPBlocks.indigo_flower.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(BPBlocks.flax_crop.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(BPBlocks.cracked_basalt_lava.get(), RenderType.cutout());

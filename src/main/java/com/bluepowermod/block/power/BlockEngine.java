@@ -124,11 +124,6 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
 
                 facing = player.getDirection().getOpposite();
             }
-
-            TileEngine tile = (TileEngine) world.getBlockEntity(pos);
-            if (tile != null) {
-                tile.setOrientation(facing);
-            }
             world.setBlock(pos, state.setValue(FACING, facing), 2);
         }
     }
