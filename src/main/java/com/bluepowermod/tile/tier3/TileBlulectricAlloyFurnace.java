@@ -146,6 +146,12 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
             if (tileAlloyFurnace.updatingRecipe) {
                 if(level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).isPresent()) {
                     tileAlloyFurnace.currentRecipe = (IAlloyFurnaceRecipe) level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).get();
+                    //Check output slot is empty and less then a stack of the same item.
+                    if(!(tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem().getItem()
+                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
+                            && !tileAlloyFurnace.outputInventory.isEmpty()){
+                        tileAlloyFurnace.currentRecipe = null;
+                    }
                 }else{
                     tileAlloyFurnace.currentRecipe = null;
                 }
@@ -155,10 +161,8 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
                 if((tileAlloyFurnace.storage.getEnergy() / tileAlloyFurnace.storage.getMaxEnergy()) > 0.5) {
                     tileAlloyFurnace.storage.addEnergy(-1, false);
                     tileAlloyFurnace.setIsActive(true);
-                    //Check if progress completed, and output slot is empty and less then a stack of the same item.
-                    if (++tileAlloyFurnace.currentProcessTime >= (100 / (tileAlloyFurnace.storage.getEnergy() / tileAlloyFurnace.storage.getMaxEnergy())) && ((tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem().getItem()
-                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount()) <= 64)
-                            || tileAlloyFurnace.outputInventory.isEmpty())) {
+                    //Check if progress completed
+                    if (++tileAlloyFurnace.currentProcessTime >= (100 / (tileAlloyFurnace.storage.getEnergy() / tileAlloyFurnace.storage.getMaxEnergy()))) {
                         tileAlloyFurnace.currentProcessTime = 0;
                         if (!tileAlloyFurnace.outputInventory.isEmpty()) {
                             tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount());
