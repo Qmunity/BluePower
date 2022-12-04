@@ -21,6 +21,7 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPRecipeSerializer;
+import com.bluepowermod.init.BPRecipeTypes;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -44,7 +45,6 @@ import java.util.*;
 public class AlloyFurnaceRegistry {
 
     private static AlloyFurnaceRegistry INSTANCE = new AlloyFurnaceRegistry();
-    public static final RecipeType<IAlloyFurnaceRecipe> ALLOYFURNACE_RECIPE = RecipeType.register("bluepower:alloy_smelting");
 
     private Map<ItemStack, ItemStack> moltenDownMap = new HashMap<ItemStack, ItemStack>();
     public List<Item> blacklist = new ArrayList<>();
@@ -149,17 +149,17 @@ public class AlloyFurnaceRegistry {
 
         @Override
         public ItemStack getToastSymbol() {
-            return new ItemStack(BPBlocks.alloyfurnace);
+            return new ItemStack(BPBlocks.alloyfurnace.get());
         }
 
         @Override
         public RecipeSerializer<?> getSerializer() {
-            return BPRecipeSerializer.ALLOYSMELTING;
+            return BPRecipeSerializer.ALLOYSMELTING.get();
         }
 
         @Override
         public RecipeType<?> getType() {
-            return ALLOYFURNACE_RECIPE;
+            return BPRecipeTypes.ALLOY_SMELTING.get();
         }
 
         @Override
@@ -223,7 +223,7 @@ public class AlloyFurnaceRegistry {
         }
     }
 
-    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<IAlloyFurnaceRecipe> {
+    public static class Serializer implements RecipeSerializer<IAlloyFurnaceRecipe> {
 
         @Override
         public IAlloyFurnaceRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

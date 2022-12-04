@@ -49,7 +49,7 @@ public class ContainerSortingMachine extends AbstractContainerMenu {
     public final int[] fuzzySettings = new int[8];
 
     public ContainerSortingMachine(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.SORTING_MACHINE, windowId);
+        super(BPMenuType.SORTING_MACHINE.get(), windowId);
         this.inventory = inventory;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 8; j++) {

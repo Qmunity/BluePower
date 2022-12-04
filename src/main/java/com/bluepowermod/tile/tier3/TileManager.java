@@ -10,6 +10,7 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,7 +38,7 @@ public class TileManager extends TileMachineBase implements WorldlyContainer, IR
     private int rejectTicker = -1;
 
     public TileManager(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.MANAGER, pos, state);
+        super(BPBlockEntityType.MANAGER.get(), pos, state);
     }
 
     private int acceptedItems(ItemStack item) {

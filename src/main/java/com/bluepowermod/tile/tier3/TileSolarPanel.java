@@ -11,7 +11,7 @@ import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.helper.EnergyHelper;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -39,7 +39,7 @@ public class TileSolarPanel extends TileMachineBase  {
 	private LazyOptional<IPowerBase> blutricityCap;
 
 	public TileSolarPanel(BlockPos pos, BlockState state) {
-		super(BPBlockEntityType.SOLAR_PANEL, pos, state);
+		super(BPBlockEntityType.SOLAR_PANEL.get(), pos, state);
 	}
 
 	@Nonnull

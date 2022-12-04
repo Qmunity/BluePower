@@ -4,7 +4,7 @@ import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.block.machine.BlockAlloyWire;
 import com.bluepowermod.client.render.IBPColoredBlock;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
@@ -15,8 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -36,7 +35,7 @@ public class TileWire extends TileBase {
     public static final ModelProperty<Boolean> LIGHT_INFO = new ModelProperty<>();
 
     public TileWire(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.WIRE, pos, state);
+        super(BPBlockEntityType.WIRE.get(), pos, state);
     }
 
     public TileWire(BlockEntityType type, BlockPos pos, BlockState state) {
@@ -46,13 +45,13 @@ public class TileWire extends TileBase {
 
     @Nonnull
     @OnlyIn(Dist.CLIENT)
-    public IModelData getModelData(BlockState state) {
+    public ModelData getModelData(BlockState state) {
 
             //Add Color and Light Data
             Pair<Integer, Integer> colorData = Pair.of(((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, -1), ((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, 2));
             Boolean lightData = state.getValue(BlockAlloyWire.POWERED);
 
-            return new ModelDataMap.Builder().withInitial(COLOR_INFO, colorData).withInitial(LIGHT_INFO, lightData).build();
+            return ModelData.builder().with(COLOR_INFO, colorData).with(LIGHT_INFO, lightData).build();
 
     }
 

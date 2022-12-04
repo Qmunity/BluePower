@@ -29,11 +29,11 @@ public class GuiContainerBaseBP<T extends AbstractContainerMenu> extends GuiCont
         }
 
         //TODO: Widgets currently conflicting with progress GUI
-        if(container.getType() != BPMenuType.ALLOY_FURNACE
-                && container.getType() != BPMenuType.BLULECTRIC_ALLOY_FURNACE
-                && container.getType() != BPMenuType.BLULECTRIC_FURNACE
-                && container.getType() != BPMenuType.CANVAS_BAG
-                && container.getType() != BPMenuType.SEEDBAG) {
+        if(container.getType() != BPMenuType.ALLOY_FURNACE.get()
+                && container.getType() != BPMenuType.BLULECTRIC_ALLOY_FURNACE.get()
+                && container.getType() != BPMenuType.BLULECTRIC_FURNACE.get()
+                && container.getType() != BPMenuType.CANVAS_BAG.get()
+                && container.getType() != BPMenuType.SEEDBAG.get()) {
             String unlocalizedInfo = title.getString() + ".info";
             addAnimatedStat("gui.bluepower:tab.info", Refs.MODID + ":textures/gui/widgets/gui_info.png", 0xFF8888FF, isInfoStatLeftSided()).setText(
                     unlocalizedInfo);

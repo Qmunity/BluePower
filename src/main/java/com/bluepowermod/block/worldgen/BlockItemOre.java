@@ -18,9 +18,9 @@
 package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.block.BlockBase;
-import com.bluepowermod.reference.Refs;
 import net.minecraft.core.BlockPos;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.SoundType;
@@ -31,14 +31,13 @@ public class BlockItemOre extends BlockBase {
 
     private final UniformInt xpRange = UniformInt.of(3, 7);
 
-    public BlockItemOre(String type) {
+    public BlockItemOre() {
         super(Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.STONE));
-        this.setRegistryName(Refs.MODID + ":" + type);
     }
 
     @Override
-    public int getExpDrop(BlockState state, LevelReader world, BlockPos pos, int fortune, int silktouch) {
-        return silktouch == 0 ? 1 + this.xpRange.sample(RANDOM) : 0;
+    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
+        return silkTouchLevel == 0 ? 1 + this.xpRange.sample(randomSource) : 0;
     }
 
 }

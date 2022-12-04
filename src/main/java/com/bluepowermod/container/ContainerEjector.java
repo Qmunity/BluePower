@@ -35,7 +35,7 @@ public class ContainerEjector extends AbstractContainerMenu {
     private final Container ejector;
 
     public ContainerEjector(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.EJECTOR, windowId);
+        super(BPMenuType.EJECTOR.get(), windowId);
         this.ejector = inventory;
 
         for (int i = 0; i < 3; ++i) {

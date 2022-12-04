@@ -23,7 +23,6 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.container.ContainerCanvasBag;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -47,14 +46,14 @@ public class ItemCanvasBag extends ItemColorableOverlay implements MenuProvider{
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
         if (!world.isClientSide) {
-            NetworkHooks.openGui((ServerPlayer) player, this);
+            NetworkHooks.openScreen((ServerPlayer) player, this);
         }
         return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
     }
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.CANVASBAG_NAME);
+        return Component.literal(Refs.CANVASBAG_NAME);
     }
 
     @Nullable

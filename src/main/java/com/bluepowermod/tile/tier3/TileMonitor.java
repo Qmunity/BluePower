@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,7 +36,7 @@ public class TileMonitor extends TileBase implements IRedBusWindow  {
 	public static float[] screenColor = new float[]{1.0F, 0.8F, 0.0F};
 	
 	public TileMonitor(BlockPos pos, BlockState state) {
-		super(BPBlockEntityType.MONITOR, pos, state);
+		super(BPBlockEntityType.MONITOR.get(), pos, state);
 		blankMemory();
 		testMemory();
 	}

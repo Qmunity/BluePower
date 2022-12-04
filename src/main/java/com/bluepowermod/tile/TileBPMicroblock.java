@@ -8,6 +8,7 @@
 
 package com.bluepowermod.tile;
 
+import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -17,8 +18,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -36,13 +36,13 @@ public class TileBPMicroblock extends BlockEntity {
     private Integer rotation = 0;
 
     public TileBPMicroblock(BlockPos pos, BlockState state){
-        super(BPBlockEntityType.MICROBLOCK, pos, state);
+        super(BPBlockEntityType.MICROBLOCK.get(), pos, state);
     }
 
     @Nonnull
     @Override
-    public IModelData getModelData() {
-        return new ModelDataMap.Builder().withInitial(PROPERTY_INFO, new ImmutablePair<>(block, rotation)).build();
+    public ModelData getModelData() {
+        return ModelData.builder().with(PROPERTY_INFO, new ImmutablePair<>(block, rotation)).build();
     }
 
     public void setBlock(Block block) {
@@ -66,7 +66,7 @@ public class TileBPMicroblock extends BlockEntity {
     @Override
     protected void saveAdditional(CompoundTag compound) {
         super.saveAdditional(compound);
-        compound.putString("block", block.getRegistryName().toString());
+        compound.putString("block", ForgeRegistries.BLOCKS.getKey(block).toString());
         compound.putInt("rotation", rotation);
     }
 

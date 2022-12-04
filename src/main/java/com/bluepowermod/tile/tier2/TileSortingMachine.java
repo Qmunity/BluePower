@@ -13,14 +13,13 @@ import com.bluepowermod.container.ContainerSortingMachine;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
@@ -59,14 +58,14 @@ public class TileSortingMachine extends TileMachineBase implements WorldlyContai
     // tick.
 
     public TileSortingMachine(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.SORTING_MACHINE, pos, state);
+        super(BPBlockEntityType.SORTING_MACHINE.get(), pos, state);
         for (int i = 0; i < colors.length; i++)
             colors[i] = TubeColor.NONE;
     }
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.SORTING_MACHINE_NAME);
+        return Component.literal(Refs.SORTING_MACHINE_NAME);
     }
 
     @Nullable

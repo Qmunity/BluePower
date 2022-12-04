@@ -16,7 +16,7 @@ import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.block.worldgen.BlockBPGlass;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -24,8 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.core.Direction;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,7 +42,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class Renderers {
 
     @SubscribeEvent
-    public static void registerModels(ModelRegistryEvent evt){
+    public static void registerModels(ModelEvent.RegisterAdditional evt){
         for (Block block : BPBlocks.blockList) {
             if ((block instanceof ICustomModelBlock)) {
                 registerBakedModel(block);
@@ -52,39 +51,38 @@ public class Renderers {
     }
 
     @SubscribeEvent
-    public void onModelBakeEvent(ModelBakeEvent event) {
+    public void onModelBakeEvent(ModelEvent.BakingCompleted event) {
 
         //Register Multipart Model
         BPMultipartModel multipartModel = new BPMultipartModel();
-        event.getModelRegistry().put(new ModelResourceLocation("bluepower:multipart","waterlogged=false"), multipartModel);
-        event.getModelRegistry().put(new ModelResourceLocation("bluepower:multipart","waterlogged=true"), multipartModel);
+        event.getModels().put(new ModelResourceLocation("bluepower:multipart","waterlogged=false"), multipartModel);
+        event.getModels().put(new ModelResourceLocation("bluepower:multipart","waterlogged=true"), multipartModel);
 
         BPMicroblockModel microblockModel = new BPMicroblockModel();
 
         for(Direction dir : Direction.values()) {
             //Register Microblock Models
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "face=" + dir.getName()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "face=" + dir.getName()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "face=" + dir.getName()), event.getModelRegistry().get(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
+            event.getModels().put(new ModelResourceLocation("bluepower:half_block", "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=true")));
+            event.getModels().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
+            event.getModels().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
+            event.getModels().put(new ModelResourceLocation("bluepower:panel", "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=true")));
+            event.getModels().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
+            event.getModels().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
+            event.getModels().put(new ModelResourceLocation("bluepower:cover", "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=true")));
+            event.getModels().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
+            event.getModels().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
         }
 
-        event.getModelRegistry().put(new ModelResourceLocation("bluepower:half_block", "inventory"), microblockModel);
-        event.getModelRegistry().put(new ModelResourceLocation("bluepower:panel", "inventory"), microblockModel);
-        event.getModelRegistry().put(new ModelResourceLocation("bluepower:cover", "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation("bluepower:half_block", "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation("bluepower:panel", "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation("bluepower:cover", "inventory"), microblockModel);
 
     }
 
     public static void init() {
 
-        BlockEntityRenderers.register(BPBlockEntityType.LAMP, context -> new RenderLamp());
-        BlockEntityRenderers.register(BPBlockEntityType.ENGINE, context -> new RenderEngine());
-
+        BlockEntityRenderers.register(BPBlockEntityType.LAMP.get(), context -> new RenderLamp());
+        BlockEntityRenderers.register(BPBlockEntityType.ENGINE.get(), context -> new RenderEngine());
 
         for (RegistryObject<Item> item : BPItems.ITEMS.getEntries()) {
             if (item.get() instanceof IBPColoredItem) {
@@ -102,13 +100,15 @@ public class Renderers {
                 ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent());
         }
 
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.indigo_flower, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.flax_crop, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.cracked_basalt_lava, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.cracked_basalt_decorative, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.rubber_leaves, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.rubber_sapling, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BPBlocks.tube, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.blulectric_cable.get(), RenderType.translucent());
+
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.indigo_flower.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.flax_crop.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.cracked_basalt_lava.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.cracked_basalt_decorative.get(), RenderType.cutout());
+        //ItemBlockRenderTypes.setRenderLayer(BPBlocks.rubber_leaves.get(), RenderType.cutout());
+        //ItemBlockRenderTypes.setRenderLayer(BPBlocks.rubber_sapling.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BPBlocks.tube.get(), RenderType.cutout());
 
     }
 

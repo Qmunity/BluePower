@@ -9,7 +9,7 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileSortron;
 import net.minecraft.world.level.material.Material;
 
@@ -19,9 +19,7 @@ import net.minecraft.world.level.material.Material;
 public class BlockSortron extends BlockContainerBase {
     
     public BlockSortron() {
-    
-        super(Material.STONE, TileSortron.class, BPBlockEntityType.SORTRON);
-        setRegistryName(Refs.MODID, Refs.BLOCKSORTRON_NAME);
+        super(Material.STONE, TileSortron.class);
     }
 
 }

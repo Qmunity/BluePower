@@ -42,7 +42,6 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
         super(1,2F);
         this.type = type;
         this.registerDefaultState(super.defaultBlockState().setValue(POWERED, false));
-        setRegistryName(Refs.MODID + ":" + type + "_wire");
     }
 
     public BlockAlloyWire(String type, float width, float height) {

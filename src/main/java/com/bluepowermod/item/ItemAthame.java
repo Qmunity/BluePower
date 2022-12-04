@@ -22,8 +22,6 @@ import com.bluepowermod.helper.GemItemTier;
 import com.bluepowermod.helper.SilverItemTier;
 import com.bluepowermod.init.BPCreativeTabs;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -53,8 +51,8 @@ public class ItemAthame extends SwordItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(new TextComponent(MinecraftColor.PURPLE.getChatColor())
-                .append(new TranslatableComponent("item." + Refs.MODID + "." + Refs.ATHAME_NAME + ".info")) );
+        tooltip.add(Component.literal(MinecraftColor.PURPLE.getChatColor())
+                .append(Component.translatable("item." + Refs.MODID + "." + Refs.ATHAME_NAME + ".info")) );
     }
 
     public float getDamageDealt() {

@@ -25,8 +25,8 @@ public class BlockRejecting extends BlockContainerBase {
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public static final BooleanProperty REJECTING = BooleanProperty.create("rejecting");
 
-    public BlockRejecting(Material material, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
-        super(material, tileEntityClass, entityType);
+    public BlockRejecting(Material material, Class<? extends TileBase> tileEntityClass) {
+        super(material, tileEntityClass);
         registerDefaultState(defaultBlockState().setValue(ACTIVE, false).setValue(POWERED, false).setValue(REJECTING, false));
     }
 

@@ -146,7 +146,7 @@ public class BPConfig {
                     generateVolcano = builder.comment("Generate Volcano").translation("bluepower.config.volcano.generate").define("generateVolcano", true);
                     volcanoSpawnChance = builder.comment("Volcano Spawn Chance").translation("bluepower.config.volcano_spawn_chance").define("volcanoSpawnChance", 0.005);
                     generateTungstenInVolcano = builder.comment("Possible to generate Tungsten in the Volcano").translation("bluepower.config.volcano.tungsten.generate").define("generateTungstenInVolcano", true);
-                    volcanoActiveToInactiveRatio = builder.comment("Volcano Active To Inactive Ratio").translation("bluepower.config.volcano_inactive_ratio").define("volcanoActiveToInactiveRatio", 0.5);
+                    volcanoActiveToInactiveRatio = builder.comment("Volcano Active To Inactive Ratio").translation("bluepower.config.volcano_inactive_ratio").define("volcanoActiveToInactiveRatio", 0.3);
                     volcanoBiomeCategoryWhitelist = builder.comment("Biomes that volcanoes should generate").translation("bluepower.config.volcano_biomecategory_whitelist").define("volcanoBiomeCategoryWhitelist", "taiga,extreme_hills,jungle,mesa,plains,savanna,icy,beach,forest,ocean,desert,river,swamp,mushroom");
                 builder.pop();
                 builder.push("Marble").comment("Marble related configs");

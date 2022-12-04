@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 // , @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = Dependencies.OPEN_COMPUTERS)
 public class TileSortron extends TileMachineBase {
     public TileSortron(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.SORTRON, pos, state);
+        super(BPBlockEntityType.SORTRON.get(), pos, state);
     }// implements IPeripheral/* , SimpleComponent */{
     //
     // private static final String NAME = "BluePower.Sortron";

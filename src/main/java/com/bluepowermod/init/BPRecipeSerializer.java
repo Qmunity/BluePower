@@ -22,38 +22,20 @@ import com.bluepowermod.recipe.AlloyFurnaceRecyclingRecipe;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.recipe.MicroblockRecipe;
 import com.bluepowermod.reference.Refs;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.*;
 
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
 /**
  * @author MoreThanHidden
  */
-@ObjectHolder(Refs.MODID)
 public class BPRecipeSerializer {
 
-    @ObjectHolder("alloy_smelting")
-    public static RecipeSerializer<IAlloyFurnaceRecipe> ALLOYSMELTING;
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Refs.MODID);
 
-    @ObjectHolder("alloy_recycling")
-    public static RecipeSerializer<IAlloyFurnaceRecipe> ALLOY_RECYCLING;
-
-    @ObjectHolder("micro_block")
-    public static RecipeSerializer<MicroblockRecipe> MICROBLOCK;
-
-    @Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class Registration {
-        @SubscribeEvent
-        public static void onRecipeSerializerRegistry(final RegistryEvent.Register<RecipeSerializer<?>> event) {
-            IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
-            registry.register(new AlloyFurnaceRegistry.Serializer().setRegistryName(Refs.MODID + ":alloy_smelting"));
-            registry.register(new AlloyFurnaceRecyclingRecipe.Serializer().setRegistryName(Refs.MODID + ":alloy_recycling"));
-            registry.register(new MicroblockRecipe.Serializer().setRegistryName(Refs.MODID + ":micro_block"));
-        }
-    }
+    public static RegistryObject<RecipeSerializer<IAlloyFurnaceRecipe>> ALLOYSMELTING = RECIPE_SERIALIZERS.register("alloy_smelting", AlloyFurnaceRegistry.Serializer::new);
+    public static RegistryObject<RecipeSerializer<AlloyFurnaceRecyclingRecipe>> ALLOY_RECYCLING = RECIPE_SERIALIZERS.register("alloy_recycling", AlloyFurnaceRecyclingRecipe.Serializer::new);
+    public static RegistryObject<RecipeSerializer<MicroblockRecipe>> MICROBLOCK = RECIPE_SERIALIZERS.register("micro_block", MicroblockRecipe.Serializer::new);
 
 }

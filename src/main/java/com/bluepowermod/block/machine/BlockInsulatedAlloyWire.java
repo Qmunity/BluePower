@@ -24,9 +24,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
 
     public BlockInsulatedAlloyWire(String type) {
         super(type, 2F , 2F);
-        setRegistryName(Refs.MODID + ":" + "insulatedwire." + type );
     }
-
 
     @Nullable
     @Override

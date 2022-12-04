@@ -15,14 +15,13 @@ import com.bluepowermod.block.power.BlockBlulectricFurnace;
 import com.bluepowermod.container.ContainerBlulectricFurnace;
 import com.bluepowermod.helper.EnergyHelper;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -59,7 +58,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
 
 
     public TileBlulectricFurnace(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.BLULECTRIC_FURNACE, pos, state);
+        super(BPBlockEntityType.BLULECTRIC_FURNACE.get(), pos, state);
         this.inventory = ItemStack.EMPTY;
         this.outputInventory = ItemStack.EMPTY;
     }
@@ -78,6 +77,12 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
             if (tileFurnace.updatingRecipe) {
                 if(level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, tileFurnace, level).isPresent()) {
                     tileFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, tileFurnace, level).get();
+                    //Check output slot is empty and less then a stack of the same item.
+                    if(!(tileFurnace.outputInventory.getItem() == tileFurnace.currentRecipe.getResultItem().getItem()
+                            && (tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(tileFurnace).getCount()) <= tileFurnace.outputInventory.getMaxStackSize())
+                            && !tileFurnace.outputInventory.isEmpty()){
+                        tileFurnace.currentRecipe = null;
+                    }
                 }else{
                     tileFurnace.currentRecipe = null;
                 }
@@ -88,9 +93,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
                     tileFurnace.storage.addEnergy(-1, false);
                     tileFurnace.setIsActive(true);
                     //Check if progress completed, and output slot is empty and less then a stack of the same item.
-                    if (++tileFurnace.currentProcessTime >= (100 / (tileFurnace.storage.getEnergy() / tileFurnace.storage.getMaxEnergy())) && ((tileFurnace.outputInventory.getItem() == tileFurnace.currentRecipe.getResultItem().getItem()
-                            && (tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(tileFurnace).getCount()) <= 64)
-                            || tileFurnace.outputInventory.isEmpty())) {
+                    if (++tileFurnace.currentProcessTime >= (100 / (tileFurnace.storage.getEnergy() / tileFurnace.storage.getMaxEnergy()))) {
                         tileFurnace.currentProcessTime = 0;
                         if (!tileFurnace.outputInventory.isEmpty()) {
                             tileFurnace.outputInventory.setCount(tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(tileFurnace).getCount());
@@ -358,7 +361,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.BLULECTRICFURNACE_NAME);
+        return Component.literal(Refs.BLULECTRICFURNACE_NAME);
     }
 
     @Nullable

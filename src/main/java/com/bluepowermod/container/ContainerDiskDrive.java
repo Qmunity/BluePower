@@ -13,18 +13,24 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 
 public class ContainerDiskDrive extends AbstractContainerMenu {
 
 	private final Container inventory;
 
 	public ContainerDiskDrive(int windowId, Inventory invPlayer, Container inventory) {
-		super(BPMenuType.DISK_DRIVE, windowId);
+		super(BPMenuType.DISK_DRIVE.get(), windowId);
 		this.inventory = inventory;
 	}
 
 	public ContainerDiskDrive( int id, Inventory player )    {
 		this( id, player, new SimpleContainer( 1));
+	}
+
+	@Override
+	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+		return null;
 	}
 
 	@Override

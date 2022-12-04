@@ -18,7 +18,7 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.block.machine.BlockIgniter;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.core.BlockPos;
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
@@ -34,7 +34,7 @@ import static com.bluepowermod.block.machine.BlockIgniter.FACING;
 public class TileIgniter extends TileBase implements IEjectAnimator {
 
     public TileIgniter(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.IGNITER, pos, state);
+        super(BPBlockEntityType.IGNITER.get(), pos, state);
     }
 
     @Override

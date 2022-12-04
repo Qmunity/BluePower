@@ -18,12 +18,11 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerHorizontalFacingBase;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -33,13 +32,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
 
     public BlockAlloyFurnace() {
-        super(Material.STONE, TileAlloyFurnace.class, BPBlockEntityType.ALLOY_FURNACE);
-        setRegistryName(Refs.MODID, Refs.ALLOYFURNACE_NAME);
+        super(Material.STONE, TileAlloyFurnace.class);
     }
 
 
@@ -50,7 +47,7 @@ public class BlockAlloyFurnace extends BlockContainerHorizontalFacingBase {
     }
 
     @Override
-    public void tick(BlockState stateIn, ServerLevel world, BlockPos pos, Random rnd) {
+    public void tick(BlockState stateIn, ServerLevel world, BlockPos pos, RandomSource rnd) {
         if (stateIn.getValue(ACTIVE)) {
             int l = stateIn.getValue(FACING).ordinal();
             float f = pos.getX() + 0.5F;

@@ -35,7 +35,7 @@ public class ContainerRelay extends AbstractContainerMenu {
     private final Container relay;
 
     public ContainerRelay(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.RELAY, windowId);
+        super(BPMenuType.RELAY.get(), windowId);
         this.relay = inventory;
 
         for (int i = 0; i < 3; ++i) {

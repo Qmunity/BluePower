@@ -13,7 +13,7 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.helper.EnergyHelper;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -40,7 +40,7 @@ public class TileBattery extends TileMachineBase {
     private LazyOptional<IPowerBase> blutricityCap;
 
     public TileBattery(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.BATTERY, pos, state);
+        super(BPBlockEntityType.BATTERY.get(), pos, state);
     }
 
     public static void tickBattery(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
@@ -100,12 +100,6 @@ public class TileBattery extends TileMachineBase {
         super.writeToPacketNBT(tCompound);
             Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
             tCompound.put("energy", nbtstorage);
-    }
-
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        super.onDataPacket(net, pkt);
-        handleUpdateTag(pkt.getTag());
     }
 
 }

@@ -6,7 +6,7 @@ import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.item.ItemSaw;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -20,9 +20,6 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistryEntry;
-
-import javax.annotation.Nullable;
 
 public class MicroblockRecipe extends CustomRecipe {
 
@@ -45,7 +42,7 @@ public class MicroblockRecipe extends CustomRecipe {
                     }catch (NullPointerException ignored){
                         //Shulker Boxes try to query the Tile Entity
                     }
-                    if (shape == Shapes.block() || Block.byItem(stack.getItem()) == BPBlocks.half_block || Block.byItem(stack.getItem()) == BPBlocks.panel) {
+                    if (shape == Shapes.block() || Block.byItem(stack.getItem()) == BPBlocks.half_block.get() || Block.byItem(stack.getItem()) == BPBlocks.panel.get()) {
                         blockCount++;
                     }
                 } else if (stack.getItem() instanceof ItemSaw) {
@@ -65,32 +62,32 @@ public class MicroblockRecipe extends CustomRecipe {
             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem) {
                 if (Block.byItem(stack.getItem()).defaultBlockState().getShape(null, null) == Shapes.block()){
                     CompoundTag nbt = new CompoundTag();
-                    nbt.putString("block", stack.getItem().getRegistryName().toString());
-                    ItemStack outStack = new ItemStack(BPBlocks.half_block, 2);
+                    nbt.putString("block", ForgeRegistries.ITEMS.getKey(stack.getItem()).toString());
+                    ItemStack outStack = new ItemStack(BPBlocks.half_block.get(), 2);
                     outStack.setTag(nbt);
-                    outStack.setHoverName(new TranslatableComponent(stack.getItem().getDescriptionId())
+                    outStack.setHoverName(Component.translatable(stack.getItem().getDescriptionId())
                             .append(" ")
-                            .append(new TranslatableComponent(BPBlocks.half_block.getDescriptionId())));
+                            .append(Component.translatable(BPBlocks.half_block.get().getDescriptionId())));
                     return outStack;
-                }else if (Block.byItem(stack.getItem()) == BPBlocks.half_block){
+                }else if (Block.byItem(stack.getItem()) == BPBlocks.half_block.get()){
                     CompoundTag nbt = new CompoundTag();
                     nbt.putString("block", stack.getTag().getString("block"));
-                    ItemStack outStack = new ItemStack(BPBlocks.panel, 2);
+                    ItemStack outStack = new ItemStack(BPBlocks.panel.get(), 2);
                     outStack.setTag(nbt);
                     Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
-                    outStack.setHoverName(new TranslatableComponent(block.getDescriptionId())
+                    outStack.setHoverName(Component.translatable(block.getDescriptionId())
                             .append(" ")
-                            .append(new TranslatableComponent(BPBlocks.panel.getDescriptionId())));
+                            .append(Component.translatable(BPBlocks.panel.get().getDescriptionId())));
                     return outStack;
-                }else if (Block.byItem(stack.getItem()) == BPBlocks.panel){
+                }else if (Block.byItem(stack.getItem()) == BPBlocks.panel.get()){
                     CompoundTag nbt = new CompoundTag();
                     nbt.putString("block", stack.getTag().getString("block"));
-                    ItemStack outStack = new ItemStack(BPBlocks.cover, 2);
+                    ItemStack outStack = new ItemStack(BPBlocks.cover.get(), 2);
                     outStack.setTag(nbt);
                     Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
-                    outStack.setHoverName(new TranslatableComponent(block.getDescriptionId())
+                    outStack.setHoverName(Component.translatable(block.getDescriptionId())
                             .append(" ")
-                            .append(new TranslatableComponent(BPBlocks.cover.getDescriptionId())));
+                            .append(Component.translatable(BPBlocks.cover.get().getDescriptionId())));
                     return outStack;
                 }
             }
@@ -105,10 +102,10 @@ public class MicroblockRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return BPRecipeSerializer.MICROBLOCK;
+        return BPRecipeSerializer.MICROBLOCK.get();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<MicroblockRecipe> {
+    public static class Serializer implements RecipeSerializer<MicroblockRecipe> {
         @Override
         public MicroblockRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new MicroblockRecipe(recipeId);

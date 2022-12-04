@@ -14,7 +14,7 @@ import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
@@ -70,7 +70,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
         if (textFieldID == 1) {
             nameTextField = text;
             if (!copyInventory.getItem(0).isEmpty()) {
-                copyInventory.getItem(0).setHoverName(new TextComponent(nameTextField));
+                copyInventory.getItem(0).setHoverName(Component.literal(nameTextField));
             }
         } else {
             super.setText(textFieldID, text);

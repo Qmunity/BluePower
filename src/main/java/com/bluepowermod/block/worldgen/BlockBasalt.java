@@ -33,8 +33,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
  * Created by Quetzi on 03/09/14.
  */
 public class BlockBasalt extends BlockStoneOre {
-    public BlockBasalt(String name) {
-        super(name);
+    public BlockBasalt() {
     }
 
     @Deprecated

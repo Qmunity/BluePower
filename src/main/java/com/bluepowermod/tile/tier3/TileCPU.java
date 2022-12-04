@@ -8,7 +8,7 @@
 package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -69,7 +69,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
     private int BRKaddress;
 
     public TileCPU(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.CPU, pos, state);
+        super(BPBlockEntityType.CPU.get(), pos, state);
         //TODO: make memory a config option
         this.memory = new byte[8192];
         powerOnReset();

@@ -24,7 +24,6 @@ import com.bluepowermod.reference.Refs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -109,7 +108,7 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
         if (!world.isClientSide && player.isCrouching()) {
-            NetworkHooks.openGui((ServerPlayer) player, this);
+            NetworkHooks.openScreen((ServerPlayer) player, this);
         }
         return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
     }
@@ -169,7 +168,7 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.SEEDBAG_NAME);
+        return Component.literal(Refs.SEEDBAG_NAME);
     }
 
     @Nullable

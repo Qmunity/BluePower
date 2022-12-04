@@ -9,8 +9,7 @@
 package com.bluepowermod.block.power;
 
 import com.bluepowermod.block.BlockContainerHorizontalFacingBase;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileThermopile;
 import net.minecraft.world.level.material.Material;
 
@@ -21,8 +20,7 @@ import net.minecraft.world.level.material.Material;
 public class BlockThermopile extends BlockContainerHorizontalFacingBase {
 
     public BlockThermopile() {
-        super(Material.METAL, TileThermopile.class, BPBlockEntityType.THERMOPILE);
-        setRegistryName(Refs.MODID, Refs.THERMOPILE_NAME);
+        super(Material.METAL, TileThermopile.class);
     }
 
 }

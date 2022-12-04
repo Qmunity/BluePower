@@ -19,11 +19,10 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.container.ContainerEjector;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -42,7 +41,7 @@ public class TileEjector extends TileMachineBase implements Container, MenuProvi
     private final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
 
     public TileEjector(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.EJECTOR, pos, state);
+        super(BPBlockEntityType.EJECTOR.get(), pos, state);
     }
 
     @Override
@@ -231,7 +230,7 @@ public class TileEjector extends TileMachineBase implements Container, MenuProvi
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.EJECTOR_NAME);
+        return Component.literal(Refs.EJECTOR_NAME);
     }
 
     @Nullable

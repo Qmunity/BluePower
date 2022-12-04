@@ -9,9 +9,11 @@
 package com.bluepowermod.tile;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
+import net.minecraft.client.resources.model.MultiPartBakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -29,10 +31,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.ModelDataManager;
 import net.minecraftforge.client.model.data.ModelProperty;
+import net.minecraftforge.client.model.data.MultipartModelData;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -46,27 +48,27 @@ import java.util.stream.Collectors;
  */
 public class TileBPMultipart extends BlockEntity {
 
-    public static final ModelProperty<Map<BlockState, IModelData>> STATE_INFO = new ModelProperty<>();
+    public static final ModelProperty<Map<BlockState, ModelData>> STATE_INFO = new ModelProperty<>();
     private Map<BlockState, BlockEntity> stateMap = new HashMap<>();
 
     public TileBPMultipart(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.MULTIPART, pos, state);
+        super(BPBlockEntityType.MULTIPART.get(), pos, state);
     }
 
     @Nonnull
     @Override
-    public IModelData getModelData() {
+    public ModelData getModelData() {
         //Get Model Data for States with Tile Entities in the Multipart
-        Map<BlockState, IModelData> modelDataMap = stateMap.keySet().stream().filter(BlockState::hasBlockEntity)
+        Map<BlockState, ModelData> modelDataMap = stateMap.keySet().stream().filter(BlockState::hasBlockEntity)
                 .collect(Collectors.toMap(s -> s, this::getModelData));
 
         //Add States without Tile Entities
         stateMap.keySet().stream().filter(s -> !s.hasBlockEntity()).forEach(s -> modelDataMap.put(s, null));
 
-        return new ModelDataMap.Builder().withInitial(STATE_INFO, modelDataMap).build();
+        return ModelData.builder().with(STATE_INFO, modelDataMap).build();
     }
 
-    private IModelData getModelData(BlockState state) {
+    private ModelData getModelData(BlockState state) {
         //Get Model Data for specific state
         BlockEntity tileEntity = stateMap.get(state);
         if(tileEntity != null) {
@@ -74,7 +76,7 @@ public class TileBPMultipart extends BlockEntity {
                 return ((TileWire) tileEntity).getModelData(state);
             return tileEntity.getModelData();
         }
-        return EmptyModelData.INSTANCE;
+        return ModelData.EMPTY;
     }
 
     public void addState(BlockState state) {

@@ -11,8 +11,8 @@ import java.awt.*;
 
 public class BlockLampRGBSurface extends BlockLampSurface {
 
-    public BlockLampRGBSurface(String name, boolean isInverted, VoxelShape size) {
-        super(name, isInverted, MinecraftColor.NONE, size);
+    public BlockLampRGBSurface(boolean isInverted, VoxelShape size) {
+        super( isInverted, MinecraftColor.NONE, size);
     }
 
     @Override

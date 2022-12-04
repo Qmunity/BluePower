@@ -10,7 +10,6 @@ package com.bluepowermod.block;
 
 import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.core.BlockPos;
@@ -57,7 +56,6 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
 
     public BlockBPMultipart() {
         super(Block.Properties.of(Material.STONE).noOcclusion().strength(2));
-        setRegistryName(Refs.MODID + ":multipart");
         BPBlocks.blockList.add(this);
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
     }

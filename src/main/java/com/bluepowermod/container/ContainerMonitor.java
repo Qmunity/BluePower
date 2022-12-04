@@ -16,18 +16,24 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import com.bluepowermod.tile.tier3.TileMonitor;
+import net.minecraft.world.item.ItemStack;
 
 public class ContainerMonitor extends AbstractContainerMenu {
 
 	private final Container inventory;
 
 	public ContainerMonitor(int windowId, Inventory invPlayer, Container inventory) {
-		super(BPMenuType.MONITOR, windowId);
+		super(BPMenuType.MONITOR.get(), windowId);
 		this.inventory = inventory;
 	}
 
 	public ContainerMonitor( int id, Inventory player )    {
 		this( id, player, new SimpleContainer( 0 ));
+	}
+
+	@Override
+	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+		return null;
 	}
 
 	@Override

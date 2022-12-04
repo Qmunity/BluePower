@@ -31,7 +31,7 @@ public class ContainerCircuitTable extends AbstractContainerMenu {
     private int scrollState = -1;
 
     public ContainerCircuitTable(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.CIRCUIT_TABLE, windowId);
+        super(BPMenuType.CIRCUIT_TABLE.get(), windowId);
         this.circuitTable = inventory;
         craftMatrix = new CraftingContainer(this, 5, 5);
         for (int i = 0; i < 3; ++i) {

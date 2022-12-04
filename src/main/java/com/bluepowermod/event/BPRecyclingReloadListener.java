@@ -21,6 +21,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
@@ -44,6 +45,11 @@ public class BPRecyclingReloadListener extends SimplePreparableReloadListener<Vo
      * Generates the Dynamic Recycling recipes on a reload.
      */
     public static void onResourceManagerReload(List<CraftingRecipe> recipeList) {
+        //Make sure this is running on the logical server
+        if(Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER) {
+            return;
+        }
+
         AlloyFurnaceRegistry.getInstance().blacklist.clear();
         String[] blacklistStr = BPConfig.CONFIG.alloyFurnaceBlacklist.get().split(",");
         for (String configString : blacklistStr) {

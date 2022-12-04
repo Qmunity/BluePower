@@ -39,7 +39,7 @@ public class ContainerSeedBag extends AbstractContainerMenu {
     private InteractionHand activeHand;
 
     public ContainerSeedBag(int windowId, Inventory playerInventory) {
-        super(BPMenuType.SEEDBAG, windowId);
+        super(BPMenuType.SEEDBAG.get(), windowId);
         seedBagInvHandler = new ItemStackHandler(9);
         
         //Get Active hand

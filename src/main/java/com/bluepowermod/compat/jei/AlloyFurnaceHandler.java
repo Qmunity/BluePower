@@ -7,57 +7,53 @@
  */
 package com.bluepowermod.compat.jei;
 
+import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.reference.Refs;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import net.minecraft.world.item.crafting.Ingredient;
 
 /**
   @author MoreThanHidden
 */
 
-public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnaceRecipe> {
+public class AlloyFurnaceHandler implements IRecipeCategory<IAlloyFurnaceRecipe> {
 
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawableAnimated progress;
+    public static final RecipeType<IAlloyFurnaceRecipe> RECIPE_TYPE = new RecipeType<>(new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME), IAlloyFurnaceRecipe.class);
 
     public AlloyFurnaceHandler(IGuiHelper helper) {
       background = helper.createDrawable(new ResourceLocation(Refs.MODID + ":textures/gui/alloy_furnace.png"),8,13, 147, 60);
-      icon = helper.createDrawableIngredient(new ItemStack(BPBlocks.alloyfurnace));
+      icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BPBlocks.alloyfurnace.get()));
       progress = helper.drawableBuilder(new ResourceLocation(Refs.MODID + ":textures/gui/alloy_furnace.png"), 178, 14, 24, 17).buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME);
-    }
-
-    @Override
-    public Class<? extends StandardAlloyFurnaceRecipe> getRecipeClass() {
-        return StandardAlloyFurnaceRecipe.class;
+    public RecipeType<IAlloyFurnaceRecipe> getRecipeType() {
+        return RECIPE_TYPE;
     }
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent("block.bluepower." + Refs.ALLOYFURNACE_NAME);
+        return Component.translatable("block.bluepower." + Refs.ALLOYFURNACE_NAME);
     }
 
     @Override
@@ -66,7 +62,7 @@ public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnace
     }
 
     @Override
-    public void draw(StandardAlloyFurnaceRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
+    public void draw(IAlloyFurnaceRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
         progress.draw(matrixStack, 95, 22);
     }
 
@@ -76,35 +72,18 @@ public class AlloyFurnaceHandler implements IRecipeCategory<StandardAlloyFurnace
     }
 
     @Override
-    public void setIngredients(StandardAlloyFurnaceRecipe recipe, IIngredients ingredients) {
-        List<List<ItemStack>> items = recipe.getRequiredItems().stream().map(ingredient -> Arrays.asList(ingredient.getItems())).collect(Collectors.toList());
-        for (int i = 0; i < items.size(); i++) {
-            for(ItemStack itemStack : items.get(i)){
-                itemStack.setCount(recipe.getRequiredCount().get(i));
-            }
-        }
-        ingredients.setInputLists(VanillaTypes.ITEM, items);
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, StandardAlloyFurnaceRecipe recipe, IIngredients ingredients) {
-        IGuiItemStackGroup guiItemStackGroup = iRecipeLayout.getItemStacks();
-        guiItemStackGroup.init(0, false, 12, 21);
-        guiItemStackGroup.set(0, new ItemStack(Items.COAL));
-        guiItemStackGroup.init(1, false,125, 21);
-        guiItemStackGroup.set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+    public void setRecipe(IRecipeLayoutBuilder builder, IAlloyFurnaceRecipe recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 126, 22).addItemStack(recipe.getResultItem());
+        int count = 0;
         for(int i = 0; i < 3; i++ ) {
             for(int j = 0; j < 3; j++ ) {
-                guiItemStackGroup.init(i * 3 + j + 2, true, 38 + j * 18, 3 + i * 18);
+                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, 39 + j * 18, 4 + i * 18);
+                if(recipe.getRequiredItems() != null && count < recipe.getRequiredItems().size()) {
+                    slot.addIngredients(recipe.getRequiredItems().get(count));
+                    count++;
+                }
             }
-        }
-        for(int i = 0; i < recipe.getRequiredItems().size(); i++){
-            List<ItemStack> itemStacks = ingredients.getInputs(VanillaTypes.ITEM).get(i);
-            for (ItemStack itemStack : itemStacks) {
-                itemStack.setCount(recipe.getRequiredCount().get(i));
-            }
-            guiItemStackGroup.set(i + 2, itemStacks);
         }
     }
+
 }

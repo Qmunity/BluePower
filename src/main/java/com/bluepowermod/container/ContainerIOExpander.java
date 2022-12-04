@@ -15,18 +15,24 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import com.bluepowermod.tile.tier3.TileIOExpander;
+import net.minecraft.world.item.ItemStack;
 
 public class ContainerIOExpander extends AbstractContainerMenu {
 
 	private final Container inventory;
 
 	public ContainerIOExpander(int windowId, Inventory invPlayer, Container inventory) {
-		super(BPMenuType.IO_EXPANDER, windowId);
+		super(BPMenuType.IO_EXPANDER.get(), windowId);
 		this.inventory = inventory;
 	}
 
 	public ContainerIOExpander( int id, Inventory player )    {
 		this( id, player, new SimpleContainer( 1));
+	}
+
+	@Override
+	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+		return null;
 	}
 
 	@Override

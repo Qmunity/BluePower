@@ -46,7 +46,7 @@ public class ContainerManager extends AbstractContainerMenu {
     public int fuzzySetting = -0;
 
     public ContainerManager(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.MANAGER, windowId);
+        super(BPMenuType.MANAGER.get(), windowId);
         manager = inventory;
 
         for (int i = 0; i < 4; ++i) {

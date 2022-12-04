@@ -32,7 +32,7 @@ public class ContainerKinect extends AbstractContainerMenu {
     private final Container kinect;
 
     public ContainerKinect(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.KINETIC_GENERATOR, windowId);
+        super(BPMenuType.KINETIC_GENERATOR.get(), windowId);
         kinect = inventory;
         
         //Inventory for Turbines

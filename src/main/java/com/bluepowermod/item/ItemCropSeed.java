@@ -18,7 +18,6 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.init.BPItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -33,16 +32,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IPlantable;
-
-import com.bluepowermod.reference.Refs;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ItemCropSeed extends Item implements IPlantable {
 
-    public static Block field_150925_a;
+    public static RegistryObject<Block> block;
 
-    public ItemCropSeed(Block blockCrop, Block blockSoil) {
+    public ItemCropSeed(RegistryObject<Block> blockCrop, Block blockSoil) {
         super(new Properties().tab(BPCreativeTabs.items));
-        field_150925_a = blockCrop;
+        block = blockCrop;
     }
 
     @Override
@@ -57,7 +55,7 @@ public class ItemCropSeed extends Item implements IPlantable {
             return InteractionResult.PASS;
         } else if (player.mayUseItemAt(pos, facing, itemStack) && player.mayUseItemAt(pos.above(), facing, itemStack)) {
             if (world.getBlockState(pos).getBlock().canSustainPlant(world.getBlockState(pos),  world, pos, Direction.UP, this) && world.isEmptyBlock(pos.above()) && world.getBlockState(pos).getBlock() instanceof FarmBlock) {
-                world.setBlock(pos.above(), field_150925_a.defaultBlockState(), 2);
+                world.setBlock(pos.above(), block.get().defaultBlockState(), 2);
                 itemStack.setCount(itemStack.getCount() - 1);
                 player.setItemInHand(hand, itemStack);
                 return InteractionResult.SUCCESS;
@@ -71,7 +69,7 @@ public class ItemCropSeed extends Item implements IPlantable {
 
     @Override
     public BlockState getPlant(BlockGetter world, BlockPos pos) {
-        return field_150925_a.defaultBlockState();
+        return block.get().defaultBlockState();
     }
 
 }

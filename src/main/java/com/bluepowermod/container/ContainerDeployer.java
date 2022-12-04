@@ -36,7 +36,7 @@ public class ContainerDeployer extends AbstractContainerMenu {
     private final Container deployer;
 
     public ContainerDeployer(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.DEPLOYER, windowId);
+        super(BPMenuType.DEPLOYER.get(), windowId);
         this.deployer = inventory;
         
         for (int i = 0; i < 3; ++i) {
@@ -120,7 +120,7 @@ public class ContainerDeployer extends AbstractContainerMenu {
                 slot = (Slot) slots.get(k);
                 itemstack1 = slot.getItem();
                 
-                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.hasContainerItem() || par1ItemStack.getDamageValue() == itemstack1.getDamageValue()) && ItemStack.tagMatches(par1ItemStack, itemstack1) && slot.mayPlace(par1ItemStack)) {
+                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.hasCraftingRemainingItem() || par1ItemStack.getDamageValue() == itemstack1.getDamageValue()) && ItemStack.tagMatches(par1ItemStack, itemstack1) && slot.mayPlace(par1ItemStack)) {
                     int l = itemstack1.getCount() + par1ItemStack.getCount();
                     
                     if (l <= par1ItemStack.getMaxStackSize()) {

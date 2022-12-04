@@ -10,7 +10,7 @@ package com.bluepowermod.block.power;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileEngine;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.core.BlockPos;
@@ -57,15 +57,13 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public BlockEngine() {
-
-        super(Material.METAL, TileEngine.class, BPBlockEntityType.ENGINE);
+        super(Material.METAL, TileEngine.class);
         registerDefaultState(this.stateDefinition.any()
                 .setValue(ACTIVE, false)
                 .setValue(GEAR, false)
                 .setValue(GLIDER, false)
                 .setValue(FACING, Direction.DOWN)
                 .setValue(WATERLOGGED, false));
-        setRegistryName(Refs.MODID, Refs.ENGINE_NAME);
     }
 
     @Override
@@ -125,11 +123,6 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
             } else {
 
                 facing = player.getDirection().getOpposite();
-            }
-
-            TileEngine tile = (TileEngine) world.getBlockEntity(pos);
-            if (tile != null) {
-                tile.setOrientation(facing);
             }
             world.setBlock(pos, state.setValue(FACING, facing), 2);
         }

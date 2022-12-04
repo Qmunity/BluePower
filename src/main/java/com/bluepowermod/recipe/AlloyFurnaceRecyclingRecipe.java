@@ -2,6 +2,7 @@ package com.bluepowermod.recipe;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPRecipeSerializer;
+import com.bluepowermod.init.BPRecipeTypes;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,7 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +37,7 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
 
     @Override
     public RecipeType<?> getType() {
-        return AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE;
+        return BPRecipeTypes.ALLOY_SMELTING.get();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return BPRecipeSerializer.ALLOY_RECYCLING;
+        return BPRecipeSerializer.ALLOY_RECYCLING.get();
     }
 
     @Override
@@ -122,7 +122,7 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
         return null;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AlloyFurnaceRecyclingRecipe> {
+    public static class Serializer implements RecipeSerializer<AlloyFurnaceRecyclingRecipe> {
         @Override
         public AlloyFurnaceRecyclingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new AlloyFurnaceRecyclingRecipe(recipeId);

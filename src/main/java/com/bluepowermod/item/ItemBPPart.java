@@ -48,7 +48,7 @@ public class ItemBPPart extends BlockItem {
             }
 
             //Replace with Multipart
-            context.getLevel().setBlockAndUpdate(context.getClickedPos(), BPBlocks.multipart.defaultBlockState());
+            context.getLevel().setBlockAndUpdate(context.getClickedPos(), BPBlocks.multipart.get().defaultBlockState());
             tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
             if(tileEntity instanceof TileBPMultipart){
                 //Add the original State to the Multipart

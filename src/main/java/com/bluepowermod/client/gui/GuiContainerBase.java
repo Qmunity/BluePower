@@ -104,7 +104,7 @@ public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractC
 
     @Override
     protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
-        this.font.draw(matrixStack, I18n.get("block.bluepower." + title.getContents()), (float)(this.imageWidth / 2 - this.font.width(I18n.get("block.bluepower." + title.getContents())) / 2), 6.0F, COLOR_TEXT);
+        this.font.draw(matrixStack, I18n.get("block.bluepower." + title.getString()), (float)(this.imageWidth / 2 - this.font.width(I18n.get("block.bluepower." + title.getString())) / 2), 6.0F, COLOR_TEXT);
     }
 
     @Override

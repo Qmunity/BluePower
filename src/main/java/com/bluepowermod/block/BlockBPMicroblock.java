@@ -5,12 +5,10 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMicroblock;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.AABBUtils;
-import com.mojang.math.Vector3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -68,12 +66,12 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
         }
         if (tileentity instanceof TileBPMicroblock) {
             CompoundTag nbt = new CompoundTag();
-            nbt.putString("block", ((TileBPMicroblock)tileentity).getBlock().getRegistryName().toString());
+            nbt.putString("block", ForgeRegistries.BLOCKS.getKey(((TileBPMicroblock)tileentity).getBlock()).toString());
             ItemStack stack = new ItemStack(this);
             stack.setTag(nbt);
-            stack.setHoverName(new TranslatableComponent(((TileBPMicroblock)tileentity).getBlock().getDescriptionId())
-                    .append(new TextComponent(" "))
-                    .append(new TranslatableComponent(this.getDescriptionId())));
+            stack.setHoverName(Component.translatable(((TileBPMicroblock)tileentity).getBlock().getDescriptionId())
+                    .append(Component.literal(" "))
+                    .append(Component.translatable(this.getDescriptionId())));
             itemStacks.add(stack);
         }
         return itemStacks;
@@ -88,12 +86,12 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
         }
         if (tileentity instanceof TileBPMicroblock) {
             CompoundTag nbt = new CompoundTag();
-            nbt.putString("block", ((TileBPMicroblock) tileentity).getBlock().getRegistryName().toString());
+            nbt.putString("block", ForgeRegistries.BLOCKS.getKey(((TileBPMicroblock) tileentity).getBlock()).toString());
             stack = new ItemStack(this);
             stack.setTag(nbt);
-            stack.setHoverName(new TranslatableComponent(((TileBPMicroblock) tileentity).getBlock().getDescriptionId())
-                    .append(new TextComponent(" "))
-                    .append(new TranslatableComponent(this.getDescriptionId())));
+            stack.setHoverName(Component.translatable(((TileBPMicroblock) tileentity).getBlock().getDescriptionId())
+                    .append(Component.literal(" "))
+                    .append(Component.translatable(this.getDescriptionId())));
         }
         return stack;
     }

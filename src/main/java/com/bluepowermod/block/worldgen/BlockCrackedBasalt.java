@@ -24,6 +24,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -43,12 +44,12 @@ import java.util.Random;
 
 public class BlockCrackedBasalt extends BlockStoneOre {
 
-    public BlockCrackedBasalt(String name) {
-        super(name, Properties.of(Material.STONE).strength(25.0F).sound(SoundType.STONE));
+    public BlockCrackedBasalt() {
+        super(Properties.of(Material.STONE).strength(25.0F).sound(SoundType.STONE));
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         // When the random chance hit, spew lava.
         if (!world.isClientSide && (random.nextInt(100) == 0)) {
                 spawnLava(world, pos, random);
@@ -59,7 +60,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
         worldIn.scheduleTick(pos, this, 20);
     }
 
-    private void spawnLava(Level world, BlockPos pos, Random random) {
+    private void spawnLava(Level world, BlockPos pos, RandomSource random) {
         if (DateEventHandler.isEvent(Event.NEW_YEAR)) {
             DateEventHandler.spawnFirework(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         } else {
@@ -76,12 +77,12 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     @Override
     public List<ItemStack> getDrops(BlockState p_220076_1_, LootContext.Builder p_220076_2_) {
         NonNullList<ItemStack> itemStacks = NonNullList.create();
-        itemStacks.add(new ItemStack(Item.byBlock(BPBlocks.cracked_basalt_lava)));
+        itemStacks.add(new ItemStack(Item.byBlock(BPBlocks.cracked_basalt_lava.get())));
         return itemStacks;
     }
 
     @Override
-    public void animateTick(BlockState stateIn, Level world, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level world, BlockPos pos, RandomSource rand) {
             for (int i = 0; i < 10; i++)
                 world.addParticle(ParticleTypes.SMOKE, pos.getX() + rand.nextDouble(), pos.getY() + 1, pos.getZ() + rand.nextDouble(), (rand.nextDouble() - 0.5) * 0.2,
                         rand.nextDouble() * 0.1, (rand.nextDouble() - 0.5) * 0.2);

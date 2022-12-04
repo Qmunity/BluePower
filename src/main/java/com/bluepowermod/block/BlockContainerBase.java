@@ -59,12 +59,12 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     private boolean isRedstoneEmitter;
     private boolean isSilkyRemoving;
 
-    public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
+    public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass) {
         super(material);
         setBlockEntityClass(tileEntityClass);
     }
 
-    public BlockContainerBase(Properties properties, Class<? extends TileBase> tileEntityClass, BlockEntityType<? extends TileBase> entityType) {
+    public BlockContainerBase(Properties properties, Class<? extends TileBase> tileEntityClass) {
         super(properties);
         setBlockEntityClass(tileEntityClass);
     }
@@ -179,7 +179,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
             return InteractionResult.FAIL;
         }
         if (world.getBlockEntity(pos) instanceof MenuProvider) {
-            NetworkHooks.openGui((ServerPlayer) player, (MenuProvider)world.getBlockEntity(pos));
+            NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider)world.getBlockEntity(pos));
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.FAIL;

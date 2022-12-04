@@ -9,13 +9,12 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.BPBlockEntityType;
+import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -40,7 +39,7 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
     protected NonNullList<ItemStack> craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
 
     public TileProjectTable(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.PROJECT_TABLE, pos, state);
+        super(BPBlockEntityType.PROJECT_TABLE.get(), pos, state);
     }
 
     public TileProjectTable(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -209,7 +208,7 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(Refs.PROJECTTABLE_NAME);
+        return Component.literal(Refs.PROJECTTABLE_NAME);
     }
 
     @Nullable

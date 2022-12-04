@@ -19,12 +19,12 @@ package com.bluepowermod.block.worldgen;
 
 public class BlockStoneOreConnected extends BlockStoneOre {
 
-    public BlockStoneOreConnected(String name) {
-        super(name);
+    public BlockStoneOreConnected() {
+
     }
 
     public BlockStoneOreConnected(String name, Boolean witherproof) {
-        super(name, witherproof);
+        super(witherproof);
     }
 
 }

@@ -10,8 +10,7 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.power.BlutricityFEStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.power.BlockEngine;
-import com.bluepowermod.tile.BPBlockEntityType;
-import com.bluepowermod.tile.TileBase;
+import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
@@ -34,7 +33,6 @@ import javax.annotation.Nullable;
  */
 public class TileEngine extends TileMachineBase  {
 
-	private Direction orientation = Direction.DOWN;
 	public boolean isActive = false;
     public byte pumpTick;
     public byte pumpSpeed;
@@ -59,7 +57,7 @@ public class TileEngine extends TileMachineBase  {
 
 	
 	public TileEngine(BlockPos pos, BlockState state){
-		super(BPBlockEntityType.ENGINE, pos, state);
+		super(BPBlockEntityType.ENGINE.get(), pos, state);
 
 		pumpTick  = 0;
 		pumpSpeed = 16;
@@ -110,22 +108,9 @@ public class TileEngine extends TileMachineBase  {
 
 	}
 
-    public void setOrientation(Direction orientation){
-        this.orientation = orientation;
-        setChanged();
-    }
-
-    public Direction getOrientation()
-    {
-        return orientation;
-    }
-
-
 	@Override
 	protected void writeToPacketNBT(CompoundTag compound) {
 		super.writeToPacketNBT(compound);
-		int rotation = orientation.get3DDataValue();
-		compound.putInt("rotation", rotation);
         compound.putByte("pumpspeed", pumpSpeed);
         compound.putByte("pumptick", pumpTick);
         Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
@@ -136,7 +121,6 @@ public class TileEngine extends TileMachineBase  {
 	@Override
 	protected void readFromPacketNBT(CompoundTag compound) {
 		super.readFromPacketNBT(compound);
-		orientation = Direction.from3DDataValue(compound.getInt("rotation"));
         pumpSpeed = compound.getByte("pumpspeed");
         pumpTick = compound.getByte("pumptick");
         if(compound.contains("energy")) {

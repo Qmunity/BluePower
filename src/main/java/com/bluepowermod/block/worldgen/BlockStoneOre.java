@@ -25,7 +25,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.projectile.WitherSkull;
@@ -46,23 +45,20 @@ public class BlockStoneOre extends Block {
 
     private final boolean witherproof;
 
-    public BlockStoneOre(String name, boolean witherproof) {
+    public BlockStoneOre(boolean witherproof) {
         super(Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.STONE));
-        setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         this.witherproof = witherproof;
     }
 
-    public BlockStoneOre(String name) {
+    public BlockStoneOre() {
         super(Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.STONE));
-        setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         witherproof = false;
     }
 
-    public BlockStoneOre(String name, Properties properties) {
+    public BlockStoneOre(Properties properties) {
         super(properties);
-        setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
         witherproof = false;
     }
@@ -71,7 +67,7 @@ public class BlockStoneOre extends Block {
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (witherproof) {
-            tooltip.add(new TextComponent(MinecraftColor.RED.getChatColor() + "Witherproof"));
+            tooltip.add(Component.literal(MinecraftColor.RED.getChatColor() + "Witherproof"));
         }
     }
 

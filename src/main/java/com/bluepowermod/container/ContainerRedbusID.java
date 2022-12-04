@@ -15,18 +15,24 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import com.bluepowermod.tile.tier3.IRedBusWindow;
+import net.minecraft.world.item.ItemStack;
 
 public class ContainerRedbusID extends AbstractContainerMenu {
 
 	private final Container inventory;
 
 	public ContainerRedbusID(int windowId, Inventory invPlayer, Container inventory) {
-		super(BPMenuType.REDBUS, windowId);
+		super(BPMenuType.REDBUS.get(), windowId);
 		this.inventory = inventory;
 	}
 
 	public ContainerRedbusID( int id, Inventory player )    {
 		this( id, player, new SimpleContainer( 1));
+	}
+
+	@Override
+	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+		return null;
 	}
 
 	@Override

@@ -14,7 +14,6 @@ public class BlockRubberSapling extends SaplingBlock {
     public BlockRubberSapling(AbstractTreeGrower tree, Properties properties) {
         super(tree, properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(STAGE, 0));
-        this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERSAPLING_NAME);
         BPBlocks.blockList.add(this);
     }
 

@@ -45,7 +45,7 @@ public class ContainerFilter extends AbstractContainerMenu {
     public int fuzzySetting = -1;
 
     public ContainerFilter(int windowId, Inventory invPlayer, Container inventory) {
-        super(BPMenuType.FILTER, windowId);
+        super(BPMenuType.FILTER.get(), windowId);
         this.filter = inventory;
 
         for (int i = 0; i < 3; ++i) {
