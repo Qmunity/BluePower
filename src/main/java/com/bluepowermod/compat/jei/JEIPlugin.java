@@ -19,6 +19,7 @@ import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
@@ -33,10 +34,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -76,7 +74,7 @@ public class JEIPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registryIn) {
         registryIn.addRecipes(getRecipes(AlloyFurnaceRegistry.ALLOYFURNACE_RECIPE).stream().filter(recipe -> recipe instanceof AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe).collect(Collectors.toSet()), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
-        registryIn.addRecipes(getMicroblockRecipes(), VanillaRecipeCategoryUid.CRAFTING);
+        registryIn.addRecipes(RecipeTypes.CRAFTING, getMicroblockRecipes());
         registryIn.addRecipes(getRecyclingRecipes(), new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME));
     }
 
@@ -86,8 +84,8 @@ public class JEIPlugin implements IModPlugin {
                 .collect(Collectors.toList());
     }
 
-    private static List<Recipe<?>> getMicroblockRecipes() {
-        List<Recipe<?>> recipes = new ArrayList<>();
+    private static List<CraftingRecipe> getMicroblockRecipes() {
+        List<CraftingRecipe> recipes = new ArrayList<>();
         for (Block block : ForgeRegistries.BLOCKS.getValues().stream().filter(b -> !(b instanceof EntityBlock)).collect(Collectors.toList())) {
             VoxelShape shape = null;
             try{
@@ -99,7 +97,7 @@ public class JEIPlugin implements IModPlugin {
                 ItemStack output = ItemStack.EMPTY;
                 for (Block mb : BPBlocks.microblocks){
                     NonNullList<Ingredient> input = NonNullList.create();
-                    input.add(Ingredient.of(ItemTags.createOptional(new ResourceLocation("bluepower:saw"))));
+                    input.add(Ingredient.of(ItemTags.create(new ResourceLocation("bluepower:saw"))));
                     if(mb == BPBlocks.half_block){
                         input.add(Ingredient.of(new ItemStack(block)));
                     }else{

@@ -3,6 +3,7 @@ package com.bluepowermod.world;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -24,13 +26,11 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 
 public class WorldGenFlowers {
 
-    public static void initFlowers(){
+    public static void registerFlowers(RegistryEvent.Register<Feature<?>> event) {
         ConfiguredFeature<?, ?> feature = Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, "bluepower:" + Refs.INDIGOFLOWER_NAME,
-                Feature.FLOWER.configured(new RandomPatchConfiguration(2, 2, 2,
-                        () -> Feature.SIMPLE_BLOCK.configured(new SimpleBlockConfiguration(BlockStateProvider.simple(BPBlocks.indigo_flower))).onlyWhenEmpty())
-                )
+                new ConfiguredFeature<>(Feature.FLOWER, new RandomPatchConfiguration(2, 2, 2,PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BPBlocks.indigo_flower)))))
         );
-        Registry.register(BuiltinRegistries.PLACED_FEATURE,"bluepower:" + Refs.INDIGOFLOWER_NAME, feature.placed(RarityFilter.onAverageOnceEvery(BPConfig.CONFIG.flowerSpawnChance.get()/2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
+        PlacementUtils.register("bluepower:" + Refs.INDIGOFLOWER_NAME, Holder.direct(feature), RarityFilter.onAverageOnceEvery(BPConfig.CONFIG.flowerSpawnChance.get()/2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome());
     }
 
     @SubscribeEvent
@@ -39,7 +39,7 @@ public class WorldGenFlowers {
             BiomeGenerationSettingsBuilder generation = event.getGeneration();
             PlacedFeature feature = BuiltinRegistries.PLACED_FEATURE.get(new ResourceLocation("bluepower:" + Refs.INDIGOFLOWER_NAME));
             if(feature != null && BPConfig.CONFIG.flowerSpawnChance.get() > 0)
-                generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, feature);
+                generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, Holder.direct(feature));
         }
     }
 

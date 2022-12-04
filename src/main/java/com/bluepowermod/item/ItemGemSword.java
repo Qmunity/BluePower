@@ -28,11 +28,9 @@ public class ItemGemSword extends SwordItem {
 
     public Item customCraftingMaterial;
 
-    public ItemGemSword(Tier itemTier, String name, Item repairItem) {
+    public ItemGemSword(Tier itemTier, Item repairItem) {
         super(itemTier, 3,-1.4F, new Properties().tab(BPCreativeTabs.tools));
-        this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
-        BPItems.itemList.add(this);
     }
 
     @Override

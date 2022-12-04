@@ -29,9 +29,8 @@ import net.minecraft.world.InteractionHand;
 
 public class ItemIndigoDye extends ItemBase {
 
-    public ItemIndigoDye(String name) {
+    public ItemIndigoDye() {
 		super(new Properties());
-        this.setRegistryName(Refs.MODID + ":" + name);
     }
 
 	@Override

@@ -19,7 +19,6 @@ package com.bluepowermod.init;
 
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import net.minecraft.world.item.ItemStack;
-
 import net.minecraft.world.item.Items;
 
 public class Recipes {

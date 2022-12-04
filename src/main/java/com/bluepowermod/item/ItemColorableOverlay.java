@@ -19,15 +19,13 @@ public class ItemColorableOverlay extends ItemBase implements IBPColoredItem {
 
     private final MinecraftColor color;
 
-    public ItemColorableOverlay(String name, Properties properties) {
+    public ItemColorableOverlay(Properties properties) {
         super(properties);
         this.color = MinecraftColor.NONE;
-        setRegistryName(Refs.MODID + ":" + name);
     }
-    public ItemColorableOverlay(MinecraftColor color, String name, Properties properties) {
+    public ItemColorableOverlay(MinecraftColor color, Properties properties) {
         super(properties);
         this.color = color;
-        setRegistryName(Refs.MODID + ":" + name + "_" + color.name().toLowerCase());
     }
 
     @Override

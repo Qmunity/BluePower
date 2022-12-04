@@ -72,10 +72,10 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onAnvilEvent(AnvilUpdateEvent event) {
 
-        if (!event.getLeft().isEmpty() && event.getLeft().getItem() == BPItems.screwdriver) {
+        if (!event.getLeft().isEmpty() && event.getLeft().getItem() == BPItems.screwdriver.get()) {
             if (!event.getRight().isEmpty() && event.getRight().getItem() == Items.ENCHANTED_BOOK) {
                 if (EnchantmentHelper.getEnchantments(event.getRight()).get(Enchantments.SILK_TOUCH) != null) {
-                    event.setOutput(new ItemStack(BPItems.silky_screwdriver, 1));
+                    event.setOutput(new ItemStack(BPItems.silky_screwdriver.get(), 1));
                     event.setCost(20);
                 }
             }

@@ -2,11 +2,13 @@ package com.bluepowermod.world;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPConfig;
+import net.minecraft.core.Holder;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.features.OreFeatures;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.core.Registry;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -14,15 +16,15 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
-import java.util.Objects;
 
 public class WorldGenOres {
 
-    public static void initOres(){
+    public static void registerOres(RegistryEvent.Register<Feature<?>> event) {
         if (BPConfig.CONFIG.generateAmethyst.get()) {
             registerConfiguredOre(BPConfig.CONFIG.veinCountAmethyst.get(), BPConfig.CONFIG.veinSizeAmethyst.get(), BPConfig.CONFIG.minAmethystY.get(), BPConfig.CONFIG.maxAmethystY.get(), BPBlocks.amethyst_ore, BPBlocks.amethyst_deepslate);
         }
@@ -51,8 +53,8 @@ public class WorldGenOres {
 
     private static void registerConfiguredOre(int veinCount, int veinSize, int minY, int maxY, Block ore, Block deepSlate){
         List<OreConfiguration.TargetBlockState> oreTarget = List.of(OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, ore.defaultBlockState()), OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, deepSlate.defaultBlockState()));
-        ConfiguredFeature<OreConfiguration, ?> configuredFeature = Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, Objects.requireNonNull(ore.getRegistryName()), Feature.ORE.configured(new OreConfiguration(oreTarget, veinSize)));
-        Registry.register(BuiltinRegistries.PLACED_FEATURE, ore.getRegistryName(), configuredFeature.placed(commonOrePlacement(veinCount, HeightRangePlacement.triangle(VerticalAnchor.aboveBottom(minY), VerticalAnchor.aboveBottom(maxY + 64)))));
+        Holder<ConfiguredFeature<OreConfiguration, ?>> configuredFeature = FeatureUtils.register(ore.getRegistryName().toString(), Feature.ORE, new OreConfiguration(oreTarget, veinSize));
+        PlacementUtils.register(ore.getRegistryName().toString(), configuredFeature, commonOrePlacement(veinCount, HeightRangePlacement.triangle(VerticalAnchor.aboveBottom(minY), VerticalAnchor.aboveBottom(maxY + 64))));
     }
 
     private static List<PlacementModifier> orePlacement(PlacementModifier modifier, PlacementModifier modifier1) {
@@ -70,42 +72,42 @@ public class WorldGenOres {
             if (BPConfig.CONFIG.generateAmethyst.get()) {
                 PlacedFeature amethyst_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.amethyst_ore.getRegistryName());
                 if(amethyst_feature != null)
-                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, amethyst_feature);
+                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(amethyst_feature));
             }
             if (BPConfig.CONFIG.generateRuby.get()) {
                 PlacedFeature ruby_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.ruby_ore.getRegistryName());
                 if(ruby_feature != null)
-                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ruby_feature);
+                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(ruby_feature));
             }
             if (BPConfig.CONFIG.generateSapphire.get()) {
                 PlacedFeature sapphire_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.sapphire_ore.getRegistryName());
                 if(sapphire_feature != null)
-                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, sapphire_feature);
+                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(sapphire_feature));
             }
             if (BPConfig.CONFIG.generateGreenSapphire.get()) {
                 PlacedFeature green_sapphire_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.green_sapphire_ore.getRegistryName());
                 if(green_sapphire_feature != null)
-                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, green_sapphire_feature);
+                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(green_sapphire_feature));
             }
             if (BPConfig.CONFIG.generateSilver.get()) {
                 PlacedFeature silver_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.silver_ore.getRegistryName());
                 if(silver_feature != null)
-                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, silver_feature);
+                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(silver_feature));
             }
             if (BPConfig.CONFIG.generateTeslatite.get()) {
                 PlacedFeature teslatite_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.teslatite_ore.getRegistryName());
                 if(teslatite_feature != null)
-                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, teslatite_feature);
+                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(teslatite_feature));
             }
             if (BPConfig.CONFIG.generateZinc.get()) {
                 PlacedFeature zinc_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.zinc_ore.getRegistryName());
                 if(zinc_feature != null)
-                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, zinc_feature);
+                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(zinc_feature));
             }
             if (BPConfig.CONFIG.generateTungsten.get()) {
                 PlacedFeature tungsten_feature = BuiltinRegistries.PLACED_FEATURE.get(BPBlocks.tungsten_ore.getRegistryName());
                 if(tungsten_feature != null)
-                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, tungsten_feature);
+                    generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(tungsten_feature));
             }
         }
     }

@@ -18,7 +18,8 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.helper.BPItemTier;
+import com.bluepowermod.helper.GemItemTier;
+import com.bluepowermod.helper.SilverItemTier;
 import com.bluepowermod.init.BPCreativeTabs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -43,13 +44,11 @@ import java.util.List;
 
 public class ItemAthame extends SwordItem {
     
-    private float               damageDealt;
-    private static Tier athameMaterial = new BPItemTier(100, 6.0F, 2.0F, 0, 10, Ingredient.of(BPItems.silver_ingot));
+    private float damageDealt;
+    private static Tier athameMaterial = new SilverItemTier(100, 6.0F, 2.0F, 0, 10);
     
     public ItemAthame() {
         super(athameMaterial, 1, -3, new Properties().tab(BPCreativeTabs.tools));
-        this.setRegistryName(Refs.MODID + ":" + Refs.ATHAME_NAME);
-        BPItems.itemList.add(this);
     }
 
     @Override
@@ -76,6 +75,6 @@ public class ItemAthame extends SwordItem {
     @Override
     public boolean isValidRepairItem(ItemStack is1, ItemStack is2) {
 
-        return ((is1.getItem() == this || is2.getItem() == this) && (is1.getItem() == BPItems.silver_ingot || is2.getItem() == BPItems.silver_ingot));
+        return ((is1.getItem() == this || is2.getItem() == this) && (is1.getItem() == BPItems.silver_ingot.get() || is2.getItem() == BPItems.silver_ingot.get()));
     }
 }

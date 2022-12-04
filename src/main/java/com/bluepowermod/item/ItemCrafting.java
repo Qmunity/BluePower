@@ -17,14 +17,9 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.reference.Refs;
-
-import net.minecraft.world.item.Item.Properties;
-
 public class ItemCrafting extends ItemBase {
 
-    public ItemCrafting(String name) {
+    public ItemCrafting() {
         super(new Properties());
-        this.setRegistryName(Refs.MODID + ":" + name);
     }
 }

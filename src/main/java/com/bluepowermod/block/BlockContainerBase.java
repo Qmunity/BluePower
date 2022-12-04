@@ -170,7 +170,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
         }
         if (player.isCrouching()) {
             if (!player.getItemInHand(hand).isEmpty()) {
-                if (player.getItemInHand(hand).getItem() == BPItems.screwdriver) {
+                if (player.getItemInHand(hand).getItem() == BPItems.screwdriver.get()) {
                     return InteractionResult.FAIL;
                 }
             }

@@ -28,9 +28,8 @@ public class ItemSaw extends ItemBase{
 
     private final int sawLevel;
 
-    public ItemSaw(int sawLevel, String name) {
+    public ItemSaw(int sawLevel) {
         super(new Properties().stacksTo(1).durability(1 << sawLevel + 8), BPCreativeTabs.tools);
-        setRegistryName(Refs.MODID + ":" + name);
         this.sawLevel = sawLevel;
     }
 

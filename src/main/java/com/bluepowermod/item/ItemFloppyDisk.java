@@ -34,10 +34,8 @@ import net.minecraft.world.level.Level;
 
 public class ItemFloppyDisk extends ItemBase implements ItemColor{
 
-    public ItemFloppyDisk(String name) {
+    public ItemFloppyDisk() {
         super(new Properties());
-        this.setRegistryName(Refs.MODID + ":" + name);
-        BPItems.itemList.add(this);
     }
 
     public static void finaliseDisk(ItemStack itemStack, String name, MinecraftColor color){

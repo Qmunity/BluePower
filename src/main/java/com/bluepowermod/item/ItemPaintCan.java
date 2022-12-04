@@ -18,11 +18,11 @@ public class ItemPaintCan extends ItemDamageableColorableOverlay {
     private static final int MAX_USES = 16;
 
     public ItemPaintCan() {
-        super(Refs.PAINTCAN_NAME + "_blank", new Properties());
+        super(new Properties());
     }
 
     public ItemPaintCan(MinecraftColor color) {
-        super(color, Refs.PAINTCAN_NAME, new Properties());
+        super(color, new Properties());
     }
 
     @Override

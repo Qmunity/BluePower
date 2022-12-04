@@ -181,11 +181,6 @@ public class BPBlocks {
 
     public static Block sortron;
 
-    public static void init() {
-        instantiateBlocks();
-        initModDependantBlocks();
-    }
-
     private static void instantiateBlocks() {
 
         basalt = new BlockBasalt(Refs.BASALT_NAME);
@@ -212,18 +207,18 @@ public class BPBlocks {
         sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME);
         amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME);
         green_sapphire_ore = new BlockItemOre(Refs.GREENSAPPHIREORE_NAME);
-        silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);
-        zinc_ore = new BlockStoneOre(Refs.ZINCORE_NAME);
-        tungsten_ore = new BlockStoneOre(Refs.TUNGSTENORE_NAME);
+        silver_ore = new BlockItemOre(Refs.SILVERORE_NAME);
+        zinc_ore = new BlockItemOre(Refs.ZINCORE_NAME);
+        tungsten_ore = new BlockItemOre(Refs.TUNGSTENORE_NAME);
 
         teslatite_deepslate = new BlockItemOre(Refs.TESLATITEDEEPSLATE_NAME);
         ruby_deepslate = new BlockItemOre(Refs.RUBYDEEPSLATE_NAME);
         sapphire_deepslate = new BlockItemOre(Refs.SAPPHIREDEEPSLATE_NAME);
         amethyst_deepslate = new BlockItemOre(Refs.AMETHYSTDEEPSLATE_NAME);
         green_sapphire_deepslate = new BlockItemOre(Refs.GREENSAPPHIREDEEPSLATE_NAME);
-        silver_deepslate = new BlockStoneOre(Refs.SILVERDEEPSLATE_NAME);
-        zinc_deepslate = new BlockStoneOre(Refs.ZINCDEEPSLATE_NAME);
-        tungsten_deepslate = new BlockStoneOre(Refs.TUNGSTENDEEPSLATE_NAME);
+        silver_deepslate = new BlockItemOre(Refs.SILVERDEEPSLATE_NAME);
+        zinc_deepslate = new BlockItemOre(Refs.ZINCDEEPSLATE_NAME);
+        tungsten_deepslate = new BlockItemOre(Refs.TUNGSTENDEEPSLATE_NAME);
 
         ruby_block = new BlockStoneOre(Refs.RUBYBLOCK_NAME);
         sapphire_block = new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME);
@@ -372,6 +367,10 @@ public class BPBlocks {
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
+
+        instantiateBlocks();
+        initModDependantBlocks();
+
         for(Block block : blockList) {
             event.getRegistry().register(block);
 

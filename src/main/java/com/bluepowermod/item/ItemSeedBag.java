@@ -47,9 +47,8 @@ import javax.annotation.Nullable;
 
 public class ItemSeedBag extends ItemBase implements MenuProvider {
 
-    public ItemSeedBag(String name) {
+    public ItemSeedBag() {
         super(new Properties().stacksTo(1));
-        this.setRegistryName(Refs.MODID + ":" + name);
     }
 
     public static ItemStack getSeedType(ItemStack seedBag) {

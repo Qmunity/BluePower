@@ -43,8 +43,6 @@ public class ItemCropSeed extends Item implements IPlantable {
     public ItemCropSeed(Block blockCrop, Block blockSoil) {
         super(new Properties().tab(BPCreativeTabs.items));
         field_150925_a = blockCrop;
-        this.setRegistryName(Refs.MODID + ":" + Refs.FLAXSEED_NAME);
-        BPItems.itemList.add(this);
     }
 
     @Override
