@@ -55,7 +55,6 @@ public class BPBlocks {
 
     public static List<Block> blockList = new ArrayList<>();
 
-
     public static List<RegistryObject<Block>> regularBlocks = new ArrayList<>();
 
     //Register Regular Blocks
