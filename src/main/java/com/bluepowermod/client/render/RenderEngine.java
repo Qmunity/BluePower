@@ -11,7 +11,7 @@ import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.init.BPBlocks;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -75,8 +75,8 @@ public class RenderEngine implements BlockEntityRenderer<TileEngine> {
             rotationX = 0F;
         }
 
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(rotationX));
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(rotation));
+        matrixStack.mulPose(Axis.XP.rotationDegrees(rotationX));
+        matrixStack.mulPose(Axis.ZP.rotationDegrees(rotation));
 
         matrixStack.pushPose();
 
@@ -100,7 +100,7 @@ public class RenderEngine implements BlockEntityRenderer<TileEngine> {
         matrixStack.pushPose();
         matrixStack.translate(0.5, 0, 0.5);
         long angle = engine.isActive ? (System.currentTimeMillis() / 10) % 360 : 0;
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(angle));
+        matrixStack.mulPose(Axis.YP.rotationDegrees(angle));
         matrixStack.translate(-0.5, 0, -0.5);
         BakedModel gear = dispatcher.getBlockModel(state.setValue(BlockEngine.GEAR, true));
         // Render the rotating cog

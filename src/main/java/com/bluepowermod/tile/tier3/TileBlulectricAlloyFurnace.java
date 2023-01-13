@@ -146,7 +146,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
             if (tileAlloyFurnace.updatingRecipe) {
                 if(level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).isPresent()) {
                     tileAlloyFurnace.currentRecipe = (IAlloyFurnaceRecipe) level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).get();
-                    //Check output slot is empty and less then a stack of the same item.
+                    //Check output slot is empty and less than a stack of the same item.
                     if(!(tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem().getItem()
                             && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
                             && !tileAlloyFurnace.outputInventory.isEmpty()){

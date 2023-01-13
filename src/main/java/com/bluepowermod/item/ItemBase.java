@@ -22,19 +22,12 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.init.BPItems;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 public class ItemBase extends Item {
 
     public ItemBase(Properties properties) {
-        super(properties.tab(BPCreativeTabs.items));
-    }
-
-    public ItemBase(Properties properties, CreativeModeTab group) {
-        super(properties.tab(group));
+        super(properties);
     }
 
 }

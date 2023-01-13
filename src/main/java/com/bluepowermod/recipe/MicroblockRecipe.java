@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -23,8 +24,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class MicroblockRecipe extends CustomRecipe {
 
-    public MicroblockRecipe(ResourceLocation idIn) {
-        super(idIn);
+    public MicroblockRecipe(ResourceLocation resourceLocation) {
+        super(resourceLocation, CraftingBookCategory.BUILDING);
     }
 
     @Override

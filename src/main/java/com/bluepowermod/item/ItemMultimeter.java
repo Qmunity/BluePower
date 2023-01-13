@@ -15,7 +15,7 @@ public class ItemMultimeter extends ItemBase {
 
 
     public ItemMultimeter() {
-        super(new Properties(), BPCreativeTabs.tools);
+        super(new Properties());
     }
 
     @Override

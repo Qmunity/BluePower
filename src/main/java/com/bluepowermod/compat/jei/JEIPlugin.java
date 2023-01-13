@@ -107,7 +107,7 @@ public class JEIPlugin implements IModPlugin {
                             .append(Component.literal(" "))
                             .append(Component.translatable(mb.get().getDescriptionId())));
                     output = stack;
-                    recipes.add(new ShapelessRecipe(new ResourceLocation("bluepower:" + mb.get().getDescriptionId() + block.getDescriptionId()), "", output, input));
+                    recipes.add(new ShapelessRecipe(new ResourceLocation("bluepower:" + mb.get().getDescriptionId() + block.getDescriptionId()), "", CraftingBookCategory.MISC, output, input));
                 }
             }
         }

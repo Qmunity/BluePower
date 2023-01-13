@@ -16,13 +16,13 @@ apply plugin: 'eclipse'
 
 project.ext {
     major = "0"
-    minor = "8"
+    minor = "9"
     if (System.getenv("CI_PIPELINE_IID") != null) {
         build = System.getenv("CI_PIPELINE_IID") + "-alpha"
     } else {
         build = "-custom"
     }
-    mcVersion = "1.19.2"
+    mcVersion = "1.19.3"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -46,7 +46,7 @@ repositories {
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'parchment', version: '2022.09.04-1.19.2'
+    mappings channel: 'parchment', version: '1.19.2-2022.11.27-1.19.3'
 
     runs {
         client {
@@ -87,12 +87,12 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.25'
+    minecraft 'net.minecraftforge:forge:1.19.3-44.1.0'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
     compileOnly fg.deobf("curse.maven:jade-324717:3960381")
     compileOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.3.0.262")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.3.0.262")
+    //runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.3.0.262")
     //runtimeOnly fg.deobf("curse.maven:jade-324717:3834997")
 }
 

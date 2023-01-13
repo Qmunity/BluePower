@@ -25,7 +25,7 @@ import net.minecraft.world.item.context.UseOnContext;
 public class ItemSilkyScrewdriver extends ItemBase {
 
     public ItemSilkyScrewdriver() {
-        super(new Properties().durability(250), BPCreativeTabs.tools);
+        super(new Properties().durability(250));
     }
 
     @Override

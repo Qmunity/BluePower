@@ -18,6 +18,7 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
@@ -51,31 +52,31 @@ public class Renderers {
     }
 
     @SubscribeEvent
-    public void onModelBakeEvent(ModelEvent.BakingCompleted event) {
+    public void onModelBakeEvent(ModelEvent.ModifyBakingResult event) {
 
         //Register Multipart Model
         BPMultipartModel multipartModel = new BPMultipartModel();
-        event.getModels().put(new ModelResourceLocation("bluepower:multipart","waterlogged=false"), multipartModel);
-        event.getModels().put(new ModelResourceLocation("bluepower:multipart","waterlogged=true"), multipartModel);
+        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:multipart"),"waterlogged=false"), multipartModel);
+        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:multipart"),"waterlogged=true"), multipartModel);
 
         BPMicroblockModel microblockModel = new BPMicroblockModel();
 
         for(Direction dir : Direction.values()) {
             //Register Microblock Models
-            event.getModels().put(new ModelResourceLocation("bluepower:half_block", "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModels().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModels().put(new ModelResourceLocation("bluepower:half_block", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
-            event.getModels().put(new ModelResourceLocation("bluepower:panel", "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModels().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModels().put(new ModelResourceLocation("bluepower:panel", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
-            event.getModels().put(new ModelResourceLocation("bluepower:cover", "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModels().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModels().put(new ModelResourceLocation("bluepower:cover", "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
+            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "facing=" + dir.getName() + ",waterlogged=true")));
+            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
+            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
+            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "facing=" + dir.getName() + ",waterlogged=true")));
+            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
+            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
+            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "facing=" + dir.getName() + ",waterlogged=true")));
+            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
+            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
         }
 
-        event.getModels().put(new ModelResourceLocation("bluepower:half_block", "inventory"), microblockModel);
-        event.getModels().put(new ModelResourceLocation("bluepower:panel", "inventory"), microblockModel);
-        event.getModels().put(new ModelResourceLocation("bluepower:cover", "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "inventory"), microblockModel);
 
     }
 

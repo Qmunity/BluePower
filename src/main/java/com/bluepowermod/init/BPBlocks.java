@@ -37,12 +37,16 @@ import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.util.Dependencies;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.grower.OakTreeGrower;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
@@ -169,15 +173,14 @@ public class BPBlocks {
         regularBlocks.add(reinforced_sapphire_glass);
 
         for(RegistryObject<Block> block : regularBlocks){
-            BPItems.ITEMS.register(block.getKey().location().getPath(), () -> new BlockItem(block.get(), new Item.Properties().tab(BPCreativeTabs.blocks)));
+            BPItems.ITEMS.register(block.getKey().location().getPath(), () -> new BlockItem(block.get(), new Item.Properties()));
         }
 
     }
 
     public static final RegistryObject<Block> flax_crop = BLOCKS.register(Refs.FLAXCROP_NAME, () -> new BlockCrop(Block.Properties.of(Material.PLANT)));
     public static final RegistryObject<BushBlock> indigo_flower = BLOCKS.register(Refs.INDIGOFLOWER_NAME, () -> new BlockCustomFlower(Block.Properties.of(Material.PLANT)));
-    static {BPItems.ITEMS.register(Refs.INDIGOFLOWER_NAME, () -> new BlockItem(indigo_flower.get(), new Item.Properties().tab(BPCreativeTabs.items)));}
-
+    static {BPItems.ITEMS.register(Refs.INDIGOFLOWER_NAME, () -> new BlockItem(indigo_flower.get(), new Item.Properties()));}
 
     public static List<RegistryObject<Block>> machines = new ArrayList<>();
 
@@ -231,13 +234,13 @@ public class BPBlocks {
         machines.add(solarpanel);
 
         for(RegistryObject<Block> block : machines){
-            BPItems.ITEMS.register(block.getKey().location().getPath(), () -> new BlockItem(block.get(), new Item.Properties().tab(BPCreativeTabs.machines)));
+            BPItems.ITEMS.register(block.getKey().location().getPath(), () -> new BlockItem(block.get(), new Item.Properties()));
         }
 
     }
 
     public static final RegistryObject<Block> blulectric_cable = BLOCKS.register(Refs.BLULECTRICCABLE_NAME, BlockBlulectricCable::new);
-    static{BPItems.ITEMS.register(blulectric_cable.getKey().location().getPath(), () -> new ItemBPPart(blulectric_cable.get(), new Item.Properties().tab(BPCreativeTabs.wiring)));}
+    static{BPItems.ITEMS.register(blulectric_cable.getKey().location().getPath(), () -> new ItemBPPart(blulectric_cable.get(), new Item.Properties()));}
 
     public static final RegistryObject<Block> multipart = BLOCKS.register(Refs.MULTIPART_NAME, BlockBPMultipart::new);
 
@@ -279,8 +282,8 @@ public class BPBlocks {
      });
 
     static{
-        BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties().tab(BPCreativeTabs.circuits)));
-        BPItems.ITEMS.register(blockGateNAND.getKey().location().getPath(), () -> new BlockItem(blockGateNAND.get(), new Item.Properties().tab(BPCreativeTabs.circuits)));
+        BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNAND.getKey().location().getPath(), () -> new BlockItem(blockGateNAND.get(), new Item.Properties()));
     }
 
      public static final RegistryObject<Block> blockRedAlloyWire = BLOCKS.register(RedwireType.RED_ALLOY.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true));
@@ -352,7 +355,7 @@ public class BPBlocks {
 
         //Register Lamp Items
         for(RegistryObject<Block> block : allLamps){
-            BPItems.ITEMS.register(block.getKey().location().getPath(), () -> new BlockItem(block.get(), new Item.Properties().tab(BPCreativeTabs.lighting)));
+            BPItems.ITEMS.register(block.getKey().location().getPath(), () -> new BlockItem(block.get(), new Item.Properties()));
         }
 
         //Wires
@@ -364,4 +367,5 @@ public class BPBlocks {
             sortron = BLOCKS.register(Refs.BLOCKSORTRON_NAME, BlockSortron::new);
         }
     }
+
 }

@@ -77,7 +77,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
             if (tileFurnace.updatingRecipe) {
                 if(level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, tileFurnace, level).isPresent()) {
                     tileFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, tileFurnace, level).get();
-                    //Check output slot is empty and less then a stack of the same item.
+                    //Check output slot is empty and less than a stack of the same item.
                     if(!(tileFurnace.outputInventory.getItem() == tileFurnace.currentRecipe.getResultItem().getItem()
                             && (tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(tileFurnace).getCount()) <= tileFurnace.outputInventory.getMaxStackSize())
                             && !tileFurnace.outputInventory.isEmpty()){
@@ -92,7 +92,7 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
                 if((tileFurnace.storage.getEnergy() / tileFurnace.storage.getMaxEnergy()) > 0.5) {
                     tileFurnace.storage.addEnergy(-1, false);
                     tileFurnace.setIsActive(true);
-                    //Check if progress completed, and output slot is empty and less then a stack of the same item.
+                    //Check if progress completed.
                     if (++tileFurnace.currentProcessTime >= (100 / (tileFurnace.storage.getEnergy() / tileFurnace.storage.getMaxEnergy()))) {
                         tileFurnace.currentProcessTime = 0;
                         if (!tileFurnace.outputInventory.isEmpty()) {

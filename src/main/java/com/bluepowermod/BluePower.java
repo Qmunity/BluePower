@@ -19,8 +19,6 @@ import com.bluepowermod.init.*;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.BPWorldGen;
-import com.bluepowermod.world.WorldGenFlowers;
-import com.bluepowermod.world.WorldGenOres;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.resources.ResourceLocation;
@@ -56,6 +54,7 @@ public class BluePower {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::complete);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerCapabilities);
+        FMLJavaModLoadingContext.get().getModEventBus().register(new BPCreativeTabs());
 
         BPBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BPItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -74,10 +73,6 @@ public class BluePower {
 
         BPApi.init(new BluePowerAPI());
         proxy.preInitRenderers();
-
-        //MinecraftForge.EVENT_BUS.register(new BPWorldGen());
-        MinecraftForge.EVENT_BUS.register(new WorldGenOres());
-        MinecraftForge.EVENT_BUS.register(new WorldGenFlowers());
     }
 
     public static Logger log = LogManager.getLogger(Refs.MODID);
@@ -85,8 +80,6 @@ public class BluePower {
     public void setup(FMLCommonSetupEvent event) {
         event.enqueueWork(BPNetworkHandler::init);
         event.enqueueWork(BPWorldGen::registerFeatures);
-        event.enqueueWork(WorldGenOres::registerOres);
-        event.enqueueWork(WorldGenFlowers::registerFlowers);
         proxy.setup(event);
         CompatibilityUtils.init(event);
     }

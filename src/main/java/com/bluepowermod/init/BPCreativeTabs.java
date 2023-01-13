@@ -17,219 +17,85 @@
 
 package com.bluepowermod.init;
 
-import net.minecraft.core.NonNullList;
+import com.bluepowermod.item.ItemSaw;
+import com.bluepowermod.item.ItemScrewdriver;
+import com.bluepowermod.reference.Refs;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
-import com.bluepowermod.api.misc.MinecraftColor;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.stream.Collectors;
+
 public class BPCreativeTabs {
 
-    public static CreativeModeTab blocks;
-    public static CreativeModeTab machines;
-    public static CreativeModeTab items;
-    public static CreativeModeTab tools;
-    public static CreativeModeTab circuits;
-    public static CreativeModeTab wiring;
-    public static CreativeModeTab lighting;
-    public static CreativeModeTab microblocks;
+    CreativeModeTab blocks;
+    CreativeModeTab machines;
+    CreativeModeTab items;
+    CreativeModeTab tools;
+    CreativeModeTab lighting;
+    CreativeModeTab microblocks;
 
-    static {
+    @SubscribeEvent
+    public void onRegisterCreativeModeTabs(CreativeModeTabEvent.Register event) {
+        blocks = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "blocks"), (builder) -> builder.title(Component.translatable("itemGroup.bluepower:blocks")).icon(() -> new ItemStack(BPBlocks.amethyst_ore.get())));
+        machines = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "machines"),(builder) -> builder.title(Component.translatable("itemGroup.bluepower:machines")).icon(() -> new ItemStack(BPBlocks.alloyfurnace.get())));
+        items = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "items"), (builder) -> builder.title(Component.translatable("itemGroup.bluepower:items")).icon(() -> new ItemStack(BPItems.ruby_gem.get())));
+        tools = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "tools"), (builder) -> builder.title(Component.translatable("itemGroup.bluepower:tools")).icon(() ->  new ItemStack(BPItems.screwdriver.get())));
+        lighting = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "lighting"), (builder) -> builder.title(Component.translatable("itemGroup.bluepower:lighting")).icon(() ->  new ItemStack(BPBlocks.fixedLampRGB.get())).backgroundSuffix("bp_search.png").withSearchBar(62));
+        microblocks = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "microblocks"), (builder) -> builder.title(Component.translatable("itemGroup.bluepower:microblocks")).icon(() ->  new ItemStack(BPBlocks.microblocks.get(0).get())).backgroundSuffix("bp_search.png").withSearchBar(62));
+    }
 
-        blocks = new BPCreativeTab("bluepower:blocks") {
-
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public ItemStack makeIcon() {
-                Block iconBlock = BPBlocks.amethyst_ore.get();
-                if (iconBlock != null) {
-                    return new ItemStack(iconBlock);
-                } else {
-                    return new ItemStack(Blocks.STONE);
+    @SubscribeEvent
+    public void creativeTabEvent(CreativeModeTabEvent.BuildContents event) {
+        if(event.getTab() == blocks) {
+            event.acceptAll(BPBlocks.regularBlocks.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
+        }else if(event.getTab() == items){
+            event.accept(BPBlocks.indigo_flower.get());
+            BPItems.ITEMS.getEntries().forEach((item) -> {if(!(item.get() instanceof TieredItem || item.get() instanceof ItemSaw || item.get() instanceof ItemScrewdriver || item.get() instanceof BlockItem)){event.accept(item.get());}});
+        }else if(event.getTab() == tools){
+            BPItems.ITEMS.getEntries().forEach((item) -> {if(item.get() instanceof TieredItem || item.get() instanceof ItemSaw || item.get() instanceof ItemScrewdriver){event.accept(item.get());}});
+        }else if(event.getTab() == machines){
+            event.acceptAll(BPBlocks.machines.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
+            event.accept(BPBlocks.blulectric_cable.get());
+            event.accept(BPBlocks.blockGateAND.get());
+            event.accept(BPBlocks.blockGateNAND.get());
+        }else if(event.getTab() == lighting){
+            event.acceptAll(BPBlocks.allLamps.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
+        }else if(event.getTab() == microblocks){
+            for (Block block : ForgeRegistries.BLOCKS.getValues().stream().filter(b -> !(b instanceof EntityBlock)).toList()) {
+                VoxelShape shape = null;
+                try{
+                    shape = block.defaultBlockState().getShape(null, null);
+                }catch (NullPointerException ignored){
+                    //Shulker Boxes try to query the Tile Entity
                 }
-            }
-        };
-
-        machines = new BPCreativeTab("bluepower:machines") {
-
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public ItemStack makeIcon() {
-
-                Block iconBlock = BPBlocks.alloyfurnace.get();
-                if (iconBlock != null) {
-                    return new ItemStack(iconBlock);
-                } else {
-                    return new ItemStack(Blocks.FURNACE);
-                }
-            }
-        };
-
-        items = new BPCreativeTab("bluepower:items") {
-
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public ItemStack makeIcon() {
-
-                Item iconItem = BPItems.ruby_gem.get();
-                if (iconItem != null) {
-                    return new ItemStack(BPItems.ruby_gem.get());
-                } else {
-                    return new ItemStack(Items.DIAMOND);
-                }
-            }
-        };
-
-        tools = new BPCreativeTab("bluepower:tools") {
-
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public ItemStack makeIcon() {
-
-                Item iconItem = BPItems.screwdriver.get();
-                if (iconItem != null) {
-                    return new ItemStack(BPItems.screwdriver.get());
-                } else {
-                    return new ItemStack(Items.DIAMOND_PICKAXE);
-                }
-            }
-        };
-
-        circuits = new BPCreativeTab("bluepower:circuits", true) {
-
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public ItemStack makeIcon() {
-
-                ItemStack iconItem = new ItemStack(BPItems.redstone_pointer_tile.get());
-                if (!iconItem.isEmpty()) {
-                    return iconItem;
-                } else {
-                    return new ItemStack(Blocks.STONE);
-                }
-            }
-        };
-
-        wiring = new BPCreativeTab("bluepower:wiring", true) {
-
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public ItemStack makeIcon() {
-                ItemStack iconItem = new ItemStack(BPBlocks.blulectric_cable.get());
-                if (!iconItem.isEmpty()) {
-                    return iconItem;
-                } else {
-                    return new ItemStack(Blocks.STONE);
-                }
-            }
-        };
-
-        lighting = new BPCreativeTab("bluepower:lighting", true) {
-
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public ItemStack makeIcon() {
-                int t = 1000;
-
-                int i = (int) ((System.currentTimeMillis() / t) % MinecraftColor.VALID_COLORS.length);
-                boolean b = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 2)) >= MinecraftColor.VALID_COLORS.length;
-                boolean b2 = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 4)) >= MinecraftColor.VALID_COLORS.length;
-
-                ItemStack iconItem = new ItemStack(BPBlocks.blockLampRGB.get());
-                if (!iconItem.isEmpty()) {
-                    return iconItem;
-                } else {
-                    return new ItemStack(Blocks.STONE);
-                }
-            }
-        };
-
-        microblocks = new BPCreativeTab("bluepower:microblocks", true) {
-
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public ItemStack makeIcon() {
-                ItemStack iconItem = new ItemStack(BPBlocks.microblocks.get(0).get());
-                if (!iconItem.isEmpty()) {
-                    return iconItem;
-                } else {
-                    return new ItemStack(Blocks.STONE);
-                }
-            }
-
-            @Override
-            public void fillItemList(NonNullList<ItemStack> items) {
-                for (Block block : ForgeRegistries.BLOCKS.getValues().stream().filter(b -> !(b instanceof EntityBlock)).toList()) {
-                    VoxelShape shape = null;
-                    try{
-                        shape = block.defaultBlockState().getShape(null, null);
-                    }catch (NullPointerException ignored){
-                        //Shulker Boxes try to query the Tile Entity
-                    }
-                    if(ForgeRegistries.BLOCKS.getKey(block) != null && shape == Shapes.block()) {
-                        for (RegistryObject<Block> mb : BPBlocks.microblocks){
-                            CompoundTag nbt = new CompoundTag();
-                            nbt.putString("block", ForgeRegistries.BLOCKS.getKey(block).toString());
-                            ItemStack stack = new ItemStack(mb.get());
-                            stack.setTag(nbt);
-                            stack.setHoverName(Component.translatable(block.getDescriptionId())
-                                    .append(Component.literal(" "))
-                                    .append(Component.translatable(mb.get().getDescriptionId())));
-                            items.add(stack);
-                        }
+                if(ForgeRegistries.BLOCKS.getKey(block) != null && shape == Shapes.block()) {
+                    for (RegistryObject<Block> mb : BPBlocks.microblocks){
+                        CompoundTag nbt = new CompoundTag();
+                        nbt.putString("block", ForgeRegistries.BLOCKS.getKey(block).toString());
+                        ItemStack stack = new ItemStack(mb.get());
+                        stack.setTag(nbt);
+                        stack.setHoverName(Component.translatable(block.getDescriptionId())
+                                .append(Component.literal(" "))
+                                .append(Component.translatable(mb.get().getDescriptionId())));
+                        event.accept(stack);
                     }
                 }
             }
-        };
-
+        }
     }
 
-    private static abstract class BPCreativeTab extends CreativeModeTab {
-
-        private boolean searchbar = false;
-
-        public BPCreativeTab(String label) {
-
-            super(label);
-        }
-
-        public BPCreativeTab(String label, boolean searchbar) {
-
-            this(label);
-            this.searchbar = searchbar;
-        }
-
-        @Override
-        public boolean hasSearchBar() {
-
-            return searchbar;
-        }
-
-        @Override
-        @OnlyIn(Dist.CLIENT)
-        public String getBackgroundSuffix() {
-
-            return searchbar ? "bp_search.png" : super.getBackgroundSuffix();
-        }
-
-        @Override
-        public int getSearchbarWidth() {
-
-            return 62;
-        }
-
-    }
 }

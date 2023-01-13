@@ -46,7 +46,7 @@ public class ItemAthame extends SwordItem {
     private static Tier athameMaterial = new SilverItemTier(100, 6.0F, 2.0F, 0, 10);
     
     public ItemAthame() {
-        super(athameMaterial, 1, -3, new Properties().tab(BPCreativeTabs.tools));
+        super(athameMaterial, 1, -3, new Properties());
     }
 
     @Override
