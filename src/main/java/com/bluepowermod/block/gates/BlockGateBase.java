@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -49,6 +50,13 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     public static final BooleanProperty POWERED_LEFT = BooleanProperty.create("powered_left");
     public static final BooleanProperty POWERED_RIGHT = BooleanProperty.create("powered_right");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+
+    public enum Side {
+        BACK,
+        FRONT,
+        LEFT,
+        RIGHT
+    }
 
     public BlockGateBase() {
         super(Material.CLAY);
@@ -84,6 +92,23 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
         return AABBUtils.rotate(Refs.GATE_AABB, state.getValue(FACING));
     }
 
+    public int rotate(int rotation, int steps) {
+        return (rotation + steps) % 4;
+    }
+
+
+    @Override
+    public BlockState rotate(BlockState state, LevelAccessor level, BlockPos pos, Rotation rotation) {
+        switch (rotation){
+            case NONE -> {}
+            case CLOCKWISE_90 -> state.setValue(ROTATION, rotate(state.getValue(ROTATION),  1));
+            case CLOCKWISE_180 -> state.setValue(ROTATION, rotate(state.getValue(ROTATION), 2));
+            case COUNTERCLOCKWISE_90 -> state.setValue(ROTATION, rotate(state.getValue(ROTATION), 3));
+        }
+        level.setBlock(pos, state, 3);
+        return state;
+    }
+
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return state.getValue(FACING) != side && (state.getValue(FACING).getOpposite() != side);
@@ -100,15 +125,15 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
         super.setPlacedBy(world, pos, state, entity, stack);
-        Map<String, Byte> map = getSidePower(world, state, pos);
-        world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get("front") > 0)
-                .setValue(POWERED_BACK, map.get("back") > 0)
-                .setValue(POWERED_LEFT, map.get("left") > 0)
-                .setValue(POWERED_RIGHT, map.get("right") > 0));
+        Map<Side, Byte> map = getSidePower(world, state, pos);
+        world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
+                .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
+                .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
+                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0));
     }
 
     @Override
-    public boolean isSignalSource(BlockState p_149744_1_) {
+    public boolean isSignalSource(BlockState blockState) {
         return true;
     }
 
@@ -116,8 +141,8 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side){
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
         if(side == dirs[blockState.getValue(ROTATION)]) {
-            Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
-            return map.get("front");
+            Map<Side, Byte> map = getSidePower(blockAccess, blockState, pos);
+            return map.get(Side.FRONT);
         }
         return 0;
     }
@@ -126,14 +151,14 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
         if(side == dirs[blockState.getValue(ROTATION)]) {
-            Map<String, Byte> map = getSidePower(blockAccess, blockState, pos);
-            return map.get("front");
+            Map<Side, Byte> map = getSidePower(blockAccess, blockState, pos);
+            return map.get(Side.FRONT);
         }
         return 0;
     }
 
-    private Map<String, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos){
-         Map<String, Byte> map = new HashMap<>();
+    public Map<Side, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos){
+         Map<Side, Byte> map = new HashMap<>();
          Direction[] dirs = DirectionHelper.ArrayFromDirection(state.getValue(FACING));
          Direction side_left = dirs[state.getValue(ROTATION) == 3 ? 0 : state.getValue(ROTATION) + 1];
          Direction side_right = side_left.getOpposite();
@@ -150,15 +175,14 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
          if(state_left.getBlock() instanceof RedStoneWireBlock){left = state_left.getValue(RedStoneWireBlock.POWER).byteValue();}
          if(state_right.getBlock() instanceof RedStoneWireBlock){right = state_right.getValue(RedStoneWireBlock.POWER).byteValue();}
          if(state_back.getBlock() instanceof RedStoneWireBlock){back = state_back.getValue(RedStoneWireBlock.POWER).byteValue();}
-         map.put("left", left);
-         map.put("right", right);
-         map.put("back", back);
-         map.put("front", computeRedstone(back, left, right));
+         map.put(Side.LEFT, left);
+         map.put(Side.RIGHT, right);
+         map.put(Side.BACK, back);
+         map.put(Side.FRONT, computeRedstone(Side.FRONT, back, (byte) 0, left, right));
          return map;
     }
 
-    public byte computeRedstone(byte back, byte left, byte right){
-
+    public byte computeRedstone(Side side, byte back, byte front, byte left, byte right){
         if (left > 0 && right > 0 ){
             return (byte)(back > 0 ? 16 : 0);
         }
@@ -172,11 +196,11 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
             world.destroyBlock(pos, true);
             return;
         }
-        Map<String, Byte> map = getSidePower(world, state, pos);
-        world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get("front") > 0)
-                .setValue(POWERED_BACK, map.get("back") > 0)
-                .setValue(POWERED_LEFT, map.get("left") > 0)
-                .setValue(POWERED_RIGHT, map.get("right") > 0));
+        Map<Side, Byte> map = getSidePower(world, state, pos);
+        world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
+                .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
+                .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
+                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0));
     }
 
 }
