@@ -29,6 +29,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.Arrays;
+
 /**
   @author MoreThanHidden
 */
@@ -79,7 +81,9 @@ public class AlloyFurnaceHandler implements IRecipeCategory<IAlloyFurnaceRecipe>
             for(int j = 0; j < 3; j++ ) {
                 IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, 39 + j * 18, 4 + i * 18);
                 if(recipe.getRequiredItems() != null && count < recipe.getRequiredItems().size()) {
-                    slot.addIngredients(recipe.getRequiredItems().get(count));
+                    int finalCount = count;
+                    slot.addItemStacks(Arrays.stream(recipe.getRequiredItems().get(count).getItems()).peek((stack) ->
+                            stack.setCount(recipe.getRequiredCount().get(finalCount))).toList());
                     count++;
                 }
             }
