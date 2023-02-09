@@ -21,6 +21,10 @@ public class BlockNullCell extends BlockGateBase {
 
     private boolean shouldSignal = true;
 
+    public BlockNullCell() {
+        setWIP(true);
+    }
+
     enum Modes {
         STRAIGHT,
         LEFT_FRONT,

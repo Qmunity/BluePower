@@ -234,6 +234,7 @@ public class BPBlocks {
         machines.add(blulectric_furnace);
         machines.add(engine);
         machines.add(solarpanel);
+        machines.add(tube);
 
         for(RegistryObject<Block> block : machines){
             BPItems.ITEMS.register(block.getKey().location().getPath(), () -> new BlockItem(block.get(), new Item.Properties()));

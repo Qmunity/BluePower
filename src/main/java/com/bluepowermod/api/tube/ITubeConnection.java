@@ -8,6 +8,7 @@
 package com.bluepowermod.api.tube;
 
 
+import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.core.Direction;
 
 /**
@@ -26,5 +27,5 @@ public interface ITubeConnection {
      * @param simulate when true, only return what would have been accepted, but don't actually accept.
      * @return The TubeStack that was unable to enter this ITubeConnection
      */
-    //public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate);
+    public TubeStack acceptItemFromTube(TubeStack stack, Direction from, boolean simulate);
 }

@@ -83,6 +83,7 @@ public class Renderers {
     public static void init() {
 
         BlockEntityRenderers.register(BPBlockEntityType.LAMP.get(), context -> new RenderLamp());
+        BlockEntityRenderers.register(BPBlockEntityType.TUBE.get(), context -> new RenderTube());
         BlockEntityRenderers.register(BPBlockEntityType.ENGINE.get(), context -> new RenderEngine());
 
         for (RegistryObject<Item> item : BPItems.ITEMS.getEntries()) {
