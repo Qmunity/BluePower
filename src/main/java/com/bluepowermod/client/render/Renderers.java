@@ -19,6 +19,7 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tile.BPBlockEntityType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
@@ -61,16 +62,16 @@ public class Renderers {
         BPMultipartModel multipartModel = new BPMultipartModel();
         BPMicroblockModel microblockModel = new BPMicroblockModel();
         
-        Map<ResourceLocation, BakedModel> models = new HashMap<>(event.getModels());
+        Map<ResourceLocation, BakedModel> models = new HashMap<>(event.getModelRegistry());
         models.forEach((key, model) -> {
             if(key.toString().contains("bluepower:cover") || key.toString().contains("bluepower:panel") || key.toString().contains("bluepower:half_block")){
                 if(((ModelResourceLocation)key).getVariant().contains("waterlogged=true")){
-                    event.getModels().put(new ModelResourceLocation(key.getNamespace(), key.getPath(), ((ModelResourceLocation)key).getVariant().replace("facing", "face").split(",")[0]), model);
+                    event.getModelRegistry().put(new ModelResourceLocation(key.getNamespace(), key.getPath(), ((ModelResourceLocation)key).getVariant().replace("facing", "face").split(",")[0]), model);
                 }
-                event.getModels().put(key, microblockModel);
+                event.getModelRegistry().put(key, microblockModel);
             }
             if(key.toString().contains("bluepower:multipart")){
-                event.getModels().put(key, multipartModel);
+                event.getModelRegistry().put(key, multipartModel);
             }
         });
 
