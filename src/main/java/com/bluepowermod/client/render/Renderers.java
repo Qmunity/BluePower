@@ -18,13 +18,13 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.core.Direction;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,6 +34,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author MoreThanHidden
@@ -54,25 +57,22 @@ public class Renderers {
     @SubscribeEvent
     public void onModelBakeEvent(ModelEvent.ModifyBakingResult event) {
 
-        //Register Multipart Model
+        //Register Multipart and Microblock Baked Models
         BPMultipartModel multipartModel = new BPMultipartModel();
-        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:multipart"),"waterlogged=false"), multipartModel);
-        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:multipart"),"waterlogged=true"), multipartModel);
-
         BPMicroblockModel microblockModel = new BPMicroblockModel();
 
-        for(Direction dir : Direction.values()) {
-            //Register Microblock Models
-            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
-            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
-            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "face=" + dir.getName()), event.getModels().get(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "facing=" + dir.getName() + ",waterlogged=true")));
-            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "facing=" + dir.getName() + ",waterlogged=true"), microblockModel);
-            event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "facing=" + dir.getName() + ",waterlogged=false"), microblockModel);
-        }
+        Map<ResourceLocation, BakedModel> models = new HashMap<>(event.getModels());
+        models.forEach((key, model) -> {
+            if(key.toString().contains("bluepower:cover") || key.toString().contains("bluepower:panel") || key.toString().contains("bluepower:half_block")){
+                if(((ModelResourceLocation)key).getVariant().contains("waterlogged=true")){
+                    event.getModels().put(new ModelResourceLocation(key.getNamespace(), key.getPath(), ((ModelResourceLocation)key).getVariant().replace("facing", "face").split(",")[0]), model);
+                }
+                event.getModels().put(key, microblockModel);
+            }
+            if(key.toString().contains("bluepower:multipart")){
+                event.getModels().put(key, multipartModel);
+            }
+        });
 
         event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "inventory"), microblockModel);
         event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "inventory"), microblockModel);
