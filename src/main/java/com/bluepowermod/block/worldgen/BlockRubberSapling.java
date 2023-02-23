@@ -2,24 +2,26 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
-
 import net.minecraft.world.level.block.SaplingBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockRubberSapling extends SaplingBlock {
 
-    public BlockRubberSapling(AbstractTreeGrower tree, Properties properties) {
-        super(tree, properties);
+    public BlockRubberSapling(Properties properties) {
+        super(new AbstractTreeGrower() {
+            @Override
+            protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(@NotNull RandomSource source, boolean p_222911_) {
+                return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(Refs.MODID, "rubber_tree"));
+            }
+        }, properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(STAGE, 0));
         BPBlocks.blockList.add(this);
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
-        builder.add(STAGE);
     }
 
 }
