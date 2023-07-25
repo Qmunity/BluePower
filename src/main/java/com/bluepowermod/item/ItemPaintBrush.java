@@ -9,12 +9,14 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileInsulatedWire;
+import com.bluepowermod.tile.tier2.TileTube;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.InteractionResult;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemPaintBrush extends ItemDamageableColorableOverlay {
     private final MinecraftColor color;
@@ -37,11 +39,10 @@ public class ItemPaintBrush extends ItemDamageableColorableOverlay {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         BlockEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
-        boolean changed = false;
-        if(tile instanceof TileInsulatedWire){
-           changed = ((TileInsulatedWire) tile).setColor(color);
-        if(changed && context.getPlayer() != null)
-            context.getPlayer().setItemInHand(context.getHand(), new ItemStack(BPItems.paint_brush.get(0).get()));
+        if(tile instanceof TileInsulatedWire && ((TileInsulatedWire) tile).setColor(color) && context.getPlayer() != null) {
+               context.getPlayer().setItemInHand(context.getHand(), new ItemStack(BPItems.paint_brush.get(0).get()));
+        }else if(tile instanceof TileTube && ((TileTube) tile).setColor(color) && context.getPlayer() != null) {
+               context.getPlayer().setItemInHand(context.getHand(), new ItemStack(BPItems.paint_brush.get(0).get()));
         }
         return super.useOn(context);
     }

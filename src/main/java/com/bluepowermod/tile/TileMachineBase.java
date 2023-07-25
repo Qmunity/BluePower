@@ -225,6 +225,14 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
+    public TubeStack acceptItemFromTube(TubeStack stack, Direction from, boolean simulate) {
+        if(!simulate) {
+            internalItemStackBuffer.add(stack);
+        }
+        return stack;
+    }
+
+    @Override
     public int getWeight(Direction from) {
 
         return from == getOutputDirection().getOpposite() ? 1000000 : 0;// make the buffer side the last place to go

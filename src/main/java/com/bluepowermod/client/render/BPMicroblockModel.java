@@ -26,6 +26,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -165,7 +166,7 @@ public class BPMicroblockModel implements BakedModel {
     }
 
     @Override
-    public BakedModel applyTransform(ItemTransforms.TransformType type, PoseStack stack, boolean applyLeftHandTransform) {
+    public BakedModel applyTransform(ItemDisplayContext type, PoseStack stack, boolean applyLeftHandTransform) {
         BakedModel sizeModel = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(defSize.getId(), "face=" + Direction.WEST));
         sizeModel.getTransforms().getTransform(type).apply(applyLeftHandTransform, stack);
         return this;

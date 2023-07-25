@@ -72,7 +72,7 @@ public class AlloyFurnaceHandler implements IRecipeCategory<IAlloyFurnaceRecipe>
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, IAlloyFurnaceRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 126, 22).addItemStack(recipe.getResultItem());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 126, 22).addItemStack(recipe.getResultItem(null));
         int count = 0;
         for(int i = 0; i < 3; i++ ) {
             for(int j = 0; j < 3; j++ ) {

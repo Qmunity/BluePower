@@ -7,6 +7,8 @@
  */
 package com.bluepowermod.helper;
 
+import com.bluepowermod.container.stack.TubeStack;
+import com.bluepowermod.tile.tier2.TileTube;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.WorldlyContainer;
@@ -20,6 +22,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 /**
  * @author MineMaarten
@@ -237,14 +242,15 @@ public class IOHelper {
                 return ItemStack.EMPTY;
             return tubeStack.stack;
         }
-        Container inv = getInventoryForTE(tile);
-        if (!inv.isEmpty())
-            return insert(inv, itemStack, direction.ordinal(), simulate);
-        PneumaticTube tube = MultipartCompatibility.getPart(tile.getLevel(), tile.getPos(), PneumaticTube.class);
-        if (tube != null) {// we don't need to check connections, that's catched earlier.
-            TubeLogic logic = tube.getLogic();
-            return logic.injectStack(itemStack, direction.getOpposite(), color, simulate) ? ItemStack.EMPTY : itemStack;
+
+        if (tile.getCapability(ForgeCapabilities.ITEM_HANDLER, direction).isPresent()) {
+            IItemHandler handler = tile.getCapability(ForgeCapabilities.ITEM_HANDLER, direction).orElse(null);
+            if (handler != null) {
+                return ItemHandlerHelper.insertItem(handler, itemStack, simulate);
+            }
+            return itemStack;
         }*/
+
         return itemStack;
     }
 
@@ -375,10 +381,8 @@ public class IOHelper {
 
    public static boolean canInterfaceWith(BlockEntity tile, Direction direction, boolean canInterfaceWithContainer) {
 
-       // PneumaticTube tube = tile != null ? MultipartCompatibility.getPart(tile.getLevel(), tile.getPos(),
-                //PneumaticTube.class) : null;
-        //if (tube != null && tube.isConnected(direction, requester))
-            //return true;
+       if (tile instanceof TileTube)
+            return true;
         if (!canInterfaceWithContainer)
             return false;
         if (tile instanceof ITubeConnection) {

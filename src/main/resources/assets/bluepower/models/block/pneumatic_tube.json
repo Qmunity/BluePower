@@ -1,7 +1,9 @@
 {
+	"parent": "block/block",
 	"textures": {
 		"glass": "bluepower:blocks/tubes/glass",
-		"edge": "bluepower:blocks/tubes/pneumatic_tube_end_opaque"
+		"edge": "bluepower:blocks/tubes/pneumatic_tube_end_opaque",
+		"particle": "bluepower:blocks/tubes/pneumatic_tube_end_opaque"
 	},
 	"elements": [
 		{

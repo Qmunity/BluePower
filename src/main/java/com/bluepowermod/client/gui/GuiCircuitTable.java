@@ -145,7 +145,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
     }
 
     //@Override
-    //public void m_181908_() {
+    //public void containerTick() {
         //for (int i = 0; i < 24; i++) {
             //displayRed[i] = inventory.getItem(i).isEmpty() && shouldDisplayRed(inventory.getItem(i));
         //}

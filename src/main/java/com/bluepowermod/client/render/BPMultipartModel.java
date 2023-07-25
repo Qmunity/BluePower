@@ -13,12 +13,12 @@ import com.bluepowermod.tile.tier1.TileWire;
 import com.bluepowermod.util.MultipartUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormatElement;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
@@ -114,7 +114,7 @@ public class BPMultipartModel implements BakedModel {
             if(state != null)
                 return Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getParticleIcon();
         }
-        return Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation("minecraft:stone", "")).getParticleIcon();
+        return Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(new ResourceLocation("minecraft:stone"), "")).getParticleIcon();
     }
 
     @Override

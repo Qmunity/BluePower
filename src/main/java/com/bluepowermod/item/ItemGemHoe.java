@@ -24,13 +24,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemGemHoe extends HoeItem {
 
     public Item customCraftingMaterial;
     protected boolean canRepair = true;
 
     public ItemGemHoe(Tier itemTier, Item repairItem) {
-        super(itemTier, 1, -1.4F, new Properties().tab(BPCreativeTabs.tools));
+        super(itemTier, 1, -1.4F, new Properties());
         this.customCraftingMaterial = repairItem;
     }
 

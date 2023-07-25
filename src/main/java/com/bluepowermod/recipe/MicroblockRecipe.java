@@ -5,11 +5,13 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.item.ItemSaw;
 import com.google.gson.JsonObject;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -23,8 +25,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class MicroblockRecipe extends CustomRecipe {
 
-    public MicroblockRecipe(ResourceLocation idIn) {
-        super(idIn);
+    public MicroblockRecipe(ResourceLocation resourceLocation) {
+        super(resourceLocation, CraftingBookCategory.BUILDING);
     }
 
     @Override
@@ -56,7 +58,7 @@ public class MicroblockRecipe extends CustomRecipe {
     }
     
     @Override
-    public ItemStack assemble(CraftingContainer inv) {
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess access) {
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem) {

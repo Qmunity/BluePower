@@ -1,0 +1,7 @@
+{
+  "parent": "bluepower:block/nullcell/nullcell_crossed_off_z",
+  "textures": {
+    "backleftwire": "bluepower:base/bluestone_off",
+    "frontrightwire": "bluepower:base/bluestone_on"
+  }
+}

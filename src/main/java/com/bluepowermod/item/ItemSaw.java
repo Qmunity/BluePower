@@ -25,12 +25,14 @@ import com.bluepowermod.init.BPCreativeTabs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemSaw extends ItemBase{
 
     private final int sawLevel;
 
     public ItemSaw(int sawLevel) {
-        super(new Properties().stacksTo(1).durability(1 << sawLevel + 8), BPCreativeTabs.tools);
+        super(new Properties().stacksTo(1).durability(1 << sawLevel + 8));
         this.sawLevel = sawLevel;
     }
 

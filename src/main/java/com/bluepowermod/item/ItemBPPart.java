@@ -24,6 +24,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionResult;
 
+import net.minecraft.world.item.Item.Properties;
+
 /**
  * IBPPartBlock's use this rather then BlockItem for their Items.
  * @author MoreThanHidden

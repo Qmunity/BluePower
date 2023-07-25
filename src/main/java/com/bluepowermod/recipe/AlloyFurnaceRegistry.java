@@ -27,6 +27,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -110,7 +111,7 @@ public class AlloyFurnaceRegistry {
         }
 
         @Override
-        public ItemStack assemble(WorldlyContainer inv) {
+        public ItemStack assemble(WorldlyContainer inv, RegistryAccess registryAccess) {
             NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
             if(inv instanceof TileAlloyFurnace) {
                 //Get Input Slots first 2 are Fuel and Output
@@ -133,7 +134,7 @@ public class AlloyFurnaceRegistry {
         }
 
         @Override
-        public ItemStack getResultItem() {
+        public ItemStack getResultItem(RegistryAccess registryAccess) {
             return craftingResult;
         }
 

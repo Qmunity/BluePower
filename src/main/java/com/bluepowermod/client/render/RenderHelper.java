@@ -8,8 +8,6 @@
 package com.bluepowermod.client.render;
 
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -19,6 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
@@ -397,7 +397,7 @@ public class RenderHelper {
         Matrix4f positionMatrix = entry.pose();
         Matrix3f normalMatrix = entry.normal();
 
-        TextureAtlasSprite sprite =  Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation("minecraft:white_concrete", "")).getParticleIcon();
+        TextureAtlasSprite sprite =  Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(new ResourceLocation("minecraft:white_concrete"), "")).getParticleIcon();
         float minU = sprite.getU0();
         float maxU = sprite.getU1();
         float minV = sprite.getV0();

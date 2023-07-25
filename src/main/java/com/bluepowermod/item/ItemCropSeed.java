@@ -17,7 +17,6 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPCreativeTabs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -34,12 +33,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.registries.RegistryObject;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemCropSeed extends Item implements IPlantable {
 
     public static RegistryObject<Block> block;
 
     public ItemCropSeed(RegistryObject<Block> blockCrop, Block blockSoil) {
-        super(new Properties().tab(BPCreativeTabs.items));
+        super(new Properties());
         block = blockCrop;
     }
 

@@ -151,7 +151,7 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
             if (optional.isPresent()) {
                 CraftingRecipe icraftingrecipe = optional.get();
                 if (craftResultInventory.setRecipeUsed(world, serverplayerentity, icraftingrecipe)) {
-                    itemstack = icraftingrecipe.assemble(craftingInventory);
+                    itemstack = icraftingrecipe.assemble(craftingInventory, world.registryAccess());
                 }
             }
 

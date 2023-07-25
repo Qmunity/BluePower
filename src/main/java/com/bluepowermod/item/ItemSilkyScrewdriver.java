@@ -22,10 +22,12 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemSilkyScrewdriver extends ItemBase {
 
     public ItemSilkyScrewdriver() {
-        super(new Properties().durability(250), BPCreativeTabs.tools);
+        super(new Properties().durability(250));
     }
 
     @Override

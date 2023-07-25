@@ -7,15 +7,18 @@
  */
 package com.bluepowermod.container.stack;
 
-import io.netty.buffer.ByteBuf;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -23,6 +26,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.RenderHelper;
@@ -34,13 +39,13 @@ import net.minecraft.world.item.ItemStack;
  * @author MineMaarten
  */
 
-public class TubeStack {
+public class TubeStack implements IItemHandler {
 
     public ItemStack stack;
-    public final TubeColor color;
+    public TubeColor color;
     public double progress; // 0 at the start, 0.5 on an intersection, 1 at the end.
     public double oldProgress;
-    public Direction heading;
+    public final Direction heading;
     public boolean enabled = true; // will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server
     // input. This just serves a visual purpose.
     public int idleCounter; // increased when the stack is standing still. This will cause the client to remove the stack when a timeout occurs.
@@ -56,6 +61,63 @@ public class TubeStack {
 
     public static RenderMode renderMode;
 
+    @Override
+    public int getSlots() {
+        return 1;
+    }
+
+    @Override
+    public @NotNull ItemStack getStackInSlot(int slot) {
+        return stack;
+    }
+
+    @Override
+    public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+        ItemStack remainder = stack.copy();
+        if(this.stack.isEmpty()) {
+            remainder = ItemStack.EMPTY;
+            if(!simulate) {
+                this.stack = stack.copy();
+            }
+        }else if(this.stack.sameItem(stack) && this.stack.getCount() < this.stack.getMaxStackSize()){
+            int amount = Math.min(stack.getCount(), this.stack.getMaxStackSize() - this.stack.getCount());
+            remainder.shrink(amount);
+            if(!simulate) {
+                this.stack.grow(amount);
+            }
+        }
+        return remainder;
+    }
+
+    @Override
+    public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+        ItemStack ret = this.stack.copy();
+        if(!this.stack.isEmpty()){
+            if(this.stack.getCount() > amount){
+                ret.setCount(amount);
+                if(!simulate){
+                    this.stack.shrink(amount);
+                }
+            }else{
+                ret = ItemStack.EMPTY;
+                if(!simulate){
+                    this.stack = ItemStack.EMPTY;
+                }
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public int getSlotLimit(int slot) {
+        return stack.getMaxStackSize();
+    }
+
+    @Override
+    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+        return this.stack.isEmpty() || (this.stack.sameItem(stack) && this.stack.getCount() < this.stack.getMaxStackSize());
+    }
+
     public static enum RenderMode {
         AUTO, NORMAL, REDUCED, NONE
     }
@@ -66,8 +128,9 @@ public class TubeStack {
     }
 
     public TubeStack(ItemStack stack, Direction from, TubeColor color) {
-
-        heading = from;
+        this.heading = from;
+        this.progress = 0;
+        this.speed = 1;
         this.stack = stack;
         this.color = color;
     }
@@ -129,7 +192,6 @@ public class TubeStack {
     }
 
     public void writeToNBT(CompoundTag tag) {
-
         stack.save(tag);
         tag.putByte("color", (byte) color.ordinal());
         tag.putByte("heading", (byte) heading.ordinal());
@@ -141,7 +203,6 @@ public class TubeStack {
     }
 
     public static TubeStack loadFromNBT(CompoundTag tag) {
-
         TubeStack stack = new TubeStack(ItemStack.of(tag), Direction.from3DDataValue(tag.getByte("heading")),
                 TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
@@ -152,27 +213,8 @@ public class TubeStack {
         return stack;
     }
 
-    public void writeToPacket(ByteBuf buf) {
-        //TODO: Add Items
-        //ByteBufUtils.writeItemStack(buf, stack);
-        buf.writeByte(heading.ordinal());
-        buf.writeByte((byte) color.ordinal());
-        buf.writeDouble(speed);
-        buf.writeDouble(progress);
-    }
-
-    public static TubeStack loadFromPacket(ByteBuf buf) {
-        //TODO: Add Items
-        //ByteBufUtils.readItemStack(buf)
-        TubeStack stack = new TubeStack(null, Direction.from3DDataValue(buf.readByte()),
-                TubeColor.values()[buf.readByte()]);
-        stack.speed = buf.readDouble();
-        stack.progress = buf.readDouble();
-        return stack;
-    }
-
     @OnlyIn(Dist.CLIENT)
-    public void render(float partialTick) {
+    public void render(float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
 
         if (renderMode == RenderMode.AUTO) {
             renderMode = Minecraft.getInstance().options.graphicsMode().get() == GraphicsStatus.FANCY ? RenderMode.NORMAL : RenderMode.REDUCED;
@@ -187,20 +229,21 @@ public class TubeStack {
 
         double renderProgress = (oldProgress + (progress - oldProgress) * partialTick) * 2 - 1;
 
-        GL11.glPushMatrix();
-        GL11.glTranslated(heading.getStepX() * renderProgress * 0.5, heading.getStepY() * renderProgress * 0.5, heading.getStepZ() * renderProgress * 0.5);
+        poseStack.pushPose();
+        poseStack.translate(heading.getStepX() * renderProgress * 0.5, heading.getStepY() * renderProgress * 0.5, heading.getStepZ() * renderProgress * 0.5);
         if (finalRenderMode != RenderMode.NONE) {
-            GL11.glPushMatrix();
+            poseStack.pushPose();
             if (stack.getCount() > 5) {
-                GL11.glScaled(0.8, 0.8, 0.8);
+                poseStack.scale(0.8F, 0.8F, 0.8F);
             }
             if (!(stack.getItem() instanceof BlockItem)) {
-                GL11.glScaled(0.8, 0.8, 0.8);
-                GL11.glTranslated(0, -0.15, 0);
+                poseStack.scale(0.8F, 0.8F, 0.8F);
+                poseStack.translate(0, -0.15, 0);
             }
 
-            //TODO: customRenderItem.renderItem(stack, ItemTransforms.TransformType.GROUND);
-            GL11.glPopMatrix();
+            customRenderItem.renderStatic(stack, ItemDisplayContext.GROUND, packedLight, packedOverlay, poseStack, bufferSource, null, 0);
+
+            poseStack.popPose();
         } else {
             float size = 0.02F;
             GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -222,8 +265,9 @@ public class TubeStack {
             GL11.glDisable(GL11.GL_CULL_FACE);
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glColor3f(red, green, blue);
-            //TODO: Find replacement for RenderEngine
-            //Minecraft.getInstance().renderEngine.bindTexture(new ResourceLocation(Refs.MODID, "textures/blocks/tubes/inside_color_border.png"));
+
+            //TODO: bind texture textures/blocks/tubes/inside_color_border.png
+
             RenderHelper.drawTesselatedTexturedCube(new AABB(-size, -size, -size, size, size, size));
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);

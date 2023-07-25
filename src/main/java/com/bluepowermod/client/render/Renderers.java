@@ -55,7 +55,7 @@ public class Renderers {
     }
 
     @SubscribeEvent
-    public void onModelBakeEvent(ModelEvent.BakingCompleted event) {
+    public void onModelBakeEvent(ModelEvent.ModifyBakingResult event) {
 
         //Register Multipart and Microblock Baked Models
         BPMultipartModel multipartModel = new BPMultipartModel();
@@ -74,15 +74,16 @@ public class Renderers {
             }
         });
 
-        event.getModels().put(new ModelResourceLocation("bluepower:half_block", "inventory"), microblockModel);
-        event.getModels().put(new ModelResourceLocation("bluepower:panel", "inventory"), microblockModel);
-        event.getModels().put(new ModelResourceLocation("bluepower:cover", "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "inventory"), microblockModel);
 
     }
 
     public static void init() {
 
         BlockEntityRenderers.register(BPBlockEntityType.LAMP.get(), context -> new RenderLamp());
+        BlockEntityRenderers.register(BPBlockEntityType.TUBE.get(), context -> new RenderTube());
         BlockEntityRenderers.register(BPBlockEntityType.ENGINE.get(), context -> new RenderEngine());
 
         for (RegistryObject<Item> item : BPItems.ITEMS.getEntries()) {

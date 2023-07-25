@@ -40,6 +40,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemSickle extends DiggerItem {
 
     private Item customCraftingMaterial;
@@ -49,7 +51,7 @@ public class ItemSickle extends DiggerItem {
             BlockTags.SMALL_FLOWERS);
 
     public ItemSickle(Tier itemTier, Item repairItem) {
-        super(2,-1.4F, itemTier, BlockTags.MINEABLE_WITH_HOE, new Properties().tab(BPCreativeTabs.tools));
+        super(2,-1.4F, itemTier, BlockTags.MINEABLE_WITH_HOE, new Properties());
         this.customCraftingMaterial = repairItem;
     }
 

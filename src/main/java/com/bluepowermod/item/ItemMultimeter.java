@@ -8,6 +8,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.InteractionResult;
 
+import net.minecraft.world.item.Item.Properties;
+
 /**
  * @author MoreThanHidden
  */
@@ -15,7 +17,7 @@ public class ItemMultimeter extends ItemBase {
 
 
     public ItemMultimeter() {
-        super(new Properties(), BPCreativeTabs.tools);
+        super(new Properties());
     }
 
     @Override

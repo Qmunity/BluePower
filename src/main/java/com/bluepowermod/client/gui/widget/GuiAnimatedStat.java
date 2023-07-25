@@ -3,7 +3,6 @@ package com.bluepowermod.client.gui.widget;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -16,6 +15,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.text.WordUtils;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -274,7 +274,6 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         GuiComponent.fill(matrixStack, renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
                 backGroundColor);
 
-        RenderSystem.disableTexture();
         RenderSystem.lineWidth(3.0F);
         RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
         Tesselator tess = Tesselator.getInstance();
@@ -285,7 +284,6 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         buff.vertex(renderBaseX + renderWidth, renderAffectedY + renderHeight, zLevel);
         buff.vertex(renderBaseX, renderAffectedY + renderHeight, zLevel);
         tess.end();
-        RenderSystem.enableTexture();
         if (leftSided)
             renderWidth *= -1;
         // if done expanding, draw the information
@@ -325,13 +323,13 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     protected void renderItem(PoseStack matrixStack, Font fontRenderer, int x, int y, ItemStack stack) {
 
         if (itemRenderer == null)
-            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelShaper().getModelManager(), Minecraft.getInstance().getItemColors(), null);
+            itemRenderer = new ItemRenderer(Minecraft.getInstance(), Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelShaper().getModelManager(), Minecraft.getInstance().getItemColors(), null);
         matrixStack.pushPose();
         matrixStack.translate(0, 0, -50);
         //GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         //TODO: RenderHelper.enableGUIStandardItemLighting();
-        itemRenderer.renderAndDecorateItem(stack, x, y);
-        itemRenderer.renderGuiItemDecorations(fontRenderer, stack, x, y, null);
+        itemRenderer.renderAndDecorateItem(matrixStack, stack, x, y);
+        itemRenderer.renderGuiItemDecorations(matrixStack, fontRenderer, stack, x, y, null);
 
         //GL11.glEnable(GL11.GL_ALPHA_TEST);
         //TODO: RenderHelper.turnOff();

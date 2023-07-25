@@ -1,7 +1,7 @@
 {
   "multipart": [
     {
-      "apply": { "model": "bluepower:block/tube"}
+      "apply": { "model": "bluepower:block/pneumatic_tube"}
     },
     {   "when": { "north": true },
       "apply": { "model": "bluepower:block/tube_extended" }

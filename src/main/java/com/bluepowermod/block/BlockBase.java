@@ -30,6 +30,8 @@ import net.minecraft.world.level.material.Material;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public abstract class BlockBase extends Block {
 
     private boolean wip = false;
