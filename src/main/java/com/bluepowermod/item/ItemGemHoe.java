@@ -24,6 +24,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemGemHoe extends HoeItem {
 
     public Item customCraftingMaterial;

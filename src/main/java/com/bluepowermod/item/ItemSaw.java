@@ -25,6 +25,8 @@ import com.bluepowermod.init.BPCreativeTabs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemSaw extends ItemBase{
 
     private final int sawLevel;

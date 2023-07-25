@@ -8,6 +8,8 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BlockRubberLog extends RotatedPillarBlock {
     public BlockRubberLog(Properties properties){
         super(properties);

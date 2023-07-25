@@ -22,7 +22,7 @@ project.ext {
     } else {
         build = "-custom"
     }
-    mcVersion = "1.19.3"
+    mcVersion = "1.19.4"
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
@@ -38,15 +38,15 @@ repositories {
     }
     maven {
         // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+        name = "Modmaven"
+        url = "https://modmaven.dev"
     }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'parchment', version: '1.19.2-2022.11.27-1.19.3'
+    mappings channel: 'parchment', version: '1.19.3-2023.06.25-1.19.4'
 
     runs {
         client {
@@ -87,12 +87,12 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.3-44.1.0'
+    minecraft 'net.minecraftforge:forge:1.19.4-45.1.16'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
     compileOnly fg.deobf("curse.maven:jade-324717:3960381")
-    compileOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.3.0.262")
-    //runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.3.0.262")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.4-forge:13.1.0.15")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.19.4-forge:13.1.0.15")
     //runtimeOnly fg.deobf("curse.maven:jade-324717:3834997")
 }
 

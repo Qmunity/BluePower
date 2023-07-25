@@ -27,6 +27,8 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BlockItemOre extends BlockBase {
 
     private final UniformInt xpRange = UniformInt.of(3, 7);

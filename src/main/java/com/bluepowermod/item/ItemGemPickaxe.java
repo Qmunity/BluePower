@@ -24,6 +24,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemGemPickaxe extends PickaxeItem {
 
     public Item customCraftingMaterial;

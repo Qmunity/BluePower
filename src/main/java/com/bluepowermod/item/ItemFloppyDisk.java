@@ -31,6 +31,8 @@ import java.util.List;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemFloppyDisk extends ItemBase implements ItemColor{
 
     public ItemFloppyDisk() {

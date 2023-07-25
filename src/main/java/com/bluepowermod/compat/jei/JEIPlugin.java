@@ -74,7 +74,7 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registryIn) {
-        registryIn.addRecipes(AlloyFurnaceHandler.RECIPE_TYPE, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(BPRecipeTypes.ALLOY_SMELTING.get()).stream().filter(r -> !r.getResultItem().isEmpty()).toList());
+        registryIn.addRecipes(AlloyFurnaceHandler.RECIPE_TYPE, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(BPRecipeTypes.ALLOY_SMELTING.get()).stream().filter(r -> !r.getResultItem(Minecraft.getInstance().level.registryAccess()).isEmpty()).toList());
         registryIn.addRecipes(RecipeTypes.CRAFTING, getMicroblockRecipes());
         registryIn.addRecipes(AlloyFurnaceHandler.RECIPE_TYPE, getRecyclingRecipes());
     }

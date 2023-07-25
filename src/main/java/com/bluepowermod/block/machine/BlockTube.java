@@ -41,6 +41,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 import java.util.List;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 /**
  * @author MoreThanHidden
  */

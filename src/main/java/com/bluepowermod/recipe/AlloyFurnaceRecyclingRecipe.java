@@ -5,6 +5,7 @@ import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.init.BPRecipeTypes;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.WorldlyContainer;
@@ -27,7 +28,8 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
         this.id = idIn;
     }
 
-    public ItemStack getResultItem() {
+    @Override
+    public ItemStack getResultItem(RegistryAccess p_267052_) {
         return ItemStack.EMPTY;
     }
 
@@ -54,7 +56,7 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     @Override
-    public ItemStack assemble(WorldlyContainer inv) {
+    public ItemStack assemble(WorldlyContainer inv, RegistryAccess registryAccess) {
         return ItemStack.EMPTY;
     }
 

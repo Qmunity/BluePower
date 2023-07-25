@@ -33,6 +33,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.registries.RegistryObject;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemCropSeed extends Item implements IPlantable {
 
     public static RegistryObject<Block> block;

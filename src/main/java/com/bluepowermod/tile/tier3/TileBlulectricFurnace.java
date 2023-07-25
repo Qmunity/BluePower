@@ -78,8 +78,8 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
                 if(level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, tileFurnace, level).isPresent()) {
                     tileFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, tileFurnace, level).get();
                     //Check output slot is empty and less than a stack of the same item.
-                    if(!(tileFurnace.outputInventory.getItem() == tileFurnace.currentRecipe.getResultItem().getItem()
-                            && (tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(tileFurnace).getCount()) <= tileFurnace.outputInventory.getMaxStackSize())
+                    if(!(tileFurnace.outputInventory.getItem() == tileFurnace.currentRecipe.getResultItem(level.registryAccess()).getItem()
+                            && (tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(tileFurnace, level.registryAccess()).getCount()) <= tileFurnace.outputInventory.getMaxStackSize())
                             && !tileFurnace.outputInventory.isEmpty()){
                         tileFurnace.currentRecipe = null;
                     }
@@ -96,9 +96,9 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
                     if (++tileFurnace.currentProcessTime >= (100 / (tileFurnace.storage.getEnergy() / tileFurnace.storage.getMaxEnergy()))) {
                         tileFurnace.currentProcessTime = 0;
                         if (!tileFurnace.outputInventory.isEmpty()) {
-                            tileFurnace.outputInventory.setCount(tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(tileFurnace).getCount());
+                            tileFurnace.outputInventory.setCount(tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(tileFurnace, level.registryAccess()).getCount());
                         } else {
-                            tileFurnace.outputInventory = tileFurnace.currentRecipe.assemble(tileFurnace).copy();
+                            tileFurnace.outputInventory = tileFurnace.currentRecipe.assemble(tileFurnace, level.registryAccess()).copy();
                         }
                         tileFurnace.removeItem(0, 1);
                         tileFurnace.updatingRecipe = true;

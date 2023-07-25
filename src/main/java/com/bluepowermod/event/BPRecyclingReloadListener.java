@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.HashSet;
 import java.util.List;
@@ -95,24 +96,24 @@ public class BPRecyclingReloadListener extends SimplePreparableReloadListener<Vo
                         }
                     } catch (Throwable e) {
                         BluePower.log.error("Error when generating an Alloy Furnace recipe for item " + outputItem.getDisplayName().getString()
-                                + ", recipe output: " + recipe.getResultItem().getDisplayName().getString());
+                                + ", recipe output: " + recipe.getResultItem(ServerLifecycleHooks.getCurrentServer().registryAccess()).getDisplayName().getString());
                         e.printStackTrace();
                     }
 
-                    if (recyclingAmount > 0 && recipe.getResultItem().getCount() > 0) {
+                    if (recyclingAmount > 0 && recipe.getResultItem(ServerLifecycleHooks.getCurrentServer().registryAccess()).getCount() > 0) {
                         //Try to avoid Duping
-                        if (!blacklist.contains(recipe.getResultItem().getItem()) && recipe.getResultItem().getCount() > recyclingAmount) {
-                            blacklist.add(recipe.getResultItem().getItem());
+                        if (!blacklist.contains(recipe.getResultItem(ServerLifecycleHooks.getCurrentServer().registryAccess()).getItem()) && recipe.getResultItem(ServerLifecycleHooks.getCurrentServer().registryAccess()).getCount() > recyclingAmount) {
+                            blacklist.add(recipe.getResultItem(ServerLifecycleHooks.getCurrentServer().registryAccess()).getItem());
                         }
 
                         //Skip item if it is on the blacklist
-                        if (blacklist.contains(recipe.getResultItem().getItem())) {
+                        if (blacklist.contains(recipe.getResultItem(ServerLifecycleHooks.getCurrentServer().registryAccess()).getItem())) {
                             continue;
                         }
 
                         //Divide by the Recipe Output
-                        ItemStack output = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount / recipe.getResultItem().getCount()));
-                        AlloyFurnaceRegistry.getInstance().recyclingRecipes.put(recipe.getResultItem().getItem(), output);
+                        ItemStack output = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount / recipe.getResultItem(ServerLifecycleHooks.getCurrentServer().registryAccess()).getCount()));
+                        AlloyFurnaceRegistry.getInstance().recyclingRecipes.put(recipe.getResultItem(ServerLifecycleHooks.getCurrentServer().registryAccess()).getItem(), output);
                     }
                 }
             }

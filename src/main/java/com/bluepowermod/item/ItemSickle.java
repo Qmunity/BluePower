@@ -40,6 +40,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemSickle extends DiggerItem {
 
     private Item customCraftingMaterial;

@@ -9,7 +9,6 @@ package com.bluepowermod.compat.jei;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.reference.Refs;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
@@ -26,8 +25,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.Arrays;
 
@@ -75,7 +72,7 @@ public class AlloyFurnaceHandler implements IRecipeCategory<IAlloyFurnaceRecipe>
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, IAlloyFurnaceRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 126, 22).addItemStack(recipe.getResultItem());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 126, 22).addItemStack(recipe.getResultItem(null));
         int count = 0;
         for(int i = 0; i < 3; i++ ) {
             for(int j = 0; j < 3; j++ ) {

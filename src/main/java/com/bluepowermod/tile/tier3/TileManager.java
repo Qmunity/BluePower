@@ -227,7 +227,7 @@ public class TileManager extends TileMachineBase implements WorldlyContainer, IR
 
     @Override
     public boolean stillValid(Player player) {
-        return worldPosition.closerThan(new Vec3i(player.getX(), player.getY(), player.getZ()), 64.0D);
+        return worldPosition.closerThan(new Vec3i((int)player.getX(), (int)player.getY(), (int)player.getZ()), 64.0D);
     }
 
     @Override

@@ -24,6 +24,8 @@ import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemGemSpade extends ShovelItem {
 
     public Item customCraftingMaterial;

@@ -31,7 +31,7 @@ public class TileAutoProjectTable extends TileProjectTable {
             Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, level);
             if (optional.isPresent()) {
                 CraftingRecipe icraftingrecipe = optional.get();
-                itemstack = icraftingrecipe.assemble(craftingInv);
+                itemstack = icraftingrecipe.assemble(craftingInv, level.registryAccess());
             }
 
             for (int i = 0; i < 9; i++) {
@@ -74,7 +74,7 @@ public class TileAutoProjectTable extends TileProjectTable {
             Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, level);
             if (optional.isPresent()) {
                 CraftingRecipe icraftingrecipe = optional.get();
-                itemstack = icraftingrecipe.assemble(craftingInv);
+                itemstack = icraftingrecipe.assemble(craftingInv, level.registryAccess());
             }
             return itemstack;
         }else {

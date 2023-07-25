@@ -44,6 +44,8 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemSeedBag extends ItemBase implements MenuProvider {
 
     public ItemSeedBag() {

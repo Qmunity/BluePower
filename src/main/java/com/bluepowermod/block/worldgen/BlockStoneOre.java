@@ -41,6 +41,8 @@ import net.minecraft.world.level.storage.loot.LootContext;
 
 import java.util.List;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BlockStoneOre extends Block {
 
     private final boolean witherproof;

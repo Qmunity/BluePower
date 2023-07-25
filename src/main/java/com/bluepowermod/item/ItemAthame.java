@@ -18,11 +18,8 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.helper.GemItemTier;
 import com.bluepowermod.helper.SilverItemTier;
-import com.bluepowermod.init.BPCreativeTabs;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.EnderMan;
@@ -31,7 +28,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.crafting.Ingredient;
 
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
@@ -39,6 +35,8 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemAthame extends SwordItem {
     
@@ -66,7 +64,7 @@ public class ItemAthame extends SwordItem {
         if ((entity instanceof EnderMan) || (entity instanceof EnderDragon)) {
             this.damageDealt += 18.0F;
         }
-        entity.hurt(DamageSource.playerAttack((Player) player), this.damageDealt);
+        entity.hurt(player.level.damageSources().playerAttack((Player) player), this.damageDealt);
         return super.hurtEnemy(stack, entity, player);
     }
 

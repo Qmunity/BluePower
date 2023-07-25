@@ -24,6 +24,8 @@ package com.bluepowermod.item;
 
 import net.minecraft.world.item.Item;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemBase extends Item {
 
     public ItemBase(Properties properties) {

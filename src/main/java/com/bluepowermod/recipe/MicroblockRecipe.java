@@ -5,6 +5,7 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.item.ItemSaw;
 import com.google.gson.JsonObject;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -57,7 +58,7 @@ public class MicroblockRecipe extends CustomRecipe {
     }
     
     @Override
-    public ItemStack assemble(CraftingContainer inv) {
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess access) {
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem) {

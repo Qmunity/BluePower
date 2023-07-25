@@ -44,6 +44,8 @@ import java.util.List;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;

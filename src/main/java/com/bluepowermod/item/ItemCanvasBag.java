@@ -37,6 +37,8 @@ import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemCanvasBag extends ItemColorableOverlay implements MenuProvider{
     
     public ItemCanvasBag(MinecraftColor color) {

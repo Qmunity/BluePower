@@ -38,6 +38,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BlockCrop extends CropBlock implements BonemealableBlock {
     private static final VoxelShape[] SHAPES = new VoxelShape[]{
             Block.box(0.0D, -1.0D, 0.0D, 16.0D, 2.0D, 16.0D),

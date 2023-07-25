@@ -274,7 +274,6 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         GuiComponent.fill(matrixStack, renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
                 backGroundColor);
 
-        RenderSystem.disableTexture();
         RenderSystem.lineWidth(3.0F);
         RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
         Tesselator tess = Tesselator.getInstance();
@@ -285,7 +284,6 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         buff.vertex(renderBaseX + renderWidth, renderAffectedY + renderHeight, zLevel);
         buff.vertex(renderBaseX, renderAffectedY + renderHeight, zLevel);
         tess.end();
-        RenderSystem.enableTexture();
         if (leftSided)
             renderWidth *= -1;
         // if done expanding, draw the information
@@ -325,13 +323,13 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     protected void renderItem(PoseStack matrixStack, Font fontRenderer, int x, int y, ItemStack stack) {
 
         if (itemRenderer == null)
-            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelShaper().getModelManager(), Minecraft.getInstance().getItemColors(), null);
+            itemRenderer = new ItemRenderer(Minecraft.getInstance(), Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelShaper().getModelManager(), Minecraft.getInstance().getItemColors(), null);
         matrixStack.pushPose();
         matrixStack.translate(0, 0, -50);
         //GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         //TODO: RenderHelper.enableGUIStandardItemLighting();
-        itemRenderer.renderAndDecorateItem(stack, x, y);
-        itemRenderer.renderGuiItemDecorations(fontRenderer, stack, x, y, null);
+        itemRenderer.renderAndDecorateItem(matrixStack, stack, x, y);
+        itemRenderer.renderGuiItemDecorations(matrixStack, fontRenderer, stack, x, y, null);
 
         //GL11.glEnable(GL11.GL_ALPHA_TEST);
         //TODO: RenderHelper.turnOff();

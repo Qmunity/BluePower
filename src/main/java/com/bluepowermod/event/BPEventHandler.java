@@ -24,7 +24,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.*;
@@ -139,7 +139,8 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onEntityAttack(LivingAttackEvent event) {
 
-        if (!isAttacking && event.getSource() instanceof EntityDamageSource entitySource) {// this event will be trigger recursively by EntityLiving#hurt,
+        DamageSource entitySource = event.getSource();
+        if (!isAttacking) {// this event will be trigger recursively by EntityLiving#hurt,
             // so we need to stop the loop.
 
             if (entitySource.getEntity() instanceof Player killer) {
@@ -161,25 +162,21 @@ public class BPEventHandler {
 
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
+        DamageSource entitySource = event.getSource();
+        if (entitySource.getEntity() instanceof Player) {
+            Player killer = (Player) entitySource.getEntity();
 
-        if (event.getSource() instanceof EntityDamageSource) {
-            EntityDamageSource entitySource = (EntityDamageSource) event.getSource();
+            if (!killer.getInventory().getSelected().isEmpty()) {
+                if (EnchantmentHelper.getEnchantments(killer.getInventory().getSelected()).containsKey(BPEnchantments.vorpal)) {
+                    int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.vorpal.get(), killer.getInventory().getSelected());
 
-            if (entitySource.getEntity() instanceof Player) {
-                Player killer = (Player) entitySource.getEntity();
-
-                if (!killer.getInventory().getSelected().isEmpty()) {
-                    if (EnchantmentHelper.getEnchantments(killer.getInventory().getSelected()).containsKey(BPEnchantments.vorpal)) {
-                        int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.vorpal.get(), killer.getInventory().getSelected());
-
-                        if (level == 1) {
-                            if (killer.level.random.nextInt(6) == 1) {
-                                dropHeads(event);
-                            }
-                        } else if (level == 2) {
-                            if (killer.level.random.nextInt(3) == 1) {
-                                dropHeads(event);
-                            }
+                    if (level == 1) {
+                        if (killer.level.random.nextInt(6) == 1) {
+                            dropHeads(event);
+                        }
+                    } else if (level == 2) {
+                        if (killer.level.random.nextInt(3) == 1) {
+                            dropHeads(event);
                         }
                     }
                 }
