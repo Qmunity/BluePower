@@ -9,8 +9,6 @@ package com.bluepowermod.block.power;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileEngine;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.core.BlockPos;
@@ -38,7 +36,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -57,7 +54,7 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public BlockEngine() {
-        super(Material.METAL, TileEngine.class);
+        super(TileEngine.class);
         registerDefaultState(this.stateDefinition.any()
                 .setValue(ACTIVE, false)
                 .setValue(GEAR, false)

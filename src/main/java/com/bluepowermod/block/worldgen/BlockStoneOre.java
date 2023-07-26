@@ -36,25 +36,22 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 
 import java.util.List;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockStoneOre extends Block {
 
     private final boolean witherproof;
 
     public BlockStoneOre(boolean witherproof) {
-        super(Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.STONE));
+        super(Properties.of().requiresCorrectToolForDrops().strength(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.STONE));
         BPBlocks.blockList.add(this);
         this.witherproof = witherproof;
     }
 
     public BlockStoneOre() {
-        super(Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.STONE));
+        super(Properties.of().requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.STONE));
         BPBlocks.blockList.add(this);
         witherproof = false;
     }
@@ -93,7 +90,7 @@ public class BlockStoneOre extends Block {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         List<ItemStack> drops = super.getDrops(state, builder);
         drops.add(new ItemStack(this));
         return drops;

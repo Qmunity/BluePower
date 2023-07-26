@@ -39,8 +39,7 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -55,7 +54,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public BlockBPMultipart() {
-        super(Block.Properties.of(Material.STONE).noOcclusion().strength(2));
+        super(Block.Properties.of().noOcclusion().strength(2));
         BPBlocks.blockList.add(this);
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
     }
@@ -136,7 +135,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         BlockEntity tileentity = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if (tileentity instanceof TileBPMultipart) {

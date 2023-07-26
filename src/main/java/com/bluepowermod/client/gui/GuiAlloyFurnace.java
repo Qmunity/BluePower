@@ -17,7 +17,7 @@
 
 package com.bluepowermod.client.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
@@ -40,19 +40,19 @@ public class GuiAlloyFurnace extends GuiContainerBaseBP<ContainerAlloyFurnace> i
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY){
+    protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY){
 
-        super.renderBg(matrixStack, partialTicks, mouseX, mouseY);
+        super.renderBg(guiGraphics, partialTicks, mouseX, mouseY);
 
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
         int burningPercentage = (int)(furnace.getBurningPercentage() * 13);
         if (burningPercentage > 0)
-            this.blit(matrixStack, x + 22, y + 54 + 13 - burningPercentage, 177, 13 - burningPercentage, 14, burningPercentage + 1);
+            guiGraphics.blit(resLoc, x + 22, y + 54 + 13 - burningPercentage, 177, 13 - burningPercentage, 14, burningPercentage + 1);
 
         int processPercentage = (int)(furnace.getProcessPercentage() * 22);
-        this.blit(matrixStack, x + 103, y + 35, 178, 14, processPercentage, 15);
+        guiGraphics.blit(resLoc, x + 103, y + 35, 178, 14, processPercentage, 15);
     }
 
 }

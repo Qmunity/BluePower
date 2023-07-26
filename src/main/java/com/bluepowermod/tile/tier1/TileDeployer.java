@@ -199,7 +199,7 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
                     ItemStack copy = stack.copy();
                     //TODO Check this
                     player.setItemInHand(InteractionHand.MAIN_HAND, stack.getItem().use(level, player, InteractionHand.MAIN_HAND).getObject());
-                    if (!copy.sameItem(stack)) return true;
+                    if (!ItemStack.isSameItem(copy, stack)) return true;
                 }
             }
             return false;

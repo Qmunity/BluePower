@@ -20,6 +20,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 
 public class ContainerCircuitTable extends AbstractContainerMenu {
@@ -33,7 +34,7 @@ public class ContainerCircuitTable extends AbstractContainerMenu {
     public ContainerCircuitTable(int windowId, Inventory invPlayer, Container inventory) {
         super(BPMenuType.CIRCUIT_TABLE.get(), windowId);
         this.circuitTable = inventory;
-        craftMatrix = new CraftingContainer(this, 5, 5);
+        craftMatrix = new TransientCraftingContainer(this, 5, 5);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 8; ++j) {
                 addSlot(new SlotCircuitTableCrafting(invPlayer.player, circuitTable, craftMatrix, j + i * 8, 8 + j * 18,

@@ -37,10 +37,8 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StainedGlassBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 
 /**
  * @author MoreThanHidden
@@ -50,13 +48,13 @@ public class BlockBPGlass extends StainedGlassBlock {
     private final boolean witherproof;
 
     public BlockBPGlass(boolean witherproof) {
-        super(DyeColor.PURPLE, Properties.of(Material.GLASS).strength(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.GLASS).noOcclusion());
+        super(DyeColor.PURPLE, Properties.of().strength(5.0F, witherproof ? 2000.0F : 2F).sound(SoundType.GLASS).noOcclusion());
         BPBlocks.blockList.add(this);
         this.witherproof = witherproof;
     }
 
     public BlockBPGlass() {
-        super(DyeColor.LIGHT_GRAY, Properties.of(Material.STONE).strength(5.0F).sound(SoundType.STONE).noOcclusion());
+        super(DyeColor.LIGHT_GRAY, Properties.of().strength(5.0F).sound(SoundType.STONE).noOcclusion());
         BPBlocks.blockList.add(this);
         witherproof = false;
     }
@@ -89,7 +87,7 @@ public class BlockBPGlass extends StainedGlassBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         List<ItemStack> drops = super.getDrops(state, builder);
         drops.add(new ItemStack(this));
         return drops;

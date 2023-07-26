@@ -53,7 +53,7 @@ public class SlotSeedBag extends SlotItemHandler {
             if (seedType.isEmpty()) {
                 return true;
             } else {
-                return ItemStack.isSame(itemstack, seedType);
+                return ItemStack.isSameItem(itemstack, seedType);
             }
         }
         

@@ -20,8 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,7 +48,7 @@ public class TileEngine extends TileMachineBase  {
 	@Nonnull
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-		if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY || cap == CapabilityEnergy.ENERGY){
+		if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY || cap == ForgeCapabilities.ENERGY){
 			if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
 			return blutricityCap.cast();
 		}
@@ -74,7 +74,7 @@ public class TileEngine extends TileMachineBase  {
 			Direction facing = engine.getBlockState().getValue(BlockEngine.FACING).getOpposite();
 			BlockEntity tileEntity = level.getBlockEntity(pos.relative(facing));
 			if (tileEntity != null) {
-				tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).ifPresent(other -> {
+				tileEntity.getCapability(ForgeCapabilities.ENERGY, facing.getOpposite()).ifPresent(other -> {
 					int simulated = engine.storage.extractEnergy(320, true);
 					int sent = other.receiveEnergy(simulated, false);
 					int amount = engine.storage.extractEnergy(sent, false);

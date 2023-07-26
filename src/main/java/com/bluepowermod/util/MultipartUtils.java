@@ -44,7 +44,7 @@ public class MultipartUtils {
         float f6 = f1 * f3;
         double d3 = 5.0D;
         if (entity instanceof ServerPlayer) {
-            d3 = ((ServerPlayer) entity).getAttribute(net.minecraftforge.common.ForgeMod.REACH_DISTANCE.get()).getValue();
+            d3 = ((ServerPlayer) entity).getAttribute(net.minecraftforge.common.ForgeMod.BLOCK_REACH.get()).getValue();
         }
         Vec3 end = start.add(f5 * d3, f4 * d3, f6 * d3);
         return Pair.of(start, end);
@@ -58,7 +58,7 @@ public class MultipartUtils {
     @Nullable
     public static BlockState getClosestState(Entity entity, BlockPos pos){
         Pair<Vec3, Vec3> lookVec = MultipartUtils.getRayTraceVectors(entity);
-        return getClosestState(entity.level, lookVec.getLeft(), lookVec.getRight(), pos);
+        return getClosestState(entity.level(), lookVec.getLeft(), lookVec.getRight(), pos);
     }
 
     /**

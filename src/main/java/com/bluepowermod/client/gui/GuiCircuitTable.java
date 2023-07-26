@@ -8,6 +8,7 @@
 package com.bluepowermod.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.world.entity.player.Inventory;
@@ -123,9 +124,9 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
     @Override
-    protected void renderBg(PoseStack matrixStack, float par1, int par2, int par3) {
+    protected void renderBg(GuiGraphics guiGraphics, float par1, int par2, int par3) {
 
-        super.renderBg(matrixStack, par1, par2, par3);
+        super.renderBg(guiGraphics, par1, par2, par3);
         //if (isTextfieldEnabled())
             //searchField.drawTextBox();
 
@@ -138,7 +139,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
                 if (displayRed[i * 8 + j]) {
-                    fill(matrixStack, leftPos + 8 + j * 18, topPos + 33 + i * 18, leftPos + 24 + j * 18, topPos + 49 + i * 18, 0x55FF0000);
+                    guiGraphics.fill(leftPos + 8 + j * 18, topPos + 33 + i * 18, leftPos + 24 + j * 18, topPos + 49 + i * 18, 0x55FF0000);
                 }
             }
         }

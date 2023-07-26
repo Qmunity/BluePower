@@ -86,8 +86,8 @@ public abstract class ContainerGhosts extends AbstractContainerMenu {
     public boolean canStacksMerge(ItemStack stack1, ItemStack stack2) {
     
         if (stack1.isEmpty() || stack2.isEmpty()) return false;
-        if (!stack1.sameItem(stack2)) return false;
-        if (!ItemStack.tagMatches(stack1, stack2)) return false;
+        if (!ItemStack.isSameItem(stack1, stack2)) return false;
+        if (!ItemStack.isSameItemSameTags(stack1, stack2)) return false;
         return true;
         
     }

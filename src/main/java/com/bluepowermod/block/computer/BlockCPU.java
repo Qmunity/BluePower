@@ -8,20 +8,18 @@
 package com.bluepowermod.block.computer;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileCPU;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 public class BlockCPU extends BlockContainerBase {
 
 
     public BlockCPU() {
-        super(Material.METAL, TileCPU.class);
+        super(TileCPU.class);
     }
 
     @Override

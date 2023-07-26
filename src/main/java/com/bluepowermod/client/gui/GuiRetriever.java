@@ -10,8 +10,7 @@ package com.bluepowermod.client.gui;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerRetriever;
 import com.bluepowermod.reference.Refs;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
@@ -54,10 +53,10 @@ public class GuiRetriever extends GuiContainerBaseBP<ContainerRetriever> impleme
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float f, int i, int j) {
+    protected void renderBg(GuiGraphics guiGraphics, float f, int i, int j) {
         if (filter.mode == 0) {
             int curSlot = filter.slotIndex;
-            GuiComponent.blit(matrixStack, leftPos + 60 + curSlot % 3 * 18, topPos + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
+            guiGraphics.blit(resLoc, leftPos + 60 + curSlot % 3 * 18, topPos + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
         }
     }
 

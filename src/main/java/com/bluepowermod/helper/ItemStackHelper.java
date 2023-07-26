@@ -53,7 +53,7 @@ public class ItemStackHelper {
         } else if (mode == 1) {
             return ItemStackUtils.isItemFuzzyEqual(stack1, stack2);
         } else {
-            return stack1.getTags().anyMatch(s1 -> stack2.getTags().anyMatch(s2 -> s2 == s1)) && ItemStack.tagMatches(stack1, stack2);
+            return stack1.getTags().anyMatch(s1 -> stack2.getTags().anyMatch(s2 -> s2 == s1)) && ItemStack.isSameItemSameTags(stack1, stack2);
         }
     }
 
@@ -61,7 +61,7 @@ public class ItemStackHelper {
         return stack1 == ItemStack.EMPTY || stack2 == ItemStack.EMPTY ||
                 (stack1.getItem() == stack2.getItem() &&
                         (stack2.getDamageValue() == stack1.getDamageValue()) &&
-                        ItemStack.tagMatches(stack2, stack1)) &&
+                        ItemStack.isSameItemSameTags(stack2, stack1)) &&
                         stack1.isStackable();
     }
 

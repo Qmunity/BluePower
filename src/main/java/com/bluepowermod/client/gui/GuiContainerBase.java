@@ -4,6 +4,7 @@ import com.bluepowermod.client.gui.widget.*;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
@@ -85,7 +86,7 @@ public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractC
     }
    */
 
-    public void drawHorizontalAlignedString(PoseStack matrixStack, int xOffset, int yOffset, int w, String text, boolean useShadow) {
+    public void drawHorizontalAlignedString(GuiGraphics guiGraphics, int xOffset, int yOffset, int w, String text, boolean useShadow) {
 
         int stringWidth = font.width(text);
         int newX = xOffset;
@@ -93,42 +94,37 @@ public class GuiContainerBase<T extends AbstractContainerMenu> extends AbstractC
             newX = w / 2 - stringWidth / 2 + xOffset;
         }
 
-        font.draw(matrixStack, text, newX, yOffset, COLOR_TEXT);
+        guiGraphics.drawString(font, text, newX, yOffset, COLOR_TEXT);
     }
 
-    public void drawString(PoseStack matrixStack, int xOffset, int yOffset, String text, boolean useShadow) {
-
-        font.draw(matrixStack, text, xOffset, yOffset, COLOR_TEXT);
+    public void drawString(GuiGraphics guiGraphics, String text, int xOffset, int yOffset, boolean useShadow) {
+        guiGraphics.drawString(font, text, xOffset, yOffset, COLOR_TEXT, useShadow);
     }
 
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
-        this.font.draw(matrixStack, I18n.get("block.bluepower." + title.getString()), (float)(this.imageWidth / 2 - this.font.width(I18n.get("block.bluepower." + title.getString())) / 2), 6.0F, COLOR_TEXT);
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        guiGraphics.drawString(font, I18n.get("block.bluepower." + title.getString()), (this.imageWidth / 2 - this.font.width(I18n.get("block.bluepower." + title.getString())) / 2), 6, COLOR_TEXT, false);
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float f, int i, int j) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, resLoc);
+    protected void renderBg(GuiGraphics guiGraphics, float f, int i, int j) {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        blit(matrixStack, x, y, 0, 0, imageWidth, imageHeight);
+        guiGraphics.blit(resLoc, x, y, 0, 0, imageWidth, imageHeight);
 
         for (IGuiWidget widget : widgets) {
-            widget.render(matrixStack, i, j, f);
+            widget.render(guiGraphics, i, j, f);
         }
     }
 
 
     @Override
-    public void render(PoseStack matrixStack, int x, int y, float partialTick) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, x, y, partialTick);
-        this.renderTooltip(matrixStack, x, y);
-
+    public void render(GuiGraphics guiGraphics, int x, int y, float partialTick) {
+        this.renderBackground(guiGraphics);
+        super.render(guiGraphics, x, y, partialTick);
+        this.renderTooltip(guiGraphics, x, y);
     }
 
     @Override

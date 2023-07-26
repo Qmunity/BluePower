@@ -1,12 +1,13 @@
 package com.bluepowermod.client.gui.widget;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -262,7 +263,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     }
 
     @Override
-    public void render(PoseStack matrixStack, Font fontRenderer, float zLevel, float partialTicks) {
+    public void render(GuiGraphics guiGraphics, Font fontRenderer, float zLevel, float partialTicks) {
 
         int renderBaseX = (int) (oldBaseX + (baseX - oldBaseX) * partialTicks);
         int renderAffectedY = (int) (oldAffectedY + (affectedY - oldAffectedY) * partialTicks);
@@ -271,7 +272,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
         if (leftSided)
             renderWidth *= -1;
-        GuiComponent.fill(matrixStack, renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
+        guiGraphics.fill(renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
                 backGroundColor);
 
         RenderSystem.lineWidth(3.0F);
@@ -288,23 +289,23 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
             renderWidth *= -1;
         // if done expanding, draw the information
         if (doneExpanding) {
-            matrixStack.pushPose();
-            matrixStack.translate(renderBaseX + (leftSided ? -renderWidth : 16), renderAffectedY, 0);
-            matrixStack.scale(textSize, textSize, textSize);
-            matrixStack.translate(-renderBaseX - (leftSided ? -renderWidth : 16), -renderAffectedY, 0);
-            fontRenderer.drawShadow(matrixStack, title, renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + 2, 0xFFFF00);
+            guiGraphics.pose().pushPose();
+            guiGraphics.pose().translate(renderBaseX + (leftSided ? -renderWidth : 16), renderAffectedY, 0);
+            guiGraphics.pose().scale(textSize, textSize, textSize);
+            guiGraphics.pose().translate(-renderBaseX - (leftSided ? -renderWidth : 16), -renderAffectedY, 0);
+            guiGraphics.drawString(Minecraft.getInstance().font, title, renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + 2, 0xFFFFFF, false);
             for (int i = 0; i < textList.size(); i++) {
 
                 if (textList.get(i).contains("\u00a70") || textList.get(i).contains(ChatFormatting.DARK_RED.toString())) {
-                    fontRenderer.draw(matrixStack, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + i * 10
-                            + 12, 0xFFFFFF);
+                    guiGraphics.drawString(Minecraft.getInstance().font, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY + i * 10
+                            + 12, 0xFFFFFF, false);
                 } else {
-                    fontRenderer.drawShadow(matrixStack, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY
-                            + i * 10 + 12, 0xFFFFFF);
+                    guiGraphics.drawString(Minecraft.getInstance().font, textList.get(i), renderBaseX + (leftSided ? -renderWidth + 2 : 18), renderAffectedY
+                            + i * 10 + 12, 0xFFFFFF, false);
                 }
             }
 
-            matrixStack.popPose();
+            guiGraphics.pose().popPose();
         }
         if (renderHeight > 16 && renderWidth > 16) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -313,29 +314,13 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
             if (iStack == null) {
                 if (iconResLoc == null)
                     iconResLoc = new ResourceLocation(texture);
-                drawTexture(matrixStack.last().pose(), iconResLoc, renderBaseX - (leftSided ? 16 : 0), renderAffectedY);
+                drawTexture(guiGraphics.pose().last().pose(), iconResLoc, renderBaseX - (leftSided ? 16 : 0), renderAffectedY);
             } else if (gui != null || !(iStack.getItem() instanceof BlockItem)) {
-                renderItem(matrixStack, fontRenderer, renderBaseX - (leftSided ? 16 : 0), renderAffectedY, iStack);
+                guiGraphics.renderItem(iStack, renderBaseX - (leftSided ? 16 : 0), renderAffectedY);
             }
         }
     }
 
-    protected void renderItem(PoseStack matrixStack, Font fontRenderer, int x, int y, ItemStack stack) {
-
-        if (itemRenderer == null)
-            itemRenderer = new ItemRenderer(Minecraft.getInstance(), Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelShaper().getModelManager(), Minecraft.getInstance().getItemColors(), null);
-        matrixStack.pushPose();
-        matrixStack.translate(0, 0, -50);
-        //GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        //TODO: RenderHelper.enableGUIStandardItemLighting();
-        itemRenderer.renderAndDecorateItem(matrixStack, stack, x, y);
-        itemRenderer.renderGuiItemDecorations(matrixStack, fontRenderer, stack, x, y, null);
-
-        //GL11.glEnable(GL11.GL_ALPHA_TEST);
-        //TODO: RenderHelper.turnOff();
-        //GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        matrixStack.popPose();
-    }
 
     public static void drawTexture(Matrix4f matrixStack, ResourceLocation texture, int x, int y) {
         RenderSystem.setShaderTexture(0, texture);
@@ -470,9 +455,9 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTick) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
 
-        render(matrixStack, Minecraft.getInstance().font, 0, partialTick);
+        render(guiGraphics, Minecraft.getInstance().font, 0, partialTick);
 
     }
 

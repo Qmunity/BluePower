@@ -3,17 +3,16 @@ package com.bluepowermod.block.machine;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.RedwireType;
-import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileInsulatedWire;
 import com.bluepowermod.tile.tier1.TileWire;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import javax.annotation.Nullable;
@@ -33,7 +32,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         BlockEntity tileentity = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if(tileentity instanceof TileBPMultipart){

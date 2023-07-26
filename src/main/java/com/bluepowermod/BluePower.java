@@ -58,6 +58,7 @@ public class BluePower {
 
         BPBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BPItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BPCreativeTabs.CREATIVE_TABS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BPBlockEntityType.BLOCK_ENTITY_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
         BPEnchantments.ENCHANTMENT.register(FMLJavaModLoadingContext.get().getModEventBus());
         BPRecipeTypes.RECIPE_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());

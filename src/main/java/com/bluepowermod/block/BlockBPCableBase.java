@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -52,7 +51,6 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
 
 
     public BlockBPCableBase(float width, float height) {
-        super(Material.METAL);
         shapes = makeShapes(width, height);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP)
                 .setValue(CONNECTED_FRONT, false).setValue(CONNECTED_BACK, false)

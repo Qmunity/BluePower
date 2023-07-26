@@ -32,6 +32,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -134,7 +135,7 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
 
         List<ItemStack> drops = super.getDrops(state, builder);
         Random random = new Random();
@@ -156,8 +157,8 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
     }
 
     @Override
-    public boolean isMaxAge(BlockState state) {
-        return getAge(state) == 7;
+    public int getMaxAge() {
+        return 7;
     }
 
     public VoxelShape getShape(BlockState state, BlockGetter blockReader, BlockPos pos, CollisionContext context) {

@@ -25,19 +25,16 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public abstract class BlockBase extends Block {
 
     private boolean wip = false;
     
-    public BlockBase(Material material) {
-        super(Properties.of(material).sound(SoundType.STONE).strength(3.0F));
+    public BlockBase() {
+        super(Properties.of().sound(SoundType.STONE).strength(3.0F));
         BPBlocks.blockList.add(this);
     }
 

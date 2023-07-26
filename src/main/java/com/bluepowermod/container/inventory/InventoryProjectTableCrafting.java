@@ -5,6 +5,7 @@ import com.bluepowermod.network.message.MessageCraftingSync;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -14,7 +15,7 @@ import javax.annotation.Nonnull;
 /**
  *@author MoreThanHidden
  **/
-public class InventoryProjectTableCrafting extends CraftingContainer {
+public class InventoryProjectTableCrafting extends TransientCraftingContainer {
 
     private final int length;
     private final Container projectTable;

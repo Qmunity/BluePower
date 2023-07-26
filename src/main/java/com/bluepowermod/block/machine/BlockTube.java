@@ -32,8 +32,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -41,14 +40,12 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 import java.util.List;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
 /**
  * @author MoreThanHidden
  */
 public class BlockTube extends PipeBlock implements IBPPartBlock, EntityBlock {
     public BlockTube() {
-        super(0.25F, Properties.of(Material.PISTON).noOcclusion());
+        super(0.25F, Properties.of().noOcclusion());
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(NORTH, false)
                 .setValue(EAST, false)
@@ -91,7 +88,7 @@ public class BlockTube extends PipeBlock implements IBPPartBlock, EntityBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         List<ItemStack> drops = ((TileTube)builder.getParameter(LootContextParams.BLOCK_ENTITY)).getDrops();
         drops.add(new ItemStack(this));
         return drops;

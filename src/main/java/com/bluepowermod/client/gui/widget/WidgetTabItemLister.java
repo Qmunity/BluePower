@@ -5,9 +5,8 @@ import java.util.List;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.container.stack.TubeStack;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.ItemStack;
 
@@ -66,13 +65,13 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
     }
 
     @Override
-    public void render(PoseStack matrixStack, Font fontRenderer, float zLevel, float partialTicks) {
+    public void render(GuiGraphics guiGraphics, Font fontRenderer, float zLevel, float partialTicks) {
 
         this.setText(showingItems.size() == 0 ? "gui.bluepower:tab.stuffed.noItems" : "");
-        super.render(matrixStack, fontRenderer, zLevel, partialTicks);
+        super.render(guiGraphics, fontRenderer, zLevel, partialTicks);
         if (isDoneExpanding()) {
             if (showingItems.size() > 0) {
-                GuiComponent.fill(matrixStack, getBaseX() + 7, getAffectedY() + 16, getBaseX() + Math.min(MAX_ITEMS_X, showingItems.size()) * 18 + 9,
+                guiGraphics.fill(getBaseX() + 7, getAffectedY() + 16, getBaseX() + Math.min(MAX_ITEMS_X, showingItems.size()) * 18 + 9,
                         getAffectedY() + 36 + (showingItems.size() - 1) / MAX_ITEMS_X * 18, 0xFFAAAAAA);
             }
             for (int i = 0; i < MAX_ITEMS_X; i++) {
@@ -81,9 +80,9 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
                     int x = getBaseX() + i * 18 + 9;
                     int y = getAffectedY() + j * 18 + 18;
                     if (stack.color != TubeColor.NONE) {
-                        GuiComponent.fill(matrixStack, x, y, x + 16, y + 16, 0xFF000000 + MinecraftColor.values()[stack.color.ordinal()].getHex());
+                        guiGraphics.fill( x, y, x + 16, y + 16, 0xFF000000 + MinecraftColor.values()[stack.color.ordinal()].getHex());
                     }
-                    renderItem(matrixStack, fontRenderer, x, y, stack.stack);
+                    guiGraphics.renderItem(stack.stack, x, y);
                 }
             }
         }

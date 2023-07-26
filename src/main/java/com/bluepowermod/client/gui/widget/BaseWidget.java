@@ -1,9 +1,8 @@
 package com.bluepowermod.client.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.resources.ResourceLocation;
@@ -61,7 +60,7 @@ public class BaseWidget implements IGuiWidget {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTick) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
 
         if (enabled) {
             RenderSystem.setShaderColor(1, 1, 1, 1);
@@ -69,8 +68,7 @@ public class BaseWidget implements IGuiWidget {
             RenderSystem.setShaderColor(0.2F, 0.2F, 0.2F, 1);
         }
         if (textures.length > 0)
-            RenderSystem.setShaderTexture(0, textures[textureIndex]);
-            GuiComponent.blit(matrixStack, x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
+            guiGraphics.blit(textures[textureIndex], x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
     }
 
     protected int getTextureU() {

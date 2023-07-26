@@ -1,15 +1,12 @@
 package com.bluepowermod.block.power;
 
 import com.bluepowermod.block.BlockContainerHorizontalFacingBase;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileBlulectricAlloyFurnace;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nullable;
 
@@ -19,7 +16,7 @@ import javax.annotation.Nullable;
 public class BlockBlulectricAlloyFurnace extends BlockContainerHorizontalFacingBase {
 
     public BlockBlulectricAlloyFurnace() {
-        super(Material.STONE, TileBlulectricAlloyFurnace.class);
+        super(TileBlulectricAlloyFurnace.class);
     }
 
     @Nullable

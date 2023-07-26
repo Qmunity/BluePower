@@ -8,22 +8,17 @@
 package com.bluepowermod.block.computer;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileMonitor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-
-import java.util.Random;
 
 public class BlockMonitor extends BlockContainerBase {
 
     public BlockMonitor() {
-        super(Material.METAL, TileMonitor.class);
+        super(TileMonitor.class);
     }
 
     @Override

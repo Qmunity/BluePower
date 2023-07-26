@@ -26,10 +26,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -37,7 +35,7 @@ import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -103,7 +101,7 @@ public class WorldGenVolcano extends Feature<NoneFeatureConfiguration> {
                         }
                         for (int i = posHeight + 1; i < volcanoHeight; i++) {
                             if (canReplace(world, x, i, z)
-                                    && world.getBlockState(new BlockPos(x, i, z)).getMaterial() != Material.WATER)
+                                    && world.getBlockState(new BlockPos(x, i, z)).getFluidState() == Fluids.EMPTY.defaultFluidState())
                                 setBlock(world, new BlockPos(x, i, z), Blocks.AIR.defaultBlockState());
                         }
                     }
@@ -127,9 +125,8 @@ public class WorldGenVolcano extends Feature<NoneFeatureConfiguration> {
         if (world.isEmptyBlock(new BlockPos(x, y, z)))
             return true;
         Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
-        Material material = world.getBlockState(new BlockPos(x, y, z)).getMaterial();
-        return material == Material.WOOD || material == Material.CACTUS || material == Material.LEAVES || material == Material.PLANT
-                || material == Material.REPLACEABLE_PLANT || block == Blocks.WATER;
+        return block instanceof LeavesBlock || block instanceof CactusBlock || block instanceof RotatedPillarBlock || block instanceof GrassBlock
+                || block instanceof FlowerBlock || block == Blocks.WATER;
     }
 
     private void generateLavaColumn(WorldGenLevel world, int x, int topY, int z, RandomSource rand) {

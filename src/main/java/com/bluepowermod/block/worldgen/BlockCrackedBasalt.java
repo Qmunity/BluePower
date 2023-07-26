@@ -32,13 +32,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 
 import java.util.List;
-import java.util.Random;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 /**
  * @author MineMaarten
@@ -47,7 +44,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 public class BlockCrackedBasalt extends BlockStoneOre {
 
     public BlockCrackedBasalt() {
-        super(Properties.of(Material.STONE).strength(25.0F).sound(SoundType.STONE));
+        super(Properties.of().strength(25.0F).sound(SoundType.STONE));
     }
 
     @Override
@@ -77,7 +74,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState p_220076_1_, LootContext.Builder p_220076_2_) {
+    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
         NonNullList<ItemStack> itemStacks = NonNullList.create();
         itemStacks.add(new ItemStack(Item.byBlock(BPBlocks.cracked_basalt_lava.get())));
         return itemStacks;

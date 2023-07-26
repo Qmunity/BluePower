@@ -93,7 +93,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
     public boolean copy(Player player, ItemStack template, ItemStack target, boolean simulate) {
 
         if (!template.isEmpty() && !target.isEmpty()) {
-            if (template.sameItem(target)) {
+            if (ItemStack.isSameItem(template, target)) {
                 IDatabaseSaveable saveable = (IDatabaseSaveable) template.getItem();
                 if (saveable.canCopy(template, target)) {
                     if (!player.isCreative()) {
@@ -113,8 +113,8 @@ public class TileCircuitDatabase extends TileCircuitTable {
                         for (ItemStack templateStack : allApplicableItems) {
                             boolean alreadyTraversed = false;
                             for (ItemStack traversedItem : traversedItems) {
-                                if (traversedItem.sameItem(templateStack)
-                                        && ItemStack.tagMatches(traversedItem, templateStack)) {
+                                if (ItemStack.isSameItem(traversedItem, templateStack)
+                                        && ItemStack.isSameItemSameTags(traversedItem, templateStack)) {
                                     alreadyTraversed = true;
                                     break;
                                 }
@@ -125,13 +125,13 @@ public class TileCircuitDatabase extends TileCircuitTable {
 
                             int count = 0;
                             for (ItemStack stack : stacksInTemplate) {
-                                if (stack.sameItem(templateStack) && ItemStack.tagMatches(stack, templateStack)) {
+                                if (ItemStack.isSameItem(stack, templateStack) && ItemStack.isSameItemSameTags(stack, templateStack)) {
                                     count += stack.getCount();
                                 }
                             }
 
                             for (ItemStack stack : stacksInOutput) {
-                                if (stack.sameItem(templateStack) && ItemStack.tagMatches(stack, templateStack)) {
+                                if (ItemStack.isSameItem(stack, templateStack) && ItemStack.isSameItemSameTags(stack, templateStack)) {
                                     count -= stack.getCount();
                                 }
                             }

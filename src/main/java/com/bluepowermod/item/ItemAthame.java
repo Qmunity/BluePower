@@ -64,7 +64,7 @@ public class ItemAthame extends SwordItem {
         if ((entity instanceof EnderMan) || (entity instanceof EnderDragon)) {
             this.damageDealt += 18.0F;
         }
-        entity.hurt(player.level.damageSources().playerAttack((Player) player), this.damageDealt);
+        entity.hurt(player.level().damageSources().playerAttack((Player) player), this.damageDealt);
         return super.hurtEnemy(stack, entity, player);
     }
 

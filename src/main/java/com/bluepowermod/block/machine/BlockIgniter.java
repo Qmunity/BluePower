@@ -18,19 +18,17 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerFacingBase;
-import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileIgniter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 public class BlockIgniter extends BlockContainerFacingBase {
     
     public BlockIgniter() {
-        super(Material.STONE, TileIgniter.class);
+        super(TileIgniter.class);
     }
 
     @Override

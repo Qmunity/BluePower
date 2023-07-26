@@ -26,14 +26,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 /**
  * @author Koen Beckers (K4Unl)
@@ -48,7 +44,7 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock, EntityBlock
     private int tick = 0;
 
     public BlockLamp(boolean isInverted, MinecraftColor color) {
-        super(Properties.of(Material.DECORATION).sound(SoundType.STONE).strength(1.0F));
+        super(Properties.of().sound(SoundType.STONE).strength(1.0F));
         this.isInverted = isInverted;
         this.color = color;
         registerDefaultState(this.defaultBlockState().setValue(POWER, isInverted ? 15 : 0));
@@ -97,7 +93,7 @@ public class BlockLamp extends BlockBase implements IBPColoredBlock, EntityBlock
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         List<ItemStack> drops =  super.getDrops(state, builder);
         drops.add(new ItemStack(this));
         return drops;

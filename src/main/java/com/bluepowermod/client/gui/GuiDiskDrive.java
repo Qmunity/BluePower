@@ -7,15 +7,13 @@
  */
 package com.bluepowermod.client.gui;
 
-import com.bluepowermod.container.ContainerAlloyFurnace;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
 
 import com.bluepowermod.container.ContainerDiskDrive;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier3.TileDiskDrive;
 import net.minecraft.network.chat.Component;
 
 public class GuiDiskDrive extends GuiContainerBaseBP<ContainerDiskDrive> implements MenuAccess<ContainerDiskDrive> {
@@ -30,7 +28,7 @@ public class GuiDiskDrive extends GuiContainerBaseBP<ContainerDiskDrive> impleme
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 
     }
 }

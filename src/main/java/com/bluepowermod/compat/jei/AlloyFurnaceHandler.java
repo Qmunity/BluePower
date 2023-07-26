@@ -22,6 +22,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -61,8 +62,8 @@ public class AlloyFurnaceHandler implements IRecipeCategory<IAlloyFurnaceRecipe>
     }
 
     @Override
-    public void draw(IAlloyFurnaceRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
-        progress.draw(matrixStack, 95, 22);
+    public void draw(IAlloyFurnaceRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        progress.draw(guiGraphics, 95, 22);
     }
 
     @Override

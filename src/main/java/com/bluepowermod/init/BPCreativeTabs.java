@@ -20,6 +20,7 @@ package com.bluepowermod.init;
 import com.bluepowermod.item.ItemSaw;
 import com.bluepowermod.item.ItemScrewdriver;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -32,50 +33,42 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.stream.Collectors;
 
 public class BPCreativeTabs {
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Refs.MODID);
 
-    CreativeModeTab blocks;
-    CreativeModeTab machines;
-    CreativeModeTab items;
-    CreativeModeTab tools;
-    CreativeModeTab lighting;
-    CreativeModeTab microblocks;
-
-    @SubscribeEvent
-    public void onRegisterCreativeModeTabs(CreativeModeTabEvent.Register event) {
-        blocks = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "blocks"), (builder) -> builder.title(Component.translatable("itemGroup.bluepower:blocks")).icon(() -> new ItemStack(BPBlocks.amethyst_ore.get())));
-        machines = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "machines"),(builder) -> builder.title(Component.translatable("itemGroup.bluepower:machines")).icon(() -> new ItemStack(BPBlocks.alloyfurnace.get())));
-        items = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "items"), (builder) -> builder.title(Component.translatable("itemGroup.bluepower:items")).icon(() -> new ItemStack(BPItems.ruby_gem.get())));
-        tools = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "tools"), (builder) -> builder.title(Component.translatable("itemGroup.bluepower:tools")).icon(() ->  new ItemStack(BPItems.screwdriver.get())));
-        lighting = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "lighting"), (builder) -> builder.title(Component.translatable("itemGroup.bluepower:lighting")).icon(() ->  new ItemStack(BPBlocks.fixedLampRGB.get())).backgroundSuffix("bp_search.png").withSearchBar(62));
-        microblocks = event.registerCreativeModeTab(new ResourceLocation(Refs.MODID, "microblocks"), (builder) -> builder.title(Component.translatable("itemGroup.bluepower:microblocks")).icon(() ->  new ItemStack(BPBlocks.microblocks.get(0).get())).backgroundSuffix("bp_search.png").withSearchBar(62));
-    }
+    public static final RegistryObject<CreativeModeTab> blocks = CREATIVE_TABS.register("blocks", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:blocks")).icon(() -> new ItemStack(BPBlocks.amethyst_ore.get())).build());
+    public static final RegistryObject<CreativeModeTab> machines = CREATIVE_TABS.register("machines",() -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:machines")).icon(() -> new ItemStack(BPBlocks.alloyfurnace.get())).build());
+    public static final RegistryObject<CreativeModeTab> items = CREATIVE_TABS.register("items", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:items")).icon(() -> new ItemStack(BPItems.ruby_gem.get())).build());
+    public static final RegistryObject<CreativeModeTab> tools = CREATIVE_TABS.register("tools", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:tools")).icon(() ->  new ItemStack(BPItems.screwdriver.get())).build());
+    public static final RegistryObject<CreativeModeTab> lighting = CREATIVE_TABS.register("lighting", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:lighting")).icon(() ->  new ItemStack(BPBlocks.fixedLampRGB.get())).backgroundSuffix("bp_search.png").withSearchBar(62).build());
+    public static final RegistryObject<CreativeModeTab> microblocks = CREATIVE_TABS.register( "microblocks", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:microblocks")).icon(() ->  new ItemStack(BPBlocks.microblocks.get(0).get())).backgroundSuffix("bp_search.png").withSearchBar(62).build());
 
     @SubscribeEvent
-    public void creativeTabEvent(CreativeModeTabEvent.BuildContents event) {
-        if(event.getTab() == blocks) {
+    public void creativeTabEvent(BuildCreativeModeTabContentsEvent event) {
+        if(event.getTab() == blocks.get()) {
             event.acceptAll(BPBlocks.regularBlocks.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
-        }else if(event.getTab() == items){
+        }else if(event.getTab() == items.get()){
             event.accept(BPBlocks.indigo_flower.get());
             BPItems.ITEMS.getEntries().forEach((item) -> {if(!(item.get() instanceof TieredItem || item.get() instanceof ItemSaw || item.get() instanceof ItemScrewdriver || item.get() instanceof BlockItem)){event.accept(item.get());}});
-        }else if(event.getTab() == tools){
+        }else if(event.getTab() == tools.get()){
             BPItems.ITEMS.getEntries().forEach((item) -> {if(item.get() instanceof TieredItem || item.get() instanceof ItemSaw || item.get() instanceof ItemScrewdriver){event.accept(item.get());}});
-        }else if(event.getTab() == machines){
+        }else if(event.getTab() == machines.get()){
             event.acceptAll(BPBlocks.machines.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
             event.accept(BPBlocks.blulectric_cable.get());
             event.accept(BPBlocks.blockGateAND.get());
             event.accept(BPBlocks.blockGateNAND.get());
             event.accept(BPBlocks.blockNullCell.get());
-        }else if(event.getTab() == lighting){
+        }else if(event.getTab() == lighting.get()){
             event.acceptAll(BPBlocks.allLamps.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
-        }else if(event.getTab() == microblocks){
+        }else if(event.getTab() == microblocks.get()){
             for (Block block : ForgeRegistries.BLOCKS.getValues().stream().filter(b -> !(b instanceof EntityBlock)).toList()) {
                 VoxelShape shape = null;
                 try{

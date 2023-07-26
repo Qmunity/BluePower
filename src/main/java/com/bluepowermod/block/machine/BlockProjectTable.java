@@ -26,19 +26,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.WorldlyContainerHolder;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 
 public class BlockProjectTable extends BlockContainerBase implements WorldlyContainerHolder {
 
     public BlockProjectTable() {
-        super(Material.WOOD, TileProjectTable.class);
+        super(TileProjectTable.class);
     }
 
     public BlockProjectTable(Class<? extends TileBase> tileClass) {
-        super(Material.WOOD, tileClass);
+        super(tileClass);
     }
 
     @Override

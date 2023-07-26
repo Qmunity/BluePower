@@ -17,13 +17,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 
 /**
  * @author MineMaarten
@@ -33,8 +31,8 @@ public class BlockContainerFacingBase extends BlockContainerBase {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
-    public BlockContainerFacingBase(Material material, Class<? extends TileBase> tileEntityClass) {
-        super(material, tileEntityClass);
+    public BlockContainerFacingBase(Class<? extends TileBase> tileEntityClass) {
+        super(tileEntityClass);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(ACTIVE, false));
     }
 

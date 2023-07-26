@@ -19,7 +19,7 @@
 
 package com.bluepowermod.client.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.entity.player.Inventory;
@@ -38,7 +38,7 @@ public class GuiCanvasBag extends GuiContainerBaseBP<ContainerCanvasBag> impleme
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
-        this.font.draw(matrixStack, I18n.get("item.bluepower." + title.getString()), 8.0F, 6.0F, COLOR_TEXT);
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        guiGraphics.drawString(font, I18n.get("item.bluepower." + title.getString()), 8, 6, COLOR_TEXT, false);
     }
 }

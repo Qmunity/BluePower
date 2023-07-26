@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.bluepowermod.client.gui.widget.*;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
@@ -76,7 +77,7 @@ public class GuiRegulator extends GuiContainerBaseBP<ContainerRegulator> impleme
     }
 
     @Override
-    protected void renderBg(PoseStack pPoseStack, float pPartialTicks, int pMouseX, int pMouseY) {
+    protected void renderBg(GuiGraphics guiGraphics, float pPartialTicks, int pMouseX, int pMouseY) {
 
     }
 

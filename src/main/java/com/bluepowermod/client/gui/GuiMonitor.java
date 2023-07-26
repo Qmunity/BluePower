@@ -8,6 +8,7 @@
 package com.bluepowermod.client.gui;
 
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
@@ -35,12 +36,12 @@ public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements 
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float f, int i, int j) {
+    protected void renderBg(GuiGraphics guiGraphics, float f, int i, int j) {
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindForSetup(resLoc);

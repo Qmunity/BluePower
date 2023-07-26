@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 /**
  * 
@@ -30,7 +29,7 @@ import net.minecraft.world.level.material.Material;
 public class BlockWindmill extends BlockContainerBase implements EntityBlock {
     
     public BlockWindmill() {
-        super(Material.METAL, TileWindmill.class);
+        super(TileWindmill.class);
         BPBlocks.blockList.add(this);
     }
 

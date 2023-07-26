@@ -11,6 +11,7 @@ import com.bluepowermod.container.ContainerRedbusID;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.IRedBusWindow;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
@@ -31,16 +32,16 @@ public class GuiRedbusID extends GuiContainerBaseBP<ContainerRedbusID> implement
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 
-        drawHorizontalAlignedString(matrixStack, 7, 4, imageWidth - 14,  "gui.redbusgui", true);
+        drawHorizontalAlignedString(guiGraphics, 7, 4, imageWidth - 14,  "gui.redbusgui", true);
 
-        drawHorizontalAlignedString(matrixStack, 7, 60, imageWidth - 14, "gui.redbus.id" + ":" + IRedBusWindow.redbus_id,
+        drawHorizontalAlignedString(guiGraphics, 7, 60, imageWidth - 14, "gui.redbus.id" + ":" + IRedBusWindow.redbus_id,
                 true);
     }
 
     @Override
-    protected void renderBg(PoseStack pPoseStack, float pPartialTicks, int pMouseX, int pMouseY) {
+    protected void renderBg(GuiGraphics guiGraphics, float pPartialTicks, int pMouseX, int pMouseY) {
 
     }
 

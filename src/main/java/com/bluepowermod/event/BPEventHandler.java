@@ -102,7 +102,7 @@ public class BPEventHandler {
             for (ItemStack is : player.getInventory().items) {
                 if (!is.isEmpty() && is.getItem() instanceof ItemSeedBag) {
                     ItemStack seedType = ItemSeedBag.getSeedType(is);
-                    if (!seedType.isEmpty() && seedType.sameItem(pickUp)) {
+                    if (!seedType.isEmpty() && ItemStack.isSameItem(seedType, pickUp)) {
                         ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
 
                         //Get Items from the NBT Handler
@@ -171,11 +171,11 @@ public class BPEventHandler {
                     int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.vorpal.get(), killer.getInventory().getSelected());
 
                     if (level == 1) {
-                        if (killer.level.random.nextInt(6) == 1) {
+                        if (killer.level().random.nextInt(6) == 1) {
                             dropHeads(event);
                         }
                     } else if (level == 2) {
-                        if (killer.level.random.nextInt(3) == 1) {
+                        if (killer.level().random.nextInt(3) == 1) {
                             dropHeads(event);
                         }
                     }
@@ -266,7 +266,7 @@ public class BPEventHandler {
         if (player == null) {
             return;
         }
-        Level world = player.level;
+        Level world = player.level();
         HitResult mop = event.getTarget();
         if(mop instanceof BlockHitResult) {
             BlockPos pos = ((BlockHitResult) mop).getBlockPos();

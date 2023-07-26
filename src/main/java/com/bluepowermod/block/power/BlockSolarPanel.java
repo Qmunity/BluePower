@@ -9,7 +9,6 @@
 package com.bluepowermod.block.power;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier3.TileSolarPanel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,7 +27,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -42,7 +40,7 @@ public class BlockSolarPanel extends BlockContainerBase implements SimpleWaterlo
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public BlockSolarPanel() {
-        super(Material.METAL, TileSolarPanel.class);
+        super(TileSolarPanel.class);
         registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
 

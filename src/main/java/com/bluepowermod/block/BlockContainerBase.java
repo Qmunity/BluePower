@@ -37,11 +37,10 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -49,7 +48,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 /**
  * @author MineMaarten
@@ -61,8 +59,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     private boolean isRedstoneEmitter;
     private boolean isSilkyRemoving;
 
-    public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass) {
-        super(material);
+    public BlockContainerBase(Class<? extends TileBase> tileEntityClass) {
         setBlockEntityClass(tileEntityClass);
     }
 
@@ -85,7 +82,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
 
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         List<ItemStack> drops =  super.getDrops(state, builder);
         drops.add(new ItemStack(this));
         return drops;

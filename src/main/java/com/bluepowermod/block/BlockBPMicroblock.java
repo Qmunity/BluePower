@@ -27,8 +27,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -44,8 +44,6 @@ import java.util.List;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
 public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -53,14 +51,14 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
     private final VoxelShape size;
 
     public BlockBPMicroblock(VoxelShape size) {
-        super(Properties.of(Material.STONE).noOcclusion().strength(2));
+        super(Properties.of().noOcclusion().strength(2));
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
         this.size = size;
         BPBlocks.blockList.add(this);
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         BlockEntity tileentity = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if(tileentity instanceof TileBPMultipart){

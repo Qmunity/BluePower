@@ -25,16 +25,13 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockItemOre extends BlockBase {
 
     private final UniformInt xpRange = UniformInt.of(3, 7);
 
     public BlockItemOre() {
-        super(Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.STONE));
+        super(Properties.of().requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.STONE));
     }
 
     @Override

@@ -79,7 +79,7 @@ public class TubeStack implements IItemHandler {
             if(!simulate) {
                 this.stack = stack.copy();
             }
-        }else if(this.stack.sameItem(stack) && this.stack.getCount() < this.stack.getMaxStackSize()){
+        }else if(this.stack.getItem().equals(stack.getItem()) && this.stack.getCount() < this.stack.getMaxStackSize()){
             int amount = Math.min(stack.getCount(), this.stack.getMaxStackSize() - this.stack.getCount());
             remainder.shrink(amount);
             if(!simulate) {
@@ -115,7 +115,7 @@ public class TubeStack implements IItemHandler {
 
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return this.stack.isEmpty() || (this.stack.sameItem(stack) && this.stack.getCount() < this.stack.getMaxStackSize());
+        return this.stack.isEmpty() || (this.stack.getItem() == stack.getItem() && this.stack.getCount() < this.stack.getMaxStackSize());
     }
 
     public static enum RenderMode {

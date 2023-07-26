@@ -21,13 +21,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import java.util.Collections;
 import java.util.List;
-
-import net.minecraft.world.level.storage.loot.LootContext;
 
 /**
  * Created by Quetzi on 03/09/14.
@@ -37,15 +36,15 @@ public class BlockBasalt extends BlockStoneOre {
     }
 
     @Deprecated
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         ResourceLocation resourcelocation = this.getLootTable();
         if (resourcelocation == LootTable.EMPTY.getLootTableId()) {
             return Collections.emptyList();
         } else {
-            LootContext lootcontext = builder.withParameter(LootContextParams.BLOCK_STATE, state).create(LootContextParamSets.BLOCK);
-            ServerLevel serverworld = lootcontext.getLevel();
-            LootTable loottable = serverworld.getServer().getLootTables().get(resourcelocation);
-            return loottable.getRandomItems(lootcontext);
+            LootParams lootParams = builder.withParameter(LootContextParams.BLOCK_STATE, state).create(LootContextParamSets.BLOCK);
+            ServerLevel serverworld = lootParams.getLevel();
+            LootTable loottable = serverworld.getServer().getLootData().getLootTable(resourcelocation);
+            return loottable.getRandomItems(lootParams);
         }
     }
 

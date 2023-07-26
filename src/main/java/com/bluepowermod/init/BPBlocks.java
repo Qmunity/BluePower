@@ -39,7 +39,6 @@ import com.bluepowermod.util.Dependencies;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fml.ModList;
 
 import java.util.ArrayList;
@@ -107,9 +106,9 @@ public class BPBlocks {
     public static final RegistryObject<Block> tungsten_block = BLOCKS.register(Refs.TUNGSTENBLOCK_NAME, BlockStoneOre::new);
     public static final RegistryObject<Block> green_sapphire_block = BLOCKS.register(Refs.GREENSAPPHIREBLOCK_NAME, BlockStoneOre::new);
 
-    public static final RegistryObject<Block> rubber_log = BLOCKS.register(Refs.RUBBERLOG_NAME, () -> new BlockRubberLog(Block.Properties.of(Material.WOOD)));
-    public static final RegistryObject<Block> rubber_leaves = BLOCKS.register(Refs.RUBBERLEAVES_NAME, () ->  new BlockRubberLeaves(Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion()));
-    public static final RegistryObject<Block> rubber_sapling = BLOCKS.register(Refs.RUBBERSAPLING_NAME, () -> new BlockRubberSapling(Block.Properties.of(Material.PLANT).sound(SoundType.GRASS)));
+    public static final RegistryObject<Block> rubber_log = BLOCKS.register(Refs.RUBBERLOG_NAME, () -> new BlockRubberLog(Block.Properties.of()));
+    public static final RegistryObject<Block> rubber_leaves = BLOCKS.register(Refs.RUBBERLEAVES_NAME, () ->  new BlockRubberLeaves(Block.Properties.of().strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion()));
+    public static final RegistryObject<Block> rubber_sapling = BLOCKS.register(Refs.RUBBERSAPLING_NAME, () -> new BlockRubberSapling(Block.Properties.of().sound(SoundType.GRASS)));
 
     public static final RegistryObject<Block> sapphire_glass = BLOCKS.register(Refs.SAPPHIREGLASS_NAME, BlockBPGlass::new);
     public static final RegistryObject<Block> reinforced_sapphire_glass = BLOCKS.register(Refs.REINFORCEDSAPPHIREGLASS_NAME, () -> new BlockBPGlass(true));
@@ -174,35 +173,35 @@ public class BPBlocks {
 
     }
 
-    public static final RegistryObject<Block> flax_crop = BLOCKS.register(Refs.FLAXCROP_NAME, () -> new BlockCrop(Block.Properties.of(Material.PLANT)));
-    public static final RegistryObject<BushBlock> indigo_flower = BLOCKS.register(Refs.INDIGOFLOWER_NAME, () -> new BlockCustomFlower(Block.Properties.of(Material.PLANT)));
+    public static final RegistryObject<Block> flax_crop = BLOCKS.register(Refs.FLAXCROP_NAME, () -> new BlockCrop(Block.Properties.of()));
+    public static final RegistryObject<BushBlock> indigo_flower = BLOCKS.register(Refs.INDIGOFLOWER_NAME, () -> new BlockCustomFlower(Block.Properties.of()));
     static {BPItems.ITEMS.register(Refs.INDIGOFLOWER_NAME, () -> new BlockItem(indigo_flower.get(), new Item.Properties()));}
 
     public static List<RegistryObject<Block>> machines = new ArrayList<>();
 
     public static final RegistryObject<Block> alloyfurnace = BLOCKS.register(Refs.ALLOYFURNACE_NAME, BlockAlloyFurnace::new);
-    public static final RegistryObject<Block> block_breaker = BLOCKS.register(Refs.BLOCKBREAKER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileBlockBreaker.class));
+    public static final RegistryObject<Block> block_breaker = BLOCKS.register(Refs.BLOCKBREAKER_NAME, () -> new BlockContainerFacingBase(TileBlockBreaker.class));
     public static final RegistryObject<Block> igniter = BLOCKS.register(Refs.BLOCKIGNITER_NAME, BlockIgniter::new);
-    public static final RegistryObject<Block> buffer = BLOCKS.register(Refs.BLOCKBUFFER_NAME, () -> new BlockContainerHorizontalFacingBase(Material.STONE, TileBuffer.class){
+    public static final RegistryObject<Block> buffer = BLOCKS.register(Refs.BLOCKBUFFER_NAME, () -> new BlockContainerHorizontalFacingBase(TileBuffer.class){
         @Override
         protected boolean canRotateVertical(){return false;}
     });
 
-    public static final RegistryObject<Block> deployer = BLOCKS.register(Refs.BLOCKDEPLOYER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileDeployer.class));
-    public static final RegistryObject<Block> transposer = BLOCKS.register(Refs.TRANSPOSER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileTransposer.class));
+    public static final RegistryObject<Block> deployer = BLOCKS.register(Refs.BLOCKDEPLOYER_NAME, () -> new BlockContainerFacingBase(TileDeployer.class));
+    public static final RegistryObject<Block> transposer = BLOCKS.register(Refs.TRANSPOSER_NAME, () -> new BlockContainerFacingBase(TileTransposer.class));
     public static final RegistryObject<Block> tube = BLOCKS.register(Refs.TUBE_NAME, BlockTube::new);
-    public static final RegistryObject<Block> sorting_machine = BLOCKS.register(Refs.SORTING_MACHINE_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileSortingMachine.class).setWIP(true));
+    public static final RegistryObject<Block> sorting_machine = BLOCKS.register(Refs.SORTING_MACHINE_NAME, () -> new BlockContainerFacingBase(TileSortingMachine.class).setWIP(true));
     public static final RegistryObject<Block> project_table = BLOCKS.register(Refs.PROJECTTABLE_NAME, BlockProjectTable::new);
     public static final RegistryObject<Block> auto_project_table = BLOCKS.register(Refs.AUTOPROJECTTABLE_NAME, () -> new BlockProjectTable(TileAutoProjectTable.class));
     public static final RegistryObject<Block> circuit_table = BLOCKS.register(Refs.CIRCUITTABLE_NAME, () -> new BlockProjectTable(TileCircuitTable.class).setWIP(true));
     public static final RegistryObject<Block> circuit_database = BLOCKS.register(Refs.CIRCUITDATABASE_NAME, () -> new BlockCircuitDatabase(TileCircuitDatabase.class).setWIP(true));
-    public static final RegistryObject<Block> ejector = BLOCKS.register(Refs.EJECTOR_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileEjector.class));
-    public static final RegistryObject<Block> relay = BLOCKS.register(Refs.RELAY_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileRelay.class).setWIP(true));
-    public static final RegistryObject<Block> filter = BLOCKS.register(Refs.FILTER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileFilter.class).setWIP(true));
-    public static final RegistryObject<Block> retriever = BLOCKS.register(Refs.RETRIEVER_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileRetriever.class).setWIP(true));
-    public static final RegistryObject<Block> regulator = BLOCKS.register(Refs.REGULATOR_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileRegulator.class).emitsRedstone().setWIP(true));
-    public static final RegistryObject<Block> item_detector = BLOCKS.register(Refs.ITEMDETECTOR_NAME, () -> new BlockContainerFacingBase(Material.STONE, TileItemDetector.class).emitsRedstone().setWIP(true));
-    public static final RegistryObject<Block> manager = BLOCKS.register(Refs.MANAGER_NAME,() -> new BlockRejecting(Material.STONE, TileManager.class).emitsRedstone().setWIP(true));
+    public static final RegistryObject<Block> ejector = BLOCKS.register(Refs.EJECTOR_NAME, () -> new BlockContainerFacingBase(TileEjector.class));
+    public static final RegistryObject<Block> relay = BLOCKS.register(Refs.RELAY_NAME, () -> new BlockContainerFacingBase(TileRelay.class).setWIP(true));
+    public static final RegistryObject<Block> filter = BLOCKS.register(Refs.FILTER_NAME, () -> new BlockContainerFacingBase(TileFilter.class).setWIP(true));
+    public static final RegistryObject<Block> retriever = BLOCKS.register(Refs.RETRIEVER_NAME, () -> new BlockContainerFacingBase(TileRetriever.class).setWIP(true));
+    public static final RegistryObject<Block> regulator = BLOCKS.register(Refs.REGULATOR_NAME, () -> new BlockContainerFacingBase(TileRegulator.class).emitsRedstone().setWIP(true));
+    public static final RegistryObject<Block> item_detector = BLOCKS.register(Refs.ITEMDETECTOR_NAME, () -> new BlockContainerFacingBase(TileItemDetector.class).emitsRedstone().setWIP(true));
+    public static final RegistryObject<Block> manager = BLOCKS.register(Refs.MANAGER_NAME,() -> new BlockRejecting(TileManager.class).emitsRedstone().setWIP(true));
     public static final RegistryObject<Block> battery = BLOCKS.register(Refs.BATTERYBLOCK_NAME, BlockBattery::new);
     public static final RegistryObject<Block> blulectric_alloyfurnace = BLOCKS.register(Refs.BLULECTRICALLOYFURNACE_NAME, BlockBlulectricAlloyFurnace::new);
     public static final RegistryObject<Block> blulectric_furnace = BLOCKS.register(Refs.BLULECTRICFURNACE_NAME, BlockBlulectricFurnace::new);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 
 /**
  * This interface doesn't have to be implemented. In PneumaticCraft there already is one class which implements this interface which is used many
@@ -165,12 +166,12 @@ public interface IGuiAnimatedStat {
     /**
      * Should be called every render tick when and where you want to render the stat.
      *
-     * @param matrixStack
+     * @param guiGraphics
      * @param fontRenderer
      * @param zLevel
      * @param partialTicks
      */
-    public void render(PoseStack matrixStack, Font fontRenderer, float zLevel, float partialTicks);
+    public void render(GuiGraphics guiGraphics, Font fontRenderer, float zLevel, float partialTicks);
 
     /**
      * Forces the stat to close.

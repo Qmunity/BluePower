@@ -1,36 +1,32 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.parchmentmc.org' }
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.parchmentmc:librarian:1.+'
-    }
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
 
 project.ext {
-    major = "0"
-    minor = "9"
+    major = mod_version_major
+    minor = mod_version_minor
     if (System.getenv("CI_PIPELINE_IID") != null) {
         build = System.getenv("CI_PIPELINE_IID") + "-alpha"
     } else {
-        build = "-custom"
+        build = "x-custom"
     }
-    mcVersion = "1.19.4"
+    mcVersion = minecraft_version
 }
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
 group = "com.bluepowermod"
 archivesBaseName = "bluepower"
 
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
 repositories {
     maven {
+        // location of the maven that hosts Jade/WAILA files
         url "https://www.cursemaven.com"
         content {
             includeGroup "curse.maven"
@@ -43,68 +39,81 @@ repositories {
     }
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
 minecraft {
-    mappings channel: 'parchment', version: '1.19.3-2023.06.25-1.19.4'
+    mappings channel: mapping_channel, version: mapping_version
+    copyIdeResources = true
 
     runs {
-        client {
+        configureEach {
             workingDirectory project.file('run')
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+
             mods {
                 bluepower {
                     source sourceSets.main
                 }
             }
+        }
+
+        client {
+            property 'forge.enabledGameTestNamespaces', 'bluepower'
         }
 
         server {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-            mods {
-                bluepower {
-                    source sourceSets.main
-                }
-            }
+            property 'forge.enabledGameTestNamespaces', 'bluepower'
+            args '--nogui'
         }
 
         data {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-            args '--mod', 'bluepower', '--all', '--output', file('src/generated/resources/')
-            mods {
-                bluepower {
-                    source sourceSets.main
-                }
-            }
+            workingDirectory project.file('run-data')
+            args '--mod', 'bluepower', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
         }
     }
-
 }
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.4-45.1.16'
-    //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
-    //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
-    compileOnly fg.deobf("curse.maven:jade-324717:3960381")
-    compileOnly fg.deobf("mezz.jei:jei-1.19.4-forge:13.1.0.15")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.19.4-forge:13.1.0.15")
-    //runtimeOnly fg.deobf("curse.maven:jade-324717:3834997")
+    minecraft "net.neoforged:forge:${minecraft_version}-${neo_version}"
+    compileOnly fg.deobf("curse.maven:${jade_version}")
+    compileOnly fg.deobf("mezz.jei:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:${jei_version}")
 }
 
-jar {
-    appendix = "${project.ext.mcVersion}"
-    classifier = "universal"
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
+            neo_version         : neo_version, neo_version_range: neo_version_range,
+            loader_version_range: loader_version_range, mod_version: version,
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes(["Specification-Title": "bluepower",
+                    "Specification-Vendor": "qmunity",
+                    "Specification-Version": "28.0",
+                    "Implementation-Title": project.name,
+                    "Implementation-Version": project.jar.archiveVersion,
+                    "Implementation-Vendor" :"qmunity",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
+    }
+    archiveAppendix = "${project.ext.mcVersion}"
+    archiveClassifier = "universal"
+    finalizedBy 'reobfJar'
 }
 
 task deobfJar(type: Jar) {
     from(sourceSets.main.output) {
-        appendix = "${project.ext.mcVersion}"
-        classifier = "deobf"
+        archiveAppendix = "${project.ext.mcVersion}"
+        archiveClassifier = "deobf"
     }
 }
 
@@ -112,8 +121,8 @@ task deobfJar(type: Jar) {
 task apiZip(type: Zip) {
     from(sourceSets.main.java) {
         include 'com/bluepowermod/api/**'
-        appendix = "${project.ext.mcVersion}"
-        classifier = "api"
+        archiveAppendix = "${project.ext.mcVersion}"
+        archiveClassifier = "api"
     }
 }
 
@@ -124,14 +133,6 @@ artifacts {
     archives apiZip
 }
 
-jar {
-    manifest {
-        attributes(["Specification-Title": "bluepower",
-                    "Specification-Vendor": "qmunity",
-                    "Specification-Version": "28.0", // We are version 1 of the modlauncher specification
-                    "Implementation-Title": project.name,
-                    "Implementation-Version": "${version}",
-                    "Implementation-Vendor" :"qmunity",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
-    }
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }

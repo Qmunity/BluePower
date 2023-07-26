@@ -38,9 +38,6 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemSickle extends DiggerItem {
 
@@ -57,7 +54,7 @@ public class ItemSickle extends DiggerItem {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if ((state.getMaterial() == Material.LEAVES) || (state.getMaterial() == Material.PLANT) || toolBlocks.contains(state)) {
+        if ((state.getBlock() instanceof LeavesBlock) || (state.getBlock() instanceof GrassBlock) || toolBlocks.contains(state)) {
             return this.speed;
         }
         return 1.0F;
