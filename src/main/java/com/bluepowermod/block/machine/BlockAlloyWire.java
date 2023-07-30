@@ -6,6 +6,7 @@ import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
+import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileWire;
 import net.minecraft.core.BlockPos;
@@ -48,6 +49,12 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
         super(width, height);
         this.type = type;
         this.registerDefaultState(super.defaultBlockState().setValue(POWERED, false));
+    }
+
+    @Override
+    public int getSignal(BlockState pState, BlockGetter pLevel, BlockPos pPos, Direction pDirection) {
+
+        return MathHelper.map(((TileWire)pLevel.getBlockEntity(pPos)).getOutputtingRedstone() & 0xFF, 0, 255, 0, 15);
     }
 
     @Override

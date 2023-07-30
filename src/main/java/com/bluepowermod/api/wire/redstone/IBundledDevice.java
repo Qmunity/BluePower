@@ -2,10 +2,11 @@ package com.bluepowermod.api.wire.redstone;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.misc.IWorldLocation;
 import com.bluepowermod.api.misc.MinecraftColor;
 import net.minecraft.core.Direction;
 
-public interface IBundledDevice {
+public interface IBundledDevice extends IWorldLocation {
 
     /**
      * Returns whether or not the device passed as an argument can be connected to this device on the specified side. It also takes a ConnectionType,

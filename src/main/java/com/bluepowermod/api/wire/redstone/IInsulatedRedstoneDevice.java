@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 public interface IInsulatedRedstoneDevice extends IRedstoneDevice {
 
     /**
-     * Gets the insulation color on the specified side. This usually determines whether or not things can connect to it.
+     * Gets the insulation color on the specified side. This usually determines whether things can connect to it.
      */
     MinecraftColor getInsulationColor(Direction side);
 

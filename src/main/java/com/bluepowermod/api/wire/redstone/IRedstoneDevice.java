@@ -2,18 +2,21 @@ package com.bluepowermod.api.wire.redstone;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.misc.IWorldLocation;
 import com.bluepowermod.api.misc.MinecraftColor;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
 
-public interface IRedstoneDevice {
+public interface IRedstoneDevice extends IWorldLocation {
 
     /**
-     * Returns whether or not the device passed as an argument can be connected to this device on the specified side. It also takes a ConnectionType,
+     * Returns whether the device passed as an argument can be connected to this device on the specified side. It also takes a ConnectionType,
      * which determines the type of connection to this device.
      */
     public boolean canConnect(Direction side, IRedstoneDevice dev, ConnectionType type);
@@ -40,7 +43,7 @@ public interface IRedstoneDevice {
     public void onRedstoneUpdate();
 
     /**
-     * Returns whether or not this is a full face (if face devices should be able to connect to it)
+     * Returns whether this is a full face (if face devices should be able to connect to it)
      */
     public boolean isNormalFace(Direction side);
 

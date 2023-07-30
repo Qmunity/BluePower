@@ -290,6 +290,8 @@ public class BPBlocks {
      public static RegistryObject<Block> sortron;
 
     static {
+        BPItems.ITEMS.register(blockRedAlloyWire.getKey().location().getPath(), () -> new BlockItem(blockRedAlloyWire.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockBlueAlloyWire.getKey().location().getPath(), () -> new BlockItem(blockBlueAlloyWire.get(), new Item.Properties()));
 
         microblocks.add(half_block);
         microblocks.add(panel);
