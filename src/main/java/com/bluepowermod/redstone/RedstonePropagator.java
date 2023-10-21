@@ -114,52 +114,6 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             currentPass = nextPass;
             nextPass = after;
         }
-
-        // List<IConnection<IRedstoneDevice>> current = new ArrayList<IConnection<IRedstoneDevice>>();
-        // for (Entry<IConnection<IRedstoneDevice>, Boolean> p : getPropagation(getDevice(), getSide())) {
-        // if (p.getValue()) {
-        // schedule(new RedPropagator(p.getKey().getB(), p.getKey().getSideB()));
-        // } else {
-        // if (p.getKey().getB() instanceof IRedstoneConductor
-        // && ((IRedstoneConductor) p.getKey().getB()).hasLoss(p.getKey().getSideB()) != (this instanceof LossyPropagator)) {
-        // schedule(new RedPropagator(p.getKey().getB(), p.getKey().getSideB()));
-        // } else {
-        // current.add(p.getKey());
-        // }
-        // }
-        // }
-        //
-        // if (current.size() == 0 && connections.size() == 0)
-        // return connections;
-        //
-        // List<IConnection<IRedstoneDevice>> newDevices = new ArrayList<IConnection<IRedstoneDevice>>();
-        //
-        // while (current.size() > 0) {
-        // List<Entry<IConnection<IRedstoneDevice>, Boolean>> tmp = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
-        // for (IConnection<IRedstoneDevice> c : current) {
-        // tmp.addAll(getPropagation(c.getB(), c.getSideB()));
-        //
-        // for (Entry<IConnection<IRedstoneDevice>, Boolean> p : tmp) {
-        // if (p.getValue()) {
-        // schedule(new RedPropagator(p.getKey().getB(), p.getKey().getSideB()));
-        // } else if (!connections.contains(p.getKey()) && !newDevices.contains(p.getKey())) {
-        // newDevices.add(p.getKey());
-        // }
-        // }
-        //
-        // tmp.clear();
-        // }
-        //
-        // connections.addAll(current);
-        // current.clear();
-        //
-        // for (IConnection<IRedstoneDevice> c : newDevices)
-        // if (!connections.contains(c))
-        // current.add(c);
-        //
-        // newDevices.clear();
-        // }
-
         return connections;
     }
 
