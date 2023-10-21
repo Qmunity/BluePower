@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TileWire extends TileBase {
-    private final IRedstoneDevice device = new RedstoneStorage(level, worldPosition);
+    private final IRedstoneDevice device = new RedstoneStorage(level, worldPosition, RedwireType.RED_ALLOY);
     @Nullable
     private BlockState cachedBlockState;
     private LazyOptional<IRedstoneDevice> redstoneCap;
