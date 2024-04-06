@@ -18,8 +18,6 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.Refs;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;

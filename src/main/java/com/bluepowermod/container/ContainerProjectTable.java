@@ -35,6 +35,7 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
@@ -147,10 +148,10 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
         if (!world.isClientSide) {
             ServerPlayer serverplayerentity = (ServerPlayer)playerEntity;
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<CraftingRecipe> optional = world.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInventory, world);
+            Optional<RecipeHolder<CraftingRecipe>> optional = world.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInventory, world);
             if (optional.isPresent()) {
-                CraftingRecipe icraftingrecipe = optional.get();
-                if (craftResultInventory.setRecipeUsed(world, serverplayerentity, icraftingrecipe)) {
+                CraftingRecipe icraftingrecipe = optional.get().value();
+                if (craftResultInventory.setRecipeUsed(world, serverplayerentity, optional.get())) {
                     itemstack = icraftingrecipe.assemble(craftingInventory, world.registryAccess());
                 }
             }

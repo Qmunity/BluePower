@@ -13,6 +13,7 @@ import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.tier2.TileTube;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -36,7 +37,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 import java.util.List;
 
@@ -44,8 +45,10 @@ import java.util.List;
  * @author MoreThanHidden
  */
 public class BlockTube extends PipeBlock implements IBPPartBlock, EntityBlock {
-    public BlockTube() {
-        super(0.25F, Properties.of().noOcclusion());
+    public static final MapCodec<BlockTube> CODEC = simpleCodec(BlockTube::new);
+
+    public BlockTube(Properties properties) {
+        super(0.25F, properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(NORTH, false)
                 .setValue(EAST, false)
@@ -79,12 +82,12 @@ public class BlockTube extends PipeBlock implements IBPPartBlock, EntityBlock {
         BlockEntity blockSouth = world.getBlockEntity(pos.south());
         BlockEntity blockWest = world.getBlockEntity(pos.west());
         return this.defaultBlockState()
-                .setValue(DOWN, blockDown instanceof ITubeConnection || (blockDown != null && blockDown.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP).isPresent()))
-                .setValue(UP,  blockUp instanceof ITubeConnection || (blockUp != null && blockUp.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.DOWN).isPresent()))
-                .setValue(NORTH, blockNorth instanceof ITubeConnection || (blockNorth != null && blockNorth.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.SOUTH).isPresent()))
-                .setValue(EAST, blockEast instanceof ITubeConnection || (blockEast != null && blockEast.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.WEST).isPresent()))
-                .setValue(SOUTH, blockSouth instanceof ITubeConnection || (blockSouth != null && blockSouth.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.NORTH).isPresent()))
-                .setValue(WEST, blockWest instanceof ITubeConnection || (blockWest != null && blockWest.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.EAST).isPresent()));
+                .setValue(DOWN, blockDown instanceof ITubeConnection || ((Level)world).getCapability(Capabilities.ItemHandler.BLOCK, pos.below(), Direction.UP) != null)
+                .setValue(UP,  blockUp instanceof ITubeConnection || ((Level)world).getCapability(Capabilities.ItemHandler.BLOCK, pos.above(), Direction.DOWN) != null)
+                .setValue(NORTH, blockNorth instanceof ITubeConnection || ((Level)world).getCapability(Capabilities.ItemHandler.BLOCK, pos.north(), Direction.SOUTH) != null)
+                .setValue(EAST, blockEast instanceof ITubeConnection || ((Level)world).getCapability(Capabilities.ItemHandler.BLOCK, pos.east(), Direction.WEST) != null)
+                .setValue(SOUTH, blockSouth instanceof ITubeConnection || ((Level)world).getCapability(Capabilities.ItemHandler.BLOCK, pos.south(), Direction.NORTH) != null)
+                .setValue(WEST, blockWest instanceof ITubeConnection || ((Level)world).getCapability(Capabilities.ItemHandler.BLOCK, pos.west(), Direction.EAST) != null);
     }
 
     @Override
@@ -114,5 +117,10 @@ public class BlockTube extends PipeBlock implements IBPPartBlock, EntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new TileTube(pos, state);
+    }
+
+    @Override
+    protected MapCodec<? extends PipeBlock> codec() {
+        return CODEC;
     }
 }

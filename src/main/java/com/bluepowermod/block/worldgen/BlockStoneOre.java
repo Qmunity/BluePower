@@ -19,7 +19,6 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.reference.Refs;
 
 import javax.annotation.Nullable;
 

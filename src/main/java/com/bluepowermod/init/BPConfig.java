@@ -17,28 +17,27 @@
 
 package com.bluepowermod.init;
 
-import com.bluepowermod.reference.Refs;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class BPConfig {
 
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
     public static final General CONFIG = new General(BUILDER);
 
     public static class General {
-        public final ForgeConfigSpec.BooleanValue generateVolcano;
-        public final ForgeConfigSpec.ConfigValue<Double> volcanoActiveToInactiveRatio;
-        public final ForgeConfigSpec.ConfigValue<Double> volcanoSpawnChance; // chance of a volcano spawning per chunk.
-        public final ForgeConfigSpec.ConfigValue<String> volcanoBiomeCategoryWhitelist;
-        public final ForgeConfigSpec.BooleanValue generateTungstenInVolcano;
-        public final ForgeConfigSpec.ConfigValue<String> alloyFurnaceBlacklist;
-        public final ForgeConfigSpec.ConfigValue<Boolean> alloyFurnaceDatapackGenerator;
-        public final ForgeConfigSpec.ConfigValue<Float> albedoBrightness;
-        //public final ForgeConfigSpec.BooleanValue enableTubeCaching;
-        public final ForgeConfigSpec.BooleanValue enableGateSounds;
-        public final ForgeConfigSpec.BooleanValue serverCircuitSavingOpOnly;
+        public final ModConfigSpec.BooleanValue generateVolcano;
+        public final ModConfigSpec.ConfigValue<Double> volcanoActiveToInactiveRatio;
+        public final ModConfigSpec.ConfigValue<Double> volcanoSpawnChance; // chance of a volcano spawning per chunk.
+        public final ModConfigSpec.ConfigValue<String> volcanoBiomeCategoryWhitelist;
+        public final ModConfigSpec.BooleanValue generateTungstenInVolcano;
+        public final ModConfigSpec.ConfigValue<String> alloyFurnaceBlacklist;
+        public final ModConfigSpec.ConfigValue<Boolean> alloyFurnaceDatapackGenerator;
+        public final ModConfigSpec.ConfigValue<Float> albedoBrightness;
+        //public final ModConfigSpec.BooleanValue enableTubeCaching;
+        public final ModConfigSpec.BooleanValue enableGateSounds;
+        public final ModConfigSpec.BooleanValue serverCircuitSavingOpOnly;
 
-        General(ForgeConfigSpec.Builder builder) {
+        General(ModConfigSpec.Builder builder) {
             builder.push("WorldGen").comment("Toggle blocks being generated into the world");
                 builder.push("Volcano").comment("Volcano related configs");
                     generateVolcano = builder.comment("Generate Volcano").translation("bluepower.config.volcano.generate").define("generateVolcano", true);
@@ -74,6 +73,6 @@ public class BPConfig {
             }
 
     }
-    public static final ForgeConfigSpec spec = BUILDER.build();
+    public static final ModConfigSpec spec = BUILDER.build();
 
 }

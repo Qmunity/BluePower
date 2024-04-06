@@ -30,16 +30,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.registries.RegistryObject;
-
-import net.minecraft.world.item.Item.Properties;
+import net.neoforged.neoforge.common.IPlantable;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class ItemCropSeed extends Item implements IPlantable {
 
-    public static RegistryObject<Block> block;
+    public static DeferredHolder<Block, Block> block;
 
-    public ItemCropSeed(RegistryObject<Block> blockCrop, Block blockSoil) {
+    public ItemCropSeed(DeferredHolder<Block, Block> blockCrop, Block blockSoil) {
         super(new Properties());
         block = blockCrop;
     }

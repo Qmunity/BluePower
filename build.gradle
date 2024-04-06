@@ -1,11 +1,9 @@
 plugins {
+    id 'java-library'
     id 'eclipse'
     id 'idea'
-    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'net.neoforged.gradle.userdev' version '7.0.80'
 }
-
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 project.ext {
     major = mod_version_major
@@ -20,9 +18,35 @@ project.ext {
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
 group = "com.bluepowermod"
-archivesBaseName = "bluepower"
+base {
+    archivesName = mod_id
+}
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+
+        modSource project.sourceSets.main
+    }
+
+    client {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
+
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        programArgument '--nogui'
+    }
+
+    data {
+       programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven {
@@ -39,47 +63,11 @@ repositories {
     }
 }
 
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
-    copyIdeResources = true
-
-    runs {
-        configureEach {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                bluepower {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        client {
-            property 'forge.enabledGameTestNamespaces', 'bluepower'
-        }
-
-        server {
-            property 'forge.enabledGameTestNamespaces', 'bluepower'
-            args '--nogui'
-        }
-
-        data {
-            workingDirectory project.file('run-data')
-            args '--mod', 'bluepower', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-        }
-    }
-}
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
 dependencies {
-    minecraft "net.neoforged:forge:${minecraft_version}-${neo_version}"
-    compileOnly fg.deobf("curse.maven:${jade_version}")
-    compileOnly fg.deobf("mezz.jei:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:${jei_version}")
+    implementation "net.neoforged:neoforge:${neo_version}"
+    compileOnly "curse.maven:${jade_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 }
 
 tasks.withType(ProcessResources).configureEach {

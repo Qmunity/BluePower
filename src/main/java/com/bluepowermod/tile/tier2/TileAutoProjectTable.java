@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -28,9 +29,9 @@ public class TileAutoProjectTable extends TileProjectTable {
         if(slot == OUTPUT_SLOT) {
             InventoryProjectTableCrafting craftingInv = new InventoryProjectTableCrafting(null, this, 3, 3);
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, level);
+            Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, level);
             if (optional.isPresent()) {
-                CraftingRecipe icraftingrecipe = optional.get();
+                CraftingRecipe icraftingrecipe = optional.get().value();
                 itemstack = icraftingrecipe.assemble(craftingInv, level.registryAccess());
             }
 
@@ -71,9 +72,9 @@ public class TileAutoProjectTable extends TileProjectTable {
         if(i == OUTPUT_SLOT){
             InventoryProjectTableCrafting craftingInv = new InventoryProjectTableCrafting(null, this, 3, 3);
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, level);
+            Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, level);
             if (optional.isPresent()) {
-                CraftingRecipe icraftingrecipe = optional.get();
+                CraftingRecipe icraftingrecipe = optional.get().value();
                 itemstack = icraftingrecipe.assemble(craftingInv, level.registryAccess());
             }
             return itemstack;

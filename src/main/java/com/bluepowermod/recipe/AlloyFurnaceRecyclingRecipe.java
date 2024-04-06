@@ -4,10 +4,13 @@ import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.init.BPRecipeTypes;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,19 +25,9 @@ import java.util.Set;
  */
 public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
 
-    private final ResourceLocation id;
-
-    public AlloyFurnaceRecyclingRecipe(ResourceLocation idIn) {
-        this.id = idIn;
-    }
-
     @Override
     public ItemStack getResultItem(RegistryAccess p_267052_) {
         return ItemStack.EMPTY;
-    }
-
-    public ResourceLocation getId() {
-        return this.id;
     }
 
     @Override
@@ -125,14 +118,17 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     public static class Serializer implements RecipeSerializer<AlloyFurnaceRecyclingRecipe> {
+
         @Override
-        public AlloyFurnaceRecyclingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            return new AlloyFurnaceRecyclingRecipe(recipeId);
+        public Codec<AlloyFurnaceRecyclingRecipe> codec() {
+            return RecordCodecBuilder.create((instance) -> instance.group(
+                    Codec.list(Ingredient.CODEC).fieldOf("ingredients").forGetter(Recipe::getIngredients)
+            ).apply(instance, (p1) -> new AlloyFurnaceRecyclingRecipe()));
         }
 
         @Override
-        public AlloyFurnaceRecyclingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            return new AlloyFurnaceRecyclingRecipe(recipeId);
+        public AlloyFurnaceRecyclingRecipe fromNetwork(FriendlyByteBuf buffer) {
+            return new AlloyFurnaceRecyclingRecipe();
         }
 
         @Override

@@ -13,7 +13,6 @@ import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.client.resources.model.MultiPartBakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -31,12 +30,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelDataManager;
-import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.client.model.data.MultipartModelData;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -130,20 +126,7 @@ public class TileBPMultipart extends BlockEntity {
         stateMap.values().forEach(t -> t.setLevel(levelIn));
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        //If any of the states are blocking the given side return empty.
-        if(isSideBlocked(cap, side)){
-            return LazyOptional.empty();
-        }
-        //Get Matching Capabilities from the contained Tile Entities.
-        List<LazyOptional<T>> capability =  stateMap.values().stream().filter(Objects::nonNull)
-                .map(t -> t.getCapability(cap, side)).filter(LazyOptional::isPresent).collect(Collectors.toList());
-        return capability.size() > 0 ? capability.get(0) : LazyOptional.empty();
-    }
-
-    public Boolean isSideBlocked(@Nonnull Capability cap, @Nullable Direction side){
+    public Boolean isSideBlocked(@Nonnull BlockCapability cap, @Nullable Direction side){
         return stateMap.keySet().stream().filter(s -> s.getBlock() instanceof IBPPartBlock)
                 .anyMatch(s -> ((IBPPartBlock)s.getBlock()).blockCapability(s, cap, side));
     }

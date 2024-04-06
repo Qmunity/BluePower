@@ -11,8 +11,8 @@ import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 /*
 public class CompatModuleHydCraft extends CompatModule {
 

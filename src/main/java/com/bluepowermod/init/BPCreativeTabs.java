@@ -20,10 +20,10 @@ package com.bluepowermod.init;
 import com.bluepowermod.item.ItemSaw;
 import com.bluepowermod.item.ItemScrewdriver;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -33,23 +33,22 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.stream.Collectors;
 
 public class BPCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Refs.MODID);
 
-    public static final RegistryObject<CreativeModeTab> blocks = CREATIVE_TABS.register("blocks", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:blocks")).icon(() -> new ItemStack(BPBlocks.amethyst_ore.get())).build());
-    public static final RegistryObject<CreativeModeTab> machines = CREATIVE_TABS.register("machines",() -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:machines")).icon(() -> new ItemStack(BPBlocks.alloyfurnace.get())).build());
-    public static final RegistryObject<CreativeModeTab> items = CREATIVE_TABS.register("items", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:items")).icon(() -> new ItemStack(BPItems.ruby_gem.get())).build());
-    public static final RegistryObject<CreativeModeTab> tools = CREATIVE_TABS.register("tools", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:tools")).icon(() ->  new ItemStack(BPItems.screwdriver.get())).build());
-    public static final RegistryObject<CreativeModeTab> lighting = CREATIVE_TABS.register("lighting", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:lighting")).icon(() ->  new ItemStack(BPBlocks.fixedLampRGB.get())).backgroundSuffix("bp_search.png").withSearchBar(62).build());
-    public static final RegistryObject<CreativeModeTab> microblocks = CREATIVE_TABS.register( "microblocks", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:microblocks")).icon(() ->  new ItemStack(BPBlocks.microblocks.get(0).get())).backgroundSuffix("bp_search.png").withSearchBar(62).build());
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> blocks = CREATIVE_TABS.register("blocks", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:blocks")).icon(() -> new ItemStack(BPBlocks.amethyst_ore.get())).build());
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> machines = CREATIVE_TABS.register("machines",() -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:machines")).icon(() -> new ItemStack(BPBlocks.alloyfurnace.get())).build());
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> items = CREATIVE_TABS.register("items", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:items")).icon(() -> new ItemStack(BPItems.ruby_gem.get())).build());
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> tools = CREATIVE_TABS.register("tools", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:tools")).icon(() ->  new ItemStack(BPItems.screwdriver.get())).build());
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> lighting = CREATIVE_TABS.register("lighting", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:lighting")).icon(() ->  new ItemStack(BPBlocks.fixedLampRGB.get())).backgroundSuffix("bp_search.png").withSearchBar(62).build());
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> microblocks = CREATIVE_TABS.register( "microblocks", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:microblocks")).icon(() ->  new ItemStack(BPBlocks.microblocks.get(0).get())).backgroundSuffix("bp_search.png").withSearchBar(62).build());
 
     @SubscribeEvent
     public void creativeTabEvent(BuildCreativeModeTabContentsEvent event) {
@@ -69,17 +68,17 @@ public class BPCreativeTabs {
         }else if(event.getTab() == lighting.get()){
             event.acceptAll(BPBlocks.allLamps.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
         }else if(event.getTab() == microblocks.get()){
-            for (Block block : ForgeRegistries.BLOCKS.getValues().stream().filter(b -> !(b instanceof EntityBlock)).toList()) {
+            for (Block block : BuiltInRegistries.BLOCK.stream().filter(b -> !(b instanceof EntityBlock)).toList()) {
                 VoxelShape shape = null;
                 try{
                     shape = block.defaultBlockState().getShape(null, null);
                 }catch (NullPointerException ignored){
                     //Shulker Boxes try to query the Tile Entity
                 }
-                if(ForgeRegistries.BLOCKS.getKey(block) != null && shape == Shapes.block()) {
-                    for (RegistryObject<Block> mb : BPBlocks.microblocks){
+                if(shape == Shapes.block()) {
+                    for (DeferredHolder<Block, Block> mb : BPBlocks.microblocks){
                         CompoundTag nbt = new CompoundTag();
-                        nbt.putString("block", ForgeRegistries.BLOCKS.getKey(block).toString());
+                        nbt.putString("block", BuiltInRegistries.BLOCK.getKey(block).toString());
                         ItemStack stack = new ItemStack(mb.get());
                         stack.setTag(nbt);
                         stack.setHoverName(Component.translatable(block.getDescriptionId())

@@ -47,4 +47,5 @@ public interface IAlloyFurnaceRecipe extends Recipe<WorldlyContainer> {
     NonNullList<Ingredient> getRequiredItems();
 
     NonNullList<Integer> getRequiredCount();
+
 }

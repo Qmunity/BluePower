@@ -2,9 +2,7 @@ package com.bluepowermod.network.message;
 
 import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 public class MessageServerTickTime{
     private double tickTime;
@@ -13,7 +11,7 @@ public class MessageServerTickTime{
         this.tickTime = tickTime;
     }
 
-    public static void handle(MessageServerTickTime msg, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(MessageServerTickTime msg, PlayPayloadContext contextSupplier) {
         TubeStack.tickTimeMultiplier = Math.min(1, 50D / Math.max(msg.tickTime - 5, 0.01));//Let the client stack go a _little_ bit faster than the real value (50 / tickTime), as else if the server stacks arrive first, glitches happen.
     }
 

@@ -10,14 +10,12 @@ package com.bluepowermod.compat;
 
 //import com.bluepowermod.compat.ic2.CompatModuleIC2;
 //import com.bluepowermod.compat.mcmp.CompatModuleMCMP;
-import com.bluepowermod.compat.waila.CompatModuleWaila;
-import com.bluepowermod.util.Dependencies;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 
 import java.util.*;
 

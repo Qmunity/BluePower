@@ -7,16 +7,9 @@
  */
 package com.bluepowermod.helper;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.Registry;
-import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.tags.TagManager;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.tags.ItemTags;
 
 import com.bluepowermod.util.ItemStackUtils;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemStackHelper {
 

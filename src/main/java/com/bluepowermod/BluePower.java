@@ -23,20 +23,23 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForgeEventHandler;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.network.registration.NetworkRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,41 +49,39 @@ public class BluePower {
 
 
     public static BluePower instance;
-    public static CommonProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
+    public static CommonProxy proxy = FMLEnvironment.dist == Dist.CLIENT ? new ClientProxy() : new CommonProxy();
 
-    public BluePower(){
+    public BluePower(IEventBus modEventBus){
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BPConfig.spec);
         instance = this;
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::complete);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerCapabilities);
-        FMLJavaModLoadingContext.get().getModEventBus().register(new BPCreativeTabs());
+        modEventBus.addListener(this::setup);
+        modEventBus.addListener(this::complete);
+        modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(BPNetworkHandler::register);
+        modEventBus.register(new BPCreativeTabs());
 
-        BPBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BPItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BPCreativeTabs.CREATIVE_TABS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BPBlockEntityType.BLOCK_ENTITY_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BPEnchantments.ENCHANTMENT.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BPRecipeTypes.RECIPE_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BPRecipeSerializer.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BPWorldGen.FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BPMenuType.MENU_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-
-        MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
+        BPBlocks.BLOCKS.register(modEventBus);
+        BPItems.ITEMS.register(modEventBus);
+        BPCreativeTabs.CREATIVE_TABS.register(modEventBus);
+        BPBlockEntityType.BLOCK_ENTITY_TYPE.register(modEventBus);
+        BPEnchantments.ENCHANTMENT.register(modEventBus);
+        BPRecipeTypes.RECIPE_TYPE.register(modEventBus);
+        BPRecipeSerializer.RECIPE_SERIALIZERS.register(modEventBus);
+        BPWorldGen.FEATURES.register(modEventBus);
+        BPWorldGen.PLACEMENTS.register(modEventBus);
+        BPMenuType.MENU_TYPES.register(modEventBus);
 
         BPEventHandler eventHandler = new BPEventHandler();
-        MinecraftForge.EVENT_BUS.register(eventHandler);
+        NeoForge.EVENT_BUS.register(eventHandler);
+        NeoForge.EVENT_BUS.register(this);
 
         BPApi.init(new BluePowerAPI());
-        proxy.preInitRenderers();
+        proxy.preInitRenderers(modEventBus);
     }
 
     public static Logger log = LogManager.getLogger(Refs.MODID);
 
     public void setup(FMLCommonSetupEvent event) {
-        event.enqueueWork(BPNetworkHandler::init);
-        event.enqueueWork(BPWorldGen::registerFeatures);
         proxy.setup(event);
         CompatibilityUtils.init(event);
     }

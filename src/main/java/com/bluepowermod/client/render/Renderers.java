@@ -25,15 +25,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,12 +41,11 @@ import java.util.Map;
 /**
  * @author MoreThanHidden
  */
-@Mod.EventBusSubscriber(Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class Renderers {
 
     @SubscribeEvent
-    public static void registerModels(ModelEvent.RegisterAdditional evt){
+    public void registerModels(ModelEvent.RegisterAdditional evt){
         for (Block block : BPBlocks.blockList) {
             if ((block instanceof ICustomModelBlock)) {
                 registerBakedModel(block);
@@ -86,7 +85,7 @@ public class Renderers {
         BlockEntityRenderers.register(BPBlockEntityType.TUBE.get(), context -> new RenderTube());
         BlockEntityRenderers.register(BPBlockEntityType.ENGINE.get(), context -> new RenderEngine());
 
-        for (RegistryObject<Item> item : BPItems.ITEMS.getEntries()) {
+        for (DeferredHolder<Item, ? extends Item> item : BPItems.ITEMS.getEntries()) {
             if (item.get() instanceof IBPColoredItem) {
                 Minecraft.getInstance().getItemColors().register(new BPItemColor(), item.get());
             }

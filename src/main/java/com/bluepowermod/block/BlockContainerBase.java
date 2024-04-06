@@ -42,7 +42,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
 
@@ -178,7 +177,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
             return InteractionResult.FAIL;
         }
         if (world.getBlockEntity(pos) instanceof MenuProvider) {
-            NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider)world.getBlockEntity(pos));
+            player.openMenu((MenuProvider)world.getBlockEntity(pos));
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.FAIL;

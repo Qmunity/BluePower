@@ -148,7 +148,7 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
             }
             if (tileAlloyFurnace.updatingRecipe) {
                 if(level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).isPresent()) {
-                    tileAlloyFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).get();
+                    tileAlloyFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).get().value();
                     //Check output slot is empty and less than a stack of the same item.
                     if(!(tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem(level.registryAccess()).getItem()
                             && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())

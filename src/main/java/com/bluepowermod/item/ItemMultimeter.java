@@ -1,14 +1,10 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.power.CapabilityBlutricity;
-import com.bluepowermod.init.BPCreativeTabs;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.InteractionResult;
-
-import net.minecraft.world.item.Item.Properties;
 
 /**
  * @author MoreThanHidden
@@ -22,11 +18,11 @@ public class ItemMultimeter extends ItemBase {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        BlockEntity tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
-        if (tileEntity != null && tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()){
+        var blulectricDevice = context.getLevel().getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, context.getClickedPos(), null);
+        if (blulectricDevice != null){
             if(!context.getLevel().isClientSide) {
-                double volts = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null).getVoltage();
-                double amps = tileEntity.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null).getCurrent();
+                double volts = blulectricDevice.getVoltage();
+                double amps = blulectricDevice.getCurrent();
                 String voltage = String.format("%.2f", volts);
                 String ampere = String.format("%.2f", amps);
                 String watts = String.format("%.2f", volts * amps);

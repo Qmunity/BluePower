@@ -24,8 +24,8 @@
 
 package elucent.albedo.lighting;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public interface ILightProvider {
     @OnlyIn(Dist.CLIENT)

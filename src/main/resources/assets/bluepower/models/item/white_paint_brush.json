@@ -1,6 +1,6 @@
 ﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "bluepower:items/White_paint_brush"
+    "layer0": "bluepower:items/white_paint_brush"
   }
 }

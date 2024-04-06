@@ -18,10 +18,11 @@
 package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.reference.Refs;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.WaterlilyBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -30,10 +31,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
 public class BlockCustomFlower extends BushBlock {
+    public static final MapCodec<BlockCustomFlower> CODEC = simpleCodec(BlockCustomFlower::new);
     protected static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 14.0D, 13.0D);
+    public MapCodec<BlockCustomFlower> codec() {
+        return CODEC;
+    }
 
     public BlockCustomFlower(Properties properties) {
         super(properties.strength(0.0F).sound(SoundType.CROP).noCollission());

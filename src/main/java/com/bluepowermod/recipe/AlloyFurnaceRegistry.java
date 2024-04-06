@@ -23,14 +23,16 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.init.BPRecipeTypes;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -72,10 +74,9 @@ public class AlloyFurnaceRegistry {
         private final ItemStack craftingResult;
         private final NonNullList<Ingredient> requiredItems;
         private final NonNullList<Integer> requiredCount;
-        private final ResourceLocation id;
         private final String group;
 
-        public StandardAlloyFurnaceRecipe(ResourceLocation id, String group, ItemStack craftingResult, NonNullList<Ingredient> requiredItems, NonNullList<Integer> requiredCount) {
+        public StandardAlloyFurnaceRecipe(String group, ItemStack craftingResult, NonNullList<Ingredient> requiredItems, NonNullList<Integer> requiredCount) {
 
             if (craftingResult == null || craftingResult.isEmpty())
                 throw new IllegalArgumentException("Alloy Furnace crafting result can't be null!");
@@ -89,7 +90,6 @@ public class AlloyFurnaceRegistry {
             this.craftingResult = craftingResult;
             this.requiredItems = requiredItems;
             this.requiredCount = requiredCount;
-            this.id = id;
             this.group = group;
         }
 
@@ -136,11 +136,6 @@ public class AlloyFurnaceRegistry {
         @Override
         public ItemStack getResultItem(RegistryAccess registryAccess) {
             return craftingResult;
-        }
-
-        @Override
-        public ResourceLocation getId() {
-            return id;
         }
 
         @Override
@@ -226,52 +221,35 @@ public class AlloyFurnaceRegistry {
 
     public static class Serializer implements RecipeSerializer<IAlloyFurnaceRecipe> {
 
-        @Override
-        public IAlloyFurnaceRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            String s = GsonHelper.getAsString(json, "group", "");
-            NonNullList<Ingredient> nonnulllist = readIngredients(GsonHelper.getAsJsonArray(json, "ingredients"));
-            NonNullList<Integer> countlist = readCount(GsonHelper.getAsJsonArray(json, "ingredients"));
-            if (nonnulllist.isEmpty()) {
-                throw new JsonParseException("No ingredients for alloy furnace recipe");
-            } else if (nonnulllist.size() > 9) {
-                throw new JsonParseException("Too many ingredients for shapeless recipe the max is 9");
+        private record RawData(String group, List<Ingredient> requiredItems, List<Integer> requiredCount, ItemStack craftingResult) {
+
+                public static final Codec<RawData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                        ExtraCodecs.strictOptionalField(Codec.STRING, "group", "").forGetter(RawData::group),
+                        ExtraCodecs.nonEmptyList(Codec.list(Ingredient.CODEC)).fieldOf("ingredients").forGetter(RawData::requiredItems),
+                        ExtraCodecs.nonEmptyList(Codec.list(Codec.INT)).fieldOf("count").forGetter(RawData::requiredCount),
+                        ItemStack.CODEC.fieldOf("result").forGetter(RawData::craftingResult)
+                ).apply(instance, RawData::new));
+        }
+
+        public static final Codec<IAlloyFurnaceRecipe> CODEC = RawData.CODEC.flatXmap(rawData -> {
+            return DataResult.success(new StandardAlloyFurnaceRecipe(rawData.group(), rawData.craftingResult(), (NonNullList<Ingredient>)rawData.requiredItems(), (NonNullList<Integer>)rawData.requiredCount()));
+        }, (recipe) -> {
+            if (recipe instanceof StandardAlloyFurnaceRecipe) {
+                StandardAlloyFurnaceRecipe standardRecipe = (StandardAlloyFurnaceRecipe) recipe;
+                return DataResult.success(new RawData(standardRecipe.getGroup(), standardRecipe.getRequiredItems(), standardRecipe.getRequiredCount(), standardRecipe.getResultItem(null)));
             } else {
-                ItemStack itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
-                return new StandardAlloyFurnaceRecipe(recipeId, s, itemstack, nonnulllist, countlist);
+                return DataResult.error(() -> "Cannot serialize IAlloyFurnaceRecipe that is not a StandardAlloyFurnaceRecipe");
             }
-        }
+        });
 
-        private static NonNullList<Ingredient> readIngredients(JsonArray jsonArray) {
-            NonNullList<Ingredient> nonnulllist = NonNullList.create();
-            for(int i = 0; i < jsonArray.size(); ++i) {
-                Ingredient ingredient = Ingredient.fromJson(jsonArray.get(i));
-                if (!ingredient.isEmpty()) {
-                    nonnulllist.add(ingredient);
-                }
-            }
-            return nonnulllist;
-        }
-
-        private static NonNullList<Integer> readCount(JsonArray jsonArray) {
-            NonNullList<Integer> countlist = NonNullList.create();
-            for(int i = 0; i < jsonArray.size(); ++i) {
-                Ingredient ingredient = Ingredient.fromJson(jsonArray.get(i));
-                int count;
-                if (jsonArray.get(i).isJsonObject() && ((JsonObject)jsonArray.get(i)).has("count")) {
-                    count = ((JsonObject) jsonArray.get(i)).get("count").getAsInt();
-                }else{
-                    count = 1;
-                }
-                if (!ingredient.isEmpty()) {
-                    countlist.add(i, count);
-                }
-            }
-            return countlist;
+        @Override
+        public Codec<IAlloyFurnaceRecipe> codec() {
+            return CODEC;
         }
 
         @Nullable
         @Override
-        public IAlloyFurnaceRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+        public IAlloyFurnaceRecipe fromNetwork(FriendlyByteBuf buffer) {
             String s = buffer.readUtf(32767);
             int i = buffer.readVarInt();
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
@@ -286,7 +264,7 @@ public class AlloyFurnaceRegistry {
             }
 
             ItemStack itemstack = buffer.readItem();
-            return new StandardAlloyFurnaceRecipe(recipeId, s, itemstack, nonnulllist, countlist);
+            return new StandardAlloyFurnaceRecipe(s, itemstack, nonnulllist, countlist);
         }
 
         @Override

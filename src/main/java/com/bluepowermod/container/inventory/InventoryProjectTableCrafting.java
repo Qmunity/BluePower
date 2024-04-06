@@ -1,14 +1,13 @@
 package com.bluepowermod.container.inventory;
 
-import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageCraftingSync;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 
@@ -44,7 +43,7 @@ public class InventoryProjectTableCrafting extends TransientCraftingContainer {
         this.projectTable.setChanged();
         this.eventHandler.slotsChanged(this);
         if(FMLEnvironment.dist == Dist.CLIENT)
-            BPNetworkHandler.wrapper.sendToServer(new MessageCraftingSync());
+            PacketDistributor.SERVER.noArg().send(new MessageCraftingSync());
     }
 
     @Nonnull

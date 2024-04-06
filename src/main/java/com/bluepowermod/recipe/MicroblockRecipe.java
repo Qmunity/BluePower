@@ -5,7 +5,10 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.item.ItemSaw;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -21,12 +24,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class MicroblockRecipe extends CustomRecipe {
 
-    public MicroblockRecipe(ResourceLocation resourceLocation) {
-        super(resourceLocation, CraftingBookCategory.BUILDING);
+    public MicroblockRecipe() {
+        super(CraftingBookCategory.BUILDING);
     }
 
     @Override
@@ -64,7 +66,7 @@ public class MicroblockRecipe extends CustomRecipe {
             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem) {
                 if (Block.byItem(stack.getItem()).defaultBlockState().getShape(null, null) == Shapes.block()){
                     CompoundTag nbt = new CompoundTag();
-                    nbt.putString("block", ForgeRegistries.ITEMS.getKey(stack.getItem()).toString());
+                    nbt.putString("block", BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
                     ItemStack outStack = new ItemStack(BPBlocks.half_block.get(), 2);
                     outStack.setTag(nbt);
                     outStack.setHoverName(Component.translatable(stack.getItem().getDescriptionId())
@@ -76,7 +78,7 @@ public class MicroblockRecipe extends CustomRecipe {
                     nbt.putString("block", stack.getTag().getString("block"));
                     ItemStack outStack = new ItemStack(BPBlocks.panel.get(), 2);
                     outStack.setTag(nbt);
-                    Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
+                    Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("block")));
                     outStack.setHoverName(Component.translatable(block.getDescriptionId())
                             .append(" ")
                             .append(Component.translatable(BPBlocks.panel.get().getDescriptionId())));
@@ -86,7 +88,7 @@ public class MicroblockRecipe extends CustomRecipe {
                     nbt.putString("block", stack.getTag().getString("block"));
                     ItemStack outStack = new ItemStack(BPBlocks.cover.get(), 2);
                     outStack.setTag(nbt);
-                    Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("block")));
+                    Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("block")));
                     outStack.setHoverName(Component.translatable(block.getDescriptionId())
                             .append(" ")
                             .append(Component.translatable(BPBlocks.cover.get().getDescriptionId())));
@@ -108,18 +110,23 @@ public class MicroblockRecipe extends CustomRecipe {
     }
 
     public static class Serializer implements RecipeSerializer<MicroblockRecipe> {
+
         @Override
-        public MicroblockRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            return new MicroblockRecipe(recipeId);
+        public Codec<MicroblockRecipe> codec() {
+            return RecordCodecBuilder.create((instance) -> instance.group(
+                    Codec.INT.fieldOf("width").forGetter((width) -> 1),
+                    Codec.INT.fieldOf("height").forGetter((height) -> 1)
+            ).apply(instance, (width, height) -> new MicroblockRecipe()));
         }
 
         @Override
-        public MicroblockRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            return new MicroblockRecipe(recipeId);
+        public MicroblockRecipe fromNetwork(FriendlyByteBuf buffer) {
+            return new MicroblockRecipe();
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, MicroblockRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf p_44101_, MicroblockRecipe p_44102_) {
+
         }
     }
 }

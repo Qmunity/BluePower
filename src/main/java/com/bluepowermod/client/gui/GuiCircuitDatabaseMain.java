@@ -11,7 +11,6 @@ import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerCircuitDatabaseMain;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
@@ -22,7 +21,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.opengl.GL11;
 
-import java.io.IOException;
 import java.util.List;
 
 public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitDatabaseMain> implements MenuAccess<ContainerCircuitDatabaseMain> {

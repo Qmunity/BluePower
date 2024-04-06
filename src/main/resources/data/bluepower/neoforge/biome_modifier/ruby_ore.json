@@ -1,6 +1,6 @@
 {
-  "type": "forge:add_features",
+  "type": "neoforge:add_features",
   "biomes": "#minecraft:is_overworld",
-  "features": "bluepower:zinc_ore",
+  "features": "bluepower:ruby_ore",
   "step": "underground_ores"
 }

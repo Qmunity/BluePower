@@ -10,19 +10,18 @@ package com.bluepowermod.block.power;
 
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.BlockBPCableBase;
-import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileBlulectricCable;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraftforge.common.capabilities.Capability;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -44,7 +43,7 @@ public class BlockBlulectricCable extends BlockBPCableBase implements EntityBloc
     }
 
     @Override
-    protected Capability<?> getCapability() {
+    protected BlockCapability<?, Direction> getCapability() {
         return CapabilityBlutricity.BLUTRICITY_CAPABILITY;
     }
 

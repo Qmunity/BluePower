@@ -19,7 +19,8 @@ package com.bluepowermod;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class CommonProxy {
 
@@ -29,7 +30,7 @@ public class CommonProxy {
 
     }
 
-    public void preInitRenderers() {
+    public void preInitRenderers(IEventBus eventBus) {
 
     }
 

@@ -7,13 +7,16 @@ import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileInsulatedWire;
 import com.bluepowermod.tile.tier1.TileWire;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.HitResult;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -48,7 +51,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
         BlockEntity tileentity = world.getBlockEntity(pos);
         ItemStack stack = ItemStack.EMPTY;
         if(tileentity instanceof TileBPMultipart){
@@ -70,9 +73,9 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
         if(tile instanceof TileBPMultipart){
             tile = ((TileBPMultipart)tile).getTileForState(state);
         }
-        if(tile instanceof TileWire && tintIndex == 1) {
-            return tile.getCapability(CapabilityRedstoneDevice.INSULATED_CAPABILITY).orElse(null).getInsulationColor(null).getHex();
-        }
+        //if(tile instanceof TileWire && tintIndex == 1) {
+        //    return tile.getCapability(CapabilityRedstoneDevice.INSULATED_CAPABILITY).orElse(null).getInsulationColor(null).getHex();
+        //}
         return RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
     }
 

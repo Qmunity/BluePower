@@ -41,9 +41,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -52,6 +49,10 @@ import java.util.UUID;
 
 
 import net.minecraft.core.NonNullList;
+import net.neoforged.bus.api.ICancellableEvent;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * @author MineMaarten
@@ -150,7 +151,7 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
         
         try {
             PlayerInteractEvent event =  new PlayerInteractEvent.RightClickEmpty(player, InteractionHand.MAIN_HAND);
-            if (event.isCanceled()) return false;
+            if (((ICancellableEvent)event).isCanceled()) return false;
             
             Block block = level.getBlockState(new BlockPos(x, y, z)).getBlock();
             List<LivingEntity> detectedEntities = level.getEntitiesOfClass(LivingEntity.class, new AABB(x, y, z, x + 1, y + 1, z + 1));

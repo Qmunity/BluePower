@@ -9,10 +9,7 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IBPColoredItem;
-import com.bluepowermod.reference.Refs;
 import net.minecraft.world.item.ItemStack;
-
-import net.minecraft.world.item.Item.Properties;
 
 /**
  * @author MineMaarten

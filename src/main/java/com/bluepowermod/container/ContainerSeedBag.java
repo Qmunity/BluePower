@@ -31,7 +31,7 @@ import com.bluepowermod.container.slot.SlotSeedBag;
 import com.bluepowermod.item.ItemSeedBag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class ContainerSeedBag extends AbstractContainerMenu {
 

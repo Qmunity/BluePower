@@ -1,6 +1,6 @@
 ﻿{
    "parent": "block/cube_all",
-   "loader": "forge:obj",
+   "loader": "neoforge:obj",
    "model": "bluepower:models/block/engine/engine_glider.obj",
    "ambientToFullbright": false,
    "textures": {

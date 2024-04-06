@@ -38,13 +38,10 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.common.IPlantable;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemSeedBag extends ItemBase implements MenuProvider {
 
@@ -110,7 +107,7 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
         if (!world.isClientSide && player.isCrouching()) {
-            NetworkHooks.openScreen((ServerPlayer) player, this);
+            player.openMenu(this);
         }
         return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
     }

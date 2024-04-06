@@ -19,17 +19,11 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 
 /**
- * 
  * @author TheFjong, MoreThanHidden
- *
  */
 public class TileEngine extends TileMachineBase  {
 
@@ -43,18 +37,6 @@ public class TileEngine extends TileMachineBase  {
 			return false;
 		}
 	};
-	private LazyOptional<BlutricityFEStorage> blutricityCap;
-
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-		if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY || cap == ForgeCapabilities.ENERGY){
-			if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
-			return blutricityCap.cast();
-		}
-		return LazyOptional.empty();
-	}
-
 	
 	public TileEngine(BlockPos pos, BlockState state){
 		super(BPBlockEntityType.ENGINE.get(), pos, state);
@@ -74,14 +56,15 @@ public class TileEngine extends TileMachineBase  {
 			Direction facing = engine.getBlockState().getValue(BlockEngine.FACING).getOpposite();
 			BlockEntity tileEntity = level.getBlockEntity(pos.relative(facing));
 			if (tileEntity != null) {
-				tileEntity.getCapability(ForgeCapabilities.ENERGY, facing.getOpposite()).ifPresent(other -> {
+                IEnergyStorage other = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.relative(facing), facing.getOpposite());
+				if(other != null) {
 					int simulated = engine.storage.extractEnergy(320, true);
 					int sent = other.receiveEnergy(simulated, false);
 					int amount = engine.storage.extractEnergy(sent, false);
 					if(amount > 0) {
 						engine.isActive = true;
 					}
-				});
+				}
 			}
 		}
 
@@ -128,15 +111,7 @@ public class TileEngine extends TileMachineBase  {
             CapabilityBlutricity.readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
         }
 	}
-
-	@Override
-	public void invalidateCaps(){
-		super.invalidateCaps();
-		if( blutricityCap != null )
-		{
-			blutricityCap.invalidate();
-			blutricityCap = null;
-		}
-	}
-
 }
+
+
+

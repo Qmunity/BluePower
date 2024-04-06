@@ -23,7 +23,6 @@ import com.bluepowermod.init.BPConfig;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.*;
@@ -37,7 +36,7 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.*;
 
@@ -50,7 +49,7 @@ public class WorldGenVolcano extends Feature<NoneFeatureConfiguration> {
     private static final int MAX_VOLCANO_RADIUS = 200; // absolute max radius a volcano can have, this should be a
     // magnitude bigger than an average volcano radius.
     private HashMap<Pos, Integer> volcanoMap;
-    private static List<RegistryObject<Block>> alterBlocks = new ArrayList<>();
+    private static List<DeferredHolder<Block, Block>> alterBlocks = new ArrayList<>();
 
     public WorldGenVolcano(Codec<NoneFeatureConfiguration> pCodec) {
         super(pCodec);
@@ -58,7 +57,7 @@ public class WorldGenVolcano extends Feature<NoneFeatureConfiguration> {
 
     public static void updateAlterBlocks() {
         alterBlocks = new ArrayList<>();
-        alterBlocks.add( BPBlocks.amethyst_block);
+        alterBlocks.add(BPBlocks.amethyst_block);
         alterBlocks.add(BPBlocks.ruby_block);
         alterBlocks.add(BPBlocks.sapphire_block);
         alterBlocks.add(BPBlocks.green_sapphire_block);

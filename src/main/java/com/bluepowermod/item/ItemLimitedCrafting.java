@@ -22,10 +22,6 @@ package com.bluepowermod.item;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Random;
-
-import net.minecraft.world.item.Item.Properties;
-
 public class ItemLimitedCrafting extends ItemBase {
     
     public ItemLimitedCrafting(int uses) {

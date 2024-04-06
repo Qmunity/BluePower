@@ -26,7 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.IFluidBlock;
+import net.neoforged.neoforge.fluids.IFluidBlock;
 
 import java.util.List;
 

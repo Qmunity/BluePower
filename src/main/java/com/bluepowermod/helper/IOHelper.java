@@ -7,7 +7,6 @@
  */
 package com.bluepowermod.helper;
 
-import com.bluepowermod.container.stack.TubeStack;
 import com.bluepowermod.tile.tier2.TileTube;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,9 +21,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 
 /**
  * @author MineMaarten

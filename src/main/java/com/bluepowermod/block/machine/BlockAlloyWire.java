@@ -20,8 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 
 import javax.annotation.Nullable;
 
@@ -36,7 +35,7 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
     }
 
     @Override
-    protected Capability<?> getCapability() {
+    protected BlockCapability<?, Direction> getCapability() {
         return CapabilityRedstoneDevice.UNINSULATED_CAPABILITY;
     }
 
@@ -54,8 +53,8 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
 
     @Override
     public int getSignal(BlockState pState, BlockGetter pLevel, BlockPos pPos, Direction pDirection) {
-        LazyOptional<IRedstoneDevice> cap = pLevel.getBlockEntity(pPos).getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY);
-        return cap.isPresent() ? MathHelper.map(cap.orElse(null).getRedstonePower(pDirection) & 0xFF, 0, 255, 0, 15) : 0;
+        IRedstoneDevice cap = ((Level)pLevel).getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, pPos, pDirection.getOpposite());
+        return cap != null ? MathHelper.map(cap.getRedstonePower(pDirection) & 0xFF, 0, 255, 0, 15) : 0;
     }
 
     @Override

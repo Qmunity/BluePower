@@ -1,36 +1,41 @@
 package com.bluepowermod.network.message;
 
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 /**
  * @Author MoreThanHidden
  */
-public class MessageCraftingSync{
+public class MessageCraftingSync implements CustomPacketPayload {
 
-    public static void handle(MessageCraftingSync msg, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player != null) {
-                AbstractContainerMenu container = player.containerMenu;
-                if (container != null) {
-                    container.slotsChanged(null);
-                }
+    public void handle(PlayPayloadContext context) {
+        Player player = context.player().orElse(null);
+        if (player != null) {
+            AbstractContainerMenu container = player.containerMenu;
+            if (container != null) {
+                container.slotsChanged(null);
             }
-        });
-        contextSupplier.get().setPacketHandled(true);
+        }
     }
 
-    public static MessageCraftingSync decode(FriendlyByteBuf buffer){
-        return new MessageCraftingSync();
+
+    public MessageCraftingSync(FriendlyByteBuf buf) {
+    }
+    public MessageCraftingSync() {
+
     }
 
-    public static void encode(MessageCraftingSync message, FriendlyByteBuf buffer) {
+    @Override
+    public void write(FriendlyByteBuf buffer) {
+
     }
 
+    @Override
+    public ResourceLocation id() {
+        return new ResourceLocation("bluepowermod", "message_crafting_sync");
+    }
 }

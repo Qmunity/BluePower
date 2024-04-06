@@ -20,18 +20,18 @@ package com.bluepowermod.network;
 import com.bluepowermod.network.message.*;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.registration.NetworkRegistry;
 
 public class BPNetworkHandler {
 
-    public static SimpleChannel wrapper;
-
-    public static void init() {
-        wrapper = NetworkRegistry.newSimpleChannel(new ResourceLocation(Refs.MODID, "network"), () -> "1.0", client -> true, server -> true);
-
-        wrapper.registerMessage(0, MessageGuiUpdate.class, MessageGuiUpdate::encode, MessageGuiUpdate::decode,  MessageGuiUpdate::handle);
-        wrapper.registerMessage(1, MessageCraftingSync.class, MessageCraftingSync::encode, MessageCraftingSync::decode, MessageCraftingSync::handle);
+    @SubscribeEvent
+    public static void register(RegisterPayloadHandlerEvent event) {
+        IPayloadRegistrar registrar = event.registrar(Refs.MODID);
+        registrar.play(new ResourceLocation(Refs.MODID, "message_gui_update"), MessageGuiUpdate::new, handler -> handler.server(MessageGuiUpdate::handle));
+        registrar.play(new ResourceLocation(Refs.MODID, "message_crafting_sync"), MessageCraftingSync::new, handler -> handler.server(MessageCraftingSync::handle));
         //wrapper.registerMessage(2, MessageUpdateTextfield.class, MessageUpdateTextfield.class, Dist.DEDICATED_SERVER);
         //wrapper.registerMessage(3, MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Dist.DEDICATED_SERVER);
         //wrapper.registerMessage(4, MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Dist.CLIENT);

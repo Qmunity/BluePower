@@ -17,14 +17,7 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPItems;
-
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.Refs;
-
 import net.minecraft.world.item.*;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemGemSword extends SwordItem {
 

@@ -35,8 +35,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,7 +45,6 @@ import javax.annotation.Nullable;
 
 public class TileBlulectricFurnace extends TileMachineBase implements WorldlyContainer, MenuProvider {
     private final BlutricityStorage storage = new BlutricityStorage(1000, 100);
-    private LazyOptional<IPowerBase> blutricityCap;
     private boolean isActive;
     private int currentProcessTime;
     public static final int SLOTS = 2;
@@ -69,14 +66,14 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
             tileFurnace.storage.resetCurrent();
             //Balance power of attached blulectric blocks.
             for (Direction facing : Direction.values()) {
-                BlockEntity tile = level.getBlockEntity(pos.relative(facing));
-                if (tile != null)
-                    tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
-                            exStorage -> EnergyHelper.balancePower(exStorage, tileFurnace.storage));
+                IPowerBase exStorage = level.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, pos.relative(facing), facing.getOpposite());
+                if (exStorage != null){
+                    EnergyHelper.balancePower(exStorage, tileFurnace.storage);
+                }
             }
             if (tileFurnace.updatingRecipe) {
                 if(level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, tileFurnace, level).isPresent()) {
-                    tileFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, tileFurnace, level).get();
+                    tileFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, tileFurnace, level).get().value();
                     //Check output slot is empty and less than a stack of the same item.
                     if(!(tileFurnace.outputInventory.getItem() == tileFurnace.currentRecipe.getResultItem(level.registryAccess()).getItem()
                             && (tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(tileFurnace, level.registryAccess()).getCount()) <= tileFurnace.outputInventory.getMaxStackSize())
@@ -113,27 +110,6 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
         }
 
     }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
-            if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
-            return blutricityCap.cast();
-        }
-        return LazyOptional.empty();
-    }
-
-    @Override
-    public void invalidateCaps(){
-        super.invalidateCaps();
-        if( blutricityCap != null )
-        {
-            blutricityCap.invalidate();
-            blutricityCap = null;
-        }
-    }
-
 
     /**
      * This function gets called whenever the world/chunk loads

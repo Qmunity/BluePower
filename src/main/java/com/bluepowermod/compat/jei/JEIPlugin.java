@@ -29,6 +29,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -40,8 +41,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -74,23 +74,23 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registryIn) {
-        registryIn.addRecipes(AlloyFurnaceHandler.RECIPE_TYPE, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(BPRecipeTypes.ALLOY_SMELTING.get()).stream().filter(r -> !r.getResultItem(Minecraft.getInstance().level.registryAccess()).isEmpty()).toList());
+        registryIn.addRecipes(AlloyFurnaceHandler.RECIPE_TYPE, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(BPRecipeTypes.ALLOY_SMELTING.get()).stream().filter(r -> !r.value().getResultItem(Minecraft.getInstance().level.registryAccess()).isEmpty()).map(RecipeHolder::value).toList());
         registryIn.addRecipes(RecipeTypes.CRAFTING, getMicroblockRecipes());
         registryIn.addRecipes(AlloyFurnaceHandler.RECIPE_TYPE, getRecyclingRecipes());
     }
 
-    private static List<CraftingRecipe> getMicroblockRecipes() {
-        List<CraftingRecipe> recipes = new ArrayList<>();
-        for (Block block : ForgeRegistries.BLOCKS.getValues().stream().filter(b -> !(b instanceof EntityBlock)).collect(Collectors.toList())) {
+    private static List<RecipeHolder<CraftingRecipe>> getMicroblockRecipes() {
+        List<RecipeHolder<CraftingRecipe>> recipes = new ArrayList<>();
+        for (Block block : BuiltInRegistries.BLOCK.stream().filter(b -> !(b instanceof EntityBlock)).collect(Collectors.toList())) {
             VoxelShape shape = null;
             try{
                 shape = block.defaultBlockState().getShape(null, null);
             }catch (NullPointerException ignored){
                 //Shulker Boxes try to query the Tile Entity
             }
-            if(ForgeRegistries.BLOCKS.getKey(block) != null && shape == Shapes.block()) {
+            if(BuiltInRegistries.BLOCK.getKey(block) != null && shape == Shapes.block()) {
                 ItemStack output = ItemStack.EMPTY;
-                for (RegistryObject<Block> mb : BPBlocks.microblocks){
+                for (DeferredHolder<Block, Block> mb : BPBlocks.microblocks){
                     NonNullList<Ingredient> input = NonNullList.create();
                     input.add(Ingredient.of(ItemTags.create(new ResourceLocation("bluepower:saw"))));
                     if(mb == BPBlocks.half_block){
@@ -100,14 +100,14 @@ public class JEIPlugin implements IModPlugin {
                     }
 
                     CompoundTag nbt = new CompoundTag();
-                    nbt.putString("block", ForgeRegistries.BLOCKS.getKey(block).toString());
+                    nbt.putString("block", BuiltInRegistries.BLOCK.getKey(block).toString());
                     ItemStack stack = new ItemStack(mb.get());
                     stack.setTag(nbt);
                     stack.setHoverName(Component.translatable(block.getDescriptionId())
                             .append(Component.literal(" "))
                             .append(Component.translatable(mb.get().getDescriptionId())));
                     output = stack;
-                    recipes.add(new ShapelessRecipe(new ResourceLocation("bluepower:" + mb.get().getDescriptionId() + block.getDescriptionId()), "", CraftingBookCategory.MISC, output, input));
+                    recipes.add(new RecipeHolder(new ResourceLocation("bluepower:" + mb.get().getDescriptionId() + block.getDescriptionId()), new ShapelessRecipe("", CraftingBookCategory.MISC, output, input)));
                 }
             }
         }
@@ -119,7 +119,7 @@ public class JEIPlugin implements IModPlugin {
         List<IAlloyFurnaceRecipe> recipesList = new ArrayList<>();
 
         for (Map.Entry<Item, ItemStack> recipe : AlloyFurnaceRegistry.getInstance().recyclingRecipes.entrySet()) {
-            recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe(new ResourceLocation("bluepower:" + ForgeRegistries.ITEMS.getKey(recipe.getValue().getItem()).toString().replace(":", ".") + ForgeRegistries.ITEMS.getKey(recipe.getKey()).toString().replace(":", ".")), "", recipe.getValue(), NonNullList.of(Ingredient.of(recipe.getKey()), Ingredient.of(recipe.getKey())), NonNullList.of(0, 1)));
+            recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe( "", recipe.getValue(), NonNullList.of(Ingredient.of(recipe.getKey()), Ingredient.of(recipe.getKey())), NonNullList.of(0, 1)));
         }
 
         return recipesList;

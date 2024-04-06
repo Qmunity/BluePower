@@ -18,10 +18,7 @@
 package com.bluepowermod.util;
 
 import com.bluepowermod.compat.CompatibilityUtils;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.tags.ItemTags;
-import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  *

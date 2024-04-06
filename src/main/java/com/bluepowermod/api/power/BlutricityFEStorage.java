@@ -1,11 +1,11 @@
 package com.bluepowermod.api.power;
 
-import net.minecraftforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 
 /**
  * @author MoreThanHidden
  */
-public class BlutricityFEStorage extends BlutricityStorage implements IEnergyStorage{
+public class BlutricityFEStorage extends BlutricityStorage implements IEnergyStorage {
 
 
     public BlutricityFEStorage(double max) {

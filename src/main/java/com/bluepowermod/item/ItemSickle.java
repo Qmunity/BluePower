@@ -17,12 +17,8 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.Refs;
 import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 

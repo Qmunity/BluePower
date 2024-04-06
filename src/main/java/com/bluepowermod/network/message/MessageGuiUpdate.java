@@ -1,26 +1,14 @@
-/*
- * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
- * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
- * with Blue Power. If not, see <http://www.gnu.org/licenses/>
- */
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-import java.util.function.Supplier;
-
-/**
- *
- * @author MineMaarten
- */
-
-public class MessageGuiUpdate{
+public class MessageGuiUpdate implements CustomPacketPayload {
 
     private int messageId;
     private int value;
@@ -30,30 +18,31 @@ public class MessageGuiUpdate{
         this.value = value;
     }
 
-    public static MessageGuiUpdate decode(FriendlyByteBuf buffer){
-        int id = buffer.readByte();
-        int value = buffer.readByte();
-        return new MessageGuiUpdate(id, value);
+    public MessageGuiUpdate(FriendlyByteBuf buf) {
+        this.messageId = buf.readByte();
+        this.value = buf.readByte();
     }
 
-    public static void encode(MessageGuiUpdate message, FriendlyByteBuf buffer) {
-        buffer.writeByte(message.messageId);
-        buffer.writeByte(message.value);
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeByte(this.messageId);
+        buf.writeByte(this.value);
     }
 
-    public static void handle(MessageGuiUpdate msg, Supplier<NetworkEvent.Context> contextSupplier) {
-       NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player == null) {
-                return;
-            }
+    @Override
+    public ResourceLocation id() {
+        return new ResourceLocation("bluepowermod", "message_gui_update");
+    }
 
-            AbstractContainerMenu container = player.containerMenu;
-            if (container instanceof IGuiButtonSensitive) {
-                ((IGuiButtonSensitive) container).onButtonPress(player, msg.messageId, msg.value);
-            }
-        });
-        contextSupplier.get().setPacketHandled(true);
+    public void handle(PlayPayloadContext context) {
+        Player player = context.player().orElse(null);
+        if (player == null) {
+            return;
+        }
+
+        AbstractContainerMenu container = player.containerMenu;
+        if (container instanceof IGuiButtonSensitive) {
+            ((IGuiButtonSensitive) container).onButtonPress(player, messageId, value);
+        }
     }
 }

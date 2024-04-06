@@ -15,11 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,16 +28,6 @@ public class TileTube extends TileBase implements ITubeConnection {
 
     public TileTube(BlockPos pos, BlockState state) {
         super(BPBlockEntityType.TUBE.get(), pos, state);
-    }
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER && side != null && !tubeStacks.isEmpty() && tubeStacks.stream().anyMatch((tubeStack -> tubeStack.heading == side))) {
-            //Find the first item that is heading in the direction of the side
-            return LazyOptional.of(() -> tubeStacks.stream().filter((tubeStack -> tubeStack.heading == side)).findFirst()).cast();
-        }else {
-            return super.getCapability(cap, side);
-        }
     }
 
     @Override

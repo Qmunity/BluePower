@@ -13,12 +13,10 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,8 +26,6 @@ import java.util.List;
 public class TileWire extends TileBase {
     private final IRedstoneDevice device = new RedstoneStorage(level, worldPosition, RedwireType.RED_ALLOY);
     @Nullable
-    private BlockState cachedBlockState;
-    private LazyOptional<IRedstoneDevice> redstoneCap;
 
     public static final ModelProperty<Pair<Integer, Integer>> COLOR_INFO = new ModelProperty<>();
     public static final ModelProperty<Boolean> LIGHT_INFO = new ModelProperty<>();
@@ -71,48 +67,4 @@ public class TileWire extends TileBase {
         tCompound.put("device", nbtstorage);
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        List<Direction> directions = new ArrayList<>(BlockBPCableBase.FACING.getPossibleValues());
-        if(level != null) {
-            BlockState state = getBlockState();
-            if (state.getBlock() instanceof BlockAlloyWire) {
-
-                //Remove upward connections
-                directions.remove(state.getValue(BlockAlloyWire.FACING));
-
-                //Make sure the cable is on the same side of the block
-                directions.removeIf(d -> level.getBlockState(worldPosition.relative(d)).getBlock() instanceof BlockAlloyWire
-                        && level.getBlockState(worldPosition.relative(d)).getValue(BlockAlloyWire.FACING) != state.getValue(BlockAlloyWire.FACING));
-
-
-                //Make sure the cable is the same color or none
-                //if(device.getInsulationColor(null) != MinecraftColor.NONE)
-                    //directions.removeIf(d -> {
-                        //BlockEntity tile = world.getBlockEntity(worldPosition.relative(d));
-                        //return tile instanceof TileWire
-                                //&& !(((TileWire) tile).device.getInsulationColor(d) == device.getInsulationColor(d.getOpposite())
-                                //|| ((TileWire) tile).device.getInsulationColor(d) == MinecraftColor.NONE);
-                    //});
-            }
-        }
-
-        if(cap == CapabilityRedstoneDevice.UNINSULATED_CAPABILITY && (side == null || directions.contains(side))){
-            if( redstoneCap == null ) redstoneCap = LazyOptional.of( () -> device );
-            return redstoneCap.cast();
-        }
-
-        return LazyOptional.empty();
-    }
-
-    @Override
-    public void invalidateCaps(){
-        super.invalidateCaps();
-        if( redstoneCap != null )
-        {
-            redstoneCap.invalidate();
-            redstoneCap = null;
-        }
-    }
 }

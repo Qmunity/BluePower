@@ -18,12 +18,9 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.IScrewdriver;
-import com.bluepowermod.reference.Refs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-
-import java.util.Random;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -34,8 +31,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 

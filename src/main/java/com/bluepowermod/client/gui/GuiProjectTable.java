@@ -32,6 +32,7 @@ import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
  * @author MineMaarten
@@ -64,6 +65,6 @@ public class GuiProjectTable extends GuiContainerBaseBP<ContainerProjectTable> i
     @Override
     public void actionPerformed(IGuiWidget button) {
         if(button.getID() == 0)
-            BPNetworkHandler.wrapper.sendToServer(new MessageGuiUpdate(0, 0));
+            PacketDistributor.SERVER.noArg().send(new MessageGuiUpdate(0, 0));
     }
 }

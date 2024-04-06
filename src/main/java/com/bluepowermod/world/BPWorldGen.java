@@ -18,24 +18,25 @@
 package com.bluepowermod.world;
 
 import com.bluepowermod.reference.Refs;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.placement.*;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 public class BPWorldGen {
 
-    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, Refs.MODID);
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(BuiltInRegistries.FEATURE, Refs.MODID);
+    public static final DeferredRegister<PlacementModifierType<?>> PLACEMENTS = DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, Refs.MODID);
     //VOLCANO
-    public static RegistryObject<Feature<NoneFeatureConfiguration>> VOLCANO = FEATURES.register("volcano", () -> new WorldGenVolcano(NoneFeatureConfiguration.CODEC));
-    public static PlacementModifierType<?> VOLCANO_PLACEMENT;
+    public static DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> VOLCANO = FEATURES.register("volcano", () -> new WorldGenVolcano(NoneFeatureConfiguration.CODEC));
+    public static Supplier<PlacementModifierType<?>> VOLCANO_PLACEMENT = PLACEMENTS.register("volcano",  () -> (PlacementModifierType<PlacementModifier>) () -> PlacementVolcano.CODEC);
 
-    public static void registerFeatures() {
-        VOLCANO_PLACEMENT = Registry.register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, "bluepower:volcano", () -> PlacementVolcano.CODEC);
-    }
+
+
 }

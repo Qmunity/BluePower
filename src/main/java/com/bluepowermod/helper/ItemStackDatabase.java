@@ -8,13 +8,15 @@
 package com.bluepowermod.helper;
 
 import com.bluepowermod.BluePower;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class ItemStackDatabase {
         CompoundTag tag = new CompoundTag();
         stack.save(tag);
 
-        ResourceLocation ui = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        ResourceLocation ui = BuiltInRegistries.ITEM.getKey(stack.getItem());
         tag.putString("owner", ui.getNamespace());
         tag.putString("name", ui.getPath());
 
@@ -95,14 +97,14 @@ public class ItemStackDatabase {
                         byte[] abyte = new byte[short1];
                         dos.read(abyte);
                         ByteArrayInputStream byteStream = new ByteArrayInputStream(abyte);
-                        CompoundTag tag = NbtIo.readCompressed(byteStream);
+                        CompoundTag tag = NbtIo.readCompressed(byteStream, NbtAccounter.unlimitedHeap());
                         ItemStack stack = ItemStack.of(tag);
                         if (stack.getItem() != Items.AIR) {
                             stacks.add(stack);
                         } else {
                             BluePower.log.error("Couldn't retrieve an itemstack with item id: " + tag.getShort("id"));
-                            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tag.getString("owner"), tag.getString("name")));
-                            if (item != null && item != Items.AIR) {
+                            Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(tag.getString("owner"), tag.getString("name")));
+                            if (item != Items.AIR) {
                                 ItemStack backupStack = new ItemStack(item, stack.getCount());
                                 backupStack.setDamageValue(tag.getShort("Damage"));
                                 if (stack.hasTag()) {
