@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:gate_state_cell"
+    "id": "bluepower:gate_state_cell"
   },
   "pattern": [
     "TAC",

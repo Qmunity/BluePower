@@ -3,6 +3,6 @@
   "ingredient": {
     "item": "minecraft:smooth_stone"
   },
-  "result": "bluepower:stone_tile",
+  "result":  { "id": "bluepower:stone_tile"},
   "count": 4
 }

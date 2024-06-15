@@ -14,7 +14,7 @@
     }
   },
   "result": {
-    "item": "bluepower:redstone_anode_tile",
+    "id": "bluepower:redstone_anode_tile",
     "count": 3
   }
 }

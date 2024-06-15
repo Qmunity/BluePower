@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:gate_inverter"
+    "id": "bluepower:gate_inverter"
   },
   "pattern": [
     "TAT",

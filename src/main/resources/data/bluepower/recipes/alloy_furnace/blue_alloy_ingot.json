@@ -2,18 +2,14 @@
   "type": "bluepower:alloy_smelting",
   "ingredients": [
     {
-      "ingredient": {
-        "tag": "c:dusts/teslatite"
-      },
+      "tag": "c:dusts/teslatite",
       "count": 4
     },
     {
-      "ingredient": {
-        "tag": "c:ingots/silver"
-      }
+      "tag": "c:ingots/silver"
     }
   ],
   "result": {
-    "item": "bluepower:blue_alloy_ingot"
+    "id": "bluepower:blue_alloy_ingot"
   }
 }

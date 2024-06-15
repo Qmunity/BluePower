@@ -2,19 +2,15 @@
   "type": "bluepower:alloy_smelting",
   "ingredients": [
     {
-      "ingredient": {
-        "item": "minecraft:coal"
-      },
+      "item": "minecraft:coal",
       "count": 8
     },
     {
-      "ingredient": {
-        "tag": "minecraft:sand"
-      },
+      "tag": "minecraft:sand",
       "count": 8
     }
   ],
   "result": {
-    "item": "bluepower:silicon_boule"
+    "id": "bluepower:silicon_boule"
   }
 }

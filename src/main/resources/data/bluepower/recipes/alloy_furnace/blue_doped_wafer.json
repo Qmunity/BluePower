@@ -2,18 +2,14 @@
   "type": "bluepower:alloy_smelting",
   "ingredients": [
     {
-      "ingredient": {
-        "tag": "c:dusts/teslatite"
-      },
+      "tag": "c:dusts/teslatite",
       "count": 4
     },
     {
-      "ingredient": {
-        "item": "bluepower:silicon_wafer"
-      }
+      "item": "bluepower:silicon_wafer"
     }
   ],
   "result": {
-    "item": "bluepower:blue_doped_wafer"
+    "id": "bluepower:blue_doped_wafer"
   }
 }

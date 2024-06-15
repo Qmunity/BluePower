@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:gate_comparator"
+    "id": "bluepower:gate_comparator"
   },
   "pattern": [
     "TCT",

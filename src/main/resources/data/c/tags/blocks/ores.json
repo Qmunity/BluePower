@@ -1,13 +1,13 @@
 {
   "replace": false,
   "values": [
-    "#forge:ores/amethyst",
-    "#forge:ores/green_sapphire",
-    "#forge:ores/ruby",
-    "#forge:ores/sapphire",
-    "#forge:ores/silver",
-    "#forge:ores/teslatite",
-    "#forge:ores/tungsten",
-    "#forge:ores/zinc"
+    "#c:ores/amethyst",
+    "#c:ores/green_sapphire",
+    "#c:ores/ruby",
+    "#c:ores/sapphire",
+    "#c:ores/silver",
+    "#c:ores/teslatite",
+    "#c:ores/tungsten",
+    "#c:ores/zinc"
   ]
 }

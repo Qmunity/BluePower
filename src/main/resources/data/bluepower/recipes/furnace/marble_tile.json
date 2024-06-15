@@ -3,6 +3,6 @@
   "ingredient": {
     "item": "bluepower:marble"
   },
-  "result": "bluepower:marble_tile",
+  "result":  { "id": "bluepower:marble_tile"},
   "cookingtime": 200
 }

@@ -239,13 +239,20 @@ public class AlloyFurnaceRegistry {
             ).apply(instance, RawData::new));
         }
 
-        public static final MapCodec<IAlloyFurnaceRecipe> CODEC = RawData.CODEC.flatXmap(rawData -> DataResult.success(
+        public static final MapCodec<IAlloyFurnaceRecipe> CODEC = RawData.CODEC.flatXmap(rawData -> {
+            NonNullList<SizedIngredient> ingredients = NonNullList.create();
+            if (rawData.requiredItems() != null) {
+                ingredients.addAll(rawData.requiredItems());
+            }
+
+            return DataResult.success(
                         new StandardAlloyFurnaceRecipe(
                                 rawData.group(),
                                 rawData.craftingResult(),
-                                (NonNullList<SizedIngredient>)rawData.requiredItems()
+                                ingredients
                         )
-                ), (recipe) -> DataResult.success(new RawData(recipe.getGroup(), recipe.getRequiredItems(), recipe.getCraftingResult()))
+                );
+            }, (recipe) -> DataResult.success(new RawData(recipe.getGroup(), recipe.getRequiredItems(), recipe.getCraftingResult()))
         );
 
         public final StreamCodec<RegistryFriendlyByteBuf, IAlloyFurnaceRecipe> STREAM_CODEC = new StreamCodec<RegistryFriendlyByteBuf, IAlloyFurnaceRecipe>() {

@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:xnor_gate"
+    "id": "bluepower:xnor_gate"
   },
   "pattern": [
     "ACA",

@@ -3,6 +3,6 @@
   "ingredient": {
     "item": "bluepower:basalt_brick"
   },
-  "result": "bluepower:basaltbrick_cracked",
+  "result":  { "id": "bluepower:basaltbrick_cracked"},
   "cookingtime": 200
 }

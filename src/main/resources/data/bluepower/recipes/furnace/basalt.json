@@ -3,6 +3,6 @@
   "ingredient": {
     "item": "bluepower:basalt_cobble"
   },
-  "result": "bluepower:basalt",
+  "result":  { "id": "bluepower:basalt"},
   "cookingtime": 200
 }

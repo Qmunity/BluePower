@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:block_breaker"
+    "id": "bluepower:block_breaker"
   },
   "pattern": [
     "SAS",
