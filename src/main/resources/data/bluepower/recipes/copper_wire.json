@@ -7,7 +7,7 @@
       "item": "bluepower:diamond_drawplate"
     },
     {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     }
   ],
   "type": "minecraft:crafting_shapeless"

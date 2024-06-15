@@ -10,10 +10,10 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "G": {
-      "tag": "forge:ingots/gold"
+      "tag": "c:ingots/gold"
     }
   }
 }

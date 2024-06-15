@@ -44,14 +44,14 @@ public class ItemSickle extends DiggerItem {
             BlockTags.SMALL_FLOWERS);
 
     public ItemSickle(Tier itemTier, Item repairItem) {
-        super(2,-1.4F, itemTier, BlockTags.MINEABLE_WITH_HOE, new Properties());
+        super(itemTier, BlockTags.MINEABLE_WITH_HOE, new Properties());
         this.customCraftingMaterial = repairItem;
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         if ((state.getBlock() instanceof LeavesBlock) || (state.getBlock() instanceof GrassBlock) || toolBlocks.contains(state)) {
-            return this.speed;
+            return super.getDestroySpeed(stack, state);
         }
         return 1.0F;
     }
@@ -78,8 +78,7 @@ public class ItemSickle extends DiggerItem {
                 }
             }
             if (used) {
-                stack.hurtAndBreak(1, player, (playerEntity) ->
-                        playerEntity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
             }
             return used;
         }
@@ -114,8 +113,7 @@ public class ItemSickle extends DiggerItem {
         }
 
         if (used) {
-            stack.hurtAndBreak(1, player, (playerEntity) ->
-                    playerEntity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+            stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
         }
         return used;
     }

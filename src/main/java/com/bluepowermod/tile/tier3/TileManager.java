@@ -12,15 +12,12 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
+import net.minecraft.core.*;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -120,13 +117,13 @@ public class TileManager extends TileMachineBase implements WorldlyContainer, IR
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(CompoundTag tCompound) {
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
 
-        super.load(tCompound);
+        super.loadAdditional(tCompound, provider);
 
         for (int i = 0; i < 24; i++) {
             CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.of(tc));
+            inventory.set(i, ItemStack.parseOptional(provider, tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
         mode = tCompound.getByte("mode");
@@ -139,13 +136,13 @@ public class TileManager extends TileMachineBase implements WorldlyContainer, IR
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
 
-        super.saveAdditional(tCompound);
+        super.saveAdditional(tCompound, provider);
 
         for (int i = 0; i < 24; i++) {
                 CompoundTag tc = new CompoundTag();
-                inventory.get(i).save(tc);
+                inventory.get(i).save(provider, tc);
                 tCompound.put("inventory" + i, tc);
         }
 

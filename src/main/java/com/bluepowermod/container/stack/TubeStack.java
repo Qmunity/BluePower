@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BlockItem;
@@ -183,15 +184,15 @@ public class TubeStack implements IItemHandler {
         }
     }
 
-    public TubeStack copy() {
+    public TubeStack copy(HolderLookup.Provider provider) {
 
         CompoundTag tag = new CompoundTag();
-        writeToNBT(tag);
-        return loadFromNBT(tag);
+        writeToNBT(provider, tag);
+        return loadFromNBT(provider, tag);
     }
 
-    public void writeToNBT(CompoundTag tag) {
-        stack.save(tag);
+    public void writeToNBT(HolderLookup.Provider provider, CompoundTag tag) {
+        stack.save(provider, tag);
         tag.putByte("color", (byte) color.ordinal());
         tag.putByte("heading", (byte) heading.ordinal());
         tag.putDouble("progress", progress);
@@ -201,8 +202,8 @@ public class TubeStack implements IItemHandler {
         tag.putInt("targetZ", targetZ);
     }
 
-    public static TubeStack loadFromNBT(CompoundTag tag) {
-        TubeStack stack = new TubeStack(ItemStack.of(tag), Direction.from3DDataValue(tag.getByte("heading")),
+    public static TubeStack loadFromNBT(HolderLookup.Provider provider, CompoundTag tag) {
+        TubeStack stack = new TubeStack(ItemStack.parseOptional(provider, tag), Direction.from3DDataValue(tag.getByte("heading")),
                 TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
         stack.speed = tag.getDouble("speed");

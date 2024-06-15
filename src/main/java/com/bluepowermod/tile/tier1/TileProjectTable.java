@@ -13,6 +13,7 @@ import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.WorldlyContainer;
@@ -25,6 +26,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
@@ -35,7 +38,7 @@ import java.util.stream.IntStream;
 public class TileProjectTable extends TileBase implements WorldlyContainer, MenuProvider {
 
     public final static int SLOTS = 28;
-    private NonNullList<ItemStack> inventory = NonNullList.withSize(18, ItemStack.EMPTY);
+    protected NonNullList<ItemStack> inventory = NonNullList.withSize(18, ItemStack.EMPTY);
     protected NonNullList<ItemStack> craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
 
     public TileProjectTable(BlockPos pos, BlockState state) {
@@ -60,15 +63,15 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
 
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
 
         ListTag tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
                 CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte)currentIndex);
-                inventory.get(currentIndex).save(tagCompound);
+                inventory.get(currentIndex).save(provider, tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("Items", tagList);
@@ -77,16 +80,16 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
         for (int currentIndex = 0; currentIndex < craftingGrid.size(); ++currentIndex) {
                 CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
-                craftingGrid.get(currentIndex).save(tagCompound);
+                craftingGrid.get(currentIndex).save(provider, tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("CraftingGrid", tagList);
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
 
-        super.load(tag);
+        super.loadAdditional(tag, provider);
 
         ListTag tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(19, ItemStack.EMPTY);
@@ -94,7 +97,7 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
             CompoundTag tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, ItemStack.of(tagCompound));
+                inventory.set(slot, ItemStack.parseOptional(provider, tagCompound));
             }
         }
 
@@ -104,7 +107,7 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
             CompoundTag tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < craftingGrid.size()) {
-                craftingGrid.set(slot, ItemStack.of(tagCompound));
+                craftingGrid.set(slot, ItemStack.parseOptional(provider, tagCompound));
             }
         }
     }

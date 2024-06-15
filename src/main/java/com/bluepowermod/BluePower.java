@@ -20,9 +20,6 @@ import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.BPWorldGen;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -33,15 +30,16 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.NeoForgeEventHandler;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.neoforged.neoforge.event.LootTableLoadEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
-import net.neoforged.neoforge.network.registration.NetworkRegistry;
+import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.function.Supplier;
 
 
 @Mod(Refs.MODID)
@@ -49,7 +47,7 @@ public class BluePower {
 
 
     public static BluePower instance;
-    public static CommonProxy proxy = FMLEnvironment.dist == Dist.CLIENT ? new ClientProxy() : new CommonProxy();
+    public static Supplier<CommonProxy>  proxy = FMLEnvironment.dist == Dist.CLIENT ? ClientProxy::new : CommonProxy::new;
 
     public BluePower(IEventBus modEventBus){
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BPConfig.spec);
@@ -57,7 +55,6 @@ public class BluePower {
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::complete);
         modEventBus.addListener(this::registerCapabilities);
-        modEventBus.addListener(BPNetworkHandler::register);
         modEventBus.register(new BPCreativeTabs());
 
         BPBlocks.BLOCKS.register(modEventBus);
@@ -70,29 +67,42 @@ public class BluePower {
         BPWorldGen.FEATURES.register(modEventBus);
         BPWorldGen.PLACEMENTS.register(modEventBus);
         BPMenuType.MENU_TYPES.register(modEventBus);
+        new BPNetworkHandler(modEventBus);
 
         BPEventHandler eventHandler = new BPEventHandler();
         NeoForge.EVENT_BUS.register(eventHandler);
         NeoForge.EVENT_BUS.register(this);
 
         BPApi.init(new BluePowerAPI());
-        proxy.preInitRenderers(modEventBus);
+        proxy.get().preInitRenderers(modEventBus);
     }
 
     public static Logger log = LogManager.getLogger(Refs.MODID);
 
     public void setup(FMLCommonSetupEvent event) {
-        proxy.setup(event);
+        proxy.get().setup(event);
         CompatibilityUtils.init(event);
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event){
         CapabilityBlutricity.register(event);
         CapabilityRedstoneDevice.register(event);
+
+        //Register Energy Storage Capabilities
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, BPBlockEntityType.ENGINE.get(), (engine, side) -> engine.storage);
+
+        //Register Item Handler Capabilities
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BPBlockEntityType.BLULECTRIC_FURNACE.get(), SidedInvWrapper::new);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BPBlockEntityType.ALLOY_FURNACE.get(), SidedInvWrapper::new);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BPBlockEntityType.BLULECTRIC_ALLOY_FURNACE.get(), SidedInvWrapper::new);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BPBlockEntityType.PROJECT_TABLE.get(), SidedInvWrapper::new);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BPBlockEntityType.AUTO_PROJECT_TABLE.get(), SidedInvWrapper::new);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BPBlockEntityType.DEPLOYER.get(), SidedInvWrapper::new);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BPBlockEntityType.BUFFER.get(), SidedInvWrapper::new);
     }
 
     public void complete(FMLLoadCompleteEvent event) {
-        event.enqueueWork(proxy::initRenderers);
+        event.enqueueWork(proxy.get()::initRenderers);
         CompatibilityUtils.postInit(event);
         Recipes.init();
     }
@@ -107,14 +117,6 @@ public class BluePower {
     public void onServerStart(ServerStartedEvent event) {
         //Check Alloy furnace recipes again after tags are populated
         BPRecyclingReloadListener.onResourceManagerReload(event.getServer().getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING));
-    }
-
-    @SubscribeEvent
-    public void onLootLoad(LootTableLoadEvent event){
-        ResourceLocation grass = new ResourceLocation("minecraft", "blocks/tall_grass");
-        if (event.getName().equals(grass)){
-                event.getTable().addPool(LootPool.lootPool().add(LootTableReference.lootTableReference(new ResourceLocation("bluepower", "blocks/tall_grass"))).name("bluepower:tall_grass").build());
-        }
     }
 
 }

@@ -29,6 +29,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -36,11 +37,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.ArrayList;
@@ -102,8 +105,8 @@ public class JEIPlugin implements IModPlugin {
                     CompoundTag nbt = new CompoundTag();
                     nbt.putString("block", BuiltInRegistries.BLOCK.getKey(block).toString());
                     ItemStack stack = new ItemStack(mb.get());
-                    stack.setTag(nbt);
-                    stack.setHoverName(Component.translatable(block.getDescriptionId())
+                    stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
+                    stack.set(DataComponents.ITEM_NAME, Component.translatable(block.getDescriptionId())
                             .append(Component.literal(" "))
                             .append(Component.translatable(mb.get().getDescriptionId())));
                     output = stack;
@@ -119,7 +122,7 @@ public class JEIPlugin implements IModPlugin {
         List<IAlloyFurnaceRecipe> recipesList = new ArrayList<>();
 
         for (Map.Entry<Item, ItemStack> recipe : AlloyFurnaceRegistry.getInstance().recyclingRecipes.entrySet()) {
-            recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe( "", recipe.getValue(), NonNullList.of(Ingredient.of(recipe.getKey()), Ingredient.of(recipe.getKey())), NonNullList.of(0, 1)));
+            recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe( "", recipe.getValue(), NonNullList.of(new SizedIngredient(Ingredient.of(recipe.getKey()), 1))));
         }
 
         return recipesList;

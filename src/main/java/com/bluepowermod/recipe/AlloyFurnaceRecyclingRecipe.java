@@ -5,10 +5,14 @@ import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.init.BPRecipeTypes;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.WorldlyContainer;
@@ -16,6 +20,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,7 +31,7 @@ import java.util.Set;
 public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
 
     @Override
-    public ItemStack getResultItem(RegistryAccess p_267052_) {
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
@@ -49,7 +54,7 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     @Override
-    public ItemStack assemble(WorldlyContainer inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(WorldlyContainer worldlyContainer, HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
@@ -69,7 +74,7 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     @Override
-    public boolean useItems(NonNullList<ItemStack> itemStacks, RecipeManager manager) {
+    public boolean useItems(NonNullList<ItemStack> itemStacks, HolderLookup.Provider provider) {
         Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
         //Check if item is in blacklist
@@ -89,7 +94,7 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     @Override
-    public ItemStack assemble(NonNullList<ItemStack> itemStacks, RecipeManager manager) {
+    public ItemStack assemble(NonNullList<ItemStack> itemStacks, HolderLookup.Provider provider) {
         Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
         //Check if item is in blacklist
@@ -108,31 +113,37 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     @Override
-    public NonNullList<Ingredient> getRequiredItems() {
+    public NonNullList<SizedIngredient> getRequiredItems() {
         return null;
     }
 
     @Override
-    public NonNullList<Integer> getRequiredCount() {
+    public ItemStack getCraftingResult() {
         return null;
     }
 
     public static class Serializer implements RecipeSerializer<AlloyFurnaceRecyclingRecipe> {
 
         @Override
-        public Codec<AlloyFurnaceRecyclingRecipe> codec() {
-            return RecordCodecBuilder.create((instance) -> instance.group(
+        public MapCodec<AlloyFurnaceRecyclingRecipe> codec() {
+            return RecordCodecBuilder.mapCodec((instance) -> instance.group(
                     Codec.list(Ingredient.CODEC).fieldOf("ingredients").forGetter(Recipe::getIngredients)
             ).apply(instance, (p1) -> new AlloyFurnaceRecyclingRecipe()));
         }
 
         @Override
-        public AlloyFurnaceRecyclingRecipe fromNetwork(FriendlyByteBuf buffer) {
-            return new AlloyFurnaceRecyclingRecipe();
-        }
+        public StreamCodec<RegistryFriendlyByteBuf, AlloyFurnaceRecyclingRecipe> streamCodec() {
+            return new StreamCodec<RegistryFriendlyByteBuf, AlloyFurnaceRecyclingRecipe>() {
+                @Override
+                public AlloyFurnaceRecyclingRecipe decode(RegistryFriendlyByteBuf registryFriendlyByteBuf) {
+                    return new AlloyFurnaceRecyclingRecipe();
+                }
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, AlloyFurnaceRecyclingRecipe recipe) {
+                @Override
+                public void encode(RegistryFriendlyByteBuf o, AlloyFurnaceRecyclingRecipe alloyFurnaceRecyclingRecipe) {
+
+                }
+            };
         }
     }
 }

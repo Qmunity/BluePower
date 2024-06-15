@@ -33,11 +33,6 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 public class ClientProxy extends CommonProxy {
 
     @Override
-    public void setup(FMLCommonSetupEvent event) {
-        BPMenuType.registerScreenFactories();
-    }
-
-    @Override
     public void preInitRenderers(IEventBus eventBus) {
         CompatibilityUtils.registerRenders();
 

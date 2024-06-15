@@ -28,7 +28,7 @@ public class ItemGemHoe extends HoeItem {
     protected boolean canRepair = true;
 
     public ItemGemHoe(Tier itemTier, Item repairItem) {
-        super(itemTier, 1, -1.4F, new Properties());
+        super(itemTier, new Properties());
         this.customCraftingMaterial = repairItem;
     }
 

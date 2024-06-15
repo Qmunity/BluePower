@@ -18,11 +18,13 @@
 package com.bluepowermod.util;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
@@ -67,16 +69,16 @@ public class DateEventHandler {
         CompoundTag nbttagcompound1 = new CompoundTag();
         ListTag nbttaglist = new ListTag();
 
-        if (!itemstack1.isEmpty() && itemstack1.getItem() == Items.FIREWORK_STAR && itemstack1.hasTag()
-                && itemstack1.getTag().hasUUID("Explosion")) {
-            nbttaglist.add(itemstack1.getTag().getCompound("Explosion"));
+        if (!itemstack1.isEmpty() && itemstack1.getItem() == Items.FIREWORK_STAR && itemstack1.has(DataComponents.CUSTOM_DATA)
+                && itemstack1.get(DataComponents.CUSTOM_DATA).copyTag().hasUUID("Explosion")) {
+            nbttaglist.add(itemstack1.get(DataComponents.CUSTOM_DATA).copyTag().getCompound("Explosion"));
         }
 
         nbttagcompound1.put("Explosions", nbttaglist);
         nbttagcompound1.putByte("Flight", (byte) 2);
         nbttagcompound.put("Fireworks", nbttagcompound1);
 
-        rocket.setTag(nbttagcompound);
+        rocket.set(DataComponents.CUSTOM_DATA, CustomData.of(nbttagcompound));
 
         FireworkRocketEntity entity = new FireworkRocketEntity(world, x, y, z, rocket);
         world.addFreshEntity(entity);
@@ -108,7 +110,7 @@ public class DateEventHandler {
         nbttagcompound1.putIntArray("Colors", aint);
         nbttagcompound1.putByte("Type", b0);
         nbttagcompound.put("Explosion", nbttagcompound1);
-        charge.setTag(nbttagcompound);
+        charge.set(DataComponents.CUSTOM_DATA, CustomData.of(nbttagcompound));
         return charge;
     }
 }

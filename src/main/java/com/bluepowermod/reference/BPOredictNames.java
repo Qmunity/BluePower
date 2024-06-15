@@ -3,35 +3,35 @@ package com.bluepowermod.reference;
 public class BPOredictNames {
 
     // Ores
-    public static final String ORE_COPPER = "forge:ores/copper";
-    public static final String ORE_ZINC = "forge:ores/zinc";
-    public static final String ORE_SILVER = "forge:ores/silver";
-    public static final String ORE_TUNGSTEN = "forge:ores/tungsten";
-    public static final String ORE_TESLATITE = "forge:ores/teslatite";
-    public static final String ORE_AMETHYST = "forge:ores/amethyst";
-    public static final String ORE_RUBY = "forge:ores/ruby";
-    public static final String ORE_SAPPHIRE = "forge:ores/sapphire";
+    public static final String ORE_COPPER = "c:ores/copper";
+    public static final String ORE_ZINC = "c:ores/zinc";
+    public static final String ORE_SILVER = "c:ores/silver";
+    public static final String ORE_TUNGSTEN = "c:ores/tungsten";
+    public static final String ORE_TESLATITE = "c:ores/teslatite";
+    public static final String ORE_AMETHYST = "c:ores/amethyst";
+    public static final String ORE_RUBY = "c:ores/ruby";
+    public static final String ORE_SAPPHIRE = "c:ores/sapphire";
 
     // Storage blocks
-    public static final String BLOCK_COPPER = "forge:blocks/copper";
-    public static final String BLOCK_ZINC = "forge:blocks/zinc";
-    public static final String BLOCK_SILVER = "forge:blocks/silver";
-    public static final String BLOCK_TUNGSTEN = "forge:blocks/tungsten";
-    public static final String BLOCK_TESLATITE = "forge:blocks/teslatite";
-    public static final String BLOCK_AMETHYST = "forge:blocks/amethyst";
-    public static final String BLOCK_RUBY = "forge:blocks/ruby";
-    public static final String BLOCK_SAPPHIRE = "forge:blocks/sapphire";
-    public static final String BLOCK_GREENSAPPHIRE = "forge:blocks/green_sapphire";
+    public static final String BLOCK_COPPER = "c:blocks/copper";
+    public static final String BLOCK_ZINC = "c:blocks/zinc";
+    public static final String BLOCK_SILVER = "c:blocks/silver";
+    public static final String BLOCK_TUNGSTEN = "c:blocks/tungsten";
+    public static final String BLOCK_TESLATITE = "c:blocks/teslatite";
+    public static final String BLOCK_AMETHYST = "c:blocks/amethyst";
+    public static final String BLOCK_RUBY = "c:blocks/ruby";
+    public static final String BLOCK_SAPPHIRE = "c:blocks/sapphire";
+    public static final String BLOCK_GREENSAPPHIRE = "c:blocks/green_sapphire";
 
     // Ingots
-    public static final String INGOT_COPPER = "forge:ingots/copper";
-    public static final String INGOT_ZINC = "forge:ingots/zinc";
-    public static final String INGOT_SILVER = "forge:ingots/silver";
-    public static final String INGOT_TUNGSTEN = "forge:ingots/tungsten";
-    public static final String INGOT_TUNGCARB = "forge:ingots/tungsten_carbite";
-    public static final String INGOT_BLUE_ALLOY = "forge:ingots/blue_alloy";
-    public static final String INGOT_RED_ALLOY = "forge:ingots/red_alloy";
-    public static final String INGOT_PURPLE_ALLOY = "forge:ingots/purple_alloy";
+    public static final String INGOT_COPPER = "c:ingots/copper";
+    public static final String INGOT_ZINC = "c:ingots/zinc";
+    public static final String INGOT_SILVER = "c:ingots/silver";
+    public static final String INGOT_TUNGSTEN = "c:ingots/tungsten";
+    public static final String INGOT_TUNGCARB = "c:ingots/tungsten_carbite";
+    public static final String INGOT_BLUE_ALLOY = "c:ingots/blue_alloy";
+    public static final String INGOT_RED_ALLOY = "c:ingots/red_alloy";
+    public static final String INGOT_PURPLE_ALLOY = "c:ingots/purple_alloy";
     public static final String INGOT_BRASS = "forge:ingots/brass";
 
     // Dusts

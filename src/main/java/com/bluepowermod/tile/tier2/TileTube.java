@@ -39,7 +39,7 @@ public class TileTube extends TileBase implements ITubeConnection {
         int size = tCompound.getInt("tubeStacksSize");
         for (int j = 0; j < size; j++) {
             CompoundTag tag = tCompound.getCompound("tubeStack" + j);
-            TubeStack tubeStack = TubeStack.loadFromNBT(tag);
+            TubeStack tubeStack = TubeStack.loadFromNBT(level.registryAccess(), tag);
             this.tubeStacks.set(j, tubeStack);
         }
 
@@ -68,7 +68,7 @@ public class TileTube extends TileBase implements ITubeConnection {
         int i = 0;
         for (TubeStack tubeStack : tubeStacks) {
             CompoundTag tag = new CompoundTag();
-            tubeStack.writeToNBT(tag);
+            tubeStack.writeToNBT(level.registryAccess(), tag);
             tCompound.put("tubeStack" + i, tag);
             i++;
         }

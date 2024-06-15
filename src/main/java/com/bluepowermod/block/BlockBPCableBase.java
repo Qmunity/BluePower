@@ -85,7 +85,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
         super.setPlacedBy(worldIn, pos, state, livingEntity, itemStack);
         FACING.getPossibleValues().forEach(f -> {
             BlockPos neighborPos = pos.relative(f).relative(state.getValue(FACING).getOpposite());
-            worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
+            worldIn.getBlockState(neighborPos).handleNeighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
         });
     }
 
@@ -187,7 +187,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
         //If not placed on a solid block break off
         if (!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude()) {
             if(te instanceof TileBPMultipart){
-                ((TileBPMultipart)te).removeState(state);
+                ((TileBPMultipart)te).removeState(state, world.registryAccess());
             }else {
                 world.destroyBlock(pos, true);
             }

@@ -45,7 +45,7 @@ public class MultipartUtils {
         float f6 = f1 * f3;
         double d3 = 5.0D;
         if (entity instanceof ServerPlayer) {
-            d3 = ((ServerPlayer) entity).getAttribute(NeoForgeMod.BLOCK_REACH.value()).getValue();
+            d3 = ((ServerPlayer) entity).blockInteractionRange();
         }
         Vec3 end = start.add(f5 * d3, f4 * d3, f6 * d3);
         return Pair.of(start, end);

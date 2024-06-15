@@ -87,7 +87,7 @@ public abstract class ContainerGhosts extends AbstractContainerMenu {
     
         if (stack1.isEmpty() || stack2.isEmpty()) return false;
         if (!ItemStack.isSameItem(stack1, stack2)) return false;
-        if (!ItemStack.isSameItemSameTags(stack1, stack2)) return false;
+        if (!ItemStack.isSameItemSameComponents(stack1, stack2)) return false;
         return true;
         
     }

@@ -24,6 +24,7 @@ import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
 import com.bluepowermod.container.slot.SlotProjectTableCrafting;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
@@ -34,6 +35,7 @@ import net.minecraft.world.inventory.*;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -130,7 +132,7 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
                     for (int ptSlot = 10; ptSlot < 28; ++ptSlot) {
                         Slot inventorySlot = slots.get(ptSlot);
                         ItemStack ptStack = inventorySlot.getItem();
-                        if (ptStack.getItem() == beforeStack.getItem() && ptStack.getTag() == beforeStack.getTag()) {
+                        if (ptStack.getItem() == beforeStack.getItem() && ptStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == beforeStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()) {
                             ptStack.setCount(ptStack.getCount() - 1);
                             inventorySlot.set(ptStack);
                             beforeStack.setCount(1);

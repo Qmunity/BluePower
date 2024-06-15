@@ -2,11 +2,15 @@
   "type": "bluepower:alloy_smelting",
   "ingredients": [
     {
-      "item": "minecraft:redstone",
+      "ingredient": {
+        "item": "minecraft:redstone"
+      },
       "count": 4
     },
     {
-      "tag": "forge:ingots/iron"
+      "ingredient": {
+        "tag": "c:ingots/iron"
+      }
     }
   ],
   "result": {

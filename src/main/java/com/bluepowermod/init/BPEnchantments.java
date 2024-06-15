@@ -19,7 +19,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class BPEnchantments {
 	public static final DeferredRegister<Enchantment> ENCHANTMENT = DeferredRegister.create(BuiltInRegistries.ENCHANTMENT, Refs.MODID);
 
-	public static DeferredHolder<Enchantment, Enchantment> vorpal = ENCHANTMENT.register("vorpal", () -> new EnchantmentVorpal(Enchantment.Rarity.COMMON));
-	public static DeferredHolder<Enchantment, Enchantment> disjunction = ENCHANTMENT.register("disjunction", () -> new EnchantmentDisjunction(Enchantment.Rarity.COMMON));
+	public static DeferredHolder<Enchantment, Enchantment> vorpal = ENCHANTMENT.register("vorpal", EnchantmentVorpal::new);
+	public static DeferredHolder<Enchantment, Enchantment> disjunction = ENCHANTMENT.register("disjunction", EnchantmentDisjunction::new);
 	
 }

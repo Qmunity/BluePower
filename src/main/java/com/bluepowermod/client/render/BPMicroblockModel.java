@@ -19,12 +19,14 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
@@ -211,7 +213,7 @@ public class BPMicroblockModel implements BakedModel {
         @Nullable
         @Override
         public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int par1){
-            CompoundTag nbt = stack.getTag();
+            CompoundTag nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             if(nbt != null && nbt.contains("block")){
                 DeferredHolder<Block, Block> block = DeferredHolder.create(new ResourceLocation("block"), new ResourceLocation(nbt.getString("block")));
                 return new BPMicroblockModel(block, DeferredHolder.create(new ResourceLocation("block"), BuiltInRegistries.BLOCK.getKey(Block.byItem(stack.getItem()))));

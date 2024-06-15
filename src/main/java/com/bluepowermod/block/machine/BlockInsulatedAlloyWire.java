@@ -7,9 +7,14 @@ import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileInsulatedWire;
 import com.bluepowermod.tile.tier1.TileWire;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -44,7 +49,8 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
         if (tileentity instanceof TileInsulatedWire) {
             CompoundTag nbt = new CompoundTag();
             nbt.putString("color", ((TileInsulatedWire)tileentity).getColor().name());
-            ItemStack stack = new ItemStack(this, 1, nbt);
+            ItemStack stack = new ItemStack(this, 1);
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
             itemStacks.add(stack);
         }
         return itemStacks;
@@ -60,7 +66,8 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
         if (tileentity instanceof TileInsulatedWire) {
             CompoundTag nbt = new CompoundTag();
             nbt.putString("color", ((TileInsulatedWire)tileentity).getColor().name());
-            stack = new ItemStack(this, 1, nbt);
+            stack = new ItemStack(this, 1);
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
         }
         return stack;
     }
@@ -83,8 +90,8 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
     public int getColor(ItemStack stack, int tintIndex) {
         //Color for Block
         MinecraftColor color = MinecraftColor.BLUE;
-        if(stack.getTag() != null && stack.getTag().contains("color"))
-            color = MinecraftColor.valueOf(stack.getTag().getString("color"));
+        if(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null && stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("color"))
+            color = MinecraftColor.valueOf(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("color"));
         return tintIndex == 1 ? color.getHex() : tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
     }
 

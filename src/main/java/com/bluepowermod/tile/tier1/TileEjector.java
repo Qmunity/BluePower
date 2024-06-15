@@ -22,6 +22,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
@@ -68,13 +69,13 @@ public class TileEjector extends TileMachineBase implements Container, MenuProvi
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(CompoundTag tCompound) {
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
 
-        super.load(tCompound);
+        super.loadAdditional(tCompound, provider);
 
         for (int i = 0; i < 9; i++) {
             CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.of(tc));
+            inventory.set(i, ItemStack.parseOptional(provider, tc));
         }
     }
 
@@ -82,13 +83,13 @@ public class TileEjector extends TileMachineBase implements Container, MenuProvi
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
 
-        super.saveAdditional(tCompound);
+        super.saveAdditional(tCompound, provider);
 
         for (int i = 0; i < 9; i++) {
                 CompoundTag tc = new CompoundTag();
-                inventory.get(i).save(tc);
+                inventory.get(i).save(provider, tc);
                 tCompound.put("inventory" + i, tc);
         }
     }

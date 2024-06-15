@@ -12,6 +12,7 @@ import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -57,15 +58,15 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
 
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
 
         ListTag tagList = new ListTag();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
                 CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
-                inventory.get(currentIndex).save(tagCompound);
+                inventory.get(currentIndex).save(provider, tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("Items", tagList);
@@ -74,9 +75,9 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
 
-        super.load(tag);
+        super.loadAdditional(tag, provider);
 
         ListTag tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(24, ItemStack.EMPTY);
@@ -84,7 +85,7 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
             CompoundTag tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, ItemStack.of(tagCompound));
+                inventory.set(slot, ItemStack.parseOptional(provider, tagCompound));
             }
         }
 

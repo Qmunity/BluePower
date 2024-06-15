@@ -11,6 +11,7 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.lighting.BlockLampRGB;
 import com.bluepowermod.helper.MathHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -27,7 +28,7 @@ public class TileLampRGB extends TileLamp {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
         if (getBlockState().getBlock() instanceof BlockLampRGB) {
             tCompound.putByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
             tCompound.putByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
@@ -36,7 +37,7 @@ public class TileLampRGB extends TileLamp {
     }
 
     @Override
-    public void load(CompoundTag tCompound) {
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
         if (tCompound.contains("red")) {
             byte[] pow = bundledPower;
             pow[MinecraftColor.RED.ordinal()] = tCompound.getByte("red");

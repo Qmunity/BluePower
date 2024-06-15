@@ -7,7 +7,7 @@
       "tag": "bluepower:canvas_bag"
     },
     {
-      "tag": "forge:dyes/blue"
+      "tag": "c:dyes/blue"
     }
   ],
   "type": "minecraft:crafting_shapeless"

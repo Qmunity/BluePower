@@ -36,8 +36,8 @@ public class BlockCircuitDatabase extends BlockProjectTable {
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
-        if (super.use(blockState, world, pos, player, hand, rayTraceResult) == InteractionResult.SUCCESS) {
+    public InteractionResult useWithoutItem (BlockState blockState, Level world, BlockPos pos, Player player, BlockHitResult rayTraceResult) {
+        if (super.useWithoutItem(blockState, world, pos, player, rayTraceResult) == InteractionResult.SUCCESS) {
             TileCircuitDatabase database = (TileCircuitDatabase) world.getBlockEntity(pos);
             database.clientCurrentTab = 0;
             if (!world.isClientSide) {

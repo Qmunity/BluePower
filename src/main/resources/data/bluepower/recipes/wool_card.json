@@ -13,7 +13,7 @@
       "tag": "minecraft:planks"
     },
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "f": {
       "item": "bluepower:iron_wire"

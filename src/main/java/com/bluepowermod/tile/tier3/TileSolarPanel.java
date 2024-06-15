@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 public class TileSolarPanel extends TileMachineBase  {
 
 	private final int MAX_VOLTAGE = 100;
-	private final BlutricityStorage storage = new BlutricityStorage(MAX_VOLTAGE, MAX_VOLTAGE);
+	public final BlutricityStorage storage = new BlutricityStorage(MAX_VOLTAGE, MAX_VOLTAGE);
 
 	public TileSolarPanel(BlockPos pos, BlockState state) {
 		super(BPBlockEntityType.SOLAR_PANEL.get(), pos, state);

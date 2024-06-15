@@ -21,6 +21,7 @@ import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.WorldlyContainer;
@@ -44,7 +45,7 @@ import javax.annotation.Nullable;
  */
 
 public class TileBlulectricAlloyFurnace extends TileMachineBase implements WorldlyContainer, MenuProvider {
-    private final BlutricityStorage storage = new BlutricityStorage(1000, 100);
+    public final BlutricityStorage storage = new BlutricityStorage(1000, 100);
     private boolean isActive;
     private int currentProcessTime;
     public static final int SLOTS = 10;
@@ -65,15 +66,15 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(CompoundTag tCompound) {
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
 
-        super.load(tCompound);
+        super.loadAdditional(tCompound, provider);
 
         for (int i = 0; i < 9; i++) {
             CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.of(tc));
+            inventory.set(i, ItemStack.parseOptional(level.registryAccess(), tc));
         }
-        outputInventory = ItemStack.of(tCompound.getCompound("outputInventory"));
+        outputInventory = ItemStack.parseOptional(level.registryAccess(), tCompound.getCompound("outputInventory"));
 
     }
 
@@ -81,19 +82,19 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
 
-        super.saveAdditional(tCompound);
+        super.saveAdditional(tCompound, provider);
 
         for (int i = 0; i < 9; i++) {
             CompoundTag tc = new CompoundTag();
-            inventory.get(i).save(tc);
+            inventory.get(i).save(level.registryAccess(), tc);
             tCompound.put("inventory" + i, tc);
         }
 
         if (outputInventory != null) {
             CompoundTag outputCompound = new CompoundTag();
-            outputInventory.save(outputCompound);
+            outputInventory.save(level.registryAccess(), outputCompound);
             tCompound.put("outputInventory", outputCompound);
         }
 
@@ -144,7 +145,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
                     tileAlloyFurnace.currentRecipe = (IAlloyFurnaceRecipe) level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).get().value();
                     //Check output slot is empty and less than a stack of the same item.
                     if(!(tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem(level.registryAccess()).getItem()
-                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
+                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
                             && !tileAlloyFurnace.outputInventory.isEmpty()){
                         tileAlloyFurnace.currentRecipe = null;
                     }
@@ -161,11 +162,11 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
                     if (++tileAlloyFurnace.currentProcessTime >= (100 / (tileAlloyFurnace.storage.getEnergy() / tileAlloyFurnace.storage.getMaxEnergy()))) {
                         tileAlloyFurnace.currentProcessTime = 0;
                         if (!tileAlloyFurnace.outputInventory.isEmpty()) {
-                            tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount());
+                            tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).getCount());
                         } else {
-                            tileAlloyFurnace.outputInventory = tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).copy();
+                            tileAlloyFurnace.outputInventory = tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).copy();
                         }
-                        tileAlloyFurnace.currentRecipe.useItems(tileAlloyFurnace.inventory, level.getRecipeManager());
+                        tileAlloyFurnace.currentRecipe.useItems(tileAlloyFurnace.inventory, level.registryAccess());
                         tileAlloyFurnace.updatingRecipe = true;
                     }
                 }else{

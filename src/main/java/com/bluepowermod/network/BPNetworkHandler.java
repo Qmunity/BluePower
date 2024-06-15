@@ -18,34 +18,21 @@
 package com.bluepowermod.network;
 
 import com.bluepowermod.network.message.*;
-import com.bluepowermod.reference.Refs;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
-import net.neoforged.neoforge.network.registration.NetworkRegistry;
+import net.neoforged.bus.api.IEventBus;
 
-public class BPNetworkHandler {
+public class BPNetworkHandler extends BPMessageHandler {
 
-    @SubscribeEvent
-    public static void register(RegisterPayloadHandlerEvent event) {
-        IPayloadRegistrar registrar = event.registrar(Refs.MODID);
-        registrar.play(new ResourceLocation(Refs.MODID, "message_gui_update"), MessageGuiUpdate::new, handler -> handler.server(MessageGuiUpdate::handle));
-        registrar.play(new ResourceLocation(Refs.MODID, "message_crafting_sync"), MessageCraftingSync::new, handler -> handler.server(MessageCraftingSync::handle));
-        //wrapper.registerMessage(2, MessageUpdateTextfield.class, MessageUpdateTextfield.class, Dist.DEDICATED_SERVER);
-        //wrapper.registerMessage(3, MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Dist.DEDICATED_SERVER);
-        //wrapper.registerMessage(4, MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Dist.CLIENT);
-        //wrapper.registerMessage(5, MessageDebugBlock.class, MessageDebugBlock.class, Dist.CLIENT);
-        //wrapper.registerMessage(6, MessageSendClientServerTemplates.class, MessageSendClientServerTemplates.class, Dist.CLIENT);
-        //wrapper.registerMessage(7, MessageRedirectTubeStack.class, MessageRedirectTubeStack.class, Dist.CLIENT);
-        //wrapper.registerMessage(8, MessageServerTickTime.class, MessageServerTickTime::encode, MessageServerTickTime::decode, MessageServerTickTime::handle);
-
-        //wrapper.registerMessage(9, MessageWirelessNewFreq.class, MessageWirelessNewFreq.class, Dist.DEDICATED_SERVER);
-        //wrapper.registerMessage(10, MessageWirelessSaveFreq.class, MessageWirelessSaveFreq.class, Dist.DEDICATED_SERVER);
-        //wrapper.registerMessage(11, MessageWirelessFrequencySync.class, MessageWirelessFrequencySync.class, Dist.CLIENT);
-        //wrapper.registerMessage(12, MessageWirelessRemoveFreq.class, MessageWirelessRemoveFreq.class, Dist.DEDICATED_SERVER);
-
-        //wrapper.registerMessage(13, MessageSyncMachineBacklog.class, MessageSyncMachineBacklog.class, Dist.CLIENT);
+    public BPNetworkHandler(IEventBus modEventBus) {
+        super(modEventBus);
     }
 
+    @Override
+    protected void registerClientToServer(PacketRegistrar registrar) {
+        registrar.play(MessageGuiUpdate.TYPE, MessageGuiUpdate.STREAM_CODEC);
+        registrar.play(MessageCraftingSync.TYPE, MessageCraftingSync.STREAM_CODEC);
+    }
+
+    @Override
+    protected void registerServerToClient(PacketRegistrar registrar) {
+    }
 }

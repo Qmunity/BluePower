@@ -29,7 +29,7 @@ public class ItemGemSpade extends ShovelItem {
     protected boolean canRepair              = true;
 
     public ItemGemSpade(Tier itemTier, Item repairItem) {
-        super(itemTier, 1,-1.4F, new Properties());
+        super(itemTier, new Properties());
         this.customCraftingMaterial = repairItem;
     }
 

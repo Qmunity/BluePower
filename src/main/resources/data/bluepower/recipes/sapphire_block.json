@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "tag": "forge:gems/sapphire"
+      "tag": "c:gems/sapphire"
     }
   }
 }

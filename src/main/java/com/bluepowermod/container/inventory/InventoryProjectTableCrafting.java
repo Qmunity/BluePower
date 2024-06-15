@@ -43,7 +43,7 @@ public class InventoryProjectTableCrafting extends TransientCraftingContainer {
         this.projectTable.setChanged();
         this.eventHandler.slotsChanged(this);
         if(FMLEnvironment.dist == Dist.CLIENT)
-            PacketDistributor.SERVER.noArg().send(new MessageCraftingSync());
+            PacketDistributor.sendToServer(new MessageCraftingSync(0));
     }
 
     @Nonnull

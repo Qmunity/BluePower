@@ -16,7 +16,7 @@
       "item": "minecraft:glowstone_dust"
     },
     "D": {
-      "tag": "forge:dyes/yellow"
+      "tag": "c:dyes/yellow"
     }
   }
 }

@@ -27,7 +27,7 @@ public class ItemGemPickaxe extends PickaxeItem {
     public Item customCraftingMaterial;
 
     public ItemGemPickaxe(Tier itemTier, Item repairItem) {
-        super(itemTier, 3,-1.4F, new Properties());
+        super(itemTier, new Properties());
         this.customCraftingMaterial = repairItem;
     }
 

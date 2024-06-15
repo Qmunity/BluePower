@@ -2,10 +2,14 @@
   "type": "bluepower:alloy_smelting",
   "ingredients": [
     {
-      "item": "bluepower:sapphire_glass"
+      "ingredient": {
+        "item": "bluepower:sapphire_glass"
+      }
     },
     {
-      "item": "minecraft:obsidian",
+      "ingredient": {
+      "item": "minecraft:obsidian"
+      },
       "count": 5
     }
   ],

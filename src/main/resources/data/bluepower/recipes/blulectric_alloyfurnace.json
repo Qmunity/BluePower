@@ -10,7 +10,7 @@
       "item": "minecraft:bricks"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "A": {
       "item": "bluepower:blue_alloy_ingot"

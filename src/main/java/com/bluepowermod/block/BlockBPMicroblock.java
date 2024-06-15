@@ -8,6 +8,7 @@ import com.bluepowermod.util.AABBUtils;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -15,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -74,8 +76,8 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
             CompoundTag nbt = new CompoundTag();
             nbt.putString("block", BuiltInRegistries.BLOCK.getKey(((TileBPMicroblock)tileentity).getBlock()).toString());
             ItemStack stack = new ItemStack(this);
-            stack.setTag(nbt);
-            stack.setHoverName(Component.translatable(((TileBPMicroblock)tileentity).getBlock().getDescriptionId())
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
+            stack.set(DataComponents.ITEM_NAME, Component.translatable(((TileBPMicroblock)tileentity).getBlock().getDescriptionId())
                     .append(Component.literal(" "))
                     .append(Component.translatable(this.getDescriptionId())));
             itemStacks.add(stack);
@@ -94,8 +96,8 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
             CompoundTag nbt = new CompoundTag();
             nbt.putString("block", BuiltInRegistries.BLOCK.getKey(((TileBPMicroblock) tileentity).getBlock()).toString());
             stack = new ItemStack(this);
-            stack.setTag(nbt);
-            stack.setHoverName(Component.translatable(((TileBPMicroblock) tileentity).getBlock().getDescriptionId())
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
+            stack.set(DataComponents.ITEM_NAME, Component.translatable(((TileBPMicroblock) tileentity).getBlock().getDescriptionId())
                     .append(Component.literal(" "))
                     .append(Component.translatable(this.getDescriptionId())));
         }
@@ -173,14 +175,14 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
     public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(worldIn, pos, state, placer, stack);
         BlockEntity tileentity = worldIn.getBlockEntity(pos);
-        if (tileentity instanceof TileBPMicroblock && stack.hasTag() && stack.getTag().contains("block")) {
+        if (tileentity instanceof TileBPMicroblock && stack.has(DataComponents.CUSTOM_DATA) && stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("block")) {
             //Update Microblock Type based on Stack
-            Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(stack.getTag().getString("block")));
+            Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block")));
             ((TileBPMicroblock) tileentity).setBlock(block);
-        }else if(tileentity instanceof TileBPMultipart && stack.hasTag() && stack.getTag().contains("block")){
+        }else if(tileentity instanceof TileBPMultipart && stack.has(DataComponents.CUSTOM_DATA) && stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("block")){
             //Update Multipart Microblock Type based on Stack
             TileBPMicroblock tile = (TileBPMicroblock)((TileBPMultipart)tileentity).getTileForState(state);
-            Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(stack.getTag().getString("block")));
+            Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block")));
             tile.setBlock(block);
         }
     }

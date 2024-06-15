@@ -2,11 +2,15 @@
   "type": "bluepower:alloy_smelting",
   "ingredients": [
     {
-      "item": "minecraft:glass",
+      "ingredient": {
+        "item": "minecraft:glass"
+      },
       "count": 4
     },
     {
-      "tag": "forge:gems/sapphire"
+      "ingredient": {
+        "tag": "c:gems/sapphire"
+      }
     }
   ],
   "result": {

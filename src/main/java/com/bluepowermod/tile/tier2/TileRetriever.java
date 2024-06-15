@@ -12,6 +12,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.tier1.TileFilter;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -35,15 +36,15 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
 
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider ) {
+        super.saveAdditional(tag, provider);
         tag.putByte("slotIndex", (byte) slotIndex);
         tag.putByte("mode", (byte) mode);
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
         slotIndex = tag.getByte("slotIndex");
         mode = tag.getByte("mode");
     }

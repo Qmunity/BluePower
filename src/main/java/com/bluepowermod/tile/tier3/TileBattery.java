@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 
 public class TileBattery extends TileMachineBase {
     private final int MAX_ENERGY = 3200;
-    private final BlutricityStorage storage = new BlutricityStorage(MAX_ENERGY, 100);
+    public final BlutricityStorage storage = new BlutricityStorage(MAX_ENERGY, 100);
 
     public TileBattery(BlockPos pos, BlockState state) {
         super(BPBlockEntityType.BATTERY.get(), pos, state);

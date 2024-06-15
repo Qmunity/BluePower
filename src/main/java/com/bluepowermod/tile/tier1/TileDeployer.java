@@ -18,12 +18,10 @@ import com.bluepowermod.tile.TileBase;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
@@ -175,7 +173,7 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
             
             for (int i = 0; i < useItems; i++) {
                 player.getInventory().selected = i;
-                if (!level.isEmptyBlock(new BlockPos(x, y, z)) && block.use(level.getBlockState(new BlockPos(x, y, z)), level, new BlockPos(x, y, z), player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == InteractionResult.SUCCESS) return true;
+                if (!level.isEmptyBlock(new BlockPos(x, y, z)) && level.getBlockState(new BlockPos(x, y, z)).useItemOn(player.getMainHandItem() ,level, player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == ItemInteractionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
@@ -215,13 +213,13 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(CompoundTag tCompound) {
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
     
-        super.load(tCompound);
+        super.loadAdditional(tCompound, provider);
         
         for (int i = 0; i < 9; i++) {
             CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.of(tc));
+            inventory.set(i, ItemStack.parseOptional(provider, tc));
         }
     }
     
@@ -229,13 +227,13 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
     
-        super.saveAdditional(tCompound);
+        super.saveAdditional(tCompound, provider);
         
         for (int i = 0; i < 9; i++) {
                 CompoundTag tc = new CompoundTag();
-                inventory.get(i).save(tc);
+                inventory.get(i).save(provider, tc);
                 tCompound.put("inventory" + i, tc);
         }
     }

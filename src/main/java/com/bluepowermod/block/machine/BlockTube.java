@@ -17,6 +17,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -65,9 +66,9 @@ public class BlockTube extends PipeBlock implements IBPPartBlock, EntityBlock {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag advanced) {
-        super.appendHoverText(stack, world, tooltip, advanced);
-        tooltip.add(Component.literal(MinecraftColor.RED.getChatColor() + "WIP") );
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag advanced) {
+        super.appendHoverText(stack, context, tooltip, advanced);
+        tooltip.add(Component.literal(MinecraftColor.RED.getChatColor() + "WIP"));
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext context) {

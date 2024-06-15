@@ -2,10 +2,14 @@
   "type": "bluepower:alloy_smelting",
   "ingredients": [
     {
-      "tag": "forge:dusts/zinc"
+      "ingredient": {
+        "tag": "c:dusts/zinc"
+      }
     },
     {
-      "tag": "forge:ingots/iron",
+      "ingredient": {
+        "tag": "c:ingots/iron"
+      },
       "count": 2
     }
   ],

@@ -14,6 +14,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class BPRecipeTypes {
 
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPE = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, Refs.MODID);
-    public static final DeferredHolder<RecipeType<?>, RecipeType<IAlloyFurnaceRecipe>> ALLOY_SMELTING = RECIPE_TYPE.register("alloy_smelting", () -> RecipeType.simple(new ResourceLocation("bluepower:alloy_smelting")));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<IAlloyFurnaceRecipe>> ALLOY_SMELTING = RECIPE_TYPE.register("alloy_smelting", () -> RecipeType.simple(new ResourceLocation(Refs.MODID, "alloy_smelting")));
 
 }

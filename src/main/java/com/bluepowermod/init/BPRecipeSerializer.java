@@ -34,7 +34,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class BPRecipeSerializer {
 
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, Refs.MODID);
-
     public static DeferredHolder<RecipeSerializer<?>, RecipeSerializer<IAlloyFurnaceRecipe>> ALLOYSMELTING = RECIPE_SERIALIZERS.register("alloy_smelting", AlloyFurnaceRegistry.Serializer::new);
     public static DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AlloyFurnaceRecyclingRecipe>> ALLOY_RECYCLING = RECIPE_SERIALIZERS.register("alloy_recycling", AlloyFurnaceRecyclingRecipe.Serializer::new);
     public static DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MicroblockRecipe>> MICROBLOCK = RECIPE_SERIALIZERS.register("micro_block", MicroblockRecipe.Serializer::new);

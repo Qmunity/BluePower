@@ -14,6 +14,8 @@ import com.bluepowermod.init.BPConfig;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -70,7 +72,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
         if (textFieldID == 1) {
             nameTextField = text;
             if (!copyInventory.getItem(0).isEmpty()) {
-                copyInventory.getItem(0).setHoverName(Component.literal(nameTextField));
+                copyInventory.getItem(0).set(DataComponents.ITEM_NAME, Component.literal(nameTextField));
             }
         } else {
             super.setText(textFieldID, text);
@@ -114,7 +116,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
                             boolean alreadyTraversed = false;
                             for (ItemStack traversedItem : traversedItems) {
                                 if (ItemStack.isSameItem(traversedItem, templateStack)
-                                        && ItemStack.isSameItemSameTags(traversedItem, templateStack)) {
+                                        && ItemStack.isSameItemSameComponents(traversedItem, templateStack)) {
                                     alreadyTraversed = true;
                                     break;
                                 }
@@ -125,13 +127,13 @@ public class TileCircuitDatabase extends TileCircuitTable {
 
                             int count = 0;
                             for (ItemStack stack : stacksInTemplate) {
-                                if (ItemStack.isSameItem(stack, templateStack) && ItemStack.isSameItemSameTags(stack, templateStack)) {
+                                if (ItemStack.isSameItem(stack, templateStack) && ItemStack.isSameItemSameComponents(stack, templateStack)) {
                                     count += stack.getCount();
                                 }
                             }
 
                             for (ItemStack stack : stacksInOutput) {
-                                if (ItemStack.isSameItem(stack, templateStack) && ItemStack.isSameItemSameTags(stack, templateStack)) {
+                                if (ItemStack.isSameItem(stack, templateStack) && ItemStack.isSameItemSameComponents(stack, templateStack)) {
                                     count -= stack.getCount();
                                 }
                             }
@@ -187,7 +189,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
                             //BPNetworkHandler.INSTANCE.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getItem(0)),
                                     //(ServerPlayer) triggeringPlayer);
                         if (tileCircuitDatabase.selectedShareOption == 2) {
-                            tileCircuitDatabase.stackDatabase.saveItemStack(tileCircuitDatabase.copyInventory.getItem(0));
+                            tileCircuitDatabase.stackDatabase.saveItemStack(level.registryAccess(), tileCircuitDatabase.copyInventory.getItem(0));
                             //BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
                         }
                         tileCircuitDatabase.selectedShareOption = 0;
@@ -201,24 +203,24 @@ public class TileCircuitDatabase extends TileCircuitTable {
         }
     }
 
-    public void saveToPrivateLibrary(ItemStack stack) {
+    public void saveToPrivateLibrary(HolderLookup.Provider provider, ItemStack stack) {
 
-        stackDatabase.saveItemStack(stack);
+        stackDatabase.saveItemStack(provider, stack);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
 
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
 
         if (!copyInventory.getItem(0).isEmpty()) {
             CompoundTag stackTag = new CompoundTag();
-            copyInventory.getItem(0).save(stackTag);
+            copyInventory.getItem(0).save(provider, stackTag);
             tag.put("copyTemplateStack", stackTag);
         }
         if (!copyInventory.getItem(1).isEmpty()) {
             CompoundTag stackTag = new CompoundTag();
-            copyInventory.getItem(1).save(stackTag);
+            copyInventory.getItem(1).save(provider, stackTag);
             tag.put("copyOutputStack", stackTag);
         }
 
@@ -228,18 +230,18 @@ public class TileCircuitDatabase extends TileCircuitTable {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
 
-        super.load(tag);
+        super.loadAdditional(tag, provider);
 
         if (tag.contains("copyTemplateStack")) {
-            copyInventory.setItem(0, ItemStack.of(tag.getCompound("copyTemplateStack")));
+            copyInventory.setItem(0, ItemStack.parseOptional(provider, tag.getCompound("copyTemplateStack")));
         } else {
             copyInventory.setItem(0, ItemStack.EMPTY);
         }
 
         if (tag.contains("copyOutputStack")) {
-            copyInventory.setItem(1, ItemStack.of(tag.getCompound("copyOutputStack")));
+            copyInventory.setItem(1, ItemStack.parseOptional(provider, tag.getCompound("copyOutputStack")));
         } else {
             copyInventory.setItem(1, ItemStack.EMPTY);
         }

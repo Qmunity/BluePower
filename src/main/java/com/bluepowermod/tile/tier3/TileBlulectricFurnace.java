@@ -19,6 +19,7 @@ import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -44,7 +45,7 @@ import javax.annotation.Nullable;
  */
 
 public class TileBlulectricFurnace extends TileMachineBase implements WorldlyContainer, MenuProvider {
-    private final BlutricityStorage storage = new BlutricityStorage(1000, 100);
+    public final BlutricityStorage storage = new BlutricityStorage(1000, 100);
     private boolean isActive;
     private int currentProcessTime;
     public static final int SLOTS = 2;
@@ -115,27 +116,27 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(CompoundTag tCompound) {
-        super.load(tCompound);
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tCompound, provider);
         CompoundTag tc = tCompound.getCompound("inventory");
-        inventory = ItemStack.of(tc);
-        outputInventory = ItemStack.of(tCompound.getCompound("outputInventory"));
+        inventory = ItemStack.parseOptional(level.registryAccess(),tc);
+        outputInventory = ItemStack.parseOptional(level.registryAccess(), tCompound.getCompound("outputInventory"));
     }
 
     /**
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
-        super.saveAdditional(tCompound);
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+        super.saveAdditional(tCompound, provider);
 
         CompoundTag tc = new CompoundTag();
-        inventory.save(tc);
+        inventory.save(level.registryAccess(), tc);
         tCompound.put("inventory", tc);
 
         if (outputInventory != null) {
             CompoundTag outputCompound = new CompoundTag();
-            outputInventory.save(outputCompound);
+            outputInventory.save(level.registryAccess(), outputCompound);
             tCompound.put("outputInventory", outputCompound);
         }
     }

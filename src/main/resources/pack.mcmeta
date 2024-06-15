@@ -1,8 +1,12 @@
 {
     "pack": {
         "description": "Blue Power resources",
-        "pack_format": 12,
-        "forge:resource_pack_format": 12,
-        "forge:data_pack_format": 10
+        "neoforge":{
+            "versions": {
+                "client_resources": 22,
+                "server_data": 26
+            }
+        },
+        "pack_format": 24
     }
 }

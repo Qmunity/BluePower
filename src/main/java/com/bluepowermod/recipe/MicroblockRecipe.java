@@ -6,14 +6,20 @@ import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.item.ItemSaw;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.nbt.CompoundTag;
@@ -24,6 +30,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import java.security.Provider;
 
 public class MicroblockRecipe extends CustomRecipe {
 
@@ -58,9 +66,9 @@ public class MicroblockRecipe extends CustomRecipe {
         }
         return blockCount == 1 && saw == 1;
     }
-    
+
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess access) {
+    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider provider) {
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem) {
@@ -68,28 +76,28 @@ public class MicroblockRecipe extends CustomRecipe {
                     CompoundTag nbt = new CompoundTag();
                     nbt.putString("block", BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
                     ItemStack outStack = new ItemStack(BPBlocks.half_block.get(), 2);
-                    outStack.setTag(nbt);
-                    outStack.setHoverName(Component.translatable(stack.getItem().getDescriptionId())
+                    outStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
+                    outStack.set(DataComponents.ITEM_NAME, Component.translatable(stack.getItem().getDescriptionId())
                             .append(" ")
                             .append(Component.translatable(BPBlocks.half_block.get().getDescriptionId())));
                     return outStack;
                 }else if (Block.byItem(stack.getItem()) == BPBlocks.half_block.get()){
                     CompoundTag nbt = new CompoundTag();
-                    nbt.putString("block", stack.getTag().getString("block"));
+                    nbt.putString("block", stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block"));
                     ItemStack outStack = new ItemStack(BPBlocks.panel.get(), 2);
-                    outStack.setTag(nbt);
+                    outStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
                     Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("block")));
-                    outStack.setHoverName(Component.translatable(block.getDescriptionId())
+                    outStack.set(DataComponents.ITEM_NAME, Component.translatable(block.getDescriptionId())
                             .append(" ")
                             .append(Component.translatable(BPBlocks.panel.get().getDescriptionId())));
                     return outStack;
                 }else if (Block.byItem(stack.getItem()) == BPBlocks.panel.get()){
                     CompoundTag nbt = new CompoundTag();
-                    nbt.putString("block", stack.getTag().getString("block"));
+                    nbt.putString("block", stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block"));
                     ItemStack outStack = new ItemStack(BPBlocks.cover.get(), 2);
-                    outStack.setTag(nbt);
+                    outStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
                     Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("block")));
-                    outStack.setHoverName(Component.translatable(block.getDescriptionId())
+                    outStack.set(DataComponents.ITEM_NAME, Component.translatable(block.getDescriptionId())
                             .append(" ")
                             .append(Component.translatable(BPBlocks.cover.get().getDescriptionId())));
                     return outStack;
@@ -112,21 +120,26 @@ public class MicroblockRecipe extends CustomRecipe {
     public static class Serializer implements RecipeSerializer<MicroblockRecipe> {
 
         @Override
-        public Codec<MicroblockRecipe> codec() {
-            return RecordCodecBuilder.create((instance) -> instance.group(
+        public MapCodec<MicroblockRecipe> codec() {
+            return RecordCodecBuilder.mapCodec((instance) -> instance.group(
                     Codec.INT.fieldOf("width").forGetter((width) -> 1),
                     Codec.INT.fieldOf("height").forGetter((height) -> 1)
             ).apply(instance, (width, height) -> new MicroblockRecipe()));
         }
 
         @Override
-        public MicroblockRecipe fromNetwork(FriendlyByteBuf buffer) {
-            return new MicroblockRecipe();
-        }
+        public StreamCodec<RegistryFriendlyByteBuf, MicroblockRecipe> streamCodec() {
+            return new StreamCodec<RegistryFriendlyByteBuf, MicroblockRecipe>() {
+                @Override
+                public MicroblockRecipe decode(RegistryFriendlyByteBuf registryFriendlyByteBuf) {
+                    return new MicroblockRecipe();
+                }
 
-        @Override
-        public void toNetwork(FriendlyByteBuf p_44101_, MicroblockRecipe p_44102_) {
+                @Override
+                public void encode(RegistryFriendlyByteBuf o, MicroblockRecipe microblockRecipe) {
 
+                }
+            };
         }
     }
 }

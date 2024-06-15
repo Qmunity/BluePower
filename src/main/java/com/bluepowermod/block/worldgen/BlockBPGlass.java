@@ -22,6 +22,7 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.projectile.WitherSkull;
@@ -30,6 +31,7 @@ import net.minecraft.world.item.DyeColor;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -60,10 +62,10 @@ public class BlockBPGlass extends StainedGlassBlock {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext context, List<Component> tootipComponents, TooltipFlag pTooltipFlag) {
+        super.appendHoverText(pStack, context, tootipComponents, pTooltipFlag);
         if (witherproof) {
-            tooltip.add(Component.literal(MinecraftColor.RED.getChatColor() + "Witherproof"));
+            tootipComponents.add(Component.literal(MinecraftColor.RED.getChatColor() + "Witherproof"));
         }
     }
 

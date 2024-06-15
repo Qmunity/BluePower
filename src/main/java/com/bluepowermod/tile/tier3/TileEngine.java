@@ -31,7 +31,7 @@ public class TileEngine extends TileMachineBase  {
     public byte pumpTick;
     public byte pumpSpeed;
 
-	private final BlutricityFEStorage storage = new BlutricityFEStorage(320){
+	public final BlutricityFEStorage storage = new BlutricityFEStorage(320){
 		@Override
 		public boolean canReceive() {
 			return false;

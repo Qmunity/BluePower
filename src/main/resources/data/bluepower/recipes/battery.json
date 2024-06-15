@@ -7,13 +7,13 @@
   ],
   "key": {
     "C": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "S": {
-      "tag": "forge:ingots/zinc"
+      "tag": "c:ingots/zinc"
     },
     "T": {
-      "tag": "forge:dusts/teslatite"
+      "tag": "c:dusts/teslatite"
     }
   },
   "result": {

@@ -23,6 +23,7 @@ import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
@@ -49,13 +50,13 @@ public class TileBuffer extends TileBase implements WorldlyContainer, MenuProvid
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(CompoundTag tCompound) {
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
     
-        super.load(tCompound);
+        super.loadAdditional(tCompound, provider);
         
         for (int i = 0; i < 20; i++) {
             CompoundTag tc = tCompound.getCompound("inventory" + i);
-            allInventories.set(i, ItemStack.of(tc));
+            allInventories.set(i, ItemStack.parseOptional(provider, tc));
         }
     }
     
@@ -63,13 +64,13 @@ public class TileBuffer extends TileBase implements WorldlyContainer, MenuProvid
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
     
-        super.saveAdditional(tCompound);
+        super.saveAdditional(tCompound, provider);
         
         for (int i = 0; i < 20; i++) {
                 CompoundTag tc = new CompoundTag();
-                allInventories.get(i).save(tc);
+                allInventories.get(i).save(provider, tc);
                 tCompound.put("inventory" + i, tc);
         }
     }

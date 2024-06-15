@@ -2,11 +2,15 @@
   "type": "bluepower:alloy_smelting",
   "ingredients": [
     {
-      "item": "minecraft:redstone",
+      "ingredient": {
+        "item": "minecraft:redstone"
+      },
       "count": 4
     },
     {
-      "item": "bluepower:silicon_wafer"
+      "ingredient": {
+        "item": "bluepower:silicon_wafer"
+      }
     }
   ],
   "result": {

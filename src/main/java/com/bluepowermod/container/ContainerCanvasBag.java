@@ -22,6 +22,7 @@ package com.bluepowermod.container;
 import com.bluepowermod.client.gui.BPMenuType;
 import com.bluepowermod.container.slot.SlotLocked;
 import com.bluepowermod.item.ItemCanvasBag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -30,6 +31,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.component.CustomData;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
@@ -52,7 +54,7 @@ public class ContainerCanvasBag extends AbstractContainerMenu {
         }
 
         //Get Items from the NBT Handler
-        if (canvasbag.hasTag()) canvasBagInvHandler.deserializeNBT(canvasbag.getTag().getCompound("inv"));
+        if (canvasbag.has(DataComponents.CUSTOM_DATA)) canvasBagInvHandler.deserializeNBT(playerInventory.player.level().registryAccess(), canvasbag.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getCompound("inv"));
 
         //Create Item Slots
         int i = -1 * 18;
@@ -100,11 +102,9 @@ public class ContainerCanvasBag extends AbstractContainerMenu {
     public void removed(Player playerIn) {
         //Update items in the NBT
         ItemStack canvasBag = playerIn.getItemInHand(activeHand);
-        if (!canvasBag.hasTag())
-            canvasBag.setTag(new CompoundTag());
-        if (canvasBag.getTag() != null) {
-            canvasBag.getTag().put("inv", canvasBagInvHandler.serializeNBT());
-        }
+        CompoundTag tag = new CompoundTag();
+        tag.put("inv", canvasBagInvHandler.serializeNBT(playerIn.level().registryAccess()));
+        canvasBag.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
         super.removed(playerIn);
     }
 

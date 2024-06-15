@@ -20,6 +20,7 @@ package com.bluepowermod.tile;
 import com.bluepowermod.block.BlockContainerFacingBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
@@ -48,24 +49,25 @@ public class TileBase extends BlockEntity implements IRotatable {
 
     /*************** BASIC TE FUNCTIONS **************/
 
+
     /**
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(CompoundTag tCompound) {
-
-        super.load(tCompound);
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tCompound, provider);
         isRedstonePowered = tCompound.getBoolean("isRedstonePowered");
         readFromPacketNBT(tCompound);
     }
+
 
     /**
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
 
-        super.saveAdditional(tCompound);
+        super.saveAdditional(tCompound, provider);
         tCompound.putBoolean("isRedstonePowered", isRedstonePowered);
 
         writeToPacketNBT(tCompound);
@@ -93,10 +95,10 @@ public class TileBase extends BlockEntity implements IRotatable {
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
         if(pkt.getTag() != null) {
             readFromPacketNBT(pkt.getTag());
-            handleUpdateTag(pkt.getTag());
+            handleUpdateTag(pkt.getTag(), provider);
         }
     }
 

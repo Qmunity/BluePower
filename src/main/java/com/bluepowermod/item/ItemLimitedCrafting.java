@@ -31,7 +31,8 @@ public class ItemLimitedCrafting extends ItemBase {
     @Override
     public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
         ItemStack container = itemStack.copy();
-        return container.hurt(1, RandomSource.create(), null) ? ItemStack.EMPTY : container;
+        container.hurtAndBreak(1, RandomSource.create(), null, ()-> {} );
+        return container;
     }
 
     @Override

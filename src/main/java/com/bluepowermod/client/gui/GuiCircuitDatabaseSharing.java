@@ -73,7 +73,7 @@ public class GuiCircuitDatabaseSharing extends GuiContainerBaseBP<ContainerCircu
     protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type) {
 
         if (slot != null && slot.hasItem() && slot.container == inventory) {
-            if (BluePower.proxy.isSneakingInGui()) {
+            if (BluePower.proxy.get().isSneakingInGui()) {
                 if (slot.getSlotIndex() == curDeletingTemplate) {
                     //if (circuitDatabase.clientCurrentTab == 1) {
                         //circuitDatabase.stackDatabase.deleteStack(slot.getItem());

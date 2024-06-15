@@ -1,22 +1,22 @@
 package com.bluepowermod.helper;
 
 import com.bluepowermod.init.BPItems;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 
 public class GemItemTier implements Tier {
 
     private final int maxUses;
     private final float efficiency;
     private final float attackDamage;
-    private final int harvestLevel;
     private final int enchantability;
 
-    public GemItemTier(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability){
+    public GemItemTier(int maxUses, float efficiency, float attackDamage, int enchantability){
         this.maxUses = maxUses;
         this.efficiency = efficiency;
         this.attackDamage = attackDamage;
-        this.harvestLevel = harvestLevel;
         this.enchantability = enchantability;
     }
 
@@ -36,8 +36,8 @@ public class GemItemTier implements Tier {
     }
 
     @Override
-    public int getLevel() {
-        return harvestLevel;
+    public TagKey<Block> getIncorrectBlocksForDrops() {
+        return null;
     }
 
     @Override

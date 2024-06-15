@@ -52,13 +52,5 @@ public abstract class BlockBase extends Block {
         this.wip = wip;
         return this;
     }
-
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag advanced) {
-        super.appendHoverText(stack, world, tooltip, advanced);
-        if(wip){
-            tooltip.add(Component.literal(MinecraftColor.RED.getChatColor() + "WIP") );
-        }
-    }
     
 }

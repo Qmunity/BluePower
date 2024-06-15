@@ -2,6 +2,7 @@ package com.bluepowermod.world;
 
 import com.bluepowermod.init.BPConfig;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -16,7 +17,7 @@ import static com.bluepowermod.world.BPWorldGen.VOLCANO_PLACEMENT;
 
 public class PlacementVolcano extends PlacementModifier {
     private static final PlacementVolcano INSTANCE = new PlacementVolcano();
-    public static final Codec<PlacementModifier> CODEC = Codec.unit(() -> INSTANCE);
+    public static final MapCodec<PlacementModifier> CODEC = MapCodec.unit(() -> INSTANCE);
 
     @Override
     public Stream<BlockPos> getPositions(PlacementContext placementContext, RandomSource random, BlockPos pos) {

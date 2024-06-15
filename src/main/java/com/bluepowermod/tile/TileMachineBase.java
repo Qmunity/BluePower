@@ -17,6 +17,7 @@ import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -24,12 +25,12 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.fluids.IFluidBlock;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -87,7 +88,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
             } else if (spawnItemsInWorld) {
                 Direction direction = getFacingDirection().getOpposite();
                 Block block = level.getBlockState(worldPosition.relative(direction)).getBlock();
-                if (!level.getBlockState( worldPosition.relative(direction)).canOcclude() || block instanceof IFluidBlock) {
+                if (!level.getBlockState( worldPosition.relative(direction)).canOcclude() || block instanceof LiquidBlock) {
                     ejectItemInWorld(tubeStack.stack, direction);
                     iterator.remove();
                     setChanged();
@@ -169,28 +170,28 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public void load(CompoundTag compound) {
+    public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
 
-        super.load(compound);
+        super.loadAdditional(compound, provider);
         ListTag nbttaglist = compound.getList("ItemBuffer", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             CompoundTag nbttagcompound1 = nbttaglist.getCompound(i);
 
-            internalItemStackBuffer.add(TubeStack.loadFromNBT(nbttagcompound1));
+            internalItemStackBuffer.add(TubeStack.loadFromNBT(provider, nbttagcompound1));
         }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
+    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
 
-        super.saveAdditional(compound);
+        super.saveAdditional(compound, provider);
         ListTag nbttaglist = new ListTag();
 
         for (TubeStack tubeStack : internalItemStackBuffer) {
             if (tubeStack != null) {
                 CompoundTag nbttagcompound1 = new CompoundTag();
-                tubeStack.writeToNBT(nbttagcompound1);
+                tubeStack.writeToNBT(provider, nbttagcompound1);
                 nbttaglist.add(nbttagcompound1);
             }
         }

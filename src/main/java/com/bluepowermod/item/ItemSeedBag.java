@@ -21,8 +21,11 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -34,6 +37,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -49,13 +53,13 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
         super(new Properties().stacksTo(1));
     }
 
-    public static ItemStack getSeedType(ItemStack seedBag) {
+    public static ItemStack getSeedType(HolderLookup.Provider provider, ItemStack seedBag) {
         ItemStack seed = ItemStack.EMPTY;
 
         ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
 
         //Get Items from the NBT Handler
-        if (seedBag.hasTag()) seedBagInvHandler.deserializeNBT(seedBag.getTag().getCompound("inv"));
+        if (seedBag.has(DataComponents.CUSTOM_DATA)) seedBagInvHandler.deserializeNBT(provider, seedBag.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getCompound("inv"));
 
         for (int i = 0; i < 9; i++) {
             ItemStack is = seedBagInvHandler.getStackInSlot(i);
@@ -70,22 +74,22 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
     @Override
     public int getBarWidth(ItemStack stack) {
 
-        return 1 - getItemDamageForDisplay(stack) / 576;
+        return 1 - getItemDamageForDisplay(Minecraft.getInstance().level.registryAccess(), stack) / 576;
     }
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
 
-        return stack.getTag() != null;
+        return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY) != CustomData.EMPTY;
     }
 
-    public int getItemDamageForDisplay(ItemStack stack) {
+    public int getItemDamageForDisplay(HolderLookup.Provider provider, ItemStack stack) {
 
         int items = 0;
         ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
 
         //Get Items from the NBT Handler
-        if (stack.hasTag()) seedBagInvHandler.deserializeNBT(stack.getTag().getCompound("inv"));
+        if (stack.has(DataComponents.CUSTOM_DATA)) seedBagInvHandler.deserializeNBT(provider, stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getCompound("inv"));
 
         for (int i = 0; i < 8; i++) {
             ItemStack is = seedBagInvHandler.getStackInSlot(i);
@@ -134,9 +138,9 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
         }
 
         //Get Items from the NBT Handler
-        if (seedBag.hasTag()) seedBagInvHandler.deserializeNBT(seedBag.getTag().getCompound("inv"));
+        if (seedBag.has(DataComponents.CUSTOM_DATA)) seedBagInvHandler.deserializeNBT(context.getPlayer().level().registryAccess(), seedBag.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getCompound("inv"));
 
-        ItemStack seed = getSeedType(player.getItemInHand(hand));
+        ItemStack seed = getSeedType(player.level().registryAccess(), player.getItemInHand(hand));
         Block block = Block.byItem(seed.getItem());
         if (!seed.isEmpty() && block instanceof IPlantable) {
             IPlantable plant = (IPlantable) block;
@@ -153,11 +157,9 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
                 }
 
                 //Update items in the NBT
-                if (!seedBag.hasTag())
-                    seedBag.setTag(new CompoundTag());
-                if (seedBag.getTag() != null) {
-                    seedBag.getTag().put("inv", seedBagInvHandler.serializeNBT());
-                }
+                CompoundTag tag =  new CompoundTag();
+                tag.put("inv", seedBagInvHandler.serializeNBT(context.getPlayer().level().registryAccess()));
+                seedBag.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
 
                 return InteractionResult.SUCCESS;
             }

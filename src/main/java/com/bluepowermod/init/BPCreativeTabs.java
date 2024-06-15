@@ -20,6 +20,7 @@ package com.bluepowermod.init;
 import com.bluepowermod.item.ItemSaw;
 import com.bluepowermod.item.ItemScrewdriver;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -29,6 +30,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
 import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -80,8 +82,8 @@ public class BPCreativeTabs {
                         CompoundTag nbt = new CompoundTag();
                         nbt.putString("block", BuiltInRegistries.BLOCK.getKey(block).toString());
                         ItemStack stack = new ItemStack(mb.get());
-                        stack.setTag(nbt);
-                        stack.setHoverName(Component.translatable(block.getDescriptionId())
+                        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
+                        stack.set(DataComponents.ITEM_NAME, Component.translatable(block.getDescriptionId())
                                 .append(Component.literal(" "))
                                 .append(Component.translatable(mb.get().getDescriptionId())));
                         event.accept(stack);

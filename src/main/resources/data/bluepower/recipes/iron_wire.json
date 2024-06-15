@@ -7,7 +7,7 @@
       "item": "bluepower:diamond_drawplate"
     },
     {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     }
   ],
   "type": "minecraft:crafting_shapeless"

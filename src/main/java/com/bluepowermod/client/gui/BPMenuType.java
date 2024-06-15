@@ -28,6 +28,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class BPMenuType {
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(BuiltInRegistries.MENU, Refs.MODID);
@@ -57,34 +58,5 @@ public class BPMenuType {
     public static final DeferredHolder<MenuType<?>,MenuType<ContainerCircuitDatabaseSharing>> CIRCUITDATABASE_SHARING = MENU_TYPES.register(ContainerNames.CIRCUITDATABASE_SHARING,() -> new MenuType<>(ContainerCircuitDatabaseSharing::new, FeatureFlags.DEFAULT_FLAGS));
     public static final DeferredHolder<MenuType<?>,MenuType<ContainerBlulectricAlloyFurnace>> BLULECTRIC_ALLOY_FURNACE = MENU_TYPES.register(ContainerNames.BLULECTRIC_ALLOY_FURNACE,() -> new MenuType<>(ContainerBlulectricAlloyFurnace::new, FeatureFlags.DEFAULT_FLAGS));
     public static final DeferredHolder<MenuType<?>,MenuType<ContainerBlulectricFurnace>> BLULECTRIC_FURNACE = MENU_TYPES.register(ContainerNames.BLULECTRIC_FURNACE,() -> new MenuType<>(ContainerBlulectricFurnace::new, FeatureFlags.DEFAULT_FLAGS));
-
-    @OnlyIn(Dist.CLIENT)
-    public static void registerScreenFactories(){
-        MenuScreens.register(ALLOY_FURNACE.get(), GuiAlloyFurnace::new);
-        MenuScreens.register(BLULECTRIC_FURNACE.get(), GuiBlulectricFurnace::new);
-        MenuScreens.register(BLULECTRIC_ALLOY_FURNACE.get(), GuiBlulectricAlloyFurnace::new);
-        MenuScreens.register(BUFFER.get(), GuiBuffer::new);
-        MenuScreens.register(SORTING_MACHINE.get(), GuiSortingMachine::new);
-        MenuScreens.register(SEEDBAG.get(), GuiSeedBag::new);
-        MenuScreens.register(CANVAS_BAG.get(), GuiCanvasBag::new);
-        MenuScreens.register(CPU.get(), GuiCPU::new);
-        MenuScreens.register(MONITOR.get(), GuiMonitor::new);
-        MenuScreens.register(DISK_DRIVE.get(), GuiDiskDrive::new);
-        MenuScreens.register(IO_EXPANDER.get(), GuiIOExpander::new);
-        MenuScreens.register(REDBUS.get(), GuiRedbusID::new);
-        MenuScreens.register(KINETIC_GENERATOR.get(), GuiKinect::new);
-        MenuScreens.register(DEPLOYER.get(), GuiDeployer::new);
-        MenuScreens.register(RELAY.get(), GuiRelay::new);
-        MenuScreens.register(EJECTOR.get(), GuiEjector::new);
-        MenuScreens.register(FILTER.get(), GuiFilter::new);
-        MenuScreens.register(RETRIEVER.get(), GuiRetriever::new);
-        MenuScreens.register(REGULATOR.get(), GuiRegulator::new);
-        MenuScreens.register(ITEM_DETECTOR.get(), GuiItemDetector::new);
-        MenuScreens.register(PROJECT_TABLE.get(), GuiProjectTable::new);
-        MenuScreens.register(CIRCUIT_TABLE.get(), GuiCircuitTable::new);
-        MenuScreens.register(MANAGER.get(), GuiManager::new);
-        MenuScreens.register(CIRCUITDATABASE_MAIN.get(), GuiCircuitDatabaseMain::new);
-        MenuScreens.register(CIRCUITDATABASE_SHARING.get(), GuiCircuitDatabaseSharing::new);
-    }
 
 }

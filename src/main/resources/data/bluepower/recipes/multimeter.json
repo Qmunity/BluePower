@@ -10,10 +10,10 @@
       "item": "minecraft:green_terracotta"
     },
     "C": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "T": {
-      "tag": "forge:dusts/teslatite"
+      "tag": "c:dusts/teslatite"
     }
   },
   "result": {

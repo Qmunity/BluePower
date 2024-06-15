@@ -19,11 +19,14 @@
 
 package com.bluepowermod.container.inventory;
 
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.component.CustomData;
 
 public class InventoryItem extends SimpleContainer {
     
@@ -37,10 +40,10 @@ public class InventoryItem extends SimpleContainer {
         this.item = item;
         
         if (!hasInventory()) {
-            createInventory();
+            createInventory(player.level().registryAccess());
         }
 
-        loadInventory();
+        loadInventory(player.level().registryAccess());
     }
     
     public static InventoryItem getItemInventory(ItemStack is, String name, int size) {
@@ -60,7 +63,7 @@ public class InventoryItem extends SimpleContainer {
 
     @Override
     public void startOpen(Player player) {
-        loadInventory();
+        loadInventory(player.level().registryAccess());
     }
 
     @Override
@@ -69,53 +72,41 @@ public class InventoryItem extends SimpleContainer {
     }
 
     
-    public void stopOpen(ItemStack is) {
-        saveInventory(is);
+    public void stopOpen(ItemStack is, HolderLookup.Provider provider) {
+        saveInventory(is,  provider);
     }
     
     private boolean hasInventory() {
     
-        if (item.getTag() == null) { return false; }
-        return item.getTag().contains("Inventory");
+        if (!item.has(DataComponents.CUSTOM_DATA)) { return false; }
+        return item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("Inventory");
     }
     
-    private void createInventory() {
+    private void createInventory(HolderLookup.Provider provider) {
     
-        writeToNBT();
+        writeToNBT(provider);
     }
     
-    protected void writeToNBT() {
-    
-        if (item.getTag() == null) {
-            item.setTag(new CompoundTag());
-        }
+    protected void writeToNBT(HolderLookup.Provider provider) {
         ListTag itemList = new ListTag();
         for (int i = 0; i < getContainerSize(); i++) {
             if (!getItem(i).isEmpty()) {
                 CompoundTag slotEntry = new CompoundTag();
                 slotEntry.putByte("Slot", (byte) i);
-                getItem(i).save(slotEntry);
+                getItem(i).save(provider, slotEntry);
                 itemList.add(slotEntry);
             }
         }
         CompoundTag inventory = new CompoundTag();
         inventory.put("Items", itemList);
-        item.getTag().put("Inventory", inventory);
+        CompoundTag tag = new CompoundTag();
+        tag.put("Inventory", inventory);
+        item.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }
     
-    public void loadInventory() {
+    public void loadInventory(HolderLookup.Provider provider) {
     
-        readFromNBT();
-    }
-    
-    @Override
-    public void setChanged() {
-    
-        super.setChanged();
-        
-        if (!reading) {
-            saveInventory(ItemStack.EMPTY);
-        }
+        readFromNBT(provider);
     }
     
     protected void setNBT(ItemStack is) {
@@ -125,29 +116,29 @@ public class InventoryItem extends SimpleContainer {
         }
         
         if (!is.isEmpty() && is.getItem() == this.item.getItem()) {
-            is.setTag(item.getTag());
+            is.set(DataComponents.CUSTOM_DATA, item.get(DataComponents.CUSTOM_DATA));
         }
     }
     
-    protected void readFromNBT() {
+    protected void readFromNBT(HolderLookup.Provider provider) {
     
         reading = true;
         
-        ListTag itemList = (ListTag) ((CompoundTag) item.getTag().get("Inventory")).get("Items");
+        ListTag itemList = (ListTag) ((CompoundTag) item.get(DataComponents.CUSTOM_DATA).copyTag().get("Inventory")).get("Items");
         for (int i = 0; i < itemList.size(); i++) {
             CompoundTag slotEntry = itemList.getCompound(i);
             int j = slotEntry.getByte("Slot") & 0xff;
             
             if (j >= 0 && j < getContainerSize()) {
-                setItem(j, ItemStack.of(slotEntry));
+                setItem(j, ItemStack.parseOptional(provider, slotEntry));
             }
         }
         reading = false;
     }
     
-    public void saveInventory(ItemStack is) {
+    public void saveInventory(ItemStack is, HolderLookup.Provider provider) {
     
-        writeToNBT();
+        writeToNBT(provider);
         setNBT(is);
     }
 }

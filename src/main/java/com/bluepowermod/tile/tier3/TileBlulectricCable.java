@@ -32,7 +32,7 @@ import java.util.List;
  */
 
 public class TileBlulectricCable extends TileMachineBase {
-    private final BlutricityStorage storage = new BlutricityStorage(100, 100);
+    public final BlutricityStorage storage = new BlutricityStorage(100, 100);
 
     public TileBlulectricCable(BlockPos pos, BlockState state) {
         super(BPBlockEntityType.BLULECTRIC_CABLE.get(), pos, state);

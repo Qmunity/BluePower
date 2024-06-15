@@ -120,7 +120,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         BlockEntity te = world.getBlockEntity(pos);
         if(partState != null && partState.getBlock() instanceof IBPPartBlock && te instanceof TileBPMultipart) {
             //Remove Selected Part
-            ((TileBPMultipart) te).removeState(partState);
+            ((TileBPMultipart) te).removeState(partState, world.registryAccess());
             //Call onMultipartReplaced
             ((IBPPartBlock)partState.getBlock()).onMultipartReplaced(partState, world, pos, state, false);
             //Play Break Sound
@@ -145,7 +145,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         BlockEntity tileentity = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if (tileentity instanceof TileBPMultipart) {
-            ((TileBPMultipart) tileentity).getStates().forEach(s -> itemStacks.addAll(s.getBlock().getDrops(s, builder)));
+            ((TileBPMultipart) tileentity).getStates().forEach(s -> itemStacks.addAll(s.getDrops(builder)));
         }
         return itemStacks;
     }
@@ -154,7 +154,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         BlockEntity te = world.getBlockEntity(pos);
         if(te instanceof TileBPMultipart) {
-            ((TileBPMultipart) te).getStates().forEach(s -> s.neighborChanged(world, pos, blockIn, fromPos, bool));
+            ((TileBPMultipart) te).getStates().forEach(s -> s.handleNeighborChanged(world, pos, blockIn, fromPos, bool));
         }
     }
 

@@ -6,12 +6,18 @@ import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -45,7 +51,7 @@ public class TileAutoProjectTable extends TileProjectTable {
                             return ItemStack.EMPTY;
                         }
                         ItemStack ptStack = getItem(ptSlot);
-                        if (ptStack.getItem() == slotStack.getItem() && ptStack.getTag() == slotStack.getTag()) {
+                        if (ptStack.getItem() == slotStack.getItem() && ptStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == slotStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()) {
                             slotStack.setCount(2);
                             craftingGrid.set(i, slotStack);
                             removeItem(ptSlot, 1);

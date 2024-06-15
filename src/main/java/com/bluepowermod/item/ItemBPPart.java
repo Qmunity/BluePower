@@ -44,7 +44,7 @@ public class ItemBPPart extends BlockItem {
             CompoundTag nbt = new CompoundTag();
             BlockEntity tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
             if(tileEntity != null){
-                nbt = tileEntity.saveWithoutMetadata();
+                nbt = tileEntity.saveWithoutMetadata(context.getLevel().registryAccess());
             }
 
             //Replace with Multipart
@@ -57,14 +57,14 @@ public class ItemBPPart extends BlockItem {
                 //Restore the Tile Entity Data
                 BlockEntity tile = ((TileBPMultipart) tileEntity).getTileForState(state);
                 if (tile != null)
-                    tile.load(nbt);
+                    tile.loadCustomOnly(nbt, context.getLevel().registryAccess());
 
                 //Add the new State
                 ((TileBPMultipart) tileEntity).addState(thisState);
                 thisState.getBlock().setPlacedBy( context.getLevel(),context.getClickedPos(), thisState, context.getPlayer(), context.getItemInHand());
             }
             //Update Self
-            state.neighborChanged(context.getLevel(), context.getClickedPos(), state.getBlock(), context.getClickedPos(), false);
+            state.handleNeighborChanged(context.getLevel(), context.getClickedPos(), state.getBlock(), context.getClickedPos(), false);
             context.getItemInHand().shrink(1);
             //Place Sound
             context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -79,10 +79,10 @@ public class ItemBPPart extends BlockItem {
                 thisState.getBlock().setPlacedBy( context.getLevel(),context.getClickedPos(), thisState, context.getPlayer(), context.getItemInHand());
                 //Update Neighbors
                 for(Direction dir : Direction.values()){
-                    context.getLevel().getBlockState(context.getClickedPos().relative(dir)).neighborChanged(context.getLevel(), context.getClickedPos().relative(dir), state.getBlock(), context.getClickedPos(), false);
+                    context.getLevel().getBlockState(context.getClickedPos().relative(dir)).handleNeighborChanged(context.getLevel(), context.getClickedPos().relative(dir), state.getBlock(), context.getClickedPos(), false);
                 }
                 //Update Self
-                state.neighborChanged(context.getLevel(), context.getClickedPos(), state.getBlock(), context.getClickedPos(), false);
+                state.handleNeighborChanged(context.getLevel(), context.getClickedPos(), state.getBlock(), context.getClickedPos(), false);
                 context.getItemInHand().shrink(1);
                 //Place Sound
                 context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);

@@ -10,9 +10,11 @@ package com.bluepowermod.helper;
 import com.bluepowermod.tile.tier2.TileTube;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,12 +33,7 @@ public class IOHelper {
     public static Container getInventoryForTE(BlockEntity te) {
 
         if (te instanceof Container) {
-            Container inv = (Container) te;
-            BlockState block = te.getBlockState();
-            if (block.getBlock() instanceof ChestBlock) {
-                inv = (Container) ((ChestBlock) block.getBlock()).getMenuProvider(block, te.getLevel(), te.getBlockPos());
-            }
-            return inv;
+            return (Container) te;
         } else {
             return null;
         }
@@ -360,8 +357,8 @@ public class IOHelper {
         float dZ = world.random.nextFloat() * 0.8F + 0.1F;
 
         ItemEntity entityItem = new ItemEntity(world, x + dX, y + dY, z + dZ, new ItemStack(itemStack.getItem(), itemStack.getCount()));
-        if (itemStack.hasTag()) {
-            entityItem.getItem().setTag(itemStack.getTag().copy());
+        if (itemStack.has(DataComponents.CUSTOM_DATA)) {
+            entityItem.getItem().set(DataComponents.CUSTOM_DATA, itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY));
         }
 
         float factor = 0.05F;

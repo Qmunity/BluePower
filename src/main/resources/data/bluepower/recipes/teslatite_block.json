@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "tag": "forge:dusts/teslatite"
+      "tag": "c:dusts/teslatite"
     }
   }
 }

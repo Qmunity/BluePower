@@ -13,7 +13,7 @@
       "item": "bluepower:blue_alloy_ingot"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     }
   },
   "result": {

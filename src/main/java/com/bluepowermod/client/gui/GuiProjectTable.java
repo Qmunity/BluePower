@@ -65,6 +65,6 @@ public class GuiProjectTable extends GuiContainerBaseBP<ContainerProjectTable> i
     @Override
     public void actionPerformed(IGuiWidget button) {
         if(button.getID() == 0)
-            PacketDistributor.SERVER.noArg().send(new MessageGuiUpdate(0, 0));
+            PacketDistributor.sendToServer(new MessageGuiUpdate(0, 0));
     }
 }
