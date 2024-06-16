@@ -46,10 +46,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -122,7 +119,7 @@ public class JEIPlugin implements IModPlugin {
         List<IAlloyFurnaceRecipe> recipesList = new ArrayList<>();
 
         for (Map.Entry<Item, ItemStack> recipe : AlloyFurnaceRegistry.getInstance().recyclingRecipes.entrySet()) {
-            recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe( "", recipe.getValue(), NonNullList.of(new SizedIngredient(Ingredient.of(recipe.getKey()), 1))));
+            recipesList.add(new AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe( "bluepower:recycling", recipe.getValue(), NonNullList.copyOf(List.of(new SizedIngredient(Ingredient.of(recipe.getKey()), 1)))));
         }
 
         return recipesList;

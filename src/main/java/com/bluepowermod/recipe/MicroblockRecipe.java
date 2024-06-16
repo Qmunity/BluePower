@@ -122,9 +122,8 @@ public class MicroblockRecipe extends CustomRecipe {
         @Override
         public MapCodec<MicroblockRecipe> codec() {
             return RecordCodecBuilder.mapCodec((instance) -> instance.group(
-                    Codec.INT.fieldOf("width").forGetter((width) -> 1),
-                    Codec.INT.fieldOf("height").forGetter((height) -> 1)
-            ).apply(instance, (width, height) -> new MicroblockRecipe()));
+                    Codec.STRING.fieldOf("type").forGetter((type) -> "bluepower:micro_block")
+            ).apply(instance, (type) -> new MicroblockRecipe()));
         }
 
         @Override

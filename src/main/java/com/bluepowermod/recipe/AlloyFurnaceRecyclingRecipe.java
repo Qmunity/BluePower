@@ -127,20 +127,20 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
         @Override
         public MapCodec<AlloyFurnaceRecyclingRecipe> codec() {
             return RecordCodecBuilder.mapCodec((instance) -> instance.group(
-                    Codec.list(Ingredient.CODEC).fieldOf("ingredients").forGetter(Recipe::getIngredients)
-            ).apply(instance, (p1) -> new AlloyFurnaceRecyclingRecipe()));
+                    Codec.STRING.fieldOf("type").forGetter((type) -> "bluepower:alloy_recycling")
+            ).apply(instance, (type) -> new AlloyFurnaceRecyclingRecipe()));
         }
 
         @Override
         public StreamCodec<RegistryFriendlyByteBuf, AlloyFurnaceRecyclingRecipe> streamCodec() {
             return new StreamCodec<RegistryFriendlyByteBuf, AlloyFurnaceRecyclingRecipe>() {
                 @Override
-                public AlloyFurnaceRecyclingRecipe decode(RegistryFriendlyByteBuf registryFriendlyByteBuf) {
+                public AlloyFurnaceRecyclingRecipe decode(RegistryFriendlyByteBuf byteBuf) {
                     return new AlloyFurnaceRecyclingRecipe();
                 }
 
                 @Override
-                public void encode(RegistryFriendlyByteBuf o, AlloyFurnaceRecyclingRecipe alloyFurnaceRecyclingRecipe) {
+                public void encode(RegistryFriendlyByteBuf byteBuf, AlloyFurnaceRecyclingRecipe alloyFurnaceRecyclingRecipe) {
 
                 }
             };
