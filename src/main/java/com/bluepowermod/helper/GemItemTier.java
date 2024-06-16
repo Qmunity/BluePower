@@ -1,8 +1,11 @@
 package com.bluepowermod.helper;
 
 import com.bluepowermod.init.BPItems;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 
@@ -37,7 +40,7 @@ public class GemItemTier implements Tier {
 
     @Override
     public TagKey<Block> getIncorrectBlocksForDrops() {
-        return null;
+        return BlockTags.create(new ResourceLocation(""));
     }
 
     @Override

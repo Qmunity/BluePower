@@ -70,7 +70,8 @@ public class TileBuffer extends TileBase implements WorldlyContainer, MenuProvid
         
         for (int i = 0; i < 20; i++) {
                 CompoundTag tc = new CompoundTag();
-                allInventories.get(i).save(provider, tc);
+                if(!allInventories.get(i).isEmpty())
+                    allInventories.get(i).save(provider, tc);
                 tCompound.put("inventory" + i, tc);
         }
     }

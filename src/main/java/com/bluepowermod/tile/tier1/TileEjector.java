@@ -89,7 +89,8 @@ public class TileEjector extends TileMachineBase implements Container, MenuProvi
 
         for (int i = 0; i < 9; i++) {
                 CompoundTag tc = new CompoundTag();
-                inventory.get(i).save(provider, tc);
+                if(!inventory.get(i).isEmpty())
+                    inventory.get(i).save(provider, tc);
                 tCompound.put("inventory" + i, tc);
         }
     }

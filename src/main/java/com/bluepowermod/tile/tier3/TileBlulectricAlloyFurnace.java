@@ -88,13 +88,15 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
 
         for (int i = 0; i < 9; i++) {
             CompoundTag tc = new CompoundTag();
-            inventory.get(i).save(level.registryAccess(), tc);
+            if (!inventory.get(i).isEmpty())
+                inventory.get(i).save(level.registryAccess(), tc);
             tCompound.put("inventory" + i, tc);
         }
 
         if (outputInventory != null) {
             CompoundTag outputCompound = new CompoundTag();
-            outputInventory.save(level.registryAccess(), outputCompound);
+            if (!outputInventory.isEmpty())
+                outputInventory.save(level.registryAccess(), outputCompound);
             tCompound.put("outputInventory", outputCompound);
         }
 

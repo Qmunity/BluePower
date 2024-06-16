@@ -260,7 +260,7 @@ public class AlloyFurnaceRegistry {
             public IAlloyFurnaceRecipe decode(RegistryFriendlyByteBuf buffer) {
                 String s = buffer.readUtf(32767);
                 int i = buffer.readVarInt();
-                NonNullList<SizedIngredient> nonnulllist = NonNullList.withSize(i, new SizedIngredient(Ingredient.EMPTY, 0));
+                NonNullList<SizedIngredient> nonnulllist = NonNullList.withSize(i, new SizedIngredient(Ingredient.EMPTY, 1));
 
                 nonnulllist.replaceAll(ignored -> SizedIngredient.STREAM_CODEC.decode(buffer));
 

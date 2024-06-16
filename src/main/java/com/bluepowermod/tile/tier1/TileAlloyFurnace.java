@@ -96,18 +96,22 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
 
         for (int i = 0; i < 9; i++) {
             CompoundTag tc = new CompoundTag();
-            inventory.get(i).save(level.registryAccess(), tc);
+            if(!inventory.get(i).isEmpty())
+                inventory.get(i).save(level.registryAccess(), tc);
             tCompound.put("inventory" + i, tc);
         }
+
         if (fuelInventory != null) {
             CompoundTag fuelCompound = new CompoundTag();
-            fuelInventory.save(level.registryAccess(), fuelCompound);
+            if(!fuelInventory.isEmpty())
+                fuelInventory.save(level.registryAccess(), fuelCompound);
             tCompound.put("fuelInventory", fuelCompound);
         }
 
         if (outputInventory != null) {
             CompoundTag outputCompound = new CompoundTag();
-            outputInventory.save(level.registryAccess(), outputCompound);
+            if(!outputInventory.isEmpty())
+                outputInventory.save(level.registryAccess(), outputCompound);
             tCompound.put("outputInventory", outputCompound);
         }
 

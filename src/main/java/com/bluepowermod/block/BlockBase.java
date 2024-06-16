@@ -20,13 +20,12 @@ package com.bluepowermod.block;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPBlocks;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class BlockBase extends Block {
@@ -45,6 +44,14 @@ public abstract class BlockBase extends Block {
 
     public boolean getWIP(){
         return wip;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag advanced) {
+        super.appendHoverText(stack, context, tooltip, advanced);
+        if(wip){
+            tooltip.add(Component.literal(MinecraftColor.RED.getChatColor() + "WIP") );
+        }
     }
 
     public BlockBase setWIP(boolean wip) {

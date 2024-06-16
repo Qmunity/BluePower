@@ -71,7 +71,8 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
                 CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte)currentIndex);
-                inventory.get(currentIndex).save(provider, tagCompound);
+                if(!inventory.get(currentIndex).isEmpty())
+                    inventory.get(currentIndex).save(provider, tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("Items", tagList);
@@ -80,7 +81,8 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
         for (int currentIndex = 0; currentIndex < craftingGrid.size(); ++currentIndex) {
                 CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
-                craftingGrid.get(currentIndex).save(provider, tagCompound);
+                if(!craftingGrid.get(currentIndex).isEmpty())
+                    craftingGrid.get(currentIndex).save(provider, tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("CraftingGrid", tagList);

@@ -21,7 +21,7 @@ import net.minecraft.world.item.*;
 
 public class ItemGemAxe extends AxeItem {
 
-    public Item customCraftingMaterial = Items.AIR;
+    public final Item customCraftingMaterial;
 
     public ItemGemAxe(Tier itemTier, Item repairItem) {
         super(itemTier, new Properties());

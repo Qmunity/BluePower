@@ -66,7 +66,8 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
                 CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
-                inventory.get(currentIndex).save(provider, tagCompound);
+                if (!inventory.get(currentIndex).isEmpty())
+                    inventory.get(currentIndex).save(provider, tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("Items", tagList);

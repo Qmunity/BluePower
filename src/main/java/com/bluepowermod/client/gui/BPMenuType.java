@@ -20,16 +20,18 @@ package com.bluepowermod.client.gui;
 import com.bluepowermod.container.*;
 import com.bluepowermod.reference.ContainerNames;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+@EventBusSubscriber(modid = Refs.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class BPMenuType {
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(BuiltInRegistries.MENU, Refs.MODID);
 
@@ -58,5 +60,37 @@ public class BPMenuType {
     public static final DeferredHolder<MenuType<?>,MenuType<ContainerCircuitDatabaseSharing>> CIRCUITDATABASE_SHARING = MENU_TYPES.register(ContainerNames.CIRCUITDATABASE_SHARING,() -> new MenuType<>(ContainerCircuitDatabaseSharing::new, FeatureFlags.DEFAULT_FLAGS));
     public static final DeferredHolder<MenuType<?>,MenuType<ContainerBlulectricAlloyFurnace>> BLULECTRIC_ALLOY_FURNACE = MENU_TYPES.register(ContainerNames.BLULECTRIC_ALLOY_FURNACE,() -> new MenuType<>(ContainerBlulectricAlloyFurnace::new, FeatureFlags.DEFAULT_FLAGS));
     public static final DeferredHolder<MenuType<?>,MenuType<ContainerBlulectricFurnace>> BLULECTRIC_FURNACE = MENU_TYPES.register(ContainerNames.BLULECTRIC_FURNACE,() -> new MenuType<>(ContainerBlulectricFurnace::new, FeatureFlags.DEFAULT_FLAGS));
+
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void registerScreenFactories(RegisterMenuScreensEvent event){
+        event.register(ALLOY_FURNACE.get(), GuiAlloyFurnace::new);
+        event.register(BLULECTRIC_FURNACE.get(), GuiBlulectricFurnace::new);
+        event.register(BLULECTRIC_ALLOY_FURNACE.get(), GuiBlulectricAlloyFurnace::new);
+        event.register(BUFFER.get(), GuiBuffer::new);
+        event.register(SORTING_MACHINE.get(), GuiSortingMachine::new);
+        event.register(SEEDBAG.get(), GuiSeedBag::new);
+        event.register(CANVAS_BAG.get(), GuiCanvasBag::new);
+        event.register(CPU.get(), GuiCPU::new);
+        event.register(MONITOR.get(), GuiMonitor::new);
+        event.register(DISK_DRIVE.get(), GuiDiskDrive::new);
+        event.register(IO_EXPANDER.get(), GuiIOExpander::new);
+        event.register(REDBUS.get(), GuiRedbusID::new);
+        event.register(KINETIC_GENERATOR.get(), GuiKinect::new);
+        event.register(DEPLOYER.get(), GuiDeployer::new);
+        event.register(RELAY.get(), GuiRelay::new);
+        event.register(EJECTOR.get(), GuiEjector::new);
+        event.register(FILTER.get(), GuiFilter::new);
+        event.register(RETRIEVER.get(), GuiRetriever::new);
+        event.register(REGULATOR.get(), GuiRegulator::new);
+        event.register(ITEM_DETECTOR.get(), GuiItemDetector::new);
+        event.register(PROJECT_TABLE.get(), GuiProjectTable::new);
+        event.register(CIRCUIT_TABLE.get(), GuiCircuitTable::new);
+        event.register(MANAGER.get(), GuiManager::new);
+        event.register(CIRCUITDATABASE_MAIN.get(), GuiCircuitDatabaseMain::new);
+        event.register(CIRCUITDATABASE_SHARING.get(), GuiCircuitDatabaseSharing::new);
+    }
+
 
 }
