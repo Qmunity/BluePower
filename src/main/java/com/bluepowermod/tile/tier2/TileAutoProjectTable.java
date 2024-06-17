@@ -51,7 +51,7 @@ public class TileAutoProjectTable extends TileProjectTable {
                             return ItemStack.EMPTY;
                         }
                         ItemStack ptStack = getItem(ptSlot);
-                        if (ptStack.getItem() == slotStack.getItem() && ptStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == slotStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()) {
+                        if (ptStack.getItem() == slotStack.getItem() && ItemStack.isSameItemSameComponents(ptStack, slotStack)) {
                             slotStack.setCount(2);
                             craftingGrid.set(i, slotStack);
                             removeItem(ptSlot, 1);

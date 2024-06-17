@@ -132,7 +132,7 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
                     for (int ptSlot = 10; ptSlot < 28; ++ptSlot) {
                         Slot inventorySlot = slots.get(ptSlot);
                         ItemStack ptStack = inventorySlot.getItem();
-                        if (ptStack.getItem() == beforeStack.getItem() && ptStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == beforeStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()) {
+                        if (ptStack.getItem() == beforeStack.getItem() && ItemStack.isSameItemSameComponents(ptStack, beforeStack)) {
                             ptStack.setCount(ptStack.getCount() - 1);
                             inventorySlot.set(ptStack);
                             beforeStack.setCount(1);
