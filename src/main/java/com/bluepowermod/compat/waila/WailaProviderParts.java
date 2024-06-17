@@ -22,12 +22,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IServerDataProvider;
 
-public class WailaProviderParts implements IServerDataProvider<BlockEntity> {
+public class WailaProviderParts implements IServerDataProvider<BlockAccessor> {
 
     @Override
-    public void appendServerData(CompoundTag compoundTag, ServerPlayer serverPlayer, Level level, BlockEntity blockEntity, boolean b) {
+    public ResourceLocation getUid() {
+        return new ResourceLocation("bluepower:parts");
+    }
+
+    @Override
+    public void appendServerData(CompoundTag compoundTag, BlockAccessor blockAccessor) {
         // ITilePartHolder h = MultipartCompatibility.getPartHolder(data.getLevel(), data.getPosition().blockX, data.getPosition().blockY,
         // data.getPosition().blockZ);
         //
@@ -40,10 +46,5 @@ public class WailaProviderParts implements IServerDataProvider<BlockEntity> {
         // if (mop.hitVec.distanceTo(data.getPosition().hitVec) < 0.01)
         // ((IPartWAILAProvider) mop.getPart()).addWAILABody(l);
         // }
-    }
-
-    @Override
-    public ResourceLocation getUid() {
-        return new ResourceLocation("bluepower:parts");
     }
 }

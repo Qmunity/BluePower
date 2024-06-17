@@ -9,7 +9,7 @@
     }
   },
   "result": {
-    "item": "bluepower:stone_tile",
+    "id": "bluepower:stone_tile",
     "count": 4
   }
 }

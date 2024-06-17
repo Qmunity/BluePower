@@ -12,6 +12,7 @@ import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.MultipartUtils;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -52,6 +54,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterloggedBlock {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+
+    //codec
+    public static final MapCodec<BlockBPMultipart> CODEC = simpleCodec((props) -> new BlockBPMultipart());
 
     public BlockBPMultipart() {
         super(Block.Properties.of().noOcclusion().strength(2));
@@ -115,7 +120,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         BlockEntity te = world.getBlockEntity(pos);
         if(partState != null && partState.getBlock() instanceof IBPPartBlock && te instanceof TileBPMultipart) {
             //Remove Selected Part
-            ((TileBPMultipart) te).removeState(partState);
+            ((TileBPMultipart) te).removeState(partState, world.registryAccess());
             //Call onMultipartReplaced
             ((IBPPartBlock)partState.getBlock()).onMultipartReplaced(partState, world, pos, state, false);
             //Play Break Sound
@@ -125,12 +130,13 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         return false;
     }
 
+
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         ItemStack itemStack = ItemStack.EMPTY;
         BlockState partState = MultipartUtils.getClosestState(player, pos);
         if(partState != null)
-            itemStack = partState.getCloneItemStack(target, world, pos, player);
+            itemStack = partState.getCloneItemStack(target, level, pos, player);
         return itemStack;
     }
 
@@ -139,7 +145,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         BlockEntity tileentity = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
         if (tileentity instanceof TileBPMultipart) {
-            ((TileBPMultipart) tileentity).getStates().forEach(s -> itemStacks.addAll(s.getBlock().getDrops(s, builder)));
+            ((TileBPMultipart) tileentity).getStates().forEach(s -> itemStacks.addAll(s.getDrops(builder)));
         }
         return itemStacks;
     }
@@ -148,8 +154,13 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         BlockEntity te = world.getBlockEntity(pos);
         if(te instanceof TileBPMultipart) {
-            ((TileBPMultipart) te).getStates().forEach(s -> s.neighborChanged(world, pos, blockIn, fromPos, bool));
+            ((TileBPMultipart) te).getStates().forEach(s -> s.handleNeighborChanged(world, pos, blockIn, fromPos, bool));
         }
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override

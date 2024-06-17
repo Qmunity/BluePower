@@ -46,9 +46,8 @@ public class BlockBattery extends BlockContainerBase {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
-        if(tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()) {
-            IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null);
+        IPowerBase storage = context.getLevel().getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, context.getClickedPos(), context.getNearestLookingDirection());
+        if(storage != null) {
             double voltage = storage.getVoltage();
             int level = (int)((voltage / storage.getMaxVoltage()) * 6);
             return this.stateDefinition.any().setValue(LEVEL, level);

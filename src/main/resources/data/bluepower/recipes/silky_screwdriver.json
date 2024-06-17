@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:silky_screwdriver"
+    "id": "bluepower:silky_screwdriver"
   },
   "pattern": [
     " t",
@@ -12,7 +12,7 @@
       "item": "bluepower:screwdriver"
     },
     "t": {
-      "tag": "forge:nuggets/tungsten"
+      "tag": "c:nuggets/tungsten"
     }
   }
 }

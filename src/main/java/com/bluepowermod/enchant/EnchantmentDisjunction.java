@@ -7,28 +7,24 @@
  */
 package com.bluepowermod.enchant;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.entity.EquipmentSlot;
-
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 
 public class EnchantmentDisjunction extends Enchantment {
 
-    public EnchantmentDisjunction(Rarity rarity) {
-        super(rarity, EnchantmentCategory.WEAPON, EquipmentSlot.values());
-    }
-
-    @Override
-    public int getMaxLevel() {
-
-        return 5;
-    }
-
-    @Override
-    public int getMinCost(int par1) {
-
-        return 5 + (par1 - 1) * 8;
+    public EnchantmentDisjunction() {
+        //TODO: 1.20.6 - Confirm Values
+        super(definition(
+                ItemTags.WEAPON_ENCHANTABLE, //EnchantmentTag
+                2, //Weight
+                5, //Max Level
+                dynamicCost(5, 8), //Cost Min
+                dynamicCost(30, 10),  //Cost Max
+                10, //Cost Anvil
+                EquipmentSlot.values()
+                )
+        );
     }
 
 }

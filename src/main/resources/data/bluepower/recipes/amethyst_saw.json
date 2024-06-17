@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:amethyst_saw"
+    "id": "bluepower:amethyst_saw"
   },
   "pattern": [
     "SSS",
@@ -10,13 +10,13 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "D": {
-      "tag": "forge:gems/amethyst"
+      "tag": "c:gems/amethyst"
     }
   }
 }

@@ -21,7 +21,6 @@ package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
-import com.bluepowermod.container.ContainerAlloyFurnace;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
@@ -29,10 +28,7 @@ import net.minecraft.resources.ResourceLocation;
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.container.ContainerFilter;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileFilter;
 import net.minecraft.network.chat.Component;
 
 /**

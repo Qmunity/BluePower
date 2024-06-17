@@ -14,7 +14,7 @@ import com.bluepowermod.network.annotation.SyncedField.SyncedFluidTank;
 import com.bluepowermod.network.annotation.SyncedField.SyncedInt;
 import com.bluepowermod.network.annotation.SyncedField.SyncedItemStack;
 import com.bluepowermod.network.annotation.SyncedField.SyncedString;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
 /**
  * @author MineMaarten

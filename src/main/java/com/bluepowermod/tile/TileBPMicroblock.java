@@ -10,6 +10,8 @@ package com.bluepowermod.tile;
 
 import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -18,9 +20,8 @@ import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -64,26 +65,26 @@ public class TileBPMicroblock extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
-        super.saveAdditional(compound);
-        compound.putString("block", ForgeRegistries.BLOCKS.getKey(block).toString());
+    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+        super.saveAdditional(compound, provider);
+        compound.putString("block", BuiltInRegistries.BLOCK.getKey(block).toString());
         compound.putInt("rotation", rotation);
     }
 
     @Override
-    public void load(CompoundTag compound) {
-       super.load(compound);
+    public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+       super.loadAdditional(compound, provider);
        if (compound.contains("block")) {
-           block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("block")));
+           block = BuiltInRegistries.BLOCK.get(new ResourceLocation(compound.getString("block")));
            rotation = compound.getInt("rotation");
        }
     }
 
 
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag updateTag = super.getUpdateTag();
-        saveAdditional(updateTag);
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag updateTag = super.getUpdateTag(provider);
+        saveAdditional(updateTag, provider);
         return updateTag;
     }
 
@@ -94,11 +95,11 @@ public class TileBPMicroblock extends BlockEntity {
 
     
     @Override
-    public void onDataPacket(Connection networkManager, ClientboundBlockEntityDataPacket packet) {
+    public void onDataPacket(Connection networkManager, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider provider) {
         Block oldblock = getBlock();
         CompoundTag tagCompound = packet.getTag();
-        super.onDataPacket(networkManager, packet);
-        load(tagCompound);
+        super.onDataPacket(networkManager, packet, provider);
+        loadAdditional(tagCompound, provider);
         if (level.isClientSide) {
             // Update if needed
             if (!getBlock().equals(oldblock)) {

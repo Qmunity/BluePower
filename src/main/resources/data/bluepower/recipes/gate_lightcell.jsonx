@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:gate_lightcell"
+    "id": "bluepower:gate_lightcell"
   },
   "pattern": [
     "TWT",

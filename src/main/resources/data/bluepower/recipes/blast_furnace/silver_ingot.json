@@ -2,9 +2,9 @@
   "type": "minecraft:blasting",
   "group": "silver_ingot",
   "ingredient": {
-    "tag": "forge:ores/silver"
+    "tag": "c:ores/silver"
   },
-  "result": "bluepower:silver_ingot",
+  "result":  { "id": "bluepower:silver_ingot"},
   "experience": 0.1,
   "cookingtime": 100
 }

@@ -31,7 +31,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -39,7 +38,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockCrop extends CropBlock implements BonemealableBlock {
     private static final VoxelShape[] SHAPES = new VoxelShape[]{
@@ -58,12 +56,13 @@ public class BlockCrop extends CropBlock implements BonemealableBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
         if (state.getBlock() instanceof BlockCrop) {
             if (isMaxAge(state) && world.getBlockState(pos.below()).getBlock() == this) {
                 world.setBlock(pos.below(), getStateForAge(4), 2);
             }
         }
+        return state;
     }
 
     /**

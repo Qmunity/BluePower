@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:toggle_latch"
+    "id": "bluepower:toggle_latch"
   },
   "pattern": [
     "CTT",

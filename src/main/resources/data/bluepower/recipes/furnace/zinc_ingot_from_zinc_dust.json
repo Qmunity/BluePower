@@ -3,6 +3,6 @@
   "ingredient": {
     "item": "bluepower:zinc_dust"
   },
-  "result": "bluepower:zinc_ingot",
+  "result":  { "id": "bluepower:zinc_ingot"},
   "cookingtime": 200
 }

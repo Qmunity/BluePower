@@ -7,13 +7,21 @@ import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileInsulatedWire;
 import com.bluepowermod.tile.tier1.TileWire;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.PatchedDataComponentMap;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.HitResult;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -41,14 +49,15 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
         if (tileentity instanceof TileInsulatedWire) {
             CompoundTag nbt = new CompoundTag();
             nbt.putString("color", ((TileInsulatedWire)tileentity).getColor().name());
-            ItemStack stack = new ItemStack(this, 1, nbt);
+            ItemStack stack = new ItemStack(this, 1);
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
             itemStacks.add(stack);
         }
         return itemStacks;
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
         BlockEntity tileentity = world.getBlockEntity(pos);
         ItemStack stack = ItemStack.EMPTY;
         if(tileentity instanceof TileBPMultipart){
@@ -57,7 +66,8 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
         if (tileentity instanceof TileInsulatedWire) {
             CompoundTag nbt = new CompoundTag();
             nbt.putString("color", ((TileInsulatedWire)tileentity).getColor().name());
-            stack = new ItemStack(this, 1, nbt);
+            stack = new ItemStack(this, 1);
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
         }
         return stack;
     }
@@ -70,9 +80,9 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
         if(tile instanceof TileBPMultipart){
             tile = ((TileBPMultipart)tile).getTileForState(state);
         }
-        if(tile instanceof TileWire && tintIndex == 1) {
-            return tile.getCapability(CapabilityRedstoneDevice.INSULATED_CAPABILITY).orElse(null).getInsulationColor(null).getHex();
-        }
+        //if(tile instanceof TileWire && tintIndex == 1) {
+        //    return tile.getCapability(CapabilityRedstoneDevice.INSULATED_CAPABILITY).orElse(null).getInsulationColor(null).getHex();
+        //}
         return RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
     }
 
@@ -80,8 +90,8 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
     public int getColor(ItemStack stack, int tintIndex) {
         //Color for Block
         MinecraftColor color = MinecraftColor.BLUE;
-        if(stack.getTag() != null && stack.getTag().contains("color"))
-            color = MinecraftColor.valueOf(stack.getTag().getString("color"));
+        if(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null && stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("color"))
+            color = MinecraftColor.valueOf(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("color"));
         return tintIndex == 1 ? color.getHex() : tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
     }
 

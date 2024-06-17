@@ -4,7 +4,7 @@
   "ingredient": {
     "item": "bluepower:silver_raw"
   },
-  "result": "bluepower:silver_ingot",
+  "result":  { "id": "bluepower:silver_ingot"},
   "experience": 1.0,
   "cookingtime": 100
 }

@@ -13,9 +13,9 @@ import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.client.resources.model.MultiPartBakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -31,12 +31,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelDataManager;
-import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.client.model.data.MultipartModelData;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -86,7 +83,7 @@ public class TileBPMultipart extends BlockEntity {
         markDirtyClient();
     }
 
-    public void removeState(BlockState state) {
+    public void removeState(BlockState state, HolderLookup.Provider provider) {
         //Drop Items
         if (level instanceof ServerLevel) {
             NonNullList<ItemStack> drops = NonNullList.create();
@@ -104,11 +101,11 @@ public class TileBPMultipart extends BlockEntity {
             //Convert back to Standalone Block
             BlockEntity te = (BlockEntity)stateMap.values().toArray()[0];
             if (level != null) {
-                CompoundTag nbt = te != null ? te.saveWithoutMetadata() : null;
+                CompoundTag nbt = te != null ? te.saveWithoutMetadata(provider) : null;
                 level.setBlockAndUpdate(worldPosition, ((BlockState)stateMap.keySet().toArray()[0]));
                 BlockEntity tile = level.getBlockEntity(worldPosition);
                 if (tile != null && nbt != null)
-                    tile.load(nbt);
+                    tile.loadCustomOnly(nbt, provider);
             }
         }else if(stateMap.size() == 0){
             //Remove if this is empty
@@ -117,7 +114,7 @@ public class TileBPMultipart extends BlockEntity {
             }
         }
         if(level != null)
-            level.getBlockState(worldPosition).neighborChanged(level, worldPosition, getBlockState().getBlock(), worldPosition, false);
+            level.getBlockState(worldPosition).handleNeighborChanged(level, worldPosition, getBlockState().getBlock(), worldPosition, false);
     }
 
     public BlockEntity getTileForState(BlockState state){
@@ -130,20 +127,7 @@ public class TileBPMultipart extends BlockEntity {
         stateMap.values().forEach(t -> t.setLevel(levelIn));
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        //If any of the states are blocking the given side return empty.
-        if(isSideBlocked(cap, side)){
-            return LazyOptional.empty();
-        }
-        //Get Matching Capabilities from the contained Tile Entities.
-        List<LazyOptional<T>> capability =  stateMap.values().stream().filter(Objects::nonNull)
-                .map(t -> t.getCapability(cap, side)).filter(LazyOptional::isPresent).collect(Collectors.toList());
-        return capability.size() > 0 ? capability.get(0) : LazyOptional.empty();
-    }
-
-    public Boolean isSideBlocked(@Nonnull Capability cap, @Nullable Direction side){
+    public Boolean isSideBlocked(@Nonnull BlockCapability cap, @Nullable Direction side){
         return stateMap.keySet().stream().filter(s -> s.getBlock() instanceof IBPPartBlock)
                 .anyMatch(s -> ((IBPPartBlock)s.getBlock()).blockCapability(s, cap, side));
     }
@@ -162,8 +146,8 @@ public class TileBPMultipart extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
-        super.saveAdditional(compound);
+    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+        super.saveAdditional(compound, provider);
         compound.putInt("size", getStates().size());
         for (int i = 0; i < getStates().size(); i++) {
             //write state data
@@ -171,13 +155,13 @@ public class TileBPMultipart extends BlockEntity {
             BlockState.CODEC.encodeStart(NbtOps.INSTANCE,  getStates().get(i)).result().ifPresent(nbt -> compound.put(stateSave, nbt));
             //write tile NBT data
             if(stateMap.get(getStates().get(i)) != null)
-                compound.put("tile" + i, stateMap.get(getStates().get(i)).saveWithoutMetadata());
+                compound.put("tile" + i, stateMap.get(getStates().get(i)).saveWithoutMetadata(provider));
         }
     }
 
     @Override
-    public void load(CompoundTag compound) {
-        super.load(compound);
+    public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+        super.loadAdditional(compound, provider);
         Map<BlockState, BlockEntity> states = new HashMap<>();
         int size = compound.getInt("size");
         for (int i = 0; i < size; i++) {
@@ -186,7 +170,7 @@ public class TileBPMultipart extends BlockEntity {
                 BlockState state = result.get().getFirst();
                 BlockEntity tile = ((EntityBlock)state.getBlock()).newBlockEntity(worldPosition, state);
                 if (tile != null) {
-                    tile.load(compound.getCompound("tile" + i));
+                    tile.loadCustomOnly(compound.getCompound("tile" + i), provider);
                 }
                 states.put(state, tile);
             }
@@ -196,9 +180,9 @@ public class TileBPMultipart extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag updateTag = super.getUpdateTag();
-        saveAdditional(updateTag);
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag updateTag = super.getUpdateTag(provider);
+        saveAdditional(updateTag, provider);
         return updateTag;
     }
 
@@ -208,11 +192,11 @@ public class TileBPMultipart extends BlockEntity {
     }
 
     @Override
-    public void onDataPacket(Connection networkManager, ClientboundBlockEntityDataPacket packet) {
+    public void onDataPacket(Connection networkManager, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider provider) {
         List<BlockState> states = getStates();
         CompoundTag tagCompound = packet.getTag();
-        super.onDataPacket(networkManager, packet);
-        load(tagCompound);
+        super.onDataPacket(networkManager, packet, provider);
+        loadAdditional(tagCompound, provider);
         if (level.isClientSide) {
             // Update if needed
             if (!getStates().equals(states)) {

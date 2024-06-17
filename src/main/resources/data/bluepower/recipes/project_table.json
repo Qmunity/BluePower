@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:project_table"
+    "id": "bluepower:project_table"
   },
   "pattern": [
     "SSS",
@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
-      "tag": "forge:stone"
+      "tag": "c:stone"
     },
     "C": {
       "item": "minecraft:crafting_table"
@@ -19,7 +19,7 @@
       "tag": "minecraft:planks"
     },
     "I": {
-      "tag": "forge:chests/wooden"
+      "tag": "c:chests/wooden"
     }
   }
 }

@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "#c:ores/amethyst",
+    "#c:ores/green_sapphire",
+    "#c:ores/ruby",
+    "#c:ores/sapphire",
+    "#c:ores/silver",
+    "#c:ores/teslatite",
+    "#c:ores/tungsten",
+    "#c:ores/zinc"
+  ]
+}

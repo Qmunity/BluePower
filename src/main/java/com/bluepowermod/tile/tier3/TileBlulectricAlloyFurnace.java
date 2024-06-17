@@ -10,7 +10,6 @@ package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
-import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.block.power.BlockBlulectricAlloyFurnace;
 import com.bluepowermod.container.ContainerBlulectricAlloyFurnace;
@@ -22,8 +21,10 @@ import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -36,8 +37,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,8 +46,7 @@ import javax.annotation.Nullable;
  */
 
 public class TileBlulectricAlloyFurnace extends TileMachineBase implements WorldlyContainer, MenuProvider {
-    private final BlutricityStorage storage = new BlutricityStorage(1000, 100);
-    private LazyOptional<IPowerBase> blutricityCap;
+    public final BlutricityStorage storage = new BlutricityStorage(1000, 100);
     private boolean isActive;
     private int currentProcessTime;
     public static final int SLOTS = 10;
@@ -69,15 +67,10 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(CompoundTag tCompound) {
-
-        super.load(tCompound);
-
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.of(tc));
-        }
-        outputInventory = ItemStack.of(tCompound.getCompound("outputInventory"));
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tCompound, provider);
+        ContainerHelper.saveAllItems(tCompound, inventory, provider);
+        outputInventory = ItemStack.parseOptional(provider, tCompound.getCompound("outputInventory"));
 
     }
 
@@ -85,20 +78,16 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
 
-        super.saveAdditional(tCompound);
+        super.saveAdditional(tCompound, provider);
 
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = new CompoundTag();
-            inventory.get(i).save(tc);
-            tCompound.put("inventory" + i, tc);
-        }
+        CompoundTag tc = new CompoundTag();
+        ContainerHelper.saveAllItems(tc, inventory, provider);
+        tCompound.put("inventory", tc);
 
-        if (outputInventory != null) {
-            CompoundTag outputCompound = new CompoundTag();
-            outputInventory.save(outputCompound);
-            tCompound.put("outputInventory", outputCompound);
+        if (outputInventory != null && !outputInventory.isEmpty()) {
+            tCompound.put("outputInventory", outputInventory.saveOptional(provider));
         }
 
     }
@@ -138,17 +127,17 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
             tileAlloyFurnace.storage.resetCurrent();
             //Balance power of attached blulectric blocks.
             for (Direction facing : Direction.values()) {
-                BlockEntity tile = level.getBlockEntity(pos.relative(facing));
-                if (tile != null)
-                    tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
-                            exStorage -> EnergyHelper.balancePower(exStorage, tileAlloyFurnace.storage));
+                var exStorage = level.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, pos.relative(facing), facing.getOpposite());
+                if (exStorage != null){
+                    EnergyHelper.balancePower(exStorage, tileAlloyFurnace.storage);
+                }
             }
             if (tileAlloyFurnace.updatingRecipe) {
                 if(level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).isPresent()) {
-                    tileAlloyFurnace.currentRecipe = (IAlloyFurnaceRecipe) level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).get();
+                    tileAlloyFurnace.currentRecipe = (IAlloyFurnaceRecipe) level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).get().value();
                     //Check output slot is empty and less than a stack of the same item.
                     if(!(tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem(level.registryAccess()).getItem()
-                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
+                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
                             && !tileAlloyFurnace.outputInventory.isEmpty()){
                         tileAlloyFurnace.currentRecipe = null;
                     }
@@ -165,11 +154,11 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
                     if (++tileAlloyFurnace.currentProcessTime >= (100 / (tileAlloyFurnace.storage.getEnergy() / tileAlloyFurnace.storage.getMaxEnergy()))) {
                         tileAlloyFurnace.currentProcessTime = 0;
                         if (!tileAlloyFurnace.outputInventory.isEmpty()) {
-                            tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount());
+                            tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).getCount());
                         } else {
-                            tileAlloyFurnace.outputInventory = tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).copy();
+                            tileAlloyFurnace.outputInventory = tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).copy();
                         }
-                        tileAlloyFurnace.currentRecipe.useItems(tileAlloyFurnace.inventory, level.getRecipeManager());
+                        tileAlloyFurnace.currentRecipe.useItems(tileAlloyFurnace.inventory, level.registryAccess());
                         tileAlloyFurnace.updatingRecipe = true;
                     }
                 }else{
@@ -362,26 +351,6 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerBlulectricAlloyFurnace(id, inventory, this, fields);
-    }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
-            if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
-            return blutricityCap.cast();
-        }
-        return LazyOptional.empty();
-    }
-
-    @Override
-    public void invalidateCaps(){
-        super.invalidateCaps();
-        if( blutricityCap != null )
-        {
-            blutricityCap.invalidate();
-            blutricityCap = null;
-        }
     }
 
 }

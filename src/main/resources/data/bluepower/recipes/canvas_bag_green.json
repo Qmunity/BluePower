@@ -1,13 +1,13 @@
 ﻿{
   "result": {
-    "item": "bluepower:canvas_bag_green"
+    "id": "bluepower:canvas_bag_green"
   },
   "ingredients": [
     {
       "tag": "bluepower:canvas_bag"
     },
     {
-      "tag": "forge:dyes/green"
+      "tag": "c:dyes/green"
     }
   ],
   "type": "minecraft:crafting_shapeless"

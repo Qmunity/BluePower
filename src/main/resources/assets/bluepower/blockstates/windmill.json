@@ -4,7 +4,7 @@
     "textures": {"#material": "bluepower:blocks/models/windmill"},
     "model": "bluepower:windmill.obj",
     "custom": {"flip-v": true},
-    "transform":"forge:default-block"
+    "transform":"c:default-block"
   },
   "variants": {
     "normal": [{}],

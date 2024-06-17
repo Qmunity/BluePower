@@ -1,59 +1,36 @@
-/*
- * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
- * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
- * with Blue Power. If not, see <http://www.gnu.org/licenses/>
- */
 package com.bluepowermod.network.message;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
-import net.minecraft.server.level.ServerPlayer;
+import com.bluepowermod.network.IBPMessage;
+import com.bluepowermod.reference.Refs;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.util.function.Supplier;
+public record MessageGuiUpdate (int messageId, int value) implements IBPMessage {
+    public static final CustomPacketPayload.Type<MessageGuiUpdate> TYPE = new CustomPacketPayload.Type<>(new ResourceLocation(Refs.MODID, "message_gui_update"));
+    public static final StreamCodec<ByteBuf, MessageGuiUpdate> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT, MessageGuiUpdate::messageId,
+            ByteBufCodecs.INT, MessageGuiUpdate::value,
+            MessageGuiUpdate::new
+    );
 
-/**
- *
- * @author MineMaarten
- */
-
-public class MessageGuiUpdate{
-
-    private int messageId;
-    private int value;
-
-    public MessageGuiUpdate(int messageId, int value) {
-        this.messageId = messageId;
-        this.value = value;
+    @Override
+    public void handle(IPayloadContext context) {
+        Player player = context.player();
+        AbstractContainerMenu container = player.containerMenu;
+        if (container instanceof IGuiButtonSensitive) {
+            ((IGuiButtonSensitive) container).onButtonPress(player, messageId, value);
+        }
     }
 
-    public static MessageGuiUpdate decode(FriendlyByteBuf buffer){
-        int id = buffer.readByte();
-        int value = buffer.readByte();
-        return new MessageGuiUpdate(id, value);
-    }
-
-    public static void encode(MessageGuiUpdate message, FriendlyByteBuf buffer) {
-        buffer.writeByte(message.messageId);
-        buffer.writeByte(message.value);
-    }
-
-    public static void handle(MessageGuiUpdate msg, Supplier<NetworkEvent.Context> contextSupplier) {
-       NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player == null) {
-                return;
-            }
-
-            AbstractContainerMenu container = player.containerMenu;
-            if (container instanceof IGuiButtonSensitive) {
-                ((IGuiButtonSensitive) container).onButtonPress(player, msg.messageId, msg.value);
-            }
-        });
-        contextSupplier.get().setPacketHandled(true);
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

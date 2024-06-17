@@ -12,7 +12,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.Capability;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 
 import javax.annotation.Nullable;
 
@@ -29,7 +29,7 @@ public interface IBPPartBlock {
      * @param capability
      * @param side
      */
-    default Boolean blockCapability (BlockState state, Capability capability, @Nullable Direction side){
+    default Boolean blockCapability (BlockState state, BlockCapability capability, @Nullable Direction side){
         return false;
     }
 

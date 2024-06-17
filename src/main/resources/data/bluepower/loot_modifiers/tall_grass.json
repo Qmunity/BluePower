@@ -1,0 +1,8 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [{
+    "condition": "neoforge:loot_table_id",
+    "loot_table_id": "minecraft:tall_grass"
+  }],
+  "table": "bluepower:tall_grass"
+}

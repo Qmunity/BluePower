@@ -120,7 +120,7 @@ public class ContainerDeployer extends AbstractContainerMenu {
                 slot = (Slot) slots.get(k);
                 itemstack1 = slot.getItem();
                 
-                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.hasCraftingRemainingItem() || par1ItemStack.getDamageValue() == itemstack1.getDamageValue()) && ItemStack.isSameItemSameTags(par1ItemStack, itemstack1) && slot.mayPlace(par1ItemStack)) {
+                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.hasCraftingRemainingItem() || par1ItemStack.getDamageValue() == itemstack1.getDamageValue()) && ItemStack.isSameItemSameComponents(par1ItemStack, itemstack1) && slot.mayPlace(par1ItemStack)) {
                     int l = itemstack1.getCount() + par1ItemStack.getCount();
                     
                     if (l <= par1ItemStack.getMaxStackSize()) {

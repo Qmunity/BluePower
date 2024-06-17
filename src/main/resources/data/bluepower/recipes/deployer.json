@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:deployer"
+    "id": "bluepower:deployer"
   },
   "pattern": [
     "SCS",
@@ -16,7 +16,7 @@
       "item": "minecraft:redstone"
     },
     "C": {
-      "tag": "forge:chests/wooden"
+      "tag": "c:chests/wooden"
     },
     "P": {
       "item": "minecraft:piston"

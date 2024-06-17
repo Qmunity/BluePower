@@ -3,11 +3,11 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.helper.MathHelper;
-import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileWire;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraftforge.common.capabilities.Capability;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 
 import javax.annotation.Nullable;
 
@@ -35,7 +35,7 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
     }
 
     @Override
-    protected Capability<?> getCapability() {
+    protected BlockCapability<?, Direction> getCapability() {
         return CapabilityRedstoneDevice.UNINSULATED_CAPABILITY;
     }
 
@@ -53,8 +53,8 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
 
     @Override
     public int getSignal(BlockState pState, BlockGetter pLevel, BlockPos pPos, Direction pDirection) {
-
-        return MathHelper.map(((TileWire)pLevel.getBlockEntity(pPos)).getOutputtingRedstone() & 0xFF, 0, 255, 0, 15);
+        IRedstoneDevice cap = ((Level)pLevel).getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, pPos, pDirection.getOpposite());
+        return cap != null ? MathHelper.map(cap.getRedstonePower(pDirection) & 0xFF, 0, 255, 0, 15) : 0;
     }
 
     @Override
@@ -62,14 +62,6 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
         if(state.getBlock().canConnectRedstone(state, world, pos, direction))
             return true;
         return super.canConnect(world, pos, state, tileEntity, direction);
-    }
-
-    @Override
-    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
-        super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
-        int redstoneValue = world.getBestNeighborSignal(pos);
-        world.getBlockEntity(pos).getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY).orElse(null).setRedstonePower(null, (byte)redstoneValue);
-        world.setBlock(pos, state.setValue(POWERED, redstoneValue > 0), 2);
     }
 
     @Override

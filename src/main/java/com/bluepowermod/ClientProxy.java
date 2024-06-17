@@ -24,27 +24,19 @@ import com.bluepowermod.compat.CompatibilityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientProxy extends CommonProxy {
 
     @Override
-    public void setup(FMLCommonSetupEvent event) {
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> BPMenuType::registerScreenFactories);
-    }
-
-    @Override
-    public void preInitRenderers() {
-        MinecraftForge.EVENT_BUS.register(new RenderDebugScreen());
+    public void preInitRenderers(IEventBus eventBus) {
         CompatibilityUtils.registerRenders();
 
-        FMLJavaModLoadingContext.get().getModEventBus().register(new Renderers());
+        eventBus.register(new Renderers());
     }
 
 

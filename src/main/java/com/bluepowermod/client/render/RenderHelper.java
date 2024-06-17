@@ -15,8 +15,8 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
@@ -410,28 +410,28 @@ public class RenderHelper {
                     .uv(minU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
+                    .normal(entry, 0.0F, 1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .uv(minU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
+                    .normal(entry, 0.0F, 1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .uv(maxU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
+                    .normal(entry, 0.0F, 1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .uv(maxU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
+                    .normal(entry, 0.0F, 1.0F, 0.0F)
                     .endVertex();
         }
 
@@ -442,28 +442,28 @@ public class RenderHelper {
                     .uv(minU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
+                    .normal(entry, 0.0F, -1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .uv(minU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
+                    .normal(entry, 0.0F, -1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .uv(maxU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
+                    .normal(entry, 0.0F, -1.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .uv(maxU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, -1.0F, 0.0F)
+                    .normal(entry, 0.0F, -1.0F, 0.0F)
                     .endVertex();
         }
 
@@ -474,28 +474,28 @@ public class RenderHelper {
                     .uv(minU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
+                    .normal(entry, -1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .uv(minU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
+                    .normal(entry, -1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .uv(maxU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
+                    .normal(entry, -1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .uv(maxU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, -1.0F, 0.0F, 0.0F)
+                    .normal(entry, -1.0F, 0.0F, 0.0F)
                     .endVertex();
         }
 
@@ -506,28 +506,28 @@ public class RenderHelper {
                     .uv(minU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
+                    .normal(entry, 1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .uv(minU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
+                    .normal(entry, 1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .uv(maxU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
+                    .normal(entry, 1.0F, 0.0F, 0.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .uv(maxU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 1.0F, 0.0F, 0.0F)
+                    .normal(entry, 1.0F, 0.0F, 0.0F)
                     .endVertex();
         }
 
@@ -538,28 +538,28 @@ public class RenderHelper {
                     .uv(minU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
+                    .normal(entry, 0.0F, 0.0F, -1.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .uv(minU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
+                    .normal(entry, 0.0F, 0.0F, -1.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .uv(maxU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
+                    .normal(entry, 0.0F, 0.0F, -1.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.minZ)
                     .color(r,g,b,a)
                     .uv(maxU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 0.0F, -1.0F)
+                    .normal(entry, 0.0F, 0.0F, -1.0F)
                     .endVertex();
         }
 
@@ -570,28 +570,28 @@ public class RenderHelper {
                     .uv(minU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
+                    .normal(entry, 0.0F, 0.0F, 1.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.minY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .uv(minU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
+                    .normal(entry, 0.0F, 0.0F, 1.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.maxX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .uv(maxU, minV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
+                    .normal(entry, 0.0F, 0.0F, 1.0F)
                     .endVertex();
             vertexBuilder.vertex(positionMatrix, (float) vector.minX, (float) vector.maxY, (float) vector.maxZ)
                     .color(r,g,b,a)
                     .uv(maxU, maxV)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(light)
-                    .normal(normalMatrix, 0.0F, 0.0F, 1.0F)
+                    .normal(entry, 0.0F, 0.0F, 1.0F)
                     .endVertex();
         }
 

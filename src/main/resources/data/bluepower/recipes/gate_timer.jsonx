@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:timer"
+    "id": "bluepower:timer"
   },
   "pattern": [
     "TWT",

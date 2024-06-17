@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:tungsten_ingot"
+    "id": "bluepower:tungsten_ingot"
   },
   "pattern": [
     "###",
@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "tag": "forge:nuggets/tungsten"
+      "tag": "c:nuggets/tungsten"
     }
   }
 }

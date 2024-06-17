@@ -17,15 +17,15 @@
 
 package com.bluepowermod.block.worldgen;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import java.util.Collections;
+
 import java.util.List;
 
 /**
@@ -37,15 +37,11 @@ public class BlockBasalt extends BlockStoneOre {
 
     @Deprecated
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-        ResourceLocation resourcelocation = this.getLootTable();
-        if (resourcelocation == LootTable.EMPTY.getLootTableId()) {
-            return Collections.emptyList();
-        } else {
-            LootParams lootParams = builder.withParameter(LootContextParams.BLOCK_STATE, state).create(LootContextParamSets.BLOCK);
-            ServerLevel serverworld = lootParams.getLevel();
-            LootTable loottable = serverworld.getServer().getLootData().getLootTable(resourcelocation);
-            return loottable.getRandomItems(lootParams);
-        }
+        ResourceKey<LootTable> resourcekey = this.getLootTable();
+        LootParams lootParams = builder.withParameter(LootContextParams.BLOCK_STATE, state).create(LootContextParamSets.BLOCK);
+        ServerLevel serverworld = lootParams.getLevel();
+        LootTable loottable = serverworld.getServer().reloadableRegistries().getLootTable(resourcekey);
+        return loottable.getRandomItems(lootParams);
     }
 
 }

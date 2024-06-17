@@ -16,8 +16,8 @@ import net.minecraft.world.Container;
 import com.bluepowermod.ClientProxy;
 
 import net.minecraft.world.SimpleContainer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * @author MineMaarten

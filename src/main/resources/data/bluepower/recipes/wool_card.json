@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:wool_card"
+    "id": "bluepower:wool_card"
   },
   "pattern": [
     "f",
@@ -13,7 +13,7 @@
       "tag": "minecraft:planks"
     },
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "f": {
       "item": "bluepower:iron_wire"

@@ -26,7 +26,9 @@ import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -68,22 +70,16 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
         this.outputInventory = ItemStack.EMPTY;
     }
 
-    /*************** BASIC TE FUNCTIONS **************/
-
     /**
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(CompoundTag tCompound) {
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tCompound, provider);
 
-        super.load(tCompound);
-
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.of(tc));
-        }
-        fuelInventory = ItemStack.of(tCompound.getCompound("fuelInventory"));
-        outputInventory = ItemStack.of(tCompound.getCompound("outputInventory"));
+        ContainerHelper.loadAllItems(tCompound.getCompound("inventory"), inventory, provider);
+        fuelInventory = ItemStack.parseOptional(provider,tCompound.getCompound("fuelInventory"));
+        outputInventory = ItemStack.parseOptional(provider,tCompound.getCompound("outputInventory"));
 
     }
 
@@ -91,25 +87,21 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+        super.saveAdditional(tCompound, provider);
 
-        super.saveAdditional(tCompound);
+        CompoundTag tc = new CompoundTag();
+        ContainerHelper.saveAllItems(tc, inventory, provider);
+        tCompound.put("inventory", tc);
 
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = new CompoundTag();
-            inventory.get(i).save(tc);
-            tCompound.put("inventory" + i, tc);
-        }
         if (fuelInventory != null) {
-            CompoundTag fuelCompound = new CompoundTag();
-            fuelInventory.save(fuelCompound);
-            tCompound.put("fuelInventory", fuelCompound);
+            if(!fuelInventory.isEmpty())
+                tCompound.put("fuelInventory", fuelInventory.saveOptional(provider));
         }
 
         if (outputInventory != null) {
-            CompoundTag outputCompound = new CompoundTag();
-            outputInventory.save(outputCompound);
-            tCompound.put("outputInventory", outputCompound);
+            if(!outputInventory.isEmpty())
+                tCompound.put("outputInventory", outputInventory.saveOptional(provider));
         }
 
     }
@@ -148,10 +140,10 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
             }
             if (tileAlloyFurnace.updatingRecipe) {
                 if(level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).isPresent()) {
-                    tileAlloyFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).get();
+                    tileAlloyFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).get().value();
                     //Check output slot is empty and less than a stack of the same item.
                     if(!(tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem(level.registryAccess()).getItem()
-                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
+                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
                             && !tileAlloyFurnace.outputInventory.isEmpty()){
                         tileAlloyFurnace.currentRecipe = null;
                     }
@@ -180,11 +172,11 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
                 if (++tileAlloyFurnace.currentProcessTime >= 200) {
                     tileAlloyFurnace.currentProcessTime = 0;
                     if (!tileAlloyFurnace.outputInventory.isEmpty()) {
-                        tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).getCount());
+                        tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).getCount());
                     } else {
-                        tileAlloyFurnace.outputInventory = tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.getRecipeManager()).copy();
+                        tileAlloyFurnace.outputInventory = tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).copy();
                     }
-                    tileAlloyFurnace.currentRecipe.useItems(tileAlloyFurnace.inventory, level.getRecipeManager());
+                    tileAlloyFurnace.currentRecipe.useItems(tileAlloyFurnace.inventory, level.registryAccess());
                     tileAlloyFurnace.updatingRecipe = true;
                 }
             } else {

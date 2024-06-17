@@ -6,10 +6,10 @@
       "count": 4
     },
     {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     }
   ],
   "result": {
-    "item": "bluepower:red_alloy_ingot"
+    "id": "bluepower:red_alloy_ingot"
   }
 }

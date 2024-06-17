@@ -20,6 +20,7 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.BPMenuType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -31,7 +32,8 @@ import com.bluepowermod.container.slot.SlotSeedBag;
 import com.bluepowermod.item.ItemSeedBag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraft.world.item.component.CustomData;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class ContainerSeedBag extends AbstractContainerMenu {
 
@@ -51,7 +53,7 @@ public class ContainerSeedBag extends AbstractContainerMenu {
         }
 
         //Get Items from the NBT Handler
-        if (seedBag.hasTag()) seedBagInvHandler.deserializeNBT(seedBag.getTag().getCompound("inv"));
+        if (seedBag.has(DataComponents.CUSTOM_DATA)) seedBagInvHandler.deserializeNBT(playerInventory.player.level().registryAccess(), seedBag.get(DataComponents.CUSTOM_DATA).copyTag().getCompound("inv"));
         
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -85,11 +87,9 @@ public class ContainerSeedBag extends AbstractContainerMenu {
     public void removed(Player playerIn) {
         //Update items in the NBT
         ItemStack seedBag = playerIn.getItemInHand(activeHand);
-        if (!seedBag.hasTag())
-            seedBag.setTag(new CompoundTag());
-        if (seedBag.getTag() != null) {
-            seedBag.getTag().put("inv", seedBagInvHandler.serializeNBT());
-        }
+        CompoundTag tag = new CompoundTag();
+        tag.put("inv", seedBagInvHandler.serializeNBT(playerIn.level().registryAccess()));
+        seedBag.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
         super.removed(playerIn);
     }
 

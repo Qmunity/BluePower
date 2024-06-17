@@ -18,24 +18,20 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.IScrewdriver;
-import com.bluepowermod.reference.Refs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 
-import java.util.Random;
-
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
@@ -64,15 +60,17 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
             return false;
 
         if (!simulated) {
-            if (player instanceof ServerPlayer && stack.hurt(damage, RandomSource.create(), (ServerPlayer) player)) {
-                player.broadcastBreakEvent(InteractionHand.MAIN_HAND);
-                stack.setCount(stack.getCount() - 1);
-                player.awardStat(Stats.ITEM_BROKEN.get(stack.getItem()), 1);
+            if (player instanceof ServerPlayer) {
+                stack.hurtAndBreak(damage, RandomSource.create(), (ServerPlayer) player, () -> {
+                    player.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+                    stack.setCount(stack.getCount() - 1);
+                    player.awardStat(Stats.ITEM_BROKEN.get(stack.getItem()), 1);
 
-                if (stack.getCount() < 0)
-                    stack.setCount(0);
+                    if (stack.getCount() < 0)
+                        stack.setCount(0);
 
-                stack.setDamageValue(0);
+                    stack.setDamageValue(0);
+                });
             }
         }
 

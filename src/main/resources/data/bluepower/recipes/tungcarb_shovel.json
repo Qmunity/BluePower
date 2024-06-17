@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:tungcarb_shovel"
+    "id": "bluepower:tungcarb_shovel"
   },
   "pattern": [
     "G",
@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "G": {
       "item": "bluepower:tungsten_carbide"

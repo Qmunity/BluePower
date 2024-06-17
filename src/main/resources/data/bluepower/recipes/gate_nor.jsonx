@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:nor_gate"
+    "id": "bluepower:nor_gate"
   },
   "pattern": [
     "TAT",

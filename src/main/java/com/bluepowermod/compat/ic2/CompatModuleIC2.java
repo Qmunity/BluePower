@@ -15,11 +15,11 @@ import ic2.api.item.IC2Items;
 import ic2.api.recipe.Recipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.fml.common.event.FMLInitializationEvent;
+import net.neoforged.fml.common.event.FMLPostInitializationEvent;
+import net.neoforged.fml.common.event.FMLPreInitializationEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class CompatModuleIC2 extends CompatModule {
 

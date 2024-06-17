@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:gate_repeater"
+    "id": "bluepower:gate_repeater"
   },
   "pattern": [
     "TCW",

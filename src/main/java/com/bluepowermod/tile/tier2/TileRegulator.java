@@ -18,6 +18,7 @@ import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -230,9 +231,9 @@ public class TileRegulator extends TileMachineBase implements WorldlyContainer, 
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
 
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
 
         tag.putByte("filterColor", (byte) color.ordinal());
         tag.putByte("mode", (byte) mode);
@@ -242,16 +243,16 @@ public class TileRegulator extends TileMachineBase implements WorldlyContainer, 
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
                 CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
-                inventory.get(currentIndex).save(tagCompound);
+                inventory.get(currentIndex).save(provider, tagCompound);
                 tagList.add(tagCompound);
         }
         tag.put("Items", tagList);
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
 
-        super.load(tag);
+        super.loadAdditional(tag, provider);
 
         color = TubeColor.values()[tag.getByte("filterColor")];
         mode = tag.getByte("mode");
@@ -263,7 +264,7 @@ public class TileRegulator extends TileMachineBase implements WorldlyContainer, 
             CompoundTag tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, ItemStack.of(tagCompound));
+                inventory.set(slot, ItemStack.parseOptional(provider, tagCompound));
             }
         }
     }

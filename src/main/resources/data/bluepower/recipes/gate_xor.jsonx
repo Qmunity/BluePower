@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:xor_gate"
+    "id": "bluepower:xor_gate"
   },
   "pattern": [
     "AWA",

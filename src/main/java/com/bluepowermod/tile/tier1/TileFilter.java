@@ -15,7 +15,9 @@ import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -101,13 +103,9 @@ public class TileFilter extends TileTransposer implements WorldlyContainer, IGui
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(CompoundTag tCompound) {
-        super.load(tCompound);
-
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.of(tc));
-        }
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tCompound, provider);
+        ContainerHelper.loadAllItems(tCompound.getCompound("inventory"), inventory, provider);
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
         fuzzySetting = tCompound.getByte("fuzzySetting");
     }
@@ -116,16 +114,11 @@ public class TileFilter extends TileTransposer implements WorldlyContainer, IGui
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
-
-        super.saveAdditional(tCompound);
-
-        for (int i = 0; i < 9; i++) {
-                CompoundTag tc = new CompoundTag();
-                inventory.get(i).save(tc);
-                tCompound.put("inventory" + i, tc);
-        }
-
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+        super.saveAdditional(tCompound, provider);
+        CompoundTag tc = new CompoundTag();
+        ContainerHelper.saveAllItems(tc, inventory, provider);
+        tCompound.put("inventory", tc);
         tCompound.putByte("filterColor", (byte) filterColor.ordinal());
         tCompound.putByte("fuzzySetting", (byte) fuzzySetting);
     }

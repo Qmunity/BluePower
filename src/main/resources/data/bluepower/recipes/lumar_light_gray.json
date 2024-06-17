@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:lumar_light_gray",
+    "id": "bluepower:lumar_light_gray",
     "count": 2
   },
   "pattern": [
@@ -16,7 +16,7 @@
       "item": "minecraft:glowstone_dust"
     },
     "D": {
-      "tag": "forge:dyes/light_gray"
+      "tag": "c:dyes/light_gray"
     }
   }
 }

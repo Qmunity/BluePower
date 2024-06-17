@@ -7,16 +7,11 @@
  */
 package com.bluepowermod.helper;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.Registry;
-import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.tags.TagManager;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.tags.ItemTags;
 
 import com.bluepowermod.util.ItemStackUtils;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.item.component.CustomData;
 
 public class ItemStackHelper {
 
@@ -27,8 +22,8 @@ public class ItemStackHelper {
 
         return itemStack1.isEmpty() && itemStack2.isEmpty() || !(itemStack1.isEmpty() || itemStack2.isEmpty())
                 && itemStack1.getItem() == itemStack2.getItem() && itemStack1.getDamageValue() == itemStack2.getDamageValue()
-                && !(itemStack1.getTag() == null && itemStack2.getTag() != null)
-                && (itemStack1.getTag() == null || itemStack1.getTag().equals(itemStack2.getTag()));
+                && !(itemStack1.has(DataComponents.CUSTOM_DATA) && !itemStack2.has(DataComponents.CUSTOM_DATA))
+                && (itemStack1.has(DataComponents.CUSTOM_DATA) || itemStack1.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).equals(itemStack2.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)));
     }
 
     /**
@@ -53,7 +48,7 @@ public class ItemStackHelper {
         } else if (mode == 1) {
             return ItemStackUtils.isItemFuzzyEqual(stack1, stack2);
         } else {
-            return stack1.getTags().anyMatch(s1 -> stack2.getTags().anyMatch(s2 -> s2 == s1)) && ItemStack.isSameItemSameTags(stack1, stack2);
+            return stack1.getTags().anyMatch(s1 -> stack2.getTags().anyMatch(s2 -> s2 == s1)) && ItemStack.isSameItemSameComponents(stack1, stack2);
         }
     }
 
@@ -61,7 +56,7 @@ public class ItemStackHelper {
         return stack1 == ItemStack.EMPTY || stack2 == ItemStack.EMPTY ||
                 (stack1.getItem() == stack2.getItem() &&
                         (stack2.getDamageValue() == stack1.getDamageValue()) &&
-                        ItemStack.isSameItemSameTags(stack2, stack1)) &&
+                        ItemStack.isSameItemSameComponents(stack2, stack1)) &&
                         stack1.isStackable();
     }
 

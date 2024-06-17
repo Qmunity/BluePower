@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
@@ -32,6 +33,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -43,38 +46,38 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.event.RenderHighlightEvent;
-import net.minecraftforge.event.AnvilUpdateEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.*;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.ICancellableEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.RenderHighlightEvent;
+import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.AnvilUpdateEvent;
+import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.*;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.joml.Matrix4f;
 
 public class BPEventHandler {
 
-    @SubscribeEvent
-    public void tick(TickEvent.LevelTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            if (event.level.getGameTime() % 200 == 0) {
+   // @SubscribeEvent
+    //public void tick(LevelTickEvent.Post event) {
+           // if (event.getLevel().getGameTime() % 200 == 0) {
                 //double tickTime = MathHelper.mean(event.world.getServer().tickTimeArray) * 1.0E-6D;
                 //In case world are going to get their own thread: MinecraftServer.getServer().worldTickTimes.get(event.world.provider.dimensionId)
                 //BPNetworkHandler.wrapper.send(PacketDistributor.DIMENSION.setValue(event.world.getDimension().getType()), new MessageServerTickTime(tickTime));
-            }
-        }
-    }
+            //}
+   // }
 
     @SubscribeEvent
     public void onAnvilEvent(AnvilUpdateEvent event) {
 
         if (!event.getLeft().isEmpty() && event.getLeft().getItem() == BPItems.screwdriver.get()) {
             if (!event.getRight().isEmpty() && event.getRight().getItem() == Items.ENCHANTED_BOOK) {
-                if (EnchantmentHelper.getEnchantments(event.getRight()).get(Enchantments.SILK_TOUCH) != null) {
+                if (EnchantmentHelper.getEnchantmentsForCrafting(event.getRight()).getLevel(Enchantments.SILK_TOUCH) > 0) {
                     event.setOutput(new ItemStack(BPItems.silky_screwdriver.get(), 1));
                     event.setCost(20);
                 }
@@ -94,19 +97,21 @@ public class BPEventHandler {
     }
 
     @SubscribeEvent
-    public void itemPickUp(EntityItemPickupEvent event) {
+    public void itemPickUp(ItemEntityPickupEvent.Pre event) {
 
-        Player player = event.getEntity();
-        ItemStack pickUp = event.getItem().getItem();
+        Player player = event.getPlayer();
+        ItemStack pickUp = event.getItemEntity().getItem();
         if (!(player.containerMenu instanceof ContainerSeedBag)) {
             for (ItemStack is : player.getInventory().items) {
                 if (!is.isEmpty() && is.getItem() instanceof ItemSeedBag) {
-                    ItemStack seedType = ItemSeedBag.getSeedType(is);
+                    ItemStack seedType = ItemSeedBag.getSeedType(event.getPlayer().level().registryAccess(), is);
                     if (!seedType.isEmpty() && ItemStack.isSameItem(seedType, pickUp)) {
                         ItemStackHandler seedBagInvHandler = new ItemStackHandler(9);
 
+                        CustomData data = is.getComponents().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+
                         //Get Items from the NBT Handler
-                        if (is.hasTag()) seedBagInvHandler.deserializeNBT(is.getTag().getCompound("inv"));
+                        if (!data.isEmpty()) seedBagInvHandler.deserializeNBT(event.getPlayer().level().registryAccess(), data.copyTag().getCompound("inv"));
 
                         //Attempt to insert items
                         for(int j = 0; j < 9 && !pickUp.isEmpty(); ++j) {
@@ -114,19 +119,17 @@ public class BPEventHandler {
                         }
 
                         //Update items in the NBT
-                        if (!is.hasTag())
-                            is.setTag(new CompoundTag());
-                        if (is.getTag() != null) {
-                            is.getTag().put("inv", seedBagInvHandler.serializeNBT());
-                        }
+                        CompoundTag tag = new CompoundTag();
+                        tag.put("inv", seedBagInvHandler.serializeNBT(event.getPlayer().level().registryAccess()));
+                        is.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
 
                         //Pickup Leftovers
                         if (pickUp.isEmpty()) {
-                            event.setResult(Event.Result.ALLOW);
-                            event.getItem().remove(Entity.RemovalReason.DISCARDED);
+                            event.setCanPickup(TriState.TRUE);
+                            event.getItemEntity().remove(Entity.RemovalReason.DISCARDED);
                             return;
                         } else {
-                            event.getItem().setItem(pickUp);
+                            event.getItemEntity().setItem(pickUp);
                         }
                     }
                 }
@@ -146,9 +149,9 @@ public class BPEventHandler {
             if (entitySource.getEntity() instanceof Player killer) {
 
                 if (!killer.getInventory().getSelected().isEmpty()) {
-                    if (EnchantmentHelper.getEnchantments(killer.getInventory().getSelected()).containsKey(BPEnchantments.disjunction)) {
+                    if (EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction.get(), killer) > 0 ) {
                         if (event.getEntity() instanceof EnderMan || event.getEntity() instanceof EnderDragon) {
-                            int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.disjunction.get(), killer.getInventory().getSelected());
+                            int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction.get(), killer);
                             isAttacking = true;
                             event.getEntity().hurt(entitySource, event.getAmount() * (level * 0.5F + 1));
                             isAttacking = false;
@@ -167,8 +170,8 @@ public class BPEventHandler {
             Player killer = (Player) entitySource.getEntity();
 
             if (!killer.getInventory().getSelected().isEmpty()) {
-                if (EnchantmentHelper.getEnchantments(killer.getInventory().getSelected()).containsKey(BPEnchantments.vorpal)) {
-                    int level = EnchantmentHelper.getItemEnchantmentLevel(BPEnchantments.vorpal.get(), killer.getInventory().getSelected());
+                if (EnchantmentHelper.getEnchantmentLevel(BPEnchantments.vorpal.get(), killer) > 0) {
+                    int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.vorpal.get(), killer);
 
                     if (level == 1) {
                         if (killer.level().random.nextInt(6) == 1) {
@@ -192,8 +195,7 @@ public class BPEventHandler {
 
         if (event.getEntity() instanceof Player) {
             ItemStack drop = new ItemStack(Items.PLAYER_HEAD, 1);
-            drop.setTag(new CompoundTag());
-            drop.getTag().putString("SkullOwner", event.getEntity().getDisplayName().getString());
+            drop.set(DataComponents.PROFILE, new ResolvableProfile(((Player) event.getEntity()).getGameProfile()));
             event.getEntity().spawnAtLocation(drop, 0.0F);
         }
 
@@ -216,8 +218,8 @@ public class BPEventHandler {
     @OnlyIn(Dist.CLIENT)
     public void onItemTooltip(ItemTooltipEvent event) {
 
-        if (event.getItemStack().hasTag() && event.getItemStack().getTag().contains("tileData")
-                && !event.getItemStack().getTag().getBoolean("hideSilkyTooltip")) {
+        if (event.getItemStack().getComponents().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).contains("tileData")
+                && !event.getItemStack().getComponents().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("hideSilkyTooltip")) {
             event.getToolTip().add(Component.literal("gui.tooltip.hasSilkyData"));
         }
 
@@ -231,19 +233,19 @@ public class BPEventHandler {
         }
     }
 
-    @SubscribeEvent
-    public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
+    //@SubscribeEvent
+    //public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
 
-        Item item = event.getCrafting().getItem();
-        if (item == Item.byBlock(Blocks.AIR))
-            return;
-    }
+        //Item item = event.getCrafting().getItem();
+        //if (item == Item.byBlock(Blocks.AIR))
+            //return;
+   // }
 
     @SubscribeEvent
     public void onBonemealEvent(BonemealEvent event) {
 
         if (!event.getLevel().isClientSide) {
-            if (event.getBlock().getBlock() instanceof GrassBlock) {
+            if (event.getState().getBlock() instanceof GrassBlock) {
                 for (int x = event.getPos().getX() - 2; x < event.getPos().getX() + 3; x++) {
                     for (int z = event.getPos().getZ() - 2; z < event.getPos().getZ() + 3; z++) {
                         if (event.getLevel().isEmptyBlock(new BlockPos(x, event.getPos().getY() + 1, z))) {
@@ -261,7 +263,7 @@ public class BPEventHandler {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void blockHighlightEvent(RenderHighlightEvent event) {
+    public void blockHighlightEvent(RenderHighlightEvent.Block event) {
         Player player = Minecraft.getInstance().player;
         if (player == null) {
             return;
@@ -285,7 +287,7 @@ public class BPEventHandler {
                     //    builder.vertex(matrix4f, (float)(startX + d0), (float)(startY + d1), (float)(startZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
                     //    builder.vertex(matrix4f, (float)(endX + d0), (float)(endY + d1), (float)(endZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
                     //});
-                    event.setCanceled(true);
+                    ((ICancellableEvent)event).setCanceled(true);
                 }
             }
         }

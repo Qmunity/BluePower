@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:sapphire_block"
+    "id": "bluepower:sapphire_block"
   },
   "pattern": [
     "###",
@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "tag": "forge:gems/sapphire"
+      "tag": "c:gems/sapphire"
     }
   }
 }

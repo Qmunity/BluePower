@@ -10,13 +10,13 @@
       "item": "bluepower:battery"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "A": {
       "item": "bluepower:blue_alloy_ingot"
     }
   },
   "result": {
-    "item": "bluepower:battery_block"
+    "id": "bluepower:battery_block"
   }
 }

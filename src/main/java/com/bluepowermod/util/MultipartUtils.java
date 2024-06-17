@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
@@ -44,7 +45,7 @@ public class MultipartUtils {
         float f6 = f1 * f3;
         double d3 = 5.0D;
         if (entity instanceof ServerPlayer) {
-            d3 = ((ServerPlayer) entity).getAttribute(net.minecraftforge.common.ForgeMod.BLOCK_REACH.get()).getValue();
+            d3 = ((ServerPlayer) entity).blockInteractionRange();
         }
         Vec3 end = start.add(f5 * d3, f4 * d3, f6 * d3);
         return Pair.of(start, end);

@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:counter"
+    "id": "bluepower:counter"
   },
   "pattern": [
     "TWT",

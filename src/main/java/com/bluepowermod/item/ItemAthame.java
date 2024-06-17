@@ -41,15 +41,15 @@ import net.minecraft.world.item.Item.Properties;
 public class ItemAthame extends SwordItem {
     
     private float damageDealt;
-    private static Tier athameMaterial = new SilverItemTier(100, 6.0F, 2.0F, 0, 10);
+    private static Tier athameMaterial = new SilverItemTier(100, 6.0F, 2.0F,  10);
     
     public ItemAthame() {
-        super(athameMaterial, 1, -3, new Properties());
+        super(athameMaterial, new Properties().attributes(createAttributes(athameMaterial, 1, -3)));
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(Component.literal(MinecraftColor.PURPLE.getChatColor())
+    public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+        pTooltipComponents.add(Component.literal(MinecraftColor.PURPLE.getChatColor())
                 .append(Component.translatable("item." + Refs.MODID + "." + Refs.ATHAME_NAME + ".info")) );
     }
 

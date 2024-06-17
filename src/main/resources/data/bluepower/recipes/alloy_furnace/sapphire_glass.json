@@ -6,11 +6,11 @@
       "count": 4
     },
     {
-      "tag": "forge:gems/sapphire"
+      "tag": "c:gems/sapphire"
     }
   ],
   "result": {
-    "item": "bluepower:sapphire_glass",
+    "id": "bluepower:sapphire_glass",
     "count": 4
   }
 }

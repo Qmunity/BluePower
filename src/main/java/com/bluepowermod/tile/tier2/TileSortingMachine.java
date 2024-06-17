@@ -18,6 +18,7 @@ import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -350,9 +351,9 @@ public class TileSortingMachine extends TileMachineBase implements WorldlyContai
 
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
 
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
 
         tag.putByte("pullMode", (byte) pullMode.ordinal());
         tag.putByte("sortMode", (byte) sortMode.ordinal());
@@ -371,7 +372,7 @@ public class TileSortingMachine extends TileMachineBase implements WorldlyContai
             if (!inventory.get(currentIndex).isEmpty()) {
                 CompoundTag tagCompound = new CompoundTag();
                 tagCompound.putByte("Slot", (byte) currentIndex);
-                inventory.get(currentIndex).save(tagCompound);
+                inventory.get(currentIndex).save(provider, tagCompound);
                 tagList.add(tagCompound);
             }
         }
@@ -379,9 +380,9 @@ public class TileSortingMachine extends TileMachineBase implements WorldlyContai
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
 
-        super.load(tag);
+        super.loadAdditional(tag, provider);
 
         pullMode = PullMode.values()[tag.getByte("pullMode")];
         sortMode = SortMode.values()[tag.getByte("sortMode")];
@@ -401,7 +402,7 @@ public class TileSortingMachine extends TileMachineBase implements WorldlyContai
             CompoundTag tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, ItemStack.of(tagCompound));
+                inventory.set(slot, ItemStack.parseOptional(provider, tagCompound));
             }
         }
     }

@@ -8,13 +8,18 @@
 package com.bluepowermod.helper;
 
 import com.bluepowermod.BluePower;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.item.component.CustomData;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -29,18 +34,18 @@ public class ItemStackDatabase {
 
     public ItemStackDatabase() {
 
-        saveLocation = BluePower.proxy.getSavePath() + File.separator + DATABASE_FOLDER_NAME;
+        saveLocation = BluePower.proxy.get().getSavePath() + File.separator + DATABASE_FOLDER_NAME;
     }
 
-    public void saveItemStack(ItemStack stack) {
+    public void saveItemStack(HolderLookup.Provider provider, ItemStack stack) {
 
         new File(saveLocation).mkdirs();
         File targetRegistryName = new File(saveLocation + stack.getDisplayName() + FILE_EXTENSION);
 
         CompoundTag tag = new CompoundTag();
-        stack.save(tag);
+        stack.save(provider, tag);
 
-        ResourceLocation ui = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        ResourceLocation ui = BuiltInRegistries.ITEM.getKey(stack.getItem());
         tag.putString("owner", ui.getNamespace());
         tag.putString("name", ui.getPath());
 
@@ -78,7 +83,7 @@ public class ItemStackDatabase {
         }
     }
 
-    public List<ItemStack> loadItemStacks() {
+    public List<ItemStack> loadItemStacks(HolderLookup.Provider provider) {
 
         if (cache == null) {
             File targetRegistryName = new File(saveLocation);
@@ -95,18 +100,18 @@ public class ItemStackDatabase {
                         byte[] abyte = new byte[short1];
                         dos.read(abyte);
                         ByteArrayInputStream byteStream = new ByteArrayInputStream(abyte);
-                        CompoundTag tag = NbtIo.readCompressed(byteStream);
-                        ItemStack stack = ItemStack.of(tag);
+                        CompoundTag tag = NbtIo.readCompressed(byteStream, NbtAccounter.unlimitedHeap());
+                        ItemStack stack = ItemStack.parseOptional(provider, tag);
                         if (stack.getItem() != Items.AIR) {
                             stacks.add(stack);
                         } else {
                             BluePower.log.error("Couldn't retrieve an itemstack with item id: " + tag.getShort("id"));
-                            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tag.getString("owner"), tag.getString("name")));
-                            if (item != null && item != Items.AIR) {
+                            Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(tag.getString("owner"), tag.getString("name")));
+                            if (item != Items.AIR) {
                                 ItemStack backupStack = new ItemStack(item, stack.getCount());
                                 backupStack.setDamageValue(tag.getShort("Damage"));
-                                if (stack.hasTag()) {
-                                    backupStack.setTag(stack.getTag());
+                                if (stack.has(DataComponents.CUSTOM_DATA)) {
+                                    backupStack.set(DataComponents.CUSTOM_DATA, CustomData.of(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()));
                                 }
                                 stacks.add(backupStack);
                                 BluePower.log.info("Successfully retrieved stack via its name: " + tag.getString("owner") + ":"

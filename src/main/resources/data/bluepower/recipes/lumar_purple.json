@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:lumar_purple",
+    "id": "bluepower:lumar_purple",
     "count": 2
   },
   "pattern": [
@@ -16,7 +16,7 @@
       "item": "minecraft:glowstone_dust"
     },
     "D": {
-      "tag": "forge:dyes/purple"
+      "tag": "c:dyes/purple"
     }
   }
 }

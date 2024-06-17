@@ -26,7 +26,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -34,6 +33,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 
 public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleWaterloggedBlock {
 
@@ -85,7 +85,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
         super.setPlacedBy(worldIn, pos, state, livingEntity, itemStack);
         FACING.getPossibleValues().forEach(f -> {
             BlockPos neighborPos = pos.relative(f).relative(state.getValue(FACING).getOpposite());
-            worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
+            worldIn.getBlockState(neighborPos).handleNeighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
         });
     }
 
@@ -94,7 +94,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
         return world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude();
     }
 
-    protected Capability<?> getCapability(){
+    protected BlockCapability<?, Direction> getCapability(){
         return null;
     }
 
@@ -187,7 +187,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
         //If not placed on a solid block break off
         if (!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude()) {
             if(te instanceof TileBPMultipart){
-                ((TileBPMultipart)te).removeState(state);
+                ((TileBPMultipart)te).removeState(state, world.registryAccess());
             }else {
                 world.destroyBlock(pos, true);
             }
@@ -202,7 +202,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     //Returns true if a given blockState / tileEntity can connect.
     protected boolean canConnect(Level world, BlockPos pos, BlockState state, @Nullable BlockEntity tileEntity, Direction direction){
         if (tileEntity != null) {
-            return tileEntity.getCapability(getCapability(), direction).isPresent();
+            return world.getCapability(getCapability(), pos, direction) != null;
         }else{
             return false;
         }

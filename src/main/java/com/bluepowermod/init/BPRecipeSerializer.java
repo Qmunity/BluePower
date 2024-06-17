@@ -22,20 +22,20 @@ import com.bluepowermod.recipe.AlloyFurnaceRecyclingRecipe;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.recipe.MicroblockRecipe;
 import com.bluepowermod.reference.Refs;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.*;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
  * @author MoreThanHidden
  */
 public class BPRecipeSerializer {
 
-    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Refs.MODID);
-
-    public static RegistryObject<RecipeSerializer<IAlloyFurnaceRecipe>> ALLOYSMELTING = RECIPE_SERIALIZERS.register("alloy_smelting", AlloyFurnaceRegistry.Serializer::new);
-    public static RegistryObject<RecipeSerializer<AlloyFurnaceRecyclingRecipe>> ALLOY_RECYCLING = RECIPE_SERIALIZERS.register("alloy_recycling", AlloyFurnaceRecyclingRecipe.Serializer::new);
-    public static RegistryObject<RecipeSerializer<MicroblockRecipe>> MICROBLOCK = RECIPE_SERIALIZERS.register("micro_block", MicroblockRecipe.Serializer::new);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, Refs.MODID);
+    public static DeferredHolder<RecipeSerializer<?>, RecipeSerializer<IAlloyFurnaceRecipe>> ALLOYSMELTING = RECIPE_SERIALIZERS.register("alloy_smelting", AlloyFurnaceRegistry.Serializer::new);
+    public static DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AlloyFurnaceRecyclingRecipe>> ALLOY_RECYCLING = RECIPE_SERIALIZERS.register("alloy_recycling", AlloyFurnaceRecyclingRecipe.Serializer::new);
+    public static DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MicroblockRecipe>> MICROBLOCK = RECIPE_SERIALIZERS.register("micro_block", MicroblockRecipe.Serializer::new);
 
 }

@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:or_gate"
+    "id": "bluepower:or_gate"
   },
   "pattern": [
     "TCT",

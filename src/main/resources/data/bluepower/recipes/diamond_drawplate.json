@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:diamond_drawplate"
+    "id": "bluepower:diamond_drawplate"
   },
   "pattern": [
     "IDI",
@@ -10,10 +10,10 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "D": {
-      "tag": "forge:gems/diamond"
+      "tag": "c:gems/diamond"
     }
   }
 }

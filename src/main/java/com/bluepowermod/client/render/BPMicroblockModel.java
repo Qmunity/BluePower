@@ -13,34 +13,29 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBPMicroblock;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormatElement;
-import com.mojang.math.Transformation;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.block.model.ItemTransform;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
-import net.minecraft.world.phys.Vec2;
-import net.minecraftforge.client.extensions.IForgeVertexConsumer;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.pipeline.QuadBakingVertexConsumer;
-import net.minecraftforge.client.model.pipeline.RemappingVertexPipeline;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -52,18 +47,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static net.minecraftforge.common.util.TransformationHelper.quatFromXYZ;
-
 /**
  * Uses Microblock IModelData to create a model.
  * @author MoreThanHidden
  */
 public class BPMicroblockModel implements BakedModel {
-    private RegistryObject<Block> defBlock = BPBlocks.marble;
-    private RegistryObject<Block> defSize = BPBlocks.half_block;
+    private DeferredHolder<Block, Block> defBlock = BPBlocks.marble;
+    private DeferredHolder<Block, Block> defSize = BPBlocks.half_block;
     BPMicroblockModel(){}
 
-    private BPMicroblockModel(RegistryObject<Block> defBlock, RegistryObject<Block> defSize){
+    private BPMicroblockModel(DeferredHolder<Block, Block> defBlock, DeferredHolder<Block, Block> defSize){
         this.defBlock = defBlock;
         this.defSize = defSize;
     }
@@ -80,7 +73,7 @@ public class BPMicroblockModel implements BakedModel {
 
             if(state != null && state.getBlock() instanceof BlockBPMicroblock) {
                 sizeModel = Minecraft.getInstance().getModelManager().getModel(
-                        new ModelResourceLocation(ForgeRegistries.BLOCKS.getKey(state.getBlock()), "face=" + state.getValue(BlockBPMicroblock.FACING))
+                        new ModelResourceLocation(BuiltInRegistries.BLOCK.getKey(state.getBlock()), "face=" + state.getValue(BlockBPMicroblock.FACING))
                 );
             }
 
@@ -111,7 +104,7 @@ public class BPMicroblockModel implements BakedModel {
 
         if(state != null && state.getBlock() instanceof BlockBPMicroblock) {
             sizeModel = Minecraft.getInstance().getModelManager().getModel(
-                    new ModelResourceLocation(ForgeRegistries.BLOCKS.getKey(state.getBlock()), "face=" + state.getValue(BlockBPMicroblock.FACING))
+                    new ModelResourceLocation(BuiltInRegistries.BLOCK.getKey(state.getBlock()), "face=" + state.getValue(BlockBPMicroblock.FACING))
             );
         }
 
@@ -136,8 +129,8 @@ public class BPMicroblockModel implements BakedModel {
 
             @Override
             public VertexConsumer uv(float x, float y) {
-                float u = (x - sizeQuad.getSprite().getU0()) / (sizeQuad.getSprite().getU1() - sizeQuad.getSprite().getU0()) * 16;
-                float v = (y - sizeQuad.getSprite().getV0()) / (sizeQuad.getSprite().getV1() - sizeQuad.getSprite().getV0()) * 16;
+                float u = sizeQuad.getSprite().getUOffset(x);
+                float v = sizeQuad.getSprite().getVOffset(y);
                 return super.uv(sprite.getU(u), sprite.getV(v));
             }
 
@@ -220,12 +213,12 @@ public class BPMicroblockModel implements BakedModel {
         @Nullable
         @Override
         public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int par1){
-            CompoundTag nbt = stack.getTag();
+            CompoundTag nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             if(nbt != null && nbt.contains("block")){
-                RegistryObject<Block> block = RegistryObject.create(new ResourceLocation(nbt.getString("block")),ForgeRegistries.BLOCKS);
-                return new BPMicroblockModel(block, RegistryObject.create(ForgeRegistries.BLOCKS.getKey(Block.byItem(stack.getItem())), ForgeRegistries.BLOCKS));
+                DeferredHolder<Block, Block> block = DeferredHolder.create(new ResourceLocation("block"), new ResourceLocation(nbt.getString("block")));
+                return new BPMicroblockModel(block, DeferredHolder.create(new ResourceLocation("block"), BuiltInRegistries.BLOCK.getKey(Block.byItem(stack.getItem()))));
             }
-            return new BPMicroblockModel(RegistryObject.create(new ResourceLocation("minecraft:stone"), ForgeRegistries.BLOCKS), RegistryObject.create(ForgeRegistries.BLOCKS.getKey(Block.byItem(stack.getItem())), ForgeRegistries.BLOCKS));
+            return new BPMicroblockModel(BPBlocks.marble, DeferredHolder.create(new ResourceLocation("block"), BuiltInRegistries.BLOCK.getKey(Block.byItem(stack.getItem()))));
         }
     }
 

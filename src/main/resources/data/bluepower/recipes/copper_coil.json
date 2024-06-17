@@ -13,10 +13,10 @@
       "item": "minecraft:iron_bars"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     }
   },
   "result": {
-    "item": "bluepower:copper_coil"
+    "id": "bluepower:copper_coil"
   }
 }

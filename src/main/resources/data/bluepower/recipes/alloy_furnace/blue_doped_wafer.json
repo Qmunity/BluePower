@@ -2,7 +2,7 @@
   "type": "bluepower:alloy_smelting",
   "ingredients": [
     {
-      "tag": "forge:dusts/teslatite",
+      "tag": "c:dusts/teslatite",
       "count": 4
     },
     {
@@ -10,6 +10,6 @@
     }
   ],
   "result": {
-    "item": "bluepower:blue_doped_wafer"
+    "id": "bluepower:blue_doped_wafer"
   }
 }

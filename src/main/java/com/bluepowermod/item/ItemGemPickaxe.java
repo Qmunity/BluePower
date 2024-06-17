@@ -17,21 +17,17 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPCreativeTabs;
-
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemGemPickaxe extends PickaxeItem {
 
     public Item customCraftingMaterial;
 
     public ItemGemPickaxe(Tier itemTier, Item repairItem) {
-        super(itemTier, 3,-1.4F, new Properties());
+        super(itemTier, new Properties().attributes(createAttributes(itemTier, 3,-1.4F)));
         this.customCraftingMaterial = repairItem;
     }
 

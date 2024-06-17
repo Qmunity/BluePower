@@ -16,8 +16,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.InteractionResult;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class ItemPaintBrush extends ItemDamageableColorableOverlay {
     private final MinecraftColor color;
 

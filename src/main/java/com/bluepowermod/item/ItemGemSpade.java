@@ -17,22 +17,19 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPCreativeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class ItemGemSpade extends ShovelItem {
 
     public Item customCraftingMaterial;
-    protected boolean canRepair              = true;
+    protected boolean canRepair = true;
 
     public ItemGemSpade(Tier itemTier, Item repairItem) {
-        super(itemTier, 1,-1.4F, new Properties());
+        super(itemTier, new Properties().attributes(createAttributes(itemTier, 1,-1.4F)));
         this.customCraftingMaterial = repairItem;
     }
 

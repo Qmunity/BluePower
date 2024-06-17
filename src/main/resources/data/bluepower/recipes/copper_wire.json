@@ -1,13 +1,13 @@
 ﻿{
   "result": {
-    "item": "bluepower:copper_wire"
+    "id": "bluepower:copper_wire"
   },
   "ingredients": [
     {
       "item": "bluepower:diamond_drawplate"
     },
     {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     }
   ],
   "type": "minecraft:crafting_shapeless"

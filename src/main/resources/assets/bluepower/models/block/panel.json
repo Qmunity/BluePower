@@ -1,5 +1,5 @@
 {
-  "parent": "forge:block/default",
+  "parent": "neoforge:block/default",
   "textures": {
     "all": "bluepower:blocks/marble"
   },

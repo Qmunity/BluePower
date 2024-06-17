@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:screwdriver"
+    "id": "bluepower:screwdriver"
   },
   "pattern": [
     " #",
@@ -9,7 +9,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "S": {
       "item": "bluepower:screwdriver_handle"

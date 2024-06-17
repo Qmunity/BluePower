@@ -19,13 +19,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,8 +32,7 @@ import javax.annotation.Nullable;
 
 public class TileBattery extends TileMachineBase {
     private final int MAX_ENERGY = 3200;
-    private final BlutricityStorage storage = new BlutricityStorage(MAX_ENERGY, 100);
-    private LazyOptional<IPowerBase> blutricityCap;
+    public final BlutricityStorage storage = new BlutricityStorage(MAX_ENERGY, 100);
 
     public TileBattery(BlockPos pos, BlockState state) {
         super(BPBlockEntityType.BATTERY.get(), pos, state);
@@ -50,10 +45,10 @@ public class TileBattery extends TileMachineBase {
 
             //Balance power of attached blulectric blocks.
             for (Direction facing : Direction.values()) {
-                BlockEntity tile = level.getBlockEntity(pos.relative(facing));
-                if (tile != null)
-                    tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
-                            exStorage -> EnergyHelper.balancePower(exStorage, tileBattery.storage));
+                var exStorage = level.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, pos.relative(facing), facing.getOpposite());
+                if (exStorage != null) {
+                    EnergyHelper.balancePower(exStorage, tileBattery.storage);
+                }
             }
 
             double energy = tileBattery.storage.getEnergy();
@@ -63,26 +58,6 @@ public class TileBattery extends TileMachineBase {
                 tileBattery.markForRenderUpdate();
                 tileBattery.setChanged();
             }
-        }
-    }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
-            if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
-            return blutricityCap.cast();
-        }
-        return LazyOptional.empty();
-    }
-
-    @Override
-    public void invalidateCaps(){
-        super.invalidateCaps();
-        if( blutricityCap != null )
-        {
-            blutricityCap.invalidate();
-            blutricityCap = null;
         }
     }
 

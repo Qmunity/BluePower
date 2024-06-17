@@ -4,7 +4,7 @@
   "ingredient": {
     "item": "bluepower:tungsten_raw"
   },
-  "result": "bluepower:tungsten_ingot",
+  "result":  { "id": "bluepower:tungsten_ingot"},
   "experience": 1.0,
   "cookingtime": 200
 }

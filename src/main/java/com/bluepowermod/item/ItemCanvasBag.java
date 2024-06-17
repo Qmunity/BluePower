@@ -33,11 +33,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemCanvasBag extends ItemColorableOverlay implements MenuProvider{
     
@@ -48,7 +46,7 @@ public class ItemCanvasBag extends ItemColorableOverlay implements MenuProvider{
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
         if (!world.isClientSide) {
-            NetworkHooks.openScreen((ServerPlayer) player, this);
+            player.openMenu(this);
         }
         return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, player.getItemInHand(handIn));
     }

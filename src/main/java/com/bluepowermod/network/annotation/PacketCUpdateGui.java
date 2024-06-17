@@ -3,8 +3,8 @@ package com.bluepowermod.network.annotation;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.fluids.FluidStack;
 import com.bluepowermod.network.annotation.SyncedField.*;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.io.DataInput;
 import java.io.DataOutput;

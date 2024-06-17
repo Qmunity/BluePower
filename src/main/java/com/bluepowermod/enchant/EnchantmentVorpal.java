@@ -7,28 +7,24 @@
  */
 package com.bluepowermod.enchant;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.entity.EquipmentSlot;
-
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 
 public class EnchantmentVorpal extends Enchantment {
 
-    public EnchantmentVorpal(Rarity rarity) {
-        super(rarity, EnchantmentCategory.WEAPON, EquipmentSlot.values());
-    }
-
-    @Override
-    public int getMaxLevel() {
-
-        return 2;
-    }
-
-    @Override
-    public int getMinCost(int par1) {
-
-        return 10 + 20 * (par1 - 1);
+    public EnchantmentVorpal() {
+        //TODO: 1.20.6 - Confirm Values
+        super(definition(
+                        ItemTags.WEAPON_ENCHANTABLE, //EnchantmentTag
+                        2, //Weight
+                        2, //Max Level
+                        dynamicCost(10, 20), //Cost Min
+                        dynamicCost(30, 20),  //Cost Max
+                        20, //Cost Anvil
+                        EquipmentSlot.values()
+                )
+        );
     }
 
 }

@@ -10,8 +10,10 @@ package com.bluepowermod;
 import com.bluepowermod.api.BPApi.IBPApi;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -33,8 +35,8 @@ public class BluePowerAPI implements IBPApi {
             throw new IllegalStateException("This block doesn't have a tile entity?!");
         if (stack.isEmpty())
             throw new IllegalArgumentException("ItemStack is empty!");
-        if (stack.hasTag()) {
-            CompoundTag tag = stack.getTag();
+        if (stack.has(DataComponents.CUSTOM_DATA)) {
+            CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             if (tag.contains("tileData")) {
                 if (te instanceof IAdvancedSilkyRemovable) {
                     ((IAdvancedSilkyRemovable) te).readSilkyData(world, pos, tag.getCompound("tileData"));
@@ -45,7 +47,7 @@ public class BluePowerAPI implements IBPApi {
                     tileTag.putInt("x", pos.getX());
                     tileTag.putInt("y", pos.getY());
                     tileTag.putInt("z", pos.getZ());
-                    te.load(tileTag);
+                    te.loadCustomOnly(tileTag, world.registryAccess());
                 }
             }
         }

@@ -9,12 +9,12 @@ package com.bluepowermod.compat.mcmp;
 /*
 
 import com.bluepowermod.compat.CompatModule;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.common.MinecraftForge;
+import net.neoforged.fml.common.event.FMLInitializationEvent;
+import net.neoforged.fml.common.event.FMLPostInitializationEvent;
+import net.neoforged.fml.common.event.FMLPreInitializationEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class CompatModuleMCMP extends CompatModule {
 

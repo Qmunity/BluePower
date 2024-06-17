@@ -9,10 +9,8 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IBPColoredItem;
-import com.bluepowermod.reference.Refs;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.item.ItemStack;
-
-import net.minecraft.world.item.Item.Properties;
 
 /**
  * @author MineMaarten
@@ -32,6 +30,6 @@ public class ItemColorableOverlay extends ItemBase implements IBPColoredItem {
 
     @Override
     public int getColor(ItemStack itemStack, int renderPass) {
-        return renderPass == 0 ? -1 : color.getHex();
+        return renderPass == 0 ? -1 : FastColor.ARGB32.opaque(color.getHex());
     }
 }

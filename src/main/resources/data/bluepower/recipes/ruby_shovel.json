@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:ruby_shovel"
+    "id": "bluepower:ruby_shovel"
   },
   "pattern": [
     "G",
@@ -10,10 +10,10 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "G": {
-      "tag": "forge:gems/ruby"
+      "tag": "c:gems/ruby"
     }
   }
 }

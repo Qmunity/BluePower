@@ -20,8 +20,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,21 +33,10 @@ import javax.annotation.Nullable;
 public class TileSolarPanel extends TileMachineBase  {
 
 	private final int MAX_VOLTAGE = 100;
-	private final BlutricityStorage storage = new BlutricityStorage(MAX_VOLTAGE, MAX_VOLTAGE);
-	private LazyOptional<IPowerBase> blutricityCap;
+	public final BlutricityStorage storage = new BlutricityStorage(MAX_VOLTAGE, MAX_VOLTAGE);
 
 	public TileSolarPanel(BlockPos pos, BlockState state) {
 		super(BPBlockEntityType.SOLAR_PANEL.get(), pos, state);
-	}
-
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-		if(cap == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
-			if( blutricityCap == null ) blutricityCap = LazyOptional.of( () -> storage );
-			return blutricityCap.cast();
-		}
-		return LazyOptional.empty();
 	}
 
 	public static void tickSolarPanel(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
@@ -62,10 +49,10 @@ public class TileSolarPanel extends TileMachineBase  {
 
 			//Balance power of attached blulectric blocks.
 			for (Direction facing : Direction.values()) {
-				BlockEntity tile = level.getBlockEntity(pos.relative(facing));
-				if (tile != null)
-					tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite()).ifPresent(
-							exStorage -> EnergyHelper.balancePower(exStorage, tileSolarPanel.storage));
+                IPowerBase exStorage = level.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY,pos.relative(facing), facing.getOpposite());
+				if(exStorage != null){
+					EnergyHelper.balancePower(exStorage, tileSolarPanel.storage);
+				}
 			}
 		}
 	}
@@ -84,16 +71,6 @@ public class TileSolarPanel extends TileMachineBase  {
 		super.writeToPacketNBT(tCompound);
 		Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
 		tCompound.put("energy", nbtstorage);
-	}
-
-	@Override
-	public void invalidateCaps(){
-		super.invalidateCaps();
-		if( blutricityCap != null )
-		{
-			blutricityCap.invalidate();
-			blutricityCap = null;
-		}
 	}
 
 }

@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IServerDataProvider;
 
 import java.util.ArrayList;
@@ -22,18 +23,19 @@ import java.util.List;
  * @author amadornes
  *
  */
-public class WailaProviderMachines implements IServerDataProvider<BlockEntity> {
+public class WailaProviderMachines implements IServerDataProvider<BlockAccessor> {
 
     private List<String> info = new ArrayList<>();
 
+
     @Override
-    public void appendServerData(CompoundTag CompoundTag, ServerPlayer serverPlayerEntity, Level world, BlockEntity blockEntity, boolean b) {
-        if(blockEntity instanceof TileMachineBase && world.isClientSide) {
-            TileMachineBase machine = (TileMachineBase) blockEntity;
+    public void appendServerData(CompoundTag compoundTag, BlockAccessor blockAccessor) {
+        if(blockAccessor.getBlockEntity() instanceof TileMachineBase && blockAccessor.getLevel().isClientSide()) {
+            TileMachineBase machine = (TileMachineBase) blockAccessor.getBlockEntity();
 
             machine.addWailaInfo(info);
             //TODO: Check this works and add the engine
-            CompoundTag.getAllKeys().addAll(info);
+            //CompoundTag.getAllKeys().addAll(info);
             info.clear();
         }
     }
@@ -42,4 +44,5 @@ public class WailaProviderMachines implements IServerDataProvider<BlockEntity> {
     public ResourceLocation getUid() {
         return new ResourceLocation("bluepower:machines");
     }
+
 }

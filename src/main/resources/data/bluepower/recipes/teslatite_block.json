@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:teslatite_block"
+    "id": "bluepower:teslatite_block"
   },
   "pattern": [
     "###",
@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "tag": "forge:dusts/teslatite"
+      "tag": "c:dusts/teslatite"
     }
   }
 }

@@ -18,9 +18,8 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.Refs;
 import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -29,6 +28,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
 import net.minecraft.world.item.Item.Properties;
@@ -43,20 +43,21 @@ public class ItemFloppyDisk extends ItemBase implements ItemColor{
         CompoundTag nbt = new CompoundTag();
         nbt.putInt("color", color.getHex());
         nbt.putString("name", name);
-        itemStack.setTag(nbt);
+        itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
     }
 
+
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        if(stack.getTag() != null && stack.getTag().contains("name")) {
-            tooltip.add(Component.literal(stack.getTag().getString("name")));
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        if(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("name")) {
+            tooltipComponents.add(Component.literal(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("name")));
         }
     }
 
     @Override
     public int getColor(ItemStack stack, int tintIndex) {
-        if(tintIndex == 0 && stack.getTag() != null && stack.getTag().contains("color")) {
-            return stack.getTag().getInt("color");
+        if(tintIndex == 0 && stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("color")) {
+            return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getInt("color");
         }
         return -1;
     }

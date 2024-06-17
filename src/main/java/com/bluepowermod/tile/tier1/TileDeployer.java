@@ -18,12 +18,10 @@ import com.bluepowermod.tile.TileBase;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
@@ -41,9 +39,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -52,6 +47,10 @@ import java.util.UUID;
 
 
 import net.minecraft.core.NonNullList;
+import net.neoforged.bus.api.ICancellableEvent;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * @author MineMaarten
@@ -150,7 +149,7 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
         
         try {
             PlayerInteractEvent event =  new PlayerInteractEvent.RightClickEmpty(player, InteractionHand.MAIN_HAND);
-            if (event.isCanceled()) return false;
+            if (((ICancellableEvent)event).isCanceled()) return false;
             
             Block block = level.getBlockState(new BlockPos(x, y, z)).getBlock();
             List<LivingEntity> detectedEntities = level.getEntitiesOfClass(LivingEntity.class, new AABB(x, y, z, x + 1, y + 1, z + 1));
@@ -174,7 +173,7 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
             
             for (int i = 0; i < useItems; i++) {
                 player.getInventory().selected = i;
-                if (!level.isEmptyBlock(new BlockPos(x, y, z)) && block.use(level.getBlockState(new BlockPos(x, y, z)), level, new BlockPos(x, y, z), player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == InteractionResult.SUCCESS) return true;
+                if (!level.isEmptyBlock(new BlockPos(x, y, z)) && level.getBlockState(new BlockPos(x, y, z)).useItemOn(player.getMainHandItem() ,level, player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == ItemInteractionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
@@ -214,29 +213,20 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void load(CompoundTag tCompound) {
-    
-        super.load(tCompound);
-        
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.of(tc));
-        }
+    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tCompound, provider);
+        ContainerHelper.loadAllItems(tCompound.getCompound("inventory"), inventory, provider);
     }
     
     /**
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound) {
-    
-        super.saveAdditional(tCompound);
-        
-        for (int i = 0; i < 9; i++) {
-                CompoundTag tc = new CompoundTag();
-                inventory.get(i).save(tc);
-                tCompound.put("inventory" + i, tc);
-        }
+    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+        super.saveAdditional(tCompound, provider);
+        CompoundTag tc = new CompoundTag();
+        ContainerHelper.saveAllItems(tc, inventory, provider);
+        tCompound.put("inventory", tc);
     }
 
     @Override

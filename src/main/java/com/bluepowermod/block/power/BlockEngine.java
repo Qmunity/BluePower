@@ -15,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -126,21 +127,19 @@ public class BlockEngine extends BlockContainerBase implements SimpleWaterlogged
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!player.getInventory().getSelected().isEmpty()) {
             Item item = player.getInventory().getSelected().getItem();
             if (item == BPItems.screwdriver.get()) {
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
-
-        return super.use(blockState, world, pos, player, hand, rayTraceResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
-    /*
-    TODO 1.17 waiting on MinecraftForge#8014
+    
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return true;
-    }*/
+    }
 
 }

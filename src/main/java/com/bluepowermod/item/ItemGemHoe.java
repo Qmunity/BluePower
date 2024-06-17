@@ -17,14 +17,10 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPCreativeTabs;
-
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemGemHoe extends HoeItem {
 
@@ -32,7 +28,7 @@ public class ItemGemHoe extends HoeItem {
     protected boolean canRepair = true;
 
     public ItemGemHoe(Tier itemTier, Item repairItem) {
-        super(itemTier, 1, -1.4F, new Properties());
+        super(itemTier, new Properties().attributes(createAttributes(itemTier, 1, -1.4F)));
         this.customCraftingMaterial = repairItem;
     }
 

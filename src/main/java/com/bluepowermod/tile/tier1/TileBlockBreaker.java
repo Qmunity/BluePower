@@ -25,8 +25,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.IFluidBlock;
 
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class TileBlockBreaker extends TileMachineBase {
 
     private boolean canBreakBlock(Block block, Level world, BlockState state, BlockPos pos) {
     
-        return !world.isEmptyBlock(pos) && !(block instanceof IFluidBlock) && state.getDestroySpeed(level, pos) > -1.0F;
+        return !world.isEmptyBlock(pos) && !(block instanceof LiquidBlock) && state.getDestroySpeed(level, pos) > -1.0F;
     }
     
     @Override

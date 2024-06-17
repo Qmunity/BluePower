@@ -14,7 +14,7 @@
     }
   },
   "result": {
-    "item": "bluepower:quartz_resonator_tile",
+    "id": "bluepower:quartz_resonator_tile",
     "count": 3
   }
 }

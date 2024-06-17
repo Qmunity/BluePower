@@ -10,7 +10,6 @@ package com.bluepowermod.compat.jei;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.Refs;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -80,8 +79,8 @@ public class AlloyFurnaceHandler implements IRecipeCategory<IAlloyFurnaceRecipe>
                 IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, 39 + j * 18, 4 + i * 18);
                 if(recipe.getRequiredItems() != null && count < recipe.getRequiredItems().size()) {
                     int finalCount = count;
-                    slot.addItemStacks(Arrays.stream(recipe.getRequiredItems().get(count).getItems()).peek((stack) ->
-                            stack.setCount(recipe.getRequiredCount().get(finalCount))).toList());
+                    slot.addItemStacks(Arrays.stream(recipe.getRequiredItems().get(count).ingredient().getItems()).peek((stack) ->
+                            stack.setCount(recipe.getRequiredItems().get(finalCount).count())).toList());
                     count++;
                 }
             }

@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:buffer_gate"
+    "id": "bluepower:buffer_gate"
   },
   "pattern": [
     "ACA",

@@ -17,8 +17,6 @@
 
 package com.bluepowermod.item;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class ItemCrafting extends ItemBase {
 
     public ItemCrafting() {

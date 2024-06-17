@@ -15,10 +15,10 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.capabilities.ICapabilityProvider;
+import net.neoforged.event.AttachCapabilitiesEvent;
+import net.neoforged.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

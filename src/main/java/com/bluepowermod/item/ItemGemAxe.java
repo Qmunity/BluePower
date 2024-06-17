@@ -17,21 +17,14 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPItems;
-
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.Refs;
-
 import net.minecraft.world.item.*;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemGemAxe extends AxeItem {
 
-    public Item customCraftingMaterial = Items.AIR;
+    public final Item customCraftingMaterial;
 
     public ItemGemAxe(Tier itemTier, Item repairItem) {
-        super(itemTier, 2, -1.4F, new Properties());
+        super(itemTier, new Properties().attributes(createAttributes(itemTier, 2, -1.4F)));
         this.customCraftingMaterial = repairItem;
     }
 

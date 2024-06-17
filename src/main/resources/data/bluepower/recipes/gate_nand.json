@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:gate_nand"
+    "id": "bluepower:gate_nand"
   },
   "pattern": [
     "AAA",

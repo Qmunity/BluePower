@@ -6,11 +6,11 @@
       "count": 4
     },
     {
-      "tag": "forge:ingots/tungsten"
+        "tag": "c:ingots/tungsten"
     }
   ],
   "result": {
-    "item": "bluepower:tungsten_carbide",
+    "id": "bluepower:tungsten_carbide",
     "count": 4
   }
 }
