@@ -21,6 +21,7 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IBPColoredItem;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemLumar extends ItemBase implements IBPColoredItem{
@@ -34,6 +35,6 @@ public class ItemLumar extends ItemBase implements IBPColoredItem{
 
     @Override
     public int getColor(ItemStack stack, int tintIndex) {
-        return color.getHex();
+        return FastColor.ARGB32.opaque(color.getHex());
     }
 }
