@@ -63,14 +63,14 @@ import org.joml.Matrix4f;
 
 public class BPEventHandler {
 
-    @SubscribeEvent
-    public void tick(LevelTickEvent.Post event) {
-            if (event.getLevel().getGameTime() % 200 == 0) {
+   // @SubscribeEvent
+    //public void tick(LevelTickEvent.Post event) {
+           // if (event.getLevel().getGameTime() % 200 == 0) {
                 //double tickTime = MathHelper.mean(event.world.getServer().tickTimeArray) * 1.0E-6D;
                 //In case world are going to get their own thread: MinecraftServer.getServer().worldTickTimes.get(event.world.provider.dimensionId)
                 //BPNetworkHandler.wrapper.send(PacketDistributor.DIMENSION.setValue(event.world.getDimension().getType()), new MessageServerTickTime(tickTime));
-            }
-    }
+            //}
+   // }
 
     @SubscribeEvent
     public void onAnvilEvent(AnvilUpdateEvent event) {
@@ -233,13 +233,13 @@ public class BPEventHandler {
         }
     }
 
-    @SubscribeEvent
-    public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
+    //@SubscribeEvent
+    //public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
 
-        Item item = event.getCrafting().getItem();
-        if (item == Item.byBlock(Blocks.AIR))
-            return;
-    }
+        //Item item = event.getCrafting().getItem();
+        //if (item == Item.byBlock(Blocks.AIR))
+            //return;
+   // }
 
     @SubscribeEvent
     public void onBonemealEvent(BonemealEvent event) {

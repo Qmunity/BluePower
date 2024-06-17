@@ -26,10 +26,10 @@ import net.minecraft.world.item.Tier;
 public class ItemGemSpade extends ShovelItem {
 
     public Item customCraftingMaterial;
-    protected boolean canRepair              = true;
+    protected boolean canRepair = true;
 
     public ItemGemSpade(Tier itemTier, Item repairItem) {
-        super(itemTier, new Properties());
+        super(itemTier, new Properties().attributes(createAttributes(itemTier, 1,-1.4F)));
         this.customCraftingMaterial = repairItem;
     }
 

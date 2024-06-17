@@ -44,7 +44,7 @@ public class ItemAthame extends SwordItem {
     private static Tier athameMaterial = new SilverItemTier(100, 6.0F, 2.0F,  10);
     
     public ItemAthame() {
-        super(athameMaterial, new Properties());
+        super(athameMaterial, new Properties().attributes(createAttributes(athameMaterial, 1, -3)));
     }
 
     @Override

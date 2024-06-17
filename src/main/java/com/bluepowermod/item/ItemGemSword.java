@@ -24,7 +24,7 @@ public class ItemGemSword extends SwordItem {
     public Item customCraftingMaterial;
 
     public ItemGemSword(Tier itemTier, Item repairItem) {
-        super(itemTier, new Properties());
+        super(itemTier, new Properties().attributes(createAttributes(itemTier, 3,-1.4F)));
         this.customCraftingMaterial = repairItem;
     }
 

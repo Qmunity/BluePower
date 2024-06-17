@@ -44,7 +44,7 @@ public class ItemSickle extends DiggerItem {
             BlockTags.SMALL_FLOWERS);
 
     public ItemSickle(Tier itemTier, Item repairItem) {
-        super(itemTier, BlockTags.MINEABLE_WITH_HOE, new Properties());
+        super(itemTier, BlockTags.MINEABLE_WITH_HOE, new Properties().attributes(createAttributes(itemTier, 2,-1.4F)));
         this.customCraftingMaterial = repairItem;
     }
 

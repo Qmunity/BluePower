@@ -24,7 +24,7 @@ public class ItemGemAxe extends AxeItem {
     public final Item customCraftingMaterial;
 
     public ItemGemAxe(Tier itemTier, Item repairItem) {
-        super(itemTier, new Properties());
+        super(itemTier, new Properties().attributes(createAttributes(itemTier, 2, -1.4F)));
         this.customCraftingMaterial = repairItem;
     }
 
