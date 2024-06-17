@@ -28,6 +28,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -74,15 +75,11 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
      */
     @Override
     public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-
         super.loadAdditional(tCompound, provider);
 
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.parse(level.registryAccess(), tc).orElse(ItemStack.EMPTY));
-        }
-        fuelInventory = ItemStack.parse(level.registryAccess(),tCompound.getCompound("fuelInventory")).orElse(ItemStack.EMPTY);
-        outputInventory = ItemStack.parse(level.registryAccess(),tCompound.getCompound("outputInventory")).orElse(ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(tCompound.getCompound("inventory"), inventory, provider);
+        fuelInventory = ItemStack.parseOptional(provider,tCompound.getCompound("fuelInventory"));
+        outputInventory = ItemStack.parseOptional(provider,tCompound.getCompound("outputInventory"));
 
     }
 
@@ -91,28 +88,20 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
      */
     @Override
     protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-
         super.saveAdditional(tCompound, provider);
 
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = new CompoundTag();
-            if(!inventory.get(i).isEmpty())
-                inventory.get(i).save(level.registryAccess(), tc);
-            tCompound.put("inventory" + i, tc);
-        }
+        CompoundTag tc = new CompoundTag();
+        ContainerHelper.saveAllItems(tc, inventory, provider);
+        tCompound.put("inventory", tc);
 
         if (fuelInventory != null) {
-            CompoundTag fuelCompound = new CompoundTag();
             if(!fuelInventory.isEmpty())
-                fuelInventory.save(level.registryAccess(), fuelCompound);
-            tCompound.put("fuelInventory", fuelCompound);
+                tCompound.put("fuelInventory", fuelInventory.saveOptional(provider));
         }
 
         if (outputInventory != null) {
-            CompoundTag outputCompound = new CompoundTag();
             if(!outputInventory.isEmpty())
-                outputInventory.save(level.registryAccess(), outputCompound);
-            tCompound.put("outputInventory", outputCompound);
+                tCompound.put("outputInventory", outputInventory.saveOptional(provider));
         }
 
     }

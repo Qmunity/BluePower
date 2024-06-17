@@ -15,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -59,37 +60,17 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-
         super.saveAdditional(tag, provider);
-
-        ListTag tagList = new ListTag();
-        for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
-                CompoundTag tagCompound = new CompoundTag();
-                tagCompound.putByte("Slot", (byte) currentIndex);
-                if (!inventory.get(currentIndex).isEmpty())
-                    inventory.get(currentIndex).save(provider, tagCompound);
-                tagList.add(tagCompound);
-        }
-        tag.put("Items", tagList);
-
+        CompoundTag tc = new CompoundTag();
+        ContainerHelper.saveAllItems(tc, inventory, provider);
+        tag.put("Items", tc);
         tag.putString("textboxString", textboxString);
     }
 
     @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-
         super.loadAdditional(tag, provider);
-
-        ListTag tagList = tag.getList("Items", 10);
-        inventory = NonNullList.withSize(24, ItemStack.EMPTY);
-        for (int i = 0; i < tagList.size(); ++i) {
-            CompoundTag tagCompound = tagList.getCompound(i);
-            byte slot = tagCompound.getByte("Slot");
-            if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, ItemStack.parseOptional(provider, tagCompound));
-            }
-        }
-
+        ContainerHelper.loadAllItems(tag.getCompound("Items"), inventory, provider);
         textboxString = tag.getString("textboxString");
     }
 

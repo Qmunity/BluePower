@@ -24,6 +24,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -67,14 +68,9 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
      */
     @Override
     public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-
         super.loadAdditional(tCompound, provider);
-
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.parseOptional(level.registryAccess(), tc));
-        }
-        outputInventory = ItemStack.parseOptional(level.registryAccess(), tCompound.getCompound("outputInventory"));
+        ContainerHelper.saveAllItems(tCompound, inventory, provider);
+        outputInventory = ItemStack.parseOptional(provider, tCompound.getCompound("outputInventory"));
 
     }
 
@@ -86,18 +82,12 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
 
         super.saveAdditional(tCompound, provider);
 
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = new CompoundTag();
-            if (!inventory.get(i).isEmpty())
-                inventory.get(i).save(level.registryAccess(), tc);
-            tCompound.put("inventory" + i, tc);
-        }
+        CompoundTag tc = new CompoundTag();
+        ContainerHelper.saveAllItems(tc, inventory, provider);
+        tCompound.put("inventory", tc);
 
-        if (outputInventory != null) {
-            CompoundTag outputCompound = new CompoundTag();
-            if (!outputInventory.isEmpty())
-                outputInventory.save(level.registryAccess(), outputCompound);
-            tCompound.put("outputInventory", outputCompound);
+        if (outputInventory != null && !outputInventory.isEmpty()) {
+            tCompound.put("outputInventory", outputInventory.saveOptional(provider));
         }
 
     }

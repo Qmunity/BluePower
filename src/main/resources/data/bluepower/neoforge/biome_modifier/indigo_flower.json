@@ -1,6 +1,6 @@
 {
   "type": "neoforge:add_features",
-  "biomes": "#forge:is_dense",
+  "biomes": "#neoforge:is_dense",
   "features": "bluepower:indigo_flower",
   "step": "vegetal_decoration"
 }

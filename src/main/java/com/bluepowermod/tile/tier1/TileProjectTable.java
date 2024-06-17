@@ -16,6 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -64,54 +65,21 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-
         super.saveAdditional(tag, provider);
+        CompoundTag tItems = new CompoundTag();
+        ContainerHelper.saveAllItems(tItems, inventory, provider);
+        tag.put("Items", tItems);
 
-        ListTag tagList = new ListTag();
-        for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
-                CompoundTag tagCompound = new CompoundTag();
-                tagCompound.putByte("Slot", (byte)currentIndex);
-                if(!inventory.get(currentIndex).isEmpty())
-                    inventory.get(currentIndex).save(provider, tagCompound);
-                tagList.add(tagCompound);
-        }
-        tag.put("Items", tagList);
-
-        tagList = new ListTag();
-        for (int currentIndex = 0; currentIndex < craftingGrid.size(); ++currentIndex) {
-                CompoundTag tagCompound = new CompoundTag();
-                tagCompound.putByte("Slot", (byte) currentIndex);
-                if(!craftingGrid.get(currentIndex).isEmpty())
-                    craftingGrid.get(currentIndex).save(provider, tagCompound);
-                tagList.add(tagCompound);
-        }
-        tag.put("CraftingGrid", tagList);
+        CompoundTag tCraftingGrid = new CompoundTag();
+        ContainerHelper.saveAllItems(tCraftingGrid, craftingGrid, provider);
+        tag.put("CraftingGrid", tCraftingGrid);
     }
 
     @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-
         super.loadAdditional(tag, provider);
-
-        ListTag tagList = tag.getList("Items", 10);
-        inventory = NonNullList.withSize(19, ItemStack.EMPTY);
-        for (int i = 0; i < tagList.size(); ++i) {
-            CompoundTag tagCompound = tagList.getCompound(i);
-            byte slot = tagCompound.getByte("Slot");
-            if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, ItemStack.parseOptional(provider, tagCompound));
-            }
-        }
-
-        tagList = tag.getList("CraftingGrid", 10);
-        craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
-        for (int i = 0; i < tagList.size(); ++i) {
-            CompoundTag tagCompound = tagList.getCompound(i);
-            byte slot = tagCompound.getByte("Slot");
-            if (slot >= 0 && slot < craftingGrid.size()) {
-                craftingGrid.set(slot, ItemStack.parseOptional(provider, tagCompound));
-            }
-        }
+        ContainerHelper.loadAllItems(tag.getCompound("Items"), inventory, provider);
+        ContainerHelper.loadAllItems(tag.getCompound("CraftingGrid"), craftingGrid, provider);
     }
 
     @Override

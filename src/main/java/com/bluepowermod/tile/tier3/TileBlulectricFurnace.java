@@ -118,9 +118,8 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
     @Override
     public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
         super.loadAdditional(tCompound, provider);
-        CompoundTag tc = tCompound.getCompound("inventory");
-        inventory = ItemStack.parseOptional(level.registryAccess(),tc);
-        outputInventory = ItemStack.parseOptional(level.registryAccess(), tCompound.getCompound("outputInventory"));
+        inventory = ItemStack.parseOptional(provider,tCompound.getCompound("inventory"));
+        outputInventory = ItemStack.parseOptional(provider, tCompound.getCompound("outputInventory"));
     }
 
     /**
@@ -129,21 +128,14 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
     @Override
     protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
         super.saveAdditional(tCompound, provider);
-
-        CompoundTag tc = new CompoundTag();
-        inventory.save(level.registryAccess(), tc);
-        tCompound.put("inventory", tc);
-
+        tCompound.put("inventory", inventory.saveOptional(provider));
         if (outputInventory != null) {
-            CompoundTag outputCompound = new CompoundTag();
-            outputInventory.save(level.registryAccess(), outputCompound);
-            tCompound.put("outputInventory", outputCompound);
+            tCompound.put("outputInventory", outputInventory.saveOptional(provider));
         }
     }
 
     @Override
     public void readFromPacketNBT(CompoundTag tag) {
-
         super.readFromPacketNBT(tag);
         isActive = tag.getBoolean("isActive");
         currentProcessTime = tag.getInt("currentProcessTime");
@@ -156,7 +148,6 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
 
     @Override
     public void writeToPacketNBT(CompoundTag tag) {
-
         super.writeToPacketNBT(tag);
         tag.putInt("currentProcessTime", currentProcessTime);
         tag.putBoolean("isActive", isActive);

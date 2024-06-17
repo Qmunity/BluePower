@@ -214,13 +214,8 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
      */
     @Override
     public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-    
         super.loadAdditional(tCompound, provider);
-        
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.parseOptional(provider, tc));
-        }
+        ContainerHelper.loadAllItems(tCompound.getCompound("inventory"), inventory, provider);
     }
     
     /**
@@ -228,15 +223,10 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
      */
     @Override
     protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-    
         super.saveAdditional(tCompound, provider);
-        
-        for (int i = 0; i < 9; i++) {
-                CompoundTag tc = new CompoundTag();
-                if(!inventory.get(i).isEmpty())
-                    inventory.get(i).save(provider, tc);
-                tCompound.put("inventory" + i, tc);
-        }
+        CompoundTag tc = new CompoundTag();
+        ContainerHelper.saveAllItems(tc, inventory, provider);
+        tCompound.put("inventory", tc);
     }
 
     @Override

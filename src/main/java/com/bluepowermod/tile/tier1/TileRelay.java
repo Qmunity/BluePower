@@ -28,6 +28,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -70,11 +71,7 @@ public class TileRelay extends TileMachineBase implements Container, MenuProvide
     @Override
     public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
         super.loadAdditional(tCompound, provider);
-
-        for (int i = 0; i < 9; i++) {
-            CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.parseOptional(provider, tc));
-        }
+        ContainerHelper.loadAllItems(tCompound.getCompound("inventory"), inventory, provider);
     }
 
     /**
@@ -82,14 +79,10 @@ public class TileRelay extends TileMachineBase implements Container, MenuProvide
      */
     @Override
     protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-
         super.saveAdditional(tCompound, provider);
-
-        for (int i = 0; i < 9; i++) {
-                CompoundTag tc = new CompoundTag();
-                inventory.get(i).save(provider, tc);
-                tCompound.put("inventory" + i, tc);
-        }
+        CompoundTag tc = new CompoundTag();
+        ContainerHelper.saveAllItems(tc, inventory, provider);
+        tCompound.put("inventory", tc);
     }
 
     /**
