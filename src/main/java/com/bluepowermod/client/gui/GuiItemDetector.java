@@ -26,7 +26,7 @@ import net.minecraft.network.chat.Component;
  */
 public class GuiItemDetector extends GuiContainerBaseBP<ContainerItemDetector> implements MenuAccess<ContainerItemDetector> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/item_detector.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/item_detector.png");
     private final ContainerItemDetector itemDetector;
 
     public GuiItemDetector(ContainerItemDetector container, Inventory playerInventory, Component title){

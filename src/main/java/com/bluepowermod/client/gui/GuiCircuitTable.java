@@ -23,8 +23,8 @@ import com.bluepowermod.reference.Refs;
 @OnlyIn(Dist.CLIENT)
 public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> implements MenuAccess<ContainerCircuitTable> {
 
-    protected static final ResourceLocation guiTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_table.png");
-    private static final ResourceLocation scrollTexture = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
+    protected static final ResourceLocation guiTexture = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/circuit_table.png");
+    private static final ResourceLocation scrollTexture = ResourceLocation.parse("textures/gui/container/creative_inventory/tabs.png");
     private final ContainerCircuitTable circuitTable;
 
     /** Amount scrolled in Creative mode inventory (0 = top, 1 = bottom) */

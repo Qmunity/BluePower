@@ -55,7 +55,7 @@ public class BPRecyclingReloadListener extends SimplePreparableReloadListener<Vo
         AlloyFurnaceRegistry.getInstance().blacklist.clear();
         String[] blacklistStr = BPConfig.CONFIG.alloyFurnaceBlacklist.get().split(",");
         for (String configString : blacklistStr) {
-            Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(configString));
+            Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(configString));
             if (item != Items.AIR) {
                 AlloyFurnaceRegistry.getInstance().blacklist.add(item);
             }

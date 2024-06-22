@@ -42,7 +42,7 @@ public class WailaProviderMachines implements IServerDataProvider<BlockAccessor>
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation("bluepower:machines");
+        return ResourceLocation.parse("bluepower:machines");
     }
 
 }

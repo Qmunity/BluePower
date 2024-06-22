@@ -8,18 +8,14 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.reference.Refs;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-import com.bluepowermod.enchant.EnchantmentDisjunction;
-import com.bluepowermod.enchant.EnchantmentVorpal;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
-
 public class BPEnchantments {
-	public static final DeferredRegister<Enchantment> ENCHANTMENT = DeferredRegister.create(BuiltInRegistries.ENCHANTMENT, Refs.MODID);
 
-	public static DeferredHolder<Enchantment, Enchantment> vorpal = ENCHANTMENT.register("vorpal", EnchantmentVorpal::new);
-	public static DeferredHolder<Enchantment, Enchantment> disjunction = ENCHANTMENT.register("disjunction", EnchantmentDisjunction::new);
+	public static ResourceKey<Enchantment> VORPAL = ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(Refs.MODID, "vorpal"));
+	public static ResourceKey<Enchantment> DISJUNCTION = ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(Refs.MODID, "disjunction"));
 	
 }

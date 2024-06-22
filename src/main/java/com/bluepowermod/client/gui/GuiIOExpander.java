@@ -20,7 +20,7 @@ public class GuiIOExpander extends GuiContainerBaseBP<ContainerIOExpander> imple
 
     private final ContainerIOExpander ioExpander;
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/ioexpandergui.png");
+    private static final ResourceLocation resLoc = ResourceLocation.parse(Refs.MODID + ":textures/gui/ioexpandergui.png");
 
     public GuiIOExpander(ContainerIOExpander container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);

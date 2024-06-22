@@ -22,8 +22,8 @@ import com.bluepowermod.tile.tier3.TileMonitor;
 
 public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements MenuAccess<ContainerMonitor> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/monitorgui.png");
-    private static final ResourceLocation chracterSetResLoc = new ResourceLocation(Refs.MODID + ":textures/gui/65el02_chars.png");
+    private static final ResourceLocation resLoc = ResourceLocation.parse(Refs.MODID + ":textures/gui/monitorgui.png");
+    private static final ResourceLocation chracterSetResLoc = ResourceLocation.parse(Refs.MODID + ":textures/gui/65el02_chars.png");
     private final ContainerMonitor monitor;
 
     public GuiMonitor(ContainerMonitor container, Inventory playerInventory, Component title){
@@ -89,13 +89,12 @@ public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements 
         float f = 0.00195313F;
         float f1 = 0.00390625F;
         Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder buffer = tessellator.getBuilder();
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        //buffer.pos(x + 0, z + h, zLevel).uv((u + 0) * f, (v + h) * f1).endVertex();
-        //buffer.pos(x + w, z + h, zLevel).uv((u + w) * f, (v + h) * f1).endVertex();
-        //buffer.pos(x + w, z + 0, zLevel).uv((u + w) * f, (v + 0) * f1).endVertex();
-        //buffer.pos(x + 0, z + 0, zLevel).uv((u + 0) * f, (v + 0) * f1).endVertex();
-        tessellator.end();
+        BufferBuilder buffer = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        buffer.addVertex(x + 0, z + h, 0).setUv((u + 0) * f, (v + h) * f1);
+        buffer.addVertex(x + w, z + h, 0).setUv((u + w) * f, (v + h) * f1);
+        buffer.addVertex(x + w, z + 0, 0).setUv((u + w) * f, (v + 0) * f1);
+        buffer.addVertex(x + 0, z + 0, 0).setUv((u + 0) * f, (v + 0) * f1);
+        BufferUploader.drawWithShader(buffer.buildOrThrow());
     }
 
     @SuppressWarnings("cast")
@@ -104,12 +103,11 @@ public class GuiMonitor extends GuiContainerBaseBP<ContainerMonitor> implements 
         float f = 0.00390625F;
         float f1 = 0.00390625F;
         Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder buffer = tessellator.getBuilder();
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        //buffer.pos(x + 0, z + h, zLevel).uv((u + 0) * f, (v + h) * f1).endVertex();
-        //buffer.pos(x + w, z + h, zLevel).uv((u + w) * f, (v + h) * f1).endVertex();
-        //buffer.pos(x + w, z + 0, zLevel).uv((u + w) * f, (v + 0) * f1).endVertex();
-        //buffer.pos(x + 0, z + 0, zLevel).uv((u + 0) * f, (v + 0) * f1).endVertex();
-        tessellator.end();
+        BufferBuilder buffer = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        buffer.addVertex(x + 0, z + h, 0).setUv((u + 0) * f, (v + h) * f1);
+        buffer.addVertex(x + w, z + h, 0).setUv((u + w) * f, (v + h) * f1);
+        buffer.addVertex(x + w, z + 0, 0).setUv((u + w) * f, (v + 0) * f1);
+        buffer.addVertex(x + 0, z + 0, 0).setUv((u + 0) * f, (v + 0) * f1);
+        BufferUploader.drawWithShader(buffer.buildOrThrow());
     }
 }

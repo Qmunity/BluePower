@@ -39,7 +39,7 @@ import net.minecraft.network.chat.Component;
  */
 public class GuiManager extends GuiContainerBaseBP<ContainerManager> implements MenuAccess<ContainerManager> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/manager.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/manager.png");
     protected ContainerManager manager;
 
     public GuiManager(ContainerManager container, Inventory playerInventory, Component title){

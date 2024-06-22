@@ -277,14 +277,6 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
         RenderSystem.lineWidth(3.0F);
         RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
-        Tesselator tess = Tesselator.getInstance();
-        BufferBuilder buff = tess.getBuilder();
-        buff.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_TEX);
-        buff.vertex(renderBaseX, renderAffectedY, zLevel);
-        buff.vertex(renderBaseX + renderWidth, renderAffectedY, zLevel);
-        buff.vertex(renderBaseX + renderWidth, renderAffectedY + renderHeight, zLevel);
-        buff.vertex(renderBaseX, renderAffectedY + renderHeight, zLevel);
-        tess.end();
         if (leftSided)
             renderWidth *= -1;
         // if done expanding, draw the information
@@ -313,7 +305,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             if (iStack == null) {
                 if (iconResLoc == null)
-                    iconResLoc = new ResourceLocation(texture);
+                    iconResLoc = ResourceLocation.parse(texture);
                 drawTexture(guiGraphics.pose().last().pose(), iconResLoc, renderBaseX - (leftSided ? 16 : 0), renderAffectedY);
             } else if (gui != null || !(iStack.getItem() instanceof BlockItem)) {
                 guiGraphics.renderItem(iStack, renderBaseX - (leftSided ? 16 : 0), renderAffectedY);
@@ -325,13 +317,12 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     public static void drawTexture(Matrix4f matrixStack, ResourceLocation texture, int x, int y) {
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(matrixStack, x, y + 16, 0).uv(0.0F, 1.0F).endVertex();
-        bufferbuilder.vertex(matrixStack,x + 16, y + 16, 0).uv(1.0F, 1.0F).endVertex();
-        bufferbuilder.vertex(matrixStack,x + 16, y, 0).uv(1.0F, 0.0F).endVertex();
-        bufferbuilder.vertex(matrixStack, x, y, 0).uv(0.0F, 0.0F).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
+        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.addVertex(matrixStack, x, y + 16, 0).setUv(0.0F, 1.0F);
+        bufferbuilder.addVertex(matrixStack,x + 16, y + 16, 0).setUv(1.0F, 1.0F);
+        bufferbuilder.addVertex(matrixStack,x + 16, y, 0).setUv(1.0F, 0.0F);
+        bufferbuilder.addVertex(matrixStack, x, y, 0).setUv(0.0F, 0.0F);
+        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
     }
 
     /*

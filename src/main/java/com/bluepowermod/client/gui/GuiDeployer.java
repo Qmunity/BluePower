@@ -32,7 +32,7 @@ import net.minecraft.network.chat.Component;
  */
 public class GuiDeployer extends GuiContainerBaseBP<ContainerDeployer> implements MenuAccess<ContainerDeployer> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/deployer.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/deployer.png");
     private final ContainerDeployer deployer;
 
     public GuiDeployer(ContainerDeployer container, Inventory playerInventory, Component title){

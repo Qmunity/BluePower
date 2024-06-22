@@ -75,7 +75,7 @@ public class TileBPMicroblock extends BlockEntity {
     public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
        super.loadAdditional(compound, provider);
        if (compound.contains("block")) {
-           block = BuiltInRegistries.BLOCK.get(new ResourceLocation(compound.getString("block")));
+           block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(compound.getString("block")));
            rotation = compound.getInt("rotation");
        }
     }

@@ -21,6 +21,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -40,11 +41,11 @@ public class MicroblockRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
+    public boolean matches(CraftingInput inv, Level level) {
         int blockCount = 0;
         int saw = 0;
 
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
+        for (int i = 0; i < inv.size(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 if (stack.getItem() instanceof BlockItem && (Block.byItem(stack.getItem()) instanceof BlockBPMicroblock || !(Block.byItem(stack.getItem()) instanceof EntityBlock))){
@@ -68,8 +69,8 @@ public class MicroblockRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider provider) {
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider provider) {
+        for (int i = 0; i < inv.size(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem) {
                 if (Block.byItem(stack.getItem()).defaultBlockState().getShape(null, null) == Shapes.block()){
@@ -86,7 +87,7 @@ public class MicroblockRecipe extends CustomRecipe {
                     nbt.putString("block", stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block"));
                     ItemStack outStack = new ItemStack(BPBlocks.panel.get(), 2);
                     outStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
-                    Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("block")));
+                    Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getString("block")));
                     outStack.set(DataComponents.ITEM_NAME, Component.translatable(block.getDescriptionId())
                             .append(" ")
                             .append(Component.translatable(BPBlocks.panel.get().getDescriptionId())));
@@ -96,7 +97,7 @@ public class MicroblockRecipe extends CustomRecipe {
                     nbt.putString("block", stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block"));
                     ItemStack outStack = new ItemStack(BPBlocks.cover.get(), 2);
                     outStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
-                    Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("block")));
+                    Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getString("block")));
                     outStack.set(DataComponents.ITEM_NAME, Component.translatable(block.getDescriptionId())
                             .append(" ")
                             .append(Component.translatable(BPBlocks.cover.get().getDescriptionId())));

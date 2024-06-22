@@ -37,7 +37,7 @@ import net.minecraft.network.chat.Component;
  */
 public class GuiRegulator extends GuiContainerBaseBP<ContainerRegulator> implements MenuAccess<ContainerRegulator> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/regulator.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/regulator.png");
     protected ContainerRegulator regulator;
 
     public GuiRegulator(ContainerRegulator container, Inventory playerInventory, Component title){

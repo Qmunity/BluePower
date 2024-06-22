@@ -51,6 +51,6 @@ public class CommonProxy {
 
     public String getSavePath() {
         //TODO: Possible Crash
-        return Minecraft.getInstance().level.getServer().getServerDirectory().getPath();
+        return Minecraft.getInstance().level.getServer().getServerDirectory().toAbsolutePath().toString();
     }
 }

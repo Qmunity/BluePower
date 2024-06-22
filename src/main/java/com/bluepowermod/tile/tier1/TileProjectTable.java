@@ -93,10 +93,6 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
         return i < 18 ? inventory.get(i) : craftingGrid.get(i - 18);
     }
 
-    public ItemStack getStackInCraftingSlot(int i) {
-        return craftingGrid.get(i);
-    }
-
     @Override
     public ItemStack removeItem(int slot, int amount) {
 
@@ -131,10 +127,6 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
         }else{
             craftingGrid.set(i - 18, itemStack);
         }
-    }
-
-    public void setCraftingSlotContents(int i, ItemStack itemStack) {
-        craftingGrid.set(i, itemStack);
     }
 
 

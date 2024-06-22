@@ -36,7 +36,7 @@ public class ItemSaw extends ItemBase{
     @Override
     public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
         ItemStack container = itemStack.copy();
-        container.hurtAndBreak(1, RandomSource.create(), null, ()->{} );
+        container.setDamageValue(container.getDamageValue() - 1);
         return container;
     }
 

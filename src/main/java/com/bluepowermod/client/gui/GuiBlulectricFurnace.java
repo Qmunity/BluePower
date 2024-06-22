@@ -31,7 +31,7 @@ import net.minecraft.network.chat.Component;
  */
 public class GuiBlulectricFurnace extends GuiContainerBaseBP<ContainerBlulectricFurnace> implements MenuAccess<ContainerBlulectricFurnace> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/powered_furnace.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/powered_furnace.png");
     private final ContainerBlulectricFurnace furnace;
 
     public GuiBlulectricFurnace(ContainerBlulectricFurnace container, Inventory playerInventory, Component title){

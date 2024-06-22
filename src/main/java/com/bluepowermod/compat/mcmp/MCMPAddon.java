@@ -41,7 +41,7 @@ public class MCMPAddon implements IMCMPAddon{
     @SubscribeEvent
     public void onAttachTileCaps(AttachCapabilitiesEvent<BlockEntity> te) {
         if (te.getObject() instanceof TileLamp) {
-            te.addCapability(new ResourceLocation(Refs.MODID, "multipart"), new ICapabilityProvider() {
+            te.addCapability(ResourceLocation.fromNamespaceAndPath(Refs.MODID, "multipart"), new ICapabilityProvider() {
                 IMultipartTile multipartTileLamp = IMultipartTile.wrap(te.getObject());
 
                 @Override

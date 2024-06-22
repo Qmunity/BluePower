@@ -29,7 +29,7 @@ import net.minecraft.network.chat.Component;
 
 public class GuiKinect extends GuiContainerBaseBP<ContainerKinect> implements MenuAccess<ContainerKinect> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/kinect.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/kinect.png");
     private final ContainerKinect kinect;
 
     public GuiKinect(ContainerKinect container, Inventory playerInventory, Component title){

@@ -60,11 +60,11 @@ public class Renderers {
         BPMultipartModel multipartModel = new BPMultipartModel();
         BPMicroblockModel microblockModel = new BPMicroblockModel();
 
-        Map<ResourceLocation, BakedModel> models = new HashMap<>(event.getModels());
+        Map<ModelResourceLocation, BakedModel> models = new HashMap<>(event.getModels());
         models.forEach((key, model) -> {
             if(key.toString().contains("bluepower:cover") || key.toString().contains("bluepower:panel") || key.toString().contains("bluepower:half_block")){
-                if(((ModelResourceLocation)key).getVariant().contains("waterlogged=true")){
-                    event.getModels().put(new ModelResourceLocation(key.getNamespace(), key.getPath(), ((ModelResourceLocation)key).getVariant().replace("facing", "face").split(",")[0]), model);
+                if(key.getVariant().contains("waterlogged=true")){
+                    event.getModels().put(new ModelResourceLocation(key.id(), key.getVariant().replace("facing", "face").split(",")[0]), model);
                 }
                 event.getModels().put(key, microblockModel);
             }
@@ -73,9 +73,9 @@ public class Renderers {
             }
         });
 
-        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:half_block"), "inventory"), microblockModel);
-        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "inventory"), microblockModel);
-        event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation(ResourceLocation.parse("bluepower:half_block"), "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation(ResourceLocation.parse("bluepower:panel"), "inventory"), microblockModel);
+        event.getModels().put(new ModelResourceLocation(ResourceLocation.parse("bluepower:cover"), "inventory"), microblockModel);
 
     }
 

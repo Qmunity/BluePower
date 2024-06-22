@@ -20,7 +20,7 @@ public class GuiDiskDrive extends GuiContainerBaseBP<ContainerDiskDrive> impleme
 
     private final ContainerDiskDrive diskDrive;
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/diskdrivegui.png");
+    private static final ResourceLocation resLoc = ResourceLocation.parse(Refs.MODID + ":textures/gui/diskdrivegui.png");
 
     public GuiDiskDrive(ContainerDiskDrive container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);

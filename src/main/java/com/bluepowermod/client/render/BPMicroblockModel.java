@@ -28,13 +28,14 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.GrassBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
+import net.neoforged.neoforge.client.model.IQuadTransformer;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -81,13 +82,15 @@ public class BPMicroblockModel implements BakedModel {
 
             if (state != null) {
                 TextureAtlasSprite sprite = typeModel.getParticleIcon();
+                int tintIndex = -1;
                 for (BakedQuad quad: sizeModelQuads) {
                     List<BakedQuad> typeModelQuads = typeModel.getQuads(info.getKey().defaultBlockState(), quad.getDirection(), rand);
-                    if(typeModelQuads.size() > 0){
-                        sprite = typeModelQuads.get(0).getSprite();
+                    if(!typeModelQuads.isEmpty()){
+                        sprite = typeModelQuads.getFirst().getSprite();
+                        tintIndex = typeModelQuads.getFirst().getTintIndex();
                     }
 
-                    bakedQuads.add(transform(quad, sprite, state.getValue(BlockBPMicroblock.FACING), defBlock.get()));
+                    bakedQuads.add(transform(quad, sprite, tintIndex, info.getKey()));
                 }
                 return bakedQuads;
             }
@@ -111,51 +114,48 @@ public class BPMicroblockModel implements BakedModel {
         List<BakedQuad> sizeModelQuads = sizeModel.getQuads(state, side, rand);
 
         TextureAtlasSprite sprite = typeModel.getParticleIcon();
+        int tintIndex = -1;
         for (BakedQuad quad: sizeModelQuads) {
             List<BakedQuad> typeModelQuads = typeModel.getQuads(this.defBlock.get().defaultBlockState(), quad.getDirection(), rand, ModelData.EMPTY, RenderType.cutout());
-            if(typeModelQuads.size() > 0){
-                sprite = typeModelQuads.get(0).getSprite();
+            if(!typeModelQuads.isEmpty()){
+                sprite = typeModelQuads.getFirst().getSprite();
+                tintIndex = typeModelQuads.getFirst().getTintIndex();
             }
 
-            outquads.add(transform(quad, sprite, Direction.EAST , defBlock.get()));
+            outquads.add(transform(quad, sprite, tintIndex, defBlock.get()));
         }
 
         return outquads;
     }
 
-    private static BakedQuad transform(BakedQuad sizeQuad, TextureAtlasSprite sprite, Direction dir, Block block) {
-        BakedQuad[] finalQuad = new BakedQuad[1];
-        final QuadBakingVertexConsumer consumer = new QuadBakingVertexConsumer(q -> finalQuad[0] = q) {
+    private static BakedQuad transform(BakedQuad sizeQuad, TextureAtlasSprite sprite, int tintIndex, Block block) {
+        int[] vertexData = sizeQuad.getVertices().clone();
+        for (int i = 0; i < 4; i++) {
 
-            @Override
-            public VertexConsumer uv(float x, float y) {
-                float u = sizeQuad.getSprite().getUOffset(x);
-                float v = sizeQuad.getSprite().getVOffset(y);
-                return super.uv(sprite.getU(u), sprite.getV(v));
+            //UVs
+            int offset = i * IQuadTransformer.STRIDE + IQuadTransformer.UV0;
+            //swap the sizeQuds UV with Sprite UV
+            vertexData[offset] = Float.floatToRawIntBits(sprite.getU(sizeQuad.getSprite().getUOffset(Float.intBitsToFloat(vertexData[offset]))));
+            vertexData[offset + 1] = Float.floatToRawIntBits(sprite.getV(sizeQuad.getSprite().getVOffset(Float.intBitsToFloat(vertexData[offset + 1]))));
+
+            //Color
+            offset = i * IQuadTransformer.STRIDE + IQuadTransformer.COLOR;
+            int color;
+            try {
+                color = Minecraft.getInstance().getBlockColors().getColor(block.defaultBlockState(), null, null, tintIndex);
+            } catch (Exception ex) {
+                    color = -1;
             }
+            int alphaMask = 0xFF000000, redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
+            int a = (color & alphaMask) >> 24;
+            int r = (color & redMask) >> 16;
+            int g = (color & greenMask) >> 8;
+            int b = (color & blueMask);
 
-            @Override
-            public VertexConsumer color(int pColorARGB) {
-                int color;
-                try {
-                    color = Minecraft.getInstance().getBlockColors().getColor(block.defaultBlockState(), null, null, sizeQuad.getTintIndex());
-                } catch (Exception ex) {
-                    try {
-                        color = Minecraft.getInstance().getBlockColors().getColor(block.defaultBlockState(), null, BlockPos.ZERO, sizeQuad.getTintIndex());
-                    } catch (Exception ex2) {
-                        color = 0;
-                    }
-                }
-                int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-                int r = (color & redMask) >> 16;
-                int g = (color & greenMask) >> 8;
-                int b = (color & blueMask);
-
-                return this.color( r / 255, g / 255, b / 255, 1);
-            }
-        };
-        consumer.putBulkData(new PoseStack().last(), sizeQuad, 1, 1, 1, 1, 0, OverlayTexture.NO_OVERLAY, true);
-        return finalQuad[0];
+            if(color != -1 && !(block instanceof GrassBlock && tintIndex == -1))
+                vertexData[offset] = (a & 255) << 24 | (b & 255) << 16 | (g & 255) << 8 | r & 255;
+        }
+        return new BakedQuad(vertexData, sizeQuad.getTintIndex(), sizeQuad.getDirection(), sprite, sizeQuad.isShade(), sizeQuad.hasAmbientOcclusion());
     }
 
     @Override
@@ -214,11 +214,11 @@ public class BPMicroblockModel implements BakedModel {
         @Override
         public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int par1){
             CompoundTag nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-            if(nbt != null && nbt.contains("block")){
-                DeferredHolder<Block, Block> block = DeferredHolder.create(new ResourceLocation("block"), new ResourceLocation(nbt.getString("block")));
-                return new BPMicroblockModel(block, DeferredHolder.create(new ResourceLocation("block"), BuiltInRegistries.BLOCK.getKey(Block.byItem(stack.getItem()))));
+            if(nbt.contains("block")){
+                DeferredHolder<Block, Block> block = DeferredHolder.create(ResourceLocation.parse("block"), ResourceLocation.parse(nbt.getString("block")));
+                return new BPMicroblockModel(block, DeferredHolder.create(ResourceLocation.parse("block"), BuiltInRegistries.BLOCK.getKey(Block.byItem(stack.getItem()))));
             }
-            return new BPMicroblockModel(BPBlocks.marble, DeferredHolder.create(new ResourceLocation("block"), BuiltInRegistries.BLOCK.getKey(Block.byItem(stack.getItem()))));
+            return new BPMicroblockModel(BPBlocks.marble, DeferredHolder.create(ResourceLocation.parse("block"), BuiltInRegistries.BLOCK.getKey(Block.byItem(stack.getItem()))));
         }
     }
 

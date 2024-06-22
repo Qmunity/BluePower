@@ -19,6 +19,7 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.IScrewdriver;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 
@@ -61,8 +62,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
         if (!simulated) {
             if (player instanceof ServerPlayer) {
-                stack.hurtAndBreak(damage, RandomSource.create(), (ServerPlayer) player, () -> {
-                    player.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+                stack.hurtAndBreak(damage, (ServerLevel) player.level(), (ServerPlayer) player, item -> {
                     stack.setCount(stack.getCount() - 1);
                     player.awardStat(Stats.ITEM_BROKEN.get(stack.getItem()), 1);
 

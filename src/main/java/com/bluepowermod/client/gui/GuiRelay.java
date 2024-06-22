@@ -31,7 +31,7 @@ import net.minecraft.network.chat.Component;
 
 public class GuiRelay extends GuiContainerBaseBP<ContainerRelay> implements MenuAccess<ContainerRelay> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/seedbag.png");
 
     public GuiRelay(ContainerRelay container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);

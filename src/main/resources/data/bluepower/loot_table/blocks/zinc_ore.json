@@ -13,18 +13,20 @@
                 {
                   "condition": "minecraft:match_tool",
                   "predicate": {
-                    "enchantments": [
-                      {
-                        "enchantment": "minecraft:silk_touch",
-                        "levels": {
-                          "min": 1
+                    "predicates": {
+                      "minecraft:enchantments": [
+                        {
+                          "enchantment": "minecraft:silk_touch",
+                          "levels": {
+                            "min": 1
+                          }
                         }
-                      }
-                    ]
+                      ]
+                    }
                   }
                 }
               ],
-              "name": "bluepower:tungsten_ore"
+              "name": "bluepower:zinc_ore"
             },
             {
               "type": "minecraft:item",
@@ -38,7 +40,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "bluepower:tungsten_raw"
+              "name": "bluepower:zinc_raw"
             }
           ]
         }

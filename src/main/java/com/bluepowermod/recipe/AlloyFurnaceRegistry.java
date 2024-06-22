@@ -23,35 +23,22 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.init.BPRecipeTypes;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import com.google.gson.JsonObject;
-import com.mojang.datafixers.util.Function3;
-import com.mojang.datafixers.util.Function4;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
-import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 
-import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * @author MoreThanHidden
@@ -103,41 +90,6 @@ public class AlloyFurnaceRegistry {
         }
 
         @Override
-        public boolean matches(WorldlyContainer inv, Level worldIn){
-            NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
-            if(inv instanceof TileAlloyFurnace) {
-                //Get Input Slots first 2 are Fuel and Output
-                for (int i = 2; i < 11; i++) {
-                    input.set(i - 2, inv.getItem(i));
-                }
-            }else{
-                //Get Input Slots first slot is Output
-                for (int i = 1; i < 10; i++) {
-                    input.set(i - 1, inv.getItem(i));
-                }
-            }
-            return matches(input);
-        }
-
-        @Override
-        public ItemStack assemble(WorldlyContainer inv, HolderLookup.Provider provider) {
-            NonNullList<ItemStack> input = NonNullList.withSize(9, ItemStack.EMPTY);
-            if(inv instanceof TileAlloyFurnace) {
-                //Get Input Slots first 2 are Fuel and Output
-                for (int i = 2; i < 12; i++) {
-                    input.set(i - 2, inv.getItem(i));
-                }
-            }else{
-                //Get Input Slots first is Output
-                for (int i = 1; i < 11; i++) {
-                    input.set(i - 1, inv.getItem(i));
-                }
-            }
-
-            return assemble(input, null);
-        }
-
-        @Override
         public boolean canCraftInDimensions(int width, int height) {
             return width <= 3 && height <= 3;
         }
@@ -172,11 +124,10 @@ public class AlloyFurnaceRegistry {
         }
 
         @Override
-        public boolean matches(NonNullList<ItemStack> input) {
-
+        public boolean matches(CraftingInput input, Level level) {
             for (SizedIngredient requiredItem : requiredItems) {
                 int itemsNeeded = requiredItem.count();
-                for (ItemStack inputStack : input) {
+                for (ItemStack inputStack : input.items()) {
                     if (requiredItem.ingredient().test(inputStack)) {
                         itemsNeeded -= inputStack.getCount();
                         if (itemsNeeded <= 0)
@@ -190,16 +141,16 @@ public class AlloyFurnaceRegistry {
         }
 
         @Override
-        public boolean useItems(NonNullList<ItemStack> input, HolderLookup.Provider provider) {
+        public boolean useItems(CraftingInput input, HolderLookup.Provider provider) {
             for (SizedIngredient requiredItem : requiredItems) {
                 int itemsNeeded = requiredItem.count();
                 for (int i = 0; i < input.size(); i++) {
-                    ItemStack inputStack = input.get(i);
+                    ItemStack inputStack = input.items().get(i);
                     if (requiredItem.ingredient().test(inputStack)) {
                         int itemsSubstracted = Math.min(inputStack.getCount(), itemsNeeded);
                         inputStack.setCount(inputStack.getCount() - itemsSubstracted);
                         if (inputStack.getCount() <= 0)
-                            input.set(i, ItemStack.EMPTY);
+                            input.items().set(i, ItemStack.EMPTY);
                         itemsNeeded -= itemsSubstracted;
                         if (itemsNeeded <= 0)
                             break;
@@ -214,7 +165,7 @@ public class AlloyFurnaceRegistry {
         }
 
         @Override
-        public ItemStack assemble(NonNullList<ItemStack> input, HolderLookup.Provider provider) {
+        public ItemStack assemble(CraftingInput input, HolderLookup.Provider provider) {
             return craftingResult;
         }
 

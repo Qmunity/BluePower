@@ -35,8 +35,8 @@ public class BlockItemOre extends BlockBase {
     }
 
     @Override
-    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
-        return silkTouchLevel == 0 ? 1 + this.xpRange.sample(randomSource) : 0;
+    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos) {
+        return 1 + this.xpRange.sample(randomSource);
     }
 
 }

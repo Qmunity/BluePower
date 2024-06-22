@@ -21,7 +21,7 @@ public class GuiRedbusID extends GuiContainerBaseBP<ContainerRedbusID> implement
 
     private final ContainerRedbusID device;
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/redbusgui.png");
+    private static final ResourceLocation resLoc = ResourceLocation.parse(Refs.MODID + ":textures/gui/redbusgui.png");
 
     public GuiRedbusID(ContainerRedbusID container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);

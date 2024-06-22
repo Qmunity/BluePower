@@ -50,7 +50,7 @@ public class BluePower {
     public static Supplier<CommonProxy>  proxy = FMLEnvironment.dist == Dist.CLIENT ? ClientProxy::new : CommonProxy::new;
 
     public BluePower(IEventBus modEventBus){
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BPConfig.spec);
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, BPConfig.spec);
         instance = this;
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::complete);
@@ -61,7 +61,6 @@ public class BluePower {
         BPItems.ITEMS.register(modEventBus);
         BPCreativeTabs.CREATIVE_TABS.register(modEventBus);
         BPBlockEntityType.BLOCK_ENTITY_TYPE.register(modEventBus);
-        BPEnchantments.ENCHANTMENT.register(modEventBus);
         BPRecipeTypes.RECIPE_TYPE.register(modEventBus);
         BPRecipeSerializer.RECIPE_SERIALIZERS.register(modEventBus);
         BPWorldGen.FEATURES.register(modEventBus);

@@ -19,6 +19,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.TileMachineBase;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -29,8 +30,10 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
@@ -40,12 +43,13 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author MoreThanHidden
  */
 
-public class TileBlulectricAlloyFurnace extends TileMachineBase implements WorldlyContainer, MenuProvider {
+public class TileBlulectricAlloyFurnace extends TileMachineBase implements WorldlyContainer, MenuProvider, CraftingContainer {
     public final BlutricityStorage storage = new BlutricityStorage(1000, 100);
     private boolean isActive;
     private int currentProcessTime;
@@ -133,11 +137,11 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
                 }
             }
             if (tileAlloyFurnace.updatingRecipe) {
-                if(level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).isPresent()) {
-                    tileAlloyFurnace.currentRecipe = (IAlloyFurnaceRecipe) level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace, level).get().value();
+                if(level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace.asCraftInput(), level).isPresent()) {
+                    tileAlloyFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace.asCraftInput(), level).get().value();
                     //Check output slot is empty and less than a stack of the same item.
                     if(!(tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem(level.registryAccess()).getItem()
-                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
+                            && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.asCraftInput(), level.registryAccess()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
                             && !tileAlloyFurnace.outputInventory.isEmpty()){
                         tileAlloyFurnace.currentRecipe = null;
                     }
@@ -154,11 +158,11 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
                     if (++tileAlloyFurnace.currentProcessTime >= (100 / (tileAlloyFurnace.storage.getEnergy() / tileAlloyFurnace.storage.getMaxEnergy()))) {
                         tileAlloyFurnace.currentProcessTime = 0;
                         if (!tileAlloyFurnace.outputInventory.isEmpty()) {
-                            tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).getCount());
+                            tileAlloyFurnace.outputInventory.setCount(tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.asCraftInput(), level.registryAccess()).getCount());
                         } else {
-                            tileAlloyFurnace.outputInventory = tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.inventory, level.registryAccess()).copy();
+                            tileAlloyFurnace.outputInventory = tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.asCraftInput(), level.registryAccess()).copy();
                         }
-                        tileAlloyFurnace.currentRecipe.useItems(tileAlloyFurnace.inventory, level.registryAccess());
+                        tileAlloyFurnace.currentRecipe.useItems(tileAlloyFurnace.asCraftInput(), level.registryAccess());
                         tileAlloyFurnace.updatingRecipe = true;
                     }
                 }else{
@@ -353,4 +357,23 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
         return new ContainerBlulectricAlloyFurnace(id, inventory, this, fields);
     }
 
+    @Override
+    public int getWidth() {
+        return 3;
+    }
+
+    @Override
+    public int getHeight() {
+        return 3;
+    }
+
+    @Override
+    public List<ItemStack> getItems() {
+        return inventory;
+    }
+
+    @Override
+    public void fillStackedContents(StackedContents stackedContents) {
+
+    }
 }

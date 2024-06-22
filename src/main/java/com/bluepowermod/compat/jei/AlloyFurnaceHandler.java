@@ -37,12 +37,12 @@ public class AlloyFurnaceHandler implements IRecipeCategory<IAlloyFurnaceRecipe>
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawableAnimated progress;
-    public static final RecipeType<IAlloyFurnaceRecipe> RECIPE_TYPE = new RecipeType<>(new ResourceLocation(Refs.MODID, Refs.ALLOYFURNACE_NAME), IAlloyFurnaceRecipe.class);
+    public static final RecipeType<IAlloyFurnaceRecipe> RECIPE_TYPE = new RecipeType<>(ResourceLocation.fromNamespaceAndPath(Refs.MODID, Refs.ALLOYFURNACE_NAME), IAlloyFurnaceRecipe.class);
 
     public AlloyFurnaceHandler(IGuiHelper helper) {
-      background = helper.createDrawable(new ResourceLocation(Refs.MODID + ":textures/gui/alloy_furnace.png"),8,13, 147, 60);
+      background = helper.createDrawable(ResourceLocation.parse(Refs.MODID + ":textures/gui/alloy_furnace.png"),8,13, 147, 60);
       icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BPBlocks.alloyfurnace.get()));
-      progress = helper.drawableBuilder(new ResourceLocation(Refs.MODID + ":textures/gui/alloy_furnace.png"), 178, 14, 24, 17).buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
+      progress = helper.drawableBuilder(ResourceLocation.parse(Refs.MODID + ":textures/gui/alloy_furnace.png"), 178, 14, 24, 17).buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
     }
 
     @Override

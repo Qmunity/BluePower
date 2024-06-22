@@ -30,7 +30,7 @@ public class GuiCircuitDatabaseSharing extends GuiContainerBaseBP<ContainerCircu
 
     private final ContainerCircuitDatabaseSharing circuitDatabase;
     private int curDeletingTemplate = -1;
-    private static final ResourceLocation copyTabTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_database.png");
+    private static final ResourceLocation copyTabTexture = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/circuit_database.png");
 
     public GuiCircuitDatabaseSharing(ContainerCircuitDatabaseSharing container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, copyTabTexture);

@@ -31,7 +31,7 @@ import net.minecraft.network.chat.Component;
 
 public class GuiSeedBag extends GuiContainerBaseBP<ContainerSeedBag> implements MenuAccess<ContainerSeedBag> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/seedbag.png");
 
     public GuiSeedBag(ContainerSeedBag container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);

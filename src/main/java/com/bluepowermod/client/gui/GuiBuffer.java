@@ -29,7 +29,7 @@ import net.minecraft.network.chat.Component;
 
 public class GuiBuffer extends GuiContainerBaseBP<ContainerBuffer> implements MenuAccess<ContainerBuffer> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/buffer.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/buffer.png");
 
     public GuiBuffer(ContainerBuffer container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);

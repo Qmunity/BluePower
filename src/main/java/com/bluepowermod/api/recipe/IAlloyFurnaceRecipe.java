@@ -17,17 +17,22 @@
 
 package com.bluepowermod.api.recipe;
 
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
 /**
  *  @author MoreThanHidden
  */
-public interface IAlloyFurnaceRecipe extends Recipe<WorldlyContainer>  {
+public interface IAlloyFurnaceRecipe extends Recipe<CraftingInput>  {
     
     /**
      * Return true if this recipe can be smelted using the input stacks. The input stacks are the 9 inventory slots, so an element can be ItemStack.EMPTY.
@@ -35,14 +40,14 @@ public interface IAlloyFurnaceRecipe extends Recipe<WorldlyContainer>  {
      * @param input
      * @return
      */
-    boolean matches(NonNullList<ItemStack> input);
+    boolean matches(CraftingInput input, Level level);
 
     /**
      * The items that are needed in this recipe need to be removed from the input inventory.
      */
-    boolean useItems(NonNullList<ItemStack> input, HolderLookup.Provider provider);
+    boolean useItems(CraftingInput input, HolderLookup.Provider provider);
 
-    ItemStack assemble(NonNullList<ItemStack> input, HolderLookup.Provider provider);
+    ItemStack assemble(CraftingInput input, HolderLookup.Provider provider);
 
     NonNullList<SizedIngredient> getRequiredItems();
 

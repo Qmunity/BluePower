@@ -26,7 +26,7 @@ import java.util.List;
 public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitDatabaseMain> implements MenuAccess<ContainerCircuitDatabaseMain> {
 
     private final ContainerCircuitDatabaseMain circuitDatabase;
-    private static final ResourceLocation copyTabTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_database.png");
+    private static final ResourceLocation copyTabTexture = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/circuit_database.png");
     private EditBox nameField;
     private WidgetSidewaysTab shareOptionTab;
     private WidgetMode copyButton;

@@ -67,23 +67,22 @@ public class BPMultipartModel implements BakedModel {
 
 
     private static BakedQuad transform(BakedQuad quad, Pair<Integer, Integer> colorPair, Boolean fullBright) {
-        BakedQuad[] finalQuad = new BakedQuad[1];
-        final QuadBakingVertexConsumer consumer = new QuadBakingVertexConsumer(q -> finalQuad[0] = q) {
+        final QuadBakingVertexConsumer consumer = new QuadBakingVertexConsumer() {
             @Override
-            public VertexConsumer color(int pColorARGB) {
+            public VertexConsumer setColor(int pColorARGB) {
                 int color = quad.getTintIndex() == 2 ? colorPair.getSecond() : colorPair.getFirst();
                 int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
                 int r = (color & redMask) >> 16;
                 int g = (color & greenMask) >> 8;
                 int b = (color & blueMask);
 
-                return this.color( r/255, g/255, b/255, 1);
+                return this.setColor( r/255, g/255, b/255, 1);
             }
         };
         consumer.putBulkData(new PoseStack().last(), quad, 1, 1, 1, 1, 0, OverlayTexture.NO_OVERLAY, true);
-        //if(fullBright)
+        //TODO: if(fullBright)
             //LightUtil.setLightData(finalQuad, 240);
-        return finalQuad[0];
+        return consumer.bakeQuad();
     }
 
     @Override
@@ -114,7 +113,7 @@ public class BPMultipartModel implements BakedModel {
             if(state != null)
                 return Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getParticleIcon();
         }
-        return Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(new ResourceLocation("minecraft:stone"), "")).getParticleIcon();
+        return Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(ResourceLocation.parse("minecraft:stone"), "")).getParticleIcon();
     }
 
     @Override

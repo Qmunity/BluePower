@@ -37,7 +37,7 @@ import java.util.List;
 
 public class GuiSortingMachine extends GuiContainerBaseBP<ContainerSortingMachine> implements MenuAccess<ContainerSortingMachine> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/sorting_machine.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/sorting_machine.png");
     private final ContainerSortingMachine sortingMachine;
 
     public GuiSortingMachine(ContainerSortingMachine container, Inventory playerInventory, Component title){

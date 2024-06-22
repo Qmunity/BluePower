@@ -43,7 +43,7 @@ public class BaseWidget implements IGuiWidget {
         this.textureV = textureV;
         textures = new ResourceLocation[textureLocs.length];
         for (int i = 0; i < textures.length; i++) {
-            textures[i] = new ResourceLocation(textureLocs[i]);
+            textures[i] = ResourceLocation.parse(textureLocs[i]);
         }
     }
 

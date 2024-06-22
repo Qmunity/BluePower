@@ -15,7 +15,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class CapabilityBlutricity {
 
-    public static BlockCapability<IPowerBase, @Nullable Direction> BLUTRICITY_CAPABILITY = BlockCapability.createSided(new ResourceLocation("bluepower", "blutricity"), IPowerBase.class);
+    public static BlockCapability<IPowerBase, @Nullable Direction> BLUTRICITY_CAPABILITY = BlockCapability.createSided(ResourceLocation.fromNamespaceAndPath("bluepower", "blutricity"), IPowerBase.class);
 
     public static void register(RegisterCapabilitiesEvent event){
         event.registerBlockEntity(BLUTRICITY_CAPABILITY, BPBlockEntityType.BLULECTRIC_ALLOY_FURNACE.get(), (furnace, side) -> furnace.storage);

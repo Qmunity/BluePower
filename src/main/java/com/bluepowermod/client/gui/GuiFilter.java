@@ -36,7 +36,7 @@ import net.minecraft.network.chat.Component;
  */
 public class GuiFilter extends GuiContainerBaseBP<ContainerFilter> implements MenuAccess<ContainerFilter> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/seedbag.png");
     protected ContainerFilter filter;
 
     public GuiFilter(ContainerFilter container, Inventory playerInventory, Component title){

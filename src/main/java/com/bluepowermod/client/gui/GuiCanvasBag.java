@@ -31,7 +31,7 @@ import net.minecraft.network.chat.Component;
 
 public class GuiCanvasBag extends GuiContainerBaseBP<ContainerCanvasBag> implements MenuAccess<ContainerCanvasBag> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/canvas_bag.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/canvas_bag.png");
 
     public GuiCanvasBag(ContainerCanvasBag container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);

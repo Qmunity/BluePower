@@ -39,7 +39,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
  */
 public class GuiProjectTable extends GuiContainerBaseBP<ContainerProjectTable> implements MenuAccess<ContainerProjectTable> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/project_table.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/project_table.png");
     private final ContainerProjectTable projectTable;
 
     public GuiProjectTable(ContainerProjectTable container, Inventory playerInventory, Component title){

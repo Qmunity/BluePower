@@ -16,7 +16,7 @@ import com.bluepowermod.reference.Refs;
 import net.minecraft.network.chat.Component;
 
 public class GuiCPU extends GuiContainerBaseBP<ContainerCPU> implements MenuAccess<ContainerCPU> {
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/cpugui.png");
+    private static final ResourceLocation resLoc = ResourceLocation.parse(Refs.MODID + ":textures/gui/cpugui.png");
 
     public GuiCPU(ContainerCPU container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);

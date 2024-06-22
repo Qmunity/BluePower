@@ -14,18 +14,20 @@
                 {
                   "condition": "minecraft:match_tool",
                   "predicate": {
-                    "enchantments": [
-                      {
-                        "enchantment": "minecraft:silk_touch",
-                        "levels": {
-                          "min": 1
+                    "predicates": {
+                      "minecraft:enchantments": [
+                        {
+                          "enchantment": "minecraft:silk_touch",
+                          "levels": {
+                            "min": 1
+                          }
                         }
-                      }
-                    ]
+                      ]
+                    }
                   }
                 }
               ],
-              "name": "bluepower:amethyst_ore"
+              "name": "bluepower:ruby_deepslate"
             },
             {
               "type": "minecraft:item",
@@ -39,7 +41,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "bluepower:amethyst_gem"
+              "name": "bluepower:ruby_gem"
             }
           ]
         }

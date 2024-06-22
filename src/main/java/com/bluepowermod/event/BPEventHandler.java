@@ -22,15 +22,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
@@ -38,7 +41,6 @@ import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.GrassBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -48,7 +50,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
@@ -57,7 +58,6 @@ import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.*;
-import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.joml.Matrix4f;
 
@@ -77,7 +77,7 @@ public class BPEventHandler {
 
         if (!event.getLeft().isEmpty() && event.getLeft().getItem() == BPItems.screwdriver.get()) {
             if (!event.getRight().isEmpty() && event.getRight().getItem() == Items.ENCHANTED_BOOK) {
-                if (EnchantmentHelper.getEnchantmentsForCrafting(event.getRight()).getLevel(Enchantments.SILK_TOUCH) > 0) {
+                if (EnchantmentHelper.getEnchantmentsForCrafting(event.getRight()).getLevel(event.getPlayer().registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.SILK_TOUCH)) > 0) {
                     event.setOutput(new ItemStack(BPItems.silky_screwdriver.get(), 1));
                     event.setCost(20);
                 }
@@ -149,9 +149,9 @@ public class BPEventHandler {
             if (entitySource.getEntity() instanceof Player killer) {
 
                 if (!killer.getInventory().getSelected().isEmpty()) {
-                    if (EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction.get(), killer) > 0 ) {
+                    if (EnchantmentHelper.getEnchantmentLevel(killer.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(BPEnchantments.DISJUNCTION), killer) > 0 ) {
                         if (event.getEntity() instanceof EnderMan || event.getEntity() instanceof EnderDragon) {
-                            int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction.get(), killer);
+                            int level = EnchantmentHelper.getEnchantmentLevel(killer.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(BPEnchantments.DISJUNCTION), killer);
                             isAttacking = true;
                             event.getEntity().hurt(entitySource, event.getAmount() * (level * 0.5F + 1));
                             isAttacking = false;
@@ -170,8 +170,8 @@ public class BPEventHandler {
             Player killer = (Player) entitySource.getEntity();
 
             if (!killer.getInventory().getSelected().isEmpty()) {
-                if (EnchantmentHelper.getEnchantmentLevel(BPEnchantments.vorpal.get(), killer) > 0) {
-                    int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.vorpal.get(), killer);
+                if (EnchantmentHelper.getEnchantmentLevel(killer.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(BPEnchantments.VORPAL), killer) > 0) {
+                    int level = EnchantmentHelper.getEnchantmentLevel(killer.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(BPEnchantments.VORPAL), killer);
 
                     if (level == 1) {
                         if (killer.level().random.nextInt(6) == 1) {
@@ -283,10 +283,10 @@ public class BPEventHandler {
                     double d1 = pos.getY() - projectedView.y();
                     double d2 = pos.getZ() - projectedView.z();
                     Matrix4f matrix4f = event.getPoseStack().last().pose();
-                    //shape.forAllEdges((startX, startY, startZ, endX, endY, endZ) -> {
-                    //    builder.vertex(matrix4f, (float)(startX + d0), (float)(startY + d1), (float)(startZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
-                    //    builder.vertex(matrix4f, (float)(endX + d0), (float)(endY + d1), (float)(endZ + d2)).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
-                    //});
+                    shape.forAllEdges((startX, startY, startZ, endX, endY, endZ) -> {
+                        builder.addVertex(matrix4f, (float)(startX + d0), (float)(startY + d1), (float)(startZ + d2)).setColor(0.0F, 0.0F, 0.0F, 0.4F).setNormal(0.0F, 0.0F, 0.0F);
+                        builder.addVertex(matrix4f, (float)(endX + d0), (float)(endY + d1), (float)(endZ + d2)).setColor(0.0F, 0.0F, 0.0F, 0.4F).setNormal(0.0F, 0.0F, 0.0F);
+                    });
                     ((ICancellableEvent)event).setCanceled(true);
                 }
             }

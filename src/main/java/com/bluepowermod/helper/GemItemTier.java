@@ -40,7 +40,7 @@ public class GemItemTier implements Tier {
 
     @Override
     public TagKey<Block> getIncorrectBlocksForDrops() {
-        return BlockTags.create(new ResourceLocation(""));
+        return BlockTags.create(ResourceLocation.parse(""));
     }
 
     @Override

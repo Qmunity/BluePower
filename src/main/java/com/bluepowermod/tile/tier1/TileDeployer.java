@@ -148,10 +148,6 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
         }
         
         try {
-            PlayerInteractEvent event =  new PlayerInteractEvent.RightClickEmpty(player, InteractionHand.MAIN_HAND);
-            if (((ICancellableEvent)event).isCanceled()) return false;
-            
-            Block block = level.getBlockState(new BlockPos(x, y, z)).getBlock();
             List<LivingEntity> detectedEntities = level.getEntitiesOfClass(LivingEntity.class, new AABB(x, y, z, x + 1, y + 1, z + 1));
             
             Entity entity = detectedEntities.isEmpty() ? null : detectedEntities.get(level.random.nextInt(detectedEntities.size()));
@@ -179,15 +175,6 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
             for (int i = 0; i < useItems; i++) {
                 player.getInventory().selected = i;
                 ItemStack stack = player.getMainHandItem();
-                boolean isGoingToShift = false;              
-                if(!stack.isEmpty()){
-                	if(stack.getItem() == Items.SUGAR_CANE || stack.getItem() == Items.REDSTONE){
-                		isGoingToShift = true;
-                	}
-                }
-                int useX = isGoingToShift ? worldPosition.getX() : x;
-                int useY = isGoingToShift ? worldPosition.getY() : y;
-                int useZ = isGoingToShift ? worldPosition.getZ() : z;
                 if (canDeployItem(stack) && stack.getItem().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == InteractionResult.SUCCESS) return true;
             }
             
@@ -196,7 +183,6 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
                 ItemStack stack = player.getMainHandItem();
                 if (canDeployItem(stack)) {
                     ItemStack copy = stack.copy();
-                    //TODO Check this
                     player.setItemInHand(InteractionHand.MAIN_HAND, stack.getItem().use(level, player, InteractionHand.MAIN_HAND).getObject());
                     if (!ItemStack.isSameItem(copy, stack)) return true;
                 }

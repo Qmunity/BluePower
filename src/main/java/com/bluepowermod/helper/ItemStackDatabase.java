@@ -106,7 +106,7 @@ public class ItemStackDatabase {
                             stacks.add(stack);
                         } else {
                             BluePower.log.error("Couldn't retrieve an itemstack with item id: " + tag.getShort("id"));
-                            Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(tag.getString("owner"), tag.getString("name")));
+                            Item item = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(tag.getString("owner"), tag.getString("name")));
                             if (item != Items.AIR) {
                                 ItemStack backupStack = new ItemStack(item, stack.getCount());
                                 backupStack.setDamageValue(tag.getShort("Damage"));

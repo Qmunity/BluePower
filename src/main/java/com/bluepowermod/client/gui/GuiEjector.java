@@ -29,7 +29,7 @@ import net.minecraft.network.chat.Component;
 
 public class GuiEjector extends GuiContainerBaseBP<ContainerEjector> implements MenuAccess<ContainerEjector> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/seedbag.png");
 
     public GuiEjector(ContainerEjector container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);

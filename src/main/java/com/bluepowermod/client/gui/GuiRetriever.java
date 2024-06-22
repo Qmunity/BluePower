@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class GuiRetriever extends GuiContainerBaseBP<ContainerRetriever> implements MenuAccess<ContainerRetriever> {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/retriever.png");
+    private static final ResourceLocation resLoc = ResourceLocation.fromNamespaceAndPath(Refs.MODID, "textures/gui/retriever.png");
     private final ContainerRetriever filter;
     public GuiRetriever(ContainerRetriever container, Inventory playerInventory, Component title){
         super(container, playerInventory, title, resLoc);

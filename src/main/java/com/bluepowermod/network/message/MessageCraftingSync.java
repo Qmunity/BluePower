@@ -16,7 +16,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
  */
 public record MessageCraftingSync(int value) implements IBPMessage {
 
-    public static final CustomPacketPayload.Type<MessageCraftingSync> TYPE = new CustomPacketPayload.Type<>(new ResourceLocation(Refs.MODID, "message_crafting_sync"));
+    public static final CustomPacketPayload.Type<MessageCraftingSync> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(Refs.MODID, "message_crafting_sync"));
     public static final StreamCodec<ByteBuf,MessageCraftingSync> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT, MessageCraftingSync::value,
             MessageCraftingSync::new

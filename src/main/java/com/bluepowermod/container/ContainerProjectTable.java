@@ -150,11 +150,11 @@ public class ContainerProjectTable extends AbstractContainerMenu implements IGui
         if (!world.isClientSide) {
             ServerPlayer serverplayerentity = (ServerPlayer)playerEntity;
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<RecipeHolder<CraftingRecipe>> optional = world.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInventory, world);
+            Optional<RecipeHolder<CraftingRecipe>> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInventory.asCraftInput(), world);
             if (optional.isPresent()) {
                 CraftingRecipe icraftingrecipe = optional.get().value();
                 if (craftResultInventory.setRecipeUsed(world, serverplayerentity, optional.get())) {
-                    itemstack = icraftingrecipe.assemble(craftingInventory, world.registryAccess());
+                    itemstack = icraftingrecipe.assemble(craftingInventory.asCraftInput(), world.registryAccess());
                 }
             }
 

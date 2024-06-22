@@ -60,7 +60,7 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(Refs.MODID, "jeiplugin");
+        return ResourceLocation.fromNamespaceAndPath(Refs.MODID, "jeiplugin");
     }
 
     @Override
@@ -92,7 +92,7 @@ public class JEIPlugin implements IModPlugin {
                 ItemStack output = ItemStack.EMPTY;
                 for (DeferredHolder<Block, Block> mb : BPBlocks.microblocks){
                     NonNullList<Ingredient> input = NonNullList.create();
-                    input.add(Ingredient.of(ItemTags.create(new ResourceLocation("bluepower:saw"))));
+                    input.add(Ingredient.of(ItemTags.create(ResourceLocation.parse("bluepower:saw"))));
                     if(mb == BPBlocks.half_block){
                         input.add(Ingredient.of(new ItemStack(block)));
                     }else{
@@ -107,7 +107,7 @@ public class JEIPlugin implements IModPlugin {
                             .append(Component.literal(" "))
                             .append(Component.translatable(mb.get().getDescriptionId())));
                     output = stack;
-                    recipes.add(new RecipeHolder(new ResourceLocation("bluepower:" + mb.get().getDescriptionId() + block.getDescriptionId()), new ShapelessRecipe("", CraftingBookCategory.MISC, output, input)));
+                    recipes.add(new RecipeHolder(ResourceLocation.parse("bluepower:" + mb.get().getDescriptionId() + block.getDescriptionId()), new ShapelessRecipe("", CraftingBookCategory.MISC, output, input)));
                 }
             }
         }

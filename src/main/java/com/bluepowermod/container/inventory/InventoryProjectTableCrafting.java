@@ -1,15 +1,19 @@
 package com.bluepowermod.container.inventory;
 
 import com.bluepowermod.network.message.MessageCraftingSync;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *@author MoreThanHidden
@@ -50,6 +54,15 @@ public class InventoryProjectTableCrafting extends TransientCraftingContainer {
     @Override
     public ItemStack getItem(int index) {
         return 18 + index >= 18 + this.getContainerSize() ? ItemStack.EMPTY : this.projectTable.getItem(18 + index);
+    }
+
+    @Override
+    public List<ItemStack> getItems() {
+        List<ItemStack> list = NonNullList.withSize(9, ItemStack.EMPTY);
+        for (int i = 0; i < 9; i++) {
+                list.set(i, this.projectTable.getItem(18 + i));
+        }
+        return list;
     }
 
     @Nonnull

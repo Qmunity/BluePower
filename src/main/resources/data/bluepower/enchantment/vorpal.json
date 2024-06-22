@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.bluepower.vorpal"
+  },
+  "supported_items": "#minecraft:enchantable/weapon",
+  "primary_items": "#minecraft:enchantable/sharp_weapon",
+  "weight": 2,
+  "max_level": 2,
+  "min_cost": {
+    "base": 10,
+    "per_level_above_first": 20
+  },
+  "max_cost": {
+    "base": 30,
+    "per_level_above_first": 20
+  },
+  "anvil_cost": 10,
+  "slots": [
+    "hand"
+  ]
+}

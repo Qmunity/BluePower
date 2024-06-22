@@ -13,7 +13,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record MessageGuiUpdate (int messageId, int value) implements IBPMessage {
-    public static final CustomPacketPayload.Type<MessageGuiUpdate> TYPE = new CustomPacketPayload.Type<>(new ResourceLocation(Refs.MODID, "message_gui_update"));
+    public static final CustomPacketPayload.Type<MessageGuiUpdate> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(Refs.MODID, "message_gui_update"));
     public static final StreamCodec<ByteBuf, MessageGuiUpdate> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT, MessageGuiUpdate::messageId,
             ByteBufCodecs.INT, MessageGuiUpdate::value,

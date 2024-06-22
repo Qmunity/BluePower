@@ -3,19 +3,14 @@ package com.bluepowermod.recipe;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPRecipeSerializer;
 import com.bluepowermod.init.BPRecipeTypes;
-import com.google.gson.JsonObject;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -41,21 +36,16 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     @Override
-    public boolean matches(WorldlyContainer inv, Level world) {
+    public boolean matches(CraftingInput inv, Level level) {
         //Build the blacklist based on config
         Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
         //item is in blacklist
-        if(inv.hasAnyOf(blacklist)){
+        if(inv.items().stream().anyMatch(itemStack -> blacklist.contains(itemStack.getItem()))){
             return false;
         }
 
-        return inv.hasAnyOf(AlloyFurnaceRegistry.getInstance().recyclingRecipes.keySet());
-    }
-
-    @Override
-    public ItemStack assemble(WorldlyContainer worldlyContainer, HolderLookup.Provider provider) {
-        return ItemStack.EMPTY;
+        return inv.items().stream().anyMatch(itemStack -> AlloyFurnaceRegistry.getInstance().recyclingRecipes.containsKey(itemStack.getItem()));
     }
 
     @Override
@@ -69,21 +59,16 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     @Override
-    public boolean matches(NonNullList<ItemStack> input) {
-        return false;
-    }
-
-    @Override
-    public boolean useItems(NonNullList<ItemStack> itemStacks, HolderLookup.Provider provider) {
+    public boolean useItems(CraftingInput itemStacks, HolderLookup.Provider provider) {
         Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
         //Check if item is in blacklist
-        if(itemStacks.stream().anyMatch(itemStack -> blacklist.contains(itemStack.getItem()))){
+        if(itemStacks.items().stream().anyMatch(itemStack -> blacklist.contains(itemStack.getItem()))){
             return false;
         }
 
         //Return true if an Furnace Item can be recycled
-        for (ItemStack itemStack : itemStacks) {
+        for (ItemStack itemStack : itemStacks.items()) {
             if (AlloyFurnaceRegistry.getInstance().recyclingRecipes.containsKey(itemStack.getItem())) {
                 itemStack.setCount(itemStack.getCount()-1);
                 return true;
@@ -94,16 +79,16 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     @Override
-    public ItemStack assemble(NonNullList<ItemStack> itemStacks, HolderLookup.Provider provider) {
+    public ItemStack assemble(CraftingInput itemStacks, HolderLookup.Provider provider) {
         Set<Item> blacklist = new HashSet<>(AlloyFurnaceRegistry.getInstance().blacklist);
 
         //Check if item is in blacklist
-        if (itemStacks.stream().anyMatch(itemStack -> blacklist.contains(itemStack.getItem()))) {
+        if (itemStacks.items().stream().anyMatch(itemStack -> blacklist.contains(itemStack.getItem()))) {
             return ItemStack.EMPTY;
         }
 
         //Return the output stack if possible.
-        for (ItemStack itemStack : itemStacks) {
+        for (ItemStack itemStack : itemStacks.items()) {
             if (AlloyFurnaceRegistry.getInstance().recyclingRecipes.containsKey(itemStack.getItem())) {
                 return AlloyFurnaceRegistry.getInstance().recyclingRecipes.get(itemStack.getItem());
             }

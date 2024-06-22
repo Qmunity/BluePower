@@ -177,12 +177,12 @@ public class BlockBPMicroblock extends BaseEntityBlock implements IBPPartBlock, 
         BlockEntity tileentity = worldIn.getBlockEntity(pos);
         if (tileentity instanceof TileBPMicroblock && stack.has(DataComponents.CUSTOM_DATA) && stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("block")) {
             //Update Microblock Type based on Stack
-            Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block")));
+            Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block")));
             ((TileBPMicroblock) tileentity).setBlock(block);
         }else if(tileentity instanceof TileBPMultipart && stack.has(DataComponents.CUSTOM_DATA) && stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("block")){
             //Update Multipart Microblock Type based on Stack
             TileBPMicroblock tile = (TileBPMicroblock)((TileBPMultipart)tileentity).getTileForState(state);
-            Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block")));
+            Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block")));
             tile.setBlock(block);
         }
     }

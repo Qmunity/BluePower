@@ -25,6 +25,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -49,8 +50,8 @@ public class BPCreativeTabs {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> machines = CREATIVE_TABS.register("machines",() -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:machines")).icon(() -> new ItemStack(BPBlocks.alloyfurnace.get())).build());
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> items = CREATIVE_TABS.register("items", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:items")).icon(() -> new ItemStack(BPItems.ruby_gem.get())).build());
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> tools = CREATIVE_TABS.register("tools", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:tools")).icon(() ->  new ItemStack(BPItems.screwdriver.get())).build());
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> lighting = CREATIVE_TABS.register("lighting", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:lighting")).icon(() ->  new ItemStack(BPBlocks.fixedLampRGB.get())).backgroundSuffix("bp_search.png").withSearchBar(62).build());
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> microblocks = CREATIVE_TABS.register( "microblocks", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:microblocks")).icon(() ->  new ItemStack(BPBlocks.microblocks.get(0).get())).backgroundSuffix("bp_search.png").withSearchBar(62).build());
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> lighting = CREATIVE_TABS.register("lighting", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:lighting")).icon(() ->  new ItemStack(BPBlocks.fixedLampRGB.get())).backgroundTexture(CreativeModeTab.createTextureLocation("bp_search")).withSearchBar(62).build());
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> microblocks = CREATIVE_TABS.register( "microblocks", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.bluepower:microblocks")).icon(() ->  new ItemStack(BPBlocks.microblocks.get(0).get())).backgroundTexture(CreativeModeTab.createTextureLocation("bp_search")).withSearchBar(62).build());
 
     @SubscribeEvent
     public void creativeTabEvent(BuildCreativeModeTabContentsEvent event) {

@@ -6,18 +6,12 @@ import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
-import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -35,10 +29,10 @@ public class TileAutoProjectTable extends TileProjectTable {
         if(slot == OUTPUT_SLOT) {
             InventoryProjectTableCrafting craftingInv = new InventoryProjectTableCrafting(null, this, 3, 3);
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, level);
+            Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv.asCraftInput(), level);
             if (optional.isPresent()) {
                 CraftingRecipe icraftingrecipe = optional.get().value();
-                itemstack = icraftingrecipe.assemble(craftingInv, level.registryAccess());
+                itemstack = icraftingrecipe.assemble(craftingInv.asCraftInput(), level.registryAccess());
             }
 
             for (int i = 0; i < 9; i++) {
@@ -78,10 +72,10 @@ public class TileAutoProjectTable extends TileProjectTable {
         if(i == OUTPUT_SLOT){
             InventoryProjectTableCrafting craftingInv = new InventoryProjectTableCrafting(null, this, 3, 3);
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, level);
+            Optional<RecipeHolder<CraftingRecipe>> optional = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv.asCraftInput(), level);
             if (optional.isPresent()) {
                 CraftingRecipe icraftingrecipe = optional.get().value();
-                itemstack = icraftingrecipe.assemble(craftingInv, level.registryAccess());
+                itemstack = icraftingrecipe.assemble(craftingInv.asCraftInput(), level.registryAccess());
             }
             return itemstack;
         }else {
