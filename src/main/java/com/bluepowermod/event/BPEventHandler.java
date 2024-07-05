@@ -22,13 +22,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -55,8 +52,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
-import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.*;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.joml.Matrix4f;
@@ -140,7 +137,7 @@ public class BPEventHandler {
     private boolean isAttacking = false;
 
     @SubscribeEvent
-    public void onEntityAttack(LivingAttackEvent event) {
+    public void onEntityAttack(LivingIncomingDamageEvent event) {
 
         DamageSource entitySource = event.getSource();
         if (!isAttacking) {// this event will be trigger recursively by EntityLiving#hurt,
@@ -250,7 +247,7 @@ public class BPEventHandler {
                     for (int z = event.getPos().getZ() - 2; z < event.getPos().getZ() + 3; z++) {
                         if (event.getLevel().isEmptyBlock(new BlockPos(x, event.getPos().getY() + 1, z))) {
                             if (event.getLevel().random.nextInt(50) == 1) {
-                                if (BPBlocks.indigo_flower.get().canSustainPlant(event.getLevel().getBlockState(event.getPos().above()), event.getLevel(), event.getPos().above(), Direction.UP, BPBlocks.indigo_flower.get())) {
+                                if (BPBlocks.indigo_flower.get().canSustainPlant(event.getLevel().getBlockState(event.getPos().above()), event.getLevel(), event.getPos().above(), Direction.UP, BPBlocks.indigo_flower.get().defaultBlockState()).isDefault()) {
                                     event.getLevel().setBlock(event.getPos().above(), BPBlocks.indigo_flower.get().defaultBlockState(), 0);
                                 }
                             }

@@ -19,9 +19,10 @@
 
 package com.bluepowermod.container.slot;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
@@ -38,7 +39,7 @@ public class SlotSeedBag extends SlotItemHandler {
         itemstack = itemstack.copy();
         itemstack.setCount(1);
         Block block = Block.byItem(itemstack.getItem());
-        if (block instanceof IPlantable) {
+        if (BuiltInRegistries.BLOCK.getTag(BlockTags.CROPS).get().stream().anyMatch(b -> b.value() == block)) {
             ItemStack seedType = ItemStack.EMPTY;
             
             for (int i = 0; i < this.container.getContainerSize(); i++) {

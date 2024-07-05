@@ -185,7 +185,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
         state = newState;
 
         //If not placed on a solid block break off
-        if (!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude()) {
+        if (!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isFaceSturdy(world, pos.relative(state.getValue(FACING).getOpposite()), state.getValue(FACING))) {
             if(te instanceof TileBPMultipart){
                 ((TileBPMultipart)te).removeState(state, world.registryAccess());
             }else {
@@ -200,8 +200,10 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     }
 
     //Returns true if a given blockState / tileEntity can connect.
-    protected boolean canConnect(Level world, BlockPos pos, BlockState state, @Nullable BlockEntity tileEntity, Direction direction){
+    protected boolean canConnect(Level world, BlockPos pos, BlockState state, @Nullable BlockEntity tileEntity, Direction direction, Direction origin){
         if (tileEntity != null) {
+            if(tileEntity instanceof TileBPMultipart)
+                return !((TileBPMultipart) tileEntity).isSideBlocked(getCapability(), direction) && ((TileBPMultipart) tileEntity).getStates().stream().anyMatch(s -> s.getValue(FACING) == origin);
             return world.getCapability(getCapability(), pos, direction) != null;
         }else{
             return false;
@@ -265,100 +267,100 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                     case DOWN:
                         switch (d) {
                             case EAST:
-                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case WEST:
-                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case NORTH:
-                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case SOUTH:
-                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                         }
                         break;
                     case NORTH:
                         switch (d) {
                             case WEST:
-                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case EAST:
-                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case UP:
-                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case DOWN:
-                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                         }
                         break;
                     case SOUTH:
                         switch (d) {
                             case EAST:
-                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case WEST:
-                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case UP:
-                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case DOWN:
-                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                         }
                         break;
                     case EAST:
                         switch (d) {
                             case NORTH:
-                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case SOUTH:
-                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case UP:
-                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case DOWN:
-                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                         }
                         break;
                     case WEST:
                         switch (d) {
                             case SOUTH:
-                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case NORTH:
-                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case UP:
-                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                             case DOWN:
-                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
+                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
+                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite(), face);
                                 break;
                         }
                 }

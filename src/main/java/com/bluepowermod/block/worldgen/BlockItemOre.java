@@ -22,9 +22,13 @@ import net.minecraft.core.BlockPos;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 public class BlockItemOre extends BlockBase {
 
@@ -35,8 +39,8 @@ public class BlockItemOre extends BlockBase {
     }
 
     @Override
-    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos) {
-        return 1 + this.xpRange.sample(randomSource);
+    public int getExpDrop(BlockState state, LevelAccessor level, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity breaker, ItemStack tool) {
+        return 1 + this.xpRange.sample(RandomSource.create());
     }
 
 }

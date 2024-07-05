@@ -59,6 +59,7 @@ public class BPCreativeTabs {
             event.acceptAll(BPBlocks.regularBlocks.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
         }else if(event.getTab() == items.get()){
             event.accept(BPBlocks.indigo_flower.get());
+            event.accept(BPItems.flax_seeds.get());
             BPItems.ITEMS.getEntries().forEach((item) -> {if(!(item.get() instanceof TieredItem || item.get() instanceof ItemSaw || item.get() instanceof ItemScrewdriver || item.get() instanceof BlockItem)){event.accept(item.get());}});
         }else if(event.getTab() == tools.get()){
             BPItems.ITEMS.getEntries().forEach((item) -> {if(item.get() instanceof TieredItem || item.get() instanceof ItemSaw || item.get() instanceof ItemScrewdriver){event.accept(item.get());}});

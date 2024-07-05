@@ -3,7 +3,6 @@ package com.bluepowermod.item;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.InteractionResult;
 
 /**

@@ -26,8 +26,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -42,7 +43,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
@@ -142,10 +142,9 @@ public class ItemSeedBag extends ItemBase implements MenuProvider {
 
         ItemStack seed = getSeedType(player.level().registryAccess(), player.getItemInHand(hand));
         Block block = Block.byItem(seed.getItem());
-        if (!seed.isEmpty() && block instanceof IPlantable) {
-            IPlantable plant = (IPlantable) block;
+        if (!seed.isEmpty() && BuiltInRegistries.BLOCK.getTag(BlockTags.CROPS).get().stream().anyMatch(b -> b.value() == block)){
             BlockState b = worldIn.getBlockState(pos);
-            if (b.getBlock().canSustainPlant(b, worldIn, pos, Direction.UP, plant)
+            if (b.getBlock().canSustainPlant(b, worldIn, pos, Direction.UP, block.defaultBlockState()).isDefault()
                     && worldIn.isEmptyBlock(pos.relative(Direction.UP))) {
                 for (int i = 0; i < 9; i++) {
                     ItemStack is = seedBagInvHandler.getStackInSlot(i);
