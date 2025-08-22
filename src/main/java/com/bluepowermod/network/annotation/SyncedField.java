@@ -252,7 +252,7 @@ public abstract class SyncedField<T> {
 
         @Override
         protected boolean equals(FluidStack oldValue, FluidStack newValue){
-            return oldValue.isFluidEqual(newValue) && oldValue.getAmount() == newValue.getAmount();
+            return oldValue.is(newValue.getFluidType()) && oldValue.getAmount() == newValue.getAmount();
         }
 
         @Override
