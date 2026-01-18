@@ -12,12 +12,14 @@ import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueInput;
 
 public class BluePowerAPI implements IBPApi {
 
@@ -39,15 +41,15 @@ public class BluePowerAPI implements IBPApi {
             CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             if (tag.contains("tileData")) {
                 if (te instanceof IAdvancedSilkyRemovable) {
-                    ((IAdvancedSilkyRemovable) te).readSilkyData(world, pos, tag.getCompound("tileData"));
+                    ((IAdvancedSilkyRemovable) te).readSilkyData(world, pos, tag.getCompoundOrEmpty("tileData"));
                 } else if (blockState.getBlock() instanceof IAdvancedSilkyRemovable) {
-                    ((IAdvancedSilkyRemovable) blockState.getBlock()).readSilkyData(world, pos, tag.getCompound("tileData"));
+                    ((IAdvancedSilkyRemovable) blockState.getBlock()).readSilkyData(world, pos, tag.getCompoundOrEmpty("tileData"));
                 } else {
-                    CompoundTag tileTag = tag.getCompound("tileData");
+                    CompoundTag tileTag = tag.getCompoundOrEmpty("tileData");
                     tileTag.putInt("x", pos.getX());
                     tileTag.putInt("y", pos.getY());
                     tileTag.putInt("z", pos.getZ());
-                    te.loadCustomOnly(tileTag, world.registryAccess());
+                    te.loadCustomOnly(TagValueInput.create(ProblemReporter.DISCARDING, world.registryAccess(), tileTag));
                 }
             }
         }

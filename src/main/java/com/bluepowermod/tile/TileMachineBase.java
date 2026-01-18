@@ -29,12 +29,15 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author MineMaarten
@@ -170,32 +173,29 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+    public void loadAdditional(ValueInput input) {
 
-        super.loadAdditional(compound, provider);
-        ListTag nbttaglist = compound.getList("ItemBuffer", 10);
+        super.loadAdditional(input);
+        ValueInput.ValueInputList nbttaglist = input.childrenListOrEmpty("ItemBuffer");
 
-        for (int i = 0; i < nbttaglist.size(); ++i) {
-            CompoundTag nbttagcompound1 = nbttaglist.getCompound(i);
-
-            internalItemStackBuffer.add(TubeStack.loadFromNBT(provider, nbttagcompound1));
+        for (ValueInput itemInput : nbttaglist){
+            internalItemStackBuffer.add(TubeStack.loadFromInput(itemInput));
         }
+
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+    protected void saveAdditional(ValueOutput valueOutput) {
 
-        super.saveAdditional(compound, provider);
-        ListTag nbttaglist = new ListTag();
+        super.saveAdditional(valueOutput);
+        ValueOutput.ValueOutputList outputlist = valueOutput.childrenList("ItemBuffer");
 
         for (TubeStack tubeStack : internalItemStackBuffer) {
             if (tubeStack != null) {
-                CompoundTag nbttagcompound1 = new CompoundTag();
-                tubeStack.writeToNBT(provider, nbttagcompound1);
-                nbttaglist.add(nbttagcompound1);
+                var outputChild = outputlist.addChild();
+                tubeStack.writeToOutput(outputChild);
             }
         }
-        compound.put("ItemBuffer", nbttaglist);
     }
 
     public void ejectItemInWorld(ItemStack stack, Direction oppDirection) {

@@ -11,16 +11,13 @@ package com.bluepowermod.tile;
 import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileWire;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -31,9 +28,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.BlockCapability;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.neoforged.neoforge.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelProperty;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -105,7 +105,7 @@ public class TileBPMultipart extends BlockEntity {
                 level.setBlockAndUpdate(worldPosition, ((BlockState)stateMap.keySet().toArray()[0]));
                 BlockEntity tile = level.getBlockEntity(worldPosition);
                 if (tile != null && nbt != null)
-                    tile.loadCustomOnly(nbt, provider);
+                    tile.loadCustomOnly(TagValueInput.create( ProblemReporter.DISCARDING, provider, nbt));
             }
         }else if(stateMap.size() == 0){
             //Remove if this is empty
@@ -114,7 +114,7 @@ public class TileBPMultipart extends BlockEntity {
             }
         }
         if(level != null)
-            level.getBlockState(worldPosition).handleNeighborChanged(level, worldPosition, getBlockState().getBlock(), worldPosition, false);
+            level.getBlockState(worldPosition).handleNeighborChanged(level, worldPosition, getBlockState().getBlock(), null, false);
     }
 
     public BlockEntity getTileForState(BlockState state){
@@ -146,31 +146,32 @@ public class TileBPMultipart extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-        super.saveAdditional(compound, provider);
-        compound.putInt("size", getStates().size());
-        for (int i = 0; i < getStates().size(); i++) {
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+
+        ValueOutput.ValueOutputList outputList = output.childrenList("states");
+
+        for (BlockState state : getStates()) {
             //write state data
-            String stateSave = "state" + i;
-            BlockState.CODEC.encodeStart(NbtOps.INSTANCE,  getStates().get(i)).result().ifPresent(nbt -> compound.put(stateSave, nbt));
+            var outputState = outputList.addChild();
+            outputState.store("state", BlockState.CODEC, state);
             //write tile NBT data
-            if(stateMap.get(getStates().get(i)) != null)
-                compound.put("tile" + i, stateMap.get(getStates().get(i)).saveWithoutMetadata(provider));
+            if(stateMap.get(state) != null)
+                stateMap.get(state).saveWithoutMetadata(outputState);
         }
     }
 
     @Override
-    public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-        super.loadAdditional(compound, provider);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
         Map<BlockState, BlockEntity> states = new HashMap<>();
-        int size = compound.getInt("size");
-        for (int i = 0; i < size; i++) {
-            Optional<Pair<BlockState, Tag>> result = BlockState.CODEC.decode(new Dynamic<>(NbtOps.INSTANCE, compound.get("state" + i))).result();
+        for (var childInput : input.childrenListOrEmpty("states")) {
+            Optional<BlockState> result = childInput.read("state", BlockState.CODEC);
             if(result.isPresent()){
-                BlockState state = result.get().getFirst();
+                BlockState state = result.get();
                 BlockEntity tile = ((EntityBlock)state.getBlock()).newBlockEntity(worldPosition, state);
                 if (tile != null) {
-                    tile.loadCustomOnly(compound.getCompound("tile" + i), provider);
+                    tile.loadCustomOnly(childInput);
                 }
                 states.put(state, tile);
             }
@@ -182,7 +183,7 @@ public class TileBPMultipart extends BlockEntity {
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
         CompoundTag updateTag = super.getUpdateTag(provider);
-        saveAdditional(updateTag, provider);
+        saveCustomOnly(provider);
         return updateTag;
     }
 
@@ -191,12 +192,12 @@ public class TileBPMultipart extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
+
     @Override
-    public void onDataPacket(Connection networkManager, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider provider) {
+    public void onDataPacket(Connection networkManager, ValueInput valueInput) {
         List<BlockState> states = getStates();
-        CompoundTag tagCompound = packet.getTag();
-        super.onDataPacket(networkManager, packet, provider);
-        loadAdditional(tagCompound, provider);
+        super.onDataPacket(networkManager, valueInput);
+        loadAdditional(valueInput);
         if (level.isClientSide) {
             // Update if needed
             if (!getStates().equals(states)) {

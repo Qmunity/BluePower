@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -37,7 +37,7 @@ import net.neoforged.neoforge.capabilities.BlockCapability;
 
 public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleWaterloggedBlock {
 
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     protected static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
     protected static final BooleanProperty CONNECTED_BACK = BooleanProperty.create("connected_back");
     protected static final BooleanProperty CONNECTED_LEFT = BooleanProperty.create("connected_left");

@@ -19,6 +19,7 @@ import com.bluepowermod.init.*;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.BPWorldGen;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
@@ -33,7 +34,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 import org.apache.logging.log4j.LogManager;
@@ -107,15 +108,15 @@ public class BluePower {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onResourceReload(AddReloadListenerEvent event) {
+    public void onResourceReload(AddServerReloadListenersEvent event) {
         //Add Reload Listener for the Alloy Furnace Recipe Generator
-        event.addListener(new BPRecyclingReloadListener(event.getServerResources()));
+        event.addListener(ResourceLocation.parse("bluepower:alloy_furnace"),new BPRecyclingReloadListener(event.getServerResources()));
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onServerStart(ServerStartedEvent event) {
         //Check Alloy furnace recipes again after tags are populated
-        BPRecyclingReloadListener.onResourceManagerReload(event.getServer().getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING));
+        BPRecyclingReloadListener.onResourceManagerReload(event.getServer().getRecipeManager().recipeMap().byType(RecipeType.CRAFTING));
     }
 
 }

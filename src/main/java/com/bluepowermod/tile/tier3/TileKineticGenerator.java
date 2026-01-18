@@ -18,6 +18,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+
+import java.util.Optional;
 
 public class TileKineticGenerator extends TileBase implements WorldlyContainer{
 
@@ -40,13 +44,16 @@ public class TileKineticGenerator extends TileBase implements WorldlyContainer{
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        super.loadAdditional(tCompound, provider);
+        Optional<ValueInput.ValueInputList> inputList = input.childrenList("inventory");
 
-        for (int i = 0; i < 1; i++) {
-            CompoundTag tc = tCompound.getCompound("inventory" + i);
-            allInventories.set(i, ItemStack.parseOptional(provider, tc));
+        if(inputList.isPresent()) {
+            for (ValueInput inputItem : inputList.get()) {
+                Optional<ItemStack> itemStack = inputItem.read("itemStack", ItemStack.CODEC);
+                itemStack.ifPresent(allInventories::add);
+            }
         }
     }
 
@@ -54,16 +61,14 @@ public class TileKineticGenerator extends TileBase implements WorldlyContainer{
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
 
-        super.saveAdditional(tCompound, provider);
+        ValueOutput.ValueOutputList outputList = valueOutput.childrenList("inventory");
 
-        for (int i = 0; i < 1; i++) {
-            if (!allInventories.get(i).isEmpty()) {
-                CompoundTag tc = new CompoundTag();
-                allInventories.get(i).save(provider, tc);
-                tCompound.put("inventory" + i, tc);
-            }
+        for (ItemStack itemStack : allInventories) {
+            ValueOutput output = outputList.addChild();
+            output.store("itemStack", ItemStack.CODEC, itemStack);
         }
     }
 

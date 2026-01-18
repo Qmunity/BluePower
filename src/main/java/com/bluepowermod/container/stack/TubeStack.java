@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BlockItem;
@@ -23,6 +24,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -186,30 +191,48 @@ public class TubeStack implements IItemHandler {
 
     public TubeStack copy(HolderLookup.Provider provider) {
 
-        CompoundTag tag = new CompoundTag();
-        writeToNBT(provider, tag);
-        return loadFromNBT(provider, tag);
+        // Create output
+        TagValueOutput output = TagValueOutput.createWithContext(
+                ProblemReporter.DISCARDING,
+                provider
+        );
+
+        // Write to output
+        writeToOutput(output);
+
+        // Build tag
+        CompoundTag tag = output.buildResult();
+
+        // Create input
+        ValueInput input = TagValueInput.create(
+                ProblemReporter.DISCARDING,
+                provider,
+                tag
+        );
+
+        // Load from input
+        return loadFromInput(input);
     }
 
-    public void writeToNBT(HolderLookup.Provider provider, CompoundTag tag) {
-        stack.save(provider, tag);
-        tag.putByte("color", (byte) color.ordinal());
-        tag.putByte("heading", (byte) heading.ordinal());
-        tag.putDouble("progress", progress);
-        tag.putDouble("speed", speed);
-        tag.putInt("targetX", targetX);
-        tag.putInt("targetY", targetY);
-        tag.putInt("targetZ", targetZ);
+    public void writeToOutput(ValueOutput output) {
+        output.store("stack", ItemStack.CODEC, stack);
+        output.putByte("color", (byte) color.ordinal());
+        output.putByte("heading", (byte) heading.ordinal());
+        output.putDouble("progress", progress);
+        output.putDouble("speed", speed);
+        output.putInt("targetX", targetX);
+        output.putInt("targetY", targetY);
+        output.putInt("targetZ", targetZ);
     }
 
-    public static TubeStack loadFromNBT(HolderLookup.Provider provider, CompoundTag tag) {
-        TubeStack stack = new TubeStack(ItemStack.parseOptional(provider, tag), Direction.from3DDataValue(tag.getByte("heading")),
-                TubeColor.values()[tag.getByte("color")]);
-        stack.progress = tag.getDouble("progress");
-        stack.speed = tag.getDouble("speed");
-        stack.targetX = tag.getInt("targetX");
-        stack.targetY = tag.getInt("targetY");
-        stack.targetZ = tag.getInt("targetZ");
+    public static TubeStack loadFromInput(ValueInput input) {
+        TubeStack stack = new TubeStack(input.read("stack", ItemStack.CODEC).get(), Direction.from3DDataValue(input.getByteOr("heading", (byte)0)),
+                TubeColor.values()[input.getByteOr("color", (byte) TubeColor.NONE.ordinal())]);
+        stack.progress = input.getDoubleOr("progress", 0);
+        stack.speed = input.getDoubleOr("speed", 0);
+        stack.targetX = input.getIntOr("targetX", 0);
+        stack.targetY = input.getIntOr("targetY", 0);
+        stack.targetZ = input.getIntOr("targetZ", 0);
         return stack;
     }
 

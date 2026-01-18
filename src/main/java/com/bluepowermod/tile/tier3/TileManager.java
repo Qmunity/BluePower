@@ -12,6 +12,7 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.*;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.*;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
@@ -21,6 +22,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+
+import java.util.Optional;
 
 /**
  * @author MineMaarten
@@ -113,57 +118,43 @@ public class TileManager extends TileMachineBase implements WorldlyContainer, IR
         }
     }
 
-    /**
-     * This function gets called whenever the world/chunk loads
-     */
     @Override
-    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        super.loadAdditional(tCompound, provider);
+        Optional<ValueInput.ValueInputList> inputList = input.childrenList("inventory");
 
-        for (int i = 0; i < 24; i++) {
-            CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.parseOptional(provider, tc));
-        }
-        filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
-        mode = tCompound.getByte("mode");
-        priority = tCompound.getByte("priority");
-        fuzzySetting = tCompound.getByte("fuzzySetting");
-    }
-
-
-    /**
-     * This function gets called whenever the world/chunk is saved
-     */
-    @Override
-    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-
-        super.saveAdditional(tCompound, provider);
-
-        for (int i = 0; i < 24; i++) {
-                CompoundTag tc = new CompoundTag();
-                inventory.get(i).save(provider, tc);
-                tCompound.put("inventory" + i, tc);
+        if(inputList.isPresent()) {
+            for (ValueInput inputItem : inputList.get()) {
+                Optional<ItemStack> itemStack = inputItem.read("itemStack", ItemStack.CODEC);
+                itemStack.ifPresent(inventory::add);
+            }
         }
 
-        tCompound.putByte("filterColor", (byte) filterColor.ordinal());
-        tCompound.putByte("mode", (byte) mode);
-        tCompound.putByte("priority", (byte) priority);
-        tCompound.putByte("fuzzySetting", (byte) fuzzySetting);
+        filterColor = TubeColor.values()[input.getByteOr("filterColor", (byte) TubeColor.NONE.ordinal())];
+        mode = input.getByteOr("mode", (byte) 0);
+        priority = input.getByteOr("priority", (byte) 0);
+        fuzzySetting = input.getByteOr("fuzzySetting", (byte) 0);
+
+        rejectTicker = input.getByteOr("rejectAnimation", (byte) 0);
     }
 
     @Override
-    public void writeToPacketNBT(CompoundTag tag) {
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
 
-        super.writeToPacketNBT(tag);
-        tag.putByte("rejectAnimation", (byte) rejectTicker);
-    }
+        ValueOutput.ValueOutputList outputList = valueOutput.childrenList("inventory");
 
-    @Override
-    public void readFromPacketNBT(CompoundTag tag) {
+        for (ItemStack itemStack : inventory) {
+            ValueOutput output = outputList.addChild();
+            output.store("itemStack", ItemStack.CODEC, itemStack);
+        }
 
-        super.readFromPacketNBT(tag);
-        rejectTicker = tag.getByte("rejectAnimation");
+        valueOutput.putByte("filterColor", (byte) filterColor.ordinal());
+        valueOutput.putByte("mode", (byte) mode);
+        valueOutput.putByte("priority", (byte) priority);
+        valueOutput.putByte("fuzzySetting", (byte) fuzzySetting);
+        valueOutput.putByte("rejectAnimation", (byte) rejectTicker);
     }
 
     @Override
@@ -174,7 +165,7 @@ public class TileManager extends TileMachineBase implements WorldlyContainer, IR
 
     @Override
     public boolean isEmpty() {
-        return inventory.size() == 0;
+        return inventory.isEmpty();
     }
 
     @Override

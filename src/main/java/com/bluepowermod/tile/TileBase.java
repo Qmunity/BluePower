@@ -31,6 +31,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nullable;
 
@@ -54,38 +57,23 @@ public class TileBase extends BlockEntity implements IRotatable {
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tCompound, provider);
-        isRedstonePowered = tCompound.getBoolean("isRedstonePowered");
-        readFromPacketNBT(tCompound);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        isRedstonePowered = input.getBooleanOr("isRedstonePowered", false);
+        outputtingRedstone = input.getByteOr("outputtingRedstone", (byte) 0);
+        if (level != null)
+            markForRenderUpdate();
     }
-
 
     /**
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+    protected void saveAdditional(ValueOutput valueOutput) {
 
-        super.saveAdditional(tCompound, provider);
-        tCompound.putBoolean("isRedstonePowered", isRedstonePowered);
-
-        writeToPacketNBT(tCompound);
-    }
-
-    /**
-     * Tags written in here are synced upon markBlockForUpdate.
-     * 
-     * @param tCompound
-     */
-    protected void writeToPacketNBT(CompoundTag tCompound) {
-        tCompound.putByte("outputtingRedstone", (byte) outputtingRedstone);
-    }
-
-    protected void readFromPacketNBT(CompoundTag tCompound) {
-        outputtingRedstone = tCompound.getByte("outputtingRedstone");
-        if (level != null)
-            markForRenderUpdate();
+        super.saveAdditional(valueOutput);
+        valueOutput.putBoolean("isRedstonePowered", isRedstonePowered);
+        valueOutput.putByte("outputtingRedstone", (byte) outputtingRedstone);
     }
 
     @Nullable
@@ -94,18 +82,10 @@ public class TileBase extends BlockEntity implements IRotatable {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-        if(pkt.getTag() != null) {
-            readFromPacketNBT(pkt.getTag());
-            handleUpdateTag(pkt.getTag(), provider);
-        }
-    }
-
     protected void sendUpdatePacket() {
 
         if (!level.isClientSide)
-        level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
+            level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
     }
 
     protected void markForRenderUpdate() {

@@ -85,15 +85,9 @@ public class Renderers {
         BlockEntityRenderers.register(BPBlockEntityType.TUBE.get(), context -> new RenderTube());
         BlockEntityRenderers.register(BPBlockEntityType.ENGINE.get(), context -> new RenderEngine());
 
-        for (DeferredHolder<Item, ? extends Item> item : BPItems.ITEMS.getEntries()) {
-            if (item.get() instanceof IBPColoredItem) {
-                Minecraft.getInstance().getItemColors().register(new BPItemColor(), item.get());
-            }
-        }
         for (Block block : BPBlocks.blockList) {
             if (block instanceof IBPColoredBlock) {
                 Minecraft.getInstance().getBlockColors().register(new BPBlockColor(), block);
-                Minecraft.getInstance().getItemColors().register(new BPBlockColor(), Item.byBlock(block));
             }
             if(block instanceof BlockLampSurface || block instanceof BlockGateBase || block instanceof BlockBattery)
                 ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());

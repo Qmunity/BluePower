@@ -26,6 +26,7 @@ import net.minecraft.world.item.crafting.*;
 import net.neoforged.fml.util.thread.SidedThreadGroups;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,14 +40,14 @@ public class BPRecyclingReloadListener extends SimplePreparableReloadListener<Vo
 
     @Override
     protected void apply(Void pObject, ResourceManager pResourceManager, ProfilerFiller pProfiler) {
-        onResourceManagerReload(serverResources.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING));
+        onResourceManagerReload(serverResources.getRecipeManager().recipeMap().byType(RecipeType.CRAFTING));
         WorldGenVolcano.updateAlterBlocks();
     }
 
     /**
      * Generates the Dynamic Recycling recipes on a reload.
      */
-    public static void onResourceManagerReload(List<RecipeHolder<CraftingRecipe>> recipeList) {
+    public static void onResourceManagerReload(Collection<RecipeHolder<CraftingRecipe>> recipeList) {
         //Make sure this is running on the logical server
         if(Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER) {
             return;

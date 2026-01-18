@@ -20,8 +20,10 @@ import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelProperty;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -65,26 +67,24 @@ public class TileBPMicroblock extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-        super.saveAdditional(compound, provider);
-        compound.putString("block", BuiltInRegistries.BLOCK.getKey(block).toString());
-        compound.putInt("rotation", rotation);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        output.putString("block", BuiltInRegistries.BLOCK.getKey(block).toString());
+        output.putInt("rotation", rotation);
     }
 
     @Override
-    public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
-       super.loadAdditional(compound, provider);
-       if (compound.contains("block")) {
-           block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(compound.getString("block")));
-           rotation = compound.getInt("rotation");
-       }
+    public void loadAdditional(ValueInput input) {
+       super.loadAdditional(input);
+       block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(input.getStringOr("block", BuiltInRegistries.BLOCK.getKey(Blocks.STONE).toString()))).get().value();
+       rotation = input.getIntOr("rotation", 0);
     }
 
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
         CompoundTag updateTag = super.getUpdateTag(provider);
-        saveAdditional(updateTag, provider);
+        saveCustomOnly(provider);
         return updateTag;
     }
 
@@ -93,13 +93,12 @@ public class TileBPMicroblock extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    
+
     @Override
-    public void onDataPacket(Connection networkManager, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider provider) {
+    public void onDataPacket(Connection networkManager, ValueInput valueInput) {
         Block oldblock = getBlock();
-        CompoundTag tagCompound = packet.getTag();
-        super.onDataPacket(networkManager, packet, provider);
-        loadAdditional(tagCompound, provider);
+        super.onDataPacket(networkManager, valueInput);
+        loadAdditional(valueInput);
         if (level.isClientSide) {
             // Update if needed
             if (!getBlock().equals(oldblock)) {

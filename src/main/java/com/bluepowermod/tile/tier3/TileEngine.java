@@ -19,6 +19,8 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
@@ -91,25 +93,20 @@ public class TileEngine extends TileMachineBase  {
 
 	}
 
-	@Override
-	protected void writeToPacketNBT(CompoundTag compound) {
-		super.writeToPacketNBT(compound);
-        compound.putByte("pumpspeed", pumpSpeed);
-        compound.putByte("pumptick", pumpTick);
-        Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
-		compound.put("energy", nbtstorage);
-
+    @Override
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        valueOutput.putByte("pumpspeed", pumpSpeed);
+        valueOutput.putByte("pumptick", pumpTick);
+        CapabilityBlutricity.saveEnergy(storage, valueOutput);
 	}
 
-	@Override
-	protected void readFromPacketNBT(CompoundTag compound) {
-		super.readFromPacketNBT(compound);
-        pumpSpeed = compound.getByte("pumpspeed");
-        pumpTick = compound.getByte("pumptick");
-        if(compound.contains("energy")) {
-            Tag nbtstorage = compound.get("energy");
-            CapabilityBlutricity.readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
-        }
+    @Override
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        pumpSpeed = input.getByteOr("pumpspeed", (byte) 0);
+        pumpTick = input.getByteOr("pumptick", (byte) 0);
+        CapabilityBlutricity.loadEnergy(storage, input);
 	}
 }
 

@@ -21,6 +21,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,20 +60,16 @@ public class TileThermopile extends TileMachineBase  {
 		}
 	}
 
-	@Override
-	protected void readFromPacketNBT(CompoundTag tCompound) {
-		super.readFromPacketNBT(tCompound);
-		if(tCompound.contains("energy")) {
-			Tag nbtstorage = tCompound.get("energy");
-			CapabilityBlutricity.readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
-		}
+    @Override
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        CapabilityBlutricity.loadEnergy(storage, input);
 	}
 
-	@Override
-	protected void writeToPacketNBT(CompoundTag tCompound) {
-		super.writeToPacketNBT(tCompound);
-		Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
-		tCompound.put("energy", nbtstorage);
-	}
+    @Override
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        CapabilityBlutricity.saveEnergy(storage, output);
+    }
 
 }

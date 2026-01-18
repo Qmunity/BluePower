@@ -24,10 +24,8 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class CommonProxy {
 
-    private FMLCommonSetupEvent event;
-
     public void setup(FMLCommonSetupEvent event) {
-
+        // Setup logic for CommonProxy
     }
 
     public void preInitRenderers(IEventBus eventBus) {
@@ -37,7 +35,6 @@ public class CommonProxy {
     public void initRenderers() {
 
     }
-
 
     public Player getPlayer() {
 

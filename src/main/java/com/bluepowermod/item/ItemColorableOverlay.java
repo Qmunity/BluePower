@@ -9,8 +9,11 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IBPColoredItem;
-import net.minecraft.util.FastColor;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author MineMaarten
@@ -29,7 +32,7 @@ public class ItemColorableOverlay extends ItemBase implements IBPColoredItem {
     }
 
     @Override
-    public int getColor(ItemStack itemStack, int renderPass) {
-        return renderPass == 0 ? -1 : FastColor.ARGB32.opaque(color.getHex());
+    public int getColor(ItemStack stack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity livingEntity) {
+        return ARGB.opaque(color.getHex());
     }
 }

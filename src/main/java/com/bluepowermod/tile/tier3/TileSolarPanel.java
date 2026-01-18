@@ -20,6 +20,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,7 +46,7 @@ public class TileSolarPanel extends TileMachineBase  {
 			TileSolarPanel tileSolarPanel = (TileSolarPanel) blockEntity;
 			tileSolarPanel.storage.resetCurrent();
 
-			if (level.isDay() && level.canSeeSky(pos) && tileSolarPanel.storage.getEnergy() < tileSolarPanel.MAX_VOLTAGE && !level.isRaining())
+			if (!level.isDarkOutside() && level.canSeeSky(pos) && tileSolarPanel.storage.getEnergy() < tileSolarPanel.MAX_VOLTAGE && !level.isRaining())
 				tileSolarPanel.storage.addEnergy(0.2, false);
 
 			//Balance power of attached blulectric blocks.
@@ -57,20 +59,16 @@ public class TileSolarPanel extends TileMachineBase  {
 		}
 	}
 
-	@Override
-	protected void readFromPacketNBT(CompoundTag tCompound) {
-		super.readFromPacketNBT(tCompound);
-		if(tCompound.contains("energy")) {
-			Tag nbtstorage = tCompound.get("energy");
-			CapabilityBlutricity.readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
-		}
+    @Override
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        CapabilityBlutricity.loadEnergy(storage, input);
 	}
 
-	@Override
-	protected void writeToPacketNBT(CompoundTag tCompound) {
-		super.writeToPacketNBT(tCompound);
-		Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
-		tCompound.put("energy", nbtstorage);
+    @Override
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+		CapabilityBlutricity.saveEnergy(storage, valueOutput);
 	}
 
 }
