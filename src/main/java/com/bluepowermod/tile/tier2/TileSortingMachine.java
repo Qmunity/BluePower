@@ -22,6 +22,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -33,11 +34,14 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author MineMaarten
@@ -351,60 +355,44 @@ public class TileSortingMachine extends TileMachineBase implements WorldlyContai
 
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
 
-        super.saveAdditional(tag, provider);
-
-        tag.putByte("pullMode", (byte) pullMode.ordinal());
-        tag.putByte("sortMode", (byte) sortMode.ordinal());
-        tag.putInt("savedPulses", savedPulses);
+        valueOutput.putByte("pullMode", (byte) pullMode.ordinal());
+        valueOutput.putByte("sortMode", (byte) sortMode.ordinal());
+        valueOutput.putInt("savedPulses", savedPulses);
 
         int[] colorArray = new int[colors.length];
         for (int i = 0; i < colorArray.length; i++) {
             colorArray[i] = colors[i].ordinal();
         }
-        tag.putIntArray("colors", colorArray);
+        valueOutput.putIntArray("colors", colorArray);
 
-        tag.putIntArray("fuzzySettings", fuzzySettings);
+        valueOutput.putIntArray("fuzzySettings", fuzzySettings);
 
-        ListTag tagList = new ListTag();
-        for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
-            if (!inventory.get(currentIndex).isEmpty()) {
-                CompoundTag tagCompound = new CompoundTag();
-                tagCompound.putByte("Slot", (byte) currentIndex);
-                inventory.get(currentIndex).save(provider, tagCompound);
-                tagList.add(tagCompound);
-            }
-        }
-        tag.put("Items", tagList);
+        ContainerHelper.saveAllItems(valueOutput, inventory);
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        super.loadAdditional(tag, provider);
+        pullMode = PullMode.values()[input.getByteOr("pullMode", (byte)pullMode.ordinal())];
+        sortMode = SortMode.values()[input.getByteOr("sortMode", (byte)sortMode.ordinal())];
+        savedPulses = input.getIntOr("savedPulses", savedPulses);
 
-        pullMode = PullMode.values()[tag.getByte("pullMode")];
-        sortMode = SortMode.values()[tag.getByte("sortMode")];
-        savedPulses = tag.getInt("savedPulses");
-
-        int[] colorArray = tag.getIntArray("colors");
-        for (int i = 0; i < colorArray.length; i++) {
-            colors[i] = TubeColor.values()[colorArray[i]];
-        }
-
-        if (tag.contains("fuzzySettings"))
-            fuzzySettings = tag.getIntArray("fuzzySettings");
-
-        ListTag tagList = tag.getList("Items", 10);
-        inventory = NonNullList.withSize(40, ItemStack.EMPTY);
-        for (int i = 0; i < tagList.size(); ++i) {
-            CompoundTag tagCompound = tagList.getCompound(i);
-            byte slot = tagCompound.getByte("Slot");
-            if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, ItemStack.parseOptional(provider, tagCompound));
+        Optional<int[]> colorsInput = input.getIntArray("colors");
+        if(colorsInput.isPresent()){
+            int[] colorArray = colorsInput.get();
+            for (int i = 0; i < colorArray.length; i++) {
+                colors[i] = TubeColor.values()[colorArray[i]];
             }
         }
+
+        Optional<int[]> fuzzyInput = input.getIntArray("fuzzySettings");
+        fuzzyInput.ifPresent(ints -> fuzzySettings = ints);
+
+        ContainerHelper.loadAllItems(input, inventory);
     }
 
     @Override

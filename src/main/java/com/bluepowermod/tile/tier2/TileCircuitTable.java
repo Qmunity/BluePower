@@ -21,6 +21,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 /**
  * @author MineMaarten
@@ -59,19 +61,17 @@ public class TileCircuitTable extends TileBase implements Container, IGUITextFie
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
-        CompoundTag tc = new CompoundTag();
-        ContainerHelper.saveAllItems(tc, inventory, provider);
-        tag.put("Items", tc);
-        tag.putString("textboxString", textboxString);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        ContainerHelper.saveAllItems(valueOutput.child("inventory"), inventory);
+        valueOutput.putString("textboxString", textboxString);
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
-        ContainerHelper.loadAllItems(tag.getCompound("Items"), inventory, provider);
-        textboxString = tag.getString("textboxString");
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        input.child("inventory").ifPresent(valueInput -> ContainerHelper.loadAllItems(valueInput, inventory));
+        textboxString = input.getStringOr("textboxString", textboxString);
     }
 
     @Override

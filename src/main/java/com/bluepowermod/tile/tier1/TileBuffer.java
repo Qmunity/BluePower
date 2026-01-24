@@ -35,6 +35,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nullable;
 
@@ -47,24 +49,16 @@ public class TileBuffer extends TileBase implements WorldlyContainer, MenuProvid
         super(BPBlockEntityType.BUFFER.get(), pos, state);
     }
 
-    /**
-     * This function gets called whenever the world/chunk loads
-     */
     @Override
-    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tCompound, provider);
-        ContainerHelper.loadAllItems(tCompound.getCompound("inventory"), allInventories, provider);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        input.child("inventory").ifPresent(tc -> ContainerHelper.loadAllItems(tc, allInventories));
     }
-    
-    /**
-     * This function gets called whenever the world/chunk is saved
-     */
+
     @Override
-    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.saveAdditional(tCompound, provider);
-        CompoundTag tc = new CompoundTag();
-        ContainerHelper.saveAllItems(tc, allInventories, provider);
-        tCompound.put("inventory", tc);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        ContainerHelper.saveAllItems(valueOutput.child("inventory"), allInventories);
     }
 
     @Override

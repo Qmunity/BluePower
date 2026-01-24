@@ -14,6 +14,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 
 /**
@@ -28,23 +30,23 @@ public class TileLampRGB extends TileLamp {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
         if (getBlockState().getBlock() instanceof BlockLampRGB) {
-            tCompound.putByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
-            tCompound.putByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
-            tCompound.putByte("blue", bundledPower[MinecraftColor.BLUE.ordinal()]);
+            output.putByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
+            output.putByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
+            output.putByte("blue", bundledPower[MinecraftColor.BLUE.ordinal()]);
         }
     }
 
     @Override
-    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        if (tCompound.contains("red")) {
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
             byte[] pow = bundledPower;
-            pow[MinecraftColor.RED.ordinal()] = tCompound.getByte("red");
-            pow[MinecraftColor.GREEN.ordinal()] = tCompound.getByte("green");
-            pow[MinecraftColor.BLUE.ordinal()] = tCompound.getByte("blue");
+            pow[MinecraftColor.RED.ordinal()] = input.getByteOr("red", (byte) 0);
+            pow[MinecraftColor.GREEN.ordinal()] = input.getByteOr("green", (byte) 0);
+            pow[MinecraftColor.BLUE.ordinal()] = input.getByteOr("blue", (byte) 0);
             bundledPower = pow;
-        }
     }
 
     public int getColor() {

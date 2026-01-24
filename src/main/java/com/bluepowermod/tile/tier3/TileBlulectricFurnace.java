@@ -37,6 +37,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nullable;
 
@@ -73,10 +75,10 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
                 }
             }
             if (tileFurnace.updatingRecipe) {
-                if(level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(tileFurnace.inventory), level).isPresent()) {
-                    tileFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(tileFurnace.inventory), level).get().value();
+                if(level.getServer().getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(tileFurnace.inventory), level).isPresent()) {
+                    tileFurnace.currentRecipe = level.getServer().getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(tileFurnace.inventory), level).get().value();
                     //Check output slot is empty and less than a stack of the same item.
-                    if(!(tileFurnace.outputInventory.getItem() == tileFurnace.currentRecipe.getResultItem(level.registryAccess()).getItem()
+                    if(!(tileFurnace.outputInventory.getItem() == tileFurnace.currentRecipe.assemble(new SingleRecipeInput(tileFurnace.inventory), level.registryAccess()).getItem()
                             && (tileFurnace.outputInventory.getCount() + tileFurnace.currentRecipe.assemble(new SingleRecipeInput(tileFurnace.inventory), level.registryAccess()).getCount()) <= tileFurnace.outputInventory.getMaxStackSize())
                             && !tileFurnace.outputInventory.isEmpty()){
                         tileFurnace.currentRecipe = null;
@@ -112,47 +114,27 @@ public class TileBlulectricFurnace extends TileMachineBase implements WorldlyCon
 
     }
 
-    /**
-     * This function gets called whenever the world/chunk loads
-     */
     @Override
-    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tCompound, provider);
-        inventory = ItemStack.parseOptional(provider,tCompound.getCompound("inventory"));
-        outputInventory = ItemStack.parseOptional(provider, tCompound.getCompound("outputInventory"));
-    }
-
-    /**
-     * This function gets called whenever the world/chunk is saved
-     */
-    @Override
-    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.saveAdditional(tCompound, provider);
-        tCompound.put("inventory", inventory.saveOptional(provider));
-        if (outputInventory != null) {
-            tCompound.put("outputInventory", outputInventory.saveOptional(provider));
-        }
-    }
-
-    @Override
-    public void readFromPacketNBT(CompoundTag tag) {
-        super.readFromPacketNBT(tag);
-        isActive = tag.getBoolean("isActive");
-        currentProcessTime = tag.getInt("currentProcessTime");
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        inventory = input.read( "inventory", ItemStack.CODEC).orElse(inventory);
+        outputInventory = input.read("outputInventory", ItemStack.CODEC).orElse(outputInventory);
+        isActive = input.getBooleanOr("isActive", isActive);
+        currentProcessTime = input.getIntOr("currentProcessTime", currentProcessTime);
         markForRenderUpdate();
-        if(tag.contains("energy")) {
-            Tag nbtstorage = tag.get("energy");
-            CapabilityBlutricity.readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
-        }
+        CapabilityBlutricity.loadEnergy(storage, input);
     }
 
     @Override
-    public void writeToPacketNBT(CompoundTag tag) {
-        super.writeToPacketNBT(tag);
-        tag.putInt("currentProcessTime", currentProcessTime);
-        tag.putBoolean("isActive", isActive);
-        Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
-        tag.put("energy", nbtstorage);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        valueOutput.store("inventory", ItemStack.CODEC, inventory);
+        if (outputInventory != null) {
+            valueOutput.store("outputInventory", ItemStack.CODEC, outputInventory);
+        }
+        valueOutput.putInt("currentProcessTime", currentProcessTime);
+        valueOutput.putBoolean("isActive", isActive);
+        CapabilityBlutricity.saveEnergy(storage, valueOutput);
     }
 
     protected final ContainerData fields = new ContainerData() {

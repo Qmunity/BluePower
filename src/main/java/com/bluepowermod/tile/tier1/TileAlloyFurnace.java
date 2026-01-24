@@ -34,6 +34,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -42,11 +43,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -76,61 +80,40 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
         this.outputInventory = ItemStack.EMPTY;
     }
 
-    /**
-     * This function gets called whenever the world/chunk loads
-     */
     @Override
-    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tCompound, provider);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        ContainerHelper.loadAllItems(tCompound.getCompound("inventory"), inventory, provider);
-        fuelInventory = ItemStack.parseOptional(provider,tCompound.getCompound("fuelInventory"));
-        outputInventory = ItemStack.parseOptional(provider,tCompound.getCompound("outputInventory"));
+        input.child("inventory").ifPresent(valueInput -> ContainerHelper.loadAllItems(valueInput, inventory));
+        fuelInventory = input.read("fuelInventory", ItemStack.CODEC).orElse(ItemStack.EMPTY);
+        outputInventory = input.read("outputInventory", ItemStack.CODEC).orElse(ItemStack.EMPTY);
+        isActive = input.getBooleanOr("isActive", isActive);
+        currentBurnTime = input.getIntOr("currentBurnTime", currentBurnTime);
+        currentProcessTime = input.getIntOr("currentProcessTime", currentProcessTime);
+        maxBurnTime = input.getIntOr("maxBurnTime", maxBurnTime);
+        markForRenderUpdate();
 
     }
 
-    /**
-     * This function gets called whenever the world/chunk is saved
-     */
     @Override
-    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.saveAdditional(tCompound, provider);
-
-        CompoundTag tc = new CompoundTag();
-        ContainerHelper.saveAllItems(tc, inventory, provider);
-        tCompound.put("inventory", tc);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        ContainerHelper.saveAllItems(valueOutput.child("inventory"), inventory);
 
         if (fuelInventory != null) {
             if(!fuelInventory.isEmpty())
-                tCompound.put("fuelInventory", fuelInventory.saveOptional(provider));
+                valueOutput.store("fuelInventory", ItemStack.CODEC, fuelInventory);
         }
 
         if (outputInventory != null) {
             if(!outputInventory.isEmpty())
-                tCompound.put("outputInventory", outputInventory.saveOptional(provider));
+                valueOutput.store("outputInventory", ItemStack.CODEC, outputInventory);
         }
+        valueOutput.putInt("currentBurnTime", currentBurnTime);
+        valueOutput.putInt("currentProcessTime", currentProcessTime);
+        valueOutput.putInt("maxBurnTime", maxBurnTime);
+        valueOutput.putBoolean("isActive", isActive);
 
-    }
-
-    @Override
-    public void readFromPacketNBT(CompoundTag tag) {
-
-        super.readFromPacketNBT(tag);
-        isActive = tag.getBoolean("isActive");
-        currentBurnTime = tag.getInt("currentBurnTime");
-        currentProcessTime = tag.getInt("currentProcessTime");
-        maxBurnTime = tag.getInt("maxBurnTime");
-        markForRenderUpdate();
-    }
-
-    @Override
-    public void writeToPacketNBT(CompoundTag tag) {
-
-        super.writeToPacketNBT(tag);
-        tag.putInt("currentBurnTime", currentBurnTime);
-        tag.putInt("currentProcessTime", currentProcessTime);
-        tag.putInt("maxBurnTime", maxBurnTime);
-        tag.putBoolean("isActive", isActive);
     }
 
     /**
@@ -145,10 +128,10 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
                 tileAlloyFurnace.currentBurnTime--;
             }
             if (tileAlloyFurnace.updatingRecipe) {
-                if(level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace.asCraftInput(), level).isPresent()) {
-                    tileAlloyFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace.asCraftInput(), level).get().value();
+                if(level.getServer().getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace.asCraftInput(), level).isPresent()) {
+                    tileAlloyFurnace.currentRecipe = level.getServer().getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace.asCraftInput(), level).get().value();
                     //Check output slot is empty and less than a stack of the same item.
-                    if(!(tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem(level.registryAccess()).getItem()
+                    if(!(tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getCraftingResult().getItem()
                             && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.asCraftInput(), level.registryAccess()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
                             && !tileAlloyFurnace.outputInventory.isEmpty()){
                         tileAlloyFurnace.currentRecipe = null;
@@ -160,13 +143,14 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
             }
             if (tileAlloyFurnace.currentRecipe != null) {
                 if (tileAlloyFurnace.currentBurnTime <= 0) {
-                    if (FurnaceBlockEntity.getFuel().containsKey(tileAlloyFurnace.fuelInventory.getItem())) {
+                    int burnTime = tileAlloyFurnace.fuelInventory.getBurnTime(RecipeType.SMELTING, level.fuelValues());
+                    if (burnTime > 0) {
                         // Put new item in
-                        tileAlloyFurnace.currentBurnTime = tileAlloyFurnace.maxBurnTime = FurnaceBlockEntity.getFuel().get(tileAlloyFurnace.fuelInventory.getItem());
+                        tileAlloyFurnace.currentBurnTime = tileAlloyFurnace.maxBurnTime = burnTime;
                         if (!tileAlloyFurnace.fuelInventory.isEmpty()) {
                             tileAlloyFurnace.fuelInventory.setCount(tileAlloyFurnace.fuelInventory.getCount() - 1);
                             if (tileAlloyFurnace.fuelInventory.getCount() <= 0) {
-                                tileAlloyFurnace.fuelInventory = tileAlloyFurnace.fuelInventory.getItem().getCraftingRemainingItem(tileAlloyFurnace.fuelInventory);
+                                tileAlloyFurnace.fuelInventory = tileAlloyFurnace.fuelInventory.getItem().getCraftingRemainder(tileAlloyFurnace.fuelInventory);
                             }
                         }
                     } else {
@@ -332,7 +316,7 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
     public boolean canPlaceItem(int slot, ItemStack itemStack) {
 
         if (slot == 0) {
-            return FurnaceBlockEntity.isFuel(itemStack);
+            return itemStack.getBurnTime(RecipeType.SMELTING, level.fuelValues()) > 0;
         } else if (slot == 1) { // Output slot
             return false;
         } else {
@@ -407,7 +391,7 @@ public class TileAlloyFurnace extends TileBase implements WorldlyContainer, Menu
     }
 
     @Override
-    public void fillStackedContents(StackedContents stackedContents) {
+    public void fillStackedContents(StackedItemContents stackedItemContents) {
 
     }
 }

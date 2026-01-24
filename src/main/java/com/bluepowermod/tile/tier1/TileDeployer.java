@@ -36,6 +36,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -154,36 +156,36 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
             
             if (entity != null) {
                 for (int i = 0; i < useItems; i++) {
-                    player.getInventory().selected = i;
+                    player.getInventory().setSelectedSlot(i);
                     ItemStack stack = player.getMainHandItem();
-                    if (canDeployItem(stack) && stack.getItem().interactLivingEntity(stack, player, (LivingEntity) entity, InteractionHand.MAIN_HAND).shouldSwing()) return true;
-                    if (entity instanceof Animal && ((Animal) entity).mobInteract(player, InteractionHand.MAIN_HAND).shouldSwing()) return true;
+                    if (canDeployItem(stack) && stack.getItem().interactLivingEntity(stack, player, (LivingEntity) entity, InteractionHand.MAIN_HAND).consumesAction()) return true;
+                    if (entity instanceof Animal && ((Animal) entity).mobInteract(player, InteractionHand.MAIN_HAND).consumesAction()) return true;
                 }
             }
             
             for (int i = 0; i < useItems; i++) {
-                player.getInventory().selected = i;
+                player.getInventory().setSelectedSlot(i);
                 ItemStack stack = player.getMainHandItem();
                 if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == InteractionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
-                player.getInventory().selected = i;
-                if (!level.isEmptyBlock(new BlockPos(x, y, z)) && level.getBlockState(new BlockPos(x, y, z)).useItemOn(player.getMainHandItem() ,level, player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == ItemInteractionResult.SUCCESS) return true;
+                player.getInventory().setSelectedSlot(i);
+                if (!level.isEmptyBlock(new BlockPos(x, y, z)) && level.getBlockState(new BlockPos(x, y, z)).useItemOn(player.getMainHandItem() ,level, player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false)) == InteractionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
-                player.getInventory().selected = i;
+                player.getInventory().setSelectedSlot(i);
                 ItemStack stack = player.getMainHandItem();
                 if (canDeployItem(stack) && stack.getItem().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(dx, dy, dz), faceDir, new BlockPos(x, y, z),false))) == InteractionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
-                player.getInventory().selected = i;
+                player.getInventory().setSelectedSlot(i);
                 ItemStack stack = player.getMainHandItem();
                 if (canDeployItem(stack)) {
                     ItemStack copy = stack.copy();
-                    player.setItemInHand(InteractionHand.MAIN_HAND, stack.getItem().use(level, player, InteractionHand.MAIN_HAND).getObject());
+                    player.setItemInHand(InteractionHand.MAIN_HAND, stack);
                     if (!ItemStack.isSameItem(copy, stack)) return true;
                 }
             }
@@ -194,25 +196,17 @@ public class TileDeployer extends TileBase implements WorldlyContainer, IEjectAn
             return true;
         }
     }
-    
-    /**
-     * This function gets called whenever the world/chunk loads
-     */
+
     @Override
-    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tCompound, provider);
-        ContainerHelper.loadAllItems(tCompound.getCompound("inventory"), inventory, provider);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        input.child("inventory").ifPresent(valueInput -> ContainerHelper.loadAllItems(valueInput, inventory));
     }
-    
-    /**
-     * This function gets called whenever the world/chunk is saved
-     */
+
     @Override
-    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.saveAdditional(tCompound, provider);
-        CompoundTag tc = new CompoundTag();
-        ContainerHelper.saveAllItems(tc, inventory, provider);
-        tCompound.put("inventory", tc);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        ContainerHelper.saveAllItems(valueOutput.child("inventory"), inventory);
     }
 
     @Override

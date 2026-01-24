@@ -17,6 +17,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,14 +26,26 @@ import java.util.Set;
  */
 public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
 
+    @Nullable
+    private PlacementInfo placementInfo;
+
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider provider) {
-        return ItemStack.EMPTY;
+    public RecipeType<? extends Recipe<CraftingInput>> getType() {
+        return BPRecipeTypes.ALLOY_SMELTING.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
-        return BPRecipeTypes.ALLOY_SMELTING.get();
+    public PlacementInfo placementInfo() {
+        if (placementInfo == null) {
+            this.placementInfo = PlacementInfo.create(this.getRequiredItems().stream().map(SizedIngredient::ingredient).toList());
+        }
+
+        return this.placementInfo;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.FURNACE_BLOCKS;
     }
 
     @Override
@@ -49,12 +62,7 @@ public class AlloyFurnaceRecyclingRecipe implements IAlloyFurnaceRecipe {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends Recipe<CraftingInput>> getSerializer() {
         return BPRecipeSerializer.ALLOY_RECYCLING.get();
     }
 

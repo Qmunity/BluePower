@@ -7,10 +7,10 @@ import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.model.data.ModelData;
@@ -48,19 +48,15 @@ public class TileWire extends TileBase {
     }
 
     @Override
-    protected void readFromPacketNBT(CompoundTag compound) {
-        super.readFromPacketNBT(compound);
-        if(compound.contains("device")) {
-            Tag nbtstorage = compound.get("device");
-            IRedstoneDevice.readNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null, nbtstorage);
-        }
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        IRedstoneDevice.loadValue(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null, input);
     }
 
     @Override
-    protected void writeToPacketNBT(CompoundTag tCompound) {
-        super.writeToPacketNBT(tCompound);
-        Tag nbtstorage = IRedstoneDevice.writeNBT(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null);
-        tCompound.put("device", nbtstorage);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        IRedstoneDevice.storeValue(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, device, null, valueOutput);
     }
 
 }

@@ -24,9 +24,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TileCircuitDatabase extends TileCircuitTable {
 
@@ -209,46 +212,44 @@ public class TileCircuitDatabase extends TileCircuitTable {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-
-        super.saveAdditional(tag, provider);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
 
         if (!copyInventory.getItem(0).isEmpty()) {
-            CompoundTag stackTag = new CompoundTag();
-            copyInventory.getItem(0).save(provider, stackTag);
-            tag.put("copyTemplateStack", stackTag);
+            valueOutput.store("copyTemplateStack", ItemStack.CODEC,  copyInventory.getItem(0));
         }
         if (!copyInventory.getItem(1).isEmpty()) {
-            CompoundTag stackTag = new CompoundTag();
-            copyInventory.getItem(1).save(provider, stackTag);
-            tag.put("copyOutputStack", stackTag);
+            valueOutput.store("copyOutputStack", ItemStack.CODEC,  copyInventory.getItem(1));
         }
 
-        tag.putInt("curUploadProgress", curUploadProgress);
-        tag.putInt("curCopyProgress", curCopyProgress);
-        tag.putByte("selectedShareOption", (byte) selectedShareOption);
+        valueOutput.putInt("curUploadProgress", curUploadProgress);
+        valueOutput.putInt("curCopyProgress", curCopyProgress);
+        valueOutput.putByte("selectedShareOption", (byte) selectedShareOption);
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        super.loadAdditional(tag, provider);
+        Optional<ItemStack> copyTemplateStackInput = input.read("copyTemplateStack", ItemStack.CODEC);
 
-        if (tag.contains("copyTemplateStack")) {
-            copyInventory.setItem(0, ItemStack.parseOptional(provider, tag.getCompound("copyTemplateStack")));
+        if (copyTemplateStackInput.isPresent()) {
+            copyInventory.setItem(0, copyTemplateStackInput.get());
         } else {
             copyInventory.setItem(0, ItemStack.EMPTY);
         }
 
-        if (tag.contains("copyOutputStack")) {
-            copyInventory.setItem(1, ItemStack.parseOptional(provider, tag.getCompound("copyOutputStack")));
+        Optional<ItemStack> copyOutputStackInput = input.read("copyOutputStack", ItemStack.CODEC);
+
+        if (copyOutputStackInput.isPresent()) {
+            copyInventory.setItem(1, copyOutputStackInput.get());
         } else {
             copyInventory.setItem(1, ItemStack.EMPTY);
         }
 
-        curUploadProgress = tag.getInt("curUploadProgress");
-        curCopyProgress = tag.getInt("curCopyProgress");
-        selectedShareOption = tag.getByte("selectedShareOption");
+        curUploadProgress = input.getIntOr("curUploadProgress", curUploadProgress);
+        curCopyProgress = input.getIntOr("curCopyProgress", curCopyProgress);
+        selectedShareOption = input.getByteOr("selectedShareOption", (byte) selectedShareOption);
     }
 
 }

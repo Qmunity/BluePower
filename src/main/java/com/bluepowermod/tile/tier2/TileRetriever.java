@@ -19,6 +19,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nullable;
 
@@ -36,17 +38,17 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
 
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider ) {
-        super.saveAdditional(tag, provider);
-        tag.putByte("slotIndex", (byte) slotIndex);
-        tag.putByte("mode", (byte) mode);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        valueOutput.putByte("slotIndex", (byte) slotIndex);
+        valueOutput.putByte("mode", (byte) mode);
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
-        slotIndex = tag.getByte("slotIndex");
-        mode = tag.getByte("mode");
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        slotIndex = input.getByteOr("slotIndex", (byte) 0);
+        mode = input.getByteOr("mode", (byte) 0);
     }
 
     @Override

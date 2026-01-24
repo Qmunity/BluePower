@@ -72,7 +72,7 @@ public class TileAutoProjectTable extends TileProjectTable {
         if(i == OUTPUT_SLOT){
             InventoryProjectTableCrafting craftingInv = new InventoryProjectTableCrafting(null, this, 3, 3);
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<RecipeHolder<CraftingRecipe>> optional = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv.asCraftInput(), level);
+            Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv.asCraftInput(), level);
             if (optional.isPresent()) {
                 CraftingRecipe icraftingrecipe = optional.get().value();
                 itemstack = icraftingrecipe.assemble(craftingInv.asCraftInput(), level.registryAccess());

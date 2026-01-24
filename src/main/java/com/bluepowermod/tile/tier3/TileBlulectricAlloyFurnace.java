@@ -31,6 +31,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -40,6 +41,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -67,56 +70,26 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
 
     /*************** BASIC TE FUNCTIONS **************/
 
-    /**
-     * This function gets called whenever the world/chunk loads
-     */
     @Override
-    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tCompound, provider);
-        ContainerHelper.saveAllItems(tCompound, inventory, provider);
-        outputInventory = ItemStack.parseOptional(provider, tCompound.getCompound("outputInventory"));
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-    }
-
-    /**
-     * This function gets called whenever the world/chunk is saved
-     */
-    @Override
-    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-
-        super.saveAdditional(tCompound, provider);
-
-        CompoundTag tc = new CompoundTag();
-        ContainerHelper.saveAllItems(tc, inventory, provider);
-        tCompound.put("inventory", tc);
-
-        if (outputInventory != null && !outputInventory.isEmpty()) {
-            tCompound.put("outputInventory", outputInventory.saveOptional(provider));
-        }
-
+        ContainerHelper.loadAllItems(input, inventory);
+        outputInventory = input.read("outputInventory", ItemStack.CODEC).orElse(ItemStack.EMPTY);
+        isActive = input.getBooleanOr("isActive", false);
+        currentProcessTime = input.getIntOr("currentProcessTime", 0);
+        CapabilityBlutricity.loadEnergy(storage, input);
     }
 
     @Override
-    public void readFromPacketNBT(CompoundTag tag) {
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
 
-        super.readFromPacketNBT(tag);
-        isActive = tag.getBoolean("isActive");
-        currentProcessTime = tag.getInt("currentProcessTime");
-        markForRenderUpdate();
-        if(tag.contains("energy")) {
-            Tag nbtstorage = tag.get("energy");
-            CapabilityBlutricity.readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
-        }
-    }
-
-    @Override
-    public void writeToPacketNBT(CompoundTag tag) {
-
-        super.writeToPacketNBT(tag);
-        tag.putInt("currentProcessTime", currentProcessTime);
-        tag.putBoolean("isActive", isActive);
-        Tag nbtstorage = CapabilityBlutricity.writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
-        tag.put("energy", nbtstorage);
+        ContainerHelper.saveAllItems(output, inventory);
+        output.store("outputInventory", ItemStack.CODEC,  outputInventory);
+        output.putInt("currentProcessTime", currentProcessTime);
+        output.putBoolean("isActive", isActive);
+        CapabilityBlutricity.saveEnergy(storage, output);
     }
 
 
@@ -137,10 +110,10 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
                 }
             }
             if (tileAlloyFurnace.updatingRecipe) {
-                if(level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace.asCraftInput(), level).isPresent()) {
-                    tileAlloyFurnace.currentRecipe = level.getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace.asCraftInput(), level).get().value();
+                if(level.getServer().getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace.asCraftInput(), level).isPresent()) {
+                    tileAlloyFurnace.currentRecipe = level.getServer().getRecipeManager().getRecipeFor(BPRecipeTypes.ALLOY_SMELTING.get(), tileAlloyFurnace.asCraftInput(), level).get().value();
                     //Check output slot is empty and less than a stack of the same item.
-                    if(!(tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getResultItem(level.registryAccess()).getItem()
+                    if(!(tileAlloyFurnace.outputInventory.getItem() == tileAlloyFurnace.currentRecipe.getCraftingResult().getItem()
                             && (tileAlloyFurnace.outputInventory.getCount() + tileAlloyFurnace.currentRecipe.assemble(tileAlloyFurnace.asCraftInput(), level.registryAccess()).getCount()) <= tileAlloyFurnace.outputInventory.getMaxStackSize())
                             && !tileAlloyFurnace.outputInventory.isEmpty()){
                         tileAlloyFurnace.currentRecipe = null;
@@ -373,7 +346,7 @@ public class TileBlulectricAlloyFurnace extends TileMachineBase implements World
     }
 
     @Override
-    public void fillStackedContents(StackedContents stackedContents) {
+    public void fillStackedContents(StackedItemContents stackedItemContents) {
 
     }
 }

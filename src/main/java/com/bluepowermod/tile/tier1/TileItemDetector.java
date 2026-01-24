@@ -28,8 +28,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * @author MineMaarten
@@ -99,40 +102,29 @@ public class TileItemDetector extends TileMachineBase implements WorldlyContaine
         return everythingNull;
     }
 
-    /**
-     * This function gets called whenever the world/chunk loads
-     */
     @Override
-    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tCompound, provider);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
         for (int i = 0; i < 9; i++) {
-            CompoundTag tc = tCompound.getCompound("inventory" + i);
-            inventory.set(i, ItemStack.parseOptional(provider, tc));
+            inventory.set(i, input.read("inventory" + i, ItemStack.CODEC).orElse(ItemStack.EMPTY));
         }
 
-        mode = tCompound.getByte("mode");
-        fuzzySetting = tCompound.getByte("fuzzySetting");
-        savedPulses = tCompound.getInt("savedPulses");
+        mode = input.getByteOr("mode", (byte) mode);
+        fuzzySetting = input.getByteOr("fuzzySetting", (byte) fuzzySetting);
+        savedPulses = input.getIntOr("savedPulses", savedPulses);
     }
 
-    /**
-     * This function gets called whenever the world/chunk is saved
-     */
     @Override
-    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-
-        super.saveAdditional(tCompound, provider);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
 
         for (int i = 0; i < 9; i++) {
-                CompoundTag tc = new CompoundTag();
-                if (!inventory.get(i).isEmpty())
-                    inventory.get(i).save(provider, tc);
-                tCompound.put("inventory" + i, tc);
+                valueOutput.store("inventory" + i, ItemStack.CODEC, inventory.get(i));
         }
 
-        tCompound.putByte("mode", (byte) mode);
-        tCompound.putByte("fuzzySetting", (byte) fuzzySetting);
-        tCompound.putInt("savedPulses", savedPulses);
+        valueOutput.putByte("mode", (byte) mode);
+        valueOutput.putByte("fuzzySetting", (byte) fuzzySetting);
+        valueOutput.putInt("savedPulses", savedPulses);
     }
 
     @Override

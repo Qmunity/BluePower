@@ -28,6 +28,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -84,20 +85,20 @@ public class MicroblockRecipe extends CustomRecipe {
                     return outStack;
                 }else if (Block.byItem(stack.getItem()) == BPBlocks.half_block.get()){
                     CompoundTag nbt = new CompoundTag();
-                    nbt.putString("block", stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block"));
+                    nbt.putString("block", stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getStringOr("block", ""));
                     ItemStack outStack = new ItemStack(BPBlocks.panel.get(), 2);
                     outStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
-                    Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getString("block")));
+                    Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getStringOr("block", ""))).get().value();
                     outStack.set(DataComponents.ITEM_NAME, Component.translatable(block.getDescriptionId())
                             .append(" ")
                             .append(Component.translatable(BPBlocks.panel.get().getDescriptionId())));
                     return outStack;
                 }else if (Block.byItem(stack.getItem()) == BPBlocks.panel.get()){
                     CompoundTag nbt = new CompoundTag();
-                    nbt.putString("block", stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("block"));
+                    nbt.putString("block", stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getStringOr("block", ""));
                     ItemStack outStack = new ItemStack(BPBlocks.cover.get(), 2);
                     outStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
-                    Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getString("block")));
+                    Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getStringOr("block", ""))).get().value();
                     outStack.set(DataComponents.ITEM_NAME, Component.translatable(block.getDescriptionId())
                             .append(" ")
                             .append(Component.translatable(BPBlocks.cover.get().getDescriptionId())));
@@ -108,13 +109,10 @@ public class MicroblockRecipe extends CustomRecipe {
         return ItemStack.EMPTY;
     }
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
+
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return BPRecipeSerializer.MICROBLOCK.get();
     }
 

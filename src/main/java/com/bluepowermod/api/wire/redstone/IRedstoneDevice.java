@@ -6,6 +6,8 @@ import com.bluepowermod.api.misc.IWorldLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -44,15 +46,12 @@ public interface IRedstoneDevice extends IWorldLocation {
     public boolean isNormalFace(Direction side);
 
 
-    static Tag writeNBT(BlockCapability<IRedstoneDevice, @Nullable Direction> capability, IRedstoneDevice instance, Direction direction) {
-        CompoundTag nbt = new CompoundTag();
-        nbt.putByte("power", instance.getRedstonePower(direction));
-        return nbt;
+    static void storeValue(BlockCapability<IRedstoneDevice, @Nullable Direction> capability, IRedstoneDevice instance, Direction direction, ValueOutput output) {
+        output.putByte("power", instance.getRedstonePower(direction));
     }
 
-    static void readNBT(BlockCapability<IRedstoneDevice, @Nullable Direction> capability, IRedstoneDevice instance, Direction side, Tag nbt) {
-        CompoundTag tags = (CompoundTag) nbt;
-        byte power = tags.getByte("power");
+    static void loadValue(BlockCapability<IRedstoneDevice, @Nullable Direction> capability, IRedstoneDevice instance, Direction side, ValueInput input) {
+        byte power = input.getByteOr("power", (byte) 0);
         instance.setRedstonePower(side, power);
     }
 

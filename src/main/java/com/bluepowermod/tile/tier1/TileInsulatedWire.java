@@ -5,6 +5,8 @@ import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class TileInsulatedWire extends TileWire {
     private MinecraftColor color = MinecraftColor.ANY;
@@ -14,13 +16,13 @@ public class TileInsulatedWire extends TileWire {
     }
 
     @Override
-    protected void readFromPacketNBT(CompoundTag compound) {
-        super.readFromPacketNBT(compound);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
     }
 
     @Override
-    protected void writeToPacketNBT(CompoundTag tCompound) {
-        super.writeToPacketNBT(tCompound);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
     }
 
     public MinecraftColor getColor() {

@@ -28,6 +28,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nullable;
 /**
@@ -99,28 +101,20 @@ public class TileFilter extends TileTransposer implements WorldlyContainer, IGui
             }
     }
 
-    /**
-     * This function gets called whenever the world/chunk loads
-     */
     @Override
-    public void loadAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tCompound, provider);
-        ContainerHelper.loadAllItems(tCompound.getCompound("inventory"), inventory, provider);
-        filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
-        fuzzySetting = tCompound.getByte("fuzzySetting");
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        ContainerHelper.loadAllItems(input, inventory);
+        filterColor = TubeColor.values()[input.getByteOr("filterColor", (byte)filterColor.ordinal())];
+        fuzzySetting = input.getByteOr("fuzzySetting", (byte)fuzzySetting);
     }
 
-    /**
-     * This function gets called whenever the world/chunk is saved
-     */
     @Override
-    protected void saveAdditional(CompoundTag tCompound, HolderLookup.Provider provider) {
-        super.saveAdditional(tCompound, provider);
-        CompoundTag tc = new CompoundTag();
-        ContainerHelper.saveAllItems(tc, inventory, provider);
-        tCompound.put("inventory", tc);
-        tCompound.putByte("filterColor", (byte) filterColor.ordinal());
-        tCompound.putByte("fuzzySetting", (byte) fuzzySetting);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        ContainerHelper.saveAllItems(valueOutput, inventory);
+        valueOutput.putByte("filterColor", (byte) filterColor.ordinal());
+        valueOutput.putByte("fuzzySetting", (byte) fuzzySetting);
     }
 
     @Override

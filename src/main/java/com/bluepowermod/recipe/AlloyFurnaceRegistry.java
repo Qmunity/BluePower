@@ -38,6 +38,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -68,10 +69,11 @@ public class AlloyFurnaceRegistry {
     }
 
     public static class StandardAlloyFurnaceRecipe implements IAlloyFurnaceRecipe {
-
         private final ItemStack craftingResult;
         private final NonNullList<SizedIngredient> requiredItems;
         private final String group;
+        @Nullable
+        private PlacementInfo placementInfo;
 
         public StandardAlloyFurnaceRecipe(String group, ItemStack craftingResult, NonNullList<SizedIngredient> requiredItems) {
 
@@ -89,38 +91,38 @@ public class AlloyFurnaceRegistry {
             this.group = group;
         }
 
-        @Override
-        public boolean canCraftInDimensions(int width, int height) {
-            return width <= 3 && height <= 3;
-        }
-
-        @Override
-        public ItemStack getResultItem(HolderLookup.Provider provider) {
-            return craftingResult;
-        }
 
         public ItemStack getCraftingResult() {
             return craftingResult;
         }
 
         @Override
-        public String getGroup() {
+        public String group() {
             return group;
         }
 
         @Override
-        public ItemStack getToastSymbol() {
-            return new ItemStack(BPBlocks.alloyfurnace.get());
-        }
-
-        @Override
-        public RecipeSerializer<?> getSerializer() {
+        public RecipeSerializer<? extends Recipe<CraftingInput>> getSerializer() {
             return BPRecipeSerializer.ALLOYSMELTING.get();
         }
 
         @Override
-        public RecipeType<?> getType() {
+        public RecipeType<? extends Recipe<CraftingInput>> getType() {
             return BPRecipeTypes.ALLOY_SMELTING.get();
+        }
+
+        @Override
+        public PlacementInfo placementInfo() {
+            if (placementInfo == null) {
+                this.placementInfo = PlacementInfo.create(this.requiredItems.stream().map(SizedIngredient::ingredient).toList());
+            }
+
+            return this.placementInfo;
+        }
+
+        @Override
+        public RecipeBookCategory recipeBookCategory() {
+            return RecipeBookCategories.FURNACE_BLOCKS;
         }
 
         @Override
@@ -185,7 +187,7 @@ public class AlloyFurnaceRegistry {
 
             public static final MapCodec<RawData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     Codec.STRING.optionalFieldOf("group", "").forGetter(RawData::group),
-                    ExtraCodecs.nonEmptyList(Codec.list(SizedIngredient.FLAT_CODEC)).fieldOf("ingredients").forGetter(RawData::requiredItems),
+                    ExtraCodecs.nonEmptyList(Codec.list(SizedIngredient.NESTED_CODEC)).fieldOf("ingredients").forGetter(RawData::requiredItems),
                     ItemStack.CODEC.fieldOf("result").forGetter(RawData::craftingResult)
             ).apply(instance, RawData::new));
         }
@@ -203,7 +205,7 @@ public class AlloyFurnaceRegistry {
                                 ingredients
                         )
                 );
-            }, (recipe) -> DataResult.success(new RawData(recipe.getGroup(), recipe.getRequiredItems(), recipe.getCraftingResult()))
+            }, (recipe) -> DataResult.success(new RawData(recipe.group(), recipe.getRequiredItems(), recipe.getCraftingResult()))
         );
 
         public final StreamCodec<RegistryFriendlyByteBuf, IAlloyFurnaceRecipe> STREAM_CODEC = new StreamCodec<RegistryFriendlyByteBuf, IAlloyFurnaceRecipe>() {
@@ -211,7 +213,7 @@ public class AlloyFurnaceRegistry {
             public IAlloyFurnaceRecipe decode(RegistryFriendlyByteBuf buffer) {
                 String s = buffer.readUtf(32767);
                 int i = buffer.readVarInt();
-                NonNullList<SizedIngredient> nonnulllist = NonNullList.withSize(i, new SizedIngredient(Ingredient.EMPTY, 1));
+                NonNullList<SizedIngredient> nonnulllist = NonNullList.withSize(i, new SizedIngredient(Ingredient.of(), 1));
 
                 nonnulllist.replaceAll(ignored -> SizedIngredient.STREAM_CODEC.decode(buffer));
 

@@ -15,10 +15,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public class TileTube extends TileBase implements ITubeConnection {
     public MinecraftColor color = MinecraftColor.ANY;
@@ -31,64 +34,59 @@ public class TileTube extends TileBase implements ITubeConnection {
     }
 
     @Override
-    protected void readFromPacketNBT(CompoundTag tCompound) {
-        super.readFromPacketNBT(tCompound);
-        color = MinecraftColor.values()[tCompound.getInt("color")];
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        color = MinecraftColor.values()[input.getIntOr("color", MinecraftColor.ANY.ordinal())];
 
         //Read the tube stacks
-        int size = tCompound.getInt("tubeStacksSize");
-        for (int j = 0; j < size; j++) {
-            CompoundTag tag = tCompound.getCompound("tubeStack" + j);
-            TubeStack tubeStack = TubeStack.loadFromNBT(level.registryAccess(), tag);
-            this.tubeStacks.set(j, tubeStack);
+        Optional<ValueInput.ValueInputList> tubeList = input.childrenList("tubeStacks");
+        if(tubeList.isPresent()){
+            for (ValueInput child : tubeList.get()) {
+                this.tubeStacks.add(TubeStack.loadFromInput(child));
+            }
         }
 
         //Read the connected pipes
-        size = tCompound.getInt("connectedPipesSize");
-        for (int j = 0; j < size; j++) {
-            BlockPos pos = BlockPos.of(tCompound.getLong("connectedPipe" + j));
-            this.connectedPipes.set(j, pos);
+        Optional<ValueInput.ValueInputList> pipesList = input.childrenList("connectedPipes");
+        if(pipesList.isPresent()){
+            for (ValueInput child : pipesList.get()) {
+                BlockPos pos = child.read("pos", BlockPos.CODEC).orElse(BlockPos.ZERO);
+                this.connectedPipes.add(pos);
+            }
         }
 
         //Read the neighboring block entities
-        size = tCompound.getInt("neighboringBlockEntitiesSize");
-        for (int j = 0; j < size; j++) {
-            BlockPos pos = BlockPos.of(tCompound.getLong("neighboringBlockEntity" + j));
-            this.neighboringBlockEntities.set(j, pos);
+        Optional<ValueInput.ValueInputList> neighborList = input.childrenList("neighboringBlockEntities");
+        if(neighborList.isPresent()){
+            for (ValueInput child : neighborList.get()) {
+                BlockPos pos = child.read("pos", BlockPos.CODEC).orElse(BlockPos.ZERO);
+                this.neighboringBlockEntities.add(pos);
+            }
         }
 
     }
 
     @Override
-    protected void writeToPacketNBT(CompoundTag tCompound) {
-        super.writeToPacketNBT(tCompound);
-        tCompound.putInt("color", color.ordinal());
-
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        valueOutput.putInt("color", color.ordinal());
+        ValueOutput.ValueOutputList outputList = valueOutput.childrenList("tubeStacks");
         //Write the tube stacks
-        int i = 0;
         for (TubeStack tubeStack : tubeStacks) {
-            CompoundTag tag = new CompoundTag();
-            tubeStack.writeToNBT(level.registryAccess(), tag);
-            tCompound.put("tubeStack" + i, tag);
-            i++;
+            tubeStack.writeToOutput(outputList.addChild());
         }
-        tCompound.putInt("tubeStacksSize", tubeStacks.size());
 
         //Write the connected pipes
-        i = 0;
+        ValueOutput.ValueOutputList pipeList = valueOutput.childrenList("connectedPipes");
         for (BlockPos pos : connectedPipes) {
-            tCompound.putLong("connectedPipe" + i, pos.asLong());
-            i++;
+            outputList.addChild().store("pos", BlockPos.CODEC, pos);
         }
-        tCompound.putInt("connectedPipesSize", connectedPipes.size());
 
         //Write the neighboring block entities
-        i = 0;
+        ValueOutput.ValueOutputList neighborList = valueOutput.childrenList("neighboringBlockEntities");
         for (BlockPos pos : neighboringBlockEntities) {
-            tCompound.putLong("neighboringBlockEntity" + i, pos.asLong());
-            i++;
+            outputList.addChild().store("pos", BlockPos.CODEC, pos);
         }
-        tCompound.putInt("neighboringBlockEntitiesSize", neighboringBlockEntities.size());
     }
 
     public boolean setColor(MinecraftColor color) {

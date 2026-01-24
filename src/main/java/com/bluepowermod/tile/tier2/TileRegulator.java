@@ -32,8 +32,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * @author MineMaarten
@@ -231,40 +234,36 @@ public class TileRegulator extends TileMachineBase implements WorldlyContainer, 
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
 
-        super.saveAdditional(tag, provider);
+        valueOutput.putByte("filterColor", (byte) color.ordinal());
+        valueOutput.putByte("mode", (byte) mode);
+        valueOutput.putByte("fuzzySetting", (byte) fuzzySetting);
 
-        tag.putByte("filterColor", (byte) color.ordinal());
-        tag.putByte("mode", (byte) mode);
-        tag.putByte("fuzzySetting", (byte) fuzzySetting);
-
-        ListTag tagList = new ListTag();
-        for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
-                CompoundTag tagCompound = new CompoundTag();
-                tagCompound.putByte("Slot", (byte) currentIndex);
-                inventory.get(currentIndex).save(provider, tagCompound);
-                tagList.add(tagCompound);
+        ValueOutput.ValueOutputList itemsOutput = valueOutput.childrenList("Items");
+        for (ItemStack item : inventory) {
+            itemsOutput.addChild().store("Item", ItemStack.CODEC, item);
         }
-        tag.put("Items", tagList);
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        super.loadAdditional(tag, provider);
+        color = TubeColor.values()[input.getByteOr("filterColor", (byte) TubeColor.NONE.ordinal())];
+        mode = input.getByteOr("mode", (byte) 0);
+        fuzzySetting = input.getByteOr("fuzzySetting", (byte) 0);
 
-        color = TubeColor.values()[tag.getByte("filterColor")];
-        mode = tag.getByte("mode");
-        fuzzySetting = tag.getByte("fuzzySetting");
-
-        ListTag tagList = tag.getList("Items", 10);
-        inventory = NonNullList.withSize(27, ItemStack.EMPTY);
-        for (int i = 0; i < tagList.size(); ++i) {
-            CompoundTag tagCompound = tagList.getCompound(i);
-            byte slot = tagCompound.getByte("Slot");
-            if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, ItemStack.parseOptional(provider, tagCompound));
+        Optional<ValueInput.ValueInputList> itemsOutput = input.childrenList("Items");
+        if (itemsOutput.isPresent()) {
+            int index = 0;
+            for (ValueInput itemInput : itemsOutput.get()) {
+                Optional<ItemStack> itemStack = itemInput.read("Item", ItemStack.CODEC);
+                if (itemStack.isPresent() && index < inventory.size()) {
+                    inventory.set(index, itemStack.get());
+                }
+                index++;
             }
         }
     }

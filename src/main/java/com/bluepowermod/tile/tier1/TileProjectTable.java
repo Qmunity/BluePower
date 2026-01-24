@@ -27,6 +27,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
@@ -64,22 +66,17 @@ public class TileProjectTable extends TileBase implements WorldlyContainer, Menu
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
-        CompoundTag tItems = new CompoundTag();
-        ContainerHelper.saveAllItems(tItems, inventory, provider);
-        tag.put("Items", tItems);
-
-        CompoundTag tCraftingGrid = new CompoundTag();
-        ContainerHelper.saveAllItems(tCraftingGrid, craftingGrid, provider);
-        tag.put("CraftingGrid", tCraftingGrid);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        ContainerHelper.saveAllItems(valueOutput.child("Items"), inventory);
+        ContainerHelper.saveAllItems(valueOutput.child("CraftingGrid"), craftingGrid);
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
-        ContainerHelper.loadAllItems(tag.getCompound("Items"), inventory, provider);
-        ContainerHelper.loadAllItems(tag.getCompound("CraftingGrid"), craftingGrid, provider);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        input.child("Items").ifPresent(valueInput -> ContainerHelper.loadAllItems(valueInput, inventory));
+        input.child("CraftingGrid").ifPresent(valueInput -> ContainerHelper.loadAllItems(valueInput, craftingGrid));
     }
 
     @Override
