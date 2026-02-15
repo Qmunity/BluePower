@@ -1,0 +1,51 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+        "bluestone_in": "bluepower:base/bluestone_off",
+        "torch_middle": "bluepower:blocks/bluestone_torch_on"
+    },
+    "elements": [
+      {
+        "name": "BackWire",
+        "from": [7.5, 2, 9],
+        "to": [8.5, 2.5, 16],
+        "faces": {
+          "east": {"uv": [0, 0, 7, 0.5], "texture": "#bluestone_in"},
+          "south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_in"},
+          "west": {"uv": [0, 0, 7, 0.5], "texture": "#bluestone_in"},
+          "up": {"uv": [0, 0, 1, 7], "texture": "#bluestone_in"}
+        }
+      },
+      {
+        "name": "Middle1",
+        "from": [7, 2, 6],
+        "to": [9, 6, 10],
+        "shade": false,
+        "rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -0.5]},
+        "faces": {
+          "east": {"uv": [6, 5, 10, 9], "texture": "#torch_middle"},
+          "west": {"uv": [6, 5, 10, 9], "texture": "#torch_middle"}
+        }
+      },
+      {
+        "name": "Middle2",
+        "from": [6, 2, 7],
+        "to": [10, 6, 9],
+        "shade": false,
+        "rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -0.5]},
+        "faces": {
+          "north": {"uv": [6, 5, 10, 9], "texture": "#torch_middle"},
+          "south": {"uv": [6, 5, 10, 9], "texture": "#torch_middle"}
+        }
+      },
+      {
+        "name": "Torch_Middle",
+        "from": [7, 2, 7],
+        "to": [9, 5, 9],
+        "rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -0.5]},
+        "faces": {
+          "up": {"uv": [7, 6, 9, 8], "texture": "#torch_middle"}
+        }
+      }
+    ]
+}

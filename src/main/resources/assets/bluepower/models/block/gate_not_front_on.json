@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/gate_not_front",
+    "textures": {
+        "bluestone_out": "bluepower:base/bluestone_on"
+    }
+}
