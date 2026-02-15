@@ -278,6 +278,7 @@ public class BPBlocks {
 
     static{
         BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNot.getKey().location().getPath(), () -> new BlockItem(blockGateNot.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockGateNAND.getKey().location().getPath(), () -> new BlockItem(blockGateNAND.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockNullCell.getKey().location().getPath(), () -> new BlockItem(blockNullCell.get(), new Item.Properties()));
     }

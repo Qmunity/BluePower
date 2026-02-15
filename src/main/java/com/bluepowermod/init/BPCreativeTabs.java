@@ -64,6 +64,7 @@ public class BPCreativeTabs {
             event.acceptAll(BPBlocks.machines.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
             event.accept(BPBlocks.blulectric_cable.get());
             event.accept(BPBlocks.blockGateAND.get());
+            event.accept(BPBlocks.blockGateNot.get());
             event.accept(BPBlocks.blockGateNAND.get());
             event.accept(BPBlocks.blockNullCell.get());
         }else if(event.getTab() == lighting.get()){
