@@ -22,6 +22,7 @@ import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.*;
 import com.bluepowermod.block.gates.BlockGateAnd;
 import com.bluepowermod.block.gates.BlockGateBase;
+import com.bluepowermod.block.gates.BlockGateNot;
 import com.bluepowermod.block.gates.BlockNullCell;
 import com.bluepowermod.block.lighting.BlockLampRGBSurface;
 import com.bluepowermod.block.lighting.BlockLampSurface;
@@ -271,6 +272,7 @@ public class BPBlocks {
 
 
     public static final RegistryObject<Block> blockGateAND = BLOCKS.register("gate_and", () -> new BlockGateAnd(false));
+    public static final RegistryObject<Block> blockGateNot = BLOCKS.register("gate_not", BlockGateNot::new);
     public static final RegistryObject<Block> blockNullCell = BLOCKS.register("gate_nullcell", BlockNullCell::new);
     public static final RegistryObject<Block> blockGateNAND = BLOCKS.register("gate_nand",() -> new BlockGateAnd(true));
 
