@@ -69,7 +69,6 @@ public class BlockNullCell extends BlockGateBase {
         return map;
     }
 
-    @Override
     public byte computeRedstone(Side side, byte back, byte front, byte left, byte right){
         return switch (side) {
             case FRONT -> right;

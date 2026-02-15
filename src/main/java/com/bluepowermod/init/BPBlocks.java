@@ -20,6 +20,7 @@ package com.bluepowermod.init;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.*;
+import com.bluepowermod.block.gates.BlockGateAnd;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.gates.BlockNullCell;
 import com.bluepowermod.block.lighting.BlockLampRGBSurface;
@@ -269,14 +270,9 @@ public class BPBlocks {
 
 
 
-    public static final RegistryObject<Block> blockGateAND = BLOCKS.register("gate_and", BlockGateBase::new);
+    public static final RegistryObject<Block> blockGateAND = BLOCKS.register("gate_and", () -> new BlockGateAnd(false));
     public static final RegistryObject<Block> blockNullCell = BLOCKS.register("gate_nullcell", BlockNullCell::new);
-     public static final RegistryObject<Block> blockGateNAND = BLOCKS.register("gate_nand",() -> new BlockGateBase(){
-         @Override
-         public byte computeRedstone(BlockGateBase.Side side, byte back, byte front, byte left, byte right){
-             return (byte)((left == 0 || right == 0 || back == 0 ) ?  16 : 0);
-         }
-     });
+    public static final RegistryObject<Block> blockGateNAND = BLOCKS.register("gate_nand",() -> new BlockGateAnd(true));
 
     static{
         BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties()));

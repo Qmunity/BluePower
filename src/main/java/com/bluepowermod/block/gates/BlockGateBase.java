@@ -41,7 +41,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 /**
  * @author MoreThanHidden
  */
-public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
+public abstract class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 3);
     public static final BooleanProperty POWERED_FRONT = BooleanProperty.create("powered_front");
@@ -132,16 +132,12 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     }
 
     @Override
-    public boolean isSignalSource(BlockState blockState) {
-        return true;
-    }
-
-    @Override
     public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side){
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
-        if(side == dirs[blockState.getValue(ROTATION)]) {
-            Map<Side, Byte> map = getSidePower(blockAccess, blockState, pos);
-            return map.get(Side.FRONT);
+        Side side1 = fromDirection(side.getOpposite(), blockState.getValue(ROTATION), dirs);
+        Map<Side, Byte> map = getSidePower(blockAccess, blockState, pos);
+        if (isSideSource(side1)){
+            return map.get(side1);
         }
         return 0;
     }
@@ -149,44 +145,38 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     @Override
     public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
-        if(side == dirs[blockState.getValue(ROTATION)]) {
-            Map<Side, Byte> map = getSidePower(blockAccess, blockState, pos);
-            return map.get(Side.FRONT);
+        Side side1 = fromDirection(side.getOpposite(), blockState.getValue(ROTATION), dirs);
+        Map<Side, Byte> map = getSidePower(blockAccess, blockState, pos);
+        if (isSideSource(side1)){
+            return map.get(side1);
         }
         return 0;
     }
 
-    public Map<Side, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos){
-         Map<Side, Byte> map = new HashMap<>();
-         Direction[] dirs = DirectionHelper.ArrayFromDirection(state.getValue(FACING));
-         Direction side_left = dirs[state.getValue(ROTATION) == 3 ? 0 : state.getValue(ROTATION) + 1];
-         Direction side_right = side_left.getOpposite();
-         Direction side_back = dirs[state.getValue(ROTATION)];
-         BlockPos pos_left = pos.relative(side_left);
-         BlockPos pos_right = pos.relative(side_right);
-         BlockPos pos_back = pos.relative(side_back);
-         BlockState state_left = worldIn.getBlockState(pos_left);
-         BlockState state_right = worldIn.getBlockState(pos_right);
-         BlockState state_back = worldIn.getBlockState(pos_back);
-         byte left = (byte) state_left.getSignal(worldIn, pos_left, side_right);
-         byte right = (byte) state_right.getSignal(worldIn, pos_right, side_left);
-         byte back = (byte) state_back.getSignal(worldIn, pos_back, side_back.getOpposite());
-         if(state_left.getBlock() instanceof RedStoneWireBlock){left = state_left.getValue(RedStoneWireBlock.POWER).byteValue();}
-         if(state_right.getBlock() instanceof RedStoneWireBlock){right = state_right.getValue(RedStoneWireBlock.POWER).byteValue();}
-         if(state_back.getBlock() instanceof RedStoneWireBlock){back = state_back.getValue(RedStoneWireBlock.POWER).byteValue();}
-         map.put(Side.LEFT, left);
-         map.put(Side.RIGHT, right);
-         map.put(Side.BACK, back);
-         map.put(Side.FRONT, computeRedstone(Side.FRONT, back, (byte) 0, left, right));
-         return map;
+    private Side fromDirection(Direction direction, int rotation, Direction[] array){
+        Direction sideLeft = array[rotation == 3 ? 0 : rotation + 1];
+        Direction sideRight = sideLeft.getOpposite();
+        Direction sideBack = array[rotation];
+        Direction sideFront = sideBack.getOpposite();
+        if (direction == sideFront) return Side.FRONT;
+        if (direction == sideBack) return Side.BACK;
+        if (direction == sideLeft) return Side.LEFT;
+        if (direction == sideRight) return Side.RIGHT;
+        return null;
     }
 
-    public byte computeRedstone(Side side, byte back, byte front, byte left, byte right){
-        if (left > 0 && right > 0 ){
-            return (byte)(back > 0 ? 16 : 0);
-        }
-        return 0;
+    protected abstract Map<Side, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos);
+
+    protected boolean isSideSource(Side side){
+        return false;
     }
+
+    @Override
+    public boolean isSignalSource(BlockState blockState) {
+        return true;
+    }
+
+
 
     @Override
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
