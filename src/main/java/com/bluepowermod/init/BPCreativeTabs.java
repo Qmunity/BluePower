@@ -23,7 +23,6 @@ import com.bluepowermod.reference.Refs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -64,7 +63,7 @@ public class BPCreativeTabs {
             event.acceptAll(BPBlocks.machines.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
             event.accept(BPBlocks.blulectric_cable.get());
             event.accept(BPBlocks.blockGateAND.get());
-            event.accept(BPBlocks.blockGateNot.get());
+            event.accept(BPBlocks.blockGateNOT.get());
             event.accept(BPBlocks.blockGateNAND.get());
             event.accept(BPBlocks.blockNullCell.get());
         }else if(event.getTab() == lighting.get()){

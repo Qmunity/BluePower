@@ -21,7 +21,6 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.*;
 import com.bluepowermod.block.gates.BlockGateAnd;
-import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.gates.BlockGateNot;
 import com.bluepowermod.block.gates.BlockNullCell;
 import com.bluepowermod.block.lighting.BlockLampRGBSurface;
@@ -272,13 +271,13 @@ public class BPBlocks {
 
 
     public static final RegistryObject<Block> blockGateAND = BLOCKS.register("gate_and", () -> new BlockGateAnd(false));
-    public static final RegistryObject<Block> blockGateNot = BLOCKS.register("gate_not", BlockGateNot::new);
+    public static final RegistryObject<Block> blockGateNOT = BLOCKS.register("gate_not", BlockGateNot::new);
     public static final RegistryObject<Block> blockNullCell = BLOCKS.register("gate_nullcell", BlockNullCell::new);
     public static final RegistryObject<Block> blockGateNAND = BLOCKS.register("gate_nand",() -> new BlockGateAnd(true));
 
     static{
         BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockGateNot.getKey().location().getPath(), () -> new BlockItem(blockGateNot.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNOT.getKey().location().getPath(), () -> new BlockItem(blockGateNOT.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockGateNAND.getKey().location().getPath(), () -> new BlockItem(blockGateNAND.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockNullCell.getKey().location().getPath(), () -> new BlockItem(blockNullCell.get(), new Item.Properties()));
     }
