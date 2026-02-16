@@ -3,7 +3,8 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
-		"gate": "bluepower:blocks/gates/gate"
+		"gate": "bluepower:blocks/gates/gate",
+    "particle": "bluepower:blocks/gates/gate"
 	},
 	"elements": [
 		{
