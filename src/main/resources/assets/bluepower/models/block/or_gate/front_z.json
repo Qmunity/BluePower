@@ -1,0 +1,125 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"torch_middle": "bluepower:blocks/bluestone_torch_on",
+		"bluestone_front": "bluepower:base/bluestone_on",
+		"torch_front": "bluepower:blocks/bluestone_torch_off",
+		"particle": "bluepower:blocks/gates/gate"
+	},
+	"elements": [
+		{
+			"name": "Middle1",
+			"from": [6, 2, 7],
+			"to": [10, 6, 9],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [6, 5, 10, 9], "texture": "#torch_middle"},
+				"south": {"uv": [6, 5, 10, 9], "texture": "#torch_middle"}
+			}
+		},
+		{
+			"name": "Middle2",
+			"from": [7, 2, 6],
+			"to": [9, 6, 10],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"east": {"uv": [6, 5, 10, 9], "texture": "#torch_middle"},
+				"west": {"uv": [6, 5, 10, 9], "texture": "#torch_middle"}
+			}
+		},
+		{
+			"name": "Torch_Middle",
+			"from": [7, 2, 7],
+			"to": [9, 5, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"up": {"uv": [7, 6, 9, 8], "rotation": 90, "texture": "#torch_middle"}
+			}
+		},
+		{
+			"name": "Front1",
+			"from": [11.5, 2, 7],
+			"to": [15.5, 7, 9],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [6, 5, 10, 10], "texture": "#torch_front"},
+				"south": {"uv": [6, 5, 10, 10], "texture": "#torch_front"}
+			}
+		},
+		{
+			"name": "Front2",
+			"from": [12.5, 2, 6],
+			"to": [14.5, 7, 10],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"east": {"uv": [6, 5, 10, 10], "texture": "#torch_front"},
+				"west": {"uv": [6, 5, 10, 10], "texture": "#torch_front"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [11, 2, 7.5],
+			"to": [12.5, 2.5, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 1, 1.5], "rotation": 90, "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "AcrossWire",
+			"from": [10, 2, 6.5],
+			"to": [11, 2.5, 9.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 9, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 9, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 3, 1], "rotation": 90, "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "Torch_Front",
+			"from": [12.5, 2, 7],
+			"to": [14.5, 6, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"up": {"uv": [7, 6, 9, 8], "rotation": 90, "texture": "#torch_front"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, -45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, -45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, 45, 0],
+			"scale": [0.625, 0.625, 0.625]
+		},
+		"head": {
+			"rotation": [0, -180, 0]
+		},
+		"fixed": {
+			"rotation": [0, -180, 0]
+		}
+	}
+}

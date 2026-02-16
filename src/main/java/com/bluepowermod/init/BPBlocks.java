@@ -22,6 +22,7 @@ import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.*;
 import com.bluepowermod.block.gates.BlockGateAnd;
 import com.bluepowermod.block.gates.BlockGateNot;
+import com.bluepowermod.block.gates.BlockGateOr;
 import com.bluepowermod.block.gates.BlockNullCell;
 import com.bluepowermod.block.lighting.BlockLampRGBSurface;
 import com.bluepowermod.block.lighting.BlockLampSurface;
@@ -272,13 +273,17 @@ public class BPBlocks {
 
     public static final RegistryObject<Block> blockGateAND = BLOCKS.register("gate_and", () -> new BlockGateAnd(false));
     public static final RegistryObject<Block> blockGateNOT = BLOCKS.register("gate_not", BlockGateNot::new);
+    public static final RegistryObject<Block> blockGateOR = BLOCKS.register("gate_or", () -> new BlockGateOr(false));
     public static final RegistryObject<Block> blockNullCell = BLOCKS.register("gate_nullcell", BlockNullCell::new);
     public static final RegistryObject<Block> blockGateNAND = BLOCKS.register("gate_nand",() -> new BlockGateAnd(true));
+    public static final RegistryObject<Block> blockGateNOR = BLOCKS.register("gate_nor", () -> new BlockGateOr(true));
 
     static{
         BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockGateNOT.getKey().location().getPath(), () -> new BlockItem(blockGateNOT.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateOR.getKey().location().getPath(), () -> new BlockItem(blockGateOR.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockGateNAND.getKey().location().getPath(), () -> new BlockItem(blockGateNAND.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNOR.getKey().location().getPath(), () -> new BlockItem(blockGateNOR.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockNullCell.getKey().location().getPath(), () -> new BlockItem(blockNullCell.get(), new Item.Properties()));
     }
 

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BlockGateAnd extends BlockGateBase {
-    private final boolean inverted;
+    protected final boolean inverted;
 
     public BlockGateAnd(boolean inverted){
         this.inverted = inverted;
