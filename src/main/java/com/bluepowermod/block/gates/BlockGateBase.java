@@ -118,7 +118,7 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         Direction face = context.getClickedFace();
-        return this.defaultBlockState().setValue(ROTATION, context.getHorizontalDirection().getOpposite().get2DDataValue()).setValue(FACING, face).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
+        return this.defaultBlockState().setValue(ROTATION, DirectionHelper.getRotationFromContext(context)).setValue(FACING, face).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
     @Override
