@@ -83,7 +83,10 @@ public class TileBPMultipart extends BlockEntity {
     }
 
     public void addState(BlockState state) {
-        BlockEntity tile = ((EntityBlock)state.getBlock()).newBlockEntity(worldPosition, state);
+        BlockEntity tile = null;
+        if (state.getBlock() instanceof EntityBlock entityBlock){
+            tile = entityBlock.newBlockEntity(worldPosition, state);
+        }
         this.stateMap.put(state, tile);
         state.getBlock().setPlacedBy(level, worldPosition, state,  null, new ItemStack(state.getBlock()));
         recalculateShape();
@@ -132,7 +135,7 @@ public class TileBPMultipart extends BlockEntity {
     @Override
     public void setLevel(Level levelIn) {
         super.setLevel(levelIn);
-        stateMap.values().forEach(t -> t.setLevel(levelIn));
+        stateMap.values().stream().filter(Objects::nonNull).forEach(t -> t.setLevel(levelIn));
     }
 
     @Nonnull
@@ -205,9 +208,13 @@ public class TileBPMultipart extends BlockEntity {
             Optional<Pair<BlockState, Tag>> result = BlockState.CODEC.decode(new Dynamic<>(NbtOps.INSTANCE, compound.get("state" + i))).result();
             if(result.isPresent()){
                 BlockState state = result.get().getFirst();
-                BlockEntity tile = ((EntityBlock)state.getBlock()).newBlockEntity(worldPosition, state);
-                if (tile != null) {
-                    tile.load(compound.getCompound("tile" + i));
+                BlockEntity tile = null;
+                if (state.getBlock() instanceof EntityBlock entityBlock){
+                    tile = entityBlock.newBlockEntity(worldPosition, state);
+                    if (tile != null) {
+                        tile.load(compound.getCompound("tile" + i));
+                    }
+
                 }
                 states.put(state, tile);
             }
