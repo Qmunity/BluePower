@@ -7,9 +7,11 @@
  */
 package com.bluepowermod.block.gates;
 
+import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -41,7 +44,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 /**
  * @author MoreThanHidden
  */
-public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
+public abstract class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock, IBPPartBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 3);
     public static final BooleanProperty POWERED_FRONT = BooleanProperty.create("powered_front");
@@ -124,11 +127,19 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
         super.setPlacedBy(world, pos, state, entity, stack);
+        BlockEntity te = world.getBlockEntity(pos);
         Map<Side, Byte> map = getSidePower(world, state, pos);
-        world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
+        BlockState newState = state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
                 .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
                 .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
-                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0));
+                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0);
+        if (!(te instanceof TileBPMultipart tileBPMultipart)){
+            //Change the block state
+            world.setBlock(pos, newState, 2);
+        }else{
+            //Update the state in the Multipart
+            tileBPMultipart.changeState(state, newState);
+        }
     }
 
     @Override
@@ -191,15 +202,41 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     @Override
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
+        BlockEntity te = world.getBlockEntity(pos);
         if(!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isCollisionShapeFullBlock(world,pos.relative(state.getValue(FACING).getOpposite()))) {
-            world.destroyBlock(pos, true);
+            if (te instanceof TileBPMultipart tileBPMultipart) {
+                tileBPMultipart.removeState(state);
+            } else {
+                world.destroyBlock(pos, true);
+            }
             return;
         }
         Map<Side, Byte> map = getSidePower(world, state, pos);
-        world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
+        BlockState newState = state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
                 .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
                 .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
-                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0));
+                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0);
+        if (newState != state) {
+            if (te instanceof TileBPMultipart tileBPMultipart) {
+                tileBPMultipart.changeState(state, newState);
+            } else {
+                world.setBlock(pos, newState, 2);
+            }
+            for (Direction dir : DirectionHelper.ArrayFromDirection(state.getValue(FACING))){
+               BlockPos neighbor = pos.relative(dir);
+                BlockState neighborState = world.getBlockState(neighbor);
+               if (neighbor.equals(fromPos)) continue;
+               world.updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
+            }
+        }
     }
 
+    /**
+     *  IBPartBlock
+     */
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state) {
+        return AABBUtils.rotate(Refs.GATE_AABB, state.getValue(FACING));
+    }
 }
