@@ -23,6 +23,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -51,6 +52,8 @@ import java.util.stream.Collectors;
 public class TileBPMultipart extends BlockEntity {
 
     public static final ModelProperty<Map<BlockState, ModelData>> STATE_INFO = new ModelProperty<>();
+    public static final ModelProperty<BlockAndTintGetter> LEVEL = new ModelProperty<>();
+    public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
     private Map<BlockState, BlockEntity> stateMap = new HashMap<>();
     VoxelShape shape = Block.box(6,6,6,10,10,10);
 
@@ -68,7 +71,7 @@ public class TileBPMultipart extends BlockEntity {
         //Add States without Tile Entities
         stateMap.keySet().stream().filter(s -> !s.hasBlockEntity()).forEach(s -> modelDataMap.put(s, null));
 
-        return ModelData.builder().with(STATE_INFO, modelDataMap).build();
+        return ModelData.builder().with(STATE_INFO, modelDataMap).with(LEVEL, this.level).with(POS, this.worldPosition).build();
     }
 
     private ModelData getModelData(BlockState state) {
