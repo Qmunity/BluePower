@@ -49,12 +49,21 @@ public class BPMultipartModel implements BakedModel {
         Map<BlockState, ModelData> stateInfo = extraData.get(TileBPMultipart.STATE_INFO);
 
         if (stateInfo != null) {
-            List<BakedQuad> bakedQuads = stateInfo.keySet().stream().flatMap(
-                    i -> brd.getBlockModel(i).getQuads(i, side, rand, stateInfo.get(i), renderType).stream().map(
-                            q -> stateInfo.get(i).has(TileWire.COLOR_INFO) ? transform(q, stateInfo.get(i).get(TileWire.COLOR_INFO), stateInfo.get(i).has(TileWire.LIGHT_INFO) ? stateInfo.get(i).get(TileWire.LIGHT_INFO) : false): q
-                    )
+            return stateInfo.keySet().stream().flatMap(
+                    i -> {
+                        BakedModel model = brd.getBlockModel(i);
+                        List<BakedQuad> list = new ArrayList<>();
+                        ModelData mData = stateInfo.get(i);
+                        if (mData == null) mData = ModelData.EMPTY;
+                        ModelData finalMData = mData;
+                        for (RenderType rType : model.getRenderTypes(i, rand, mData)){
+                            list.addAll(model.getQuads(i, side, rand, mData, rType).stream().map(
+                                    q -> finalMData.has(TileWire.COLOR_INFO) ? transform(q, finalMData.get(TileWire.COLOR_INFO), finalMData.has(TileWire.LIGHT_INFO) ? finalMData.get(TileWire.LIGHT_INFO) : false) : q
+                            ).toList());
+                        }
+                        return list.stream();
+                    }
             ).collect(Collectors.toList());
-             return bakedQuads;
         }else{
             return Collections.emptyList();
         }
