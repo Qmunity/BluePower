@@ -29,6 +29,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.client.model.QuadTransformers;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.pipeline.QuadBakingVertexConsumer;
 import org.jetbrains.annotations.NotNull;
@@ -77,19 +78,12 @@ public class BPMultipartModel implements BakedModel {
 
     private static BakedQuad transform(BakedQuad quad, Pair<Integer, Integer> colorPair, Boolean fullBright) {
         BakedQuad[] finalQuad = new BakedQuad[1];
-        final QuadBakingVertexConsumer consumer = new QuadBakingVertexConsumer(q -> finalQuad[0] = q) {
-            @Override
-            public VertexConsumer color(int pColorARGB) {
-                int color = quad.getTintIndex() == 2 ? colorPair.getSecond() : colorPair.getFirst();
-                int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-                int r = (color & redMask) >> 16;
-                int g = (color & greenMask) >> 8;
-                int b = (color & blueMask);
-
-                return this.color( r/255, g/255, b/255, 1);
-            }
-        };
-        consumer.putBulkData(new PoseStack().last(), quad, 1, 1, 1, 1, 0, OverlayTexture.NO_OVERLAY, true);
+        int color = quad.getTintIndex() == 2 ? colorPair.getSecond() : colorPair.getFirst();
+        float f = (float)(color >> 16 & 255) / 255.0F;
+        float f1 = (float)(color >> 8 & 255) / 255.0F;
+        float f2 = (float)(color & 255) / 255.0F;
+        final QuadBakingVertexConsumer consumer = new QuadBakingVertexConsumer(q -> finalQuad[0] = q);
+        consumer.putBulkData(new PoseStack().last(), quad, f, f1, f2, 1, 0, OverlayTexture.NO_OVERLAY, true);
         //if(fullBright)
             //LightUtil.setLightData(finalQuad, 240);
         return finalQuad[0];
