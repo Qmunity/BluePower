@@ -100,9 +100,9 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     public BlockState rotate(BlockState state, LevelAccessor level, BlockPos pos, Rotation rotation) {
         switch (rotation){
             case NONE -> {}
-            case CLOCKWISE_90 -> state.setValue(ROTATION, rotate(state.getValue(ROTATION),  1));
-            case CLOCKWISE_180 -> state.setValue(ROTATION, rotate(state.getValue(ROTATION), 2));
-            case COUNTERCLOCKWISE_90 -> state.setValue(ROTATION, rotate(state.getValue(ROTATION), 3));
+            case CLOCKWISE_90 -> state = state.setValue(ROTATION, rotate(state.getValue(ROTATION),  1));
+            case CLOCKWISE_180 -> state = state.setValue(ROTATION, rotate(state.getValue(ROTATION), 2));
+            case COUNTERCLOCKWISE_90 -> state = state.setValue(ROTATION, rotate(state.getValue(ROTATION), 3));
         }
         level.setBlock(pos, state, 3);
         return state;
@@ -118,7 +118,7 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         Direction face = context.getClickedFace();
-        return this.defaultBlockState().setValue(ROTATION, context.getHorizontalDirection().getOpposite().get2DDataValue()).setValue(FACING, face).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
+        return this.defaultBlockState().setValue(ROTATION, DirectionHelper.getRotationFromContext(context)).setValue(FACING, face).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
     @Override
