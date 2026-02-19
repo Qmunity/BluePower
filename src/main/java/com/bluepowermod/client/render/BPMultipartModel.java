@@ -84,8 +84,9 @@ public class BPMultipartModel implements BakedModel {
         float f2 = (float)(color & 255) / 255.0F;
         final QuadBakingVertexConsumer consumer = new QuadBakingVertexConsumer(q -> finalQuad[0] = q);
         consumer.putBulkData(new PoseStack().last(), quad, f, f1, f2, 1, 0, OverlayTexture.NO_OVERLAY, true);
-        //if(fullBright)
-            //LightUtil.setLightData(finalQuad, 240);
+        if (fullBright){
+            QuadTransformers.applyingLightmap(15, 15).processInPlace(quad);
+        }
         return finalQuad[0];
     }
 
