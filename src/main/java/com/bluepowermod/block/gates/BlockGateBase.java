@@ -200,6 +200,12 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
                 .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
                 .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
                 .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0));
+        for (Direction dir : DirectionHelper.ArrayFromDirection(state.getValue(FACING))){
+           BlockPos neighbor = pos.relative(dir);
+            BlockState neighborState = world.getBlockState(neighbor);
+           if (neighbor.equals(fromPos)) continue;
+           world.updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
+        }
     }
 
 }
