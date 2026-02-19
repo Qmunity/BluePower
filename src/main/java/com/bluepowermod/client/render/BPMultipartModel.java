@@ -79,11 +79,11 @@ public class BPMultipartModel implements BakedModel {
     private static BakedQuad transform(BakedQuad quad, Pair<Integer, Integer> colorPair, Boolean fullBright) {
         BakedQuad[] finalQuad = new BakedQuad[1];
         int color = quad.getTintIndex() == 2 ? colorPair.getSecond() : colorPair.getFirst();
-        float f = (float)(color >> 16 & 255) / 255.0F;
-        float f1 = (float)(color >> 8 & 255) / 255.0F;
-        float f2 = (float)(color & 255) / 255.0F;
+        float r = (float)(color >> 16 & 255) / 255.0F;
+        float g = (float)(color >> 8 & 255) / 255.0F;
+        float b = (float)(color & 255) / 255.0F;
         final QuadBakingVertexConsumer consumer = new QuadBakingVertexConsumer(q -> finalQuad[0] = q);
-        consumer.putBulkData(new PoseStack().last(), quad, f, f1, f2, 1, 0, OverlayTexture.NO_OVERLAY, true);
+        consumer.putBulkData(new PoseStack().last(), quad, r, g, b, 1, 0, OverlayTexture.NO_OVERLAY, true);
         if (fullBright){
             QuadTransformers.applyingLightmap(15, 15).processInPlace(quad);
         }
