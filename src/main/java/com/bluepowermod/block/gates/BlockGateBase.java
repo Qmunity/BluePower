@@ -220,7 +220,7 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock, 
             if (te instanceof TileBPMultipart tileBPMultipart) {
                 tileBPMultipart.changeState(state, newState);
             } else {
-                world.setBlock(pos, newState, 2);
+                world.setBlockAndUpdate(pos, newState);
             }
             for (Direction dir : DirectionHelper.ArrayFromDirection(state.getValue(FACING))){
                BlockPos neighbor = pos.relative(dir);
