@@ -1,0 +1,80 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+        "bluestone_right": "bluepower:base/bluestone_off",
+        "torch_right": "bluepower:blocks/bluestone_torch_on"
+    },
+    "display": {
+        "gui": {
+            "rotation": [ 30, 45, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.625, 0.625, 0.625 ]
+        },
+        "ground": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, 3, 0 ],
+            "scale": [ 0.25, 0.25, 0.25 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "head": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, 315, 0 ],
+            "translation": [ 0, 2.5, 0 ],
+            "scale": [ 0.4, 0.4, 0.4 ]
+        },
+        "thirdperson_righthand": {
+            "rotation": [ 75, 315, 0 ],
+            "translation": [ 0, 2.5, 0 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        }
+    },
+    "elements": [
+        {
+            "name": "Torch_Right",
+            "from": [ 10, 2, 7.5 ],
+            "to": [ 12, 5, 9.5 ],
+            "faces": {
+                "up": { "texture": "#torch_right", "uv": [ 7, 6, 9, 8 ] }
+            }
+        },
+        {
+            "name": "AcrossWire",
+            "from": [ 12, 2, 8 ],
+            "to": [ 16, 2.5, 9 ],
+            "faces": {
+                "north": { "texture": "#bluestone_right", "uv": [ 0, 0, 4, 0.5 ] },
+                "east": { "texture": "#bluestone_right", "uv": [ 0, 0, 1, 0.5 ] },
+                "south": { "texture": "#bluestone_right", "uv": [ 0, 0, 4, 0.5 ] },
+                "up": { "texture": "#bluestone_right", "uv": [ 0, 0, 4, 1 ] }
+            }
+        },
+        {
+            "name": "Right1",
+            "from": [ 10, 2, 6.5 ],
+            "to": [ 12, 6, 10.5 ],
+            "shade": false,
+            "faces": {
+                "east": { "texture": "#torch_right", "uv": [ 6, 5, 10, 9 ] },
+                "west": { "texture": "#torch_right", "uv": [ 6, 5, 10, 9 ] }
+            }
+        },
+        {
+            "name": "Right2",
+            "from": [ 9, 2, 7.5 ],
+            "to": [ 13, 6, 9.5 ],
+            "shade": false,
+            "faces": {
+                "north": { "texture": "#torch_right", "uv": [ 6, 5, 10, 9 ] },
+                "south": { "texture": "#torch_right", "uv": [ 6, 5, 10, 9 ] }
+            }
+        }
+    ]
+}
