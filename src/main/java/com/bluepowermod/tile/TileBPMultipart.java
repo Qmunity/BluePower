@@ -55,7 +55,7 @@ public class TileBPMultipart extends BlockEntity {
     public static final ModelProperty<BlockAndTintGetter> LEVEL = new ModelProperty<>();
     public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
     private Map<BlockState, BlockEntity> stateMap = new HashMap<>();
-    VoxelShape shape = Block.box(6,6,6,10,10,10);
+    VoxelShape shape = null;
 
     public TileBPMultipart(BlockPos pos, BlockState state) {
         super(BPBlockEntityType.MULTIPART.get(), pos, state);
@@ -92,7 +92,7 @@ public class TileBPMultipart extends BlockEntity {
         }
         this.stateMap.put(state, tile);
         state.getBlock().setPlacedBy(level, worldPosition, state,  null, new ItemStack(state.getBlock()));
-        recalculateShape();
+        shape = null;
         markDirtyClient();
     }
 
@@ -109,7 +109,7 @@ public class TileBPMultipart extends BlockEntity {
         }
         //Remove State
         this.stateMap.remove(state);
-        recalculateShape();
+        shape = null;
         markDirtyClient();
         if(stateMap.size() == 1) {
             //Convert back to Standalone Block
@@ -175,6 +175,9 @@ public class TileBPMultipart extends BlockEntity {
     }
 
     public VoxelShape getShape() {
+        if (shape == null) {
+            recalculateShape();
+        }
         return shape;
     }
 
@@ -223,7 +226,7 @@ public class TileBPMultipart extends BlockEntity {
             }
         }
         this.stateMap = states;
-        recalculateShape();
+        shape = null;
         markDirtyClient();
     }
 
@@ -248,7 +251,7 @@ public class TileBPMultipart extends BlockEntity {
         if (level.isClientSide) {
             // Update if needed
             if (!getStates().equals(states)) {
-                recalculateShape();
+                shape = null;
                 level.blockEntityChanged(getBlockPos());
             }
         }
@@ -258,7 +261,7 @@ public class TileBPMultipart extends BlockEntity {
         BlockEntity te = stateMap.get(state);
         stateMap.remove(state);
         stateMap.put(newState, te);
-        recalculateShape();
+        shape = null;
         markDirtyClient();
     }
 
