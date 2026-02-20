@@ -44,7 +44,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 /**
  * @author MoreThanHidden
  */
-public abstract class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock, IBPPartBlock {
+public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock, IBPPartBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 3);
     public static final BooleanProperty POWERED_FRONT = BooleanProperty.create("powered_front");
