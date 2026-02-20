@@ -20,12 +20,16 @@ public class BlockGateNot extends BlockGateBase{
         BlockState stateBack = worldIn.getBlockState(posBack);
         byte back = (byte) stateBack.getSignal(worldIn, posBack, sideBack.getOpposite());
         if(stateBack.getBlock() instanceof RedStoneWireBlock){back = stateBack.getValue(RedStoneWireBlock.POWER).byteValue();}
-        byte output = (byte) (back > 0 ? 0 : 16);
+        byte output = getOutput(back);
         map.put(Side.FRONT, output);
         map.put(Side.LEFT, output);
         map.put(Side.RIGHT, output);
         map.put(Side.BACK, back);
         return map;
+    }
+
+    protected byte getOutput(byte back){
+        return (byte) (back > 0 ? 0 : 16);
     }
 
     @Override
