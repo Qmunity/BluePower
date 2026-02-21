@@ -1,7 +1,7 @@
 {
-    "parent": "bluepower:block/and_gate/back_z",
+    "parent": "bluepower:block/xor_gate/back_z",
     "textures": {
         "bluestone_back": "bluepower:base/bluestone_on",
-        "torch_middle": "bluepower:blocks/bluestone_torch_off"
+        "torch_back": "bluepower:blocks/bluestone_torch_on"
     }
 }

@@ -153,7 +153,7 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         return 0;
     }
 
-    private Side fromDirection(Direction direction, int rotation, Direction[] array){
+    protected Side fromDirection(Direction direction, int rotation, Direction[] array){
         Direction sideLeft = array[rotation == 3 ? 0 : rotation + 1];
         Direction sideRight = sideLeft.getOpposite();
         Direction sideBack = array[rotation];
