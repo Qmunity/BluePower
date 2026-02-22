@@ -3,9 +3,9 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
-		"particle": "bluepower:blocks/gates/gate",
-		"gate": "bluepower:blocks/gates/gate"
-	},
+		"gate": "bluepower:blocks/gates/gate",
+    "particle": "bluepower:blocks/gates/gate"
+  },
 	"elements": [
 		{
 			"name": "Base",
@@ -34,13 +34,13 @@
 		},
 		{
 			"name": "LeverBase",
-			"from": [10.5, 2, 3.999],
+			"from": [8.5, 2, 3.999],
 			"to": [13.5, 2.25, 11.999],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 3, 0.25], "texture": "#gate"},
+				"north": {"uv": [0, 0, 5, 0.25], "texture": "#gate"},
 				"east": {"uv": [0, 0, 8, 0.25], "texture": "#gate"},
-				"south": {"uv": [0, 0, 3, 0.25], "texture": "#gate"},
+				"south": {"uv": [0, 0, 5, 0.25], "texture": "#gate"},
 				"west": {"uv": [0, 0, 8, 0.25], "texture": "#gate"},
 				"up": {"uv": [0, 0, 1, 8], "rotation": 180, "texture": "#gate"}
 			}
@@ -99,24 +99,24 @@
 		{
 			"name": "AcrossBase",
 			"from": [4.5, 2, 8],
-			"to": [10.5, 2.25, 9],
+			"to": [8.5, 2.25, 9],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
 				"south": {"uv": [0, 0, 6, 0.25], "texture": "#gate"},
 				"west": {"uv": [0, 0, 1, 0.25], "texture": "#gate"},
-				"up": {"uv": [0, 0, 5.5, 1], "rotation": 180, "texture": "#gate"}
+				"up": {"uv": [0, 0, 4, 1], "rotation": 180, "texture": "#gate"}
 			}
 		},
 		{
 			"name": "AcrossBase",
 			"from": [0.02, 2, 7],
-			"to": [10.51, 2.25, 8],
+			"to": [8.51, 2.25, 8],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 10.49, 0.25], "texture": "#gate"},
 				"south": {"uv": [0, 0, 10.49, 0.25], "texture": "#gate"},
 				"west": {"uv": [0, 0, 1, 0.25], "texture": "#gate"},
-				"up": {"uv": [0, 0, 10.49, 1], "rotation": 180, "texture": "#gate"}
+				"up": {"uv": [0, 0, 8.49, 1], "rotation": 180, "texture": "#gate"}
 			}
 		}
 	],

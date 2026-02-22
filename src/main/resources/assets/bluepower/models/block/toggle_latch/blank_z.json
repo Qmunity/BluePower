@@ -1,0 +1,124 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "bluepower:blocks/gates/gate",
+		"gate": "bluepower:blocks/gates/gate"
+	},
+	"elements": [
+		{
+			"name": "Base",
+			"from": [0, 0, 0],
+			"to": [16, 2, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 16], "rotation": 270, "texture": "#gate"},
+				"east": {"uv": [0, 0, 16, 1], "rotation": 180, "texture": "#gate"},
+				"south": {"uv": [15, 0, 16, 16], "rotation": 90, "texture": "#gate"},
+				"west": {"uv": [0, 15, 16, 16], "texture": "#gate"},
+				"up": {"uv": [0, 0, 16, 16], "rotation": 90, "texture": "#gate"}
+			}
+		},
+		{
+			"name": "TorchBase",
+			"from": [1.001, 2, 1.5],
+			"to": [4.001, 2.25, 4.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 3, 0.25], "texture": "#gate"},
+				"east": {"uv": [0, 0, 3, 0.25], "texture": "#gate"},
+				"south": {"uv": [0, 0, 3, 0.25], "texture": "#gate"},
+				"west": {"uv": [0, 0, 3, 0.25], "texture": "#gate"},
+				"up": {"uv": [0, 0, 1, 3], "rotation": 270, "texture": "#gate"}
+			}
+		},
+		{
+			"name": "LeverBase",
+			"from": [4.001, 2, 8.5],
+			"to": [12.001, 2.25, 13.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 0.25], "texture": "#gate"},
+				"east": {"uv": [0, 0, 5, 0.25], "texture": "#gate"},
+				"south": {"uv": [0, 0, 8, 0.25], "texture": "#gate"},
+				"west": {"uv": [0, 0, 5, 0.25], "texture": "#gate"},
+				"up": {"uv": [0, 0, 1, 8], "rotation": 270, "texture": "#gate"}
+			}
+		},
+		{
+			"name": "TorchBase",
+			"from": [11.501, 2, 1.5],
+			"to": [14.501, 2.25, 4.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 3, 0.25], "texture": "#gate"},
+				"east": {"uv": [0, 0, 3, 0.25], "texture": "#gate"},
+				"south": {"uv": [0, 0, 3, 0.25], "texture": "#gate"},
+				"west": {"uv": [0, 0, 3, 0.25], "texture": "#gate"},
+				"up": {"uv": [0, 0, 1, 3], "rotation": 270, "texture": "#gate"}
+			}
+		},
+		{
+			"name": "AcrossBase",
+			"from": [7, 2, 13.509],
+			"to": [9, 2.25, 15.999],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 0.25], "texture": "#gate"},
+				"east": {"uv": [0, 0, 3.49, 0.25], "texture": "#gate"},
+				"south": {"uv": [0, 0, 2, 0.25], "texture": "#gate"},
+				"west": {"uv": [0, 0, 3.49, 0.25], "texture": "#gate"},
+				"up": {"uv": [0, 0, 2.49, 1], "rotation": 270, "texture": "#gate"}
+			}
+		},
+		{
+			"name": "AcrossBase",
+			"from": [9, 2, 1.5],
+			"to": [10, 2.25, 5.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.25], "texture": "#gate"},
+				"east": {"uv": [0, 0, 4, 0.25], "texture": "#gate"},
+				"south": {"uv": [0, 0, 1, 0.25], "texture": "#gate"},
+				"up": {"uv": [0, 0, 4, 1], "rotation": 270, "texture": "#gate"}
+			}
+		},
+		{
+			"name": "AcrossBase",
+			"from": [7, 2, 0.02],
+			"to": [8, 2.25, 2.51],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.25], "texture": "#gate"},
+				"east": {"uv": [0, 0, 2.49, 0.25], "texture": "#gate"},
+				"south": {"uv": [0, 0, 1, 0.25], "texture": "#gate"},
+				"west": {"uv": [0, 0, 2.49, 0.25], "texture": "#gate"},
+				"up": {"uv": [0, 0, 2.49, 1], "rotation": 270, "texture": "#gate"}
+			}
+		},
+		{
+			"name": "AcrossBase",
+			"from": [7, 2, 4.5],
+			"to": [8, 2.25, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.25], "texture": "#gate"},
+				"west": {"uv": [0, 0, 6, 0.25], "texture": "#gate"},
+				"up": {"uv": [0, 0, 4, 1], "rotation": 270, "texture": "#gate"}
+			}
+		},
+		{
+			"name": "AcrossBase",
+			"from": [8, 2, 0.02],
+			"to": [9, 2.25, 8.51],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.25], "texture": "#gate"},
+				"east": {"uv": [0, 0, 10.49, 0.25], "texture": "#gate"},
+				"west": {"uv": [0, 0, 10.49, 0.25], "texture": "#gate"},
+				"up": {"uv": [0, 0, 8.49, 1], "rotation": 270, "texture": "#gate"}
+			}
+		}
+	]
+}

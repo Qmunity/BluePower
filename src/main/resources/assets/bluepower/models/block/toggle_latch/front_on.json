@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/toggle_latch/front",
+    "textures": {
+      "torch_front": "bluepower:blocks/bluestone_torch_on"
+    }
+}
