@@ -1,9 +1,8 @@
 plugins {
     id 'eclipse'
     id 'idea'
-    id "net.neoforged.moddev.legacyforge" version "2.0.82" apply false
+    id "net.neoforged.moddev.legacyforge" version "2.0.82"
 }
-apply plugin: "net.neoforged.moddev.legacyforge"
 
 project.ext {
     major = mod_version_major
