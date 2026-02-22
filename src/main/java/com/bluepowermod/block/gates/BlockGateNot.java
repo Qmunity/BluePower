@@ -33,7 +33,7 @@ public class BlockGateNot extends BlockGateBase{
     }
 
     @Override
-    protected boolean isSideSource(Side side) {
+    protected boolean isSideSource(Side side, BlockState blockState, BlockGetter blockAccess, BlockPos pos) {
         return side == Side.FRONT || side == Side.LEFT || side == Side.RIGHT;
     }
 }

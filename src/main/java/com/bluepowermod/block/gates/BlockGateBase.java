@@ -136,7 +136,7 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
         Side side1 = fromDirection(side.getOpposite(), blockState.getValue(ROTATION), dirs);
         Map<Side, Byte> map = getSidePower(blockAccess, blockState, pos);
-        if (isSideSource(side1)){
+        if (isSideSource(side1, blockState, blockAccess, pos)){
             return map.get(side1);
         }
         return 0;
@@ -147,7 +147,7 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
         Side side1 = fromDirection(side.getOpposite(), blockState.getValue(ROTATION), dirs);
         Map<Side, Byte> map = getSidePower(blockAccess, blockState, pos);
-        if (isSideSource(side1)){
+        if (isSideSource(side1, blockState, blockAccess, pos)){
             return map.get(side1);
         }
         return 0;
@@ -167,7 +167,7 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
 
     protected abstract Map<Side, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos);
 
-    protected boolean isSideSource(Side side){
+    protected boolean isSideSource(Side side, BlockState blockState, BlockGetter blockAccess, BlockPos pos){
         return false;
     }
 

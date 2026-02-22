@@ -24,6 +24,7 @@ import com.bluepowermod.block.gates.BlockGateAnd;
 import com.bluepowermod.block.gates.BlockGateBuffer;
 import com.bluepowermod.block.gates.BlockGateNot;
 import com.bluepowermod.block.gates.BlockGateOr;
+import com.bluepowermod.block.gates.BlockGateRSLatch;
 import com.bluepowermod.block.gates.BlockGateXor;
 import com.bluepowermod.block.gates.BlockNullCell;
 import com.bluepowermod.block.lighting.BlockLampRGBSurface;
@@ -282,6 +283,7 @@ public class BPBlocks {
     public static final RegistryObject<Block> blockGateBUFFER = BLOCKS.register("gate_buffer", BlockGateBuffer::new);
     public static final RegistryObject<Block> blockGateXOR = BLOCKS.register("gate_xor", () -> new BlockGateXor(false));
     public static final RegistryObject<Block> blockGateXNOR = BLOCKS.register("gate_xnor", () -> new BlockGateXor(true));
+    public static final RegistryObject<Block> blockRSLatch = BLOCKS.register("gate_rs", BlockGateRSLatch::new);
 
     static{
         BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties()));
@@ -293,6 +295,7 @@ public class BPBlocks {
         BPItems.ITEMS.register(blockGateBUFFER.getKey().location().getPath(), () -> new BlockItem(blockGateBUFFER.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockGateXOR.getKey().location().getPath(), () -> new BlockItem(blockGateXOR.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockGateXNOR.getKey().location().getPath(), () -> new BlockItem(blockGateXNOR.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockRSLatch.getKey().location().getPath(), () -> new BlockItem(blockRSLatch.get(), new Item.Properties()));
     }
 
      public static final RegistryObject<Block> blockRedAlloyWire = BLOCKS.register(RedwireType.RED_ALLOY.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true));
