@@ -26,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.api.distmarker.Dist;
@@ -78,6 +79,11 @@ public class Renderers {
         event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:panel"), "inventory"), microblockModel);
         event.getModels().put(new ModelResourceLocation(new ResourceLocation("bluepower:cover"), "inventory"), microblockModel);
 
+    }
+
+    @SubscribeEvent
+    public void onRegisterGeometryLoadersEvent(RegisterGeometryLoaders event){
+        event.register("gate", new GateModelLoader());
     }
 
     public static void init() {
