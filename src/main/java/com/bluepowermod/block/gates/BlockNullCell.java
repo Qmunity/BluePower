@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.SignalGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
@@ -33,7 +34,7 @@ public class BlockNullCell extends BlockGateBase {
         CROSSED
     }
 
-    public Map<Side, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos){
+    public Map<Side, Byte> getSidePower(SignalGetter worldIn, BlockState state, BlockPos pos){
         Map<Side, Byte> map = new HashMap<>();
         Direction[] dirs = DirectionHelper.ArrayFromDirection(state.getValue(FACING));
 
@@ -49,10 +50,10 @@ public class BlockNullCell extends BlockGateBase {
 
         shouldSignal = false;
 
-        byte left = state.getValue(POWERED_LEFT) ?  0 : (byte) ((Level)worldIn).getSignal(pos_left, side_right);
-        byte right = state.getValue(POWERED_RIGHT) ?  0 : (byte) ((Level)worldIn).getSignal(pos_right, side_left);
-        byte back = state.getValue(POWERED_BACK) ?  0 : (byte) ((Level)worldIn).getSignal(pos_back, side_front);
-        byte front = state.getValue(POWERED_FRONT) ?  0 : (byte) ((Level)worldIn).getSignal(pos_front, side_back);
+        byte left = state.getValue(POWERED_LEFT) ?  0 : (byte) worldIn.getSignal(pos_left, side_right);
+        byte right = state.getValue(POWERED_RIGHT) ?  0 : (byte) worldIn.getSignal(pos_right, side_left);
+        byte back = state.getValue(POWERED_BACK) ?  0 : (byte) worldIn.getSignal(pos_back, side_front);
+        byte front = state.getValue(POWERED_FRONT) ?  0 : (byte) worldIn.getSignal(pos_front, side_back);
 
         shouldSignal = true;
 

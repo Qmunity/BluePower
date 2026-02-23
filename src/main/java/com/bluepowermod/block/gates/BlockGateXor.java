@@ -4,6 +4,7 @@ import com.bluepowermod.helper.DirectionHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.SignalGetter;
 import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +18,7 @@ public class BlockGateXor extends BlockGateAnd{
     }
 
     @Override
-    public Map<Side, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos){
+    public Map<Side, Byte> getSidePower(SignalGetter worldIn, BlockState state, BlockPos pos){
         Map<Side, Byte> map = super.getSidePower(worldIn, state, pos);
         boolean powered_back = map.get(Side.LEFT) == 0 && map.get(Side.RIGHT) == 0;
         map.put(Side.BACK, (byte) (powered_back ? 16 : 0));

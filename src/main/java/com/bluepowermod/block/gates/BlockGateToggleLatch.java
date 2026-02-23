@@ -3,28 +3,29 @@ package com.bluepowermod.block.gates;
 import com.bluepowermod.helper.DirectionHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.SignalGetter;
 import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 public class BlockGateToggleLatch extends BlockGateBase{
     @Override
-    protected Map<Side, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos) {
-        Direction[] dirs = DirectionHelper.ArrayFromDirection(state.getValue(FACING));
-        Direction side_left = dirs[state.getValue(ROTATION) == 3 ? 0 : state.getValue(ROTATION) + 1];
-        Direction side_right = side_left.getOpposite();
-        BlockPos pos_left = pos.relative(side_left);
-        BlockPos pos_right = pos.relative(side_right);
-        BlockState state_left = worldIn.getBlockState(pos_left);
-        BlockState state_right = worldIn.getBlockState(pos_right);
-        byte leftIn = (byte) state_left.getSignal(worldIn, pos_left, side_right);
-        byte rightIn = (byte) state_right.getSignal(worldIn, pos_right, side_left);
-        if(state_left.getBlock() instanceof RedStoneWireBlock){leftIn = state_left.getValue(RedStoneWireBlock.POWER).byteValue();}
-        if(state_right.getBlock() instanceof RedStoneWireBlock){rightIn = state_right.getValue(RedStoneWireBlock.POWER).byteValue();}
+    protected Map<Side, Byte> getSidePower(SignalGetter worldIn, BlockState state, BlockPos pos) {
+        Direction sideLeft = toDirection(Side.LEFT, state);
+        Direction sideRight = toDirection(Side.RIGHT, state);
+        byte leftIn = (byte) worldIn.getSignal(pos.relative(sideLeft), sideLeft);
+        byte rightIn = (byte) worldIn.getSignal(pos.relative(sideRight), sideRight);
         boolean frontPowered = state.getValue(POWERED_FRONT);
         boolean backPowered = state.getValue(POWERED_BACK);
         boolean leftPowered = state.getValue(POWERED_LEFT);
@@ -54,5 +55,18 @@ public class BlockGateToggleLatch extends BlockGateBase{
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         return super.getStateForPlacement(context).setValue(POWERED_FRONT, true);
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        state = state.setValue(POWERED_FRONT, !state.getValue(POWERED_FRONT)).setValue(POWERED_BACK, !state.getValue(POWERED_BACK));
+        level.setBlockAndUpdate(pos, state);
+        for (Direction dir : DirectionHelper.ArrayFromDirection(state.getValue(FACING))){
+            BlockPos neighbor = pos.relative(dir);
+            BlockState neighborState = level.getBlockState(neighbor);
+            level.updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
+        }
+        level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, 0.5F);
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 }
