@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:xor_gate"
+    "item": "bluepower:gate_xor"
   },
   "pattern": [
     "AWA",
@@ -17,9 +17,6 @@
     },
     "C": {
       "item": "bluepower:bluestone_cathode_tile"
-    },
-    "T": {
-      "item": "bluepower:stone_tile"
     }
   }
 }
