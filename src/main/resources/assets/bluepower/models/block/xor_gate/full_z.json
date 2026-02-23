@@ -1,0 +1,107 @@
+{
+  "loader": "bluepower:gate",
+  "models": [
+    "bluepower:block/xor_gate/blank_z",
+    {
+      "model": "bluepower:block/xor_gate/back_z",
+      "when": {
+        "powered_back": false
+      }
+    },
+    {
+      "model": "bluepower:block/xor_gate/back_on_z",
+      "when": {
+        "powered_back": true
+      }
+    },
+    {
+      "model": "bluepower:block/xor_gate/front_z",
+      "when": {
+        "powered_front": false
+      }
+    },
+    {
+      "model": "bluepower:block/xor_gate/front_on_z",
+      "when": {
+        "powered_front": true
+      }
+    },
+    {
+      "model": "bluepower:block/xor_gate/left_z",
+      "when": {
+        "powered_left": false
+      }
+    },
+    {
+      "model": "bluepower:block/xor_gate/left_on_z",
+      "when": {
+        "powered_left": true
+      }
+    },
+    {
+      "model": "bluepower:block/xor_gate/right_z",
+      "when": {
+        "powered_right": false
+      }
+    },
+    {
+      "model": "bluepower:block/xor_gate/right_on_z",
+      "when": {
+        "powered_right": true
+      }
+    },
+    {
+      "model": "bluepower:block/xor_gate/left_torch_z",
+      "when": {
+        "OR": [
+          {
+            "powered_left": true,
+            "powered_right": true
+          },
+          {
+            "powered_left": false,
+            "powered_right": false
+          },
+          {
+            "powered_left": true,
+            "powered_right": false
+          }
+        ]
+      }
+    },
+    {
+      "model": "bluepower:block/xor_gate/left_torch_on_Z",
+      "when": {
+        "powered_left": false,
+        "powered_right": true
+      }
+    },
+    {
+      "model": "bluepower:block/xor_gate/right_torch_z",
+      "when": {
+        "OR": [
+          {
+            "powered_left": true,
+            "powered_right": true
+          },
+          {
+            "powered_left": false,
+            "powered_right": false
+          },
+          {
+            "powered_left": false,
+            "powered_right": true
+          }
+        ]
+      }
+    },
+    {
+      "model": "bluepower:block/xor_gate/right_torch_on_z",
+      "when": {
+        "powered_left": true,
+        "powered_right": false
+      }
+    }
+  ],
+  "particle": "bluepower:blocks/gates/gate"
+}

@@ -1,51 +1,51 @@
 {
   "loader": "bluepower:gate",
   "models": [
-    "bluepower:block/and_gate/blank_z",
+    "bluepower:block/nor_gate/blank_z",
     {
-      "model": "bluepower:block/and_gate/back_z",
+      "model": "bluepower:block/nor_gate/left",
       "when": {
         "powered_back": false
       }
     },
     {
-      "model": "bluepower:block/and_gate/back_on_z",
+      "model": "bluepower:block/nor_gate/left_on",
       "when": {
         "powered_back": true
       }
     },
     {
-      "model": "bluepower:block/and_gate/front_z",
+      "model": "bluepower:block/nor_gate/front_z",
       "when": {
         "powered_front": false
       }
     },
     {
-      "model": "bluepower:block/and_gate/front_on_z",
+      "model": "bluepower:block/nor_gate/front_on_z",
       "when": {
         "powered_front": true
       }
     },
     {
-      "model": "bluepower:block/and_gate/left_z",
+      "model": "bluepower:block/nor_gate/left_z",
       "when": {
         "powered_left": false
       }
     },
     {
-      "model": "bluepower:block/and_gate/left_on_z",
+      "model": "bluepower:block/nor_gate/left_on_z",
       "when": {
         "powered_left": true
       }
     },
     {
-      "model": "bluepower:block/and_gate/right_z",
+      "model": "bluepower:block/nor_gate/back",
       "when": {
         "powered_right": false
       }
     },
     {
-      "model": "bluepower:block/and_gate/right_on_z",
+      "model": "bluepower:block/nor_gate/back_on",
       "when": {
         "powered_right": true
       }

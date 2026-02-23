@@ -15,8 +15,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import net.minecraftforge.client.model.geometry.IGeometryLoader;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class GateModelLoader implements IGeometryLoader<GateModel> {
@@ -34,16 +37,43 @@ public class GateModelLoader implements IGeometryLoader<GateModel> {
                 modelName = object.getAsJsonPrimitive("model").getAsString();
                 if (object.has("when")){
                     JsonObject when = object.getAsJsonObject("when");
-                    Map<String, Boolean> conditions = when.asMap().entrySet().stream()
-                            .filter(e -> e.getValue() instanceof JsonPrimitive primitive && primitive.isBoolean())
-                            .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().getAsBoolean()));
-                    condition = m -> {
-                        boolean[] bool = new boolean[1];
-                        bool[0] = true;
-                        conditions.forEach((s, o) -> {
-                            bool[0] &= m.containsKey(s) && m.get(s).equals(o);
+                    List<Predicate<Map<String, Boolean>>> conditionsList = new ArrayList<>();
+                    if (when.has("OR") && when.get("OR").isJsonArray()){
+                        for (JsonElement element : when.getAsJsonArray("OR")){
+                            if (element instanceof JsonObject conditionObject){
+                                Map<String, Boolean> conditions = conditionObject.entrySet().stream()
+                                        .filter(e -> e.getValue() instanceof JsonPrimitive primitive && primitive.isBoolean())
+                                        .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().getAsBoolean()));
+                                conditionsList.add(m -> {
+                                    boolean[] bool = new boolean[1];
+                                    bool[0] = true;
+                                    conditions.forEach((s, o) -> {
+                                        bool[0] &= m.containsKey(s) && m.get(s).equals(o);
+                                    });
+                                    return bool[0];
+                                });
+                            }
+                        }
+                    } else {
+                        Map<String, Boolean> conditions = when.asMap().entrySet().stream()
+                                .filter(e -> e.getValue() instanceof JsonPrimitive primitive && primitive.isBoolean())
+                                .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().getAsBoolean()));
+                        conditionsList.add(m -> {
+                            boolean[] bool = new boolean[1];
+                            bool[0] = true;
+                            conditions.forEach((s, o) -> {
+                                bool[0] &= m.containsKey(s) && m.get(s).equals(o);
+                            });
+                            return bool[0];
                         });
-                        return bool[0];
+                    }
+                    condition = m ->{
+                        if (conditionsList.isEmpty()) return true;
+                        boolean test = conditionsList.get(0).test(m);
+                        for (int i = 1; i < conditionsList.size(); i++) {
+                            test |= conditionsList.get(i).test(m);
+                        }
+                        return test;
                     };
                 }
             }
