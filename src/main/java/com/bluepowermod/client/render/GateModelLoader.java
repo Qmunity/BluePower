@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -36,14 +37,20 @@ public class GateModelLoader implements IGeometryLoader<GateModel> {
             } else if (model instanceof JsonObject object) {
                 modelName = object.getAsJsonPrimitive("model").getAsString();
                 if (object.has("when")){
+                    Function<JsonPrimitive, Object> mappingFunction = j -> {
+                        if (j.isBoolean()) return j.getAsBoolean();
+                        if (j.isNumber()) return j.getAsNumber();
+                        if (j.isString()) return j.getAsString();
+                        throw new JsonParseException("When condition must be a string, a number, or a boolean: " + j);
+                    };
                     JsonObject when = object.getAsJsonObject("when");
-                    List<Predicate<Map<String, Boolean>>> conditionsList = new ArrayList<>();
+                    List<Predicate<Map<String, Object>>> conditionsList = new ArrayList<>();
                     if (when.has("OR") && when.get("OR").isJsonArray()){
                         for (JsonElement element : when.getAsJsonArray("OR")){
                             if (element instanceof JsonObject conditionObject){
-                                Map<String, Boolean> conditions = conditionObject.entrySet().stream()
-                                        .filter(e -> e.getValue() instanceof JsonPrimitive primitive && primitive.isBoolean())
-                                        .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().getAsBoolean()));
+                                Map<String, Object> conditions = conditionObject.entrySet().stream()
+                                        .filter(e -> e.getValue() instanceof JsonPrimitive)
+                                        .collect(Collectors.toMap(Entry::getKey, e -> mappingFunction.apply(e.getValue().getAsJsonPrimitive())));
                                 conditionsList.add(m -> {
                                     boolean[] bool = new boolean[1];
                                     bool[0] = true;
@@ -55,9 +62,9 @@ public class GateModelLoader implements IGeometryLoader<GateModel> {
                             }
                         }
                     } else {
-                        Map<String, Boolean> conditions = when.asMap().entrySet().stream()
-                                .filter(e -> e.getValue() instanceof JsonPrimitive primitive && primitive.isBoolean())
-                                .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().getAsBoolean()));
+                        Map<String, Object> conditions = when.asMap().entrySet().stream()
+                                .filter(e -> e.getValue() instanceof JsonPrimitive)
+                                .collect(Collectors.toMap(Entry::getKey, e -> mappingFunction.apply(e.getValue().getAsJsonPrimitive())));
                         conditionsList.add(m -> {
                             boolean[] bool = new boolean[1];
                             bool[0] = true;

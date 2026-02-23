@@ -37,7 +37,7 @@ public class GateBakedModel implements BakedModel {
     @Override
     public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData data, @Nullable RenderType renderType) {
         List<BakedQuad> quads = new ArrayList<>();
-        Map<String, Boolean> redstoneStates = new HashMap<>();
+        Map<String, Object> redstoneStates = new HashMap<>();
         redstoneStates.put("powered_back", state.getValue(BlockGateBase.POWERED_BACK));
         redstoneStates.put("powered_front", state.getValue(BlockGateBase.POWERED_FRONT));
         redstoneStates.put("powered_left", state.getValue(BlockGateBase.POWERED_LEFT));
