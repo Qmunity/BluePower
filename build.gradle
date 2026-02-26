@@ -1,11 +1,8 @@
 plugins {
     id 'eclipse'
     id 'idea'
-    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id "net.neoforged.moddev.legacyforge" version "2.0.82"
 }
-
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 project.ext {
     major = mod_version_major
@@ -39,36 +36,27 @@ repositories {
     }
 }
 
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
-    copyIdeResources = true
-
+legacyForge {
+    version = "${project.minecraft_version}-${project.forge_version}"
+    parchment {
+        minecraftVersion = project.minecraft_version
+        mappingsVersion = project.mapping_version
+    }
     runs {
-        configureEach {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                bluepower {
-                    source sourceSets.main
-                }
-            }
-        }
-
         client {
-            property 'forge.enabledGameTestNamespaces', 'bluepower'
+            client()
         }
-
-        server {
-            property 'forge.enabledGameTestNamespaces', 'bluepower'
-            args '--nogui'
-        }
-
         data {
-            workingDirectory project.file('run-data')
-            args '--mod', 'bluepower', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            data()
+            programArguments.addAll('--mod', 'bluepower', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath())
+        }
+        server {
+            server()
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
         }
     }
 }
@@ -76,16 +64,16 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft "net.neoforged:forge:${minecraft_version}-${neo_version}"
-    compileOnly fg.deobf("curse.maven:${jade_version}")
-    compileOnly fg.deobf("mezz.jei:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:${jei_version}")
+    modCompileOnly("curse.maven:jade-324717:${jade_version}")
+    implementation("org.jetbrains:annotations:26.0.1")
+    modCompileOnly("mezz.jei:jei-${project.minecraft_version}-forge:${jei_version}")
+    modRuntimeOnly("mezz.jei:jei-${project.minecraft_version}-forge:${jei_version}")
 }
 
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
             minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
-            neo_version         : neo_version, neo_version_range: neo_version_range,
+            forge_version         : forge_version, forge_version_range: forge_version_range,
             loader_version_range: loader_version_range, mod_version: version,
     ]
     inputs.properties replaceProperties
@@ -107,7 +95,6 @@ tasks.named('jar', Jar).configure {
     }
     archiveAppendix = "${project.ext.mcVersion}"
     archiveClassifier = "universal"
-    finalizedBy 'reobfJar'
 }
 
 task deobfJar(type: Jar) {
