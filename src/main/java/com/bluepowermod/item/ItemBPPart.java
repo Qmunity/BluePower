@@ -52,17 +52,17 @@ public class ItemBPPart extends BlockItem {
             //Replace with Multipart
             context.getLevel().setBlockAndUpdate(context.getClickedPos(), BPBlocks.multipart.get().defaultBlockState());
             tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
-            if(tileEntity instanceof TileBPMultipart){
+            if(tileEntity instanceof TileBPMultipart multipart){
                 //Add the original State to the Multipart
-                ((TileBPMultipart) tileEntity).addState(state);
+                multipart.addState(state);
 
                 //Restore the Tile Entity Data
-                BlockEntity tile = ((TileBPMultipart) tileEntity).getTileForState(state);
+                BlockEntity tile = multipart.getTileForState(state);
                 if (tile != null)
                     tile.load(nbt);
 
                 //Add the new State
-                ((TileBPMultipart) tileEntity).addState(thisState);
+                multipart.addState(thisState);
                 thisState.getBlock().setPlacedBy( context.getLevel(),context.getClickedPos(), thisState, context.getPlayer(), context.getItemInHand());
             }
             //Update Self
@@ -76,8 +76,8 @@ public class ItemBPPart extends BlockItem {
 
             // Add to the Existing Multipart
             BlockEntity tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
-            if (tileEntity instanceof TileBPMultipart) {
-                ((TileBPMultipart) tileEntity).addState(thisState);
+            if (tileEntity instanceof TileBPMultipart multipart) {
+                multipart.addState(thisState);
                 thisState.getBlock().setPlacedBy( context.getLevel(),context.getClickedPos(), thisState, context.getPlayer(), context.getItemInHand());
                 //Update Neighbors
                 for(Direction dir : Direction.values()){
