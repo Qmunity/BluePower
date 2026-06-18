@@ -288,17 +288,17 @@ public class BPBlocks {
     public static final RegistryObject<Block> blockToggleLatch = BLOCKS.register("gate_toggle", BlockGateToggleLatch::new);
 
     static{
-        BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new ItemBPPart(blockGateAND.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockGateNOT.getKey().location().getPath(), () -> new ItemBPPart(blockGateNOT.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockGateOR.getKey().location().getPath(), () -> new ItemBPPart(blockGateOR.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockGateNAND.getKey().location().getPath(), () -> new ItemBPPart(blockGateNAND.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockGateNOR.getKey().location().getPath(), () -> new ItemBPPart(blockGateNOR.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockNullCell.getKey().location().getPath(), () -> new ItemBPPart(blockNullCell.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockGateBUFFER.getKey().location().getPath(), () -> new ItemBPPart(blockGateBUFFER.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockGateXOR.getKey().location().getPath(), () -> new ItemBPPart(blockGateXOR.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockGateXNOR.getKey().location().getPath(), () -> new ItemBPPart(blockGateXNOR.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockRSLatch.getKey().location().getPath(), () -> new ItemBPPart(blockRSLatch.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockToggleLatch.getKey().location().getPath(), () -> new ItemBPPart(blockToggleLatch.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNOT.getKey().location().getPath(), () -> new BlockItem(blockGateNOT.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateOR.getKey().location().getPath(), () -> new BlockItem(blockGateOR.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNAND.getKey().location().getPath(), () -> new BlockItem(blockGateNAND.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNOR.getKey().location().getPath(), () -> new BlockItem(blockGateNOR.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockNullCell.getKey().location().getPath(), () -> new BlockItem(blockNullCell.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateBUFFER.getKey().location().getPath(), () -> new BlockItem(blockGateBUFFER.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateXOR.getKey().location().getPath(), () -> new BlockItem(blockGateXOR.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateXNOR.getKey().location().getPath(), () -> new BlockItem(blockGateXNOR.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockRSLatch.getKey().location().getPath(), () -> new BlockItem(blockRSLatch.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockToggleLatch.getKey().location().getPath(), () -> new BlockItem(blockToggleLatch.get(), new Item.Properties()));
     }
 
      public static final RegistryObject<Block> blockRedAlloyWire = BLOCKS.register(RedwireType.RED_ALLOY.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true));
