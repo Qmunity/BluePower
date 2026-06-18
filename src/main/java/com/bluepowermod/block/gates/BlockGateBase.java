@@ -15,6 +15,8 @@ import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -41,6 +43,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.ticks.TickPriority;
 
 /**
  * @author MoreThanHidden
@@ -202,6 +205,10 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         return false;
     }
 
+    protected int getDelay(BlockState state, BlockGetter blockGetter, BlockPos pos){
+        return 1;
+    }
+
     @Override
     public boolean isSignalSource(BlockState blockState) {
         return true;
@@ -210,18 +217,35 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
 
 
     @Override
-    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
-        super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
-        BlockEntity te = world.getBlockEntity(pos);
-        if(!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isCollisionShapeFullBlock(world,pos.relative(state.getValue(FACING).getOpposite()))) {
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+        super.neighborChanged(state, level, pos, blockIn, fromPos, bool);
+        BlockEntity te = level.getBlockEntity(pos);
+        if(!level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isCollisionShapeFullBlock(level,pos.relative(state.getValue(FACING).getOpposite()))) {
             if (te instanceof TileBPMultipart tileBPMultipart) {
                 tileBPMultipart.removeState(state);
             } else {
-                world.destroyBlock(pos, true);
+                level.destroyBlock(pos, true);
             }
             return;
         }
-        Map<Side, Byte> map = getSidePower(world, state, pos);
+        Map<Side, Byte> map = getSidePower(level, state, pos);
+        BlockState newState = state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
+                .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
+                .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
+                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0);
+        if (newState != state) {
+            Block blockToTick = te instanceof TileBPMultipart bpMultipart ? bpMultipart.getBlockState().getBlock() : this;
+            if (!level.getBlockTicks().willTickThisTick(pos, blockToTick)) {
+                level.scheduleTick(pos, blockToTick,
+                        getDelay(state, level, pos), TickPriority.HIGH);
+            }
+        }
+    }
+
+    @Override
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        BlockEntity te = level.getBlockEntity(pos);
+        Map<Side, Byte> map = getSidePower(level, state, pos);
         BlockState newState = state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
                 .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
                 .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
@@ -230,13 +254,15 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
             if (te instanceof TileBPMultipart tileBPMultipart) {
                 tileBPMultipart.changeState(state, newState);
             } else {
-                world.setBlockAndUpdate(pos, newState);
+                level.setBlockAndUpdate(pos, newState);
             }
-            for (Direction dir : DirectionHelper.ArrayFromDirection(state.getValue(FACING))){
-               BlockPos neighbor = pos.relative(dir);
-                BlockState neighborState = world.getBlockState(neighbor);
-               if (neighbor.equals(fromPos)) continue;
-               world.updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
+        }
+        for (Side side : Side.values()){
+            Direction dir = toDirection(side, state);
+            if (isSideSource(side, state, level, pos)){
+                BlockPos neighbor = pos.relative(dir);
+                BlockState neighborState = level.getBlockState(neighbor);
+                level.updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
             }
         }
     }
