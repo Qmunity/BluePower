@@ -14,8 +14,10 @@ import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -157,6 +159,32 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         if(te instanceof TileBPMultipart bp) {
             bp.getStates().forEach(s -> s.neighborChanged(world, pos, blockIn, fromPos, bool));
         }
+    }
+
+    @Override
+    public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        int[] signal = {0};
+        BlockEntity te = level.getBlockEntity(pos);
+        if(te instanceof TileBPMultipart bp) {
+            bp.getStates().forEach(s -> {
+                int partSignal = s.getSignal(level, pos, direction);
+                if (partSignal > signal[0]) signal[0] = partSignal;
+            });
+        }
+        return signal[0];
+    }
+
+    @Override
+    public int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        int[] signal = {0};
+        BlockEntity te = level.getBlockEntity(pos);
+        if(te instanceof TileBPMultipart bp) {
+            bp.getStates().forEach(s -> {
+                int partSignal = s.getDirectSignal(level, pos, direction);
+                if (partSignal > signal[0]) signal[0] = partSignal;
+            });
+        }
+        return signal[0];
     }
 
     @Override
