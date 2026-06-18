@@ -54,7 +54,7 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public BlockBPMultipart() {
-        super(Block.Properties.of().noOcclusion().strength(2));
+        super(Block.Properties.of().noOcclusion().strength(2).dynamicShape());
         BPBlocks.blockList.add(this);
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
     }
@@ -99,11 +99,18 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         BlockEntity te = worldIn.getBlockEntity(pos);
-        if(te instanceof TileBPMultipart){
-            List<VoxelShape> shapeList = new ArrayList<>();
-            ((TileBPMultipart) te).getStates().forEach(s -> shapeList.add(s.getShape(worldIn, pos)));
-            if(shapeList.size() > 0)
-                return shapeList.stream().reduce(shapeList.get(0), Shapes::or);
+        if(te instanceof TileBPMultipart tileBPMultipart){
+            return tileBPMultipart.getShape();
+        }
+        //Shouldn't be required but allows the player to break an empty multipart
+        return Block.box(6,6,6,10,10,10);
+    }
+
+    @Override
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter level, BlockPos pos) {
+        BlockEntity te = level.getBlockEntity(pos);
+        if(te instanceof TileBPMultipart tileBPMultipart){
+            return tileBPMultipart.getShape();
         }
         //Shouldn't be required but allows the player to break an empty multipart
         return Block.box(6,6,6,10,10,10);

@@ -23,6 +23,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -31,6 +32,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelDataManager;
 import net.minecraftforge.client.model.data.ModelProperty;
@@ -49,7 +52,10 @@ import java.util.stream.Collectors;
 public class TileBPMultipart extends BlockEntity {
 
     public static final ModelProperty<Map<BlockState, ModelData>> STATE_INFO = new ModelProperty<>();
+    public static final ModelProperty<BlockAndTintGetter> LEVEL = new ModelProperty<>();
+    public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
     private Map<BlockState, BlockEntity> stateMap = new HashMap<>();
+    VoxelShape shape = null;
 
     public TileBPMultipart(BlockPos pos, BlockState state) {
         super(BPBlockEntityType.MULTIPART.get(), pos, state);
@@ -65,24 +71,28 @@ public class TileBPMultipart extends BlockEntity {
         //Add States without Tile Entities
         stateMap.keySet().stream().filter(s -> !s.hasBlockEntity()).forEach(s -> modelDataMap.put(s, null));
 
-        return ModelData.builder().with(STATE_INFO, modelDataMap).build();
+        return ModelData.builder().with(STATE_INFO, modelDataMap).with(LEVEL, this.level).with(POS, this.worldPosition).build();
     }
 
     private ModelData getModelData(BlockState state) {
         //Get Model Data for specific state
         BlockEntity tileEntity = stateMap.get(state);
         if(tileEntity != null) {
-            if (tileEntity instanceof TileWire)
-                return ((TileWire) tileEntity).getModelData(state);
+            if (tileEntity instanceof TileWire tileWire)
+                return tileWire.getModelData(state);
             return tileEntity.getModelData();
         }
         return ModelData.EMPTY;
     }
 
     public void addState(BlockState state) {
-        BlockEntity tile = ((EntityBlock)state.getBlock()).newBlockEntity(worldPosition, state);
+        BlockEntity tile = null;
+        if (state.getBlock() instanceof EntityBlock entityBlock){
+            tile = entityBlock.newBlockEntity(worldPosition, state);
+        }
         this.stateMap.put(state, tile);
         state.getBlock().setPlacedBy(level, worldPosition, state,  null, new ItemStack(state.getBlock()));
+        shape = null;
         markDirtyClient();
     }
 
@@ -99,6 +109,7 @@ public class TileBPMultipart extends BlockEntity {
         }
         //Remove State
         this.stateMap.remove(state);
+        shape = null;
         markDirtyClient();
         if(stateMap.size() == 1) {
             //Convert back to Standalone Block
@@ -110,7 +121,7 @@ public class TileBPMultipart extends BlockEntity {
                 if (tile != null && nbt != null)
                     tile.load(nbt);
             }
-        }else if(stateMap.size() == 0){
+        }else if(stateMap.isEmpty()){
             //Remove if this is empty
             if (level != null) {
                 level.removeBlock(worldPosition, false);
@@ -127,7 +138,7 @@ public class TileBPMultipart extends BlockEntity {
     @Override
     public void setLevel(Level levelIn) {
         super.setLevel(levelIn);
-        stateMap.values().forEach(t -> t.setLevel(levelIn));
+        stateMap.values().stream().filter(Objects::nonNull).forEach(t -> t.setLevel(levelIn));
     }
 
     @Nonnull
@@ -151,6 +162,25 @@ public class TileBPMultipart extends BlockEntity {
     public List<BlockState> getStates(){
         return new ArrayList<>(stateMap.keySet());
     }
+
+    private void recalculateShape(){
+        shape = Block.box(6,6,6,10,10,10);
+        List<VoxelShape> shapeList = new ArrayList<>();
+        if (level != null) {
+            getStates().forEach(s -> shapeList.add(s.getShape(this.level, this.worldPosition)));
+        }
+
+        if(!shapeList.isEmpty())
+            shape = shapeList.stream().reduce(shapeList.get(0), Shapes::or);
+    }
+
+    public VoxelShape getShape() {
+        if (shape == null) {
+            recalculateShape();
+        }
+        return shape;
+    }
+
 
     private void markDirtyClient() {
         setChanged();
@@ -184,14 +214,19 @@ public class TileBPMultipart extends BlockEntity {
             Optional<Pair<BlockState, Tag>> result = BlockState.CODEC.decode(new Dynamic<>(NbtOps.INSTANCE, compound.get("state" + i))).result();
             if(result.isPresent()){
                 BlockState state = result.get().getFirst();
-                BlockEntity tile = ((EntityBlock)state.getBlock()).newBlockEntity(worldPosition, state);
-                if (tile != null) {
-                    tile.load(compound.getCompound("tile" + i));
+                BlockEntity tile = null;
+                if (state.getBlock() instanceof EntityBlock entityBlock){
+                    tile = entityBlock.newBlockEntity(worldPosition, state);
+                    if (tile != null) {
+                        tile.load(compound.getCompound("tile" + i));
+                    }
+
                 }
                 states.put(state, tile);
             }
         }
         this.stateMap = states;
+        shape = null;
         markDirtyClient();
     }
 
@@ -216,6 +251,7 @@ public class TileBPMultipart extends BlockEntity {
         if (level.isClientSide) {
             // Update if needed
             if (!getStates().equals(states)) {
+                shape = null;
                 level.blockEntityChanged(getBlockPos());
             }
         }
@@ -225,6 +261,7 @@ public class TileBPMultipart extends BlockEntity {
         BlockEntity te = stateMap.get(state);
         stateMap.remove(state);
         stateMap.put(newState, te);
+        shape = null;
         markDirtyClient();
     }
 
