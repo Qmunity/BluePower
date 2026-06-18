@@ -120,11 +120,11 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     public boolean onDestroyedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
         BlockState partState = MultipartUtils.getClosestState(player, pos);
         BlockEntity te = world.getBlockEntity(pos);
-        if(partState != null && partState.getBlock() instanceof IBPPartBlock && te instanceof TileBPMultipart) {
+        if(partState != null && partState.getBlock() instanceof IBPPartBlock partBlock && te instanceof TileBPMultipart bpMultipart) {
             //Remove Selected Part
-            ((TileBPMultipart) te).removeState(partState);
+            bpMultipart.removeState(partState);
             //Call onMultipartReplaced
-            ((IBPPartBlock)partState.getBlock()).onMultipartReplaced(partState, world, pos, state, false);
+            partBlock.onMultipartReplaced(partState, world, pos, state, false);
             //Play Break Sound
             world.playSound(null, pos, SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
             return false;
@@ -145,8 +145,8 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         BlockEntity tileentity = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
-        if (tileentity instanceof TileBPMultipart) {
-            ((TileBPMultipart) tileentity).getStates().forEach(s -> itemStacks.addAll(s.getBlock().getDrops(s, builder)));
+        if (tileentity instanceof TileBPMultipart bp) {
+            bp.getStates().forEach(s -> itemStacks.addAll(s.getBlock().getDrops(s, builder)));
         }
         return itemStacks;
     }
@@ -154,8 +154,8 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     @Override
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         BlockEntity te = world.getBlockEntity(pos);
-        if(te instanceof TileBPMultipart) {
-            ((TileBPMultipart) te).getStates().forEach(s -> s.neighborChanged(world, pos, blockIn, fromPos, bool));
+        if(te instanceof TileBPMultipart bp) {
+            bp.getStates().forEach(s -> s.neighborChanged(world, pos, blockIn, fromPos, bool));
         }
     }
 
