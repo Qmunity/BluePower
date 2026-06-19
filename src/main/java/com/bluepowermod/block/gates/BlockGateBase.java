@@ -27,6 +27,7 @@ import net.minecraft.world.level.SignalGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -65,7 +66,7 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
     }
 
     public BlockGateBase() {
-        super();
+        super(Properties.of().sound(SoundType.STONE).instabreak());
         this.registerDefaultState(stateDefinition.any()
                 .setValue(FACING, Direction.UP)
                 .setValue(POWERED_BACK, false)
