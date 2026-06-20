@@ -207,6 +207,14 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
 
     }
 
+    protected void cycleDisabledStates(BlockState state, TileGate gate){
+
+    }
+
+    public void cycleDisabledStates(BlockState state, BlockGetter blockGetter, BlockPos pos){
+        this.cycleDisabledStates(state, getGateTile(state, blockGetter.getBlockEntity(pos)));
+    }
+
     protected int getDelay(BlockState state, TileGate gate){
         return 1;
     }
