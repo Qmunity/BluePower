@@ -12,6 +12,7 @@ import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
+import com.bluepowermod.tile.tier1.TileGate;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.SignalGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
@@ -49,7 +51,7 @@ import net.minecraft.world.ticks.TickPriority;
 /**
  * @author MoreThanHidden
  */
-public abstract class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock, IBPPartBlock {
+public abstract class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock, IBPPartBlock, EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 3);
     public static final BooleanProperty POWERED_FRONT = BooleanProperty.create("powered_front");
@@ -74,6 +76,11 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
                 .setValue(POWERED_LEFT, false)
                 .setValue(POWERED_RIGHT, false)
                 .setValue(ROTATION, 0));
+    }
+
+    @Override
+    public @org.jetbrains.annotations.Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new TileGate(blockPos, blockState);
     }
 
     @Override
@@ -134,16 +141,15 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         super.setPlacedBy(world, pos, state, entity, stack);
         BlockEntity te = world.getBlockEntity(pos);
         Map<Side, Byte> map = getSidePower(world, state, pos);
-        BlockState newState = state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
-                .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
-                .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
-                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0);
-        if (!(te instanceof TileBPMultipart tileBPMultipart)){
-            //Change the block state
-            world.setBlock(pos, newState, 2);
-        }else{
-            //Update the state in the Multipart
-            tileBPMultipart.changeState(state, newState);
+        TileGate tileGate = getGateTile(state, te);
+        if (tileGate == null) return;
+        boolean powerChanged = tileGate.updateStates(map);
+        if (powerChanged) {
+            Block blockToTick = te instanceof TileBPMultipart bpMultipart ? bpMultipart.getBlockState().getBlock() : this;
+            if (!world.getBlockTicks().willTickThisTick(pos, blockToTick)) {
+                world.scheduleTick(pos, blockToTick,
+                        getDelay(state, world, pos), TickPriority.HIGH);
+            }
         }
     }
 
@@ -151,8 +157,9 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
     public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side){
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
         Side side1 = fromDirection(side.getOpposite(), blockState.getValue(ROTATION), dirs);
-        if (isSideSource(side1, blockState, blockAccess, pos)){
-            return redstoneFromSide(side1, blockState);
+        TileGate tileGate = getGateTile(blockState, blockAccess.getBlockEntity(pos));
+        if (isSideSource(side1, blockState, blockAccess, pos) && tileGate != null){
+            return tileGate.redstoneFromSide(side1);
         }
         return 0;
     }
@@ -161,19 +168,11 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
     public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
         Side side1 = fromDirection(side.getOpposite(), blockState.getValue(ROTATION), dirs);
-        if (isSideSource(side1, blockState, blockAccess, pos)){
-            return redstoneFromSide(side1, blockState);
+        TileGate tileGate = getGateTile(blockState, blockAccess.getBlockEntity(pos));
+        if (isSideSource(side1, blockState, blockAccess, pos) && tileGate != null){
+            return tileGate.redstoneFromSide(side1);
         }
         return 0;
-    }
-
-    private int redstoneFromSide(Side side, BlockState state){
-        return switch (side){
-            case FRONT -> state.getValue(POWERED_FRONT) ? 16 : 0;
-            case BACK -> state.getValue(POWERED_BACK) ? 16 : 0;
-            case LEFT -> state.getValue(POWERED_LEFT) ? 16 : 0;
-            case RIGHT -> state.getValue(POWERED_RIGHT) ? 16 : 0;
-        };
     }
 
     protected Direction toDirection(Side side, BlockState state){
@@ -210,6 +209,11 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         return 1;
     }
 
+    protected TileGate getGateTile(BlockState state, BlockEntity inWorldBE){
+        BlockEntity gateBE = inWorldBE instanceof TileBPMultipart bpMultipart ? bpMultipart.getTileForState(state) : inWorldBE;
+        return gateBE instanceof TileGate gate ? gate : null;
+    }
+
     @Override
     public boolean isSignalSource(BlockState blockState) {
         return true;
@@ -229,12 +233,11 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
             }
             return;
         }
+        TileGate tileGate = getGateTile(state, te);
+        if (tileGate == null) return;
         Map<Side, Byte> map = getSidePower(level, state, pos);
-        BlockState newState = state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
-                .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
-                .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
-                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0);
-        if (newState != state) {
+        boolean powerChanged = tileGate.updateStates(map);
+        if (powerChanged) {
             Block blockToTick = te instanceof TileBPMultipart bpMultipart ? bpMultipart.getBlockState().getBlock() : this;
             if (!level.getBlockTicks().willTickThisTick(pos, blockToTick)) {
                 level.scheduleTick(pos, blockToTick,
@@ -245,25 +248,18 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
 
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        BlockEntity te = level.getBlockEntity(pos);
+        TileGate tileGate = getGateTile(state, level.getBlockEntity(pos));
+        if (tileGate == null) return;
         Map<Side, Byte> map = getSidePower(level, state, pos);
-        BlockState newState = state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
-                .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
-                .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
-                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0);
-        if (newState != state) {
-            if (te instanceof TileBPMultipart tileBPMultipart) {
-                tileBPMultipart.changeState(state, newState);
-            } else {
-                level.setBlockAndUpdate(pos, newState);
-            }
-        }
-        for (Side side : Side.values()){
-            Direction dir = toDirection(side, state);
-            if (isSideSource(side, state, level, pos)){
-                BlockPos neighbor = pos.relative(dir);
-                BlockState neighborState = level.getBlockState(neighbor);
-                level.updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
+        boolean powerChanged = tileGate.updateStates(map);
+        if (powerChanged) {
+            for (Side side : Side.values()){
+                Direction dir = toDirection(side, state);
+                if (isSideSource(side, state, level, pos)){
+                    BlockPos neighbor = pos.relative(dir);
+                    BlockState neighborState = level.getBlockState(neighbor);
+                    level.updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
+                }
             }
         }
     }

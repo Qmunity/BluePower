@@ -1,6 +1,7 @@
 package com.bluepowermod.block.gates;
 
 import com.bluepowermod.helper.DirectionHelper;
+import com.bluepowermod.tile.tier1.TileGate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -15,12 +16,13 @@ import java.util.Map;
 public class BlockGateRSLatch extends BlockGateBase{
     @Override
     protected Map<Side, Byte> getSidePower(SignalGetter worldIn, BlockState state, BlockPos pos) {
+        TileGate gate = getGateTile(state, worldIn.getBlockEntity(pos));
         Direction sideLeft = toDirection(Side.LEFT, state);
         Direction sideRight = toDirection(Side.RIGHT, state);
         byte leftIn = (byte) worldIn.getSignal(pos.relative(sideLeft), sideLeft);
         byte rightIn = (byte) worldIn.getSignal(pos.relative(sideRight), sideRight);
-        boolean frontPowered = state.getValue(POWERED_FRONT);
-        boolean backPowered = state.getValue(POWERED_BACK);
+        boolean frontPowered = gate.isPoweredFront();
+        boolean backPowered = gate.isPoweredBack();
         if (!frontPowered && !backPowered ){
             if (rightIn == 0) backPowered = true;
             else if (leftIn == 0) frontPowered = true;

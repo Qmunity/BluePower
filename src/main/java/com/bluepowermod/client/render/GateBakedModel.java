@@ -1,6 +1,7 @@
 package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.gates.BlockGateBase;
+import com.bluepowermod.tile.tier1.TileGate;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.RenderType;
@@ -38,10 +39,16 @@ public class GateBakedModel implements BakedModel {
     public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData data, @Nullable RenderType renderType) {
         List<BakedQuad> quads = new ArrayList<>();
         Map<String, Object> redstoneStates = new HashMap<>();
-        redstoneStates.put("powered_back", state.getValue(BlockGateBase.POWERED_BACK));
-        redstoneStates.put("powered_front", state.getValue(BlockGateBase.POWERED_FRONT));
-        redstoneStates.put("powered_left", state.getValue(BlockGateBase.POWERED_LEFT));
-        redstoneStates.put("powered_right", state.getValue(BlockGateBase.POWERED_RIGHT));
+        TileGate.SideStates poweredProperty = data.get(TileGate.POWERED_PROPERTY);
+        redstoneStates.put("powered_back", poweredProperty.back());
+        redstoneStates.put("powered_front", poweredProperty.front());
+        redstoneStates.put("powered_left", poweredProperty.left());
+        redstoneStates.put("powered_right", poweredProperty.right());
+        TileGate.SideStates disabledProperty = data.get(TileGate.DISABLED_PROPERTY);
+        redstoneStates.put("disabled_back", disabledProperty.back());
+        redstoneStates.put("disabled_front", disabledProperty.front());
+        redstoneStates.put("disabled_left", disabledProperty.left());
+        redstoneStates.put("disabled_right", disabledProperty.right());
         for(Pair<IGateCondition, BakedModel> pair : models){
             if (pair.key().test(redstoneStates)){
                 quads.addAll(pair.value().getQuads(state, side, rand, data, renderType));
