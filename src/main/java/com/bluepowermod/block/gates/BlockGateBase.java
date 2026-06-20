@@ -105,13 +105,18 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
 
     @Override
     public BlockState rotate(BlockState state, LevelAccessor level, BlockPos pos, Rotation rotation) {
+        BlockState oldState = state;
         switch (rotation){
             case NONE -> {}
             case CLOCKWISE_90 -> state = state.setValue(ROTATION, rotate(state.getValue(ROTATION),  1));
             case CLOCKWISE_180 -> state = state.setValue(ROTATION, rotate(state.getValue(ROTATION), 2));
             case COUNTERCLOCKWISE_90 -> state = state.setValue(ROTATION, rotate(state.getValue(ROTATION), 3));
         }
-        level.setBlock(pos, state, 3);
+        if (level.getBlockEntity(pos) instanceof TileBPMultipart multipart){
+            multipart.changeState(oldState, state);
+        } else {
+            level.setBlock(pos, state, 3);
+        }
         return state;
     }
 
