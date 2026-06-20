@@ -59,7 +59,9 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
         }
         if (context.getPlayer() != null && context.getPlayer().isCrouching()){
             if (state.getBlock() instanceof BlockGateBase gateBase){
-                gateBase.cycleDisabledStates(state, context.getLevel(), context.getClickedPos());
+                if (!gateBase.cycleDisabledStates(state, context.getLevel(), context.getClickedPos())){
+                    state.getBlock().rotate(state, context.getLevel(), context.getClickedPos(), Rotation.CLOCKWISE_180);
+                }
             } else {
                 state.getBlock().rotate(state, context.getLevel(), context.getClickedPos(), Rotation.CLOCKWISE_180);
             }
