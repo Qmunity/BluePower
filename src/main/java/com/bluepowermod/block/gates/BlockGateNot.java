@@ -27,7 +27,7 @@ public class BlockGateNot extends BlockGateBase{
 
 
     @Override
-    protected void cycleDisabledStates(BlockState state, TileGate gate) {
+    protected boolean cycleDisabledStates(BlockState state, TileGate gate) {
         boolean left = gate.isDisabled(Side.LEFT), right = gate.isDisabled(Side.RIGHT), front = gate.isDisabled(Side.FRONT);
         if (!left && !front && !right) {
             gate.setDisabled(Side.RIGHT, true);
@@ -51,6 +51,7 @@ public class BlockGateNot extends BlockGateBase{
             gate.setDisabled(Side.LEFT, false);
             gate.setDisabled(Side.FRONT, false);
         }
+        return true;
     }
 
     protected byte getOutput(byte back){

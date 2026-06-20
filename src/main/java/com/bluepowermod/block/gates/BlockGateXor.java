@@ -38,7 +38,7 @@ public class BlockGateXor extends BlockGateAnd{
     }
 
     @Override
-    protected void cycleDisabledStates(BlockState state, TileGate gate) {
-        //NOOP
+    protected boolean cycleDisabledStates(BlockState state, TileGate gate) {
+        return false;
     }
 }
