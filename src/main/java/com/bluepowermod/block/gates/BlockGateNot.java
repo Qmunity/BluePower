@@ -25,12 +25,40 @@ public class BlockGateNot extends BlockGateBase{
         return map;
     }
 
+
+    @Override
+    protected void cycleDisabledStates(BlockState state, TileGate gate) {
+        boolean left = gate.isDisabled(Side.LEFT), right = gate.isDisabled(Side.RIGHT), front = gate.isDisabled(Side.FRONT);
+        if (!left && !front && !right) {
+            gate.setDisabled(Side.RIGHT, true);
+        } else if (!left && !front) {
+            gate.setDisabled(Side.FRONT, true);
+            gate.setDisabled(Side.RIGHT, false);
+        } else if (!left && !right) {
+            gate.setDisabled(Side.LEFT, true);
+            gate.setDisabled(Side.FRONT, false);
+        } else if (!front && !right) {
+            gate.setDisabled(Side.LEFT, false);
+            gate.setDisabled(Side.FRONT, true);
+            gate.setDisabled(Side.RIGHT, true);
+        } else if (!left) {
+            gate.setDisabled(Side.LEFT, true);
+            gate.setDisabled(Side.FRONT, false);
+        } else if (!front) {
+            gate.setDisabled(Side.FRONT, true);
+            gate.setDisabled(Side.RIGHT, false);
+        } else {// right enabled
+            gate.setDisabled(Side.LEFT, false);
+            gate.setDisabled(Side.FRONT, false);
+        }
+    }
+
     protected byte getOutput(byte back){
         return (byte) (back > 0 ? 0 : 16);
     }
 
     @Override
     protected boolean isSideSource(Side side, BlockState blockState, TileGate gate) {
-        return side == Side.FRONT || side == Side.LEFT || side == Side.RIGHT;
+        return (side == Side.FRONT || side == Side.LEFT || side == Side.RIGHT) && !gate.isDisabled(side);
     }
 }

@@ -46,4 +46,32 @@ public class BlockGateAnd extends BlockGateBase {
     public byte computeRedstone(Side side, byte back, byte front, byte left, byte right){
         boolean and = left > 0 && right > 0 && back > 0;
         return (byte) (and != inverted ? 16 : 0);
-    }}
+    }
+
+    @Override
+    protected void cycleDisabledStates(BlockState state, TileGate gate) {
+        boolean left = gate.isDisabled(Side.LEFT), right = gate.isDisabled(Side.RIGHT), back = gate.isDisabled(Side.BACK);
+        if (!left && !back && !right) {
+            gate.setDisabled(Side.RIGHT, true);
+        } else if (!left && !back) {
+            gate.setDisabled(Side.BACK, true);
+            gate.setDisabled(Side.RIGHT, false);
+        } else if (!left && !right) {
+            gate.setDisabled(Side.LEFT, true);
+            gate.setDisabled(Side.BACK, false);
+        } else if (!back && !right) {
+            gate.setDisabled(Side.LEFT, false);
+            gate.setDisabled(Side.BACK, true);
+            gate.setDisabled(Side.RIGHT, true);
+        } else if (!left) {
+            gate.setDisabled(Side.LEFT, true);
+            gate.setDisabled(Side.BACK, false);
+        } else if (!back) {
+            gate.setDisabled(Side.BACK, true);
+            gate.setDisabled(Side.RIGHT, false);
+        } else {// right enabled
+            gate.setDisabled(Side.LEFT, false);
+            gate.setDisabled(Side.BACK, false);
+        }
+    }
+}
