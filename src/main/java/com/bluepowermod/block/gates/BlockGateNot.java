@@ -1,6 +1,7 @@
 package com.bluepowermod.block.gates;
 
 import com.bluepowermod.helper.DirectionHelper;
+import com.bluepowermod.tile.tier1.TileGate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -13,9 +14,9 @@ import java.util.Map;
 
 public class BlockGateNot extends BlockGateBase{
     @Override
-    protected Map<Side, Byte> getSidePower(SignalGetter worldIn, BlockState state, BlockPos pos) {
+    protected Map<Side, Byte> getSidePower(BlockState state, TileGate gate) {
         Map<Side, Byte> map = new HashMap<>();
-        byte back = (byte) worldIn.getSignal(pos.relative(toDirection(Side.BACK, state)), toDirection(Side.BACK, state));
+        byte back = (byte) gate.getLevel().getSignal(gate.getBlockPos().relative(toDirection(Side.BACK, state)), toDirection(Side.BACK, state));
         byte output = getOutput(back);
         map.put(Side.FRONT, output);
         map.put(Side.LEFT, output);
@@ -29,7 +30,7 @@ public class BlockGateNot extends BlockGateBase{
     }
 
     @Override
-    protected boolean isSideSource(Side side, BlockState blockState, BlockGetter blockAccess, BlockPos pos) {
+    protected boolean isSideSource(Side side, BlockState blockState, TileGate gate) {
         return side == Side.FRONT || side == Side.LEFT || side == Side.RIGHT;
     }
 }

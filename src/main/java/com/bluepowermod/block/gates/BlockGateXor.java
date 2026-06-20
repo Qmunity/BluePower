@@ -1,6 +1,7 @@
 package com.bluepowermod.block.gates;
 
 import com.bluepowermod.helper.DirectionHelper;
+import com.bluepowermod.tile.tier1.TileGate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -18,8 +19,8 @@ public class BlockGateXor extends BlockGateAnd{
     }
 
     @Override
-    public Map<Side, Byte> getSidePower(SignalGetter worldIn, BlockState state, BlockPos pos){
-        Map<Side, Byte> map = super.getSidePower(worldIn, state, pos);
+    public Map<Side, Byte> getSidePower(BlockState state, TileGate gate){
+        Map<Side, Byte> map = super.getSidePower(state, gate);
         boolean powered_back = map.get(Side.LEFT) == 0 && map.get(Side.RIGHT) == 0;
         map.put(Side.BACK, (byte) (powered_back ? 16 : 0));
         return map;

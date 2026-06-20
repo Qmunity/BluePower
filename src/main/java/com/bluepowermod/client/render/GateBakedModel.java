@@ -40,6 +40,7 @@ public class GateBakedModel implements BakedModel {
         List<BakedQuad> quads = new ArrayList<>();
         Map<String, Object> redstoneStates = new HashMap<>();
         TileGate.SideStates poweredProperty = data.get(TileGate.POWERED_PROPERTY);
+        if (poweredProperty == null) return quads;
         redstoneStates.put("powered_back", poweredProperty.back());
         redstoneStates.put("powered_front", poweredProperty.front());
         redstoneStates.put("powered_left", poweredProperty.left());

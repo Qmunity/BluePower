@@ -4,7 +4,7 @@ import com.bluepowermod.block.gates.BlockGateBase.Side;
 import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,54 +33,90 @@ public class TileGate extends TileBase {
                 .with(DISABLED_PROPERTY, new SideStates(disabledFront, disabledBack, disabledLeft, disabledRight)).build();
     }
 
-    public boolean updateStates(Map<Side, Byte> map){
+    public void setPowered(Side side, boolean powered){
+        switch (side){
+            case LEFT -> poweredLeft = powered;
+            case FRONT -> poweredFront = powered;
+            case BACK -> poweredBack = powered;
+            case RIGHT -> poweredRight = powered;
+        }
+        markBlockForUpdate();
+    }
+
+    public void setDisabled(Side side, boolean disabled){
+        switch (side){
+            case LEFT -> disabledLeft = disabled;
+            case FRONT -> disabledFront = disabled;
+            case BACK -> disabledBack = disabled;
+            case RIGHT -> disabledRight = disabled;
+        }
+        markBlockForUpdate();
+    }
+
+    public boolean updateStates(Map<Side, Byte> map, boolean simulate){
         SideStates oldPoweredStates = new SideStates(poweredFront, poweredBack, poweredLeft, poweredRight);
-        poweredFront = map.get(Side.FRONT) > 0;
-        poweredBack = map.get(Side.BACK) > 0;
-        poweredLeft = map.get(Side.LEFT) > 0;
-        poweredRight = map.get(Side.RIGHT) > 0;
-        return poweredFront != oldPoweredStates.front || poweredBack != oldPoweredStates.back || poweredLeft != oldPoweredStates.left || poweredRight != oldPoweredStates.right;
+        SideStates newPoweredStates;
+        if (!simulate){
+            poweredFront = map.get(Side.FRONT) > 0;
+            poweredBack = map.get(Side.BACK) > 0;
+            poweredLeft = map.get(Side.LEFT) > 0;
+            poweredRight = map.get(Side.RIGHT) > 0;
+            newPoweredStates = new SideStates(poweredFront, poweredBack, poweredLeft, poweredRight);
+        } else {
+            newPoweredStates = new SideStates(map.get(Side.FRONT) > 0, map.get(Side.BACK) > 0, map.get(Side.LEFT) > 0, map.get(Side.RIGHT) > 0);
+        }
+        boolean changed = !oldPoweredStates.equals(newPoweredStates);
+        if (changed && !simulate) markBlockForUpdate();
+        return changed;
     }
 
-    public boolean isPoweredFront() {
-        return poweredFront;
+    public boolean isPowered(Side side){
+        return switch (side){
+            case FRONT -> poweredFront;
+            case BACK -> poweredBack;
+            case LEFT -> poweredLeft;
+            case RIGHT -> poweredRight;
+        };
     }
 
-    public boolean isPoweredBack() {
-        return poweredBack;
-    }
-
-    public boolean isPoweredLeft() {
-        return poweredLeft;
-    }
-
-    public boolean isPoweredRight() {
-        return poweredRight;
-    }
-
-    public boolean isDisabledFront() {
-        return disabledFront;
-    }
-
-    public boolean isDisabledBack() {
-        return disabledBack;
-    }
-
-    public boolean isDisabledLeft() {
-        return disabledLeft;
-    }
-
-    public boolean isDisabledRight() {
-        return disabledRight;
+    public boolean isDisabled(Side side){
+        return switch (side){
+            case FRONT -> disabledFront;
+            case BACK -> disabledBack;
+            case LEFT -> disabledLeft;
+            case RIGHT -> disabledRight;
+        };
     }
 
     public int redstoneFromSide(Side side){
-        return switch (side){
-            case FRONT -> poweredFront && !disabledFront ? 16 : 0;
-            case BACK -> poweredBack && !disabledBack ? 16 : 0;
-            case LEFT -> poweredLeft && !disabledLeft ? 16 : 0;
-            case RIGHT -> poweredRight && !disabledRight ? 16 : 0;
-        };
+        return isPowered(side) && !isDisabled(side) ? 16 : 0;
+    }
+
+    @Override
+    protected void writeToPacketNBT(CompoundTag tCompound) {
+        super.writeToPacketNBT(tCompound);
+        tCompound.putBoolean("poweredFront", poweredFront);
+        tCompound.putBoolean("poweredBack", poweredBack);
+        tCompound.putBoolean("poweredLeft", poweredLeft);
+        tCompound.putBoolean("poweredRight", poweredRight);
+        tCompound.putBoolean("disabledFront", disabledFront);
+        tCompound.putBoolean("disabledBack", disabledBack);
+        tCompound.putBoolean("disabledLeft", disabledLeft);
+        tCompound.putBoolean("disabledRight", disabledRight);
+    }
+
+    @Override
+    protected void readFromPacketNBT(CompoundTag tCompound) {
+        super.readFromPacketNBT(tCompound);
+        poweredFront = tCompound.getBoolean("poweredFront");
+        poweredBack = tCompound.getBoolean("poweredBack");
+        poweredLeft = tCompound.getBoolean("poweredLeft");
+        poweredRight = tCompound.getBoolean("poweredRight");
+        disabledFront = tCompound.getBoolean("disabledFront");
+        disabledBack = tCompound.getBoolean("disabledBack");
+        disabledLeft = tCompound.getBoolean("disabledLeft");
+        disabledRight = tCompound.getBoolean("disabledRight");
+        markForRenderUpdate();
     }
 
     public record SideStates(boolean front, boolean back, boolean left, boolean right){}
