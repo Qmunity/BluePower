@@ -141,7 +141,7 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
             Block blockToTick = te instanceof TileBPMultipart bpMultipart ? bpMultipart.getBlockState().getBlock() : this;
             if (!world.getBlockTicks().willTickThisTick(pos, blockToTick)) {
                 world.scheduleTick(pos, blockToTick,
-                        getDelay(state, world, pos), TickPriority.HIGH);
+                        getDelay(state, tileGate), TickPriority.HIGH);
             }
         }
     }
@@ -202,7 +202,7 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
 
     }
 
-    protected int getDelay(BlockState state, BlockGetter blockGetter, BlockPos pos){
+    protected int getDelay(BlockState state, TileGate gate){
         return 1;
     }
 
@@ -238,7 +238,7 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
             Block blockToTick = te instanceof TileBPMultipart bpMultipart ? bpMultipart.getBlockState().getBlock() : this;
             if (!level.getBlockTicks().willTickThisTick(pos, blockToTick)) {
                 level.scheduleTick(pos, blockToTick,
-                        getDelay(state, level, pos), TickPriority.HIGH);
+                        getDelay(state, tileGate), TickPriority.HIGH);
             }
         }
     }
