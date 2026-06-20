@@ -5,7 +5,8 @@
     {
       "model": "bluepower:block/and_gate/back_z",
       "when": {
-        "powered_back": false
+        "powered_back": false,
+        "disabled_back": false
       }
     },
     {
@@ -36,7 +37,8 @@
     {
       "model": "bluepower:block/and_gate/left_z",
       "when": {
-        "powered_left": false
+        "powered_left": false,
+        "disabled_left": false
       }
     },
     {
@@ -55,7 +57,8 @@
     {
       "model": "bluepower:block/and_gate/right_z",
       "when": {
-        "powered_right": false
+        "powered_right": false,
+        "disabled_right": false
       }
     },
     {
