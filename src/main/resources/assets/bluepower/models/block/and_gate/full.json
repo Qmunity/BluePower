@@ -11,7 +11,14 @@
     {
       "model": "bluepower:block/and_gate/back_on",
       "when": {
-        "powered_back": true
+        "powered_back": true,
+        "disabled_back": false
+      }
+    },
+    {
+      "model": "bluepower:block/and_gate/back_disabled",
+      "when": {
+        "disabled_back": true
       }
     },
     {
@@ -35,7 +42,14 @@
     {
       "model": "bluepower:block/and_gate/left_on",
       "when": {
-        "powered_left": true
+        "powered_left": true,
+        "disabled_left": false
+      }
+    },
+    {
+      "model": "bluepower:block/and_gate/left_disabled",
+      "when": {
+        "disabled_left": true
       }
     },
     {
@@ -47,7 +61,14 @@
     {
       "model": "bluepower:block/and_gate/right_on",
       "when": {
-        "powered_right": true
+        "powered_right": true,
+        "disabled_right": false
+      }
+    },
+    {
+      "model": "bluepower:block/and_gate/right_disabled",
+      "when": {
+        "disabled_right": true
       }
     }
   ],
