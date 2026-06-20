@@ -33,18 +33,20 @@ public class BlockGateAnd extends BlockGateBase {
         Direction sideBack = toDirection(Side.BACK, state);
         Level worldIn = gate.getLevel();
         BlockPos pos = gate.getBlockPos();
-        byte left = gate.isDisabled(Side.LEFT) ? 16 : (byte) worldIn.getSignal(pos.relative(sideLeft), sideLeft);
-        byte right = gate.isDisabled(Side.RIGHT) ? 16 : (byte) worldIn.getSignal(pos.relative(sideRight), sideRight);
-        byte back = gate.isDisabled(Side.BACK) ? 16 : (byte) worldIn.getSignal(pos.relative(sideBack), sideBack);
+        byte left = (byte) worldIn.getSignal(pos.relative(sideLeft), sideLeft);
+        byte right = (byte) worldIn.getSignal(pos.relative(sideRight), sideRight);
+        byte back = (byte) worldIn.getSignal(pos.relative(sideBack), sideBack);
         map.put(Side.LEFT, left);
         map.put(Side.RIGHT, right);
         map.put(Side.BACK, back);
-        map.put(Side.FRONT, computeRedstone(Side.FRONT, back, (byte) 0, left, right));
+        map.put(Side.FRONT, computeRedstone(Side.FRONT, back, (byte) 0, left, right, gate));
         return map;
     }
 
-    public byte computeRedstone(Side side, byte back, byte front, byte left, byte right){
-        boolean and = left > 0 && right > 0 && back > 0;
+    public byte computeRedstone(Side side, byte back, byte front, byte left, byte right, TileGate gate){
+        boolean and = (left > 0 || gate.isDisabled(Side.LEFT)) &&
+                (right > 0 || gate.isDisabled(Side.RIGHT)) &&
+                (back > 0 || gate.isDisabled(Side.BACK));
         return (byte) (and != inverted ? 16 : 0);
     }
 

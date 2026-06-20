@@ -27,7 +27,7 @@ public class BlockGateXor extends BlockGateAnd{
     }
 
     @Override
-    public byte computeRedstone(Side side, byte back, byte front, byte left, byte right) {
+    public byte computeRedstone(Side side, byte back, byte front, byte left, byte right, TileGate gate) {
         boolean out = (left > 0 && right == 0) || (left == 0 && right > 0);
         return (byte) (out != inverted ? 16 : 0);
     }

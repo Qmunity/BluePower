@@ -1,5 +1,6 @@
 package com.bluepowermod.block.gates;
 
+import com.bluepowermod.tile.tier1.TileGate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
@@ -12,8 +13,10 @@ public class BlockGateOr extends BlockGateAnd{
     }
 
     @Override
-    public byte computeRedstone(Side side, byte back, byte front, byte left, byte right) {
-        boolean output = back > 0 || left > 0 || right > 0;
+    public byte computeRedstone(Side side, byte back, byte front, byte left, byte right, TileGate gate) {
+        boolean output = back > 0 || gate.isDisabled(Side.BACK) ||
+                left > 0 || gate.isDisabled(Side.LEFT) ||
+                right > 0 || gate.isDisabled(Side.RIGHT);
         return (byte) (output != inverted ? 16: 0);
     }
 }
