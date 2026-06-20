@@ -36,4 +36,9 @@ public class BlockGateXor extends BlockGateAnd{
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return super.canConnectRedstone(state, world, pos, side) && side != null && fromDirection(side.getOpposite(), state.getValue(ROTATION), DirectionHelper.ArrayFromDirection(state.getValue(FACING))) != Side.BACK;
     }
+
+    @Override
+    protected void cycleDisabledStates(BlockState state, TileGate gate) {
+        //NOOP
+    }
 }
