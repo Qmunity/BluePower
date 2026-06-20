@@ -70,7 +70,7 @@
       }
     },
     {
-      "model": "bluepower:block/xor_gate/left_torch_on_Z",
+      "model": "bluepower:block/xor_gate/left_torch_on_z",
       "when": {
         "powered_left": false,
         "powered_right": true
