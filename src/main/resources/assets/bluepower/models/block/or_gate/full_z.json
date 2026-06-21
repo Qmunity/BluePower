@@ -5,13 +5,21 @@
     {
       "model": "bluepower:block/or_gate/left",
       "when": {
-        "powered_back": false
+        "powered_back": false,
+        "disabled_back": false
       }
     },
     {
       "model": "bluepower:block/or_gate/left_on",
       "when": {
-        "powered_back": true
+        "powered_back": true,
+        "disabled_back": false
+      }
+    },
+    {
+      "model": "bluepower:block/or_gate/left_disabled",
+      "when": {
+        "disabled_back": true
       }
     },
     {
@@ -29,25 +37,41 @@
     {
       "model": "bluepower:block/or_gate/left_z",
       "when": {
-        "powered_left": false
+        "powered_left": false,
+        "disabled_left": false
       }
     },
     {
       "model": "bluepower:block/or_gate/left_on_z",
       "when": {
-        "powered_left": true
+        "powered_left": true,
+        "disabled_left": false
+      }
+    },
+    {
+      "model": "bluepower:block/or_gate/left_disabled_z",
+      "when": {
+        "disabled_left": true
       }
     },
     {
       "model": "bluepower:block/or_gate/back",
       "when": {
-        "powered_right": false
+        "powered_right": false,
+        "disabled_right": false
       }
     },
     {
       "model": "bluepower:block/or_gate/back_on",
       "when": {
-        "powered_right": true
+        "powered_right": true,
+        "disabled_right": false
+      }
+    },
+    {
+      "model": "bluepower:block/or_gate/back_disabled",
+      "when": {
+        "disabled_right": true
       }
     }
   ],

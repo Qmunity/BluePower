@@ -29,25 +29,41 @@
     {
       "model": "bluepower:block/buffer_gate/left",
       "when": {
-        "powered_left": false
+        "powered_left": false,
+        "disabled_left": false
       }
     },
     {
       "model": "bluepower:block/buffer_gate/left_on",
       "when": {
-        "powered_left": true
+        "powered_left": true,
+        "disabled_left": false
+      }
+    },
+    {
+      "model": "bluepower:block/buffer_gate/left_disabled",
+      "when": {
+        "disabled_left": true
       }
     },
     {
       "model": "bluepower:block/buffer_gate/right",
       "when": {
-        "powered_right": false
+        "powered_right": false,
+        "disabled_right": false
       }
     },
     {
       "model": "bluepower:block/buffer_gate/right_on",
       "when": {
-        "powered_right": true
+        "powered_right": true,
+        "disabled_right": false
+      }
+    },
+    {
+      "model": "bluepower:block/buffer_gate/right_disabled",
+      "when": {
+        "disabled_right": true
       }
     }
   ],
