@@ -1,0 +1,7 @@
+{
+    "parent": "bluepower:block/buffer_gate/right_z",
+    "textures": {
+        "bluestone_right": "bluepower:base/disabled"
+    }
+} }
+}
