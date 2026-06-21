@@ -41,4 +41,10 @@ public class BlockGateXor extends BlockGateAnd{
     protected boolean cycleDisabledStates(BlockState state, TileGate gate) {
         return false;
     }
+
+    @Override
+    protected void onBlockPlace(BlockState state, TileGate gate) {
+        super.onBlockPlace(state, gate);
+        if (inverted) gate.setPowered(Side.BACK, true);
+    }
 }

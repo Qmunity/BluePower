@@ -1,6 +1,7 @@
 package com.bluepowermod.block.gates;
 
 import com.bluepowermod.helper.DirectionHelper;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.tier1.TileGate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -61,5 +62,14 @@ public class BlockGateNot extends BlockGateBase{
     @Override
     protected boolean isSideSource(Side side, BlockState blockState, TileGate gate) {
         return (side == Side.FRONT || side == Side.LEFT || side == Side.RIGHT) && !gate.isDisabled(side);
+    }
+
+    @Override
+    protected void onBlockPlace(BlockState state, TileGate gate) {
+        if (this == BPBlocks.blockGateNOT.get()) {
+            gate.setPowered(Side.FRONT, true);
+            gate.setPowered(Side.LEFT, true);
+            gate.setPowered(Side.RIGHT, true);
+        }
     }
 }

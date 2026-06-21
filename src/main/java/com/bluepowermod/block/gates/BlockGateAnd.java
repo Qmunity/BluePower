@@ -77,4 +77,9 @@ public class BlockGateAnd extends BlockGateBase {
         }
         return true;
     }
+
+    @Override
+    protected void onBlockPlace(BlockState state, TileGate gate) {
+        if (inverted) gate.setPowered(Side.FRONT, true);
+    }
 }
