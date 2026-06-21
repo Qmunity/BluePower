@@ -89,6 +89,9 @@ public class TileBPMultipart extends BlockEntity {
         BlockEntity tile = null;
         if (state.getBlock() instanceof EntityBlock entityBlock){
             tile = entityBlock.newBlockEntity(worldPosition, state);
+            if (tile != null) {
+                tile.setLevel(level);
+            }
         }
         this.stateMap.put(state, tile);
         state.getBlock().setPlacedBy(level, worldPosition, state,  null, new ItemStack(state.getBlock()));
@@ -218,6 +221,9 @@ public class TileBPMultipart extends BlockEntity {
                 if (state.getBlock() instanceof EntityBlock entityBlock){
                     tile = entityBlock.newBlockEntity(worldPosition, state);
                     if (tile != null) {
+                        if (this.level != null) {
+                            tile.setLevel(this.level);
+                        }
                         tile.load(compound.getCompound("tile" + i));
                     }
 
