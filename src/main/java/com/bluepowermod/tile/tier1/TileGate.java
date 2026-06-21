@@ -13,6 +13,7 @@ import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,9 +23,7 @@ public class TileGate extends TileBase {
     EnumMap<Side, Boolean> poweredSides = new EnumMap<>(Map.of(Side.FRONT, false, Side.BACK, false, Side.LEFT, false, Side.RIGHT, false));
     EnumMap<Side, Boolean> disabledSides = new EnumMap<>(Map.of(Side.FRONT, false, Side.BACK, false, Side.LEFT, false, Side.RIGHT, false));
     @OnlyIn(Dist.CLIENT)
-    public static final ModelProperty<EnumMap<Side, Boolean>> POWERED_PROPERTY = new ModelProperty<>();
-    @OnlyIn(Dist.CLIENT)
-    public static final ModelProperty<EnumMap<Side, Boolean>> DISABLED_PROPERTY = new ModelProperty<>();
+    public static final ModelProperty<Map<String, Object>> REDSTONE_STATES = new ModelProperty<>();
     public TileGate(BlockPos pos, BlockState state) {
         super(BPBlockEntityType.GATE.get(), pos, state);
     }
@@ -33,8 +32,21 @@ public class TileGate extends TileBase {
     @Override
     @OnlyIn(Dist.CLIENT)
     public @NotNull ModelData getModelData() {
-        return ModelData.builder().with(POWERED_PROPERTY, poweredSides)
-                .with(DISABLED_PROPERTY, disabledSides).build();
+        Map<String, Object> map = new HashMap<>();
+        addToRedstoneStateMap(map);
+        return ModelData.builder().with(REDSTONE_STATES, map).build();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    protected void addToRedstoneStateMap(Map<String, Object> map){
+        map.put("powered_back", poweredSides.get(Side.BACK));
+        map.put("powered_front", poweredSides.get(Side.FRONT));
+        map.put("powered_left", poweredSides.get(Side.LEFT));
+        map.put("powered_right", poweredSides.get(Side.RIGHT));
+        map.put("disabled_back", disabledSides.get(Side.BACK));
+        map.put("disabled_front", disabledSides.get(Side.FRONT));
+        map.put("disabled_left", disabledSides.get(Side.LEFT));
+        map.put("disabled_right", disabledSides.get(Side.RIGHT));
     }
 
     public void setPowered(Side side, boolean powered){

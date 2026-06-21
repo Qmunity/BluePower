@@ -40,18 +40,8 @@ public class GateBakedModel implements BakedModel {
     @Override
     public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData data, @Nullable RenderType renderType) {
         List<BakedQuad> quads = new ArrayList<>();
-        Map<String, Object> redstoneStates = new HashMap<>();
-        EnumMap<Side, Boolean> poweredProperty = data.get(TileGate.POWERED_PROPERTY);
-        if (poweredProperty == null) return quads;
-        redstoneStates.put("powered_back", poweredProperty.get(Side.BACK));
-        redstoneStates.put("powered_front", poweredProperty.get(Side.FRONT));
-        redstoneStates.put("powered_left", poweredProperty.get(Side.LEFT));
-        redstoneStates.put("powered_right", poweredProperty.get(Side.RIGHT));
-        EnumMap<Side, Boolean> disabledProperty = data.get(TileGate.DISABLED_PROPERTY);
-        redstoneStates.put("disabled_back", disabledProperty.get(Side.BACK));
-        redstoneStates.put("disabled_front", disabledProperty.get(Side.FRONT));
-        redstoneStates.put("disabled_left", disabledProperty.get(Side.LEFT));
-        redstoneStates.put("disabled_right", disabledProperty.get(Side.RIGHT));
+        Map<String, Object> redstoneStates = data.get(TileGate.REDSTONE_STATES);
+        if (redstoneStates == null) return quads;
         for(Pair<IGateCondition, BakedModel> pair : models){
             if (pair.key().test(redstoneStates)){
                 quads.addAll(pair.value().getQuads(state, side, rand, data, renderType));
