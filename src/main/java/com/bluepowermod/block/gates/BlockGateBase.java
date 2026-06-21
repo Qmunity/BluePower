@@ -212,7 +212,27 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
     }
 
     public boolean cycleDisabledStates(BlockState state, BlockGetter blockGetter, BlockPos pos){
-        return this.cycleDisabledStates(state, getGateTile(state, blockGetter.getBlockEntity(pos)));
+        BlockEntity te = blockGetter.getBlockEntity(pos);
+        if (te == null) return false;
+        TileGate gate = getGateTile(state, te);
+        List<Side> sourceSides = new ArrayList<>();
+        for (Side side : Side.values()){
+            if (isSideSource(side, state, gate)){
+                sourceSides.add(side);
+            }
+        }
+
+        boolean cycle = this.cycleDisabledStates(state, gate);
+        if (cycle){
+            te.getLevel().markAndNotifyBlock(pos, te.getLevel().getChunkAt(pos), state, state, 1, 512);
+            for (Side side : sourceSides){
+                Direction dir = toDirection(side, state);
+                BlockPos neighbor = pos.relative(dir);
+                BlockState neighborState = te.getLevel().getBlockState(neighbor);
+                te.getLevel().updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
+            }
+        }
+        return cycle;
     }
 
     protected int getDelay(BlockState state, TileGate gate){
