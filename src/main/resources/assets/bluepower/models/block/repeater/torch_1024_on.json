@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/repeater/torch_1024",
+    "textures": {
+        "torch": "bluepower:blocks/bluestone_torch_on"
+    }
+}

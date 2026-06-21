@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/repeater/front",
+    "textures": {
+        "bluestone_front": "bluepower:base/bluestone_on"
+    }
+}
