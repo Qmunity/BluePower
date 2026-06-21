@@ -9,7 +9,7 @@
 	"elements": [
 		{
 			"name": "LeftWire",
-			"from": [7.5, 2, 0],
+			"from": [7.5, 2, -0.001],
 			"to": [8.5, 2.5, 7],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {

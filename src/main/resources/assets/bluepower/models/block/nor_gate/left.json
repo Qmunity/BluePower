@@ -9,7 +9,7 @@
 	"elements": [
 		{
 			"name": "LeftWire",
-			"from": [0, 2, 7.5],
+			"from": [-0.001, 2, 7.5],
 			"to": [7, 2.5, 8.5],
 			"faces": {
 				"north": {"uv": [0, 0, 7, 0.5], "texture": "#bluestone_left"},
