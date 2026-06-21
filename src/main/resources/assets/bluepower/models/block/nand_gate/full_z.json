@@ -49,7 +49,7 @@
       }
     },
     {
-      "model": "bluepower:block/nand_gate/left_disabled_Z",
+      "model": "bluepower:block/nand_gate/left_disabled_z",
       "when": {
         "disabled_left": true
       }
