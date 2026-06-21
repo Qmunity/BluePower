@@ -1,6 +1,7 @@
 package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.gates.BlockGateBase;
+import com.bluepowermod.block.gates.BlockGateBase.Side;
 import com.bluepowermod.tile.tier1.TileGate;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,17 +41,17 @@ public class GateBakedModel implements BakedModel {
     public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData data, @Nullable RenderType renderType) {
         List<BakedQuad> quads = new ArrayList<>();
         Map<String, Object> redstoneStates = new HashMap<>();
-        TileGate.SideStates poweredProperty = data.get(TileGate.POWERED_PROPERTY);
+        EnumMap<Side, Boolean> poweredProperty = data.get(TileGate.POWERED_PROPERTY);
         if (poweredProperty == null) return quads;
-        redstoneStates.put("powered_back", poweredProperty.back());
-        redstoneStates.put("powered_front", poweredProperty.front());
-        redstoneStates.put("powered_left", poweredProperty.left());
-        redstoneStates.put("powered_right", poweredProperty.right());
-        TileGate.SideStates disabledProperty = data.get(TileGate.DISABLED_PROPERTY);
-        redstoneStates.put("disabled_back", disabledProperty.back());
-        redstoneStates.put("disabled_front", disabledProperty.front());
-        redstoneStates.put("disabled_left", disabledProperty.left());
-        redstoneStates.put("disabled_right", disabledProperty.right());
+        redstoneStates.put("powered_back", poweredProperty.get(Side.BACK));
+        redstoneStates.put("powered_front", poweredProperty.get(Side.FRONT));
+        redstoneStates.put("powered_left", poweredProperty.get(Side.LEFT));
+        redstoneStates.put("powered_right", poweredProperty.get(Side.RIGHT));
+        EnumMap<Side, Boolean> disabledProperty = data.get(TileGate.DISABLED_PROPERTY);
+        redstoneStates.put("disabled_back", disabledProperty.get(Side.BACK));
+        redstoneStates.put("disabled_front", disabledProperty.get(Side.FRONT));
+        redstoneStates.put("disabled_left", disabledProperty.get(Side.LEFT));
+        redstoneStates.put("disabled_right", disabledProperty.get(Side.RIGHT));
         for(Pair<IGateCondition, BakedModel> pair : models){
             if (pair.key().test(redstoneStates)){
                 quads.addAll(pair.value().getQuads(state, side, rand, data, renderType));

@@ -12,15 +12,19 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.EnumMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class TileGate extends TileBase {
-    boolean poweredFront, poweredBack, poweredLeft, poweredRight;
-    boolean disabledFront, disabledBack, disabledLeft, disabledRight;
+    EnumMap<Side, Boolean> poweredSides = new EnumMap<>(Map.of(Side.FRONT, false, Side.BACK, false, Side.LEFT, false, Side.RIGHT, false));
+    EnumMap<Side, Boolean> disabledSides = new EnumMap<>(Map.of(Side.FRONT, false, Side.BACK, false, Side.LEFT, false, Side.RIGHT, false));
     @OnlyIn(Dist.CLIENT)
-    public static final ModelProperty<SideStates> POWERED_PROPERTY = new ModelProperty<>();
+    public static final ModelProperty<EnumMap<Side, Boolean>> POWERED_PROPERTY = new ModelProperty<>();
     @OnlyIn(Dist.CLIENT)
-    public static final ModelProperty<SideStates> DISABLED_PROPERTY = new ModelProperty<>();
+    public static final ModelProperty<EnumMap<Side, Boolean>> DISABLED_PROPERTY = new ModelProperty<>();
     public TileGate(BlockPos pos, BlockState state) {
         super(BPBlockEntityType.GATE.get(), pos, state);
     }
@@ -29,63 +33,40 @@ public class TileGate extends TileBase {
     @Override
     @OnlyIn(Dist.CLIENT)
     public @NotNull ModelData getModelData() {
-        return ModelData.builder().with(POWERED_PROPERTY, new SideStates(poweredFront, poweredBack, poweredLeft, poweredRight))
-                .with(DISABLED_PROPERTY, new SideStates(disabledFront, disabledBack, disabledLeft, disabledRight)).build();
+        return ModelData.builder().with(POWERED_PROPERTY, poweredSides)
+                .with(DISABLED_PROPERTY, disabledSides).build();
     }
 
     public void setPowered(Side side, boolean powered){
-        switch (side){
-            case LEFT -> poweredLeft = powered;
-            case FRONT -> poweredFront = powered;
-            case BACK -> poweredBack = powered;
-            case RIGHT -> poweredRight = powered;
-        }
+        poweredSides.put(side, powered);
         markBlockForUpdate();
     }
 
     public void setDisabled(Side side, boolean disabled){
-        switch (side){
-            case LEFT -> disabledLeft = disabled;
-            case FRONT -> disabledFront = disabled;
-            case BACK -> disabledBack = disabled;
-            case RIGHT -> disabledRight = disabled;
-        }
+        disabledSides.put(side, disabled);
         markBlockForUpdate();
     }
 
     public boolean updateStates(Map<Side, Byte> map, boolean simulate){
-        SideStates oldPoweredStates = new SideStates(poweredFront, poweredBack, poweredLeft, poweredRight);
-        SideStates newPoweredStates;
+        EnumMap<Side, Boolean> oldPoweredStates = new EnumMap<>(poweredSides);
+        EnumMap<Side, Boolean> newPoweredStates;
         if (!simulate){
-            poweredFront = map.get(Side.FRONT) > 0;
-            poweredBack = map.get(Side.BACK) > 0;
-            poweredLeft = map.get(Side.LEFT) > 0;
-            poweredRight = map.get(Side.RIGHT) > 0;
-            newPoweredStates = new SideStates(poweredFront, poweredBack, poweredLeft, poweredRight);
+            newPoweredStates = poweredSides;
         } else {
-            newPoweredStates = new SideStates(map.get(Side.FRONT) > 0, map.get(Side.BACK) > 0, map.get(Side.LEFT) > 0, map.get(Side.RIGHT) > 0);
+            newPoweredStates = new EnumMap<>(Side.class);
         }
+        newPoweredStates.putAll(map.entrySet().stream().collect(Collectors.toMap(Entry::getKey, v -> v.getValue() > 0)));
         boolean changed = !oldPoweredStates.equals(newPoweredStates);
         if (changed && !simulate) markBlockForUpdate();
         return changed;
     }
 
     public boolean isPowered(Side side){
-        return switch (side){
-            case FRONT -> poweredFront;
-            case BACK -> poweredBack;
-            case LEFT -> poweredLeft;
-            case RIGHT -> poweredRight;
-        };
+        return poweredSides.getOrDefault(side, false);
     }
 
     public boolean isDisabled(Side side){
-        return switch (side){
-            case FRONT -> disabledFront;
-            case BACK -> disabledBack;
-            case LEFT -> disabledLeft;
-            case RIGHT -> disabledRight;
-        };
+        return disabledSides.getOrDefault(side, false);
     }
 
     public int redstoneFromSide(Side side){
@@ -95,29 +76,32 @@ public class TileGate extends TileBase {
     @Override
     protected void writeToPacketNBT(CompoundTag tCompound) {
         super.writeToPacketNBT(tCompound);
-        tCompound.putBoolean("poweredFront", poweredFront);
-        tCompound.putBoolean("poweredBack", poweredBack);
-        tCompound.putBoolean("poweredLeft", poweredLeft);
-        tCompound.putBoolean("poweredRight", poweredRight);
-        tCompound.putBoolean("disabledFront", disabledFront);
-        tCompound.putBoolean("disabledBack", disabledBack);
-        tCompound.putBoolean("disabledLeft", disabledLeft);
-        tCompound.putBoolean("disabledRight", disabledRight);
+        CompoundTag poweredSides = new CompoundTag();
+        this.poweredSides.forEach((s, b) -> {
+            poweredSides.putBoolean(s.name().toLowerCase(Locale.ROOT), b);
+        });
+        tCompound.put("poweredSides", poweredSides);
+        CompoundTag disabledSides = new CompoundTag();
+        this.disabledSides.forEach((s, b) -> {
+            disabledSides.putBoolean(s.name().toLowerCase(Locale.ROOT), b);
+        });
+        tCompound.put("disabledSides", disabledSides);
     }
 
     @Override
     protected void readFromPacketNBT(CompoundTag tCompound) {
         super.readFromPacketNBT(tCompound);
-        poweredFront = tCompound.getBoolean("poweredFront");
-        poweredBack = tCompound.getBoolean("poweredBack");
-        poweredLeft = tCompound.getBoolean("poweredLeft");
-        poweredRight = tCompound.getBoolean("poweredRight");
-        disabledFront = tCompound.getBoolean("disabledFront");
-        disabledBack = tCompound.getBoolean("disabledBack");
-        disabledLeft = tCompound.getBoolean("disabledLeft");
-        disabledRight = tCompound.getBoolean("disabledRight");
-        markForRenderUpdate();
+        if (tCompound.contains("poweredSides")){
+            CompoundTag poweredSides = tCompound.getCompound("poweredSides");
+            for (Side side : Side.values()){
+                this.poweredSides.put(side, poweredSides.getBoolean(side.name().toLowerCase(Locale.ROOT)));
+            }
+        }
+        if (tCompound.contains("disabledSides")){
+            CompoundTag disabledSides = tCompound.getCompound("disabledSides");
+            for (Side side : Side.values()){
+                this.disabledSides.put(side, disabledSides.getBoolean(side.name().toLowerCase(Locale.ROOT)));
+            }
+        }
     }
-
-    public record SideStates(boolean front, boolean back, boolean left, boolean right){}
 }
