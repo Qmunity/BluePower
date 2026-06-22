@@ -18,6 +18,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -43,6 +45,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -141,6 +144,16 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         if(partState != null)
             itemStack = partState.getCloneItemStack(target, world, pos, player);
         return itemStack;
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        BlockState partState = MultipartUtils.getClosestState(player, pos);
+        if (partState != null){
+            InteractionResult result = partState.use(level, player, hand, hit);
+            if (result != InteractionResult.PASS) return result;
+        }
+        return super.use(state, level, pos, player, hand, hit);
     }
 
     @Override
