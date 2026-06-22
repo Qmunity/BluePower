@@ -173,7 +173,7 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         return 0;
     }
 
-    protected Direction toDirection(Side side, BlockState state){
+    public static Direction toDirection(Side side, BlockState state){
         Direction[] dirs = DirectionHelper.ArrayFromDirection(state.getValue(FACING));
         Direction left = dirs[state.getValue(ROTATION) == 3 ? 0 : state.getValue(ROTATION) + 1];
         Direction back = dirs[state.getValue(ROTATION)];

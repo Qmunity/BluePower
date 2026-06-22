@@ -1,0 +1,7 @@
+{
+    "parent": "bluepower:block/repeater/front",
+    "textures": {
+        "bluestone_front": "bluepower:base/bluestone_off",
+        "torch_front": "bluepower:blocks/bluestone_torch_on"
+    }
+}

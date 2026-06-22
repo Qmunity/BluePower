@@ -5,6 +5,7 @@ import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,6 +27,10 @@ public class TileGate extends TileBase {
     public static final ModelProperty<Map<String, Object>> REDSTONE_STATES = new ModelProperty<>();
     public TileGate(BlockPos pos, BlockState state) {
         super(BPBlockEntityType.GATE.get(), pos, state);
+    }
+
+    public TileGate(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
 
