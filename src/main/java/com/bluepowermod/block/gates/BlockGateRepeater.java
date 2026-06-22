@@ -7,7 +7,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
@@ -18,11 +21,6 @@ public class BlockGateRepeater extends BlockGateBase{
     @Override
     protected Map<Side, Byte> getSidePower(BlockState state, TileGate gate) {
         return Map.of();
-    }
-
-    @Override
-    protected int getDelay(BlockState state, TileGate gate) {
-        return ((TileRepeater)gate).getDelay() * 2;
     }
 
     @Override
@@ -43,5 +41,14 @@ public class BlockGateRepeater extends BlockGateBase{
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
         return super.use(state, level, pos, player, hand, hit);
+    }
+
+    @Override
+    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        return (level1, blockPos, blockState, t) -> {
+            if (t instanceof TileRepeater repeater){
+                repeater.tick(level, blockPos, state);
+            }
+        };
     }
 }
