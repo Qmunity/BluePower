@@ -1,5 +1,6 @@
 package com.bluepowermod.client.render;
 
+import com.bluepowermod.BluePower;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -7,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.internal.LazilyParsedNumber;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
@@ -15,6 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import net.minecraftforge.client.model.geometry.IGeometryLoader;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +43,13 @@ public class GateModelLoader implements IGeometryLoader<GateModel> {
                 if (object.has("when")){
                     Function<JsonPrimitive, Object> mappingFunction = j -> {
                         if (j.isBoolean()) return j.getAsBoolean();
-                        if (j.isNumber()) return j.getAsNumber();
+                        if (j.isNumber()) {
+                            var num = j.getAsNumber();
+                            if (num instanceof LazilyParsedNumber lazilyParsedNumber){
+                                num = parse(lazilyParsedNumber.toString());
+                            }
+                            return num;
+                        }
                         if (j.isString()) return j.getAsString();
                         throw new JsonParseException("When condition must be a string, a number, or a boolean: " + j);
                     };
@@ -92,4 +102,30 @@ public class GateModelLoader implements IGeometryLoader<GateModel> {
         }
         return new GateModel(builder.build(), particle);
     }
+
+    // Source - https://stackoverflow.com/a/8286722
+    // Posted by AlexR, modified by community. See post 'Timeline' for change history
+    // Retrieved 2026-06-21, License - CC BY-SA 3.0
+    private static Number parse(String str) {
+        Number number = null;
+        try {
+            number = Integer.parseInt(str);
+        } catch(NumberFormatException e) {
+            try {
+                number = Long.parseLong(str);
+            } catch(NumberFormatException e1) {
+                try {
+                    number = Float.parseFloat(str);
+                } catch(NumberFormatException e2) {
+                    try {
+                        number = Double.parseDouble(str);
+                    } catch(NumberFormatException e3) {
+                        BluePower.log.error(e3);
+                    }
+                }
+            }
+        }
+        return number;
+    }
+
 }
