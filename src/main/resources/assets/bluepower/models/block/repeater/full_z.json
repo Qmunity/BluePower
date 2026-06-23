@@ -1,7 +1,7 @@
 {
   "loader": "bluepower:gate",
   "models": [
-    "bluepower:block/repeater/blank",
+    "bluepower:block/repeater/blank_z",
     {
       "model": "bluepower:block/repeater/back_z",
       "when": {
