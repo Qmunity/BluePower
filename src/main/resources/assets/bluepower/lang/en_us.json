@@ -564,7 +564,7 @@
   "block.bluepower.gate_not": "NOT Gate",
   "block.bluepower.gate_nullcell": "Null Cell",
   "block.bluepower.gate_or": "OR Gate",
-  "block.bluepower.gate_pulseformer": "Pulse Former",
+  "block.bluepower.gate_pulse_former": "Pulse Former",
   "block.bluepower.gate_randomizer": "Randomizer",
   "block.bluepower.gate_repeater": "Repeater",
   "block.bluepower.gate_rs": "RS Latch",

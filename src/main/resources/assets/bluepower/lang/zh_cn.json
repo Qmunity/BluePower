@@ -564,7 +564,7 @@
   "block.bluepower.gate_not": "非门",
   "block.bluepower.gate_nullcell": "空单元",
   "block.bluepower.gate_or": "或门",
-  "block.bluepower.gate_pulseformer": "脉冲发生器",
+  "block.bluepower.gate_pulse_former": "脉冲发生器",
   "block.bluepower.gate_randomizer": "随机信号发生器",
   "block.bluepower.gate_repeater": "重复器",
   "block.bluepower.gate_rs": "RS锁存器",

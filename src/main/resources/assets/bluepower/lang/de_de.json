@@ -527,7 +527,7 @@
     "block.bluepower:gate_not": "NOT Gatter",
     "block.bluepower:gate_nullcell": "Digitale Null Zelle",
     "block.bluepower:gate_or": "OR Gatter",
-    "block.bluepower:gate_pulseformer": "Pulse Generator",
+    "block.bluepower:gate_pulse_former": "Pulse Generator",
     "block.bluepower:gate_randomizer": "Zufallsgenerator",
     "block.bluepower:gate_repeater": "Verstärker",
     "block.bluepower:gate_rs": "RS Latch",
