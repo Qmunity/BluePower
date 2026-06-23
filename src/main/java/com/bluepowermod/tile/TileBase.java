@@ -117,6 +117,7 @@ public class TileBase extends BlockEntity implements IRotatable {
         if (level != null) {
             level.setBlocksDirty(getBlockPos(), getBlockState(), getBlockState());
             if (level.isClientSide()){
+                getLevel().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 11);
                 getLevel().getModelDataManager().requestRefresh(this);
             }
         }
