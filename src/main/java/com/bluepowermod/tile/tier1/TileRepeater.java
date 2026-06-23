@@ -48,7 +48,7 @@ public class TileRepeater extends TileGate{
         boolean in = isPowered(Side.BACK);
         if (in != currentUpdate){
             if (in || ticksRemaining == 0){
-                ticksRemaining = delay;
+                ticksRemaining = delay * 2;
                 currentUpdate = in;
             }
         }
