@@ -65,6 +65,7 @@ public class TileGate extends TileBase {
     }
 
     public boolean updateStates(Map<Side, Byte> map, boolean simulate){
+        if (map.isEmpty()) return false;
         EnumMap<Side, Boolean> oldPoweredStates = new EnumMap<>(poweredSides);
         EnumMap<Side, Boolean> newPoweredStates;
         if (!simulate){
