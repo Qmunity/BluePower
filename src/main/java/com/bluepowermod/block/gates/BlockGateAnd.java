@@ -1,13 +1,9 @@
 package com.bluepowermod.block.gates;
 
-import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.tile.tier1.TileGate;
+import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.SignalGetter;
-import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
@@ -28,14 +24,11 @@ public class BlockGateAnd extends BlockGateBase {
     @Override
     public Map<Side, Byte> getSidePower(BlockState state, TileGate gate){
         Map<Side, Byte> map = new HashMap<>();
-        Direction sideLeft = toDirection(Side.LEFT, state);
-        Direction sideRight = toDirection(Side.RIGHT, state);
-        Direction sideBack = toDirection(Side.BACK, state);
         Level worldIn = gate.getLevel();
         BlockPos pos = gate.getBlockPos();
-        byte left = (byte) worldIn.getSignal(pos.relative(sideLeft), sideLeft);
-        byte right = (byte) worldIn.getSignal(pos.relative(sideRight), sideRight);
-        byte back = (byte) worldIn.getSignal(pos.relative(sideBack), sideBack);
+        byte left = MultipartUtils.getRedstonePower(Side.LEFT, state, worldIn, pos);
+        byte right = MultipartUtils.getRedstonePower(Side.RIGHT, state, worldIn, pos);
+        byte back = MultipartUtils.getRedstonePower(Side.BACK, state, worldIn, pos);
         map.put(Side.LEFT, left);
         map.put(Side.RIGHT, right);
         map.put(Side.BACK, back);

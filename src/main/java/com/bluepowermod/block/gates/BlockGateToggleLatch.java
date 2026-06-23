@@ -2,6 +2,7 @@ package com.bluepowermod.block.gates;
 
 import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.tile.tier1.TileGate;
+import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -18,10 +19,8 @@ import java.util.Map;
 public class BlockGateToggleLatch extends BlockGateBase{
     @Override
     protected Map<Side, Byte> getSidePower(BlockState state, TileGate gate) {
-        Direction sideLeft = toDirection(Side.LEFT, state);
-        Direction sideRight = toDirection(Side.RIGHT, state);
-        byte leftIn = (byte) gate.getLevel().getSignal(gate.getBlockPos().relative(sideLeft), sideLeft);
-        byte rightIn = (byte) gate.getLevel().getSignal(gate.getBlockPos().relative(sideRight), sideRight);
+        byte leftIn = MultipartUtils.getRedstonePower(Side.LEFT, state, gate.getLevel(), gate.getBlockPos());
+        byte rightIn = MultipartUtils.getRedstonePower(Side.RIGHT, state, gate.getLevel(), gate.getBlockPos());
         boolean frontPowered = gate.isPowered(Side.FRONT);
         boolean backPowered = gate.isPowered(Side.BACK);
         boolean leftPowered = gate.isPowered(Side.LEFT);

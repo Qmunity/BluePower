@@ -1,7 +1,7 @@
 package com.bluepowermod.block.gates;
 
 import com.bluepowermod.tile.tier1.TileGate;
-import net.minecraft.core.Direction;
+import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Map;
@@ -9,10 +9,8 @@ import java.util.Map;
 public class BlockGateRSLatch extends BlockGateBase{
     @Override
     protected Map<Side, Byte> getSidePower(BlockState state, TileGate gate) {
-        Direction sideLeft = toDirection(Side.LEFT, state);
-        Direction sideRight = toDirection(Side.RIGHT, state);
-        byte leftIn = (byte) gate.getLevel().getSignal(gate.getBlockPos().relative(sideLeft), sideLeft);
-        byte rightIn = (byte) gate.getLevel().getSignal(gate.getBlockPos().relative(sideRight), sideRight);
+        byte leftIn = MultipartUtils.getRedstonePower(Side.LEFT, state, gate.getLevel(), gate.getBlockPos());
+        byte rightIn = MultipartUtils.getRedstonePower(Side.RIGHT, state, gate.getLevel(), gate.getBlockPos());
         boolean frontPowered = gate.isPowered(Side.FRONT);
         boolean backPowered = gate.isPowered(Side.BACK);
         if (!frontPowered && !backPowered ){

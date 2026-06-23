@@ -1,13 +1,8 @@
 package com.bluepowermod.block.gates;
 
-import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.tier1.TileGate;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.SignalGetter;
-import net.minecraft.world.level.block.RedStoneWireBlock;
+import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
@@ -17,7 +12,7 @@ public class BlockGateNot extends BlockGateBase{
     @Override
     protected Map<Side, Byte> getSidePower(BlockState state, TileGate gate) {
         Map<Side, Byte> map = new HashMap<>();
-        byte back = (byte) gate.getLevel().getSignal(gate.getBlockPos().relative(toDirection(Side.BACK, state)), toDirection(Side.BACK, state));
+        byte back = MultipartUtils.getRedstonePower(Side.BACK, state, gate.getLevel(), gate.getBlockPos());
         byte output = getOutput(back);
         map.put(Side.FRONT, output);
         map.put(Side.LEFT, output);

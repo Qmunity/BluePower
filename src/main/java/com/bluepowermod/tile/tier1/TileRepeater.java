@@ -1,8 +1,8 @@
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.gates.BlockGateBase.Side;
 import com.bluepowermod.init.BPBlockEntityType;
+import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -65,8 +65,7 @@ public class TileRepeater extends TileGate{
     }
 
     public void onBlockUpdate(){
-        Direction sideBack = toDirection(Side.BACK, getBlockState());
-        boolean in = level.getSignal(getBlockPos().relative(sideBack), sideBack) > 0;
+        boolean in = MultipartUtils.getRedstonePower(Side.BACK, getBlockState(), level, getBlockPos()) > 0;
         setPowered(Side.BACK, in);
     }
 
