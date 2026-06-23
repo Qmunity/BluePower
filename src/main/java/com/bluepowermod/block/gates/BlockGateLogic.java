@@ -13,4 +13,5 @@ public abstract class BlockGateLogic extends BlockGateBase {
     protected boolean checkPower(BlockState state, TileGate gate, boolean onTick){
         Map<Side, Byte> map = getSidePower(state, gate);
         return gate.updateStates(map, true);
-    }}
+    }
+}
