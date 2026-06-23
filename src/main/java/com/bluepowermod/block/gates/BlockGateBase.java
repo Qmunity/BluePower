@@ -140,14 +140,8 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         TileGate tileGate = getGateTile(state, te);
         if (tileGate == null) return;
         onBlockPlace(state, tileGate);
-        Map<Side, Byte> map = getSidePower(state, tileGate);
-        boolean powerChanged = tileGate.updateStates(map, true);
-        if (powerChanged) {
-            Block blockToTick = te instanceof TileBPMultipart bpMultipart ? bpMultipart.getBlockState().getBlock() : this;
-            if (!world.getBlockTicks().willTickThisTick(pos, blockToTick)) {
-                world.scheduleTick(pos, blockToTick,
-                        getDelay(state, tileGate), TickPriority.HIGH);
-            }
+        if (checkPower(state, tileGate)) {
+            scheduleTick(state, te, tileGate);
         }
     }
 
@@ -265,15 +259,23 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         }
         TileGate tileGate = getGateTile(state, te);
         if (tileGate == null) return;
-        Map<Side, Byte> map = getSidePower(state, tileGate);
-        boolean powerChanged = tileGate.updateStates(map, true);
-        if (powerChanged) {
-            Block blockToTick = te instanceof TileBPMultipart bpMultipart ? bpMultipart.getBlockState().getBlock() : this;
-            if (!level.getBlockTicks().willTickThisTick(pos, blockToTick)) {
-                level.scheduleTick(pos, blockToTick,
-                        getDelay(state, tileGate), TickPriority.HIGH);
-            }
+        if (checkPower(state, tileGate)) {
+            scheduleTick(state, te, tileGate);
         }
+    }
+
+    protected boolean checkPower(BlockState state, TileGate gate){
+        Map<Side, Byte> map = getSidePower(state, gate);
+        return gate.updateStates(map, true);
+    }
+
+    protected void scheduleTick(BlockState state, BlockEntity te, TileGate gate){
+        Block blockToTick = te instanceof TileBPMultipart bpMultipart ? bpMultipart.getBlockState().getBlock() : this;
+        if (!te.getLevel().getBlockTicks().willTickThisTick(te.getBlockPos(), blockToTick)) {
+            te.getLevel().scheduleTick(te.getBlockPos(), blockToTick,
+                    getDelay(state, gate), TickPriority.HIGH);
+        }
+
     }
 
     @Override
