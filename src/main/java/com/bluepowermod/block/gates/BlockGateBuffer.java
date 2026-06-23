@@ -11,6 +11,11 @@ public class BlockGateBuffer extends BlockGateNot{
 
 
     @Override
+    protected int getDelay(BlockState state, TileGate gate) {
+        return 2;
+    }
+
+    @Override
     protected boolean cycleDisabledStates(BlockState state, TileGate gate) {
         boolean left = gate.isDisabled(Side.LEFT), right = gate.isDisabled(Side.RIGHT);
         if (!left && !right) {
