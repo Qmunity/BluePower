@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Map;
 
-public class BlockGateRSLatch extends BlockGateBase{
+public class BlockGateRSLatch extends BlockGateLogic {
     @Override
     protected Map<Side, Byte> getSidePower(BlockState state, TileGate gate) {
         byte leftIn = MultipartUtils.getRedstonePower(Side.LEFT, state, gate.getLevel(), gate.getBlockPos());

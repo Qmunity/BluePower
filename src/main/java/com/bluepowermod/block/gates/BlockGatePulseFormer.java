@@ -13,11 +13,6 @@ import java.util.Map;
 
 public class BlockGatePulseFormer extends BlockGateBase{
     @Override
-    protected Map<Side, Byte> getSidePower(BlockState state, TileGate gate) {
-        return Map.of();
-    }
-
-    @Override
     protected int getDelay(BlockState state, TileGate gate) {
         return 2;
     }
@@ -28,7 +23,7 @@ public class BlockGatePulseFormer extends BlockGateBase{
     }
 
     @Override
-    protected boolean checkPower(BlockState state, TileGate gate) {
+    protected boolean checkPower(BlockState state, TileGate gate, boolean onTick) {
         boolean oldInput = gate.isPowered(Side.BACK);
         Level level = gate.getLevel();
         BlockPos pos = gate.getBlockPos();

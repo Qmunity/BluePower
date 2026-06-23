@@ -16,7 +16,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Map;
 
-public class BlockGateToggleLatch extends BlockGateBase{
+public class BlockGateToggleLatch extends BlockGateLogic {
     @Override
     protected Map<Side, Byte> getSidePower(BlockState state, TileGate gate) {
         byte leftIn = MultipartUtils.getRedstonePower(Side.LEFT, state, gate.getLevel(), gate.getBlockPos());

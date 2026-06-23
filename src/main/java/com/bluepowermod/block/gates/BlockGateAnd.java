@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockGateAnd extends BlockGateBase {
+public class BlockGateAnd extends BlockGateLogic {
     protected final boolean inverted;
 
     public BlockGateAnd(boolean inverted){

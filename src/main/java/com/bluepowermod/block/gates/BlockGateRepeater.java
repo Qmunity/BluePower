@@ -19,13 +19,13 @@ import java.util.Map;
 
 public class BlockGateRepeater extends BlockGateBase{
     @Override
-    protected Map<Side, Byte> getSidePower(BlockState state, TileGate gate) {
-        return Map.of();
+    protected boolean isSideSource(Side side, BlockState blockState, TileGate gate) {
+        return side == Side.FRONT;
     }
 
     @Override
-    protected boolean isSideSource(Side side, BlockState blockState, TileGate gate) {
-        return side == Side.FRONT;
+    protected boolean checkPower(BlockState state, TileGate gate, boolean onTick) {
+        return false;
     }
 
     @Override

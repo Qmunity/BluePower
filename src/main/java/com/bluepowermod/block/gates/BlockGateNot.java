@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockGateNot extends BlockGateBase{
+public class BlockGateNot extends BlockGateLogic {
     @Override
     protected Map<Side, Byte> getSidePower(BlockState state, TileGate gate) {
         Map<Side, Byte> map = new HashMap<>();

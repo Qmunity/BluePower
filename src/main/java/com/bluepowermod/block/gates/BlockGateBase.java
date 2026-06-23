@@ -138,7 +138,7 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         TileGate tileGate = getGateTile(state, te);
         if (tileGate == null) return;
         onBlockPlace(state, tileGate);
-        if (checkPower(state, tileGate)) {
+        if (checkPower(state, tileGate, false)) {
             scheduleTick(state, te, tileGate);
         }
     }
@@ -188,8 +188,6 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         if (direction == sideRight) return Side.RIGHT;
         return null;
     }
-
-    protected abstract Map<Side, Byte> getSidePower(BlockState state, TileGate gate);
 
     protected boolean isSideSource(Side side, BlockState blockState, TileGate gate){
         return false;
@@ -257,15 +255,12 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
         }
         TileGate tileGate = getGateTile(state, te);
         if (tileGate == null) return;
-        if (checkPower(state, tileGate)) {
+        if (checkPower(state, tileGate, false)) {
             scheduleTick(state, te, tileGate);
         }
     }
 
-    protected boolean checkPower(BlockState state, TileGate gate){
-        Map<Side, Byte> map = getSidePower(state, gate);
-        return gate.updateStates(map, true);
-    }
+    protected abstract boolean checkPower(BlockState state, TileGate gate, boolean onTick);
 
     protected void scheduleTick(BlockState state, BlockEntity te, TileGate gate){
         Block blockToTick = te instanceof TileBPMultipart bpMultipart ? bpMultipart.getBlockState().getBlock() : this;
@@ -280,8 +275,7 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         TileGate tileGate = getGateTile(state, level.getBlockEntity(pos));
         if (tileGate == null) return;
-        Map<Side, Byte> map = getSidePower(state, tileGate);
-        boolean powerChanged = tileGate.updateStates(map, false);
+        boolean powerChanged = checkPower(state, tileGate, true);
         if (powerChanged) {
             level.markAndNotifyBlock(pos, level.getChunkAt(pos), state, state, 1, 512);
             for (Side side : Side.values()){

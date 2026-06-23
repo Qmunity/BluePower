@@ -12,14 +12,12 @@ import com.bluepowermod.tile.tier1.TileGate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.SignalGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockNullCell extends BlockGateBase {
+public class BlockNullCell extends BlockGateLogic {
 
     private boolean shouldSignal = true;
 
