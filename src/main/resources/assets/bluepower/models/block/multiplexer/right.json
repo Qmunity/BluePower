@@ -1,0 +1,23 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"bluestone_right": "bluepower:base/bluestone_off",
+		"particle": "bluepower:blocks/gates/gate"
+	},
+	"elements": [
+		{
+			"name": "TopWire",
+			"from": [13, 2, 7.5],
+			"to": [16, 2.5, 8.5],
+			"faces": {
+				"north": {"uv": [0, 0, 3, 0.5], "texture": "#bluestone_right"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_right"},
+				"south": {"uv": [0, 0, 3, 0.5], "texture": "#bluestone_right"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_right"},
+				"up": {"uv": [0, 0, 3, 1], "texture": "#bluestone_right"}
+			}
+		}
+	]
+}

@@ -1,0 +1,91 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"bluestone_front": "bluepower:base/bluestone_on",
+		"torch_front": "bluepower:blocks/bluestone_torch_off",
+		"particle": "bluepower:blocks/gates/gate"
+	},
+	"elements": [
+		{
+			"name": "CenterWire",
+			"from": [3.5, 2, 5],
+			"to": [4.5, 2.5, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 0, -0.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 1, 2], "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "CenterWire",
+			"from": [11.5, 2, 5],
+			"to": [12.5, 2.5, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1, 0, -1]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 1, 2], "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "Torch_Front",
+			"from": [7, 2, 1.5],
+			"to": [9, 5, 3.5],
+			"faces": {
+				"up": {"uv": [7, 6, 9, 8], "texture": "#torch_front"}
+			}
+		},
+		{
+			"name": "Front",
+			"from": [7, 2, 0.5],
+			"to": [9, 6, 4.5],
+			"shade": false,
+			"faces": {
+				"east": {"uv": [6, 5, 10, 9], "texture": "#torch_front"},
+				"west": {"uv": [6, 5, 10, 9], "texture": "#torch_front"}
+			}
+		},
+		{
+			"name": "Front2",
+			"from": [6, 2, 1.5],
+			"to": [10, 6, 3.5],
+			"shade": false,
+			"faces": {
+				"north": {"uv": [6, 5, 10, 9], "texture": "#torch_front"},
+				"south": {"uv": [6, 5, 10, 9], "texture": "#torch_front"}
+			}
+		},
+		{
+			"name": "CenterWire",
+			"from": [4.5, 2, 4],
+			"to": [11.5, 2.5, 5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -0.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 7, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 7, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 7, 1], "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "CenterWire",
+			"from": [7.5, 2, 3.5],
+			"to": [8.5, 2.5, 4],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 0.5, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 0.5, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"}
+			}
+		}
+	]
+}

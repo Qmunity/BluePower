@@ -1,0 +1,42 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"torch_left": "bluepower:blocks/bluestone_torch_off",
+		"particle": "bluepower:blocks/gates/gate"
+	},
+	"elements": [
+		{
+			"name": "Torch_Left",
+			"from": [7, 2, 3],
+			"to": [9, 5, 5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"up": {"uv": [7, 6, 9, 8], "rotation": 90, "texture": "#torch_left"}
+			}
+		},
+		{
+			"name": "Left1",
+			"from": [6, 2, 3],
+			"to": [10, 6, 5],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [6, 5, 10, 9], "texture": "#torch_left"},
+				"south": {"uv": [6, 5, 10, 9], "texture": "#torch_left"}
+			}
+		},
+		{
+			"name": "Left2",
+			"from": [7, 2, 2],
+			"to": [9, 6, 6],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"east": {"uv": [6, 5, 10, 9], "texture": "#torch_left"},
+				"west": {"uv": [6, 5, 10, 9], "texture": "#torch_left"}
+			}
+		}
+	]
+}
