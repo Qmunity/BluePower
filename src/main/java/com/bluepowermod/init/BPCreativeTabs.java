@@ -71,6 +71,7 @@ public class BPCreativeTabs {
             event.accept(BPBlocks.blockGateXOR.get());
             event.accept(BPBlocks.blockGateXNOR.get());
             event.accept(BPBlocks.blockNullCell.get());
+            event.accept(BPBlocks.blockMultiplexer.get());
             event.accept(BPBlocks.blockPulseFormer.get());
             event.accept(BPBlocks.blockRSLatch.get());
             event.accept(BPBlocks.blockToggleLatch.get());
