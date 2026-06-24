@@ -24,6 +24,10 @@ public class BlockGatePulseFormer extends BlockGateBase{
 
     @Override
     protected boolean checkPower(BlockState state, TileGate gate, boolean onTick) {
+        if (onTick){
+            gate.setPowered(Side.FRONT, false);
+            return true;
+        }
         boolean oldInput = gate.isPowered(Side.BACK);
         Level level = gate.getLevel();
         BlockPos pos = gate.getBlockPos();
@@ -41,18 +45,5 @@ public class BlockGatePulseFormer extends BlockGateBase{
             gate.setPowered(Side.BACK, false);
         }
         return false;
-    }
-
-    @Override
-    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        TileGate gate = getGateTile(state, level.getBlockEntity(pos));
-        if (gate.isPowered(Side.FRONT)){
-            gate.setPowered(Side.FRONT, false);
-            level.markAndNotifyBlock(pos, level.getChunkAt(pos), state, state, 1, 512);
-            Direction dir = toDirection(Side.FRONT, state);
-            BlockPos neighbor = pos.relative(dir);
-            BlockState neighborState = level.getBlockState(neighbor);
-            level.updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
-        }
     }
 }
