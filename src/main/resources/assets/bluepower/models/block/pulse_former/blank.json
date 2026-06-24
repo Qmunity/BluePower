@@ -1,5 +1,4 @@
 {
-	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
@@ -84,7 +83,6 @@
 			"name": "TopBase",
 			"from": [5, 2, 4],
 			"to": [11, 2.2499, 6],
-			"rotation": {"angle": 0, "axis": "y", "origin": [6, 2.12495, 7]},
 			"faces": {
 				"north": {"uv": [0, 0, 6, 0.2499], "texture": "#gate"},
 				"east": {"uv": [0, 0, 2, 0.2499], "texture": "#gate"},
@@ -97,7 +95,6 @@
 			"name": "TopBase",
 			"from": [6.5, 2, 9],
 			"to": [9.5, 2.25, 11],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 2.12495, 10]},
 			"faces": {
 				"north": {"uv": [0, 0, 3, 0.25], "texture": "#gate"},
 				"east": {"uv": [0, 0, 2, 0.25], "texture": "#gate"},
@@ -110,7 +107,6 @@
 			"name": "TopBase",
 			"from": [4, 2, 10.5],
 			"to": [6, 2.25, 12.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [-3, 0, 1]},
 			"faces": {
 				"east": {"uv": [0, 0, 1.5, 0.25], "texture": "#gate"},
 				"south": {"uv": [0, 0, 2, 0.25], "texture": "#gate"},
@@ -122,7 +118,6 @@
 			"name": "TopBase",
 			"from": [4, 2, 5],
 			"to": [6, 2.25, 7.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [-3, 0, -4]},
 			"faces": {
 				"north": {"uv": [0, 0, 2, 0.25], "texture": "#gate"},
 				"east": {"uv": [0, 0, 1.5, 0.25], "texture": "#gate"},
@@ -134,7 +129,6 @@
 			"name": "TopBase",
 			"from": [10, 2, 5],
 			"to": [12, 2.25, 7.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [3, 0, -4]},
 			"faces": {
 				"north": {"uv": [0, 0, 2, 0.25], "texture": "#gate"},
 				"east": {"uv": [0, 0, 1.5, 0.25], "texture": "#gate"},
@@ -146,7 +140,6 @@
 			"name": "TopBase",
 			"from": [6.5, 2, 8],
 			"to": [7.5, 2.25, 9],
-			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 0, -1.5]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 0.25], "texture": "#gate"},
 				"east": {"uv": [0, 0, 1.5, 0.25], "texture": "#gate"},
@@ -159,7 +152,6 @@
 			"name": "TopBase",
 			"from": [8.5, 2, 8],
 			"to": [9.5, 2.25, 9],
-			"rotation": {"angle": 0, "axis": "y", "origin": [1, 0, -1.5]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 0.25], "texture": "#gate"},
 				"east": {"uv": [0, 0, 1.5, 0.25], "texture": "#gate"},
