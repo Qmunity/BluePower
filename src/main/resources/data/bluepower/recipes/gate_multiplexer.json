@@ -1,6 +1,6 @@
 ﻿{
   "result": {
-    "item": "bluepower:multiplexer"
+    "item": "bluepower:gate_multiplexer"
   },
   "pattern": [
     "ACA",
@@ -11,9 +11,6 @@
   "key": {
     "A": {
       "item": "bluepower:bluestone_anode_tile"
-    },
-    "W": {
-      "item": "bluepower:bluestone_wire_tile"
     },
     "C": {
       "item": "bluepower:bluestone_cathode_tile"
