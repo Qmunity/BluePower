@@ -1,0 +1,51 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"bluestone_back": "bluepower:base/bluestone_off",
+		"particle": "bluepower:blocks/gates/gate",
+		"silicon_chip": "bluepower:blocks/gates/components/tainted_silicon_chip_off"
+	},
+	"elements": [
+		{
+			"name": "TopWire",
+			"from": [12, 2, 8.5],
+			"to": [13, 2.5, 10.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [4.5, 0, -5.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"east": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_back"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"west": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_back"},
+				"up": {"uv": [0, 0, 1, 2], "texture": "#bluestone_back"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [13, 2, 7.5],
+			"to": [16, 2.5, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5.5, 0, -7.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"up": {"uv": [0, 0, 1, 1], "texture": "#bluestone_back"}
+			}
+		},
+		{
+			"name": "Chip",
+			"from": [11, 3.5, 11],
+			"to": [14, 4, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [17, 2, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
+				"east": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
+				"south": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
+				"west": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
+				"up": {"uv": [11, 11, 15, 15], "texture": "#silicon_chip"}
+			}
+		}
+	]
+}
