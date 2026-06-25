@@ -2,6 +2,7 @@ package com.bluepowermod.block.gates;
 
 import com.bluepowermod.tile.tier1.TileGate;
 import com.bluepowermod.tile.tier1.TileRepeater;
+import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,6 +26,8 @@ public class BlockGateRepeater extends BlockGateBase{
 
     @Override
     protected boolean checkPower(BlockState state, TileGate gate, boolean onTick) {
+        boolean in = MultipartUtils.getRedstonePower(Side.BACK, state, gate.getLevel(), gate.getBlockPos()) > 0;
+        gate.setPowered(Side.BACK, in);
         return false;
     }
 

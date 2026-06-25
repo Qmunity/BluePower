@@ -70,19 +70,6 @@ public class TileRepeater extends TileGate{
         return true;
     }
 
-    public void onBlockUpdate(){
-        boolean in = MultipartUtils.getRedstonePower(Side.BACK, getBlockState(), level, getBlockPos()) > 0;
-        setPowered(Side.BACK, in);
-    }
-
-    @Override
-    public boolean updateStates(Map<Side, Byte> map, boolean simulate) {
-        if (simulate){
-            onBlockUpdate();
-        }
-        return false;
-    }
-
     @Override
     protected void writeToPacketNBT(CompoundTag tCompound) {
         super.writeToPacketNBT(tCompound);
