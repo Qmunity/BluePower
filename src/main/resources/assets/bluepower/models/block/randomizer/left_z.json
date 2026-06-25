@@ -4,47 +4,47 @@
 	"ambientocclusion": false,
 	"textures": {
 		"bluestone_left": "bluepower:base/bluestone_off",
-		"particle": "bluepower:blocks/gates/gate",
-		"silicon_chip": "bluepower:blocks/gates/components/tainted_silicon_chip_off"
+		"silicon_chip": "bluepower:blocks/gates/components/tainted_silicon_chip_off",
+		"particle": "bluepower:blocks/gates/gate"
 	},
 	"elements": [
 		{
 			"name": "TopWire",
-			"from": [3, 2, 8.5],
-			"to": [4, 2.5, 10.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [-4.5, 0, -5.5]},
+			"from": [5.5, 2, 3],
+			"to": [7.5, 2.5, 4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
-				"east": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_left"},
-				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
-				"west": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_left"},
-				"up": {"uv": [0, 0, 1, 2], "texture": "#bluestone_left"}
+				"north": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_left"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"south": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_left"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"up": {"uv": [0, 0, 1, 2], "rotation": 90, "texture": "#bluestone_left"}
 			}
 		},
 		{
 			"name": "TopWire",
-			"from": [0, 2, 7.5],
-			"to": [3, 2.5, 8.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [-7.5, 0, -7.5]},
+			"from": [7.5, 2, 0],
+			"to": [8.5, 2.5, 3],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
 				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
 				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
 				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
-				"up": {"uv": [0, 0, 1, 1], "texture": "#bluestone_left"}
+				"up": {"uv": [0, 0, 1, 1], "rotation": 90, "texture": "#bluestone_left"}
 			}
 		},
 		{
 			"name": "Chip",
-			"from": [2, 3.5, 11],
-			"to": [5, 4, 14],
+			"from": [2, 3.5, 2],
+			"to": [5, 4, 5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 2, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
 				"east": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
 				"south": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
 				"west": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
-				"up": {"uv": [2, 11, 6, 15], "texture": "#silicon_chip"}
+				"up": {"uv": [2, 11, 6, 15], "rotation": 90, "texture": "#silicon_chip"}
 			}
 		}
 	]

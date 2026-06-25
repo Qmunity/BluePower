@@ -1,29 +1,69 @@
 {
   "loader": "bluepower:gate",
   "models": [
-    "bluepower:block/pulse_former/blank",
+    "bluepower:block/randomizer/blank",
     {
-      "model": "bluepower:block/pulse_former/back",
+      "model": "bluepower:block/randomizer/back",
       "when": {
-        "powered_back": false
+        "powered_back": false,
+        "powered_front": false,
+        "powered_left": false,
+        "powered_right": false
       }
     },
     {
-      "model": "bluepower:block/pulse_former/back_on",
+      "model": "bluepower:block/randomizer/back_on",
       "when": {
-        "powered_back": true
+        "OR": [
+          {
+            "powered_back": true
+          },
+          {
+            "powered_front": true
+          },
+          {
+            "powered_left": true
+          },
+          {
+            "powered_right": true
+          }
+        ]
       }
     },
     {
-      "model": "bluepower:block/pulse_former/front",
+      "model": "bluepower:block/randomizer/front",
       "when": {
         "powered_front": false
       }
     },
     {
-      "model": "bluepower:block/pulse_former/front_on",
+      "model": "bluepower:block/randomizer/front_on",
       "when": {
         "powered_front": true
+      }
+    },
+    {
+      "model": "bluepower:block/randomizer/left",
+      "when": {
+        "powered_left": false
+      }
+    },
+    {
+      "model": "bluepower:block/randomizer/left_on",
+      "when": {
+        "powered_left": true
+      }
+    },
+    {
+      "model": "bluepower:block/randomizer/right",
+      "when": {
+        "powered_right": false
+      }
+    },
+    {
+      "model": "bluepower:block/randomizer/right_on",
+      "when": {
+        "powered_right": true
       }
     }
   ],

@@ -3,7 +3,7 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
-		"bluestone_back": "bluepower:base/bluestone_off",
+		"bluestone_front": "bluepower:base/bluestone_off",
 		"particle": "bluepower:blocks/gates/gate",
 		"silicon_chip": "bluepower:blocks/gates/components/tainted_silicon_chip_off"
 	},
@@ -14,10 +14,10 @@
 			"to": [8, 2.5, 4],
 			"rotation": {"angle": 0, "axis": "y", "origin": [-0.5, 0, -12]},
 			"faces": {
-				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
-				"east": {"uv": [0, 0, 4, 0.5], "texture": "#bluestone_back"},
-				"west": {"uv": [0, 0, 4, 0.5], "texture": "#bluestone_back"},
-				"up": {"uv": [0, 0, 1, 4], "texture": "#bluestone_back"}
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 4, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 4, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 1, 4], "texture": "#bluestone_front"}
 			}
 		},
 		{
