@@ -1,0 +1,7 @@
+{
+    "parent": "bluepower:block/randomizer/left",
+    "textures": {
+        "bluestone_left": "bluepower:base/bluestone_on",
+        "silicon_chip": "bluepower:blocks/gates/components/tainted_silicon_chip_on"
+    }
+}
