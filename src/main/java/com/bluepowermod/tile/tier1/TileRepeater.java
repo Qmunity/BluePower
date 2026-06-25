@@ -43,6 +43,7 @@ public class TileRepeater extends TileGate{
         markBlockForUpdate();
     }
 
+    @Override
     public void tick(Level level, BlockPos pos, BlockState state){
         if (level.isClientSide()) return;
         boolean in = isPowered(Side.BACK);
@@ -62,6 +63,11 @@ public class TileRepeater extends TileGate{
             BlockState neighborState = level.getBlockState(neighbor);
             level.updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
         }
+    }
+
+    @Override
+    public boolean canActuallyTick() {
+        return true;
     }
 
     public void onBlockUpdate(){

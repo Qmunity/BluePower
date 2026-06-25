@@ -11,6 +11,7 @@ import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.ITickableTile;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileGate;
 import com.bluepowermod.util.AABBUtils;
@@ -29,6 +30,8 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -71,6 +74,15 @@ public abstract class BlockGateBase extends BlockBase implements SimpleWaterlogg
     @Override
     public @org.jetbrains.annotations.Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new TileGate(blockPos, blockState);
+    }
+
+    @Override
+    public @org.jetbrains.annotations.Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        return !level.isClientSide() && ticks() ? ITickableTile::tick : null;
+    }
+
+    public boolean ticks(){
+        return false;
     }
 
     @Override

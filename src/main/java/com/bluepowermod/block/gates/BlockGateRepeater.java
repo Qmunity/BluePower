@@ -44,11 +44,7 @@ public class BlockGateRepeater extends BlockGateBase{
     }
 
     @Override
-    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return (level1, blockPos, blockState, t) -> {
-            if (t instanceof TileRepeater repeater){
-                repeater.tick(level, blockPos, state);
-            }
-        };
+    public boolean ticks() {
+        return true;
     }
 }

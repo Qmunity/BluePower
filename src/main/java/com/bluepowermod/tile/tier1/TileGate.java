@@ -2,9 +2,11 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.block.gates.BlockGateBase.Side;
 import com.bluepowermod.init.BPBlockEntityType;
+import com.bluepowermod.tile.ITickableTile;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,7 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-public class TileGate extends TileBase {
+public class TileGate extends TileBase implements ITickableTile {
     EnumMap<Side, Boolean> poweredSides = new EnumMap<>(Map.of(Side.FRONT, false, Side.BACK, false, Side.LEFT, false, Side.RIGHT, false));
     EnumMap<Side, Boolean> disabledSides = new EnumMap<>(Map.of(Side.FRONT, false, Side.BACK, false, Side.LEFT, false, Side.RIGHT, false));
     @OnlyIn(Dist.CLIENT)
@@ -89,6 +91,16 @@ public class TileGate extends TileBase {
 
     public int redstoneFromSide(Side side){
         return isPowered(side) && !isDisabled(side) ? 16 : 0;
+    }
+
+    @Override
+    public void tick(Level level, BlockPos pos, BlockState state) {
+
+    }
+
+    @Override
+    public boolean canActuallyTick() {
+        return false;
     }
 
     @Override
