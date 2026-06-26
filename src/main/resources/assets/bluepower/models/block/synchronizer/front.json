@@ -3,34 +3,77 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
+		"torch_front": "bluepower:blocks/bluestone_torch_off",
 		"bluestone_front": "bluepower:base/bluestone_off",
-		"particle": "bluepower:blocks/gates/gate",
-		"silicon_chip": "bluepower:blocks/gates/components/tainted_silicon_chip_off"
+		"particle": "bluepower:blocks/gates/gate"
 	},
 	"elements": [
 		{
-			"name": "TopWire",
-			"from": [7, 2, 0],
-			"to": [8, 2.5, 4],
-			"rotation": {"angle": 0, "axis": "y", "origin": [-0.5, 0, -12]},
+			"name": "Torch_Front",
+			"from": [7, 2, 2.5],
+			"to": [9, 5, 4.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -5]},
 			"faces": {
-				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
-				"east": {"uv": [0, 0, 4, 0.5], "texture": "#bluestone_front"},
-				"west": {"uv": [0, 0, 4, 0.5], "texture": "#bluestone_front"},
-				"up": {"uv": [0, 0, 1, 4], "texture": "#bluestone_front"}
+				"up": {"uv": [7, 6, 9, 8], "texture": "#torch_front"}
 			}
 		},
 		{
-			"name": "Chip",
-			"from": [6, 3.5, 4.5],
-			"to": [9, 4, 7.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [12, 2, 1.5]},
+			"name": "Front1",
+			"from": [7, 2, 1.5],
+			"to": [9, 6, 5.5],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -5]},
 			"faces": {
-				"north": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
-				"east": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
-				"south": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
-				"west": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
-				"up": {"uv": [6, 4.5, 10, 8.5], "texture": "#silicon_chip"}
+				"east": {"uv": [6, 5, 10, 9], "texture": "#torch_front"},
+				"west": {"uv": [6, 5, 10, 9], "texture": "#torch_front"}
+			}
+		},
+		{
+			"name": "Front2",
+			"from": [6, 2, 2.5],
+			"to": [10, 6, 4.5],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -5]},
+			"faces": {
+				"north": {"uv": [6, 5, 10, 9], "texture": "#torch_front"},
+				"south": {"uv": [6, 5, 10, 9], "texture": "#torch_front"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [6, 2, 7],
+			"to": [7, 2.5, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1.5, 0, -8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 1, 1], "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [7, 2, 6],
+			"to": [9, 2.5, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-0.5, 0, -9]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 2, 1], "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [9, 2, 7],
+			"to": [10, 2.5, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1.5, 0, -8]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 1, 1], "texture": "#bluestone_front"}
 			}
 		}
 	]

@@ -1,7 +1,7 @@
 {
-    "parent": "bluepower:block/randomizer/front_z",
+    "parent": "bluepower:block/synchronizer/front_z",
     "textures": {
-        "bluestone_front": "bluepower:base/bluestone_on",
-        "silicon_chip": "bluepower:blocks/gates/components/tainted_silicon_chip_on"
+        "bluestone_front": "bluepower:base/bluestone_off",
+        "torch_front": "bluepower:blocks/bluestone_torch_on"
     }
 }

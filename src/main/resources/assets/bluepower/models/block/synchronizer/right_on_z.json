@@ -1,5 +1,5 @@
 {
-    "parent": "bluepower:block/randomizer/right_z",
+    "parent": "bluepower:block/synchronizer/right_z",
     "textures": {
         "bluestone_right": "bluepower:base/bluestone_on",
         "silicon_chip": "bluepower:blocks/gates/components/tainted_silicon_chip_on"
