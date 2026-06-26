@@ -3,7 +3,7 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
-		"bluestone_back": "bluepower:base/bluestone_off",
+		"bluestone_left": "bluepower:base/bluestone_off",
 		"particle": "bluepower:blocks/gates/gate"
 	},
 	"elements": [
@@ -13,10 +13,10 @@
 			"to": [7.5, 2.5, 2],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
-				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
-				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
-				"up": {"uv": [0, 0, 1, 1], "rotation": 90, "texture": "#bluestone_back"}
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"up": {"uv": [0, 0, 1, 1], "rotation": 90, "texture": "#bluestone_left"}
 			}
 		},
 		{
@@ -25,10 +25,10 @@
 			"to": [6.5, 2.5, 3],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
-				"east": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_back"},
-				"west": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_back"},
-				"up": {"uv": [0, 0, 2, 1], "rotation": 90, "texture": "#bluestone_back"}
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"east": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_left"},
+				"west": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_left"},
+				"up": {"uv": [0, 0, 2, 1], "rotation": 90, "texture": "#bluestone_left"}
 			}
 		},
 		{
@@ -37,10 +37,10 @@
 			"to": [8.5, 2.5, 1],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
-				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
-				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
-				"up": {"uv": [0, 0, 1, 1], "rotation": 90, "texture": "#bluestone_back"}
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"up": {"uv": [0, 0, 1, 1], "rotation": 90, "texture": "#bluestone_left"}
 			}
 		}
 	]

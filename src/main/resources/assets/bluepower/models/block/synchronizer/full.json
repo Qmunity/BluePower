@@ -63,7 +63,7 @@
       }
     },
     {
-      "model": "bluepower:block/synchronizer/right_silcon_chip",
+      "model": "bluepower:block/synchronizer/right_silicon_chip",
       "when": {
         "right_chip_powered": false
       }
