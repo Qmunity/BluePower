@@ -5,29 +5,13 @@
     {
       "model": "bluepower:block/randomizer/back_z",
       "when": {
-        "powered_back": false,
-        "powered_front": false,
-        "powered_left": false,
-        "powered_right": false
+        "powered_back": false
       }
     },
     {
       "model": "bluepower:block/randomizer/back_on_z",
       "when": {
-        "OR": [
-          {
-            "powered_back": true
-          },
-          {
-            "powered_front": true
-          },
-          {
-            "powered_left": true
-          },
-          {
-            "powered_right": true
-          }
-        ]
+        "powered_back": true
       }
     },
     {
