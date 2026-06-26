@@ -1,5 +1,5 @@
 {
-  "loader": "bluepower:gate_z",
+  "loader": "bluepower:gate",
   "models": [
     "bluepower:block/randomizer/blank_z",
     {
