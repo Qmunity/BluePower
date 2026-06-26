@@ -1,6 +1,7 @@
 package com.bluepowermod.tile.tier1.gate;
 
 import com.bluepowermod.block.gates.BlockGateBase.Side;
+import com.bluepowermod.init.BPBlockEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -13,12 +14,12 @@ import static com.bluepowermod.block.gates.BlockGateBase.toDirection;
 
 public class TileRandomizer extends TileGate{
     public TileRandomizer(BlockPos pos, BlockState state) {
-        super(pos, state);
+        super(BPBlockEntityType.RANDOMIZER.get(), pos, state);
     }
 
     @Override
     public void tick(Level level, BlockPos pos, BlockState state) {
-        if (level.getGameTime() % 2 != 0 || !isPowered(Side.BACK)) return;
+        if (level.getGameTime() % 4 != 0 || !isPowered(Side.BACK)) return;
         List<Side> sidesToUpdate = new ArrayList<>();
         for (Side side : Side.values()){
             if (side == Side.BACK) continue;

@@ -27,6 +27,7 @@ import com.bluepowermod.block.gates.BlockGateNot;
 import com.bluepowermod.block.gates.BlockGateOr;
 import com.bluepowermod.block.gates.BlockGatePulseFormer;
 import com.bluepowermod.block.gates.BlockGateRSLatch;
+import com.bluepowermod.block.gates.BlockGateRandomizer;
 import com.bluepowermod.block.gates.BlockGateRepeater;
 import com.bluepowermod.block.gates.BlockGateSynchronizer;
 import com.bluepowermod.block.gates.BlockGateToggleLatch;
@@ -290,6 +291,7 @@ public class BPBlocks {
     public static final RegistryObject<Block> blockGateXNOR = BLOCKS.register("gate_xnor", () -> new BlockGateXor(true));
     public static final RegistryObject<Block> blockMultiplexer = BLOCKS.register("gate_multiplexer", BlockGateMultiplexer::new);
     public static final RegistryObject<Block> blockPulseFormer = BLOCKS.register("gate_pulse_former", BlockGatePulseFormer::new);
+    public static final RegistryObject<Block> blockRandomizer = BLOCKS.register("gate_randomizer", BlockGateRandomizer::new);
     public static final RegistryObject<Block> blockRSLatch = BLOCKS.register("gate_rs", BlockGateRSLatch::new);
     public static final RegistryObject<Block> blockToggleLatch = BLOCKS.register("gate_toggle", BlockGateToggleLatch::new);
     public static final RegistryObject<Block> blockRepeater = BLOCKS.register("gate_repeater", BlockGateRepeater::new);
@@ -307,6 +309,7 @@ public class BPBlocks {
         BPItems.ITEMS.register(blockGateXNOR.getKey().location().getPath(), () -> new BlockItem(blockGateXNOR.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockMultiplexer.getKey().location().getPath(), () -> new BlockItem(blockMultiplexer.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockPulseFormer.getKey().location().getPath(), () -> new BlockItem(blockPulseFormer.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockRandomizer.getKey().location().getPath(), () -> new BlockItem(blockRandomizer.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockRSLatch.getKey().location().getPath(), () -> new BlockItem(blockRSLatch.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockToggleLatch.getKey().location().getPath(), () -> new BlockItem(blockToggleLatch.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockRepeater.getKey().location().getPath(), () -> new BlockItem(blockRepeater.get(), new Item.Properties()));
