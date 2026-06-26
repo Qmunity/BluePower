@@ -13,7 +13,7 @@ import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.ITickableTile;
 import com.bluepowermod.tile.TileBPMultipart;
-import com.bluepowermod.tile.tier1.TileGate;
+import com.bluepowermod.tile.tier1.gate.TileGate;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

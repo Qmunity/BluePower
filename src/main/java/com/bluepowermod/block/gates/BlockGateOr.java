@@ -1,11 +1,6 @@
 package com.bluepowermod.block.gates;
 
-import com.bluepowermod.tile.tier1.TileGate;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.Map;
+import com.bluepowermod.tile.tier1.gate.TileGate;
 
 public class BlockGateOr extends BlockGateAnd{
     public BlockGateOr(boolean inverted) {

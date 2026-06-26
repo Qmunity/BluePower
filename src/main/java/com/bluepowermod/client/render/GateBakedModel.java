@@ -1,10 +1,7 @@
 package com.bluepowermod.client.render;
 
-import com.bluepowermod.block.gates.BlockGateBase;
-import com.bluepowermod.block.gates.BlockGateBase.Side;
-import com.bluepowermod.tile.tier1.TileGate;
+import com.bluepowermod.tile.tier1.gate.TileGate;
 import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
@@ -18,8 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

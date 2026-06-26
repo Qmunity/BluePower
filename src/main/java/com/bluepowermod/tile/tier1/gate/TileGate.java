@@ -1,4 +1,4 @@
-package com.bluepowermod.tile.tier1;
+package com.bluepowermod.tile.tier1.gate;
 
 import com.bluepowermod.block.gates.BlockGateBase.Side;
 import com.bluepowermod.init.BPBlockEntityType;

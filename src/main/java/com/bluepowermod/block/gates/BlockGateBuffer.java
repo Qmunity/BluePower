@@ -1,6 +1,6 @@
 package com.bluepowermod.block.gates;
 
-import com.bluepowermod.tile.tier1.TileGate;
+import com.bluepowermod.tile.tier1.gate.TileGate;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockGateBuffer extends BlockGateNot{

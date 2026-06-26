@@ -1,7 +1,7 @@
 package com.bluepowermod.block.gates;
 
 import com.bluepowermod.helper.DirectionHelper;
-import com.bluepowermod.tile.tier1.TileGate;
+import com.bluepowermod.tile.tier1.gate.TileGate;
 import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

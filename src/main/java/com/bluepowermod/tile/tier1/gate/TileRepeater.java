@@ -1,8 +1,7 @@
-package com.bluepowermod.tile.tier1;
+package com.bluepowermod.tile.tier1.gate;
 
 import com.bluepowermod.block.gates.BlockGateBase.Side;
 import com.bluepowermod.init.BPBlockEntityType;
-import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -13,7 +12,7 @@ import java.util.Map;
 
 import static com.bluepowermod.block.gates.BlockGateBase.toDirection;
 
-public class TileRepeater extends TileGate{
+public class TileRepeater extends TileGate {
     int delay = 1;
     int ticksRemaining = 0;
     boolean currentUpdate = false;
