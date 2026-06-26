@@ -1,7 +1,7 @@
 {
   "loader": "bluepower:gate",
   "models": [
-    "bluepower:block/buffer_gate/blank",
+    "bluepower:block/buffer_gate/base",
     {
       "model": "bluepower:block/buffer_gate/back",
       "when": {

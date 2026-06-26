@@ -1,7 +1,7 @@
 {
   "loader": "bluepower:gate",
   "models": [
-    "bluepower:block/xor_gate/blank_z",
+    "bluepower:block/xor_gate/base_z",
     {
       "model": "bluepower:block/xor_gate/back_z",
       "when": {

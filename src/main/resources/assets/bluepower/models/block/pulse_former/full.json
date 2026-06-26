@@ -1,7 +1,7 @@
 {
   "loader": "bluepower:gate",
   "models": [
-    "bluepower:block/pulse_former/blank",
+    "bluepower:block/pulse_former/base",
     {
       "model": "bluepower:block/pulse_former/back",
       "when": {

@@ -1,7 +1,7 @@
 {
   "loader": "bluepower:gate",
   "models": [
-    "bluepower:block/rs_latch/blank",
+    "bluepower:block/rs_latch/base",
     {
       "model": "bluepower:block/rs_latch/back",
       "when": {

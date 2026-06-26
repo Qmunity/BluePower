@@ -1,7 +1,7 @@
 {
   "loader": "bluepower:gate",
   "models": [
-    "bluepower:block/randomizer/blank_z",
+    "bluepower:block/randomizer/base_z",
     {
       "model": "bluepower:block/randomizer/back_z",
       "when": {

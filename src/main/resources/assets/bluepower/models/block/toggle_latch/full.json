@@ -1,7 +1,7 @@
 {
   "loader": "bluepower:gate",
   "models": [
-    "bluepower:block/toggle_latch/blank",
+    "bluepower:block/toggle_latch/base",
     {
       "model": "bluepower:block/toggle_latch/back",
       "when": {

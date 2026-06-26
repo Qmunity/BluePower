@@ -1,7 +1,7 @@
 {
   "loader": "bluepower:gate",
   "models": [
-    "bluepower:block/or_gate/blank_z",
+    "bluepower:block/or_gate/base_z",
     {
       "model": "bluepower:block/or_gate/left",
       "when": {
