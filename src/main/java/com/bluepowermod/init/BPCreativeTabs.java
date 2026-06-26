@@ -76,6 +76,7 @@ public class BPCreativeTabs {
             event.accept(BPBlocks.blockRSLatch.get());
             event.accept(BPBlocks.blockToggleLatch.get());
             event.accept(BPBlocks.blockRepeater.get());
+            event.accept(BPBlocks.blockSynchronizer.get());
         }else if(event.getTab() == lighting.get()){
             event.acceptAll(BPBlocks.allLamps.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
         }else if(event.getTab() == microblocks.get()){

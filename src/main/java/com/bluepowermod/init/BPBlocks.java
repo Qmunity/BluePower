@@ -28,6 +28,7 @@ import com.bluepowermod.block.gates.BlockGateOr;
 import com.bluepowermod.block.gates.BlockGatePulseFormer;
 import com.bluepowermod.block.gates.BlockGateRSLatch;
 import com.bluepowermod.block.gates.BlockGateRepeater;
+import com.bluepowermod.block.gates.BlockGateSynchronizer;
 import com.bluepowermod.block.gates.BlockGateToggleLatch;
 import com.bluepowermod.block.gates.BlockGateXor;
 import com.bluepowermod.block.gates.BlockNullCell;
@@ -292,6 +293,7 @@ public class BPBlocks {
     public static final RegistryObject<Block> blockRSLatch = BLOCKS.register("gate_rs", BlockGateRSLatch::new);
     public static final RegistryObject<Block> blockToggleLatch = BLOCKS.register("gate_toggle", BlockGateToggleLatch::new);
     public static final RegistryObject<Block> blockRepeater = BLOCKS.register("gate_repeater", BlockGateRepeater::new);
+    public static final RegistryObject<Block> blockSynchronizer = BLOCKS.register("gate_synchronizer", BlockGateSynchronizer::new);
 
     static{
         BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties()));
@@ -308,6 +310,7 @@ public class BPBlocks {
         BPItems.ITEMS.register(blockRSLatch.getKey().location().getPath(), () -> new BlockItem(blockRSLatch.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockToggleLatch.getKey().location().getPath(), () -> new BlockItem(blockToggleLatch.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockRepeater.getKey().location().getPath(), () -> new BlockItem(blockRepeater.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockSynchronizer.getKey().location().getPath(), () -> new BlockItem(blockSynchronizer.get(), new Item.Properties()));
     }
 
      public static final RegistryObject<Block> blockRedAlloyWire = BLOCKS.register(RedwireType.RED_ALLOY.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true));

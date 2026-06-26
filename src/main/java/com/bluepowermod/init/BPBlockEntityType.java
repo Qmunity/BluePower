@@ -14,6 +14,7 @@ import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier1.gate.TileGate;
 import com.bluepowermod.tile.tier1.gate.TileRepeater;
+import com.bluepowermod.tile.tier1.gate.TileSynchronizer;
 import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.*;
 import net.minecraft.world.level.block.Block;
@@ -62,6 +63,7 @@ public class BPBlockEntityType {
     public static RegistryObject<BlockEntityType<TileTransposer>> TRANSPOSER = BLOCK_ENTITY_TYPE.register(Refs.TRANSPOSER_NAME, () -> BlockEntityType.Builder.of(TileTransposer::new, BPBlocks.transposer.get()).build(null));
     public static RegistryObject<BlockEntityType<TileGate>> GATE = BLOCK_ENTITY_TYPE.register("gate", () -> BlockEntityType.Builder.of(TileGate::new, BPBlocks.blockGateAND.get(), BPBlocks.blockGateNAND.get(), BPBlocks.blockGateBUFFER.get(), BPBlocks.blockGateOR.get(), BPBlocks.blockGateNOR.get(), BPBlocks.blockGateNOT.get(), BPBlocks.blockGateXNOR.get(), BPBlocks.blockGateXOR.get(), BPBlocks.blockRSLatch.get(), BPBlocks.blockToggleLatch.get(), BPBlocks.blockPulseFormer.get(), BPBlocks.blockMultiplexer.get()).build(null));
     public static RegistryObject<BlockEntityType<TileRepeater>> REPEATER = BLOCK_ENTITY_TYPE.register("repeater", () -> BlockEntityType.Builder.of(TileRepeater::new, BPBlocks.blockRepeater.get()).build(null));
+    public static RegistryObject<BlockEntityType<TileSynchronizer>> SYNCHRONIZER = BLOCK_ENTITY_TYPE.register("synchronizer", () -> BlockEntityType.Builder.of(TileSynchronizer::new, BPBlocks.blockSynchronizer.get()).build(null));
     public static RegistryObject<BlockEntityType<TileWire>> WIRE = BLOCK_ENTITY_TYPE.register("alloywire", () -> BlockEntityType.Builder.of(TileWire::new, BPBlocks.blockRedAlloyWire.get(), BPBlocks.blockBlueAlloyWire.get()).build(null));
     public static RegistryObject<BlockEntityType<TileInsulatedWire>> INSULATEDWIRE; //BLOCK_ENTITY_TYPE.register("insulated_alloywire", () -> BlockEntityType.Builder.of(TileInsulatedWire::new, BPBlocks.blockInsulatedBlueAlloyWire, BPBlocks.blockInsulatedRedAlloyWire).build(null));
     public static RegistryObject<BlockEntityType<TileBattery>> BATTERY = BLOCK_ENTITY_TYPE.register(Refs.BATTERY_NAME, () -> BlockEntityType.Builder.of(TileBattery::new, BPBlocks.battery.get()).build(null));
