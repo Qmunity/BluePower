@@ -31,6 +31,7 @@ import com.bluepowermod.block.gates.BlockGateRandomizer;
 import com.bluepowermod.block.gates.BlockGateRepeater;
 import com.bluepowermod.block.gates.BlockGateSynchronizer;
 import com.bluepowermod.block.gates.BlockGateToggleLatch;
+import com.bluepowermod.block.gates.BlockGateTransparentLatch;
 import com.bluepowermod.block.gates.BlockGateXor;
 import com.bluepowermod.block.gates.BlockNullCell;
 import com.bluepowermod.block.lighting.BlockLampRGBSurface;
@@ -295,6 +296,7 @@ public class BPBlocks {
     public static final RegistryObject<Block> blockRSLatch = BLOCKS.register("gate_rs", BlockGateRSLatch::new);
     public static final RegistryObject<Block> blockToggleLatch = BLOCKS.register("gate_toggle", BlockGateToggleLatch::new);
     public static final RegistryObject<Block> blockRepeater = BLOCKS.register("gate_repeater", BlockGateRepeater::new);
+    public static final RegistryObject<Block> blockTransparentLatch = BLOCKS.register("gate_transparent", BlockGateTransparentLatch::new);
     public static final RegistryObject<Block> blockSynchronizer = BLOCKS.register("gate_synchronizer", BlockGateSynchronizer::new);
 
     static{
@@ -313,6 +315,7 @@ public class BPBlocks {
         BPItems.ITEMS.register(blockRSLatch.getKey().location().getPath(), () -> new BlockItem(blockRSLatch.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockToggleLatch.getKey().location().getPath(), () -> new BlockItem(blockToggleLatch.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockRepeater.getKey().location().getPath(), () -> new BlockItem(blockRepeater.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockTransparentLatch.getKey().location().getPath(), () -> new BlockItem(blockTransparentLatch.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockSynchronizer.getKey().location().getPath(), () -> new BlockItem(blockSynchronizer.get(), new Item.Properties()));
     }
 
