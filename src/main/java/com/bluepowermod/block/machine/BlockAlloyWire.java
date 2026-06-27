@@ -8,6 +8,7 @@ import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileWire;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -68,8 +69,15 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
         int redstoneValue = world.getBestNeighborSignal(pos);
-        world.getBlockEntity(pos).getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY).orElse(null).setRedstonePower(null, (byte)redstoneValue);
-        world.setBlock(pos, state.setValue(POWERED, redstoneValue > 0), 2);
+        BlockEntity be = world.getBlockEntity(pos);
+        BlockEntity wire = be instanceof TileBPMultipart multipart ? multipart.getTileForState(state) : be;
+        if (wire == null) return;
+        wire.getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY).ifPresent(r -> r.setRedstonePower(null, (byte) redstoneValue));
+        if (be instanceof TileBPMultipart multipart){
+            multipart.changeState(state, state.setValue(POWERED, redstoneValue > 0));
+        } else {
+            world.setBlock(pos, state.setValue(POWERED, redstoneValue > 0), 2);
+        }
     }
 
     @Override
