@@ -22,6 +22,7 @@ import com.bluepowermod.init.BPClientConfig;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.util.AABBUtils;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.resources.model.BakedModel;
@@ -80,9 +81,16 @@ public class Renderers {
                     BlockPos placePos = rayTrace.getBlockPos().relative(directionAwayFromTargetedBlock);
 
                     BlockState existingState = world.getBlockState(placePos);
-                    if (existingState.isAir() || existingState.canBeReplaced() || existingState.getBlock() instanceof IBPPartBlock) {
+                    boolean isMultipart = existingState.getBlock() instanceof IBPPartBlock || existingState.getBlock() instanceof BlockBPMultipart;
+                    if (existingState.isAir() || existingState.canBeReplaced() ||
+                            (block instanceof IBPPartBlock && isMultipart)) {
                         // only render the preview if we know it would make sense for the block to be placed where we expect it to be
                         BlockState state = block.getStateForPlacement(new BlockPlaceContext(world, player, hand, itemstack, rayTrace));
+                        if (isMultipart && block instanceof IBPPartBlock partBlock){
+                            if (AABBUtils.testOcclusion(partBlock.getOcclusionShape(state), existingState.getShape(world, placePos))){
+                                return;
+                            }
+                        }
                         BlockPreviewRenderer.renderBlockPreview(placePos, state, world, event.getCamera().getPosition(), event.getPoseStack(), event.getMultiBufferSource());
                     }
                 }
