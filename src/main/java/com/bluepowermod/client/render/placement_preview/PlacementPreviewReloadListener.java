@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PlacementPreviewReloadListener extends SimpleJsonResourceReloadListener {
     private final Map<BlockState, Variant> models = new Object2ObjectOpenHashMap<>();
-    private final Cache<BlockState, PlacementPreview> previewCache = CacheBuilder.newBuilder().expireAfterAccess(15, TimeUnit.MINUTES).build();
+    private final Cache<BlockState, BakedModel> previewCache = CacheBuilder.newBuilder().expireAfterAccess(15, TimeUnit.MINUTES).build();
     private final Set<Item> relevantItems = new HashSet<>();
 
     public static final Variant.Deserializer VARIANT_DESERIALIZER = new Deserializer();
