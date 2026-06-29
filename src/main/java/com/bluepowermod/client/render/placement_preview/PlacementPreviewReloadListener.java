@@ -11,8 +11,12 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.block.model.Variant;
 import net.minecraft.client.renderer.block.model.Variant.Deserializer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelBakery.ModelBakerImpl;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -24,6 +28,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.extensions.IForgeModelBaker;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -31,7 +36,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 public class PlacementPreviewReloadListener extends SimpleJsonResourceReloadListener {
     private final Map<BlockState, Variant> models = new Object2ObjectOpenHashMap<>();
@@ -39,8 +46,9 @@ public class PlacementPreviewReloadListener extends SimpleJsonResourceReloadList
     private final Set<Item> relevantItems = new HashSet<>();
 
     public static final Variant.Deserializer VARIANT_DESERIALIZER = new Deserializer();
-    public static final PlacementPreviewReloadListener INSTANCE = new PlacementPreviewReloadListener();
+    public static ModelBakery BAKERY = null;
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    public static final PlacementPreviewReloadListener INSTANCE = new PlacementPreviewReloadListener();
     public PlacementPreviewReloadListener() {
         super(GSON, "bluepower/placement_preview");
     }
@@ -104,6 +112,30 @@ public class PlacementPreviewReloadListener extends SimpleJsonResourceReloadList
         this.previewCache.invalidateAll();
         this.relevantItems.clear();
         this.relevantItems.addAll(relevantItems);
+    }
+
+    @Nullable
+    public BakedModel getModelFromState(BlockState state){
+        if (!models.containsKey(state)) return null;
+        if (BAKERY == null) return null;
+        Variant variant = models.get(state);
+        try {
+            return previewCache.get(state, () -> {
+                ModelBaker baker = BAKERY.new ModelBakerImpl((r, m) -> getDefaultTextureGetter().apply(m), variant.getModelLocation());
+                return baker.bake(variant.getModelLocation(), variant, getDefaultTextureGetter());
+            });
+        } catch (ExecutionException e) {
+            BluePower.log.error(e);
+            return null;
+        }
+    }
+
+    public boolean hasItem(Item item){
+        return relevantItems.contains(item);
+    }
+
+    public static Function<Material, TextureAtlasSprite> getDefaultTextureGetter(){
+        return Material::sprite;
     }
 
    /* @Nullable

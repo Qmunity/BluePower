@@ -8,25 +8,42 @@
 
 package com.bluepowermod.client.render;
 
+import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.block.BlockBPMicroblock;
 import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.lighting.BlockLampSurface;
 import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.block.worldgen.BlockBPGlass;
+import com.bluepowermod.client.render.placement_preview.BlockPreviewRenderer;
+import com.bluepowermod.client.render.placement_preview.PlacementPreviewReloadListener;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPClientConfig;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.BPBlockEntityType;
+import com.bluepowermod.reference.Refs;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
+import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,12 +59,39 @@ import java.util.Map;
 /**
  * @author MoreThanHidden
  */
-@Mod.EventBusSubscriber(Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Refs.MODID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class Renderers {
 
     @SubscribeEvent
-    public static void registerModels(ModelEvent.RegisterAdditional evt){
+    public static void onRenderHighlightEvent(RenderHighlightEvent.Block event){
+        if (BPClientConfig.CONFIG.renderPlacementPreview.get()){
+            @SuppressWarnings("resource")
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (player != null && player.level() != null) {
+                InteractionHand hand = player.getUsedItemHand();
+                ItemStack itemstack = player.getItemInHand(hand == null ? InteractionHand.MAIN_HAND : hand);
+                Item item = itemstack.getItem();
+                if (item instanceof BlockItem blockItem && PlacementPreviewReloadListener.INSTANCE.hasItem(item)) {
+                    Block block = blockItem.getBlock();
+                    Level world = player.level();
+                    BlockHitResult rayTrace = event.getTarget();
+                    Direction directionAwayFromTargetedBlock = rayTrace.getDirection();
+                    BlockPos placePos = rayTrace.getBlockPos().relative(directionAwayFromTargetedBlock);
+
+                    BlockState existingState = world.getBlockState(placePos);
+                    if (existingState.isAir() || existingState.canBeReplaced() || existingState.getBlock() instanceof IBPPartBlock) {
+                        // only render the preview if we know it would make sense for the block to be placed where we expect it to be
+                        BlockState state = block.getStateForPlacement(new BlockPlaceContext(world, player, hand, itemstack, rayTrace));
+                        BlockPreviewRenderer.renderBlockPreview(placePos, state, world, event.getCamera().getPosition(), event.getPoseStack(), event.getMultiBufferSource());
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void registerModels(ModelEvent.RegisterAdditional evt){
         for (Block block : BPBlocks.blockList) {
             if ((block instanceof ICustomModelBlock)) {
                 registerBakedModel(block);
@@ -57,7 +101,7 @@ public class Renderers {
 
     @SubscribeEvent
     public void onModelBakeEvent(ModelEvent.ModifyBakingResult event) {
-
+        PlacementPreviewReloadListener.BAKERY = event.getModelBakery();
         //Register Multipart and Microblock Baked Models
         BPMultipartModel multipartModel = new BPMultipartModel();
         BPMicroblockModel microblockModel = new BPMicroblockModel();
@@ -84,6 +128,11 @@ public class Renderers {
     @SubscribeEvent
     public void onRegisterGeometryLoadersEvent(RegisterGeometryLoaders event){
         event.register("gate", new GateModelLoader());
+    }
+
+    @SubscribeEvent
+    public void onClientReload(RegisterClientReloadListenersEvent event){
+        event.registerReloadListener(PlacementPreviewReloadListener.INSTANCE);
     }
 
     public static void init() {
