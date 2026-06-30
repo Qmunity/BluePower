@@ -1,0 +1,22 @@
+﻿{
+  "result": {
+    "item": "bluepower:randomizer"
+  },
+  "pattern": [
+    "TST",
+    "WWW",
+    "SWS"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "S": {
+      "item": "bluepower:tainted_silicon_chip_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    }
+  }
+}

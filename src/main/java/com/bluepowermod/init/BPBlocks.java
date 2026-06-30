@@ -281,23 +281,23 @@ public class BPBlocks {
 
 
 
-    public static final RegistryObject<Block> blockGateAND = BLOCKS.register("gate_and", () -> new BlockGateAnd(false));
-    public static final RegistryObject<Block> blockGateNOT = BLOCKS.register("gate_not", BlockGateNot::new);
-    public static final RegistryObject<Block> blockGateOR = BLOCKS.register("gate_or", () -> new BlockGateOr(false));
-    public static final RegistryObject<Block> blockNullCell = BLOCKS.register("gate_nullcell", BlockNullCell::new);
-    public static final RegistryObject<Block> blockGateNAND = BLOCKS.register("gate_nand",() -> new BlockGateAnd(true));
-    public static final RegistryObject<Block> blockGateNOR = BLOCKS.register("gate_nor", () -> new BlockGateOr(true));
-    public static final RegistryObject<Block> blockGateBUFFER = BLOCKS.register("gate_buffer", BlockGateBuffer::new);
-    public static final RegistryObject<Block> blockGateXOR = BLOCKS.register("gate_xor", () -> new BlockGateXor(false));
-    public static final RegistryObject<Block> blockGateXNOR = BLOCKS.register("gate_xnor", () -> new BlockGateXor(true));
-    public static final RegistryObject<Block> blockMultiplexer = BLOCKS.register("gate_multiplexer", BlockGateMultiplexer::new);
-    public static final RegistryObject<Block> blockPulseFormer = BLOCKS.register("gate_pulse_former", BlockGatePulseFormer::new);
-    public static final RegistryObject<Block> blockRandomizer = BLOCKS.register("gate_randomizer", BlockGateRandomizer::new);
-    public static final RegistryObject<Block> blockRSLatch = BLOCKS.register("gate_rs", BlockGateRSLatch::new);
-    public static final RegistryObject<Block> blockToggleLatch = BLOCKS.register("gate_toggle", BlockGateToggleLatch::new);
-    public static final RegistryObject<Block> blockRepeater = BLOCKS.register("gate_repeater", BlockGateRepeater::new);
-    public static final RegistryObject<Block> blockTransparentLatch = BLOCKS.register("gate_transparent", BlockGateTransparentLatch::new);
-    public static final RegistryObject<Block> blockSynchronizer = BLOCKS.register("gate_synchronizer", BlockGateSynchronizer::new);
+    public static final RegistryObject<Block> blockGateAND = BLOCKS.register("and_gate", () -> new BlockGateAnd(false));
+    public static final RegistryObject<Block> blockGateNOT = BLOCKS.register("not_gate", BlockGateNot::new);
+    public static final RegistryObject<Block> blockGateOR = BLOCKS.register("or_gate", () -> new BlockGateOr(false));
+    public static final RegistryObject<Block> blockNullCell = BLOCKS.register("null_cell", BlockNullCell::new);
+    public static final RegistryObject<Block> blockGateNAND = BLOCKS.register("nand_gate",() -> new BlockGateAnd(true));
+    public static final RegistryObject<Block> blockGateNOR = BLOCKS.register("nor_gate", () -> new BlockGateOr(true));
+    public static final RegistryObject<Block> blockGateBUFFER = BLOCKS.register("buffer_gate", BlockGateBuffer::new);
+    public static final RegistryObject<Block> blockGateXOR = BLOCKS.register("xor_gate", () -> new BlockGateXor(false));
+    public static final RegistryObject<Block> blockGateXNOR = BLOCKS.register("xnor_gate", () -> new BlockGateXor(true));
+    public static final RegistryObject<Block> blockMultiplexer = BLOCKS.register("multiplexer", BlockGateMultiplexer::new);
+    public static final RegistryObject<Block> blockPulseFormer = BLOCKS.register("pulse_former", BlockGatePulseFormer::new);
+    public static final RegistryObject<Block> blockRandomizer = BLOCKS.register("randomizer", BlockGateRandomizer::new);
+    public static final RegistryObject<Block> blockRSLatch = BLOCKS.register("rs_latch", BlockGateRSLatch::new);
+    public static final RegistryObject<Block> blockToggleLatch = BLOCKS.register("toggle_latch", BlockGateToggleLatch::new);
+    public static final RegistryObject<Block> blockRepeater = BLOCKS.register("repeater", BlockGateRepeater::new);
+    public static final RegistryObject<Block> blockTransparentLatch = BLOCKS.register("transparent_latch", BlockGateTransparentLatch::new);
+    public static final RegistryObject<Block> blockSynchronizer = BLOCKS.register("synchronizer", BlockGateSynchronizer::new);
 
     static{
         BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties()));
