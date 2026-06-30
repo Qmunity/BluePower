@@ -263,6 +263,7 @@ public class BPEventHandler {
         }
     }
 
+    @SubscribeEvent
     public void remapBlocks(final MissingMappingsEvent event){
         for (var mapping : event.getMappings(Keys.BLOCKS, Refs.MODID)){
             if (mapping.getKey().getPath().equals("gate_and")){
