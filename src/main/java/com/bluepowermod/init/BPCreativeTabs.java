@@ -74,8 +74,8 @@ public class BPCreativeTabs {
             event.accept(BPBlocks.blockMultiplexer.get());
             event.accept(BPBlocks.blockPulseFormer.get());
             event.accept(BPBlocks.blockRandomizer.get());
-            event.accept(BPBlocks.blockRSLatch.get());
             event.accept(BPBlocks.blockToggleLatch.get());
+            event.accept(BPBlocks.blockRSLatch.get());
             event.accept(BPBlocks.blockRepeater.get());
             event.accept(BPBlocks.blockTransparentLatch.get());
             event.accept(BPBlocks.blockSynchronizer.get());

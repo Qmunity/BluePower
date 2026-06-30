@@ -293,8 +293,8 @@ public class BPBlocks {
     public static final RegistryObject<Block> blockMultiplexer = BLOCKS.register("multiplexer", BlockGateMultiplexer::new);
     public static final RegistryObject<Block> blockPulseFormer = BLOCKS.register("pulse_former", BlockGatePulseFormer::new);
     public static final RegistryObject<Block> blockRandomizer = BLOCKS.register("randomizer", BlockGateRandomizer::new);
-    public static final RegistryObject<Block> blockRSLatch = BLOCKS.register("rs_latch", BlockGateRSLatch::new);
     public static final RegistryObject<Block> blockToggleLatch = BLOCKS.register("toggle_latch", BlockGateToggleLatch::new);
+    public static final RegistryObject<Block> blockRSLatch = BLOCKS.register("rs_latch", BlockGateRSLatch::new);
     public static final RegistryObject<Block> blockRepeater = BLOCKS.register("repeater", BlockGateRepeater::new);
     public static final RegistryObject<Block> blockTransparentLatch = BLOCKS.register("transparent_latch", BlockGateTransparentLatch::new);
     public static final RegistryObject<Block> blockSynchronizer = BLOCKS.register("synchronizer", BlockGateSynchronizer::new);
@@ -312,8 +312,8 @@ public class BPBlocks {
         BPItems.ITEMS.register(blockMultiplexer.getKey().location().getPath(), () -> new BlockItem(blockMultiplexer.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockPulseFormer.getKey().location().getPath(), () -> new BlockItem(blockPulseFormer.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockRandomizer.getKey().location().getPath(), () -> new BlockItem(blockRandomizer.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockRSLatch.getKey().location().getPath(), () -> new BlockItem(blockRSLatch.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockToggleLatch.getKey().location().getPath(), () -> new BlockItem(blockToggleLatch.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockRSLatch.getKey().location().getPath(), () -> new BlockItem(blockRSLatch.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockRepeater.getKey().location().getPath(), () -> new BlockItem(blockRepeater.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockTransparentLatch.getKey().location().getPath(), () -> new BlockItem(blockTransparentLatch.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockSynchronizer.getKey().location().getPath(), () -> new BlockItem(blockSynchronizer.get(), new Item.Properties()));
