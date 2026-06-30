@@ -1,5 +1,4 @@
 {
-	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"parent": "bluepower:block/multiplexer/right_torch",
 	"ambientocclusion": false,
@@ -16,7 +15,6 @@
 			"name": "CenterWire",
 			"from": [3.5, 2, 5],
 			"to": [4.5, 2.5, 7],
-			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 0, -0.5]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_center"},
 				"east": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_center"},
@@ -29,7 +27,6 @@
 			"name": "CenterWire",
 			"from": [11.5, 2, 5],
 			"to": [12.5, 2.5, 7],
-			"rotation": {"angle": 0, "axis": "y", "origin": [1, 0, -1]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_center"},
 				"east": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_center"},
@@ -70,7 +67,6 @@
 			"name": "CenterWire",
 			"from": [4.5, 2, 4],
 			"to": [11.5, 2.5, 5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -0.5]},
 			"faces": {
 				"north": {"uv": [0, 0, 7, 0.5], "texture": "#bluestone_center"},
 				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_center"},

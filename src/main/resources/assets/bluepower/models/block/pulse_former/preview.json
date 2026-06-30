@@ -1,5 +1,4 @@
 {
-	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
@@ -279,7 +278,6 @@
 			"name": "TopBase",
 			"from": [5, 2, 11.5],
 			"to": [8, 2.2499, 13.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [6, 2.12495, 13]},
 			"faces": {
 				"north": {"uv": [0, 0, 3, 0.2499], "texture": "#gate_dark"},
 				"east": {"uv": [0, 0, 2, 0.2499], "texture": "#gate_dark"},
