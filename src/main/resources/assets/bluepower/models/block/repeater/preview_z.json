@@ -7,6 +7,7 @@
 		"bluestone_back": "bluepower:base/bluestone_off",
 		"bluestone_front": "bluepower:base/bluestone_on",
 		"torch": "bluepower:blocks/bluestone_torch_off",
+		"torch_on": "bluepower:blocks/bluestone_torch_on",
 		"gate_dark": "bluepower:blocks/gates/gate_dark",
 		"particle": "bluepower:blocks/gates/gate"
 	},
@@ -18,8 +19,8 @@
 			"shade": false,
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [6, 5, 10, 10], "texture": "#torch"},
-				"south": {"uv": [6, 5, 10, 10], "texture": "#torch"}
+				"north": {"uv": [6, 5, 10, 10], "texture": "#torch_on"},
+				"south": {"uv": [6, 5, 10, 10], "texture": "#torch_on"}
 			}
 		},
 		{
@@ -29,8 +30,8 @@
 			"shade": false,
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"east": {"uv": [6, 5, 10, 10], "texture": "#torch"},
-				"west": {"uv": [6, 5, 10, 10], "texture": "#torch"}
+				"east": {"uv": [6, 5, 10, 10], "texture": "#torch_on"},
+				"west": {"uv": [6, 5, 10, 10], "texture": "#torch_on"}
 			}
 		},
 		{
@@ -39,7 +40,7 @@
 			"to": [4, 6, 13],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"up": {"uv": [7, 6, 9, 8], "rotation": 90, "texture": "#torch"}
+				"up": {"uv": [7, 6, 9, 8], "rotation": 90, "texture": "#torch_on"}
 			}
 		},
 		{
