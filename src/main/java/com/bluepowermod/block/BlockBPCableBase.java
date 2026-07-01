@@ -6,6 +6,7 @@ import com.bluepowermod.util.AABBUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -29,15 +31,19 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+
+import static net.minecraft.core.Direction.*;
 
 public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleWaterloggedBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    protected static final EnumProperty<ConnectionType> CONNECTION_TYPE_FRONT = EnumProperty.create("connection_type_front", ConnectionType.class);
+    protected static final EnumProperty<ConnectionType> CONNECTION_TYPE_BACK = EnumProperty.create("connection_type_back", ConnectionType.class);
+    protected static final EnumProperty<ConnectionType> CONNECTION_TYPE_LEFT = EnumProperty.create("connection_type_left", ConnectionType.class);
+    protected static final EnumProperty<ConnectionType> CONNECTION_TYPE_RIGHT = EnumProperty.create("connection_type_right", ConnectionType.class);
     protected static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
     protected static final BooleanProperty CONNECTED_BACK = BooleanProperty.create("connected_back");
     protected static final BooleanProperty CONNECTED_LEFT = BooleanProperty.create("connected_left");
@@ -53,10 +59,8 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     public BlockBPCableBase(float width, float height) {
         shapes = makeShapes(width, height);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP)
-                .setValue(CONNECTED_FRONT, false).setValue(CONNECTED_BACK, false)
-                .setValue(CONNECTED_LEFT, false).setValue(CONNECTED_RIGHT, false)
-                .setValue(JOIN_FRONT, false).setValue(JOIN_BACK, false)
-                .setValue(JOIN_LEFT, false).setValue(JOIN_RIGHT, false)
+                .setValue(CONNECTION_TYPE_FRONT, ConnectionType.NONE).setValue(CONNECTION_TYPE_BACK, ConnectionType.NONE)
+                .setValue(CONNECTION_TYPE_LEFT, ConnectionType.NONE).setValue(CONNECTION_TYPE_RIGHT, ConnectionType.NONE)
                 .setValue(WATERLOGGED, false));
     }
 
@@ -138,11 +142,11 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
         VoxelShape shapes = this.shapes[this.getShapeIndex(state)];
 
         //Draw the joins
-        if(state.getValue(JOIN_FRONT))
+        if(state.getValue(CONNECTION_TYPE_FRONT) == ConnectionType.OUTER_CORNER)
             shapes = Shapes.or(shapes, this.shapes[16]);
         //if(state.getValue(JOIN_BACK))
             //shapes = Shapes.or(shapes, this.shapes[17]);
-        if(state.getValue(JOIN_LEFT))
+        if(state.getValue(CONNECTION_TYPE_LEFT) == ConnectionType.OUTER_CORNER)
             shapes = Shapes.or(shapes, this.shapes[18]);
         //if(state.getValue(JOIN_RIGHT))
             //shapes = Shapes.or(shapes, this.shapes[19]);
@@ -153,13 +157,13 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     private int getShapeIndex(BlockState state) {
         int i = 0;
 
-        if(state.getValue(CONNECTED_FRONT))
+        if(state.getValue(CONNECTION_TYPE_FRONT) != ConnectionType.NONE)
             i |= getMask(Direction.NORTH);
-        if(state.getValue(CONNECTED_BACK))
+        if(state.getValue(CONNECTION_TYPE_BACK) != ConnectionType.NONE)
             i |= getMask(Direction.SOUTH);
-        if(state.getValue(CONNECTED_LEFT))
-            i |= getMask(Direction.WEST);
-        if(state.getValue(CONNECTED_RIGHT))
+        if(state.getValue(CONNECTION_TYPE_LEFT) != ConnectionType.NONE)
+            i |= getMask(WEST);
+        if(state.getValue(CONNECTION_TYPE_RIGHT) != ConnectionType.NONE)
             i |= getMask(Direction.EAST);
 
         return i;
@@ -170,33 +174,34 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
-        BlockEntity te = world.getBlockEntity(pos);
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+        BlockEntity te = level.getBlockEntity(pos);
         //Get new state based on surrounding capabilities
-        BlockState newState = getStateForPos(world, pos, defaultBlockState().setValue(FACING, state.getValue(FACING)), state.getValue(FACING));
+        BlockState newState = getStateForPos(level, pos, defaultBlockState().setValue(FACING, state.getValue(FACING)), state.getValue(FACING));
 
-        if (!(te instanceof TileBPMultipart)){
+        if (!(te instanceof TileBPMultipart multipart)){
             //Change the block state
-            world.setBlock(pos, newState, 2);
+            level.setBlock(pos, newState, 2);
         }else{
             //Update the state in the Multipart
-            ((TileBPMultipart) te).changeState(state, newState);
+            multipart.changeState(state, newState);
         }
         state = newState;
 
         //If not placed on a solid block break off
-        if (!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude()) {
-            if(te instanceof TileBPMultipart){
-                ((TileBPMultipart)te).removeState(state);
+        if (!level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).canOcclude()) {
+            if(te instanceof TileBPMultipart multipart){
+                multipart.removeState(state);
             }else {
-                world.destroyBlock(pos, true);
+                level.destroyBlock(pos, true);
             }
         }
+
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
-        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, JOIN_FRONT, JOIN_BACK, JOIN_LEFT, JOIN_RIGHT, WATERLOGGED);
+        builder.add(FACING, CONNECTION_TYPE_FRONT, CONNECTION_TYPE_BACK, CONNECTION_TYPE_LEFT, CONNECTION_TYPE_RIGHT, WATERLOGGED);
     }
 
     //Returns true if a given blockState / tileEntity can connect.
@@ -209,256 +214,66 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     }
 
     private BlockState getStateForPos(Level world, BlockPos pos, BlockState state, Direction face){
-        List<Direction> directions = new ArrayList<>(FACING.getPossibleValues());
-        List<Direction> internal = null;
-        boolean connected_left = false;
-        boolean connected_right = false;
-        boolean connected_front = false;
-        boolean connected_back = false;
-        boolean join_left = false;
-        boolean join_right = false;
-        boolean join_front = false;
-        boolean join_back = false;
+        Direction[] sides = directionsFromFacing(face);
+        ConnectionType[] connections = new ConnectionType[]{ConnectionType.NONE, ConnectionType.NONE, ConnectionType.NONE, ConnectionType.NONE};
 
-        //Make sure the side we are trying to connect on isn't blocked.
         BlockEntity ownTile = world.getBlockEntity(pos);
-        if(ownTile instanceof TileBPMultipart) {
-            directions.removeIf(d -> ((TileBPMultipart) ownTile).isSideBlocked(getCapability(), d));
-            internal = ((TileBPMultipart) ownTile).getStates().stream().filter(s -> s.getBlock() == this).map(s -> s.getValue(FACING)).collect(Collectors.toList());
+        TileBPMultipart multipart = null;
+        if (ownTile instanceof TileBPMultipart bpMultipart){
+            multipart = bpMultipart;
         }
-        //Make sure the cable is on the same side of the block
-        directions.removeIf(d -> {
-            BlockEntity t = world.getBlockEntity(pos.relative(d));
-            return (world.getBlockState(pos.relative(d)).getBlock() == this
-                    && world.getBlockState(pos.relative(d)).getValue(FACING) != face)
-                    || (t instanceof TileBPMultipart
-                    && ((TileBPMultipart) t).getStates().stream().noneMatch(s -> s.getValue(FACING) == face));
-        });
-
-        //Populate all directions
-        for (Direction d : directions) {
-            BlockEntity tileEntity = world.getBlockEntity(pos.relative(d));
-            BlockState dirState = world.getBlockState(pos.relative(d));
-            BlockPos dirPos = pos.relative(d);
-
-            boolean join = false;
-            //If Air look for a change in Direction
-            if (world.getBlockState(pos.relative(d)).getBlock() == Blocks.AIR) {
-                dirState = world.getBlockState(pos.relative(d).relative(face.getOpposite()));
-                dirPos = pos.relative(d).relative(face.getOpposite());
-                if (dirState.getBlock() == this && dirState.getValue(FACING) == d) {
-                    tileEntity = world.getBlockEntity(pos.relative(d).relative(face.getOpposite()));
-                    join = true;
-                } else if (dirState.getBlock() instanceof BlockBPMultipart) {
-                    tileEntity = world.getBlockEntity(pos.relative(d).relative(face.getOpposite()));
-                    if (tileEntity instanceof TileBPMultipart && ((TileBPMultipart) tileEntity).getStates().stream().filter(s -> s.getBlock() == this).anyMatch(s -> s.getValue(FACING) == d)) {
-                        join = true;
-                    } else {
-                        tileEntity = null;
+        for (int i = 0; i < 4; i++){
+            Direction side = sides[i];
+            if (multipart != null && multipart.isSideBlocked(getCapability(), side)) continue;
+            BlockPos neighbor = pos.relative(side);
+            BlockState neighborState = world.getBlockState(neighbor);
+            BlockEntity neighborTile = world.getBlockEntity(neighbor);
+            boolean outerCorner = false;
+            if (neighborState.getBlock() == Blocks.AIR){
+                neighbor = neighbor.relative(face.getOpposite());
+                neighborState = world.getBlockState(neighbor);
+                neighborTile = world.getBlockEntity(neighbor);
+                outerCorner = true;
+            }
+            Direction compare = outerCorner ? side : face;
+            if (neighborState.getBlock() == this){
+                Direction nFace = neighborState.getValue(FACING);
+                if (nFace == compare){
+                    connections[i] = outerCorner ? ConnectionType.OUTER_CORNER : ConnectionType.STRAIGHT;
+                }
+            } else if (neighborTile instanceof TileBPMultipart neighborMultipart){
+                for (BlockState s : neighborMultipart.getStates()){
+                    if (s.getBlock() == this && s.getValue(FACING) == compare){
+                        connections[i] = outerCorner ? ConnectionType.OUTER_CORNER : ConnectionType.STRAIGHT;
+                        break;
+                    }
+                }
+            } else if (multipart != null){
+                for (BlockState s : multipart.getStates()){
+                    if (s.getBlock() == this && s.getValue(FACING) == side.getOpposite()){
+                        connections[i] = ConnectionType.INNER_CORNER;
+                        break;
                     }
                 }
             }
-
-            //Check Capability for Direction
-                switch (state.getValue(FACING)) {
-                    case UP:
-                    case DOWN:
-                        switch (d) {
-                            case EAST:
-                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case WEST:
-                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case NORTH:
-                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case SOUTH:
-                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                        }
-                        break;
-                    case NORTH:
-                        switch (d) {
-                            case WEST:
-                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case EAST:
-                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case UP:
-                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case DOWN:
-                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                        }
-                        break;
-                    case SOUTH:
-                        switch (d) {
-                            case EAST:
-                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case WEST:
-                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case UP:
-                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case DOWN:
-                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                        }
-                        break;
-                    case EAST:
-                        switch (d) {
-                            case NORTH:
-                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case SOUTH:
-                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case UP:
-                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case DOWN:
-                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                        }
-                        break;
-                    case WEST:
-                        switch (d) {
-                            case SOUTH:
-                                connected_right = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_right = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case NORTH:
-                                connected_left = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_left = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case UP:
-                                connected_front = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_front = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                            case DOWN:
-                                connected_back = canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                join_back = join && canConnect(world, dirPos, dirState, tileEntity, d.getOpposite());
-                                break;
-                        }
-                }
-            }
-
-        if (internal != null)
-            for(Direction d : internal){
-                switch (state.getValue(FACING)) {
-                    case UP:
-                    case DOWN:
-                        switch (d) {
-                            case EAST:
-                                connected_left = true;
-                                break;
-                            case WEST:
-                                connected_right = true;
-                                break;
-                            case NORTH:
-                                connected_back = true;
-                                break;
-                            case SOUTH:
-                                connected_front = true;
-                                break;
-                        }
-                        break;
-                    case NORTH:
-                        switch (d) {
-                            case WEST:
-                                connected_left = true;
-                                break;
-                            case EAST:
-                                connected_right = true;
-                                break;
-                            case UP:
-                                connected_back = true;
-                                break;
-                            case DOWN:
-                                connected_front = true;
-                                break;
-                        }
-                        break;
-                    case SOUTH:
-                        switch (d) {
-                            case EAST:
-                                connected_left = true;
-                                break;
-                            case WEST:
-                                connected_right = true;
-                                break;
-                            case UP:
-                                connected_back = true;
-                                break;
-                            case DOWN:
-                                connected_front = true;
-                                break;
-                        }
-                        break;
-                    case EAST:
-                        switch (d) {
-                            case NORTH:
-                                connected_left = true;
-                                break;
-                            case SOUTH:
-                                connected_right = true;
-                                break;
-                            case UP:
-                                connected_back = true;
-                                break;
-                            case DOWN:
-                                connected_front = true;
-                                break;
-                        }
-                        break;
-                    case WEST:
-                        switch (d) {
-                            case SOUTH:
-                                connected_left = true;
-                                break;
-                            case NORTH:
-                                connected_right = true;
-                                break;
-                            case UP:
-                                connected_back = true;
-                                break;
-                            case DOWN:
-                                connected_front = true;
-                                break;
-                        }
-                }
-            }
-
+        }
         FluidState fluidstate = world.getFluidState(pos);
-        return state.setValue(CONNECTED_LEFT, connected_left)
-                .setValue(CONNECTED_RIGHT, connected_right)
-                .setValue(CONNECTED_FRONT, connected_front)
-                .setValue(CONNECTED_BACK, connected_back)
-                .setValue(JOIN_LEFT, join_left)
-                .setValue(JOIN_RIGHT, join_right)
-                .setValue(JOIN_FRONT, join_front)
-                .setValue(JOIN_BACK, join_back).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
+        return state.setValue(CONNECTION_TYPE_LEFT, connections[0])
+                .setValue(CONNECTION_TYPE_RIGHT, connections[1])
+                .setValue(CONNECTION_TYPE_FRONT, connections[2])
+                .setValue(CONNECTION_TYPE_BACK, connections[3])
+                .setValue(WATERLOGGED, fluidstate.is(Fluids.WATER));
+    }
+
+    private Direction[] directionsFromFacing(Direction facing){
+        //Order is Left, Right, Front, Back
+        return switch (facing){
+            case UP, DOWN -> new Direction[]{WEST, EAST, NORTH, SOUTH};
+            case NORTH -> new Direction[]{EAST, WEST, UP, DOWN};
+            case SOUTH -> new Direction[]{WEST, EAST, UP, DOWN};
+            case WEST -> new Direction[]{NORTH, SOUTH, UP, DOWN};
+            case EAST -> new Direction[]{SOUTH, NORTH, UP, DOWN};
+        };
     }
 
     @Nullable
@@ -470,5 +285,17 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     @Override
     public VoxelShape getOcclusionShape(BlockState state) {
         return AABBUtils.rotate(this.shapes[this.getShapeIndex(state)], state.getValue(FACING));
+    }
+
+    public enum ConnectionType implements StringRepresentable {
+        NONE,
+        STRAIGHT,
+        INNER_CORNER,
+        OUTER_CORNER;
+
+        @Override
+        public String getSerializedName() {
+            return this.name().toLowerCase(Locale.ROOT);
+        }
     }
 }

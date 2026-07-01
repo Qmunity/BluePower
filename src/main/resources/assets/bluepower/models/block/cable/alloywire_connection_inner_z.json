@@ -1,0 +1,48 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"particle": "bluepower:blocks/wire/wire",
+		"wire": "bluepower:blocks/wire/wire"
+	},
+	"elements": [
+		{
+			"name": "sides",
+			"from": [7, 0, 2],
+			"to": [9, 2, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"east": {"uv": [11, 7, 16, 9], "texture": "#wire", "tintindex": 2},
+				"south": {"uv": [7, 7, 9, 9], "texture": "#wire", "tintindex": 2},
+				"west": {"uv": [11, 7, 16, 9], "texture": "#wire", "tintindex": 2}
+			}
+		},
+		{
+			"name": "corner",
+			"from": [7, 0, 0],
+			"to": [9, 2, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"west": {"uv": [11, 7, 16, 9], "texture": "#wire", "tintindex": 2}
+			}
+		},
+		{
+			"name": "top",
+			"from": [7, 2, 0],
+			"to": [9, 2, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"up": {"uv": [9, 7, 16, 9], "rotation": 270, "texture": "#wire", "tintindex": 2}
+			}
+		},
+		{
+			"name": "bottom",
+			"from": [7, 0, 0],
+			"to": [9, 0, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -2, 8]},
+			"faces": {
+				"down": {"uv": [9, 7, 16, 9], "rotation": 90, "texture": "#wire", "tintindex": 2}
+			}
+		}
+	]
+}

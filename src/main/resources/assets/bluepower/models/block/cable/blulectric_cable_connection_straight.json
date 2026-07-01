@@ -1,0 +1,21 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"particle": "bluepower:blocks/cable/blulectric_cable",
+		"top": "bluepower:blocks/cable/blulectric_cable"
+	},
+	"elements": [
+		{
+			"from": [10, 0, 6],
+			"to": [16, 2, 10],
+			"faces": {
+				"north": {"uv": [0, 14, 8, 16], "texture": "#top", "tintindex": 1},
+				"east": {"uv": [10, 14, 6, 16], "texture": "#top", "tintindex": 1},
+				"south": {"uv": [8, 14, 16, 16], "texture": "#top", "tintindex": 1},
+				"up": {"uv": [8, 6, 16, 10], "texture": "#top", "tintindex": 1},
+				"down": {"uv": [8, 6, 16, 10], "texture": "#top", "tintindex": 1}
+			}
+		}
+	]
+}
