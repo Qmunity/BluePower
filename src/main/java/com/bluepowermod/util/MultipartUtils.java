@@ -8,8 +8,11 @@
 
 package com.bluepowermod.util;
 
+import com.bluepowermod.block.gates.BlockGateBase;
+import com.bluepowermod.block.gates.BlockGateBase.Side;
 import com.bluepowermod.tile.TileBPMultipart;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -86,5 +89,10 @@ public class MultipartUtils {
             }
         }
         return state;
+    }
+
+    public static byte getRedstonePower(Side side, BlockState state, Level level, BlockPos pos){
+        Direction direction = BlockGateBase.toDirection(side, state);
+        return (byte) level.getSignal(pos.relative(direction), direction);
     }
 }

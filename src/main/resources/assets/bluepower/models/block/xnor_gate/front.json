@@ -1,0 +1,119 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"bluestone_front": "bluepower:base/bluestone_on",
+		"torch_front": "bluepower:blocks/bluestone_torch_off"
+	},
+	"elements": [
+		{
+			"name": "TopWire",
+			"from": [7.5, 2, 3],
+			"to": [8.5, 2.5, 3.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -0.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.25], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 0.5, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 0.5, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [4, 2, 4.5],
+			"to": [5, 2.5, 5.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-3.5, 0, 1]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 1, 1], "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [11, 2, 4.5],
+			"to": [12, 2.5, 5.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3.5, 0, 1]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 1, 1], "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "AcrossWire",
+			"from": [5, 2, 3.5],
+			"to": [11, 2.5, 4.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1.5, 0, -2]},
+			"faces": {
+				"north": {"uv": [0, 0, 6, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 6, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 6, 1], "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "AcrossWire",
+			"from": [3, 2, 5.5],
+			"to": [6, 2.5, 6.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-0.5, 0, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 3, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 3, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 3, 1], "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "AcrossWire",
+			"from": [10, 2, 5.5],
+			"to": [13, 2.5, 6.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6.5, 0, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 3, 0.5], "texture": "#bluestone_front"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"south": {"uv": [0, 0, 3, 0.5], "texture": "#bluestone_front"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_front"},
+				"up": {"uv": [0, 0, 3, 1], "texture": "#bluestone_front"}
+			}
+		},
+		{
+			"name": "Torch_Front",
+			"from": [7, 2, 1],
+			"to": [9, 5, 3],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -6.5]},
+			"faces": {
+				"up": {"uv": [7, 6, 9, 8], "texture": "#torch_front"}
+			}
+		},
+		{
+			"name": "Front",
+			"from": [7, 2, 0],
+			"to": [9, 6, 4],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -6.5]},
+			"faces": {
+				"east": {"uv": [6, 5, 10, 9], "texture": "#torch_front"},
+				"west": {"uv": [6, 5, 10, 9], "texture": "#torch_front"}
+			}
+		},
+		{
+			"name": "Front",
+			"from": [6, 2, 1],
+			"to": [10, 6, 3],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -6.5]},
+			"faces": {
+				"north": {"uv": [6, 5, 10, 9], "texture": "#torch_front"},
+				"south": {"uv": [6, 5, 10, 9], "texture": "#torch_front"}
+			}
+		}
+	]
+}

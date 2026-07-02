@@ -1,0 +1,8 @@
+{
+    "parent": "bluepower:block/transparent_latch/back",
+    "textures": {
+        "bluestone_back": "bluepower:base/bluestone_on",
+        "torch_back": "bluepower:blocks/bluestone_torch_off",
+        "bluestone_left": "bluepower:base/bluestone_off"
+    }
+}

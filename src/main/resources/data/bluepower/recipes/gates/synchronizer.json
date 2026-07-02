@@ -1,0 +1,25 @@
+﻿{
+  "result": {
+    "item": "bluepower:synchronizer"
+  },
+  "pattern": [
+    "WCW",
+    "SAS",
+    "WWW"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "bluepower:bluestone_anode_tile"
+    },
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "S": {
+      "item": "bluepower:silicon_chip_tile"
+    },
+    "C": {
+      "item": "bluepower:bluestone_cathode_tile"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/synchronizer/left",
+    "textures": {
+        "bluestone_left": "bluepower:base/bluestone_on"
+    }
+}

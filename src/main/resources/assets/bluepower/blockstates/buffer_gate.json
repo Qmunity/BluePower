@@ -1,0 +1,28 @@
+﻿{
+  "variants":  {
+    "facing=up,rotation=0":{"model":"bluepower:block/buffer_gate/full"},
+    "facing=up,rotation=1":{"model":"bluepower:block/buffer_gate/full","y":90},
+    "facing=up,rotation=2":{"model":"bluepower:block/buffer_gate/full","y":180},
+    "facing=up,rotation=3":{"model":"bluepower:block/buffer_gate/full","y":270},
+    "facing=down,rotation=0":{"model":"bluepower:block/buffer_gate/full","x":180,"y":0},
+    "facing=down,rotation=3":{"model":"bluepower:block/buffer_gate/full","x":180,"y":90},
+    "facing=down,rotation=2":{"model":"bluepower:block/buffer_gate/full","x":180,"y":180},
+    "facing=down,rotation=1":{"model":"bluepower:block/buffer_gate/full","x":180,"y":270},
+    "facing=north,rotation=0":{"model":"bluepower:block/buffer_gate/full","x":90,"y":0},
+    "facing=north,rotation=1":{"model":"bluepower:block/buffer_gate/full_z","x":90,"y":0},
+    "facing=north,rotation=2":{"model":"bluepower:block/buffer_gate/full","x":270,"y":180},
+    "facing=north,rotation=3":{"model":"bluepower:block/buffer_gate/full_z","x":270,"y":-180},
+    "facing=south,rotation=0":{"model":"bluepower:block/buffer_gate/full","x":90,"y":180},
+    "facing=south,rotation=1":{"model":"bluepower:block/buffer_gate/full_z","x":90,"y":180},
+    "facing=south,rotation=2":{"model":"bluepower:block/buffer_gate/full","x":270,"y":0},
+    "facing=south,rotation=3":{"model":"bluepower:block/buffer_gate/full_z","x":270,"y":0},
+    "facing=east,rotation=0":{"model":"bluepower:block/buffer_gate/full","x":90,"y":90},
+    "facing=east,rotation=1":{"model":"bluepower:block/buffer_gate/full_z","x":90,"y":90},
+    "facing=east,rotation=2":{"model":"bluepower:block/buffer_gate/full","x":270,"y":270},
+    "facing=east,rotation=3":{"model":"bluepower:block/buffer_gate/full_z","x":270,"y":-90},
+    "facing=west,rotation=0":{"model":"bluepower:block/buffer_gate/full","x":90,"y":270},
+    "facing=west,rotation=1":{"model":"bluepower:block/buffer_gate/full_z","x":90,"y":270},
+    "facing=west,rotation=2":{"model":"bluepower:block/buffer_gate/full","x":270,"y":90},
+    "facing=west,rotation=3":{"model":"bluepower:block/buffer_gate/full_z","x":270,"y":90}
+  }
+}

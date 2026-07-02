@@ -1,0 +1,185 @@
+{
+  "loader": "bluepower:gate",
+  "models": [
+    "bluepower:block/repeater/base",
+    {
+      "model": "bluepower:block/repeater/back",
+      "when": {
+        "powered_back": false
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/back_on",
+      "when": {
+        "powered_back": true
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/front",
+      "when": {
+        "powered_front": false
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/front_on",
+      "when": {
+        "powered_front": true
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_1",
+      "when": {
+        "powered_back": true,
+        "delay": 1
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_2",
+      "when": {
+        "powered_back": true,
+        "delay": 2
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_3",
+      "when": {
+        "powered_back": true,
+        "delay": 3
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_4",
+      "when": {
+        "powered_back": true,
+        "delay": 4
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_8",
+      "when": {
+        "powered_back": true,
+        "delay": 8
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_16",
+      "when": {
+        "powered_back": true,
+        "delay": 16
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_32",
+      "when": {
+        "powered_back": true,
+        "delay": 32
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_64",
+      "when": {
+        "powered_back": true,
+        "delay": 64
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_128",
+      "when": {
+        "powered_back": true,
+        "delay": 128
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_256",
+      "when": {
+        "powered_back": true,
+        "delay": 256
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_512",
+      "when": {
+        "powered_back": true,
+        "delay": 512
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_1_on",
+      "when": {
+        "powered_back": false,
+        "delay": 1
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_2_on",
+      "when": {
+        "powered_back": false,
+        "delay": 2
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_3_on",
+      "when": {
+        "powered_back": false,
+        "delay": 3
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_4_on",
+      "when": {
+        "powered_back": false,
+        "delay": 4
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_8_on",
+      "when": {
+        "powered_back": false,
+        "delay": 8
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_16_on",
+      "when": {
+        "powered_back": false,
+        "delay": 16
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_32_on",
+      "when": {
+        "powered_back": false,
+        "delay": 32
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_64_on",
+      "when": {
+        "powered_back": false,
+        "delay": 64
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_128_on",
+      "when": {
+        "powered_back": false,
+        "delay": 128
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_256_on",
+      "when": {
+        "powered_back": false,
+        "delay": 256
+      }
+    },
+    {
+      "model": "bluepower:block/repeater/torch_512_on",
+      "when": {
+        "powered_back": false,
+        "delay": 512
+      }
+    }
+  ],
+  "particle": "bluepower:blocks/gates/gate"
+}

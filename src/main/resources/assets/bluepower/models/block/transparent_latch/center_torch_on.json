@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/transparent_latch/center_torch",
+    "textures": {
+        "torch_center": "bluepower:blocks/bluestone_torch_on"
+    }
+}

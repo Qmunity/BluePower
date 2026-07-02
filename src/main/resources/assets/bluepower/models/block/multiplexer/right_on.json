@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/multiplexer/right",
+    "textures": {
+        "bluestone_right": "bluepower:base/bluestone_on"
+    }
+}

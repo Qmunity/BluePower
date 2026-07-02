@@ -1,0 +1,7 @@
+{
+    "parent": "bluepower:block/synchronizer/right_silicon_chip_z",
+    "textures": {
+        "bluestone_front": "bluepower:base/bluestone_off",
+        "silicon_chip": "bluepower:blocks/gates/components/silicon_chip_on"
+    }
+}
