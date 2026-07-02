@@ -32,11 +32,8 @@ public class TileRepeater extends TileGate {
 
     public void cycleDelay(){
         switch (delay){
-            case 1 -> delay = 2;
-            case 2 -> delay = 3;
-            case 3 -> delay = 4;
-            case 4, 8, 16, 32, 64, 128 -> delay *= 2;
-            case 256 -> delay = 1024;
+            case 1, 2, 3 -> delay++;
+            case 4, 8, 16, 32, 64, 128, 256 -> delay *= 2;
             default -> delay = 1;
         }
         markBlockForUpdate();
