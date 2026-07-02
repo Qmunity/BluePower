@@ -1,0 +1,37 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"bluestone_back": "bluepower:base/bluestone_off",
+		"silicon_chip": "bluepower:blocks/gates/components/tainted_silicon_chip_off",
+		"particle": "bluepower:blocks/gates/gate"
+	},
+	"elements": [
+		{
+			"name": "TopWire",
+			"from": [12, 2, 7],
+			"to": [16, 2.5, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 0.5], "texture": "#bluestone_back"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"south": {"uv": [0, 0, 4, 0.5], "texture": "#bluestone_back"},
+				"up": {"uv": [0, 0, 1, 4], "rotation": 90, "texture": "#bluestone_back"}
+			}
+		},
+		{
+			"name": "Chip",
+			"from": [8.5, 3.5, 6],
+			"to": [11.5, 4, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 2, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
+				"east": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
+				"south": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
+				"west": {"uv": [0, 0, 3, 0.5], "texture": "#silicon_chip"},
+				"up": {"uv": [6, 4.5, 10, 8.5], "rotation": 90, "texture": "#silicon_chip"}
+			}
+		}
+	]
+}

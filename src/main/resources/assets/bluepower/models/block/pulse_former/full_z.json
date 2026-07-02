@@ -1,0 +1,31 @@
+{
+  "loader": "bluepower:gate",
+  "models": [
+    "bluepower:block/pulse_former/base_z",
+    {
+      "model": "bluepower:block/pulse_former/back_z",
+      "when": {
+        "powered_back": false
+      }
+    },
+    {
+      "model": "bluepower:block/pulse_former/back_on_z",
+      "when": {
+        "powered_back": true
+      }
+    },
+    {
+      "model": "bluepower:block/pulse_former/front_z",
+      "when": {
+        "powered_front": false
+      }
+    },
+    {
+      "model": "bluepower:block/pulse_former/front_on_z",
+      "when": {
+        "powered_front": true
+      }
+    }
+  ],
+  "particle": "bluepower:blocks/gates/gate"
+}

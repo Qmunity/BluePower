@@ -1,0 +1,7 @@
+{
+    "parent": "bluepower:block/synchronizer/front_z",
+    "textures": {
+        "bluestone_front": "bluepower:base/bluestone_on",
+        "torch_front": "bluepower:blocks/bluestone_torch_on"
+    }
+}

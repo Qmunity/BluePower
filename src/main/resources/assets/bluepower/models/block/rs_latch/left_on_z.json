@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/rs_latch/left_z",
+    "textures": {
+        "bluestone_left": "bluepower:base/bluestone_on"
+    }
+}

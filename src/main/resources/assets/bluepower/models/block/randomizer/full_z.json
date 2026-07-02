@@ -1,0 +1,55 @@
+{
+  "loader": "bluepower:gate",
+  "models": [
+    "bluepower:block/randomizer/base_z",
+    {
+      "model": "bluepower:block/randomizer/back_z",
+      "when": {
+        "powered_back": false
+      }
+    },
+    {
+      "model": "bluepower:block/randomizer/back_on_z",
+      "when": {
+        "powered_back": true
+      }
+    },
+    {
+      "model": "bluepower:block/randomizer/front_z",
+      "when": {
+        "powered_front": false
+      }
+    },
+    {
+      "model": "bluepower:block/randomizer/front_on_z",
+      "when": {
+        "powered_front": true
+      }
+    },
+    {
+      "model": "bluepower:block/randomizer/left_z",
+      "when": {
+        "powered_left": false
+      }
+    },
+    {
+      "model": "bluepower:block/randomizer/left_on_z",
+      "when": {
+        "powered_left": true
+      }
+    },
+    {
+      "model": "bluepower:block/randomizer/right_z",
+      "when": {
+        "powered_right": false
+      }
+    },
+    {
+      "model": "bluepower:block/randomizer/right_on_z",
+      "when": {
+        "powered_right": true
+      }
+    }
+  ],
+  "particle": "bluepower:blocks/gates/gate"
+}

@@ -16,6 +16,7 @@ import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.util.MultipartUtils;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -55,6 +56,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.registries.ForgeRegistries.Keys;
+import net.minecraftforge.registries.MissingMappingsEvent;
 import org.joml.Matrix4f;
 
 public class BPEventHandler {
@@ -256,6 +259,28 @@ public class BPEventHandler {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void remapBlocks(final MissingMappingsEvent event){
+        for (var mapping : event.getMappings(Keys.BLOCKS, Refs.MODID)){
+            if (mapping.getKey().getPath().equals("gate_and")){
+                mapping.remap(BPBlocks.blockGateAND.get());
+                continue;
+            }
+            if (mapping.getKey().getPath().equals("gate_nand")){
+                mapping.remap(BPBlocks.blockGateNAND.get());
+            }
+        }
+        for (var mapping : event.getMappings(Keys.ITEMS, Refs.MODID)){
+            if (mapping.getKey().getPath().equals("gate_and")){
+                mapping.remap(BPBlocks.blockGateAND.get().asItem());
+                continue;
+            }
+            if (mapping.getKey().getPath().equals("gate_nand")){
+                mapping.remap(BPBlocks.blockGateNAND.get().asItem());
             }
         }
     }

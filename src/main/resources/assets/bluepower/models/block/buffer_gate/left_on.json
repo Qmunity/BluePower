@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/buffer_gate/left",
+    "textures": {
+        "bluestone_right": "bluepower:base/bluestone_on"
+    }
+}

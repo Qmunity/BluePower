@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/or_gate/right",
+    "textures": {
+        "bluestone_right": "bluepower:base/bluestone_on"
+    }
+}

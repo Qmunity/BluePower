@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/xor_gate/right",
+    "textures": {
+        "bluestone_right": "bluepower:base/bluestone_on"
+    }
+}

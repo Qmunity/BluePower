@@ -82,8 +82,6 @@ public class TileBase extends BlockEntity implements IRotatable {
 
     protected void readFromPacketNBT(CompoundTag tCompound) {
         outputtingRedstone = tCompound.getByte("outputtingRedstone");
-        if (level != null)
-            markForRenderUpdate();
     }
 
     @Nullable
@@ -93,23 +91,41 @@ public class TileBase extends BlockEntity implements IRotatable {
     }
 
     @Override
+    public CompoundTag getUpdateTag() {
+        CompoundTag updateTag = super.getUpdateTag();
+        writeToPacketNBT(updateTag);
+        return updateTag;
+    }
+
+    @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         if(pkt.getTag() != null) {
             readFromPacketNBT(pkt.getTag());
             handleUpdateTag(pkt.getTag());
+            markForRenderUpdate();
         }
     }
 
     protected void sendUpdatePacket() {
 
-        if (!level.isClientSide)
-        level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
+        if (!level.isClientSide) {
+            level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
+        }
     }
 
     protected void markForRenderUpdate() {
-
-        if (level != null)
+        if (level != null) {
             level.setBlocksDirty(getBlockPos(), getBlockState(), getBlockState());
+            if (level.isClientSide()){
+                getLevel().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 11);
+                getLevel().getModelDataManager().requestRefresh(this);
+            }
+        }
+    }
+
+    protected void markBlockForUpdate(){
+        this.setChanged();
+        getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
     }
 
     protected void notifyNeighborBlockUpdate() {

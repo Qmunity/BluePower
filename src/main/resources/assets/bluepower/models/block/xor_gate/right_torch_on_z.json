@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/xor_gate/right_torch_z",
+    "textures": {
+        "torch_right": "bluepower:blocks/bluestone_torch_on"
+    }
+}

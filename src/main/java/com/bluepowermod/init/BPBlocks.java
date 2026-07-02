@@ -20,7 +20,19 @@ package com.bluepowermod.init;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.*;
-import com.bluepowermod.block.gates.BlockGateBase;
+import com.bluepowermod.block.gates.BlockGateAnd;
+import com.bluepowermod.block.gates.BlockGateBuffer;
+import com.bluepowermod.block.gates.BlockGateMultiplexer;
+import com.bluepowermod.block.gates.BlockGateNot;
+import com.bluepowermod.block.gates.BlockGateOr;
+import com.bluepowermod.block.gates.BlockGatePulseFormer;
+import com.bluepowermod.block.gates.BlockGateRSLatch;
+import com.bluepowermod.block.gates.BlockGateRandomizer;
+import com.bluepowermod.block.gates.BlockGateRepeater;
+import com.bluepowermod.block.gates.BlockGateSynchronizer;
+import com.bluepowermod.block.gates.BlockGateToggleLatch;
+import com.bluepowermod.block.gates.BlockGateTransparentLatch;
+import com.bluepowermod.block.gates.BlockGateXor;
 import com.bluepowermod.block.gates.BlockNullCell;
 import com.bluepowermod.block.lighting.BlockLampRGBSurface;
 import com.bluepowermod.block.lighting.BlockLampSurface;
@@ -269,19 +281,42 @@ public class BPBlocks {
 
 
 
-    public static final RegistryObject<Block> blockGateAND = BLOCKS.register("gate_and", BlockGateBase::new);
-    public static final RegistryObject<Block> blockNullCell = BLOCKS.register("gate_nullcell", BlockNullCell::new);
-     public static final RegistryObject<Block> blockGateNAND = BLOCKS.register("gate_nand",() -> new BlockGateBase(){
-         @Override
-         public byte computeRedstone(BlockGateBase.Side side, byte back, byte front, byte left, byte right){
-             return (byte)((left == 0 || right == 0 || back == 0 ) ?  16 : 0);
-         }
-     });
+    public static final RegistryObject<Block> blockGateAND = BLOCKS.register("and_gate", () -> new BlockGateAnd(false));
+    public static final RegistryObject<Block> blockGateNOT = BLOCKS.register("not_gate", BlockGateNot::new);
+    public static final RegistryObject<Block> blockGateOR = BLOCKS.register("or_gate", () -> new BlockGateOr(false));
+    public static final RegistryObject<Block> blockNullCell = BLOCKS.register("null_cell", BlockNullCell::new);
+    public static final RegistryObject<Block> blockGateNAND = BLOCKS.register("nand_gate",() -> new BlockGateAnd(true));
+    public static final RegistryObject<Block> blockGateNOR = BLOCKS.register("nor_gate", () -> new BlockGateOr(true));
+    public static final RegistryObject<Block> blockGateBUFFER = BLOCKS.register("buffer_gate", BlockGateBuffer::new);
+    public static final RegistryObject<Block> blockGateXOR = BLOCKS.register("xor_gate", () -> new BlockGateXor(false));
+    public static final RegistryObject<Block> blockGateXNOR = BLOCKS.register("xnor_gate", () -> new BlockGateXor(true));
+    public static final RegistryObject<Block> blockMultiplexer = BLOCKS.register("multiplexer", BlockGateMultiplexer::new);
+    public static final RegistryObject<Block> blockPulseFormer = BLOCKS.register("pulse_former", BlockGatePulseFormer::new);
+    public static final RegistryObject<Block> blockRandomizer = BLOCKS.register("randomizer", BlockGateRandomizer::new);
+    public static final RegistryObject<Block> blockToggleLatch = BLOCKS.register("toggle_latch", BlockGateToggleLatch::new);
+    public static final RegistryObject<Block> blockRSLatch = BLOCKS.register("rs_latch", BlockGateRSLatch::new);
+    public static final RegistryObject<Block> blockRepeater = BLOCKS.register("repeater", BlockGateRepeater::new);
+    public static final RegistryObject<Block> blockTransparentLatch = BLOCKS.register("transparent_latch", BlockGateTransparentLatch::new);
+    public static final RegistryObject<Block> blockSynchronizer = BLOCKS.register("synchronizer", BlockGateSynchronizer::new);
 
     static{
         BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNOT.getKey().location().getPath(), () -> new BlockItem(blockGateNOT.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateOR.getKey().location().getPath(), () -> new BlockItem(blockGateOR.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockGateNAND.getKey().location().getPath(), () -> new BlockItem(blockGateNAND.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNOR.getKey().location().getPath(), () -> new BlockItem(blockGateNOR.get(), new Item.Properties()));
         BPItems.ITEMS.register(blockNullCell.getKey().location().getPath(), () -> new BlockItem(blockNullCell.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateBUFFER.getKey().location().getPath(), () -> new BlockItem(blockGateBUFFER.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateXOR.getKey().location().getPath(), () -> new BlockItem(blockGateXOR.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateXNOR.getKey().location().getPath(), () -> new BlockItem(blockGateXNOR.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockMultiplexer.getKey().location().getPath(), () -> new BlockItem(blockMultiplexer.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockPulseFormer.getKey().location().getPath(), () -> new BlockItem(blockPulseFormer.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockRandomizer.getKey().location().getPath(), () -> new BlockItem(blockRandomizer.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockToggleLatch.getKey().location().getPath(), () -> new BlockItem(blockToggleLatch.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockRSLatch.getKey().location().getPath(), () -> new BlockItem(blockRSLatch.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockRepeater.getKey().location().getPath(), () -> new BlockItem(blockRepeater.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockTransparentLatch.getKey().location().getPath(), () -> new BlockItem(blockTransparentLatch.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockSynchronizer.getKey().location().getPath(), () -> new BlockItem(blockSynchronizer.get(), new Item.Properties()));
     }
 
      public static final RegistryObject<Block> blockRedAlloyWire = BLOCKS.register(RedwireType.RED_ALLOY.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true));

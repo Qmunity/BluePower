@@ -1,0 +1,7 @@
+{
+    "parent": "bluepower:block/nor_gate/back",
+    "textures": {
+        "bluestone_back": "bluepower:base/disabled"
+    }
+} }
+}
