@@ -22,6 +22,14 @@ archivesBaseName = "bluepower"
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 repositories {
+    //Needed for intellij
+    maven {
+        name = 'sponge'
+        url = 'https://repo.spongepowered.org/repository/maven-public/'
+        content {
+            includeGroup "org.spongepowered"
+        }
+    }
     maven {
         // location of the maven that hosts Jade/WAILA files
         url "https://www.cursemaven.com"
@@ -61,10 +69,16 @@ legacyForge {
     }
 }
 
+mixin {
+    add sourceSets.main, "bluepower.refmap.json"
+    config "bluepower.mixins.json"
+}
+
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     modCompileOnly("curse.maven:jade-324717:${jade_version}")
+    annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
     implementation("org.jetbrains:annotations:26.0.1")
     modCompileOnly("mezz.jei:jei-${project.minecraft_version}-forge:${jei_version}")
     modRuntimeOnly("mezz.jei:jei-${project.minecraft_version}-forge:${jei_version}")
@@ -91,13 +105,26 @@ tasks.named('jar', Jar).configure {
                     "Implementation-Title": project.name,
                     "Implementation-Version": project.jar.archiveVersion,
                     "Implementation-Vendor" :"qmunity",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    "MixinConfigs" : "bluepower.mixins.json"
+        ],)
     }
     archiveAppendix = "${project.ext.mcVersion}"
     archiveClassifier = "universal"
 }
 
 task deobfJar(type: Jar) {
+    manifest {
+        attributes(["Specification-Title": "bluepower",
+                    "Specification-Vendor": "qmunity",
+                    "Specification-Version": "28.0",
+                    "Implementation-Title": project.name,
+                    "Implementation-Version": project.jar.archiveVersion,
+                    "Implementation-Vendor" :"qmunity",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    "MixinConfigs" : "bluepower.mixins.json"
+        ],)
+    }
     from(sourceSets.main.output) {
         archiveAppendix = "${project.ext.mcVersion}"
         archiveClassifier = "deobf"
