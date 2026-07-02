@@ -1,5 +1,5 @@
 {
-    "parent": "bluepower:block/repeater/torch_1024_z",
+    "parent": "bluepower:block/repeater/torch_512_z",
     "textures": {
         "torch": "bluepower:blocks/bluestone_torch_on"
     }
