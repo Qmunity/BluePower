@@ -97,10 +97,10 @@
       }
     },
     {
-      "model": "bluepower:block/repeater/torch_1024_z",
+      "model": "bluepower:block/repeater/torch_512_z",
       "when": {
         "powered_back": true,
-        "delay": 1024
+        "delay": 512
       }
     },
     {
@@ -174,10 +174,10 @@
       }
     },
     {
-      "model": "bluepower:block/repeater/torch_1024_on_z",
+      "model": "bluepower:block/repeater/torch_512_on_z",
       "when": {
         "powered_back": false,
-        "delay": 1024
+        "delay": 512
       }
     }
   ],
