@@ -35,7 +35,7 @@ public class BlockGateRepeater extends BlockGateBase{
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         TileGate gate = getGateTile(state, level.getBlockEntity(pos));
         if (gate instanceof TileRepeater repeater){
-            repeater.cycleDelay();
+            repeater.cycleDelay(player.isCrouching());
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
         return super.use(state, level, pos, player, hand, hit);

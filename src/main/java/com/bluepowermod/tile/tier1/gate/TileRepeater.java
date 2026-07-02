@@ -30,11 +30,19 @@ public class TileRepeater extends TileGate {
         return delay;
     }
 
-    public void cycleDelay(){
-        switch (delay){
-            case 1, 2, 3 -> delay++;
-            case 4, 8, 16, 32, 64, 128, 256 -> delay *= 2;
-            default -> delay = 1;
+    public void cycleDelay(boolean shift){
+        if (!shift) {
+            switch (delay){
+                case 1,2,3 -> delay ++;
+                case 4, 8, 16, 32, 64, 128, 256 -> delay *= 2;
+                default -> delay = 1;
+            }
+        } else {
+            switch (delay){
+                case 4,3,2 -> delay--;
+                case 512, 256, 128, 64, 32, 16, 8 -> delay /= 2;
+                default -> delay = 512;
+            }
         }
         markBlockForUpdate();
     }
