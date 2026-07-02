@@ -213,6 +213,20 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         }
     }
 
+    @Override
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        int light = 0;
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof TileBPMultipart multipart){
+            for (BlockState s : multipart.getStates()) {
+                int sLight = s.getLightEmission(level, pos);
+                if (sLight > light) light = sLight;
+            }
+        }
+
+        return light;
+    }
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
