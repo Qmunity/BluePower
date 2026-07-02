@@ -75,7 +75,7 @@ public class MultipartUtils {
         double distance = Double.POSITIVE_INFINITY;
         if(te instanceof TileBPMultipart) {
             for (BlockState part : ((TileBPMultipart) te).getStates()) {
-                BlockHitResult res = part.getVisualShape(world, pos, CollisionContext.empty()).clip(start, end, pos);
+                BlockHitResult res = part.getShape(world, pos, CollisionContext.empty()).clip(start, end, pos);
                 if (res != null) {
                     double partDistance = start.distanceToSqr(res.getLocation());
                     if(distance > partDistance) {
