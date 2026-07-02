@@ -1,4 +1,5 @@
 {
+    "loader": "bluepower:wire",
     "textures": {
         "wire": "bluepower:blocks/wire/wire",
         "particle": "bluepower:blocks/wire/wire"
