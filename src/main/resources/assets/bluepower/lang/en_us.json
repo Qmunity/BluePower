@@ -817,6 +817,8 @@
   "waila.bluepower:repeater.delay": "Delay",
   "waila.bluepower:repeater.ticks": "tick(s)",
 
+  "info.bluepower.repeater.delay": "Delay: %s tick(s)",
+
   "bluepower.accessability.public": "Public",
   "bluepower.accessability.shared": "Shared",
   "bluepower.accessability.private": "Private",

@@ -4,6 +4,7 @@ import com.bluepowermod.tile.tier1.gate.TileGate;
 import com.bluepowermod.tile.tier1.gate.TileRepeater;
 import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -36,6 +37,7 @@ public class BlockGateRepeater extends BlockGateBase{
         TileGate gate = getGateTile(state, level.getBlockEntity(pos));
         if (gate instanceof TileRepeater repeater){
             repeater.cycleDelay(player.isCrouching());
+            player.displayClientMessage(Component.translatable("info.bluepower.repeater.delay", repeater.getDelay()), true);
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
         return super.use(state, level, pos, player, hand, hit);
