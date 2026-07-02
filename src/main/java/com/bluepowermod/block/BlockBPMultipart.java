@@ -205,6 +205,14 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         return RenderShape.MODEL;
     }
 
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof TileBPMultipart multipart){
+            multipart.getStates().forEach(s -> s.getBlock().animateTick(s, level, pos, random));
+        }
+    }
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
