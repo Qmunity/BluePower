@@ -112,6 +112,16 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        BlockEntity te = level.getBlockEntity(pos);
+        if(te instanceof TileBPMultipart tileBPMultipart){
+            return tileBPMultipart.getCollisionShape();
+        }
+        //Shouldn't be required but allows the player to walk through an empty multipart
+        return Shapes.empty();
+    }
+
+    @Override
     public VoxelShape getInteractionShape(BlockState state, BlockGetter level, BlockPos pos) {
         BlockEntity te = level.getBlockEntity(pos);
         if(te instanceof TileBPMultipart tileBPMultipart){
