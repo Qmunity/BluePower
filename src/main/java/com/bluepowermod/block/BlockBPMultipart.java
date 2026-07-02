@@ -93,6 +93,17 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         if (stateIn.getValue(WATERLOGGED)) {
             worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
+        if (worldIn.getBlockEntity(currentPos) instanceof TileBPMultipart multipart){
+            List<BlockState> toRemove = new ArrayList<>();
+            for (BlockState state : multipart.getStates()){
+                if (!state.canSurvive(worldIn, currentPos)){
+                    toRemove.add(state);
+                }
+            }
+            for (BlockState r : toRemove){
+                multipart.removeState(r);
+            }
+        }
         return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
