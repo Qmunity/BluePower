@@ -44,14 +44,6 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     protected static final EnumProperty<ConnectionType> CONNECTION_TYPE_BACK = EnumProperty.create("connection_type_back", ConnectionType.class);
     protected static final EnumProperty<ConnectionType> CONNECTION_TYPE_LEFT = EnumProperty.create("connection_type_left", ConnectionType.class);
     protected static final EnumProperty<ConnectionType> CONNECTION_TYPE_RIGHT = EnumProperty.create("connection_type_right", ConnectionType.class);
-    protected static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
-    protected static final BooleanProperty CONNECTED_BACK = BooleanProperty.create("connected_back");
-    protected static final BooleanProperty CONNECTED_LEFT = BooleanProperty.create("connected_left");
-    protected static final BooleanProperty CONNECTED_RIGHT = BooleanProperty.create("connected_right");
-    public static final BooleanProperty JOIN_FRONT = BooleanProperty.create("join_front");
-    public static final BooleanProperty JOIN_BACK = BooleanProperty.create("join_back");
-    public static final BooleanProperty JOIN_LEFT = BooleanProperty.create("join_left");
-    public static final BooleanProperty JOIN_RIGHT = BooleanProperty.create("join_right");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected final VoxelShape[] shapes;
 
