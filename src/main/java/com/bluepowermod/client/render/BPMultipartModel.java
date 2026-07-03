@@ -14,6 +14,7 @@ import com.bluepowermod.util.MultipartUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.ModelBlockRenderer.AmbientOcclusionFace;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
@@ -32,7 +33,9 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.extensions.IForgeBakedModel;
 import net.minecraftforge.client.model.QuadTransformers;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.pipeline.QuadBakingVertexConsumer;
@@ -41,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Uses Multipart IModelData to create a model.
@@ -61,21 +65,33 @@ public class BPMultipartModel implements BakedModel {
             return stateInfo.keySet().stream().flatMap(
                     i -> {
                         BakedModel model = brd.getBlockModel(i);
-                        List<BakedQuad> list = new ArrayList<>();
                         ModelData mData = stateInfo.get(i);
                         if (mData == null) mData = ModelData.EMPTY;
+                        ChunkRenderTypeSet renderTypes = model.getRenderTypes(i, rand, mData);
+                        if (!renderTypes.contains(renderType)) return Stream.of();
                         ModelData finalMData = mData;
-                        for (RenderType rType : model.getRenderTypes(i, rand, mData)){
-                            list.addAll(model.getQuads(i, side, rand, mData, rType).stream().map(
-                                    q -> finalMData.has(TileWire.COLOR_INFO) ? transform(level, i, pos, side, q, finalMData.get(TileWire.COLOR_INFO), finalMData.has(TileWire.LIGHT_INFO) ? finalMData.get(TileWire.LIGHT_INFO) : false, shape, bitSet) : q
-                            ).toList());
-                        }
+                        List<BakedQuad> list = new ArrayList<>(model.getQuads(i, side, rand, mData, renderType).stream().map(
+                                q -> finalMData.has(TileWire.COLOR_INFO) ? transform(level, i, pos, side, q, finalMData.get(TileWire.COLOR_INFO), finalMData.has(TileWire.LIGHT_INFO) ? finalMData.get(TileWire.LIGHT_INFO) : false, shape, bitSet) : q
+                        ).toList());
                         return list.stream();
                     }
             ).collect(Collectors.toList());
         }else{
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
+        BlockRenderDispatcher brd = Minecraft.getInstance().getBlockRenderer();
+        Set<RenderType> renderTypes = new HashSet<>();
+        Map<BlockState, ModelData> stateInfo = data.get(TileBPMultipart.STATE_INFO);
+        if (stateInfo == null) return ItemBlockRenderTypes.getRenderLayers(state);
+        stateInfo.forEach((s, d) -> {
+            BakedModel model = brd.getBlockModel(s);
+            renderTypes.addAll(model.getRenderTypes(s, rand, d).asList());
+        });
+        return ChunkRenderTypeSet.of(renderTypes);
     }
 
     @Override

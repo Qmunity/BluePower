@@ -18,6 +18,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -43,6 +45,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -90,6 +93,17 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
         if (stateIn.getValue(WATERLOGGED)) {
             worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
+        if (worldIn.getBlockEntity(currentPos) instanceof TileBPMultipart multipart){
+            List<BlockState> toRemove = new ArrayList<>();
+            for (BlockState state : multipart.getStates()){
+                if (!state.canSurvive(worldIn, currentPos)){
+                    toRemove.add(state);
+                }
+            }
+            for (BlockState r : toRemove){
+                multipart.removeState(r);
+            }
+        }
         return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
@@ -109,6 +123,16 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        BlockEntity te = level.getBlockEntity(pos);
+        if(te instanceof TileBPMultipart tileBPMultipart){
+            return tileBPMultipart.getCollisionShape();
+        }
+        //Shouldn't be required but allows the player to walk through an empty multipart
+        return Shapes.empty();
+    }
+
+    @Override
     public VoxelShape getInteractionShape(BlockState state, BlockGetter level, BlockPos pos) {
         BlockEntity te = level.getBlockEntity(pos);
         if(te instanceof TileBPMultipart tileBPMultipart){
@@ -122,11 +146,11 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     public boolean onDestroyedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
         BlockState partState = MultipartUtils.getClosestState(player, pos);
         BlockEntity te = world.getBlockEntity(pos);
-        if(partState != null && partState.getBlock() instanceof IBPPartBlock && te instanceof TileBPMultipart) {
+        if(partState != null && partState.getBlock() instanceof IBPPartBlock partBlock && te instanceof TileBPMultipart bpMultipart) {
             //Remove Selected Part
-            ((TileBPMultipart) te).removeState(partState);
+            bpMultipart.removeState(partState);
             //Call onMultipartReplaced
-            ((IBPPartBlock)partState.getBlock()).onMultipartReplaced(partState, world, pos, state, false);
+            partBlock.onMultipartReplaced(partState, world, pos, state, false);
             //Play Break Sound
             world.playSound(null, pos, SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
             return false;
@@ -144,11 +168,21 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        BlockState partState = MultipartUtils.getClosestState(player, pos);
+        if (partState != null){
+            InteractionResult result = partState.use(level, player, hand, hit);
+            if (result != InteractionResult.PASS) return result;
+        }
+        return super.use(state, level, pos, player, hand, hit);
+    }
+
+    @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         BlockEntity tileentity = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         List<ItemStack> itemStacks = new ArrayList<>();
-        if (tileentity instanceof TileBPMultipart) {
-            ((TileBPMultipart) tileentity).getStates().forEach(s -> itemStacks.addAll(s.getBlock().getDrops(s, builder)));
+        if (tileentity instanceof TileBPMultipart bp) {
+            bp.getStates().forEach(s -> itemStacks.addAll(s.getBlock().getDrops(s, builder)));
         }
         return itemStacks;
     }
@@ -156,12 +190,37 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     @Override
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
         BlockEntity te = world.getBlockEntity(pos);
-        if(te instanceof TileBPMultipart) {
-            ((TileBPMultipart) te).getStates().forEach(s -> s.neighborChanged(world, pos, blockIn, fromPos, bool));
+        if(te instanceof TileBPMultipart bp) {
+            bp.getStates().forEach(s -> s.neighborChanged(world, pos, blockIn, fromPos, bool));
         }
     }
 
     @Override
+    public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        int[] signal = {0};
+        BlockEntity te = level.getBlockEntity(pos);
+        if(te instanceof TileBPMultipart bp) {
+            bp.getStates().forEach(s -> {
+                int partSignal = s.getSignal(level, pos, direction);
+                if (partSignal > signal[0]) signal[0] = partSignal;
+            });
+        }
+        return signal[0];
+    }
+
+    @Override
+    public int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        int[] signal = {0};
+        BlockEntity te = level.getBlockEntity(pos);
+        if(te instanceof TileBPMultipart bp) {
+            bp.getStates().forEach(s -> {
+                int partSignal = s.getDirectSignal(level, pos, direction);
+                if (partSignal > signal[0]) signal[0] = partSignal;
+            });
+        }
+        return signal[0];
+    }
+
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         BlockEntity te = level.getBlockEntity(pos);
         if(te instanceof TileBPMultipart bp) {
@@ -172,6 +231,28 @@ public class BlockBPMultipart extends BaseEntityBlock implements SimpleWaterlogg
     @Override
     public RenderShape getRenderShape(BlockState state){
         return RenderShape.MODEL;
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof TileBPMultipart multipart){
+            multipart.getStates().forEach(s -> s.getBlock().animateTick(s, level, pos, random));
+        }
+    }
+
+    @Override
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        int light = 0;
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof TileBPMultipart multipart){
+            for (BlockState s : multipart.getStates()) {
+                int sLight = s.getLightEmission(level, pos);
+                if (sLight > light) light = sLight;
+            }
+        }
+
+        return light;
     }
 
     @Nullable
