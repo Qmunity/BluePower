@@ -19,8 +19,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.RedstoneTorchBlock;
+import net.minecraft.world.level.block.RedstoneWallTorchBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -109,7 +111,11 @@ public class MultipartUtils {
         final int[] signal = new int[]{-1};
         if (level.getBlockEntity(pos) instanceof TileBPMultipart multipart){
             multipart.getStates().forEach(s -> {
-                if (s.getBlock() instanceof RedstoneTorchBlock || s.getBlock() instanceof LeverBlock){
+                if ((s.getBlock() instanceof RedstoneWallTorchBlock && s.getValue(RedstoneWallTorchBlock.FACING) == direction.getOpposite())
+                        || (s.getBlock() instanceof LeverBlock && (s.getValue(LeverBlock.FACING) == direction.getOpposite()
+                                        || (s.getValue(LeverBlock.FACE) == AttachFace.CEILING && direction == Direction.UP)
+                                        || (s.getValue(LeverBlock.FACE) == AttachFace.FLOOR && direction == Direction.DOWN)
+                        ))){
                     int partSignal = s.getSignal(level, pos, direction);
                     if (partSignal > 0 && partSignal > signal[0]) signal[0] = partSignal;
                 }
