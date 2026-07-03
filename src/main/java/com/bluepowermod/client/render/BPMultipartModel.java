@@ -44,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Uses Multipart IModelData to create a model.
@@ -66,6 +67,8 @@ public class BPMultipartModel implements BakedModel {
                         BakedModel model = brd.getBlockModel(i);
                         ModelData mData = stateInfo.get(i);
                         if (mData == null) mData = ModelData.EMPTY;
+                        ChunkRenderTypeSet renderTypes = model.getRenderTypes(i, rand, mData);
+                        if (!renderTypes.contains(renderType)) return Stream.of();
                         ModelData finalMData = mData;
                         List<BakedQuad> list = new ArrayList<>(model.getQuads(i, side, rand, mData, renderType).stream().map(
                                 q -> finalMData.has(TileWire.COLOR_INFO) ? transform(level, i, pos, side, q, finalMData.get(TileWire.COLOR_INFO), finalMData.has(TileWire.LIGHT_INFO) ? finalMData.get(TileWire.LIGHT_INFO) : false, shape, bitSet) : q
