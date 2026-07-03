@@ -26,7 +26,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nullable;
 
 public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock, EntityBlock {
-    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     final String type;
 
     @Nullable
@@ -43,13 +42,11 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
     public BlockAlloyWire(String type) {
         super(1,2F);
         this.type = type;
-        this.registerDefaultState(super.defaultBlockState().setValue(POWERED, false));
     }
 
     public BlockAlloyWire(String type, float width, float height) {
         super(width, height);
         this.type = type;
-        this.registerDefaultState(super.defaultBlockState().setValue(POWERED, false));
     }
 
     @Override
@@ -74,11 +71,6 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
         if (wire == null) return state;
         wire.getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY).ifPresent(r -> r.setRedstonePower(null, (byte) redstoneValue));
         return state;
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
-        builder.add(FACING, POWERED, CONNECTION_TYPE_FRONT, CONNECTION_TYPE_BACK, CONNECTION_TYPE_LEFT, CONNECTION_TYPE_RIGHT, WATERLOGGED);
     }
 
     @Override

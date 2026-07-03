@@ -49,7 +49,7 @@ public class TileWire extends TileBase {
 
             //Add Color and Light Data
             Pair<Integer, Integer> colorData = Pair.of(((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, -1), ((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, 2));
-            Boolean lightData = state.getValue(BlockAlloyWire.POWERED);
+            Boolean lightData = redstoneCap.map(r -> r.getRedstonePower(null) > 0).orElse(false);
 
             return ModelData.builder().with(COLOR_INFO, colorData).with(LIGHT_INFO, lightData).build();
 
