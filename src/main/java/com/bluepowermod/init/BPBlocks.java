@@ -319,8 +319,8 @@ public class BPBlocks {
         BPItems.ITEMS.register(blockSynchronizer.getKey().location().getPath(), () -> new ItemBPPart(blockSynchronizer.get(), new Item.Properties()));
     }
 
-     public static final RegistryObject<Block> blockRedAlloyWire = BLOCKS.register(RedwireType.RED_ALLOY.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true));
-     public static final RegistryObject<Block> blockBlueAlloyWire = BLOCKS.register( RedwireType.BLUESTONE.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.BLUESTONE.getName()).setWIP(true));
+     public static final RegistryObject<Block> blockRedAlloyWire = BLOCKS.register(RedwireType.RED_ALLOY.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.RED_ALLOY).setWIP(true));
+     public static final RegistryObject<Block> blockBlueAlloyWire = BLOCKS.register( RedwireType.BLUESTONE.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.BLUESTONE).setWIP(true));
 
      public static RegistryObject<Block> sortron;
 

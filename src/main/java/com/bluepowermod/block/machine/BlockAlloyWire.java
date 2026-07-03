@@ -26,7 +26,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nullable;
 
 public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock, EntityBlock {
-    final String type;
+    final RedwireType type;
 
     @Nullable
     @Override
@@ -39,12 +39,12 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
         return CapabilityRedstoneDevice.UNINSULATED_CAPABILITY;
     }
 
-    public BlockAlloyWire(String type) {
+    public BlockAlloyWire(RedwireType type) {
         super(1,2F);
         this.type = type;
     }
 
-    public BlockAlloyWire(String type, float width, float height) {
+    public BlockAlloyWire(RedwireType type, float width, float height) {
         super(width, height);
         this.type = type;
     }
@@ -74,6 +74,14 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
     }
 
     @Override
+    protected boolean isNeighborStateEquivalent(BlockState state, BlockEntity be, BlockState neighborState, BlockEntity neighborBE) {
+        if (neighborState.getBlock() instanceof BlockAlloyWire wire){
+            if (wire.type.equals(type)) return true;
+        }
+        return super.isNeighborStateEquivalent(state, be, neighborState, neighborBE);
+    }
+
+    @Override
     protected BlockState updateState(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean movedByPiston) {
         state = super.updateState(state, level, pos, blockIn, fromPos, movedByPiston);
         int redstoneValue = level.getBestNeighborSignal(pos);
@@ -87,12 +95,12 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
 
     @Override
     public int getColor(BlockState state, BlockGetter w, BlockPos pos, int tint) {
-        return RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
+        return RedwireType.RED_ALLOY.equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
     }
 
     @Override
     public int getColor(ItemStack stack, int tint) {
-        return RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
+        return RedwireType.RED_ALLOY.equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
     }
 
 }

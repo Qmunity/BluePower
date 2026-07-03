@@ -21,7 +21,7 @@ import java.util.List;
 
 public class BlockInsulatedAlloyWire extends BlockAlloyWire{
 
-    public BlockInsulatedAlloyWire(String type) {
+    public BlockInsulatedAlloyWire(RedwireType type) {
         super(type, 2F , 2F);
     }
 
@@ -73,7 +73,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
         if(tile instanceof TileWire && tintIndex == 1) {
             return tile.getCapability(CapabilityRedstoneDevice.INSULATED_CAPABILITY).orElse(null).getInsulationColor(null).getHex();
         }
-        return RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
+        return RedwireType.RED_ALLOY.equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire{
         MinecraftColor color = MinecraftColor.BLUE;
         if(stack.getTag() != null && stack.getTag().contains("color"))
             color = MinecraftColor.valueOf(stack.getTag().getString("color"));
-        return tintIndex == 1 ? color.getHex() : tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
+        return tintIndex == 1 ? color.getHex() : tintIndex == 2 ? RedwireType.RED_ALLOY.equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
     }
 
 }
