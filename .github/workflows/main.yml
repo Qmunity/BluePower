@@ -12,4 +12,4 @@ jobs:
         run: |
           git remote remove gitlab 2>/dev/null || true
           git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/Quetzi/BluePower.git
-          git push --force --prune gitlab +refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/*
+          git push --force gitlab +refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/*
