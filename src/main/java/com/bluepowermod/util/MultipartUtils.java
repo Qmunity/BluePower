@@ -8,6 +8,7 @@
 
 package com.bluepowermod.util;
 
+import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.gates.BlockGateBase.Side;
 import com.bluepowermod.tile.TileBPMultipart;
@@ -16,14 +17,21 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LeverBlock;
+import net.minecraft.world.level.block.RedstoneTorchBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
+
+import java.util.Optional;
+
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
 
 /**
  * @author MoreThanHidden
@@ -93,6 +101,31 @@ public class MultipartUtils {
 
     public static byte getRedstonePower(Side side, BlockState state, Level level, BlockPos pos){
         Direction direction = BlockGateBase.toDirection(side, state);
-        return (byte) level.getSignal(pos.relative(direction), direction);
+        return getRedstonePower(direction, state.getValue(FACING), level, pos);
+    }
+
+    public static byte getRedstonePower(Direction direction, Direction face, Level level, BlockPos pos){
+        BlockPos neighborPos = pos.relative(direction);
+        final int[] signal = new int[]{-1};
+        if (level.getBlockEntity(pos) instanceof TileBPMultipart multipart){
+            multipart.getStates().forEach(s -> {
+                if (s.getBlock() instanceof RedstoneTorchBlock || s.getBlock() instanceof LeverBlock){
+                    int partSignal = s.getSignal(level, pos, direction);
+                    if (partSignal > 0 && partSignal > signal[0]) signal[0] = partSignal;
+                }
+            });
+        }
+        BlockState neighborState = level.getBlockState(neighborPos);
+        if (neighborState.getBlock() instanceof BlockBPMultipart){
+            if (level.getBlockEntity(neighborPos) instanceof TileBPMultipart multipart){
+                Optional<BlockState> partState = multipart.getStates().stream().filter(s -> s.hasProperty(FACING) && s.getValue(FACING) == face).findFirst();
+                if (partState.isPresent()){
+                    int partSignal = partState.get().getSignal(level, neighborPos, direction);
+                    if (partSignal > signal[0]) signal[0] = partSignal;
+                }
+            }
+        }
+        if (signal[0] >=0) return (byte) signal[0];
+        return (byte) level.getSignal(neighborPos, direction);
     }
 }
