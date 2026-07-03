@@ -175,6 +175,10 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+        updateState(state, level, pos, blockIn, fromPos, bool);
+    }
+
+    protected BlockState updateState(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean movedByPiston){
         BlockEntity te = level.getBlockEntity(pos);
         //Get new state based on surrounding capabilities
         BlockState newState = getStateForPos(level, pos, defaultBlockState().setValue(FACING, state.getValue(FACING)), state.getValue(FACING));
@@ -196,7 +200,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                 level.destroyBlock(pos, true);
             }
         }
-
+        return state;
     }
 
     @Override
