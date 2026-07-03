@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "ItemsMixin",
+    "LeverBlockMixin",
     "RedstoneWallTorchMixin"
   ],
   "minVersion": "0.8",
