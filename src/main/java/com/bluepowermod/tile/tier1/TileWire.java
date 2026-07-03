@@ -19,6 +19,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,13 +44,18 @@ public class TileWire extends TileBase {
     }
 
 
+    public @NotNull ModelData getModelData(){
+        Boolean lightData = device.getRedstonePower(null) > 0;
+        return ModelData.builder().with(LIGHT_INFO, lightData).build();
+    }
+
     @Nonnull
     @OnlyIn(Dist.CLIENT)
     public ModelData getModelData(BlockState state) {
 
             //Add Color and Light Data
             Pair<Integer, Integer> colorData = Pair.of(((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, -1), ((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, 2));
-            Boolean lightData = redstoneCap.map(r -> r.getRedstonePower(null) > 0).orElse(false);
+            Boolean lightData = device.getRedstonePower(null) > 0;
 
             return ModelData.builder().with(COLOR_INFO, colorData).with(LIGHT_INFO, lightData).build();
 

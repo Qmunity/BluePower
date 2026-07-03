@@ -123,7 +123,7 @@ public class TileBase extends BlockEntity implements IRotatable {
         }
     }
 
-    protected void markBlockForUpdate(){
+    public void markBlockForUpdate(){
         this.setChanged();
         getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
     }

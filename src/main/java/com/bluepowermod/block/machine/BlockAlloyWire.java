@@ -70,6 +70,7 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
         BlockEntity wire = be instanceof TileBPMultipart multipart ? multipart.getTileForState(state) : be;
         if (wire == null) return state;
         wire.getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY).ifPresent(r -> r.setRedstonePower(null, (byte) redstoneValue));
+        if (wire instanceof TileWire wire1) wire1.markBlockForUpdate();
         return state;
     }
 
