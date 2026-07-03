@@ -209,9 +209,12 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     }
 
     //Returns true if a given blockState / tileEntity can connect.
-    protected boolean canConnect(Level world, BlockPos pos, BlockState state, @Nullable BlockEntity tileEntity, Direction direction){
+    protected boolean canConnect(Level world, BlockPos pos, BlockState state, @Nullable BlockEntity tileEntity, Direction connectDir, Direction sideToCompare){
+        if (state.getBlock() == this && state.getValue(FACING) == sideToCompare){
+            return true;
+        }
         if (tileEntity != null) {
-            return tileEntity.getCapability(getCapability(), direction).isPresent();
+            return tileEntity.getCapability(getCapability(), connectDir).isPresent();
         }else{
             return false;
         }
@@ -236,26 +239,24 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
             if (neighborState.getBlock() == Blocks.AIR){
                 neighbor = neighbor.relative(face.getOpposite());
                 neighborState = world.getBlockState(neighbor);
+                if (neighborState.getBlock() != this) continue;
                 neighborTile = world.getBlockEntity(neighbor);
                 outerCorner = true;
             }
             Direction compare = outerCorner ? side : face;
-            if (neighborState.getBlock() == this){
-                Direction nFace = neighborState.getValue(FACING);
-                if (nFace == compare){
-                    connections[i] = outerCorner ? ConnectionType.OUTER_CORNER : ConnectionType.STRAIGHT;
-                }
+            if (canConnect(world, neighbor, neighborState, neighborTile, side, compare)){
+                connections[i] = outerCorner && neighborState.getBlock() == this ? ConnectionType.OUTER_CORNER : ConnectionType.STRAIGHT;
             } else if (neighborTile instanceof TileBPMultipart neighborMultipart){
                 for (BlockState s : neighborMultipart.getStates()){
-                    if (s.getBlock() == this && s.getValue(FACING) == compare){
+                    if (canConnect(world, neighbor, s, neighborMultipart.getTileForState(s), side, compare)){
                         connections[i] = outerCorner ? ConnectionType.OUTER_CORNER : ConnectionType.STRAIGHT;
                         break;
                     }
                 }
             } else if (multipart != null){
                 for (BlockState s : multipart.getStates()){
-                    if (s.getBlock() == this && s.getValue(FACING) == side.getOpposite()){
-                        connections[i] = ConnectionType.INNER_CORNER;
+                    if (canConnect(world, pos, s, multipart.getTileForState(s), face, side.getOpposite())){
+                        connections[i] = s.getBlock() == this ? ConnectionType.INNER_CORNER : ConnectionType.STRAIGHT;
                         break;
                     }
                 }
