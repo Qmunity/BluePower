@@ -217,8 +217,8 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
         }
     }
 
-    protected boolean isNeighborStateEquivalent(BlockState neighborState, BlockEntity neighborBE){
-        return neighborState.getBlock() == this;
+    protected boolean isNeighborStateEquivalent(BlockState state, BlockEntity be, BlockState neighborState, BlockEntity neighborBE){
+        return neighborState.getBlock() == state.getBlock();
     }
 
     private BlockState getStateForPos(Level world, BlockPos pos, BlockState state, Direction face){
@@ -229,6 +229,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
         TileBPMultipart multipart = null;
         if (ownTile instanceof TileBPMultipart bpMultipart){
             multipart = bpMultipart;
+            ownTile = multipart.getTileForState(state);
         }
         outer:
         for (int i = 0; i < 4; i++){
@@ -238,7 +239,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                     continue;
                 }
                 for (BlockState s : multipart.getStates()){
-                    if (isNeighborStateEquivalent(s, multipart.getTileForState(s))){
+                    if (isNeighborStateEquivalent(state, ownTile, s, multipart.getTileForState(s))){
                         if (s.getValue(FACING) == side.getOpposite()){
                             connections[i] = s.getBlock() == this ? ConnectionType.INNER_CORNER : ConnectionType.STRAIGHT;
                             continue outer;
@@ -250,38 +251,48 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
             BlockPos neighbor = pos.relative(side);
             BlockState neighborState = world.getBlockState(neighbor);
             BlockEntity neighborTile = world.getBlockEntity(neighbor);
-            boolean outerCorner = false;
-            if (neighborState.getBlock() == Blocks.AIR){
-                neighbor = neighbor.relative(face.getOpposite());
-                neighborState = world.getBlockState(neighbor);
-                neighborTile = world.getBlockEntity(neighbor);
-                if (neighborTile instanceof TileBPMultipart multipart1){
-                    for (BlockState s : multipart1.getStates()){
-                        if (isNeighborStateEquivalent(s, multipart1.getTileForState(s)) && s.getValue(FACING) == side){
-                            connections[i] = ConnectionType.OUTER_CORNER;
-                            continue outer;
-                        }
-                    }
+            boolean checkAroundCorner = false;
+            if (isNeighborStateEquivalent(state, ownTile, neighborState, neighborTile)){
+                if (neighborState.getValue(FACING) == face) {
+                    connections[i] = ConnectionType.STRAIGHT;
+                    continue;
                 }
-                if (!isNeighborStateEquivalent(neighborState, neighborTile)) continue;
-                outerCorner = true;
-            }
-            Direction compare = outerCorner ? side : face;
-            if (isNeighborStateEquivalent(neighborState, neighborTile)){
-                if (neighborState.getValue(FACING) == compare){
-                    connections[i] = outerCorner ? ConnectionType.OUTER_CORNER : ConnectionType.STRAIGHT;
-                }
+                checkAroundCorner = true;
+            } else if (neighborState.getBlock() == Blocks.AIR){
+                checkAroundCorner = true;
             } else if (neighborTile instanceof TileBPMultipart neighborMultipart){
                 if (neighborMultipart.isSideBlocked(getCapability(), side.getOpposite())) {
                     continue;
                 }
                 for (BlockState s : neighborMultipart.getStates()){
-                    if (isNeighborStateEquivalent(s, neighborMultipart.getTileForState(s)) && neighborState.getValue(FACING) == compare){
-                        connections[i] = outerCorner ? ConnectionType.OUTER_CORNER : ConnectionType.STRAIGHT;
-                        continue outer;
+                    BlockEntity partBE = neighborMultipart.getTileForState(s);
+                    if (isNeighborStateEquivalent(state, ownTile, s, partBE)) {
+                        if (s.getValue(FACING) == side) {
+                            connections[i] = ConnectionType.STRAIGHT;
+                            continue outer;
+                        } else {
+                            checkAroundCorner = true;
+                        }
                     }
                 }
-            } else if (canConnect(world, pos, state, ownTile, side)){
+            }
+            if (checkAroundCorner){
+                neighbor = neighbor.relative(face.getOpposite());
+                neighborState = world.getBlockState(neighbor);
+                neighborTile = world.getBlockEntity(neighbor);
+                if (neighborTile instanceof TileBPMultipart multipart1){
+                    for (BlockState s : multipart1.getStates()){
+                        if (isNeighborStateEquivalent(state, ownTile, s, multipart1.getTileForState(s)) && s.getValue(FACING) == side){
+                            connections[i] = ConnectionType.OUTER_CORNER;
+                            continue outer;
+                        }
+                    }
+                }
+                if (!isNeighborStateEquivalent(state, ownTile, neighborState, neighborTile) || neighborState.getValue(FACING) != side) continue;
+                connections[i] = ConnectionType.OUTER_CORNER;
+                continue;
+            }
+            if (canConnect(world, pos, state, ownTile, side)){
                 connections[i] = ConnectionType.STRAIGHT;
             }
         }
