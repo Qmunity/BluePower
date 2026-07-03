@@ -50,9 +50,20 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
     }
 
     @Override
-    public int getSignal(BlockState pState, BlockGetter pLevel, BlockPos pPos, Direction pDirection) {
+    public int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        return getSignal(state, level, pos, direction);
+    }
 
-        return MathHelper.map(((TileWire)pLevel.getBlockEntity(pPos)).getOutputtingRedstone() & 0xFF, 0, 255, 0, 15);
+    @Override
+    public int getSignal(BlockState pState, BlockGetter pLevel, BlockPos pPos, Direction pDirection) {
+        BlockEntity ownTile = pLevel.getBlockEntity(pPos);
+        if (ownTile instanceof TileBPMultipart multipart){
+            ownTile = multipart.getTileForState(pState);
+        }
+        if (ownTile instanceof TileWire wire){
+            return MathHelper.map(wire.getOutputtingRedstone() & 0xFF, 0, 255, 0, 15);
+        }
+        return 0;
     }
 
     @Override
