@@ -217,7 +217,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
         }
     }
 
-    protected boolean isNeighborStateEquivalent(BlockState neighborState){
+    protected boolean isNeighborStateEquivalent(BlockState neighborState, BlockEntity neighborBE){
         return neighborState.getBlock() == this;
     }
 
@@ -238,7 +238,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                     continue;
                 }
                 for (BlockState s : multipart.getStates()){
-                    if (isNeighborStateEquivalent(s)){
+                    if (isNeighborStateEquivalent(s, multipart.getTileForState(s))){
                         if (s.getValue(FACING) == side.getOpposite()){
                             connections[i] = s.getBlock() == this ? ConnectionType.INNER_CORNER : ConnectionType.STRAIGHT;
                             continue outer;
@@ -254,12 +254,12 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
             if (neighborState.getBlock() == Blocks.AIR){
                 neighbor = neighbor.relative(face.getOpposite());
                 neighborState = world.getBlockState(neighbor);
-                if (!isNeighborStateEquivalent(neighborState)) continue;
                 neighborTile = world.getBlockEntity(neighbor);
+                if (!isNeighborStateEquivalent(neighborState, neighborTile)) continue;
                 outerCorner = true;
             }
             Direction compare = outerCorner ? side : face;
-            if (isNeighborStateEquivalent(neighborState)){
+            if (isNeighborStateEquivalent(neighborState, neighborTile)){
                 if (neighborState.getValue(FACING) == compare){
                     connections[i] = outerCorner ? ConnectionType.OUTER_CORNER : ConnectionType.STRAIGHT;
                 }
@@ -268,7 +268,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                     continue;
                 }
                 for (BlockState s : neighborMultipart.getStates()){
-                    if (isNeighborStateEquivalent(s) && neighborState.getValue(FACING) == compare){
+                    if (isNeighborStateEquivalent(s, neighborMultipart.getTileForState(s)) && neighborState.getValue(FACING) == compare){
                         connections[i] = outerCorner ? ConnectionType.OUTER_CORNER : ConnectionType.STRAIGHT;
                         continue outer;
                     }
