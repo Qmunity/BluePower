@@ -136,6 +136,7 @@ public class Renderers {
     @SubscribeEvent
     public void onRegisterGeometryLoadersEvent(RegisterGeometryLoaders event){
         event.register("gate", new GateModelLoader());
+        event.register("wire", new BPWireModelLoader());
     }
 
     @SubscribeEvent
