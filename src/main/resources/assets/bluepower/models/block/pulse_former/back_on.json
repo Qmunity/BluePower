@@ -1,0 +1,9 @@
+{
+    "parent": "bluepower:block/pulse_former/back",
+    "textures": {
+        "bluestone_back": "bluepower:base/bluestone_on",
+        "torch_left": "bluepower:blocks/bluestone_torch_off",
+        "bluestone_center": "bluepower:base/bluestone_off",
+        "torch_right": "bluepower:blocks/bluestone_torch_on"
+    }
+}

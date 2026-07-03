@@ -1,0 +1,41 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"torch_front": "bluepower:blocks/bluestone_torch_off"
+	},
+	"elements": [
+		{
+			"name": "Torch_Front",
+			"from": [7, 2, 2],
+			"to": [9, 5, 4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -5.5]},
+			"faces": {
+				"up": {"uv": [7, 6, 9, 8], "texture": "#torch_front"}
+			}
+		},
+		{
+			"name": "Front",
+			"from": [7, 2, 1],
+			"to": [9, 6, 5],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -5.5]},
+			"faces": {
+				"east": {"uv": [6, 5, 10, 9], "texture": "#torch_front"},
+				"west": {"uv": [6, 5, 10, 9], "texture": "#torch_front"}
+			}
+		},
+		{
+			"name": "Front",
+			"from": [6, 2, 2],
+			"to": [10, 6, 4],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -5.5]},
+			"faces": {
+				"north": {"uv": [6, 5, 10, 9], "texture": "#torch_front"},
+				"south": {"uv": [6, 5, 10, 9], "texture": "#torch_front"}
+			}
+		}
+	]
+}

@@ -1,0 +1,73 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"bluestone_back": "bluepower:base/bluestone_off",
+		"particle": "bluepower:blocks/gates/gate"
+	},
+	"elements": [
+		{
+			"name": "TopWire",
+			"from": [7.5, 2, 14],
+			"to": [8.5, 2.5, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"east": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_back"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"west": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_back"},
+				"up": {"uv": [0, 0, 1, 2], "texture": "#bluestone_back"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [4.5, 2, 12],
+			"to": [5.5, 2.5, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-3, 0, -3]},
+			"faces": {
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"up": {"uv": [0, 0, 1, 1], "texture": "#bluestone_back"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [5.5, 2, 13],
+			"to": [7.5, 2.5, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-2, 0, -2]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_back"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"south": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_back"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"up": {"uv": [0, 0, 2, 1], "texture": "#bluestone_back"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [8.5, 2, 13],
+			"to": [10.5, 2.5, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1, 0, -2]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_back"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"south": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_back"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"up": {"uv": [0, 0, 2, 1], "texture": "#bluestone_back"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [10.5, 2, 12],
+			"to": [11.5, 2.5, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3, 0, -3]},
+			"faces": {
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_back"},
+				"up": {"uv": [0, 0, 1, 1], "texture": "#bluestone_back"}
+			}
+		}
+	]
+}

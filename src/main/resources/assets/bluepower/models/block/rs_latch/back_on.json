@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/rs_latch/back",
+    "textures": {
+        "torch_back": "bluepower:blocks/bluestone_torch_on"
+    }
+}

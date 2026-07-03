@@ -23,7 +23,6 @@ import com.bluepowermod.reference.Refs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -64,8 +63,22 @@ public class BPCreativeTabs {
             event.acceptAll(BPBlocks.machines.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
             event.accept(BPBlocks.blulectric_cable.get());
             event.accept(BPBlocks.blockGateAND.get());
+            event.accept(BPBlocks.blockGateNOT.get());
+            event.accept(BPBlocks.blockGateOR.get());
             event.accept(BPBlocks.blockGateNAND.get());
+            event.accept(BPBlocks.blockGateNOR.get());
+            event.accept(BPBlocks.blockGateBUFFER.get());
+            event.accept(BPBlocks.blockGateXOR.get());
+            event.accept(BPBlocks.blockGateXNOR.get());
             event.accept(BPBlocks.blockNullCell.get());
+            event.accept(BPBlocks.blockMultiplexer.get());
+            event.accept(BPBlocks.blockPulseFormer.get());
+            event.accept(BPBlocks.blockRandomizer.get());
+            event.accept(BPBlocks.blockToggleLatch.get());
+            event.accept(BPBlocks.blockRSLatch.get());
+            event.accept(BPBlocks.blockRepeater.get());
+            event.accept(BPBlocks.blockTransparentLatch.get());
+            event.accept(BPBlocks.blockSynchronizer.get());
         }else if(event.getTab() == lighting.get()){
             event.acceptAll(BPBlocks.allLamps.stream().map(block -> new ItemStack(block.get())).collect(Collectors.toList()));
         }else if(event.getTab() == microblocks.get()){

@@ -1,0 +1,15 @@
+name: Mirror to GitLab
+on:
+  push:
+jobs:
+  gitlab-mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push to GitLab
+        run: |
+          git remote remove gitlab 2>/dev/null || true
+          git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/Quetzi/BluePower.git
+          git push --force gitlab +refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/*

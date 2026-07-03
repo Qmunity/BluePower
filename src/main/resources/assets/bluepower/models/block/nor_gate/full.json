@@ -1,0 +1,79 @@
+{
+  "loader": "bluepower:gate",
+  "models": [
+    "bluepower:block/nor_gate/base",
+    {
+      "model": "bluepower:block/nor_gate/back",
+      "when": {
+        "powered_back": false,
+        "disabled_back": false
+      }
+    },
+    {
+      "model": "bluepower:block/nor_gate/back_on",
+      "when": {
+        "powered_back": true,
+        "disabled_back": false
+      }
+    },
+    {
+      "model": "bluepower:block/nor_gate/back_disabled",
+      "when": {
+        "disabled_back": true
+      }
+    },
+    {
+      "model": "bluepower:block/nor_gate/front",
+      "when": {
+        "powered_front": false
+      }
+    },
+    {
+      "model": "bluepower:block/nor_gate/front_on",
+      "when": {
+        "powered_front": true
+      }
+    },
+    {
+      "model": "bluepower:block/nor_gate/left",
+      "when": {
+        "powered_left": false,
+        "disabled_left": false
+      }
+    },
+    {
+      "model": "bluepower:block/nor_gate/left_on",
+      "when": {
+        "powered_left": true,
+        "disabled_left": false
+      }
+    },
+    {
+      "model": "bluepower:block/nor_gate/left_disabled",
+      "when": {
+        "disabled_left": true
+      }
+    },
+    {
+      "model": "bluepower:block/nor_gate/right",
+      "when": {
+        "powered_right": false,
+        "disabled_right": false
+      }
+    },
+    {
+      "model": "bluepower:block/nor_gate/right_on",
+      "when": {
+        "powered_right": true,
+        "disabled_right": false
+      }
+    },
+    {
+      "model": "bluepower:block/nor_gate/right_disabled",
+      "when": {
+        "disabled_right": true
+      }
+    }
+  ],
+  "particle": "bluepower:blocks/gates/gate"
+}

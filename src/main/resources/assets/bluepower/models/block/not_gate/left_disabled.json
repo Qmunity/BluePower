@@ -1,0 +1,7 @@
+{
+    "parent": "bluepower:block/not_gate/left",
+    "textures": {
+        "bluestone_out": "bluepower:base/disabled"
+    }
+} }
+}

@@ -1,0 +1,55 @@
+{
+  "loader": "bluepower:gate",
+  "models": [
+    "bluepower:block/rs_latch/base_z",
+    {
+      "model": "bluepower:block/rs_latch/back_z",
+      "when": {
+        "powered_back": false
+      }
+    },
+    {
+      "model": "bluepower:block/rs_latch/back_on_z",
+      "when": {
+        "powered_back": true
+      }
+    },
+    {
+      "model": "bluepower:block/rs_latch/front_z",
+      "when": {
+        "powered_front": false
+      }
+    },
+    {
+      "model": "bluepower:block/rs_latch/front_on_z",
+      "when": {
+        "powered_front": true
+      }
+    },
+    {
+      "model": "bluepower:block/rs_latch/left_z",
+      "when": {
+        "powered_left": false
+      }
+    },
+    {
+      "model": "bluepower:block/rs_latch/left_on_z",
+      "when": {
+        "powered_left": true
+      }
+    },
+    {
+      "model": "bluepower:block/rs_latch/right_z",
+      "when": {
+        "powered_right": false
+      }
+    },
+    {
+      "model": "bluepower:block/rs_latch/right_on_z",
+      "when": {
+        "powered_right": true
+      }
+    }
+  ],
+  "particle": "bluepower:blocks/gates/gate"
+}

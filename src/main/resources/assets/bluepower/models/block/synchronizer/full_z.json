@@ -1,0 +1,79 @@
+{
+  "loader": "bluepower:gate",
+  "models": [
+    "bluepower:block/synchronizer/base_z",
+    {
+      "model": "bluepower:block/synchronizer/back_z",
+      "when": {
+        "powered_back": false
+      }
+    },
+    {
+      "model": "bluepower:block/synchronizer/back_on_z",
+      "when": {
+        "powered_back": true
+      }
+    },
+    {
+      "model": "bluepower:block/synchronizer/front_z",
+      "when": {
+        "powered_front": false
+      }
+    },
+    {
+      "model": "bluepower:block/synchronizer/front_on_z",
+      "when": {
+        "powered_front": true
+      }
+    },
+    {
+      "model": "bluepower:block/synchronizer/left_z",
+      "when": {
+        "powered_left": false
+      }
+    },
+    {
+      "model": "bluepower:block/synchronizer/left_on_z",
+      "when": {
+        "powered_left": true
+      }
+    },
+    {
+      "model": "bluepower:block/synchronizer/right_z",
+      "when": {
+        "powered_right": false
+      }
+    },
+    {
+      "model": "bluepower:block/synchronizer/right_on_z",
+      "when": {
+        "powered_right": true
+      }
+    },
+    {
+      "model": "bluepower:block/synchronizer/left_silicon_chip_z",
+      "when": {
+        "left_chip_powered": false
+      }
+    },
+    {
+      "model": "bluepower:block/synchronizer/left_silicon_chip_on_z",
+      "when": {
+        "left_chip_powered": true
+      }
+    },
+    {
+      "model": "bluepower:block/synchronizer/right_silicon_chip_z",
+      "when": {
+        "right_chip_powered": false
+      }
+    },
+    {
+      "model": "bluepower:block/synchronizer/right_silicon_chip_on_z",
+      "when": {
+        "right_chip_powered": true
+      }
+    }
+  ],
+  "particle": "bluepower:blocks/gates/gate"
+}

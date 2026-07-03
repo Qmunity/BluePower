@@ -56,6 +56,7 @@ public class TileBPMultipart extends BlockEntity {
     public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
     private Map<BlockState, BlockEntity> stateMap = new HashMap<>();
     VoxelShape shape = null;
+    VoxelShape collisionShape = null;
 
     public TileBPMultipart(BlockPos pos, BlockState state) {
         super(BPBlockEntityType.MULTIPART.get(), pos, state);
@@ -89,10 +90,14 @@ public class TileBPMultipart extends BlockEntity {
         BlockEntity tile = null;
         if (state.getBlock() instanceof EntityBlock entityBlock){
             tile = entityBlock.newBlockEntity(worldPosition, state);
+            if (tile != null) {
+                tile.setLevel(level);
+            }
         }
         this.stateMap.put(state, tile);
         state.getBlock().setPlacedBy(level, worldPosition, state,  null, new ItemStack(state.getBlock()));
         shape = null;
+        collisionShape = null;
         markDirtyClient();
     }
 
@@ -110,6 +115,7 @@ public class TileBPMultipart extends BlockEntity {
         //Remove State
         this.stateMap.remove(state);
         shape = null;
+        collisionShape = null;
         markDirtyClient();
         if(stateMap.size() == 1) {
             //Convert back to Standalone Block
@@ -163,22 +169,38 @@ public class TileBPMultipart extends BlockEntity {
         return new ArrayList<>(stateMap.keySet());
     }
 
-    private void recalculateShape(){
-        shape = Block.box(6,6,6,10,10,10);
+    private void recalculateShape(boolean collision){
+        if (collision) {
+            collisionShape = Shapes.empty();
+        } else {
+            shape = Block.box(6,6,6,10,10,10);
+        }
         List<VoxelShape> shapeList = new ArrayList<>();
         if (level != null) {
-            getStates().forEach(s -> shapeList.add(s.getShape(this.level, this.worldPosition)));
+            getStates().forEach(s -> shapeList.add(collision ? s.getCollisionShape(this.level, this.worldPosition) : s.getShape(this.level, this.worldPosition)));
         }
 
-        if(!shapeList.isEmpty())
-            shape = shapeList.stream().reduce(shapeList.get(0), Shapes::or);
+        if(!shapeList.isEmpty()) {
+            if (collision) {
+                collisionShape = shapeList.stream().reduce(shapeList.get(0), Shapes::or);
+            } else {
+                shape = shapeList.stream().reduce(shapeList.get(0), Shapes::or);
+            }
+        }
     }
 
     public VoxelShape getShape() {
         if (shape == null) {
-            recalculateShape();
+            recalculateShape(false);
         }
         return shape;
+    }
+
+    public VoxelShape getCollisionShape() {
+        if (collisionShape == null) {
+            recalculateShape(true);
+        }
+        return collisionShape;
     }
 
 
@@ -218,6 +240,9 @@ public class TileBPMultipart extends BlockEntity {
                 if (state.getBlock() instanceof EntityBlock entityBlock){
                     tile = entityBlock.newBlockEntity(worldPosition, state);
                     if (tile != null) {
+                        if (this.level != null) {
+                            tile.setLevel(this.level);
+                        }
                         tile.load(compound.getCompound("tile" + i));
                     }
 
@@ -227,6 +252,7 @@ public class TileBPMultipart extends BlockEntity {
         }
         this.stateMap = states;
         shape = null;
+        collisionShape = null;
         markDirtyClient();
     }
 
@@ -252,6 +278,7 @@ public class TileBPMultipart extends BlockEntity {
             // Update if needed
             if (!getStates().equals(states)) {
                 shape = null;
+                collisionShape = null;
                 level.blockEntityChanged(getBlockPos());
             }
         }
@@ -262,6 +289,7 @@ public class TileBPMultipart extends BlockEntity {
         stateMap.remove(state);
         stateMap.put(newState, te);
         shape = null;
+        collisionShape = null;
         markDirtyClient();
     }
 
