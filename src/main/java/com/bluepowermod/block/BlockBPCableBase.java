@@ -87,6 +87,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     @Override
     public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, ItemStack itemStack) {
         super.setPlacedBy(worldIn, pos, state, livingEntity, itemStack);
+        updateState(state, worldIn, pos, state.getBlock(), pos, false);
         FACING.getPossibleValues().forEach(f -> {
             BlockPos neighborPos = pos.relative(f).relative(state.getValue(FACING).getOpposite());
             worldIn.getBlockState(neighborPos).neighborChanged(worldIn, neighborPos, state.getBlock(), pos, false);
@@ -336,7 +337,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return getStateForPos(context.getLevel(), context.getClickedPos(), defaultBlockState().setValue(FACING, context.getClickedFace()), context.getClickedFace());
+        return defaultBlockState().setValue(FACING, context.getClickedFace());
     }
 
     @Override
