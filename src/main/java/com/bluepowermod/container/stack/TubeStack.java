@@ -269,11 +269,7 @@ public class TubeStack implements IItemHandler {
             poseStack.popPose();
         } else {
             float size = 0.02F;
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glBegin(GL11.GL_QUADS);
-            RenderHelper.drawColoredCube(new AABB(-size, -size, -size, size, size, size), 1, 1, 1, 1);
-            GL11.glEnd();
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            //TODO: RenderHelper.drawColoredCube(new AABB(-size, -size, -size, size, size, size), poseStack, 1, 1, 1, 1);
         }
 
         if (color != TubeColor.NONE) {
