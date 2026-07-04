@@ -1,0 +1,22 @@
+﻿{
+  "result": {
+    "id": "bluepower:or_gate"
+  },
+  "pattern": [
+    "TCT",
+    "WCW",
+    "TWT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "C": {
+      "item": "bluepower:bluestone_cathode_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    }
+  }
+}

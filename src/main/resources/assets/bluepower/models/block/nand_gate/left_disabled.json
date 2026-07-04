@@ -1,0 +1,7 @@
+{
+    "parent": "bluepower:block/nand_gate/left",
+    "textures": {
+        "bluestone_left": "bluepower:base/disabled",
+        "torch_left": "bluepower:blocks/bluestone_torch_off"
+    }
+}

@@ -16,9 +16,11 @@ import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.util.MultipartUtils;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -258,6 +260,28 @@ public class BPEventHandler {
         }
     }
 
+    @SubscribeEvent
+    public void remapBlocks(final MissingMappingsEvent event){
+        for (var mapping : event.getMappings(Keys.BLOCKS, Refs.MODID)){
+            if (mapping.getKey().getPath().equals("gate_and")){
+                mapping.remap(BPBlocks.blockGateAND.get());
+                continue;
+            }
+            if (mapping.getKey().getPath().equals("gate_nand")){
+                mapping.remap(BPBlocks.blockGateNAND.get());
+            }
+        }
+        for (var mapping : event.getMappings(Keys.ITEMS, Refs.MODID)){
+            if (mapping.getKey().getPath().equals("gate_and")){
+                mapping.remap(BPBlocks.blockGateAND.get().asItem());
+                continue;
+            }
+            if (mapping.getKey().getPath().equals("gate_nand")){
+                mapping.remap(BPBlocks.blockGateNAND.get().asItem());
+            }
+        }
+    }
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void blockHighlightEvent(RenderHighlightEvent.Block event) {
@@ -275,16 +299,13 @@ public class BPEventHandler {
                 VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
                 if(partstate != null) {
                     VoxelShape shape = partstate.getShape(world, pos, CollisionContext.of(player));
+                    VertexConsumer vertexconsumer = event.getMultiBufferSource().getBuffer(RenderType.lines());
                     Vec3 projectedView = event.getCamera().getPosition();
                     double d0 = pos.getX() - projectedView.x();
                     double d1 = pos.getY() - projectedView.y();
                     double d2 = pos.getZ() - projectedView.z();
-                    Matrix4f matrix4f = event.getPoseStack().last().pose();
-                    shape.forAllEdges((startX, startY, startZ, endX, endY, endZ) -> {
-                        builder.addVertex(matrix4f, (float)(startX + d0), (float)(startY + d1), (float)(startZ + d2)).setColor(0.0F, 0.0F, 0.0F, 0.4F).setNormal(0.0F, 0.0F, 0.0F);
-                        builder.addVertex(matrix4f, (float)(endX + d0), (float)(endY + d1), (float)(endZ + d2)).setColor(0.0F, 0.0F, 0.0F, 0.4F).setNormal(0.0F, 0.0F, 0.0F);
-                    });
-                    ((ICancellableEvent)event).setCanceled(true);
+                    LevelRenderer.renderVoxelShape(event.getPoseStack(), vertexconsumer, shape, d0, d1, d2, 0, 0, 0, 0.4f, false);
+                    event.setCanceled(true);
                 }
             }
         }

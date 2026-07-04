@@ -124,7 +124,7 @@ public class WorldGenVolcano extends Feature<NoneFeatureConfiguration> {
         if (world.isEmptyBlock(new BlockPos(x, y, z)))
             return true;
         Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
-        return block instanceof LeavesBlock || block instanceof CactusBlock || block instanceof RotatedPillarBlock || block instanceof GrassBlock
+        return block instanceof LeavesBlock || block instanceof CactusBlock || block instanceof RotatedPillarBlock || block instanceof TallGrassBlock
                 || block instanceof FlowerBlock || block == Blocks.WATER;
     }
 

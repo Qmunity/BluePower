@@ -1,0 +1,47 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"bluestone_left": "bluepower:base/bluestone_off",
+		"particle": "bluepower:blocks/gates/gate"
+	},
+	"elements": [
+		{
+			"name": "TopWire",
+			"from": [6.5, 2, 1],
+			"to": [7.5, 2.5, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"east": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"up": {"uv": [0, 0, 1, 1], "rotation": 90, "texture": "#bluestone_left"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [5.5, 2, 1],
+			"to": [6.5, 2.5, 3],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"east": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_left"},
+				"west": {"uv": [0, 0, 2, 0.5], "texture": "#bluestone_left"},
+				"up": {"uv": [0, 0, 2, 1], "rotation": 90, "texture": "#bluestone_left"}
+			}
+		},
+		{
+			"name": "TopWire",
+			"from": [7.5, 2, 0],
+			"to": [8.5, 2.5, 1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"south": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"west": {"uv": [0, 0, 1, 0.5], "texture": "#bluestone_left"},
+				"up": {"uv": [0, 0, 1, 1], "rotation": 90, "texture": "#bluestone_left"}
+			}
+		}
+	]
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/nand_gate/front_z",
+    "textures": {
+        "bluestone_front": "bluepower:base/bluestone_on"
+    }
+}

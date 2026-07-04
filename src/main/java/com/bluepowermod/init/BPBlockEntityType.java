@@ -12,6 +12,10 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMicroblock;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.*;
+import com.bluepowermod.tile.tier1.gate.TileGate;
+import com.bluepowermod.tile.tier1.gate.TileRandomizer;
+import com.bluepowermod.tile.tier1.gate.TileRepeater;
+import com.bluepowermod.tile.tier1.gate.TileSynchronizer;
 import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.*;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,6 +24,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.stream.Collectors;
 /**
  * @author MoreThanHidden
  */
@@ -56,6 +61,10 @@ public class BPBlockEntityType {
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<TileLamp>> LAMP = BLOCK_ENTITY_TYPE.register(Refs.LAMP_NAME, () -> BlockEntityType.Builder.of(TileLamp::new, BPBlocks.allLamps.stream().map(DeferredHolder::get).toList().toArray(new Block[0])).build(null));
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<TileBPMultipart>> MULTIPART = BLOCK_ENTITY_TYPE.register(Refs.MULTIPART_NAME, () -> BlockEntityType.Builder.of(TileBPMultipart::new, BPBlocks.multipart.get()).build(null));
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<TileTransposer>> TRANSPOSER = BLOCK_ENTITY_TYPE.register(Refs.TRANSPOSER_NAME, () -> BlockEntityType.Builder.of(TileTransposer::new, BPBlocks.transposer.get()).build(null));
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<TileGate>> GATE = BLOCK_ENTITY_TYPE.register("gate", () -> BlockEntityType.Builder.of(TileGate::new, BPBlocks.blockGateAND.get(), BPBlocks.blockGateNAND.get(), BPBlocks.blockGateBUFFER.get(), BPBlocks.blockGateOR.get(), BPBlocks.blockGateNOR.get(), BPBlocks.blockGateNOT.get(), BPBlocks.blockGateXNOR.get(), BPBlocks.blockGateXOR.get(), BPBlocks.blockRSLatch.get(), BPBlocks.blockToggleLatch.get(), BPBlocks.blockPulseFormer.get(), BPBlocks.blockMultiplexer.get(), BPBlocks.blockTransparentLatch.get()).build(null));
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<TileRepeater>> REPEATER = BLOCK_ENTITY_TYPE.register("repeater", () -> BlockEntityType.Builder.of(TileRepeater::new, BPBlocks.blockRepeater.get()).build(null));
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<TileSynchronizer>> SYNCHRONIZER = BLOCK_ENTITY_TYPE.register("synchronizer", () -> BlockEntityType.Builder.of(TileSynchronizer::new, BPBlocks.blockSynchronizer.get()).build(null));
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<TileRandomizer>> RANDOMIZER = BLOCK_ENTITY_TYPE.register("randomizer", () -> BlockEntityType.Builder.of(TileRandomizer::new, BPBlocks.blockRandomizer.get()).build(null));
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<TileWire>> WIRE = BLOCK_ENTITY_TYPE.register("alloywire", () -> BlockEntityType.Builder.of(TileWire::new, BPBlocks.blockRedAlloyWire.get(), BPBlocks.blockBlueAlloyWire.get()).build(null));
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<TileInsulatedWire>> INSULATEDWIRE; //BLOCK_ENTITY_TYPE.register("insulated_alloywire", () -> BlockEntityType.Builder.of(TileInsulatedWire::new, BPBlocks.blockInsulatedBlueAlloyWire, BPBlocks.blockInsulatedRedAlloyWire).build(null));
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<TileBattery>> BATTERY = BLOCK_ENTITY_TYPE.register(Refs.BATTERY_NAME, () -> BlockEntityType.Builder.of(TileBattery::new, BPBlocks.battery.get()).build(null));

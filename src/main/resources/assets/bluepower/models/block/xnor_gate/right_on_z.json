@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/xnor_gate/right_z",
+    "textures": {
+        "bluestone_right": "bluepower:base/bluestone_on"
+    }
+}

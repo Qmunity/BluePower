@@ -1,0 +1,39 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"torch_right": "bluepower:blocks/bluestone_torch_off",
+		"particle": "bluepower:blocks/gates/gate"
+	},
+	"elements": [
+		{
+			"name": "Torch_Right",
+			"from": [11, 2, 7],
+			"to": [13, 5, 9],
+			"faces": {
+				"up": {"uv": [7, 6, 9, 8], "texture": "#torch_right"}
+			}
+		},
+		{
+			"name": "Right1",
+			"from": [11, 2, 6],
+			"to": [13, 6, 10],
+			"shade": false,
+			"faces": {
+				"east": {"uv": [6, 5, 10, 9], "texture": "#torch_right"},
+				"west": {"uv": [6, 5, 10, 9], "texture": "#torch_right"}
+			}
+		},
+		{
+			"name": "Right2",
+			"from": [10, 2, 7],
+			"to": [14, 6, 9],
+			"shade": false,
+			"faces": {
+				"north": {"uv": [6, 5, 10, 9], "texture": "#torch_right"},
+				"south": {"uv": [6, 5, 10, 9], "texture": "#torch_right"}
+			}
+		}
+	]
+}

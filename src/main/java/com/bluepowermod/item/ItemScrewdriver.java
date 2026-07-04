@@ -18,6 +18,10 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.IScrewdriver;
+import com.bluepowermod.block.gates.BlockGateBase;
+import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.TileBPMultipart;
+import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,6 +38,10 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 
+import net.minecraft.world.item.Item.Properties;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+
 public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
     public ItemScrewdriver() {
@@ -42,11 +50,23 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
-        Block block = context.getLevel().getBlockState(context.getClickedPos()).getBlock();
+        BlockEntity te = context.getLevel().getBlockEntity(context.getClickedPos());
+        BlockState state;
+        if (te instanceof TileBPMultipart multipart){
+            state = MultipartUtils.getClosestState(context.getPlayer(), context.getClickedPos());
+        } else {
+            state = context.getLevel().getBlockState(context.getClickedPos());
+        }
         if (context.getPlayer() != null && context.getPlayer().isCrouching()){
-            block.rotate(context.getLevel().getBlockState(context.getClickedPos()), context.getLevel(), context.getClickedPos(), Rotation.CLOCKWISE_180);
+            if (state.getBlock() instanceof BlockGateBase gateBase){
+                if (!gateBase.cycleDisabledStates(state, context.getLevel(), context.getClickedPos())){
+                    state.getBlock().rotate(state, context.getLevel(), context.getClickedPos(), Rotation.CLOCKWISE_180);
+                }
+            } else {
+                state.getBlock().rotate(state, context.getLevel(), context.getClickedPos(), Rotation.CLOCKWISE_180);
+            }
         } else{
-            block.rotate(context.getLevel().getBlockState(context.getClickedPos()), context.getLevel(), context.getClickedPos(), Rotation.CLOCKWISE_90);
+            state.getBlock().rotate(state, context.getLevel(), context.getClickedPos(), Rotation.CLOCKWISE_90);
         }
         damage(context.getPlayer().getItemInHand(context.getHand()), 1, context.getPlayer(), false);
         return InteractionResult.SUCCESS;

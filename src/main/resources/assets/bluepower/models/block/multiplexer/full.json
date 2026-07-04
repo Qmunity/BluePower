@@ -1,0 +1,107 @@
+{
+  "loader": "bluepower:gate",
+  "models": [
+    "bluepower:block/multiplexer/base",
+    {
+      "model": "bluepower:block/multiplexer/back",
+      "when": {
+        "powered_back": false
+      }
+    },
+    {
+      "model": "bluepower:block/multiplexer/back_on",
+      "when": {
+        "powered_back": true
+      }
+    },
+    {
+      "model": "bluepower:block/multiplexer/front",
+      "when": {
+        "powered_front": false
+      }
+    },
+    {
+      "model": "bluepower:block/multiplexer/front_on",
+      "when": {
+        "powered_front": true
+      }
+    },
+    {
+      "model": "bluepower:block/multiplexer/left",
+      "when": {
+        "powered_left": false
+      }
+    },
+    {
+      "model": "bluepower:block/multiplexer/left_on",
+      "when": {
+        "powered_left": true
+      }
+    },
+    {
+      "model": "bluepower:block/multiplexer/right",
+      "when": {
+        "powered_right": false
+      }
+    },
+    {
+      "model": "bluepower:block/multiplexer/right_on",
+      "when": {
+        "powered_right": true
+      }
+    },
+    {
+      "model": "bluepower:block/multiplexer/left_torch",
+      "when": {
+        "OR": [
+          {
+            "powered_left": true,
+            "powered_back": true
+          },
+          {
+            "powered_left": false,
+            "powered_back": false
+          },
+          {
+            "powered_left": true,
+            "powered_back": false
+          }
+        ]
+      }
+    },
+    {
+      "model": "bluepower:block/multiplexer/left_torch_on",
+      "when": {
+        "powered_left": false,
+        "powered_back": true
+      }
+    },
+    {
+      "model": "bluepower:block/multiplexer/right_torch",
+      "when": {
+        "OR": [
+          {
+            "powered_back": true,
+            "powered_right": true
+          },
+          {
+            "powered_back": true,
+            "powered_right": false
+          },
+          {
+            "powered_back": false,
+            "powered_right": true
+          }
+        ]
+      }
+    },
+    {
+      "model": "bluepower:block/multiplexer/right_torch_on",
+      "when": {
+        "powered_back": false,
+        "powered_right": false
+      }
+    }
+  ],
+  "particle": "bluepower:blocks/gates/gate"
+}

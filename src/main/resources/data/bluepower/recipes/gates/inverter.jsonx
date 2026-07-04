@@ -1,0 +1,29 @@
+﻿{
+  "result": {
+<<<<<<<< HEAD:src/main/resources/data/bluepower/recipe/gate_inverter.jsonx
+    "id": "bluepower:gate_inverter"
+========
+    "item": "bluepower:inverter"
+>>>>>>>> origin/1.20.1:src/main/resources/data/bluepower/recipes/gates/inverter.jsonx
+  },
+  "pattern": [
+    "TAT",
+    "ACA",
+    "TWT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "bluepower:redstone_anode_tile"
+    },
+    "W": {
+      "item": "bluepower:redstone_wire_tile"
+    },
+    "C": {
+      "item": "bluepower:redstone_cathode_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    }
+  }
+}

@@ -8,16 +8,16 @@
 package com.bluepowermod.block.gates;
 
 import com.bluepowermod.helper.DirectionHelper;
+import com.bluepowermod.tile.tier1.gate.TileGate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockNullCell extends BlockGateBase {
+public class BlockNullCell extends BlockGateLogic {
 
     private boolean shouldSignal = true;
 
@@ -33,7 +33,7 @@ public class BlockNullCell extends BlockGateBase {
         CROSSED
     }
 
-    public Map<Side, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos){
+    public Map<Side, Byte> getSidePower(BlockState state, TileGate gate){
         Map<Side, Byte> map = new HashMap<>();
         Direction[] dirs = DirectionHelper.ArrayFromDirection(state.getValue(FACING));
 
@@ -42,17 +42,17 @@ public class BlockNullCell extends BlockGateBase {
         Direction side_back = dirs[state.getValue(ROTATION)];
         Direction side_front = dirs[rotate(state.getValue(ROTATION), 2)];
 
-        BlockPos pos_left = pos.relative(side_left);
-        BlockPos pos_right = pos.relative(side_right);
-        BlockPos pos_back = pos.relative(side_back);
-        BlockPos pos_front = pos.relative(side_front);
+        BlockPos pos_left = gate.getBlockPos().relative(side_left);
+        BlockPos pos_right = gate.getBlockPos().relative(side_right);
+        BlockPos pos_back = gate.getBlockPos().relative(side_back);
+        BlockPos pos_front = gate.getBlockPos().relative(side_front);
 
         shouldSignal = false;
 
-        byte left = state.getValue(POWERED_LEFT) ?  0 : (byte) ((Level)worldIn).getSignal(pos_left, side_right);
-        byte right = state.getValue(POWERED_RIGHT) ?  0 : (byte) ((Level)worldIn).getSignal(pos_right, side_left);
-        byte back = state.getValue(POWERED_BACK) ?  0 : (byte) ((Level)worldIn).getSignal(pos_back, side_front);
-        byte front = state.getValue(POWERED_FRONT) ?  0 : (byte) ((Level)worldIn).getSignal(pos_front, side_back);
+        byte left = gate.isPowered(Side.LEFT) ?  0 : (byte) gate.getLevel().getSignal(pos_left, side_right);
+        byte right = gate.isPowered(Side.RIGHT) ?  0 : (byte) gate.getLevel().getSignal(pos_right, side_left);
+        byte back = gate.isPowered(Side.BACK) ?  0 : (byte) gate.getLevel().getSignal(pos_back, side_front);
+        byte front = gate.isPowered(Side.FRONT) ?  0 : (byte) gate.getLevel().getSignal(pos_front, side_back);
 
         shouldSignal = true;
 
@@ -69,7 +69,6 @@ public class BlockNullCell extends BlockGateBase {
         return map;
     }
 
-    @Override
     public byte computeRedstone(Side side, byte back, byte front, byte left, byte right){
         return switch (side) {
             case FRONT -> right;
@@ -90,6 +89,8 @@ public class BlockNullCell extends BlockGateBase {
 
     @Override
     public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side){
+        TileGate gate = getGateTile(blockState, blockAccess.getBlockEntity(pos));
+        if (gate == null) return 0;
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
 
         Direction side_left = dirs[rotate(blockState.getValue(ROTATION), 1)];
@@ -98,13 +99,13 @@ public class BlockNullCell extends BlockGateBase {
         Direction side_front = dirs[rotate(blockState.getValue(ROTATION), 2)];
 
         if(side == side_back) {
-            return blockState.getValue(POWERED_FRONT) ? 16 : 0;
+            return gate.isPowered(Side.FRONT) ? 16 : 0;
         }else if(side == side_front){
-            return blockState.getValue(POWERED_BACK) ? 16 : 0;
+            return gate.isPowered(Side.BACK) ? 16 : 0;
         }else if(side == side_left){
-            return blockState.getValue(POWERED_RIGHT) ? 16 : 0;
+            return gate.isPowered(Side.RIGHT) ? 16 : 0;
         }else if(side == side_right){
-            return blockState.getValue(POWERED_LEFT) ? 16 : 0;
+            return gate.isPowered(Side.LEFT) ? 16 : 0;
         }
         return 0;
     }

@@ -1,0 +1,6 @@
+{
+    "parent": "bluepower:block/toggle_latch/right",
+    "textures": {
+        "bluestone_right": "bluepower:base/bluestone_on"
+    }
+}

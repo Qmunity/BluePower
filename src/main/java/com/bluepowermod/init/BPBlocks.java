@@ -20,7 +20,19 @@ package com.bluepowermod.init;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.*;
-import com.bluepowermod.block.gates.BlockGateBase;
+import com.bluepowermod.block.gates.BlockGateAnd;
+import com.bluepowermod.block.gates.BlockGateBuffer;
+import com.bluepowermod.block.gates.BlockGateMultiplexer;
+import com.bluepowermod.block.gates.BlockGateNot;
+import com.bluepowermod.block.gates.BlockGateOr;
+import com.bluepowermod.block.gates.BlockGatePulseFormer;
+import com.bluepowermod.block.gates.BlockGateRSLatch;
+import com.bluepowermod.block.gates.BlockGateRandomizer;
+import com.bluepowermod.block.gates.BlockGateRepeater;
+import com.bluepowermod.block.gates.BlockGateSynchronizer;
+import com.bluepowermod.block.gates.BlockGateToggleLatch;
+import com.bluepowermod.block.gates.BlockGateTransparentLatch;
+import com.bluepowermod.block.gates.BlockGateXor;
 import com.bluepowermod.block.gates.BlockNullCell;
 import com.bluepowermod.block.lighting.BlockLampRGBSurface;
 import com.bluepowermod.block.lighting.BlockLampSurface;
@@ -270,19 +282,42 @@ public class BPBlocks {
 
 
 
-    public static final DeferredHolder<Block, Block> blockGateAND = BLOCKS.register("gate_and", BlockGateBase::new);
-    public static final DeferredHolder<Block, Block> blockNullCell = BLOCKS.register("gate_nullcell", BlockNullCell::new);
-     public static final DeferredHolder<Block, Block> blockGateNAND = BLOCKS.register("gate_nand",() -> new BlockGateBase(){
-         @Override
-         public byte computeRedstone(BlockGateBase.Side side, byte back, byte front, byte left, byte right){
-             return (byte)((left == 0 || right == 0 || back == 0 ) ?  16 : 0);
-         }
-     });
+    public static final DeferredHolder<Block, Block> blockGateAND = BLOCKS.register("and_gate", () -> new BlockGateAnd(false));
+    public static final DeferredHolder<Block, Block> blockGateNOT = BLOCKS.register("not_gate", BlockGateNot::new);
+    public static final DeferredHolder<Block, Block> blockGateOR = BLOCKS.register("or_gate", () -> new BlockGateOr(false));
+    public static final DeferredHolder<Block, Block> blockNullCell = BLOCKS.register("null_cell", BlockNullCell::new);
+    public static final DeferredHolder<Block, Block> blockGateNAND = BLOCKS.register("nand_gate",() -> new BlockGateAnd(true));
+    public static final DeferredHolder<Block, Block> blockGateNOR = BLOCKS.register("nor_gate", () -> new BlockGateOr(true));
+    public static final DeferredHolder<Block, Block> blockGateBUFFER = BLOCKS.register("buffer_gate", BlockGateBuffer::new);
+    public static final DeferredHolder<Block, Block> blockGateXOR = BLOCKS.register("xor_gate", () -> new BlockGateXor(false));
+    public static final DeferredHolder<Block, Block> blockGateXNOR = BLOCKS.register("xnor_gate", () -> new BlockGateXor(true));
+    public static final DeferredHolder<Block, Block> blockMultiplexer = BLOCKS.register("multiplexer", BlockGateMultiplexer::new);
+    public static final DeferredHolder<Block, Block> blockPulseFormer = BLOCKS.register("pulse_former", BlockGatePulseFormer::new);
+    public static final DeferredHolder<Block, Block> blockRandomizer = BLOCKS.register("randomizer", BlockGateRandomizer::new);
+    public static final DeferredHolder<Block, Block> blockToggleLatch = BLOCKS.register("toggle_latch", BlockGateToggleLatch::new);
+    public static final DeferredHolder<Block, Block> blockRSLatch = BLOCKS.register("rs_latch", BlockGateRSLatch::new);
+    public static final DeferredHolder<Block, Block> blockRepeater = BLOCKS.register("repeater", BlockGateRepeater::new);
+    public static final DeferredHolder<Block, Block> blockTransparentLatch = BLOCKS.register("transparent_latch", BlockGateTransparentLatch::new);
+    public static final DeferredHolder<Block, Block> blockSynchronizer = BLOCKS.register("synchronizer", BlockGateSynchronizer::new);
 
     static{
-        BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new BlockItem(blockGateAND.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockGateNAND.getKey().location().getPath(), () -> new BlockItem(blockGateNAND.get(), new Item.Properties()));
-        BPItems.ITEMS.register(blockNullCell.getKey().location().getPath(), () -> new BlockItem(blockNullCell.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateAND.getKey().location().getPath(), () -> new ItemBPPart(blockGateAND.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNOT.getKey().location().getPath(), () -> new ItemBPPart(blockGateNOT.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateOR.getKey().location().getPath(), () -> new ItemBPPart(blockGateOR.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNAND.getKey().location().getPath(), () -> new ItemBPPart(blockGateNAND.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateNOR.getKey().location().getPath(), () -> new ItemBPPart(blockGateNOR.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockNullCell.getKey().location().getPath(), () -> new ItemBPPart(blockNullCell.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateBUFFER.getKey().location().getPath(), () -> new ItemBPPart(blockGateBUFFER.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateXOR.getKey().location().getPath(), () -> new ItemBPPart(blockGateXOR.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockGateXNOR.getKey().location().getPath(), () -> new ItemBPPart(blockGateXNOR.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockMultiplexer.getKey().location().getPath(), () -> new ItemBPPart(blockMultiplexer.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockPulseFormer.getKey().location().getPath(), () -> new ItemBPPart(blockPulseFormer.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockRandomizer.getKey().location().getPath(), () -> new ItemBPPart(blockRandomizer.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockToggleLatch.getKey().location().getPath(), () -> new ItemBPPart(blockToggleLatch.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockRSLatch.getKey().location().getPath(), () -> new ItemBPPart(blockRSLatch.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockRepeater.getKey().location().getPath(), () -> new ItemBPPart(blockRepeater.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockTransparentLatch.getKey().location().getPath(), () -> new ItemBPPart(blockTransparentLatch.get(), new Item.Properties()));
+        BPItems.ITEMS.register(blockSynchronizer.getKey().location().getPath(), () -> new ItemBPPart(blockSynchronizer.get(), new Item.Properties()));
     }
 
      public static final DeferredHolder<Block, Block> blockRedAlloyWire = BLOCKS.register(RedwireType.RED_ALLOY.getName() + "_wire", () -> new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true));

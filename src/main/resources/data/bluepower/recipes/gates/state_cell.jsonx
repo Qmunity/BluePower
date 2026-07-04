@@ -1,0 +1,32 @@
+﻿{
+  "result": {
+<<<<<<<< HEAD:src/main/resources/data/bluepower/recipe/gate_state_cell.jsonx
+    "id": "bluepower:gate_state_cell"
+========
+    "item": "bluepower:state_cell"
+>>>>>>>> origin/1.20.1:src/main/resources/data/bluepower/recipes/gates/state_cell.jsonx
+  },
+  "pattern": [
+    "TAC",
+    "WSP",
+    "TWT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "S": {
+      "item": "bluepower:silicon_chip_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    },
+    "P": {
+      "item": "bluepower:bluestone_pointer_tile"
+    },
+    "C": {
+      "item": "bluepower:bluestone_cathode_tile"
+    }
+  }
+}

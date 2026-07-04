@@ -1,0 +1,29 @@
+﻿{
+  "result": {
+<<<<<<<< HEAD:src/main/resources/data/bluepower/recipe/gate_transparent.jsonx
+    "id": "bluepower:gate_transparent"
+========
+    "item": "bluepower:transparent_latch"
+>>>>>>>> origin/1.20.1:src/main/resources/data/bluepower/recipes/gates/transparent_latch.json
+  },
+  "pattern": [
+    "ACW",
+    "CCC",
+    "CWT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "bluepower:bluestone_anode_tile"
+    },
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "C": {
+      "item": "bluepower:bluestone_cathode_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    }
+  }
+}

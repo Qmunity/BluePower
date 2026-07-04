@@ -84,14 +84,24 @@ public class TileBase extends BlockEntity implements IRotatable {
 
     protected void sendUpdatePacket() {
 
-        if (!level.isClientSide)
+        if (!level.isClientSide) {
             level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
+        }
     }
 
     protected void markForRenderUpdate() {
-
-        if (level != null)
+        if (level != null) {
             level.setBlocksDirty(getBlockPos(), getBlockState(), getBlockState());
+            if (level.isClientSide()){
+                getLevel().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 11);
+                getLevel().getModelDataManager().requestRefresh(this);
+            }
+        }
+    }
+
+    protected void markBlockForUpdate(){
+        this.setChanged();
+        getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
     }
 
     protected void notifyNeighborBlockUpdate() {

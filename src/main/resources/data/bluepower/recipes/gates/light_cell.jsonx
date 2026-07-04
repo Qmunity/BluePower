@@ -1,0 +1,26 @@
+﻿{
+  "result": {
+<<<<<<<< HEAD:src/main/resources/data/bluepower/recipe/gate_lightcell.jsonx
+    "id": "bluepower:gate_lightcell"
+========
+    "item": "bluepower:light_cell"
+>>>>>>>> origin/1.20.1:src/main/resources/data/bluepower/recipes/gates/light_cell.jsonx
+  },
+  "pattern": [
+    "TWT",
+    "TDT",
+    "TTT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": {
+      "item": "bluepower:blue_doped_wafer"
+    },
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "T": {
+      "item": "bluepower:stone_tile"
+    }
+  }
+}

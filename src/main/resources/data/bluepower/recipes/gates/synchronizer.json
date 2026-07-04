@@ -1,0 +1,29 @@
+﻿{
+  "result": {
+<<<<<<<< HEAD:src/main/resources/data/bluepower/recipe/gate_synchronizer.jsonx
+    "id": "bluepower:gate_synchronizer"
+========
+    "item": "bluepower:synchronizer"
+>>>>>>>> origin/1.20.1:src/main/resources/data/bluepower/recipes/gates/synchronizer.json
+  },
+  "pattern": [
+    "WCW",
+    "SAS",
+    "WWW"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "bluepower:bluestone_anode_tile"
+    },
+    "W": {
+      "item": "bluepower:bluestone_wire_tile"
+    },
+    "S": {
+      "item": "bluepower:silicon_chip_tile"
+    },
+    "C": {
+      "item": "bluepower:bluestone_cathode_tile"
+    }
+  }
+}

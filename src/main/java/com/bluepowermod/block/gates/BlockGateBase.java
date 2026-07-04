@@ -7,12 +7,18 @@
  */
 package com.bluepowermod.block.gates;
 
+import com.bluepowermod.api.multipart.IBPPartBlock;
 import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.helper.DirectionHelper;
 import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.ITickableTile;
+import com.bluepowermod.tile.TileBPMultipart;
+import com.bluepowermod.tile.tier1.gate.TileGate;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -20,8 +26,12 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -32,17 +42,14 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.ticks.TickPriority;
 
 /**
  * @author MoreThanHidden
  */
-public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
+public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock, IBPPartBlock, EntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 3);
-    public static final BooleanProperty POWERED_FRONT = BooleanProperty.create("powered_front");
-    public static final BooleanProperty POWERED_BACK = BooleanProperty.create("powered_back");
-    public static final BooleanProperty POWERED_LEFT = BooleanProperty.create("powered_left");
-    public static final BooleanProperty POWERED_RIGHT = BooleanProperty.create("powered_right");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public enum Side {
@@ -53,19 +60,29 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     }
 
     public BlockGateBase() {
-        super();
+        super(Properties.of().sound(SoundType.STONE).instabreak());
         this.registerDefaultState(stateDefinition.any()
                 .setValue(FACING, Direction.UP)
-                .setValue(POWERED_BACK, false)
-                .setValue(POWERED_FRONT, false)
-                .setValue(POWERED_LEFT, false)
-                .setValue(POWERED_RIGHT, false)
                 .setValue(ROTATION, 0));
     }
 
     @Override
+    public @org.jetbrains.annotations.Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new TileGate(blockPos, blockState);
+    }
+
+    @Override
+    public @org.jetbrains.annotations.Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        return !level.isClientSide() && ticks() ? ITickableTile::tick : null;
+    }
+
+    public boolean ticks(){
+        return false;
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
-        builder.add(FACING, ROTATION, POWERED_BACK, POWERED_FRONT, POWERED_LEFT, POWERED_RIGHT, WATERLOGGED);
+        builder.add(FACING, ROTATION, WATERLOGGED);
     }
 
     @Override
@@ -93,13 +110,18 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
 
     @Override
     public BlockState rotate(BlockState state, LevelAccessor level, BlockPos pos, Rotation rotation) {
+        BlockState oldState = state;
         switch (rotation){
             case NONE -> {}
-            case CLOCKWISE_90 -> state.setValue(ROTATION, rotate(state.getValue(ROTATION),  1));
-            case CLOCKWISE_180 -> state.setValue(ROTATION, rotate(state.getValue(ROTATION), 2));
-            case COUNTERCLOCKWISE_90 -> state.setValue(ROTATION, rotate(state.getValue(ROTATION), 3));
+            case CLOCKWISE_90 -> state = state.setValue(ROTATION, rotate(state.getValue(ROTATION),  1));
+            case CLOCKWISE_180 -> state = state.setValue(ROTATION, rotate(state.getValue(ROTATION), 2));
+            case COUNTERCLOCKWISE_90 -> state = state.setValue(ROTATION, rotate(state.getValue(ROTATION), 3));
         }
-        level.setBlock(pos, state, 3);
+        if (level.getBlockEntity(pos) instanceof TileBPMultipart multipart){
+            multipart.changeState(oldState, state);
+        } else {
+            level.setBlock(pos, state, 3);
+        }
         return state;
     }
 
@@ -113,30 +135,28 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         Direction face = context.getClickedFace();
-        return this.defaultBlockState().setValue(ROTATION, context.getHorizontalDirection().getOpposite().get2DDataValue()).setValue(FACING, face).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
+        return this.defaultBlockState().setValue(ROTATION, DirectionHelper.getRotationFromContext(context)).setValue(FACING, face).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
         super.setPlacedBy(world, pos, state, entity, stack);
-        Map<Side, Byte> map = getSidePower(world, state, pos);
-        world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
-                .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
-                .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
-                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0));
-    }
-
-    @Override
-    public boolean isSignalSource(BlockState blockState) {
-        return true;
+        BlockEntity te = world.getBlockEntity(pos);
+        TileGate tileGate = getGateTile(state, te);
+        if (tileGate == null) return;
+        onBlockPlace(state, tileGate);
+        if (checkPower(state, tileGate, false)) {
+            scheduleTick(state, te, tileGate);
+        }
     }
 
     @Override
     public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side){
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
-        if(side == dirs[blockState.getValue(ROTATION)]) {
-            Map<Side, Byte> map = getSidePower(blockAccess, blockState, pos);
-            return map.get(Side.FRONT);
+        Side side1 = fromDirection(side.getOpposite(), blockState.getValue(ROTATION), dirs);
+        TileGate tileGate = getGateTile(blockState, blockAccess.getBlockEntity(pos));
+        if (tileGate != null && isSideSource(side1, blockState, tileGate)){
+            return tileGate.redstoneFromSide(side1);
         }
         return 0;
     }
@@ -144,57 +164,144 @@ public class BlockGateBase extends BlockBase implements SimpleWaterloggedBlock {
     @Override
     public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
         Direction[] dirs = DirectionHelper.ArrayFromDirection(blockState.getValue(FACING));
-        if(side == dirs[blockState.getValue(ROTATION)]) {
-            Map<Side, Byte> map = getSidePower(blockAccess, blockState, pos);
-            return map.get(Side.FRONT);
+        Side side1 = fromDirection(side.getOpposite(), blockState.getValue(ROTATION), dirs);
+        TileGate tileGate = getGateTile(blockState, blockAccess.getBlockEntity(pos));
+        if (tileGate != null && isSideSource(side1, blockState, tileGate)){
+            return tileGate.redstoneFromSide(side1);
         }
         return 0;
     }
 
-    public Map<Side, Byte> getSidePower(BlockGetter worldIn, BlockState state, BlockPos pos){
-         Map<Side, Byte> map = new HashMap<>();
-         Direction[] dirs = DirectionHelper.ArrayFromDirection(state.getValue(FACING));
-         Direction side_left = dirs[state.getValue(ROTATION) == 3 ? 0 : state.getValue(ROTATION) + 1];
-         Direction side_right = side_left.getOpposite();
-         Direction side_back = dirs[state.getValue(ROTATION)];
-         BlockPos pos_left = pos.relative(side_left);
-         BlockPos pos_right = pos.relative(side_right);
-         BlockPos pos_back = pos.relative(side_back);
-         BlockState state_left = worldIn.getBlockState(pos_left);
-         BlockState state_right = worldIn.getBlockState(pos_right);
-         BlockState state_back = worldIn.getBlockState(pos_back);
-         byte left = (byte) state_left.getSignal(worldIn, pos_left, side_right);
-         byte right = (byte) state_right.getSignal(worldIn, pos_right, side_left);
-         byte back = (byte) state_back.getSignal(worldIn, pos_back, side_back.getOpposite());
-         if(state_left.getBlock() instanceof RedStoneWireBlock){left = state_left.getValue(RedStoneWireBlock.POWER).byteValue();}
-         if(state_right.getBlock() instanceof RedStoneWireBlock){right = state_right.getValue(RedStoneWireBlock.POWER).byteValue();}
-         if(state_back.getBlock() instanceof RedStoneWireBlock){back = state_back.getValue(RedStoneWireBlock.POWER).byteValue();}
-         map.put(Side.LEFT, left);
-         map.put(Side.RIGHT, right);
-         map.put(Side.BACK, back);
-         map.put(Side.FRONT, computeRedstone(Side.FRONT, back, (byte) 0, left, right));
-         return map;
+    public static Direction toDirection(Side side, BlockState state){
+        Direction[] dirs = DirectionHelper.ArrayFromDirection(state.getValue(FACING));
+        Direction left = dirs[state.getValue(ROTATION) == 3 ? 0 : state.getValue(ROTATION) + 1];
+        Direction back = dirs[state.getValue(ROTATION)];
+        return switch (side){
+            case FRONT -> back.getOpposite();
+            case BACK -> back;
+            case LEFT -> left;
+            case RIGHT -> left.getOpposite();
+        };
     }
 
-    public byte computeRedstone(Side side, byte back, byte front, byte left, byte right){
-        if (left > 0 && right > 0 ){
-            return (byte)(back > 0 ? 16 : 0);
+    protected Side fromDirection(Direction direction, int rotation, Direction[] array){
+        Direction sideLeft = array[rotation == 3 ? 0 : rotation + 1];
+        Direction sideRight = sideLeft.getOpposite();
+        Direction sideBack = array[rotation];
+        Direction sideFront = sideBack.getOpposite();
+        if (direction == sideFront) return Side.FRONT;
+        if (direction == sideBack) return Side.BACK;
+        if (direction == sideLeft) return Side.LEFT;
+        if (direction == sideRight) return Side.RIGHT;
+        return null;
+    }
+
+    protected boolean isSideSource(Side side, BlockState blockState, TileGate gate){
+        return false;
+    }
+
+    protected void onBlockPlace(BlockState state, TileGate gate){
+
+    }
+
+    protected boolean cycleDisabledStates(BlockState state, TileGate gate){
+        return false;
+    }
+
+    public boolean cycleDisabledStates(BlockState state, BlockGetter blockGetter, BlockPos pos){
+        BlockEntity te = blockGetter.getBlockEntity(pos);
+        if (te == null) return false;
+        TileGate gate = getGateTile(state, te);
+        List<Side> sourceSides = new ArrayList<>();
+        for (Side side : Side.values()){
+            if (isSideSource(side, state, gate)){
+                sourceSides.add(side);
+            }
         }
-        return 0;
+
+        boolean cycle = this.cycleDisabledStates(state, gate);
+        if (cycle){
+            te.getLevel().markAndNotifyBlock(pos, te.getLevel().getChunkAt(pos), state, state, 1, 512);
+            for (Side side : sourceSides){
+                Direction dir = toDirection(side, state);
+                BlockPos neighbor = pos.relative(dir);
+                BlockState neighborState = te.getLevel().getBlockState(neighbor);
+                te.getLevel().updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
+            }
+        }
+        return cycle;
+    }
+
+    protected int getDelay(BlockState state, TileGate gate){
+        return 1;
+    }
+
+    protected TileGate getGateTile(BlockState state, BlockEntity inWorldBE){
+        BlockEntity gateBE = inWorldBE instanceof TileBPMultipart bpMultipart ? bpMultipart.getTileForState(state) : inWorldBE;
+        return gateBE instanceof TileGate gate ? gate : null;
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
-        super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
-        if(!world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isCollisionShapeFullBlock(world,pos.relative(state.getValue(FACING).getOpposite()))) {
-            world.destroyBlock(pos, true);
-            return;
-        }
-        Map<Side, Byte> map = getSidePower(world, state, pos);
-        world.setBlockAndUpdate(pos, state.setValue(POWERED_FRONT, map.get(Side.FRONT) > 0)
-                .setValue(POWERED_BACK, map.get(Side.BACK) > 0)
-                .setValue(POWERED_LEFT, map.get(Side.LEFT) > 0)
-                .setValue(POWERED_RIGHT, map.get(Side.RIGHT) > 0));
+    public boolean isSignalSource(BlockState blockState) {
+        return true;
     }
 
+
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+        super.neighborChanged(state, level, pos, blockIn, fromPos, bool);
+        BlockEntity te = level.getBlockEntity(pos);
+        if(!level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isCollisionShapeFullBlock(level,pos.relative(state.getValue(FACING).getOpposite()))) {
+            if (te instanceof TileBPMultipart tileBPMultipart) {
+                tileBPMultipart.removeState(state);
+            } else {
+                level.destroyBlock(pos, true);
+            }
+            return;
+        }
+        TileGate tileGate = getGateTile(state, te);
+        if (tileGate == null) return;
+        if (checkPower(state, tileGate, false)) {
+            scheduleTick(state, te, tileGate);
+        }
+    }
+
+    protected abstract boolean checkPower(BlockState state, TileGate gate, boolean onTick);
+
+    protected void scheduleTick(BlockState state, BlockEntity te, TileGate gate){
+        Block blockToTick = te instanceof TileBPMultipart bpMultipart ? bpMultipart.getBlockState().getBlock() : this;
+        if (!te.getLevel().getBlockTicks().willTickThisTick(te.getBlockPos(), blockToTick)) {
+            te.getLevel().scheduleTick(te.getBlockPos(), blockToTick,
+                    getDelay(state, gate), TickPriority.HIGH);
+        }
+
+    }
+
+    @Override
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        TileGate tileGate = getGateTile(state, level.getBlockEntity(pos));
+        if (tileGate == null) return;
+        boolean powerChanged = checkPower(state, tileGate, true);
+        if (powerChanged) {
+            level.markAndNotifyBlock(pos, level.getChunkAt(pos), state, state, 1, 512);
+            for (Side side : Side.values()){
+                Direction dir = toDirection(side, state);
+                if (isSideSource(side, state, tileGate)){
+                    BlockPos neighbor = pos.relative(dir);
+                    BlockState neighborState = level.getBlockState(neighbor);
+                    level.updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), dir.getOpposite());
+                }
+            }
+        }
+    }
+
+    /**
+     *  IBPartBlock
+     */
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state) {
+        return AABBUtils.rotate(Refs.GATE_AABB, state.getValue(FACING));
+    }
 }
