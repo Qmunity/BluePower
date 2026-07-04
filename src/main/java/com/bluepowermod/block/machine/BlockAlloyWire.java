@@ -75,6 +75,11 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
     }
 
     @Override
+    public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @org.jetbrains.annotations.Nullable Direction direction) {
+        return true; //TODO proper checks
+    }
+
+    @Override
     protected boolean isNeighborStateEquivalent(BlockState state, BlockEntity be, BlockState neighborState, BlockEntity neighborBE) {
         if (neighborState.getBlock() instanceof BlockAlloyWire wire){
             if (wire.type.equals(type)) return true;
