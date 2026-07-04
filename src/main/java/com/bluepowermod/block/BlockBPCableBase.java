@@ -209,9 +209,9 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     }
 
     //Returns true if a given blockState / tileEntity can connect.
-    protected boolean canConnect(Level world, BlockPos pos, BlockState state, @Nullable BlockEntity tileEntity, Direction direction){
-        if (tileEntity != null) {
-            return tileEntity.getCapability(getCapability(), direction).isPresent();
+    protected boolean canConnect(Level world, BlockPos neighborPos, BlockState neighborState, @Nullable BlockEntity neighborTileEntity, Direction direction){
+        if (neighborTileEntity != null) {
+            return neighborTileEntity.getCapability(getCapability(), direction).isPresent();
         }else{
             return false;
         }
@@ -292,7 +292,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                 connections[i] = ConnectionType.OUTER_CORNER;
                 continue;
             }
-            if (canConnect(world, pos, state, ownTile, side)){
+            if (canConnect(world, neighbor, neighborState, neighborTile, side)){
                 connections[i] = ConnectionType.STRAIGHT;
             }
         }
