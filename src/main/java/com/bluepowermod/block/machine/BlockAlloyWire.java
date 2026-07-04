@@ -6,6 +6,7 @@ import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.BlockBPCableBase;
+import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.reference.Refs;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.common.capabilities.Capability;
 
@@ -71,6 +73,10 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
 
     @Override
     protected boolean canConnect(Level world, BlockEntity ownTile, BlockPos neighborPos, BlockState neighborState, BlockEntity neighborTileEntity, Direction direction) {
+        if (neighborState.getBlock() instanceof BlockGateBase){
+            Direction facing = neighborState.getValue(BlockStateProperties.FACING);
+            return facing == ownTile.getBlockState().getValue(BlockStateProperties.FACING) || (neighborPos.equals(ownTile.getBlockPos()) && facing == direction);
+        }
         if(neighborState.getBlock().canConnectRedstone(neighborState, world, neighborPos, direction))
             return true;
         return super.canConnect(world, ownTile, neighborPos, neighborState, neighborTileEntity, direction);
