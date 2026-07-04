@@ -3,6 +3,7 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
@@ -11,6 +12,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.bluepowermod.util.MultipartUtils;
+import com.bluepowermod.util.WireHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -110,12 +112,20 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
 
     @Override
     public int getColor(BlockState state, BlockGetter w, BlockPos pos, int tint) {
-        return RedwireType.RED_ALLOY.equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
+        BlockEntity be = w.getBlockEntity(pos);
+        if (be instanceof TileBPMultipart multipart){
+            be = multipart.getTileForState(state);
+        }
+        int power = 0;
+        if (be != null){
+           power = be.getCapability(getCapability()).map(r -> ((IRedstoneDevice)r).getRedstonePower(null) * 17).orElse(0);
+        }
+        return WireHelper.getColorForPowerLevel(type, (byte) power);
     }
 
     @Override
     public int getColor(ItemStack stack, int tint) {
-        return RedwireType.RED_ALLOY.equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex();
+        return type.getMinColor();
     }
 
 }
