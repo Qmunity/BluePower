@@ -10,6 +10,7 @@ import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileBPMultipart;
 import com.bluepowermod.tile.tier1.TileWire;
+import com.bluepowermod.util.MultipartUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -84,7 +85,16 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
     @Override
     protected BlockState updateState(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean movedByPiston) {
         state = super.updateState(state, level, pos, blockIn, fromPos, movedByPiston);
-        int redstoneValue = level.getBestNeighborSignal(pos);
+        int redstoneLevel = 0;
+        for (Direction direction : Direction.values()){
+            int j = MultipartUtils.getRedstonePower(direction, state.getValue(FACING), level, pos);
+            if (j >= 15){
+                redstoneLevel = 15;
+                break;
+            }
+            if (j > redstoneLevel) redstoneLevel = j;
+        }
+        int redstoneValue = redstoneLevel;
         BlockEntity be = level.getBlockEntity(pos);
         BlockEntity wire = be instanceof TileBPMultipart multipart ? multipart.getTileForState(state) : be;
         if (wire == null) return state;
