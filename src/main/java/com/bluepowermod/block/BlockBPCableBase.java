@@ -209,7 +209,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     }
 
     //Returns true if a given blockState / tileEntity can connect.
-    protected boolean canConnect(Level world, BlockPos neighborPos, BlockState neighborState, @Nullable BlockEntity neighborTileEntity, Direction direction){
+    protected boolean canConnect(Level world, BlockEntity ownTile, BlockPos neighborPos, BlockState neighborState, @Nullable BlockEntity neighborTileEntity, Direction direction){
         if (neighborTileEntity != null) {
             return neighborTileEntity.getCapability(getCapability(), direction).isPresent();
         }else{
@@ -239,11 +239,21 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                     continue;
                 }
                 for (BlockState s : multipart.getStates()){
-                    if (isNeighborStateEquivalent(state, ownTile, s, multipart.getTileForState(s))){
+                    BlockEntity partTile = multipart.getTileForState(s);
+                    if (s == state) continue;
+                    if (isNeighborStateEquivalent(state, ownTile, s, partTile)){
                         if (s.getValue(FACING) == side.getOpposite()){
                             connections[i] = s.getBlock() == this ? ConnectionType.INNER_CORNER : ConnectionType.STRAIGHT;
                             continue outer;
+                        } else {
+                            continue;
                         }
+                    } else if (s.getBlock() instanceof BlockBPCableBase){
+                        continue;
+                    }
+                    if (canConnect(world, ownTile, pos, s, partTile, side.getOpposite())){
+                        connections[i] = ConnectionType.STRAIGHT;
+                        continue outer;
                     }
                 }
 
@@ -258,6 +268,8 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                     continue;
                 }
                 checkAroundCorner = true;
+            }  else if (neighborState.getBlock() instanceof BlockBPCableBase){
+                continue;
             } else if (neighborState.getBlock() == Blocks.AIR){
                 checkAroundCorner = true;
             } else if (neighborTile instanceof TileBPMultipart neighborMultipart){
@@ -273,6 +285,12 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                         } else {
                             checkAroundCorner = true;
                         }
+                    } else if (s.getBlock() instanceof BlockBPCableBase){
+                        continue;
+                    }
+                    if (canConnect(world, ownTile, neighbor, s, partBE, side.getOpposite())){
+                        connections[i] = ConnectionType.STRAIGHT;
+                        continue outer;
                     }
                 }
             }
@@ -292,7 +310,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                 connections[i] = ConnectionType.OUTER_CORNER;
                 continue;
             }
-            if (canConnect(world, neighbor, neighborState, neighborTile, side.getOpposite())){
+            if (canConnect(world, ownTile, neighbor, neighborState, neighborTile, side.getOpposite())){
                 connections[i] = ConnectionType.STRAIGHT;
             }
         }

@@ -70,10 +70,10 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
     }
 
     @Override
-    protected boolean canConnect(Level world, BlockPos neighborPos, BlockState neighborState, BlockEntity neighborTileEntity, Direction direction) {
+    protected boolean canConnect(Level world, BlockEntity ownTile, BlockPos neighborPos, BlockState neighborState, BlockEntity neighborTileEntity, Direction direction) {
         if(neighborState.getBlock().canConnectRedstone(neighborState, world, neighborPos, direction))
             return true;
-        return super.canConnect(world, neighborPos, neighborState, neighborTileEntity, direction);
+        return super.canConnect(world, ownTile, neighborPos, neighborState, neighborTileEntity, direction);
     }
 
     @Override
