@@ -53,7 +53,7 @@ public class BluePower {
     public BluePower(IEventBus modEventBus){
         ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, BPConfig.spec);
         if (FMLEnvironment.dist.isClient()){
-            ModLoadingContext.get().registerConfig(Type.CLIENT, BPClientConfig.spec);
+            ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.CLIENT, BPConfig.spec);
         }
 
         instance = this;
