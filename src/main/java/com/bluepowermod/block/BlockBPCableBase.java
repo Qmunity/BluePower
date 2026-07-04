@@ -292,7 +292,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                 connections[i] = ConnectionType.OUTER_CORNER;
                 continue;
             }
-            if (canConnect(world, neighbor, neighborState, neighborTile, side)){
+            if (canConnect(world, neighbor, neighborState, neighborTile, side.getOpposite())){
                 connections[i] = ConnectionType.STRAIGHT;
             }
         }
