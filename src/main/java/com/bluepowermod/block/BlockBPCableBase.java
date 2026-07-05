@@ -182,7 +182,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
     protected BlockState updateState(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean movedByPiston){
         BlockEntity te = level.getBlockEntity(pos);
         //Get new state based on surrounding capabilities
-        BlockState newState = getStateForPos(level, pos, defaultBlockState().setValue(FACING, state.getValue(FACING)), state.getValue(FACING));
+        BlockState newState = getStateForPos(level, pos, state, state.getValue(FACING));
 
         if (!(te instanceof TileBPMultipart multipart)){
             //Change the block state
