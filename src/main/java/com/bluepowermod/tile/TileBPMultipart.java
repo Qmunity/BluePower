@@ -101,6 +101,7 @@ public class TileBPMultipart extends BlockEntity {
                 tile.setLevel(level);
             }
         }
+        addStateToEnumMap(state);
         this.stateMap.put(state, tile);
         state.getBlock().setPlacedBy(level, worldPosition, state,  null, new ItemStack(state.getBlock()));
         shape = null;
@@ -141,6 +142,14 @@ public class TileBPMultipart extends BlockEntity {
         if(stateMap.get(state) != null) {
             stateMap.get(state).setRemoved();
         }
+        Direction toRemove = null;
+        for (var s : statesByDirection.entrySet()){
+            if (s.getValue() == state){
+                toRemove = s.getKey();
+                break;
+            }
+        }
+        if (toRemove != null) statesByDirection.remove(toRemove);
         //Remove State
         this.stateMap.remove(state);
         shape = null;
@@ -315,7 +324,16 @@ public class TileBPMultipart extends BlockEntity {
 
     public void changeState(BlockState state, BlockState newState) {
         BlockEntity te = stateMap.get(state);
+        Direction toRemove = null;
+        for (var s : statesByDirection.entrySet()){
+            if (s.getValue() == state){
+                toRemove = s.getKey();
+                break;
+            }
+        }
+        if (toRemove != null) statesByDirection.remove(toRemove);
         stateMap.remove(state);
+        addStateToEnumMap(newState);
         stateMap.put(newState, te);
         shape = null;
         collisionShape = null;
