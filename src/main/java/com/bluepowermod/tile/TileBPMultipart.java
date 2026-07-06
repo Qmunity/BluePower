@@ -26,12 +26,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.LeverBlock;
+import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.properties.AttachFace;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.model.data.ModelData;
@@ -55,6 +61,7 @@ public class TileBPMultipart extends BlockEntity {
     public static final ModelProperty<BlockAndTintGetter> LEVEL = new ModelProperty<>();
     public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
     private Map<BlockState, BlockEntity> stateMap = new HashMap<>();
+    private EnumMap<Direction, BlockState> statesByDirection = new EnumMap<>(Direction.class);
     VoxelShape shape = null;
     VoxelShape collisionShape = null;
 
@@ -99,6 +106,28 @@ public class TileBPMultipart extends BlockEntity {
         shape = null;
         collisionShape = null;
         markDirtyClient();
+    }
+
+    private void addStateToEnumMap(BlockState state){
+        if (state.hasProperty(BlockStateProperties.FACING)){
+            statesByDirection.put(state.getValue(BlockStateProperties.FACING), state);
+        } else if (state.getBlock() instanceof WallTorchBlock && state.hasProperty(HorizontalDirectionalBlock.FACING)){
+            statesByDirection.put(state.getValue(HorizontalDirectionalBlock.FACING), state);
+        } else if (state.getBlock() == Blocks.LEVER){
+            var face = state.getValue(LeverBlock.FACE);
+            Direction side = state.getValue(LeverBlock.FACING);
+            if (face == AttachFace.CEILING){
+                side = Direction.DOWN;
+            } else if (face == AttachFace.FLOOR){
+                side = Direction.UP;
+            }
+            statesByDirection.put(side, state);
+        }
+    }
+
+    @Nullable
+    public BlockState getStateByFacing(Direction face){
+        return statesByDirection.get(face);
     }
 
     public void removeState(BlockState state) {
