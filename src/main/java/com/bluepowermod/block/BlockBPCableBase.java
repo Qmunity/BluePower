@@ -40,10 +40,10 @@ import static net.minecraft.core.Direction.*;
 public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleWaterloggedBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    protected static final EnumProperty<ConnectionType> CONNECTION_TYPE_FRONT = EnumProperty.create("connection_type_front", ConnectionType.class);
-    protected static final EnumProperty<ConnectionType> CONNECTION_TYPE_BACK = EnumProperty.create("connection_type_back", ConnectionType.class);
-    protected static final EnumProperty<ConnectionType> CONNECTION_TYPE_LEFT = EnumProperty.create("connection_type_left", ConnectionType.class);
-    protected static final EnumProperty<ConnectionType> CONNECTION_TYPE_RIGHT = EnumProperty.create("connection_type_right", ConnectionType.class);
+    public static final EnumProperty<ConnectionType> CONNECTION_TYPE_FRONT = EnumProperty.create("connection_type_front", ConnectionType.class);
+    public static final EnumProperty<ConnectionType> CONNECTION_TYPE_BACK = EnumProperty.create("connection_type_back", ConnectionType.class);
+    public static final EnumProperty<ConnectionType> CONNECTION_TYPE_LEFT = EnumProperty.create("connection_type_left", ConnectionType.class);
+    public static final EnumProperty<ConnectionType> CONNECTION_TYPE_RIGHT = EnumProperty.create("connection_type_right", ConnectionType.class);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected final VoxelShape[] shapes;
 
@@ -323,7 +323,7 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                 .setValue(WATERLOGGED, fluidstate.is(Fluids.WATER));
     }
 
-    private Direction[] directionsFromFacing(Direction facing){
+    public static Direction[] directionsFromFacing(Direction facing){
         //Order is Left, Right, Front, Back
         return switch (facing){
             case UP, DOWN -> new Direction[]{WEST, EAST, NORTH, SOUTH};

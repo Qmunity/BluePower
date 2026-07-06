@@ -2,6 +2,7 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
+import com.bluepowermod.block.BlockBPCableBase.ConnectionType;
 import com.bluepowermod.block.machine.BlockAlloyWire;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.init.BPBlockEntityType;
@@ -120,5 +121,22 @@ public class TileWire extends TileBase {
             redstoneCap.invalidate();
             redstoneCap = null;
         }
+    }
+
+    public boolean isConnected(Direction direction){
+        Direction[] sides = BlockBPCableBase.directionsFromFacing(getBlockState().getValue(BlockBPCableBase.FACING));
+        for (int i = 0; i < 4; i++){
+            Direction side = sides[i];
+            var property = switch (i){
+                case 0 -> BlockBPCableBase.CONNECTION_TYPE_LEFT;
+                case 1 -> BlockBPCableBase.CONNECTION_TYPE_RIGHT;
+                case 2 -> BlockBPCableBase.CONNECTION_TYPE_FRONT;
+                default -> BlockBPCableBase.CONNECTION_TYPE_BACK;
+            };
+            if (side == direction){
+                return getBlockState().getValue(property) != ConnectionType.NONE;
+            }
+        }
+        return false;
     }
 }
