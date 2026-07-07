@@ -98,6 +98,7 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
     @Override
     protected BlockState updateState(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean movedByPiston) {
         state = super.updateState(state, level, pos, blockIn, fromPos, movedByPiston);
+/*
         int redstoneLevel = 0;
         for (Direction direction : Direction.values()){
             int j = MultipartUtils.getRedstonePower(direction, state.getValue(FACING), level, pos);
@@ -108,11 +109,15 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
             if (j > redstoneLevel) redstoneLevel = j;
         }
         int redstoneValue = redstoneLevel;
+*/
         BlockEntity be = level.getBlockEntity(pos);
         BlockEntity wire = be instanceof TileBPMultipart multipart ? multipart.getTileForState(state) : be;
         if (wire == null) return state;
-        wire.getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY).ifPresent(r -> r.setRedstonePower(null, (byte) (redstoneValue * 17)));
-        if (wire instanceof TileWire wire1) wire1.markBlockForUpdate();
+        //wire.getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY).ifPresent(r -> r.setRedstonePower(null, (byte) (redstoneValue * 17)));
+        if (wire instanceof TileWire wire1) {
+            wire1.onBlockUpdate();
+            wire1.markBlockForUpdate();
+        }
         return state;
     }
 
@@ -134,4 +139,7 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
         return type.getMinColor();
     }
 
+    public RedwireType getType() {
+        return type;
+    }
 }

@@ -7,15 +7,21 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 
-public class RedstoneStorage implements IRedstoneDevice {
+import java.util.function.Supplier;
+
+public class RedstoneStorage implements IRedstoneDevice, IRedConductor {
     private final RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
     byte power = 0;
-    private final Level level;
+    private final Supplier<Level> level;
     private final BlockPos blockPos;
+    private final Direction face;
+    private final RedwireType type;
 
-    public RedstoneStorage(Level level, BlockPos blockPos) {
+    public RedstoneStorage(Supplier<Level> level, BlockPos blockPos, Direction face, RedwireType type) {
         this.level = level;
         this.blockPos = blockPos;
+        this.face = face;
+        this.type = type;
     }
 
 
@@ -41,7 +47,13 @@ public class RedstoneStorage implements IRedstoneDevice {
 
     @Override
     public void onRedstoneUpdate() {
+        if (this.level.get() == null) return;
+        // Don't to anything if propagation-related stuff is going on
+        if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+            return;
+        if (level.get().isClientSide()) return;
 
+        //RedstoneApi.getInstance().getRedstonePropagator(this, face).propagate();
     }
 
     @Override
@@ -56,6 +68,16 @@ public class RedstoneStorage implements IRedstoneDevice {
 
     @Override
     public Level getLevel() {
-        return level;
+        return level.get();
+    }
+
+    @Override
+    public boolean hasLoss(Direction side) {
+        return type.hasLoss();
+    }
+
+    @Override
+    public boolean isAnalogue(Direction side) {
+        return type.isAnalogue();
     }
 }

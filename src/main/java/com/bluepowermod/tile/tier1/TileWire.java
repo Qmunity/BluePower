@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TileWire extends TileBase {
-    private final IRedstoneDevice device = new RedstoneStorage(level, worldPosition);
+    private final IRedstoneDevice device;
     @Nullable
     private BlockState cachedBlockState;
     private LazyOptional<IRedstoneDevice> redstoneCap;
@@ -37,11 +37,16 @@ public class TileWire extends TileBase {
     public static final ModelProperty<Boolean> LIGHT_INFO = new ModelProperty<>();
 
     public TileWire(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.WIRE.get(), pos, state);
+        this(BPBlockEntityType.WIRE.get(), pos, state);
     }
 
     public TileWire(BlockEntityType type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+        device = new RedstoneStorage(() -> level, pos, state.getValue(BlockBPCableBase.FACING), ((BlockAlloyWire)state.getBlock()).getType());
+    }
+
+    public void onBlockUpdate(){
+        this.device.onRedstoneUpdate();
     }
 
 
