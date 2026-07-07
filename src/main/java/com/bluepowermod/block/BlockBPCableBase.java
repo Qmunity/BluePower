@@ -239,25 +239,20 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                 if (multipart.isSideBlocked(getCapability(), side)) {
                     continue;
                 }
-                for (BlockState s : multipart.getStates()){
-                    BlockEntity partTile = multipart.getTileForState(s);
-                    if (s == state) continue;
-                    if (isNeighborStateEquivalent(state, ownTile, s, partTile)){
-                        if (s.getValue(FACING) == side.getOpposite()){
-                            connections[i] = s.getBlock() == this ? ConnectionType.INNER_CORNER : ConnectionType.STRAIGHT;
-                            continue outer;
-                        } else {
-                            continue;
-                        }
-                    } else if (s.getBlock() instanceof BlockBPCableBase){
+                BlockState partState = multipart.getStateByFacing(side.getOpposite());
+                if (partState != null){
+                    BlockEntity partTile = multipart.getTileForState(partState);
+                    if (isNeighborStateEquivalent(state, ownTile, partState, partTile)){
+                        connections[i] = partState.getBlock() == this ? ConnectionType.INNER_CORNER : ConnectionType.STRAIGHT;
+                        continue;
+                    } else if (partState.getBlock() instanceof BlockBPCableBase){
                         continue;
                     }
-                    if (canConnect(world, ownTile, pos, s, partTile, side.getOpposite())){
+                    if (canConnect(world, ownTile, pos, partState, partTile, side.getOpposite())){
                         connections[i] = ConnectionType.STRAIGHT;
-                        continue outer;
+                        continue;
                     }
                 }
-
             }
             BlockPos neighbor = pos.relative(side);
             BlockState neighborState = world.getBlockState(neighbor);
@@ -300,10 +295,11 @@ public class BlockBPCableBase extends BlockBase implements IBPPartBlock, SimpleW
                 neighborState = world.getBlockState(neighbor);
                 neighborTile = world.getBlockEntity(neighbor);
                 if (neighborTile instanceof TileBPMultipart multipart1){
-                    for (BlockState s : multipart1.getStates()){
-                        if (isNeighborStateEquivalent(state, ownTile, s, multipart1.getTileForState(s)) && s.getValue(FACING) == side){
+                    BlockState partState = multipart1.getStateByFacing(side);
+                    if (partState != null){
+                        if (isNeighborStateEquivalent(state, ownTile, partState, multipart1.getTileForState(partState))){
                             connections[i] = ConnectionType.OUTER_CORNER;
-                            continue outer;
+                            continue;
                         }
                     }
                 }
