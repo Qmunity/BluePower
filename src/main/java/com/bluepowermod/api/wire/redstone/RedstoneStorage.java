@@ -3,25 +3,27 @@ package com.bluepowermod.api.wire.redstone;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
+import com.bluepowermod.tile.tier1.TileWire;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class RedstoneStorage implements IRedstoneDevice, IRedConductor {
     private final RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
     byte power = 0;
-    private final Supplier<Level> level;
-    private final BlockPos blockPos;
+    private final IRedwire wire;
     private final Direction face;
-    private final RedwireType type;
+    private final EnumMap<Direction, Byte> inputs = new EnumMap<>(Direction.class);
 
-    public RedstoneStorage(Supplier<Level> level, BlockPos blockPos, Direction face, RedwireType type) {
-        this.level = level;
-        this.blockPos = blockPos;
+    public RedstoneStorage(IRedwire wire, Direction face) {
+        this.wire = wire;
         this.face = face;
-        this.type = type;
     }
 
 
@@ -37,6 +39,7 @@ public class RedstoneStorage implements IRedstoneDevice, IRedConductor {
 
     @Override
     public byte getRedstonePower(Direction side) {
+        if (inputs.containsKey(side)) return 0;
         return power;
     }
 
@@ -47,11 +50,11 @@ public class RedstoneStorage implements IRedstoneDevice, IRedConductor {
 
     @Override
     public void onRedstoneUpdate() {
-        if (this.level.get() == null) return;
+        if (this.getLevel() == null) return;
         // Don't to anything if propagation-related stuff is going on
         if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
             return;
-        if (level.get().isClientSide()) return;
+        if (getLevel().isClientSide()) return;
 
         //RedstoneApi.getInstance().getRedstonePropagator(this, face).propagate();
     }
@@ -63,21 +66,21 @@ public class RedstoneStorage implements IRedstoneDevice, IRedConductor {
 
     @Override
     public BlockPos getBlockPos() {
-        return blockPos;
+        return wire.getBlockPos();
     }
 
     @Override
     public Level getLevel() {
-        return level.get();
+        return wire.getLevel();
     }
 
     @Override
     public boolean hasLoss(Direction side) {
-        return type.hasLoss();
+        return wire.getRedwireType(side).hasLoss();
     }
 
     @Override
     public boolean isAnalogue(Direction side) {
-        return type.isAnalogue();
+        return wire.getRedwireType(side).isAnalogue();
     }
 }

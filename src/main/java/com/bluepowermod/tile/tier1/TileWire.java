@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileWire extends TileBase {
+public class TileWire extends TileBase implements IRedwire {
     private final IRedstoneDevice device;
     @Nullable
     private BlockState cachedBlockState;
@@ -42,7 +42,7 @@ public class TileWire extends TileBase {
 
     public TileWire(BlockEntityType type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        device = new RedstoneStorage(() -> level, pos, state.getValue(BlockBPCableBase.FACING), ((BlockAlloyWire)state.getBlock()).getType());
+        device = new RedstoneStorage(this, state.getValue(BlockBPCableBase.FACING));
     }
 
     public void onBlockUpdate(){
@@ -143,5 +143,10 @@ public class TileWire extends TileBase {
             }
         }
         return false;
+    }
+
+    @Override
+    public RedwireType getRedwireType(Direction side) {
+        return ((BlockAlloyWire)getBlockState().getBlock()).getType();
     }
 }
