@@ -149,4 +149,14 @@ public class TileWire extends TileBase implements IRedwire {
     public RedwireType getRedwireType(Direction side) {
         return ((BlockAlloyWire)getBlockState().getBlock()).getType();
     }
+
+    @Override
+    public boolean canReceivePower(Direction side) {
+        return isConnected(side) || getBlockState().getValue(BlockBPCableBase.FACING) == side.getOpposite();
+    }
+
+    @Override
+    public boolean canOutputPower(Direction side) {
+        return canReceivePower(side);
+    }
 }

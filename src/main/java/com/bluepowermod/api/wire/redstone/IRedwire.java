@@ -11,9 +11,14 @@ import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneCo
  */
 public interface IRedwire extends IWorldLocation {
 
-    public RedwireType getRedwireType(Direction side);
+    RedwireType getRedwireType(Direction side);
 
-    public static interface IInsulatedRedwire extends IInsulatedRedstoneDevice, IRedwire, IAdvancedRedstoneConductor,
+    boolean canReceivePower(Direction side);
+
+    boolean canOutputPower(Direction side);
+
+
+    interface IInsulatedRedwire extends IInsulatedRedstoneDevice, IRedwire, IAdvancedRedstoneConductor,
             IAdvancedBundledConductor {
 
     }
