@@ -8,7 +8,9 @@
 
 package com.bluepowermod.tile;
 
+import com.bluepowermod.api.multipart.IBPMultipartTile;
 import com.bluepowermod.api.multipart.IBPPartBlock;
+import com.bluepowermod.api.multipart.IBPPartTile;
 import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.mojang.datafixers.util.Pair;
@@ -55,7 +57,7 @@ import java.util.stream.Collectors;
 /**
  * @author MoreThanHidden
  */
-public class TileBPMultipart extends BlockEntity {
+public class TileBPMultipart extends BlockEntity implements IBPMultipartTile {
 
     public static final ModelProperty<Map<BlockState, ModelData>> STATE_INFO = new ModelProperty<>();
     public static final ModelProperty<BlockAndTintGetter> LEVEL = new ModelProperty<>();
@@ -99,6 +101,9 @@ public class TileBPMultipart extends BlockEntity {
             tile = entityBlock.newBlockEntity(worldPosition, state);
             if (tile != null) {
                 tile.setLevel(level);
+                if (tile instanceof IBPPartTile part){
+                    part.setMultipartTile(this);
+                }
             }
         }
         addStateToEnumMap(state);
@@ -141,6 +146,7 @@ public class TileBPMultipart extends BlockEntity {
         //Remove Tile Entity
         if(stateMap.get(state) != null) {
             stateMap.get(state).setRemoved();
+            if (stateMap.get(state) instanceof IBPPartTile part) part.setMultipartTile(null);
         }
         Direction toRemove = null;
         for (var s : statesByDirection.entrySet()){
@@ -335,6 +341,7 @@ public class TileBPMultipart extends BlockEntity {
         stateMap.remove(state);
         addStateToEnumMap(newState);
         stateMap.put(newState, te);
+        if (te != null) te.setBlockState(newState);
         shape = null;
         collisionShape = null;
         markDirtyClient();

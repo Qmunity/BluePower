@@ -1,5 +1,8 @@
 package com.bluepowermod.tile.tier1;
 
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.multipart.IBPMultipartTile;
+import com.bluepowermod.api.multipart.IBPPartTile;
 import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
 import com.bluepowermod.block.BlockBPCableBase.ConnectionType;
@@ -27,8 +30,9 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileWire extends TileBase implements IRedwire {
+public class TileWire extends TileBase implements IRedwire, IBPPartTile {
     private final IRedstoneDevice device;
+    IBPMultipartTile multipart = null;
     @Nullable
     private BlockState cachedBlockState;
     private LazyOptional<IRedstoneDevice> redstoneCap;
@@ -157,5 +161,15 @@ public class TileWire extends TileBase implements IRedwire {
     @Override
     public boolean canOutputPower(Direction side) {
         return canReceivePower(side);
+    }
+
+    @Override
+    public void setMultipartTile(IBPMultipartTile multipart) {
+        this.multipart = multipart;
+    }
+
+    @Override
+    public IBPMultipartTile getMultipart() {
+        return multipart;
     }
 }
