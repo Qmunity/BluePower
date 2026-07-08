@@ -65,8 +65,7 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
         if (ownTile instanceof TileBPMultipart multipart){
             ownTile = multipart.getTileForState(pState);
         }
-        int outputPower = ownTile == null ? 0 : ownTile.getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, pDirection.getOpposite()).map(r -> r.getRedstonePower(pDirection.getOpposite()) & 0xFF).orElse(0);
-        return MathHelper.map(outputPower, 0, 255, 0, 15);
+        return ownTile == null ? 0 : ownTile.getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, pDirection.getOpposite()).map(r -> r.getVanillaRedstonePower(pDirection.getOpposite()) & 0xFF).orElse(0);
     }
 
     @Override
@@ -94,7 +93,21 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
     }
 
     @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+        if (state != oldState && state.is(oldState.getBlock())){
+            BlockEntity be = level.getBlockEntity(pos);
+            BlockEntity wire = be instanceof TileBPMultipart multipart ? multipart.getTileForState(state) : be;
+            if (wire instanceof TileWire wire1) {
+                wire1.setBlockState(state);
+                wire1.onBlockUpdate();
+            }
+        }
+    }
+
+    @Override
     protected BlockState updateState(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean movedByPiston) {
+        BlockState oldState = state;
         state = super.updateState(state, level, pos, blockIn, fromPos, movedByPiston);
 /*
         int redstoneLevel = 0;
@@ -108,13 +121,13 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
         }
         int redstoneValue = redstoneLevel;
 */
+        if (oldState != state) return state; //returning since the redstone update code will be run from onPlace anyways
         BlockEntity be = level.getBlockEntity(pos);
         BlockEntity wire = be instanceof TileBPMultipart multipart ? multipart.getTileForState(state) : be;
         if (wire == null) return state;
         //wire.getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY).ifPresent(r -> r.setRedstonePower(null, (byte) (redstoneValue * 17)));
         if (wire instanceof TileWire wire1) {
             wire1.onBlockUpdate();
-            wire1.markBlockForUpdate();
         }
         return state;
     }

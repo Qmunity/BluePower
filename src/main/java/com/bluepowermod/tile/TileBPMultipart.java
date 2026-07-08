@@ -201,7 +201,7 @@ public class TileBPMultipart extends BlockEntity implements IBPMultipartTile {
         //Get Matching Capabilities from the contained Tile Entities.
         List<LazyOptional<T>> capability =  stateMap.values().stream().filter(Objects::nonNull)
                 .map(t -> t.getCapability(cap, side)).filter(LazyOptional::isPresent).collect(Collectors.toList());
-        return capability.size() > 0 ? capability.get(0) : LazyOptional.empty();
+        return !capability.isEmpty() ? capability.get(0) : LazyOptional.empty();
     }
 
     public Boolean isSideBlocked(@Nonnull Capability cap, @Nullable Direction side){

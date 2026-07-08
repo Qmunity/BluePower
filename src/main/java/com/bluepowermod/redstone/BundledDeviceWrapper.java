@@ -70,6 +70,11 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
+    public byte getVanillaRedstonePower(Direction side) {
+        return getRedstonePower(side);
+    }
+
+    @Override
     public void setRedstonePower(Direction side, byte power) {
 
         byte[] b = device.getBundledPower(side);

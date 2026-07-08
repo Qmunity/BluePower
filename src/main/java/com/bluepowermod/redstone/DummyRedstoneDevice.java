@@ -103,6 +103,11 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
     }
 
     @Override
+    public byte getVanillaRedstonePower(Direction side) {
+        return getRedstonePower(side);
+    }
+
+    @Override
     public void setRedstonePower(Direction side, byte power) {
 
         // if (loc.getBlock() instanceof BlockRedstoneWire) {
