@@ -13,10 +13,11 @@ public interface IRedwire extends IWorldLocation {
 
     RedwireType getRedwireType(Direction side);
 
+    boolean isConnected(Direction side);
+
     boolean canReceivePower(Direction side);
 
     boolean canOutputPower(Direction side);
-
 
     interface IInsulatedRedwire extends IInsulatedRedstoneDevice, IRedwire, IAdvancedRedstoneConductor,
             IAdvancedBundledConductor {
