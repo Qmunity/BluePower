@@ -2,6 +2,7 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.multipart.IBPPartTile;
 import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.RedwireType;
@@ -101,8 +102,36 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
             if (wire instanceof TileWire wire1) {
                 wire1.setBlockState(state);
                 wire1.onBlockUpdate();
+                for (Direction direction : Direction.values()){ //Trigger block updates since connections have changed
+                    if (!isWire(direction, wire1)){
+                        level.markAndNotifyBlock(pos, level.getChunkAt(pos), state, state, 1, 512);
+                        BlockPos neighbor = pos.relative(direction);
+                        BlockState neighborState = level.getBlockState(neighbor);
+                        level.updateNeighborsAtExceptFromFacing(neighbor, neighborState.getBlock(), direction.getOpposite());
+                    }
+                }
             }
         }
+    }
+
+    public boolean isWire(Direction side, TileWire wire){
+        if (wire.getMultipart() != null){
+            BlockState partState = wire.getMultipart().getStateByFacing(side.getOpposite());
+            if (partState != null){
+                BlockEntity partBE = wire.getMultipart().getTileForState(partState);
+                return this.isNeighborStateEquivalent(wire.getBlockState(), wire, partState, partBE);
+            }
+        }
+        BlockState neighborState = wire.getLevel().getBlockState(wire.getBlockPos().relative(side));
+        BlockEntity tDelegator = wire.getLevel().getBlockEntity(wire.getBlockPos().relative(side));
+        boolean isWire = isNeighborStateEquivalent(wire.getBlockState(), wire, neighborState, tDelegator);
+        if (tDelegator instanceof TileBPMultipart multipart){
+            BlockState partState = multipart.getStateByFacing(wire.getFacingDirection());
+            if (partState != null){
+                isWire = isNeighborStateEquivalent(wire.getBlockState(), wire, partState, multipart.getTileForState(partState));
+            }
+        }
+        return isWire;
     }
 
     @Override

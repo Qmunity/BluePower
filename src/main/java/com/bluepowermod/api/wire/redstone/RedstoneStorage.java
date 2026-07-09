@@ -1,6 +1,7 @@
 package com.bluepowermod.api.wire.redstone;
 
 import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.multipart.IBPPartTile;
 import com.bluepowermod.block.BlockBPMultipart;
 import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.helper.RedstoneHelper;
