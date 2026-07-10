@@ -14,7 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 
-public class RedstoneStorage implements IRedstoneDevice, IRedConductor, IFace {
+public class RedstoneStorage implements IRedstoneConductor, IFace {
     private final RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
     byte power = 0;
     private final IRedwire wire;
@@ -93,5 +93,10 @@ public class RedstoneStorage implements IRedstoneDevice, IRedConductor, IFace {
     @Override
     public Direction getFace() {
         return face;
+    }
+
+    @Override
+    public boolean canPropagateFrom(Direction fromSide) {
+        return true;
     }
 }
