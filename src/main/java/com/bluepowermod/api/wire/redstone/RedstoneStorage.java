@@ -34,6 +34,7 @@ public class RedstoneStorage implements IRedstoneDevice, IRedConductor {
     @Override
     public byte getRedstonePower(Direction side) {
         if (input != null && input.first() == side) return 0;
+        if (side != null && !wire.canOutputPower(side)) return 0;
         return power;
     }
 
