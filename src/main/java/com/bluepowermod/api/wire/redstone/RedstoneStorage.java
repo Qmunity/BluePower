@@ -3,23 +3,17 @@ package com.bluepowermod.api.wire.redstone;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
-import com.bluepowermod.tile.tier1.TileWire;
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.function.Supplier;
 
 public class RedstoneStorage implements IRedstoneDevice, IRedConductor {
     private final RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
     byte power = 0;
     private final IRedwire wire;
     private final Direction face;
-    private final EnumMap<Direction, Byte> inputs = new EnumMap<>(Direction.class);
+    private Pair<Direction, Byte> input = null;
 
     public RedstoneStorage(IRedwire wire, Direction face) {
         this.wire = wire;
@@ -39,7 +33,7 @@ public class RedstoneStorage implements IRedstoneDevice, IRedConductor {
 
     @Override
     public byte getRedstonePower(Direction side) {
-        if (inputs.containsKey(side)) return 0;
+        if (input != null && input.first() == side) return 0;
         return power;
     }
 
