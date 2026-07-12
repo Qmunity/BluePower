@@ -69,6 +69,17 @@ public class RedstoneHelper {
                 || b instanceof PistonBaseBlock;
     }
 
+    public static boolean isVanillaRedstoneSink(BlockState state){
+        Block b = state.getBlock();
+        return b instanceof DoorBlock || b instanceof RedstoneLampBlock || b instanceof TntBlock || b instanceof DispenserBlock
+                || b instanceof NoteBlock || b instanceof PistonBaseBlock;
+    }
+
+    public static boolean isVanillaSource(BlockState state){
+        Block b = state.getBlock();
+        return b instanceof LeverBlock || b instanceof RedstoneTorchBlock || b instanceof RedstoneWallTorchBlock || b == Blocks.REDSTONE_BLOCK;
+    }
+
     @Deprecated
     public static int getOutputWeak(Level world, int x, int y, int z, Direction side, Direction face) {
 
