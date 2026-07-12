@@ -95,8 +95,7 @@ public class TileWire extends TileBase implements IRedwire {
                 directions.remove(state.getValue(BlockAlloyWire.FACING));
 
                 //Make sure the cable is on the same side of the block
-                directions.removeIf(d -> level.getBlockState(worldPosition.relative(d)).getBlock() instanceof BlockAlloyWire
-                        && level.getBlockState(worldPosition.relative(d)).getValue(BlockAlloyWire.FACING) != state.getValue(BlockAlloyWire.FACING));
+                directions.removeIf(d -> !isConnected(d));
 
 
                 //Make sure the cable is the same color or none
