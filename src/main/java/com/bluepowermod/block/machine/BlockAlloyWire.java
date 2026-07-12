@@ -65,10 +65,8 @@ public class BlockAlloyWire extends BlockBPCableBase implements IBPColoredBlock,
         if (ownTile instanceof TileBPMultipart multipart){
             ownTile = multipart.getTileForState(pState);
         }
-        if (ownTile instanceof TileWire wire){
-            return MathHelper.map(wire.getOutputtingRedstone() & 0xFF, 0, 255, 0, 15);
-        }
-        return 0;
+        int outputPower = ownTile == null ? 0 : ownTile.getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, pDirection.getOpposite()).map(r -> r.getRedstonePower(pDirection.getOpposite()) & 0xFF).orElse(0);
+        return MathHelper.map(outputPower, 0, 255, 0, 15);
     }
 
     @Override
