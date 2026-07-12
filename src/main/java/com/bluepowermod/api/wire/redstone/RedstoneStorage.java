@@ -2,11 +2,8 @@ package com.bluepowermod.api.wire.redstone;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.misc.IFace;
-import com.bluepowermod.api.multipart.IBPMultipartTile;
-import com.bluepowermod.api.multipart.IBPPartTile;
-import com.bluepowermod.block.BlockBPMultipart;
+import com.bluepowermod.api.misc.IWorldLocation;
 import com.bluepowermod.helper.MathHelper;
-import com.bluepowermod.helper.RedstoneHelper;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 import it.unimi.dsi.fastutil.Pair;
@@ -14,16 +11,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 
-public class RedstoneStorage implements IRedstoneConductor, IFace {
+public class RedstoneStorage implements IRedstoneDevice {
     private final RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
     byte power = 0;
-    private final IRedwire wire;
-    private final Direction face;
+    private final IWorldLocation tile;
     private Pair<Direction, Byte> input = null;
 
-    public RedstoneStorage(IRedwire wire, Direction face) {
-        this.wire = wire;
-        this.face = face;
+    public RedstoneStorage(IWorldLocation tile) {
+        this.tile = tile;
     }
 
 
@@ -45,7 +40,6 @@ public class RedstoneStorage implements IRedstoneConductor, IFace {
 
     @Override
     public byte getVanillaRedstonePower(Direction side) {
-        if (side != null && !wire.canOutputPower(side)) return 0;
         return (byte) MathHelper.map(getRedstonePower(side) & 0xFF, 0, 255, 0, 15);
     }
 
@@ -56,13 +50,6 @@ public class RedstoneStorage implements IRedstoneConductor, IFace {
 
     @Override
     public void onRedstoneUpdate() {
-        if (this.getLevel() == null) return;
-        // Don't to anything if propagation-related stuff is going on
-        if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
-            return;
-        if (getLevel().isClientSide()) return;
-
-        //RedstoneApi.getInstance().getRedstonePropagator(this, face).propagate();
     }
 
     @Override
@@ -72,31 +59,12 @@ public class RedstoneStorage implements IRedstoneConductor, IFace {
 
     @Override
     public BlockPos getBlockPos() {
-        return wire.getBlockPos();
+        return tile.getBlockPos();
     }
 
     @Override
     public Level getLevel() {
-        return wire.getLevel();
+        return tile.getLevel();
     }
 
-    @Override
-    public boolean hasLoss(Direction side) {
-        return wire.getRedwireType(side).hasLoss();
-    }
-
-    @Override
-    public boolean isAnalogue(Direction side) {
-        return wire.getRedwireType(side).isAnalogue();
-    }
-
-    @Override
-    public Direction getFace() {
-        return face;
-    }
-
-    @Override
-    public boolean canPropagateFrom(Direction fromSide) {
-        return true;
-    }
 }

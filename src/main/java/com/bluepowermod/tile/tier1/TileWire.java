@@ -12,6 +12,7 @@ import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
+import com.bluepowermod.redstone.RedwireFaceStorage;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
@@ -50,7 +51,7 @@ public class TileWire extends TileBase implements IRedwire, IBPPartTile, IFace {
 
     public TileWire(BlockEntityType type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        device = new RedstoneStorage(this, state.getValue(BlockBPCableBase.FACING));
+        device = new RedwireFaceStorage(this);
     }
 
     public void onBlockUpdate(){
