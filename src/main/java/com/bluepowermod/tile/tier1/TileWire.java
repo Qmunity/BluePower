@@ -1,6 +1,7 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.multipart.IBPMultipartTile;
 import com.bluepowermod.api.multipart.IBPPartTile;
 import com.bluepowermod.api.wire.redstone.*;
@@ -9,6 +10,8 @@ import com.bluepowermod.block.BlockBPCableBase.ConnectionType;
 import com.bluepowermod.block.machine.BlockAlloyWire;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.init.BPBlockEntityType;
+import com.bluepowermod.redstone.DummyRedstoneDevice;
+import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
@@ -31,8 +34,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileWire extends TileBase implements IRedwire, IBPPartTile {
-    private final IRedstoneDevice device;
+public class TileWire extends TileBase implements IRedwire, IBPPartTile, IFace {
+    private final RedstoneStorage device;
     IBPMultipartTile multipart = null;
     @Nullable
     private BlockState cachedBlockState;
@@ -51,7 +54,25 @@ public class TileWire extends TileBase implements IRedwire, IBPPartTile {
     }
 
     public void onBlockUpdate(){
-        this.device.onRedstoneUpdate();
+
+        // Don't to anything if propagation-related stuff is going on
+        if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+            return;
+
+        // Do not do anything if we're on the client
+        if (getLevel().isClientSide())
+            return;
+
+        // Refresh connections
+        device.getRedstoneConnectionCache().recalculateConnections();
+        // Add bottom device (forced)
+        if (device.getRedstoneConnectionCache().getConnectionOnSide(getFace()) == null) {
+            DummyRedstoneDevice drd = DummyRedstoneDevice.getDeviceAt(getLevel(), this.getBlockPos().relative(getFace()));
+            device.getRedstoneConnectionCache().onConnect(getFace(), drd, getFace().getOpposite(), com.bluepowermod.api.connect.ConnectionType.STRAIGHT);
+            drd.getRedstoneConnectionCache().onConnect(getFace().getOpposite(), device, getFace(), com.bluepowermod.api.connect.ConnectionType.STRAIGHT);
+        }
+
+        RedstoneApi.getInstance().getRedstonePropagator(device, getFace()).propagate();
     }
 
 
@@ -179,5 +200,10 @@ public class TileWire extends TileBase implements IRedwire, IBPPartTile {
     @Override
     public IBPMultipartTile getMultipart() {
         return multipart;
+    }
+
+    @Override
+    public Direction getFace() {
+        return getFacingDirection();
     }
 }
