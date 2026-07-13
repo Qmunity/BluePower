@@ -69,6 +69,42 @@ public class RedwireFaceStorage extends RedstoneStorage implements IAdvancedReds
     public boolean canPropagateFrom(Direction fromSide) {
         return true;
     }
+
+    @Override
+    public void onRedstoneUpdate() {
+        if (hasUpdated) {
+            if (wire instanceof TileBase base) base.markBlockForUpdate();
+
+            for (Direction dir : Direction.values()) {
+                IConnection<IRedstoneDevice> c = redstoneConnections.getConnectionOnSide(dir);
+                IRedstoneDevice dev = null;
+                if (c != null)
+                    dev = c.getB();
+                if (dir == getFace()) {
+                    RedstoneHelper.notifyRedstoneUpdate(getLevel(), getBlockPos(), dir, true);
+                } else if ((dev == null || dev instanceof DummyRedstoneDevice) && dir != getFace().getOpposite()) {
+                    RedstoneHelper.notifyRedstoneUpdate(getLevel(), getBlockPos(), dir, false);
+                }
+            }
+
+            hasUpdated = false;
+        }
+    }
+
+    @Override
+    public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(Direction fromSide, Collection<IConnection<IRedstoneDevice>> propagation) {
+
+        List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+
+        for (Direction d : Direction.values()) {
+            IConnection<IRedstoneDevice> c = redstoneConnections.getConnectionOnSide(d);
+            if (c != null)
+                l.add(Map.entry(c, c.getB() instanceof IRedwire redwire
+                        && redwire.getRedwireType(c.getSideB()) != wire.getRedwireType(c.getSideA())));
+        }
+
+        return l;
+    }
     @Override
     public void onConnect(IConnection<?> connection) {
 
