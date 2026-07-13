@@ -101,7 +101,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
         if (side == null)
             return 0;
 
-        return (byte) MathHelper.map(RedstoneHelper.getOutput(getLevel(), getBlockPos(), side), 0, 15, 0, 255);
+        return (byte) (RedstoneHelper.getOutput(getLevel(), getBlockPos(), side) * 17);
     }
 
     @Override
