@@ -50,6 +50,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
     private BlockPos blockPos;
     private Level level;
     private RedstoneConnectionCache connections;
+    Direction input = null;
 
     private DummyRedstoneDevice(Level level, BlockPos blockPos) {
 
@@ -86,6 +87,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
     @Override
     public byte getRedstonePower(Direction side) {
 
+        if (input != null && input == side) return 0;
         // if (loc.getBlock() instanceof BlockRedstoneWire) {
         // boolean wiresHandledUpdates = RedstoneApi.getInstance().shouldWiresHandleUpdates();
         // boolean wiresOutputtedPower = RedstoneApi.getInstance().shouldWiresOutputPower();
@@ -104,7 +106,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
 
     @Override
     public byte getVanillaRedstonePower(Direction side) {
-        return getRedstonePower(side);
+        return (byte) RedstoneHelper.getOutput(getLevel(), getBlockPos(), side);
     }
 
     @Override
@@ -119,6 +121,11 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
         // RedstoneApi.getInstance().setWiresHandleUpdates(wiresHandledUpdates);
         // RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
         // }
+    }
+
+    @Override
+    public void setInputSide(Direction side) {
+        this.input = side;
     }
 
     public int getRedstoneOutput(int def) {

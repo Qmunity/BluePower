@@ -87,6 +87,11 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
+    public void setInputSide(Direction side) {
+
+    }
+
+    @Override
     public void onRedstoneUpdate() {
 
         device.onBundledUpdate();

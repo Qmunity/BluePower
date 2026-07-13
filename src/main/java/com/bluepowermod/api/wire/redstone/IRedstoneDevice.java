@@ -43,10 +43,12 @@ public interface IRedstoneDevice extends IWorldLocation {
      */
     void setRedstonePower(Direction side, byte power);
 
+    void setInputSide(Direction side);
+
     /**
      * Notifies the device of a power change. (Usually called after propagation)
      */
-    public void onRedstoneUpdate();
+    void onRedstoneUpdate();
 
     /**
      * Returns whether this is a full face (if face devices should be able to connect to it)

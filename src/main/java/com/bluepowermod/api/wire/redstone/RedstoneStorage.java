@@ -15,7 +15,7 @@ public class RedstoneStorage implements IRedstoneDevice {
     protected final RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
     protected byte power = 0;
     private final IWorldLocation tile;
-    protected Pair<Direction, Byte> input = null;
+    protected Direction input = null;
 
     public RedstoneStorage(IWorldLocation tile) {
         this.tile = tile;
@@ -35,7 +35,7 @@ public class RedstoneStorage implements IRedstoneDevice {
 
     @Override
     public byte getRedstonePower(Direction side) {
-        if (input != null && input.first() == side) return 0;
+        if (input != null && input == side) return 0;
         return power;
     }
 
@@ -47,6 +47,11 @@ public class RedstoneStorage implements IRedstoneDevice {
     @Override
     public void setRedstonePower(Direction side, byte power) {
         this.power = power;
+    }
+
+    @Override
+    public void setInputSide(Direction side) {
+        input = side;
     }
 
     @Override
