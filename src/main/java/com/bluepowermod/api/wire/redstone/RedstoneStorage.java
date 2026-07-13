@@ -12,13 +12,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 
 public class RedstoneStorage implements IRedstoneDevice {
-    private final RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
-    byte power = 0;
+    protected final RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
+    protected byte power = 0;
     private final IWorldLocation tile;
-    private Pair<Direction, Byte> input = null;
+    protected Pair<Direction, Byte> input = null;
 
     public RedstoneStorage(IWorldLocation tile) {
         this.tile = tile;
+        redstoneConnections.listen();
     }
 
 
