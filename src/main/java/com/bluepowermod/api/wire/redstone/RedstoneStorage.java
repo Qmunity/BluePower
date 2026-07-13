@@ -41,7 +41,12 @@ public class RedstoneStorage implements IRedstoneDevice {
 
     @Override
     public byte getVanillaRedstonePower(Direction side) {
-        return (byte) MathHelper.map(getRedstonePower(side) & 0xFF, 0, 255, 0, 15);
+        int currentPower = getRedstonePower(side) & 0xFF;
+        int remainder = currentPower % 17;
+        int level = currentPower / 17;
+        if (remainder > 0) level++;
+        return (byte) level;
+        //return (byte) MathHelper.map(getRedstonePower(side) & 0xFF, 0, 255, 0, 15);
     }
 
     @Override
