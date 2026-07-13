@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TileWire extends TileBase implements IRedwire, IBPPartTile, IFace {
-    private final RedstoneStorage device;
+    private final RedwireFaceStorage device;
     IBPMultipartTile multipart = null;
     @Nullable
     private BlockState cachedBlockState;
@@ -55,25 +55,7 @@ public class TileWire extends TileBase implements IRedwire, IBPPartTile, IFace {
     }
 
     public void onBlockUpdate(){
-
-        // Don't to anything if propagation-related stuff is going on
-        if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
-            return;
-
-        // Do not do anything if we're on the client
-        if (getLevel().isClientSide())
-            return;
-
-        // Refresh connections
-        device.getRedstoneConnectionCache().recalculateConnections();
-        // Add bottom device (forced)
-        if (device.getRedstoneConnectionCache().getConnectionOnSide(getFace()) == null) {
-            DummyRedstoneDevice drd = DummyRedstoneDevice.getDeviceAt(getLevel(), this.getBlockPos().relative(getFace()));
-            device.getRedstoneConnectionCache().onConnect(getFace(), drd, getFace().getOpposite(), com.bluepowermod.api.connect.ConnectionType.STRAIGHT);
-            drd.getRedstoneConnectionCache().onConnect(getFace().getOpposite(), device, getFace(), com.bluepowermod.api.connect.ConnectionType.STRAIGHT);
-        }
-
-        RedstoneApi.getInstance().getRedstonePropagator(device, getFace()).propagate();
+        device.onUpdate();
     }
 
 
