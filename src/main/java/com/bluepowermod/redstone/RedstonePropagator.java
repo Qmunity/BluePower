@@ -36,8 +36,9 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
         doPropagate();
 
-        // for (RedstonePropagator p : scheduledPropagations)
-        // p.propagate();
+         for (RedstonePropagator p : scheduledPropagations) {
+             p.propagate();
+         }
     }
 
     public IRedstoneDevice getDevice() {
@@ -198,7 +199,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
             List<IConnection<IRedstoneDevice>> connections = performPropagation();
 
-            if (connections.size() == 0) {
+            if (connections.isEmpty()) {
                 RedstoneApi.getInstance().setWiresOutputPower(false, false);
 
                 getDevice().setRedstonePower(getSide(), (byte) 0);
@@ -244,8 +245,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             l.clear();
             connections.clear();
 
-            List<RedstonePropagator> scheduled = new ArrayList<RedstonePropagator>();
-            scheduled.addAll(getScheduledPropagations());
+            List<RedstonePropagator> scheduled = new ArrayList<RedstonePropagator>(getScheduledPropagations());
             getScheduledPropagations().clear();
 
             for (RedstonePropagator p : scheduled) {
