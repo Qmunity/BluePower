@@ -17,6 +17,7 @@
 
 package com.bluepowermod.redstone;
 
+import com.bluepowermod.api.wire.redstone.CapabilityRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
@@ -29,10 +30,15 @@ public class RedstoneProviderVanilla implements IRedstoneProvider {
 
     @Override
     public IRedstoneDevice getRedstoneDeviceAt(Level world, BlockPos pos, Direction face, Direction side) {
-
         BlockEntity te = world.getBlockEntity(pos);
-        if (te != null && te instanceof IRedstoneDevice)
-            return (IRedstoneDevice) te;
+        if (te != null) {
+            if (te.getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, side).isPresent()){
+                return te.getCapability(CapabilityRedstoneDevice.UNINSULATED_CAPABILITY, side).map(r -> r).get();
+            }
+            if (te.getCapability(CapabilityRedstoneDevice.INSULATED_CAPABILITY, side).isPresent()){
+                return te.getCapability(CapabilityRedstoneDevice.INSULATED_CAPABILITY, side).map(r -> r).get();
+            }
+        }
 
         return DummyRedstoneDevice.getDeviceAt(world, pos);
     }
@@ -41,8 +47,8 @@ public class RedstoneProviderVanilla implements IRedstoneProvider {
     public IBundledDevice getBundledDeviceAt(Level world, BlockPos pos, Direction face, Direction side) {
 
         BlockEntity te = world.getBlockEntity(pos);
-        if (te != null && te instanceof IBundledDevice)
-            return (IBundledDevice) te;
+        if (te instanceof IBundledDevice bundledDevice)
+            return bundledDevice;
 
         return null;
     }
