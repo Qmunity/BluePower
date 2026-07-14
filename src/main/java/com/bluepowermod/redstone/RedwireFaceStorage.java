@@ -1,5 +1,6 @@
 package com.bluepowermod.redstone;
 
+import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionListener;
 import com.bluepowermod.api.misc.IFace;
@@ -8,6 +9,7 @@ import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneCo
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedstoneStorage;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.helper.RedstoneHelper;
 import com.bluepowermod.tile.TileBase;
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class RedwireFaceStorage extends RedstoneStorage implements IAdvancedRedstoneConductor, IFace, IConnectionListener {
+public class RedwireFaceStorage extends RedstoneStorage implements IAdvancedRedstoneConductor, IRedwire, IFace, IConnectionListener {
     IRedwire wire;
     boolean hasUpdated = false;
     public RedwireFaceStorage(IRedwire wire) {
@@ -129,6 +131,38 @@ public class RedwireFaceStorage extends RedstoneStorage implements IAdvancedReds
     }
 
     @Override
+    public boolean canConnect(Direction side, IRedstoneDevice dev, ConnectionType type) {
+        if ((type == ConnectionType.STRAIGHT && side == getFace().getOpposite() && dev instanceof IFace)
+                || side == null)
+            return false;
+        if (type == ConnectionType.CLOSED_CORNER) {
+            if (side == getFace())
+                return false;
+            if (side == getFace().getOpposite())
+                return false;
+            if (side == null)
+                return false;
+        }
+
+        if (dev instanceof IRedwire redwire) {
+            RedwireType rwt = redwire.getRedwireType(side);
+            if (type == null)
+                return false;
+            RedwireType rwt_ = redwire.getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
+                    : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
+            if (rwt_ == null)
+                return false;
+            if (!rwt.canConnectTo(rwt_))
+                return false;
+        }
+
+        //if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 2, getFace(), side))
+        //    return false;
+
+        return true;
+    }
+
+    @Override
     public void onConnect(IConnection<?> connection) {
 
     }
@@ -136,5 +170,25 @@ public class RedwireFaceStorage extends RedstoneStorage implements IAdvancedReds
     @Override
     public void onDisconnect(IConnection<?> connection) {
 
+    }
+
+    @Override
+    public RedwireType getRedwireType(Direction side) {
+        return wire.getRedwireType(side);
+    }
+
+    @Override
+    public boolean isConnected(Direction side) {
+        return wire.isConnected(side);
+    }
+
+    @Override
+    public boolean canReceivePower(Direction side) {
+        return wire.canReceivePower(side);
+    }
+
+    @Override
+    public boolean canOutputPower(Direction side) {
+        return wire.canOutputPower(side);
     }
 }
