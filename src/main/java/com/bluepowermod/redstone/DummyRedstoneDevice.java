@@ -31,6 +31,7 @@ import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RedStoneWireBlock;
+import org.jetbrains.annotations.Nullable;
 
 public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
 
@@ -126,6 +127,11 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
     @Override
     public void setInputSide(Direction side) {
         this.input = side;
+    }
+
+    @Override
+    public @Nullable Direction getInputSide() {
+        return input;
     }
 
     public int getRedstoneOutput(int def) {

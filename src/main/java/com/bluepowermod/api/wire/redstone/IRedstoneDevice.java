@@ -45,6 +45,8 @@ public interface IRedstoneDevice extends IWorldLocation {
 
     void setInputSide(Direction side);
 
+    @Nullable
+    Direction getInputSide();
     /**
      * Notifies the device of a power change. (Usually called after propagation)
      */
@@ -59,12 +61,18 @@ public interface IRedstoneDevice extends IWorldLocation {
     static Tag writeNBT(Capability<IRedstoneDevice> capability, IRedstoneDevice instance, Direction direction) {
         CompoundTag nbt = new CompoundTag();
         nbt.putByte("power", instance.getRedstonePower(direction));
+        if (instance.getInputSide() != null){
+            nbt.putByte("inputSide", (byte)instance.getInputSide().get3DDataValue());
+        }
         return nbt;
     }
 
     static void readNBT(Capability<IRedstoneDevice> capability, IRedstoneDevice instance, Direction side, Tag nbt) {
         CompoundTag tags = (CompoundTag) nbt;
         byte power = tags.getByte("power");
+        if (tags.contains("inputSide")){
+            instance.setInputSide(Direction.from3DDataValue(tags.getByte("inputSide") & 0xFF));
+        }
         instance.setRedstonePower(side, power);
     }
 

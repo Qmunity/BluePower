@@ -19,6 +19,7 @@ import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneCo
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedwire.IInsulatedRedwire;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
 
@@ -89,6 +90,11 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     @Override
     public void setInputSide(Direction side) {
 
+    }
+
+    @Override
+    public @Nullable Direction getInputSide() {
+        return null;
     }
 
     @Override

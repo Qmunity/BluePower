@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 public class RedstoneStorage implements IRedstoneDevice {
     protected final RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
@@ -57,6 +58,11 @@ public class RedstoneStorage implements IRedstoneDevice {
     @Override
     public void setInputSide(Direction side) {
         input = side;
+    }
+
+    @Override
+    public @Nullable Direction getInputSide() {
+        return input;
     }
 
     @Override
