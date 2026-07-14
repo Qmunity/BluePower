@@ -4,8 +4,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
-;
-
 public interface IRedstoneProvider {
 
     /**
@@ -21,7 +19,7 @@ public interface IRedstoneProvider {
      *            Face the device must be placed on or {@link null} if not know or not a face device
      * @return The redstone device at the specified coords, side and face.
      */
-    public IRedstoneDevice getRedstoneDeviceAt(Level world, BlockPos pos, Direction side, Direction face);
+    IRedstoneDevice getRedstoneDeviceAt(Level world, BlockPos pos, Direction face, Direction side);
 
     /**
      * Returns the bundled device at the specified coordinates and on the specified side and face.
@@ -36,7 +34,7 @@ public interface IRedstoneProvider {
      *            Face the device must be placed on or {@link null} if not know or not a face device
      * @return The bundled device at the specified coords, side and face.
      */
-    public IBundledDevice getBundledDeviceAt(Level world, BlockPos pos, Direction side, Direction face);
+    IBundledDevice getBundledDeviceAt(Level world, BlockPos pos, Direction face, Direction side);
 
 
 
