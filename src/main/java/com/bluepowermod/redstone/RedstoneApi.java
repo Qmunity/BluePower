@@ -56,7 +56,7 @@ public class RedstoneApi implements IRedstoneApi {
         for (IRedstoneProvider provider : providers) {
             if (returned && provider instanceof RedstoneProviderVanilla)
                 continue;
-            IRedstoneDevice device = provider.getRedstoneDeviceAt(world, pos, side, face);
+            IRedstoneDevice device = provider.getRedstoneDeviceAt(world, pos, face, side);
             if (device == returnDevice) {
                 returned = true;
                 continue;
