@@ -31,6 +31,7 @@ import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
@@ -52,11 +53,15 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
     private Level level;
     private RedstoneConnectionCache connections;
     Direction input = null;
+    BlockState state;
 
     private DummyRedstoneDevice(Level level, BlockPos blockPos) {
 
         this.blockPos = blockPos;
         this.level = level;
+        if (level != null){
+            state = level.getBlockState(blockPos);
+        }
         if (blockPos != null)
             connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
     }
