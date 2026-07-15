@@ -121,10 +121,10 @@ public class RedwireFaceStorage extends RedstoneStorage implements IAdvancedReds
         // Refresh connections
         redstoneConnections.recalculateConnections();
         // Add bottom device (forced)
-        if (redstoneConnections.getConnectionOnSide(getFace()) == null) {
-            DummyRedstoneDevice drd = DummyRedstoneDevice.getDeviceAt(getLevel(), this.getBlockPos().relative(getFace()));
-            redstoneConnections.onConnect(getFace(), drd, getFace().getOpposite(), com.bluepowermod.api.connect.ConnectionType.STRAIGHT);
-            drd.getRedstoneConnectionCache().onConnect(getFace().getOpposite(), this, getFace(), com.bluepowermod.api.connect.ConnectionType.STRAIGHT);
+        if (redstoneConnections.getConnectionOnSide(getFace().getOpposite()) == null) {
+            DummyRedstoneDevice drd = DummyRedstoneDevice.getDeviceAt(getLevel(), this.getBlockPos().relative(getFace().getOpposite()));
+            redstoneConnections.onConnect(getFace().getOpposite(), drd, getFace(), com.bluepowermod.api.connect.ConnectionType.STRAIGHT);
+            drd.getRedstoneConnectionCache().onConnect(getFace(), this, getFace().getOpposite(), com.bluepowermod.api.connect.ConnectionType.STRAIGHT);
         }
 
         RedstoneApi.getInstance().getRedstonePropagator(this, getFace()).propagate();
