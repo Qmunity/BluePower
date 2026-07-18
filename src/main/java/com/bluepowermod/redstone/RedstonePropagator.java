@@ -372,13 +372,13 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                     try {
                         new LossyPropagator(getDevice(), getSide()).propagate();
                     } catch (Exception ex) {
-                        BluePower.log.error(ex);
+                        BluePower.log.error("Propagation threw an error", ex);
                     }
                 } else {
                     try {
                         new LosslessPropagator(getDevice(), getSide()).propagate();
                     } catch (Exception ex) {
-                        BluePower.log.error(ex);
+                        BluePower.log.error("Propagation threw an error", ex);
                     }
                 }
                 return;
@@ -407,7 +407,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             try {
                 new LosslessPropagator(getDevice(), getSide()).propagate();
             } catch (Exception ex) {
-                BluePower.log.error(ex);
+                BluePower.log.error("Propagation threw an error", ex);
             }
         }
     }
