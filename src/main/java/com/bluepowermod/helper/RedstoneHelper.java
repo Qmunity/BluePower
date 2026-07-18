@@ -113,7 +113,7 @@ public class RedstoneHelper {
                 if (d == side)
                     continue;
                 power = Math.max(power,
-                        getOutputStrong(world, pos.relative(d), null));
+                        getOutputStrong(world, pos.relative(d), d));
             }
         }
 
