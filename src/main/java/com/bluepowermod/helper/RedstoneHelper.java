@@ -6,6 +6,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 
 public class RedstoneHelper {
 
@@ -39,21 +40,35 @@ public class RedstoneHelper {
 
         Block block = world.getBlockState(pos).getBlock();
         if ((block == Blocks.REPEATER)
-                && (face == Direction.DOWN || face == null))
+                && (face == Direction.UP || face == null))
             if (world.getBlockState(pos).getValue(RepeaterBlock.FACING) == side.getOpposite())
                 return true;
 
         if (block instanceof LeverBlock) {
-            if (world.getBlockState(pos).getValue(LeverBlock.FACING) != face)
-                return false;
-            return side != world.getBlockState(pos).getValue(LeverBlock.FACING).getOpposite();
+            if (face == null) return true;
+            BlockState state = world.getBlockState(pos);
+            AttachFace attachFace = state.getValue(LeverBlock.FACE);
+            Direction facing = state.getValue(LeverBlock.FACING);
+            return switch (face){
+                case UP -> {
+                    yield attachFace == AttachFace.FLOOR || attachFace == AttachFace.WALL;
+                }
+                case DOWN -> {
+                    yield attachFace == AttachFace.CEILING || attachFace == AttachFace.WALL;
+                }
+                default -> {
+                    yield (attachFace == AttachFace.WALL) ||
+                            (attachFace == AttachFace.CEILING && side == Direction.DOWN) ||
+                            (attachFace == AttachFace.FLOOR && side == Direction.UP);
+                }
+            };
         }
 
-        if (block instanceof ComparatorBlock && (face == Direction.DOWN || face == null))
-            return side != Direction.UP;
+        if (block instanceof ComparatorBlock && (face == Direction.UP || face == null))
+            return side != Direction.DOWN;
 
         if (block instanceof RedStoneWireBlock)
-            return face == null || face == Direction.DOWN;
+            return face == null || face == Direction.UP;
 
         return block instanceof DoorBlock || block instanceof RedstoneLampBlock || block instanceof TntBlock
                 || block instanceof DispenserBlock || block instanceof NoteBlock
@@ -67,6 +82,17 @@ public class RedstoneHelper {
                 || b instanceof ComparatorBlock || b instanceof DoorBlock || b instanceof RedstoneLampBlock
                 || b instanceof TntBlock || b instanceof DispenserBlock || b instanceof NoteBlock
                 || b instanceof PistonBaseBlock;
+    }
+
+    public static boolean isVanillaRedstoneSink(BlockState state){
+        Block b = state.getBlock();
+        return b instanceof DoorBlock || b instanceof RedstoneLampBlock || b instanceof TntBlock || b instanceof DispenserBlock
+                || b instanceof NoteBlock || b instanceof PistonBaseBlock;
+    }
+
+    public static boolean isVanillaSource(BlockState state){
+        Block b = state.getBlock();
+        return b instanceof LeverBlock || b instanceof RedstoneTorchBlock || b instanceof RedstoneWallTorchBlock || b == Blocks.REDSTONE_BLOCK;
     }
 
     @Deprecated
@@ -87,7 +113,7 @@ public class RedstoneHelper {
                 if (d == side)
                     continue;
                 power = Math.max(power,
-                        getOutputStrong(world, pos.relative(d), null));
+                        getOutputStrong(world, pos.relative(d), d));
             }
         }
 

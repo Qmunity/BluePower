@@ -1,15 +1,24 @@
 package com.bluepowermod.tile.tier1;
 
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.misc.IFace;
+import com.bluepowermod.api.multipart.IBPMultipartTile;
+import com.bluepowermod.api.multipart.IBPPartTile;
 import com.bluepowermod.api.wire.redstone.*;
 import com.bluepowermod.block.BlockBPCableBase;
+import com.bluepowermod.block.BlockBPCableBase.ConnectionType;
 import com.bluepowermod.block.machine.BlockAlloyWire;
 import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.init.BPBlockEntityType;
+import com.bluepowermod.redstone.DummyRedstoneDevice;
+import com.bluepowermod.redstone.RedstoneApi;
+import com.bluepowermod.redstone.RedwireFaceStorage;
 import com.bluepowermod.tile.TileBase;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,14 +28,16 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileWire extends TileBase {
-    private final IRedstoneDevice device = new RedstoneStorage(level, worldPosition);
+public class TileWire extends TileBase implements IRedwire, IBPPartTile, IFace {
+    private final RedwireFaceStorage device;
+    IBPMultipartTile multipart = null;
     @Nullable
     private BlockState cachedBlockState;
     private LazyOptional<IRedstoneDevice> redstoneCap;
@@ -35,13 +46,23 @@ public class TileWire extends TileBase {
     public static final ModelProperty<Boolean> LIGHT_INFO = new ModelProperty<>();
 
     public TileWire(BlockPos pos, BlockState state) {
-        super(BPBlockEntityType.WIRE.get(), pos, state);
+        this(BPBlockEntityType.WIRE.get(), pos, state);
     }
 
     public TileWire(BlockEntityType type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+        device = new RedwireFaceStorage(this);
     }
 
+    public void onBlockUpdate(){
+        device.onUpdate();
+    }
+
+
+    public @NotNull ModelData getModelData(){
+        Boolean lightData = (device.getRedstonePower(null) & 0xFF) > 0;
+        return ModelData.builder().with(LIGHT_INFO, lightData).build();
+    }
 
     @Nonnull
     @OnlyIn(Dist.CLIENT)
@@ -49,7 +70,7 @@ public class TileWire extends TileBase {
 
             //Add Color and Light Data
             Pair<Integer, Integer> colorData = Pair.of(((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, -1), ((IBPColoredBlock)state.getBlock()).getColor(state, level, worldPosition, 2));
-            Boolean lightData = state.getValue(BlockAlloyWire.POWERED);
+            Boolean lightData = (device.getRedstonePower(null) & 0xFF) > 0;
 
             return ModelData.builder().with(COLOR_INFO, colorData).with(LIGHT_INFO, lightData).build();
 
@@ -83,8 +104,7 @@ public class TileWire extends TileBase {
                 directions.remove(state.getValue(BlockAlloyWire.FACING));
 
                 //Make sure the cable is on the same side of the block
-                directions.removeIf(d -> level.getBlockState(worldPosition.relative(d)).getBlock() instanceof BlockAlloyWire
-                        && level.getBlockState(worldPosition.relative(d)).getValue(BlockAlloyWire.FACING) != state.getValue(BlockAlloyWire.FACING));
+                directions.removeIf(d -> !isConnected(d));
 
 
                 //Make sure the cable is the same color or none
@@ -114,5 +134,59 @@ public class TileWire extends TileBase {
             redstoneCap.invalidate();
             redstoneCap = null;
         }
+    }
+
+    public boolean isConnected(Direction direction){
+        return getConnectionType(direction) != ConnectionType.NONE;
+    }
+
+    public ConnectionType getConnectionType(Direction direction){
+        Direction[] sides = BlockBPCableBase.directionsFromFacing(getBlockState().getValue(BlockBPCableBase.FACING));
+        for (int i = 0; i < 4; i++){
+            Direction side = sides[i];
+            var property = switch (i){
+                case 0 -> BlockBPCableBase.CONNECTION_TYPE_LEFT;
+                case 1 -> BlockBPCableBase.CONNECTION_TYPE_RIGHT;
+                case 2 -> BlockBPCableBase.CONNECTION_TYPE_FRONT;
+                default -> BlockBPCableBase.CONNECTION_TYPE_BACK;
+            };
+            if (side == direction){
+                return getBlockState().getValue(property);
+            }
+        }
+        return ConnectionType.NONE;
+    }
+
+    @Override
+    public RedwireType getRedwireType(Direction side) {
+        return ((BlockAlloyWire)getBlockState().getBlock()).getType();
+    }
+
+    @Override
+    public boolean canReceivePower(Direction side) {
+        return isConnected(side) || getBlockState().getValue(BlockBPCableBase.FACING) == side.getOpposite();
+    }
+
+    @Override
+    public boolean canOutputPower(Direction side) {
+        if (multipart != null){
+            return getConnectionType(side) == ConnectionType.STRAIGHT || getBlockState().getValue(BlockBPCableBase.FACING) == side.getOpposite();
+        }
+        return canReceivePower(side);
+    }
+
+    @Override
+    public void setMultipartTile(IBPMultipartTile multipart) {
+        this.multipart = multipart;
+    }
+
+    @Override
+    public IBPMultipartTile getMultipart() {
+        return multipart;
+    }
+
+    @Override
+    public Direction getFace() {
+        return getFacingDirection();
     }
 }

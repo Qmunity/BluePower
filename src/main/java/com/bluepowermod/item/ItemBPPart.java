@@ -63,7 +63,6 @@ public class ItemBPPart extends BlockItem {
 
                 //Add the new State
                 multipart.addState(thisState);
-                thisState.getBlock().setPlacedBy( context.getLevel(),context.getClickedPos(), thisState, context.getPlayer(), context.getItemInHand());
             }
             //Update Self
             state.neighborChanged(context.getLevel(), context.getClickedPos(), state.getBlock(), context.getClickedPos(), false);

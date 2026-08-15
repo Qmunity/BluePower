@@ -1,0 +1,22 @@
+{
+	"loader": "bluepower:wire",
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"particle": "bluepower:blocks/wire/wire",
+		"wire": "bluepower:blocks/wire/wire"
+	},
+	"elements": [
+		{
+			"from": [9, 0, 7],
+			"to": [16, 2, 9],
+			"faces": {
+				"north": {"uv": [9, 7, 16, 9], "texture": "#wire", "tintindex": 2},
+				"east": {"uv": [7, 7, 9, 9], "texture": "#wire", "tintindex": 2},
+				"south": {"uv": [9, 7, 16, 9], "texture": "#wire", "tintindex": 2},
+				"up": {"uv": [9, 7, 16, 9], "texture": "#wire", "tintindex": 2},
+				"down": {"uv": [9, 7, 16, 9], "texture": "#wire", "tintindex": 2}
+			}
+		}
+	]
+}

@@ -1,21 +1,26 @@
 package com.bluepowermod.api.wire.redstone;
 
 import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.misc.IFace;
+import com.bluepowermod.api.misc.IWorldLocation;
+import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 public class RedstoneStorage implements IRedstoneDevice {
-    private final RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
-    byte power = 0;
-    private final Level level;
-    private final BlockPos blockPos;
+    protected final RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
+    protected byte power = 0;
+    private final IWorldLocation tile;
+    protected Direction input = null;
 
-    public RedstoneStorage(Level level, BlockPos blockPos) {
-        this.level = level;
-        this.blockPos = blockPos;
+    public RedstoneStorage(IWorldLocation tile) {
+        this.tile = tile;
+        redstoneConnections.listen();
     }
 
 
@@ -31,7 +36,18 @@ public class RedstoneStorage implements IRedstoneDevice {
 
     @Override
     public byte getRedstonePower(Direction side) {
+        if (input != null && input == side) return 0;
         return power;
+    }
+
+    @Override
+    public byte getVanillaRedstonePower(Direction side) {
+        int currentPower = getRedstonePower(side) & 0xFF;
+        int remainder = currentPower % 17;
+        int level = currentPower / 17;
+        if (remainder > 0) level++;
+        return (byte) level;
+        //return (byte) MathHelper.map(getRedstonePower(side) & 0xFF, 0, 255, 0, 15);
     }
 
     @Override
@@ -40,8 +56,17 @@ public class RedstoneStorage implements IRedstoneDevice {
     }
 
     @Override
-    public void onRedstoneUpdate() {
+    public void setInputSide(Direction side) {
+        input = side;
+    }
 
+    @Override
+    public @Nullable Direction getInputSide() {
+        return input;
+    }
+
+    @Override
+    public void onRedstoneUpdate() {
     }
 
     @Override
@@ -51,11 +76,12 @@ public class RedstoneStorage implements IRedstoneDevice {
 
     @Override
     public BlockPos getBlockPos() {
-        return blockPos;
+        return tile.getBlockPos();
     }
 
     @Override
     public Level getLevel() {
-        return level;
+        return tile.getLevel();
     }
+
 }

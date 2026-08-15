@@ -8,7 +8,9 @@
 
 package com.bluepowermod.tile;
 
+import com.bluepowermod.api.multipart.IBPMultipartTile;
 import com.bluepowermod.api.multipart.IBPPartBlock;
+import com.bluepowermod.api.multipart.IBPPartTile;
 import com.bluepowermod.init.BPBlockEntityType;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.mojang.datafixers.util.Pair;
@@ -26,12 +28,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.LeverBlock;
+import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.properties.AttachFace;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.model.data.ModelData;
@@ -49,12 +57,13 @@ import java.util.stream.Collectors;
 /**
  * @author MoreThanHidden
  */
-public class TileBPMultipart extends BlockEntity {
+public class TileBPMultipart extends BlockEntity implements IBPMultipartTile {
 
     public static final ModelProperty<Map<BlockState, ModelData>> STATE_INFO = new ModelProperty<>();
     public static final ModelProperty<BlockAndTintGetter> LEVEL = new ModelProperty<>();
     public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
     private Map<BlockState, BlockEntity> stateMap = new HashMap<>();
+    private EnumMap<Direction, BlockState> statesByDirection = new EnumMap<>(Direction.class);
     VoxelShape shape = null;
     VoxelShape collisionShape = null;
 
@@ -92,13 +101,39 @@ public class TileBPMultipart extends BlockEntity {
             tile = entityBlock.newBlockEntity(worldPosition, state);
             if (tile != null) {
                 tile.setLevel(level);
+                if (tile instanceof IBPPartTile part){
+                    part.setMultipartTile(this);
+                }
             }
         }
+        addStateToEnumMap(state);
         this.stateMap.put(state, tile);
         state.getBlock().setPlacedBy(level, worldPosition, state,  null, new ItemStack(state.getBlock()));
         shape = null;
         collisionShape = null;
         markDirtyClient();
+    }
+
+    private void addStateToEnumMap(BlockState state){
+        if (state.hasProperty(BlockStateProperties.FACING)){
+            statesByDirection.put(state.getValue(BlockStateProperties.FACING), state);
+        } else if (state.getBlock() instanceof WallTorchBlock && state.hasProperty(HorizontalDirectionalBlock.FACING)){
+            statesByDirection.put(state.getValue(HorizontalDirectionalBlock.FACING), state);
+        } else if (state.getBlock() == Blocks.LEVER){
+            var face = state.getValue(LeverBlock.FACE);
+            Direction side = state.getValue(LeverBlock.FACING);
+            if (face == AttachFace.CEILING){
+                side = Direction.DOWN;
+            } else if (face == AttachFace.FLOOR){
+                side = Direction.UP;
+            }
+            statesByDirection.put(side, state);
+        }
+    }
+
+    @Nullable
+    public BlockState getStateByFacing(Direction face){
+        return statesByDirection.get(face);
     }
 
     public void removeState(BlockState state) {
@@ -111,7 +146,16 @@ public class TileBPMultipart extends BlockEntity {
         //Remove Tile Entity
         if(stateMap.get(state) != null) {
             stateMap.get(state).setRemoved();
+            if (stateMap.get(state) instanceof IBPPartTile part) part.setMultipartTile(null);
         }
+        Direction toRemove = null;
+        for (var s : statesByDirection.entrySet()){
+            if (s.getValue() == state){
+                toRemove = s.getKey();
+                break;
+            }
+        }
+        if (toRemove != null) statesByDirection.remove(toRemove);
         //Remove State
         this.stateMap.remove(state);
         shape = null;
@@ -157,7 +201,7 @@ public class TileBPMultipart extends BlockEntity {
         //Get Matching Capabilities from the contained Tile Entities.
         List<LazyOptional<T>> capability =  stateMap.values().stream().filter(Objects::nonNull)
                 .map(t -> t.getCapability(cap, side)).filter(LazyOptional::isPresent).collect(Collectors.toList());
-        return capability.size() > 0 ? capability.get(0) : LazyOptional.empty();
+        return !capability.isEmpty() ? capability.get(0) : LazyOptional.empty();
     }
 
     public Boolean isSideBlocked(@Nonnull Capability cap, @Nullable Direction side){
@@ -286,8 +330,18 @@ public class TileBPMultipart extends BlockEntity {
 
     public void changeState(BlockState state, BlockState newState) {
         BlockEntity te = stateMap.get(state);
+        Direction toRemove = null;
+        for (var s : statesByDirection.entrySet()){
+            if (s.getValue() == state){
+                toRemove = s.getKey();
+                break;
+            }
+        }
+        if (toRemove != null) statesByDirection.remove(toRemove);
         stateMap.remove(state);
+        addStateToEnumMap(newState);
         stateMap.put(newState, te);
+        if (te != null) te.setBlockState(newState);
         shape = null;
         collisionShape = null;
         markDirtyClient();

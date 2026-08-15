@@ -19,44 +19,60 @@ public interface IRedstoneDevice extends IWorldLocation {
      * Returns whether the device passed as an argument can be connected to this device on the specified side. It also takes a ConnectionType,
      * which determines the type of connection to this device.
      */
-    public boolean canConnect(Direction side, IRedstoneDevice dev, ConnectionType type);
+    boolean canConnect(Direction side, IRedstoneDevice dev, ConnectionType type);
 
     /**
      * Returns a cache of all the connections of other devices with this one. Create an instance of this class by calling
      * {@link IRedstoneApi#createRedstoneConnectionCache(IRedstoneDevice)}
      */
-    public IConnectionCache<? extends IRedstoneDevice> getRedstoneConnectionCache();
+    IConnectionCache<? extends IRedstoneDevice> getRedstoneConnectionCache();
 
     /**
      * Gets the output of this device on the specified side.
      */
-    public byte getRedstonePower(Direction side);
+    byte getRedstonePower(Direction side);
+
+
+    /**
+     * Gets the output of this device on the specified side, as a byte between 0 and 15.
+     */
+    byte getVanillaRedstonePower(Direction side);
 
     /**
      * Sets the power level on the specified side to a set power level.
      */
-    public void setRedstonePower(Direction side, byte power);
+    void setRedstonePower(Direction side, byte power);
 
+    void setInputSide(Direction side);
+
+    @Nullable
+    Direction getInputSide();
     /**
      * Notifies the device of a power change. (Usually called after propagation)
      */
-    public void onRedstoneUpdate();
+    void onRedstoneUpdate();
 
     /**
      * Returns whether this is a full face (if face devices should be able to connect to it)
      */
-    public boolean isNormalFace(Direction side);
+    boolean isNormalFace(Direction side);
 
 
     static Tag writeNBT(Capability<IRedstoneDevice> capability, IRedstoneDevice instance, Direction direction) {
         CompoundTag nbt = new CompoundTag();
         nbt.putByte("power", instance.getRedstonePower(direction));
+        if (instance.getInputSide() != null){
+            nbt.putByte("inputSide", (byte)instance.getInputSide().get3DDataValue());
+        }
         return nbt;
     }
 
     static void readNBT(Capability<IRedstoneDevice> capability, IRedstoneDevice instance, Direction side, Tag nbt) {
         CompoundTag tags = (CompoundTag) nbt;
         byte power = tags.getByte("power");
+        if (tags.contains("inputSide")){
+            instance.setInputSide(Direction.from3DDataValue(tags.getByte("inputSide") & 0xFF));
+        }
         instance.setRedstonePower(side, power);
     }
 

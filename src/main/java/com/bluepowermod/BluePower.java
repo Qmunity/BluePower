@@ -17,6 +17,9 @@ import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.event.BPRecyclingReloadListener;
 import com.bluepowermod.init.*;
 import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.redstone.RedstoneApi;
+import com.bluepowermod.redstone.RedstoneProviderMultipart;
+import com.bluepowermod.redstone.RedstoneProviderVanilla;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.BPWorldGen;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -79,6 +82,7 @@ public class BluePower {
 
         BPApi.init(new BluePowerAPI());
         proxy.preInitRenderers();
+        RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderMultipart());
     }
 
     public static Logger log = LogManager.getLogger(Refs.MODID);
@@ -99,6 +103,7 @@ public class BluePower {
         event.enqueueWork(proxy::initRenderers);
         CompatibilityUtils.postInit(event);
         Recipes.init();
+        RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderVanilla());
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

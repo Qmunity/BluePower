@@ -26,12 +26,18 @@ public interface IInsulatedRedstoneDevice extends IRedstoneDevice {
         CompoundTag nbt = new CompoundTag();
         nbt.putString("color", instance.getInsulationColor(direction).name());
         nbt.putByte("power", instance.getRedstonePower(direction));
+        if (instance.getInputSide() != null){
+            nbt.putByte("inputSide", (byte)instance.getInputSide().get3DDataValue());
+        }
         return nbt;
     }
 
     default void readNBT(Capability<IInsulatedRedstoneDevice> capability, IInsulatedRedstoneDevice instance, Direction side, Tag nbt) {
         CompoundTag tags = (CompoundTag) nbt;
         byte power = tags.getByte("power");
+        if (tags.contains("inputSide")){
+            instance.setInputSide(Direction.from3DDataValue(tags.getByte("inputSide") & 0xFF));
+        }
         instance.setInsulationColor(MinecraftColor.valueOf(tags.getString("color")));
         instance.setRedstonePower(side, power);
     }

@@ -31,6 +31,8 @@ import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
 
@@ -50,11 +52,16 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
     private BlockPos blockPos;
     private Level level;
     private RedstoneConnectionCache connections;
+    Direction input = null;
+    BlockState state;
 
     private DummyRedstoneDevice(Level level, BlockPos blockPos) {
 
         this.blockPos = blockPos;
         this.level = level;
+        if (level != null){
+            state = level.getBlockState(blockPos);
+        }
         if (blockPos != null)
             connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
     }
@@ -86,6 +93,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
     @Override
     public byte getRedstonePower(Direction side) {
 
+        if (input != null && input == side) return 0;
         // if (loc.getBlock() instanceof BlockRedstoneWire) {
         // boolean wiresHandledUpdates = RedstoneApi.getInstance().shouldWiresHandleUpdates();
         // boolean wiresOutputtedPower = RedstoneApi.getInstance().shouldWiresOutputPower();
@@ -99,7 +107,12 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
         if (side == null)
             return 0;
 
-        return (byte) MathHelper.map(RedstoneHelper.getOutput(getLevel(), getBlockPos(), side), 0, 15, 0, 255);
+        return (byte) (RedstoneHelper.getOutput(getLevel(), getBlockPos(), side) * 17);
+    }
+
+    @Override
+    public byte getVanillaRedstonePower(Direction side) {
+        return (byte) RedstoneHelper.getOutput(getLevel(), getBlockPos(), side);
     }
 
     @Override
@@ -114,6 +127,16 @@ public class DummyRedstoneDevice implements IRedstoneDevice, IWorldLocation {
         // RedstoneApi.getInstance().setWiresHandleUpdates(wiresHandledUpdates);
         // RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
         // }
+    }
+
+    @Override
+    public void setInputSide(Direction side) {
+        this.input = side;
+    }
+
+    @Override
+    public @Nullable Direction getInputSide() {
+        return input;
     }
 
     public int getRedstoneOutput(int def) {

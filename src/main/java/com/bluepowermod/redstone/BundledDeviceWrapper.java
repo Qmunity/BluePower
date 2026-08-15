@@ -19,6 +19,7 @@ import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneCo
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedwire.IInsulatedRedwire;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
 
@@ -70,6 +71,11 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
+    public byte getVanillaRedstonePower(Direction side) {
+        return getRedstonePower(side);
+    }
+
+    @Override
     public void setRedstonePower(Direction side, byte power) {
 
         byte[] b = device.getBundledPower(side);
@@ -79,6 +85,16 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
         b[color.ordinal()] = power;
 
         device.setBundledPower(side, b);
+    }
+
+    @Override
+    public void setInputSide(Direction side) {
+
+    }
+
+    @Override
+    public @Nullable Direction getInputSide() {
+        return null;
     }
 
     @Override

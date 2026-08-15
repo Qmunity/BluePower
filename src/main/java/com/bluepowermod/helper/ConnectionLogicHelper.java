@@ -36,8 +36,8 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
     public C getNeighbor(T device, Direction side) {
 
         Direction face = null;
-        if (device instanceof IFace)
-            face = ((IFace) device).getFace();
+        if (device instanceof IFace iFace)
+            face = iFace.getFace();
 
         // In same block
         do {
@@ -55,7 +55,7 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
         // On same block
         if (face != null) {
             do {
-                T dev = provider.getConnectableAt(device.getLevel(), device.getBlockPos(), side.getOpposite(), face.getOpposite());
+                T dev = provider.getConnectableAt(device.getLevel(), device.getBlockPos().relative(face).relative(side), side.getOpposite(), face.getOpposite());
                 if (dev == null || dev == device || !provider.isValidOpenCorner(dev))
                     break;
                 if (provider.canConnect(device, dev, side, ConnectionType.OPEN_CORNER)
@@ -66,9 +66,9 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
         // Straight connection
         do {
-            T dev = provider.getConnectableAt(device.getLevel(), device.getBlockPos(), face, side.getOpposite());
+            T dev = provider.getConnectableAt(device.getLevel(), device.getBlockPos().relative(side), face, side.getOpposite());
             if (dev == null) {
-                dev = provider.getConnectableAt(device.getLevel(), device.getBlockPos(), side.getOpposite(), side.getOpposite());
+                dev = provider.getConnectableAt(device.getLevel(), device.getBlockPos().relative(side), side.getOpposite(), side.getOpposite());
                 if (dev == null && face == null && provider.isNormalFace(device, side)) {
                     for (Direction d : Direction.values()) {
                         if (d != side && d != side.getOpposite()) {
