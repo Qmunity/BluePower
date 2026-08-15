@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class TileGate extends TileBase implements ITickableTile {
     EnumMap<Side, Boolean> poweredSides = new EnumMap<>(Map.of(Side.FRONT, false, Side.BACK, false, Side.LEFT, false, Side.RIGHT, false));
     EnumMap<Side, Boolean> disabledSides = new EnumMap<>(Map.of(Side.FRONT, false, Side.BACK, false, Side.LEFT, false, Side.RIGHT, false));
-    @OnlyIn(Dist.CLIENT)
     public static final ModelProperty<Map<String, Object>> REDSTONE_STATES = new ModelProperty<>();
     public TileGate(BlockPos pos, BlockState state) {
         super(BPBlockEntityType.GATE.get(), pos, state);
